@@ -13,7 +13,8 @@ wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
-library(tidyverse)
+library(tidyverse)  # For data wrangling
+library(lubridate)  # To handle dates easily
 
 ############################################################
 #### Data Source 1: POPECOL
@@ -28,11 +29,13 @@ files <- dir(
 # There are some inconsistencies we need to take care of. Firstly, sometimes "."
 # is used as decimal, sometimes ",". Moreover, there are some files containing
 # "°" symbols. We need to get rid of this stuff. This only needs to be run once
-# as it overwrites the default csv files.
+# as it overwrites the default csv files. This also makes sure that every file
+# is stored exactly the same way
 # lapply(files, function(x){
 #   dat <- read_file(x, local = locale(encoding = "latin1"))
 #   dat <- gsub(dat, pattern = ",", replacement = ".")
 #   dat <- gsub(dat, pattern = "°", replacement = "")
+#   dat <- gsub(dat, pattern = "/", replacement = ".")
 #   write(dat, x)
 # })
 
@@ -70,38 +73,139 @@ dat1 <- lapply(files, function(x){
     )
 }) %>% do.call(rbind, .)
 
-# This data still contains periods prior and after collaring of the animal. We
-# need to get rid of such data.
+# Check validity of columns
+summary(dat1$x)
+summary(dat1$y)
+sum(is.na(dat1$Timestamp))
+sum(is.na(dat1$CollarID))
+range(dat1$Timestamp)
 
+# The GPS devices typcially record GPS locations even before and after collaring
+# an animal. These GPS fixes need to be removed since they provide wrong
+# location data. To do so, we load the dataframe that Dominik prepared. It shows
+# for each collar and dog the first and last fix retrieved, i.e. when an
+# individual was collared or uncollared. The table also contains valuable
+# information about pack-affiliations
+collars <- read_csv2("03_Data/01_RawData/POPECOL/CollarSettings.csv") %>%
 
+  # Remove rows where the Dog Names are NA since these rows do not contain any
+  # useful information
+  subset(., !is.na(`Dog Name`)) %>%
 
+  # Keep only the desired columns and rename them nicely. Note that we want to
+  # keep the Dog Code because it provides information about the birth pack of
+  # each dog.
+  select(.
+    , CollarID  = `Collar Nr.`
+    , DogName   = `Dog Name`
+    , DogCode   = `Dog Code`
+    , Sex       = `Sex`
+    , FirstDate = `Collaring Date`
+    , LastDate1 = `Stop recording date`
+    , LastDate2 = `Last fix date`
+  )
 
+# Looking at the table we can see that we are missing exact times for some of
+# the timestamps. This will cause errors when we convert those to posixct. We
+# Will therefore assign very conservative times (i.e. 24:00 for first dates,
+# 00:01 for last dates)
+for (i in 1:nrow(collars)){
+  if (!is.na(collars$FirstDate[i]) & nchar(collars$FirstDate[i]) == 10){
+    collars$FirstDate[i] <- paste0(collars$FirstDate[i], " 24:00")
+  }
+  if (!is.na(collars$LastDate1[i]) & nchar(collars$LastDate1[i]) == 10){
+    collars$LastDate1[i] <- paste0(collars$LastDate1[i], " 00:01")
+  }
+  if (!is.na(collars$LastDate2[i]) & nchar(collars$LastDate2[i]) == 10){
+    collars$LastDate2[i] <- paste0(collars$LastDate2[i], " 00:01")
+  }
+}
 
+# Taryn's collar number is also entered incorrectly
+collars$CollarID[collars$DogName == "Taryn" & collars$CollarID == 22028] <- 20228
 
-# Visualize data
-vis <- dat1 %>% group_by(DogName, CollarID) %>% summarize(
-    First = range(Timestamp)[1]
-  , Last = range(Timestamp)[2]
+# Now we can coerce the date columns to true dates. Note that we subtract two
+# hours because the original format was in local time (which is UTC + 2 hours).
+# Also note that there are two possible "last dates". The first one refers to
+# the last fix, the other to the date when the dog was uncollared. We need to
+# combine both because depending on whether the dog is still collared we will
+# use on or the other. Again we subtract two hours to make sure that the times
+# are in UTC
+collars <- collars %>%
+  mutate(.
+    , FirstDate = as.POSIXct(FirstDate
+      , tz = "UTC"
+      , format = "%d.%m.%Y %H:%M") - hours(2)
+    , LastDate1 = as.POSIXct(LastDate1
+      , tz = "UTC"
+      , format = "%d.%m.%Y %H:%M") - hours(2)
+    , LastDate2 = as.POSIXct(LastDate2
+      , tz = "UTC"
+      , format = "%d.%m.%Y %H:%M") - hours(2)
+  )
+
+# Merge the columns for the "LastDates". We only want to keep the latest of the
+# two.
+collars$LastDate <- pmax(collars$LastDate1, collars$LastDate2, na.rm = T)
+collars$LastDate <- collars$LastDate + minutes(5)
+collars$LastDate1 <- NULL
+collars$LastDate2 <- NULL
+
+# Logical check that LastDate > FirstDate
+table(collars$LastDate > collars$FirstDate)
+
+# Make sure there are no duplicates
+table(paste(collars$CollarID, collars$DogName))
+table(table(paste(collars$CollarID, collars$DogName)))
+
+# Left-join the dataset to the gps locations
+dat1 <- left_join(dat1, collars, by = c("CollarID", "DogName"))
+
+# Create a column that indicates if the respective fix lies within the first and
+# last date
+dat1$Keep <- ifelse(
+    test  = dat1$Timestamp >= dat1$FirstDate & dat1$Timestamp <= dat1$LastDate
+  , yes   = T
+  , no    = F
 )
 
-ggplot(dat1, aes(x = x, y = y, col = factor(DogName)))
+# Let's check how many datapoints we loose (per dog and collar)
+table(dat1$Keep)
+table(dat1$DogName, dat1$Keep)
+table(dat1$CollarID, dat1$Keep)
 
+# Subset data and remove unnecessary columns
+dat1 <- subset(dat1, Keep)
+dat1 <- select(dat1, -c("FirstDate", "LastDate", "Keep", "DogCode"))
+
+# Prepare data for visualization
+vis <- dat1 %>% group_by(DogName, CollarID) %>% summarize(
+    First = range(Timestamp)[1]
+  , Last  = range(Timestamp)[2]
+)
+
+# Verify that collars are not overlapping
 ggplot(vis, aes(color = factor(CollarID))) +
-  geom_segment(aes(x = First, xend = Last, y = DogName, yend = DogName), size = 2)
+  geom_segment(
+      aes(x = First, xend = Last, y = DogName, yend = DogName)
+    , size = 3
+    , alpha = 0.6
+  )
 
-ggplot(subset(vis, DogName == "Odzala"), aes(color = factor(CollarID))) +
-  geom_segment(aes(x = First, xend = Last, y = DogName, yend = DogName), size = 2, alpha = 0.6)
+# Maybe look at some in more detail
+ggplot(subset(vis, DogName == "Taryn"), aes(color = factor(CollarID))) +
+  geom_segment(
+      aes(x = First, xend = Last, y = DogName, yend = DogName)
+    , size = 10
+    , alpha = 0.6
+  )
 
-
-
-
-
-
-
-
-
-
-# We also want to import the GPS fixes provided by Abrahms
+################################################################################
+#### Data Source 2: Abrahms
+################################################################################
+# We also want to import the GPS fixes provided by Abrahms. Note that I will not
+# clean this data anymore, as this is the cleaned data that Abrahms used for her
+# publication
 dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
 
   # Remove rows with missing fixes
@@ -115,107 +219,79 @@ dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
     , Timestamp = `Timestamp`
   ) %>%
 
-  # Add a column for the (nonexistent) collar id so that the dataframe contains
-  # the same columns as the dat1 dataframe
-  mutate(., CollarID = NA)
+  # Add all columns that are also in dat1
+  mutate(., CollarID = NA, DOP = NA, Sex = "M")
 
-# Lastly, we retrieved fixes from the camp in Botswana that were collected
-# prior to own our project in Botswana. This data requires some intensive
-# cleaning
+################################################################################
+#### Data Source 3: Botswana Camp
+################################################################################
+# Lastly, we retrieved fixes from the camp in Botswana that were collected prior
+# to own our project in Botswana. This is data from residents only! I only
+# include it for completeness. This data requires some intensive cleaning
 files <- dir(
     path        = "03_Data/01_RawData/DOMINIK"
   , pattern     = ".txt$"
   , full.names  = T
 )
 
-# Identify the DogNames from the file descriptions
-names <- substr(files, start = 33, stop = nchar(files) - 7)
-
 # Load all the files
 dat3 <- lapply(files, function(x){
+
+  # Identify the DogName
+  name <- substr(basename(x), start = 6, stop = nchar(basename(x)) - 7)
 
   # Load the data (skip the first two rows as they contain stuff we dont care
   # about)
   read_delim(x, delim = "\t", skip = 2) %>%
 
-  # Keep only the columns of interest
-  select(
-      x                   = `Longitude (deg)`
-    , y                   = `Latitude (deg)`
-    , Timestamp           = `UTC time (yyyy-mm-dd HH:MM:SS)`
-    , Height              = `Height above MSL (m)`
-    , HorizontalAccuracy  = `Horizontal accuracy (m)`
-    , VerticalAccuracy    = `Vertical accuracy (m)`
-  )}) %>%
+    # Keep only the columns of interest
+    select(
+        x                   = `Longitude (deg)`
+      , y                   = `Latitude (deg)`
+      , Timestamp           = `UTC time (yyyy-mm-dd HH:MM:SS)`
+      , Height              = `Height above MSL (m)`
+      , HorizontalAccuracy  = `Horizontal accuracy (m)`
+      , VerticalAccuracy    = `Vertical accuracy (m)`
+    ) %>%
 
-  # The resulting object is a list with one entry for each dog. So let's add the
-  # dog names that we retrieved from the file descriptions
-  set_names(., names) %>%
+    # Add dog name
+    mutate(DogName = name) %>%
 
-  # Bind the dataframes together, but create a new column indicating the
-  # individuals (using idcol = TRUE)
-  rbindlist(., idcol = TRUE) %>%
+    # Prepare columns present in dat1
+    mutate(., CollarID = NA, DOP = NA, Sex = "M") %>%
 
-  # Make a nicer column name
-  rename(., DogName = .id) %>%
+    # Remove rows with missing fixes
+    filter(., !is.na(x)) %>%
 
-  # Prepare an empty column for the (for dat3 nonexistent) CollarID
-  mutate(., CollarID = NA) %>%
+    # Order the data by timestamp
+    arrange(., Timestamp) %>%
 
-  # Remove rows with missing fixes
-  filter(., !is.na(x)) %>%
-
-  # Order the data by dogname and timestamp
-  arrange(., DogName, Timestamp) %>%
-
-  # Split dataframe into list by DogName
-  split(., .$DogName) %>%
-
-  # Create Column that indicates the timelag and distance between two fixes
-  # This allows us to also calculate the speed
-  lapply(., function(x){
+    # Create Column that indicates the timelag and distance between two fixes
+    # This allows us to also calculate the speed
     mutate(x,
         dt = as.numeric(Timestamp - lag(Timestamp), units = "hours")
       , dl = sqrt((x - lag(x))**2 + (y - lag(y)) ** 2) * 111
       , speed = dl / dt
     )
-  }) %>%
-
-  # Collapse list to single dataframe
-  do.call(rbind, .)
+}) %>% do.call(rbind, .)
 
 # There are some pretty beefy outliers that we need to remove. We can use the
 # Accuracy indicators, the height and speed in order to remove any unreasonable
-# gps fix
+# gps fix (we are going to be pretty rough here)
 dat3 <- dat3 %>%
-
-  # Remove fixes with unreasonable high elevation
   filter(., Height > quantile(Height, 0.1)) %>%
-
-  # Remove fixes with unreasonable low elevation
   filter(., Height < quantile(Height, 0.9)) %>%
-
-  # Remove fixes with too low vertical accuracy
   filter(., VerticalAccuracy < quantile(VerticalAccuracy, 0.9)) %>%
-
-  # Remove fixes with too low horizontal accuracy
   filter(., HorizontalAccuracy < quantile(HorizontalAccuracy, 0.9)) %>%
-
-  # Remove fixes with wrong dates
   filter(., year(Timestamp) != 1970) %>%
-
-  # Remove fixes with unreasonable speed
   filter(., speed < quantile(speed, 0.9, na.rm = TRUE)) %>%
-
-  # Finally, we remove all columns that we don't need furthermore
-  select(., c("DogName", "CollarID", "x", "y", "Timestamp"))
-
-# Combine the three datasets
+  select(., c("DogName", "CollarID", "x", "y", "Timestamp", "DOP", "Sex"))
 data <- rbind(dat1, dat2, dat3)
-
-# Remove any remaining duplicates
 data <- data[!duplicated(data), ]
 
+################################################################################
+#### CONTINUE HERE!!!
+################################################################################
 ############################################################
 #### Some Exploration
 ############################################################
@@ -328,112 +404,6 @@ data %>%
   group_by(DogName, State) %>%
   summarize(NoFixes = n()) %>%
   spread(State, NoFixes)
-
-############################################################
-#### Cut Periods of GPS Handling
-############################################################
-# The GPS devices typcially record GPS locations even before and after collaring
-# an animal. These GPS fixes need to be removed since they provide wrong
-# location data. To do so, we load the dataframe that Dominik prepared. It shows
-# for each collar and dog the first and last fix retrieved, i.e. when an
-# individual was collared or uncollared. The table also contains valuable
-# information about pack-affiliations
-collars <- read_csv("03_Data/01_RawData/POPECOL/CollarSettings.csv") %>%
-
-  # Remove rows where the Dog Names are NA since these rows do not contain any
-  # useful information
-  subset(., !is.na(`Dog Name`)) %>%
-
-  # Keep only the desired columns and rename them nicely. Note that we want to
-  # keep the Dog Code because it provides information about the birth pack of
-  # each dog.
-  select(.
-    , CollarNr  = `Collar Nr.`
-    , DogName   = `Dog Name`
-    , DogCode   = `Dog Code`
-    , Sex       = `Sex`
-    , FirstDate = `Collaring Date`
-    , LastDate1 = `Stop recording date`
-    , LastDate2 = `Last fix date`
-  ) %>%
-
-  # Coerce date columns to true dates. Note that we subtract two hours because the
-  # original format was not in UTC time but rather local time (which is UTC + 2
-  # hours). Also note that there are two possible "last dates". The first one
-  # refers to the last fix, the other to the date when the dog was uncollared.
-  # We need to combine both because depending on whether the dog is still
-  # collared one or the other will be used as true "last date". Again we subtract
-  # two hours to make sure that the times are in UTC
-  mutate(.
-    , FirstDate = as.POSIXct(FirstDate
-      , tz = "UTC"
-      , format = "%d.%m.%Y %H:%M") - hours(2)
-    , LastDate1 = as.POSIXct(LastDate1
-      , tz = "UTC"
-      , format = "%d.%m.%Y %H:%M") - hours(2)
-    , LastDate2 = as.POSIXct(LastDate2
-      , tz = "UTC"
-      , format = "%d.%m.%Y %H:%M") - hours(2)
-  )
-
-# Merge the columns for the "LastDates". We only want to keep the latest of the
-# two.
-collars$LastDate <- collars$LastDate1
-for (i in 1:nrow(collars)){
-  collars$LastDate[i] <- max(collars$LastDate1[i], collars$LastDate2[i], na.rm = TRUE)
-}
-
-# Remove any undesired column
-collars <- select(collars, -c("LastDate1", "LastDate2"))
-
-# There was also an issue with the first dates for Belgium and Abel. Let's add
-# them back manually. Note that the system will automatically subtract 2 hours
-# from the times that we enter. I.e. the times will be 22:00 afterwards. (UTC
-# time)
-collars$FirstDate[collars$DogName == "Belgium" &
-  is.na(collars$FirstDate)] <- "2017-10-28 24:00:00"
-collars$FirstDate[collars$DogName == "Abel" &
-  is.na(collars$FirstDate)] <- "2017-10-26 24:00:00"
-
-# We can now get rid of GPS locations that are not valid because the locations
-# were recorded before the dog was actually collared. Thus, for each dog we
-# remove the GPS fixes that were collected prior to the collaring date. Let's
-# get a table that shows the "first" date and "end" date for each dog and collar
-dates <- select(collars, c(DogName, CollarID = CollarNr, FirstDate, LastDate))
-
-# Left-join the dataset to the dataset containing the gps locations
-data <- left_join(data, dates, by = c("CollarID", "DogName"))
-
-# For the dogs that we did not collar ourselves (Abrahms dogs and the dogs
-# collared before 2016) there is no such information. This might cause some
-# problems later. We can easily identify these Dogs as their CollarID is NA. We
-# anyways don't want to cut any of their locations so let's just use each dog's
-# first and last recording date as substitutes.
-temp <- unique(data$DogName[is.na(data$CollarID)])
-for (i in 1:length(temp)){
-  sub <- subset(data, DogName == temp[i] & is.na(CollarID))
-  FirstDate <- range(sub$Timestamp)[1]
-  LastDate  <- range(sub$Timestamp)[2]
-  data$FirstDate[data$DogName == temp[i] & is.na(data$CollarID)] <- FirstDate
-  data$LastDate[data$DogName == temp[i] & is.na(data$CollarID)] <- LastDate
-}
-
-# Make sure there are no NA's
-sum(is.na(data$FirstDate))
-sum(is.na(data$LastDate))
-
-# Remove rows for which the recording date does not lie between the First and
-# Last Date. In other words, we get rid of the recordings that are before or
-# after the first and last dates. Let's get the indices of these rows
-indices <- which(data$Timestamp < data$FirstDate | data$Timestamp > data$LastDate)
-data <- data[-indices, ]
-
-# Now remove the FirstDate and LastDate columns since they are not needed
-# anymore
-data <- select(data, -c("FirstDate", "LastDate"))
-data %>%
-  group_by(DogName) %>%
-  summarize(FirstDate = min(Timestamp), LastDate = max(Timestamp))
 
 ############################################################
 #### Adding Pack Information
