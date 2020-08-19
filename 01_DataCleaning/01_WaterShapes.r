@@ -8,15 +8,11 @@
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(rgdal)
-library(raster)
-library(rgeos)
-library(tidyverse)
-library(parallel)
+library(rgdal)  # To load spatial data
 
 # Load water shapefiles
 water <- readOGR("03_Data/01_RawData/GEOFABRIK/Water.shp")

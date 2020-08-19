@@ -1,18 +1,18 @@
 ############################################################
 #### Preparation of the Wild Dog Distribution Data
 ############################################################
-# Description: Preparation of a shapefile of the distribution of wild dogs.
+# Description: Preparation of a shapefile depicting the current spatial
+# distribution of wild dogs.
 
 # Clean environment
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(rgdal)
-library(raster)
+library(rgdal)    # To load spatial data
 
 # Load the shapefile
 dogs <- readOGR("03_Data/01_RawData/IUCN/data_0.shp")

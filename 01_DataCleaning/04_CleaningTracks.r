@@ -9,69 +9,97 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
-library(rgdal)
-library(raster)
-library(data.table)
-library(lubridate)
-library(amt)
 library(tidyverse)
-library(parallel)
-
-# Load custom functions
-source("Functions.r")
 
 ############################################################
-#### Data Cleaning
+#### Data Source 1: POPECOL
 ############################################################
-# Important to note: I had to delete the "degree" sign in the csvs manually
-# to be able to import them correctly into R.
+# Identify all files containing GPS data
+files <- dir(
+    path        = "03_Data/01_RawData/POPECOL"
+  , pattern     = "GPS_Collar"
+  , full.names = T
+)
 
-# Retrieve the names of all files that contain GPS fixes
-dat1 <- dir(
-      path      = "03_Data/01_RawData/POPECOL"
-    , pattern   = "GPS_Collar"
-    , full.names = T
-  ) %>%
+# There are some inconsistencies we need to take care of. Firstly, sometimes "."
+# is used as decimal, sometimes ",". Moreover, there are some files containing
+# "°" symbols. We need to get rid of this stuff. This only needs to be run once
+# as it overwrites the default csv files.
+# lapply(files, function(x){
+#   dat <- read_file(x, local = locale(encoding = "latin1"))
+#   dat <- gsub(dat, pattern = ",", replacement = ".")
+#   dat <- gsub(dat, pattern = "°", replacement = "")
+#   write(dat, x)
+# })
 
-  # Run through the list and import the files
-  lapply(., read_csv2, local = locale(encoding = "latin1")) %>%
+# Load all of them and do some cleaning
+dat1 <- lapply(files, function(x){
 
-  # Put nice list-names so we know which list-entry corresponds to which dog
-  set_names(., dir(
-    path = "03_Data/01_RawData/POPECOL/", pattern = "GPS_Collar"
-  )) %>%
+  # Load data...
+  dat <- x %>%
 
-  # Collapse the list and make sure that a column indicating the dog name is
-  # added to each dataframe (using the idcol = TRUE option).
-  rbindlist(., idcol = TRUE) %>%
+    # ...using readr
+    read_delim(local = locale(encoding = "latin1"), delim = ";") %>%
 
-  # Make nicer names by only keeping the DogName and omitting superfluous
-  # information contained in the file description
-  mutate(., Name = substr(.id, start = 17, stop = nchar(.id) - 19)) %>%
+    # Retrieve DogName from filename. For this we use regex to identify a
+    # pattern preceeded by five digits (?<=\\d{5}) and a "_", but is then
+    # followed by a "_" and whatever
+    mutate(DogName = str_extract(x, pattern = "(?<=\\d{5}_).*(?=_)")) %>%
 
-  # Combine the utc date and utc time columns into one POSIXct column that we
-  # will use as timestamp
-  mutate(.
-    , Timestamp = as.POSIXct(paste(UTC_Date, UTC_Time)
-    , tz = "UTC"
-    , format = "%d.%m.%Y %H:%M:%S")
-  ) %>%
+    # Retrieve timestamp
+    mutate(Timestamp = as.POSIXct(
+      paste(UTC_Date, UTC_Time), tz = "UTC", format = "%d.%m.%Y %H:%M:%S")
+    ) %>%
 
-  # Remove rows where we the gps devices failed to obtain coordinates
-  filter(., !is.na(`Longitude []`)) %>%
+    # Remove stuff like [°]
+    setNames(gsub(names(.), pattern = " \\[*", replacement = "")) %>%
+    setNames(gsub(names(.), pattern = "\\]", replacement = "")) %>%
 
-  # Keep only the columns we are interested in
-  select(.,
-      DogName   = `Name`
-    , CollarID  = `CollarID`
-    , x         = `Longitude []`
-    , y         = `Latitude []`
-    , Timestamp = `Timestamp`
-  )
+    # Keep only desired columns
+    select(.
+      , DogName   = DogName
+      , DOP       = DOP
+      , CollarID  = CollarID
+      , x         = Longitude
+      , y         = Latitude
+      , Timestamp = Timestamp
+    )
+}) %>% do.call(rbind, .)
+
+# This data still contains periods prior and after collaring of the animal. We
+# need to get rid of such data.
+
+
+
+
+
+
+# Visualize data
+vis <- dat1 %>% group_by(DogName, CollarID) %>% summarize(
+    First = range(Timestamp)[1]
+  , Last = range(Timestamp)[2]
+)
+
+ggplot(dat1, aes(x = x, y = y, col = factor(DogName)))
+
+ggplot(vis, aes(color = factor(CollarID))) +
+  geom_segment(aes(x = First, xend = Last, y = DogName, yend = DogName), size = 2)
+
+ggplot(subset(vis, DogName == "Odzala"), aes(color = factor(CollarID))) +
+  geom_segment(aes(x = First, xend = Last, y = DogName, yend = DogName), size = 2, alpha = 0.6)
+
+
+
+
+
+
+
+
+
 
 # We also want to import the GPS fixes provided by Abrahms
 dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%

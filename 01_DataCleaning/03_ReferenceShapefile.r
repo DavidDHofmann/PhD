@@ -1,25 +1,24 @@
 ############################################################
 #### Preparation of a Reference Shapefile
 ############################################################
-# Description: Here I simply create a reference shapefile according to which I
-# will resample and resize all the other shapefiles. This is comparable to the
-# reference raster. I create the reference shapefile according to the reference
-# raster due to limited flexibility in adjusting the raster (because of
-# resolution).
+# Description: Here I create a reference shapefile according to which I will
+# crop all the other shapefiles. This is comparable to the reference raster, yet
+# for vector data. I will thus use the reference raster to define the spatial
+# extent.
 
 # Clear R's brain
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)
-library(rgdal)
+library(raster)   # To handle raster data
+library(rgdal)    # To handle vector data
 
 # I will use the raster created in the previous script for this
-r <- raster("03_Data/02_CleanData/00_General_Raster250.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Extract the extent from the raster file and create a polygon with the same
 # extent. Note that we also need to reassign the correct crs.
@@ -31,16 +30,14 @@ crs(s) <- crs(r)
 plot(r)
 plot(s, border = "red", add = T)
 
-# Now it is still only a spatial polygon and to save it we need a spatial
-# polygon data frame. To do so we need to add some information. I will simply
-# add an ID
-ss <- SpatialPolygonsDataFrame(s, data = as.data.frame(1))
+# Assign an ID
+s <- SpatialPolygonsDataFrame(s, data = data.frame(Name = "ReferenceShapefile"))
 
 # Save the final object
 writeOGR(
-    ss
-  , "03_Data/02_CleanData"
-  , "00_General_Shapefile"
-  , driver = "ESRI Shapefile"
+    obj       = s
+  , dsn       = "03_Data/02_CleanData"
+  , layer     = "00_General_Shapefile"
+  , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )

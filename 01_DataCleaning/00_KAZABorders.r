@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of the Kaza Borders
-############################################################
+################################################################################
 # Description: Import and cleaning of the KAZA borders as downloaded from
 # https://maps.ppf.org.za/KAZA_ME/public/index.html.
 
@@ -25,17 +25,20 @@ kaza <- readOGR(
 )
 
 # Plot the imported layer
-plot(KAZA)
+plot(kaza)
 
 # The projection is not yet set to WGS84. I therefore reproject it to WGS84
-KAZA <- spTransform(KAZA, CRS("+init=epsg:4326"))
+kaza <- spTransform(kaza, CRS("+init=epsg:4326"))
 
 # Let's check the area of the kaza (in km2)
-area(KAZA) / 1000000
+area(kaza) / 1000000
+
+# We can remove all data and assign a simple name
+kaza@data <- data.frame(Name = "KAZA TFCA")
 
 # Store the cleaned shapefile
 writeOGR(
-    KAZA
+    kaza
   , dsn       = "03_Data/02_CleanData"
   , layer     = "00_General_KAZA_KAZA"
   , driver    = "ESRI Shapefile"
