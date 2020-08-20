@@ -70,7 +70,10 @@ dat1 <- lapply(files, function(x){
       , x         = Longitude
       , y         = Latitude
       , Timestamp = Timestamp
-    )
+    ) %>%
+
+    # Add a column indicating the data source
+    mutate(Source = "Popecol")
 }) %>% do.call(rbind, .)
 
 # Check validity of columns
@@ -220,7 +223,7 @@ dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
   ) %>%
 
   # Add all columns that are also in dat1
-  mutate(., CollarID = NA, DOP = NA, Sex = "M")
+  mutate(., CollarID = NA, DOP = NA, Sex = "M", Source = "Abrahms")
 
 ################################################################################
 #### Data Source 3: Botswana Camp
@@ -258,7 +261,7 @@ dat3 <- lapply(files, function(x){
     mutate(DogName = name) %>%
 
     # Prepare columns present in dat1
-    mutate(., CollarID = NA, DOP = NA, Sex = "M") %>%
+    mutate(., CollarID = NA, DOP = NA, Sex = "M", Source = "Botswana") %>%
 
     # Remove rows with missing fixes
     filter(., !is.na(x)) %>%
@@ -285,90 +288,54 @@ dat3 <- dat3 %>%
   filter(., HorizontalAccuracy < quantile(HorizontalAccuracy, 0.9)) %>%
   filter(., year(Timestamp) != 1970) %>%
   filter(., speed < quantile(speed, 0.9, na.rm = TRUE)) %>%
-  select(., c("DogName", "CollarID", "x", "y", "Timestamp", "DOP", "Sex"))
+  select(., c("DogName", "CollarID", "x", "y", "Timestamp", "DOP", "Sex", "Source"))
+
+# Put data of all sources together
 data <- rbind(dat1, dat2, dat3)
-data <- data[!duplicated(data), ]
+
+# Check sources
+table(data$Source)
+
+# Check if there are any duplicates
+dups_complete <- duplicated(data)
+sum(dups_complete)
+
+# Store data for exploration
+write_csv(data, "GPS_Data.csv")
 
 ################################################################################
-#### CONTINUE HERE!!!
-################################################################################
-############################################################
-#### Some Exploration
-############################################################
-# Check number of Individuals
-length(unique(data$DogName))
-
-# Number of GPS fixes
-nrow(data)
-
-# Number of GPS fixes per Dog. You will find that there are vastly different
-# amounts of fixes. This is mostly due to different fix-rates
-data %>%
-  group_by(., DogName) %>%
-  summarize(., NoFixes = n()) %>%
-  arrange(., NoFixes)
-
-# Check the range of observation for each individual
-data %>%
-  group_by(., DogName) %>%
-  summarize(., FirstDate = min(Timestamp), LastDate = max(Timestamp))
-
-############################################################
 #### Adding Cutoff Dates
-############################################################
+################################################################################
 # For each GPS fix we want to know whether it was collected during dispersal or
-# residency. For this we want to create a table that tells us the cutoff dates
-# for each individual. To create this table we have to combine several sources.
+# residency. We can use the following table for this.
+cut <- read_csv("03_Data/01_RawData/POPECOL/CutoffDates.csv") %>%
 
-# Let's load the first cutoff-date table, which contains most of the cutoff
-# dates. We subtract two hours from the timestamp to get UTC times
-cut1 <- read_csv("03_Data/01_RawData/POPECOL/CutoffDates1.csv") %>%
+  # Remove undesired columns
+  select(c("CollarID", "DogName", "StartDate", "EndDate")) %>%
 
-  # Set some nice column names
-  set_names(., c("DogName", "StartDate", "EndDate", "Comments")) %>%
-
-  # Remove comments
-  select(., -c(Comments)) %>%
-
-  # Coerce the StartDate to a POSIXct column
-  mutate(., StartDate = as.POSIXct(paste(StartDate, "00:00:00")
-    , tz = "UTC"
-    , format = "%Y-%m-%d %H:%M:%S") - hours(2)) %>%
-
-  # Coerce the EndDate to a POSIXct column
-  mutate(., EndDate = as.POSIXct(paste(EndDate, "24:00:00")
-    , tz = "UTC"
-    , format = "%Y-%m-%d %H:%M:%S") - hours(2))
-
-# Now we load the second cutoff-date table, which contains cutoff dates for
-# those indvidiuals with multiple dispersal phases. These individuals left their
-# pack but eventually returned before fully dispersing. Again we subtract two
-# hours to get UTC times.
-cut2 <- read_csv("03_Data/01_RawData/POPECOL/CutoffDates2.csv") %>%
-
-  # Select only the columns of interest
-  select(.,
-      DogName   = `DogName`
-    , StartDate = `StartDate`
-    , EndDate   = `EndDate`
+  # Add Minutes to the timestamps
+  mutate(
+      StartDate = paste0(StartDate, ":00")
+    , EndDate   = paste0(EndDate, ":00")
   ) %>%
 
-  # Coerce the StartDate to a POSIXct column
-  mutate(., StartDate = as.POSIXct(StartDate
-    , tz = "UTC"
-    , format = "%d.%m.%Y %H:%M") - hours(2)) %>%
+  # Make proper dates and subtract 2 hours
+  mutate(
+      StartDate = as.POSIXct(StartDate, tz = "UTC"
+        , format = "%d.%m.%Y %H:%M") - hours(2)
+    , EndDate = as.POSIXct(EndDate, tz = "UTC"
+      , format = "%d.%m.%Y %H:%M") - hours(2)
+  ) %>%
 
-  # Coerce the EndDate to a POSIXct column
-  mutate(., EndDate = as.POSIXct(EndDate
-    , tz = "UTC"
-    , format = "%d.%m.%Y %H:%M") - hours(2))
+  # Sort
+  arrange(DogName, StartDate)
 
-
-# Put all three tables together into one big cutoff date table
-cut <- rbind(cut1, cut2)
-
-# Look at the resulting table
-cut
+# As you can see for some individuals there are multiple dispersal phases. Let's
+# create a counter for each individual
+cut <- cut %>%
+  group_by(DogName) %>%
+  mutate(DispersalNo = row_number()) %>%
+  ungroup()
 
 # Store the merged cutoff dates
 write.csv(cut, "03_Data/02_CleanData/00_General_Dispersers_Popecol_CutoffDates.csv")
@@ -393,23 +360,22 @@ for (i in seq_along(names)){
 head(data)
 tail(data)
 
-# Check the number of fixes during dispersal per dog
-data %>%
-  subset(State == "Disperser") %>%
-  group_by(DogName) %>%
-  summarise(noFixes = n())
+# Check the number of data per individual
+table(data$DogName, data$State)
 
-# Compare the number of fixes during dispersal and residency
-data %>%
-  group_by(DogName, State) %>%
-  summarize(NoFixes = n()) %>%
-  spread(State, NoFixes)
 
+################################################################################
+#### CONTINUE TO WORK FROM HERE
+################################################################################
 ############################################################
 #### Adding Pack Information
 ############################################################
 # Let's load the csv containing all pack affiliations
 packs <- read_csv("03_Data/01_RawData/POPECOL/PackAffiliation.csv")
+
+# Create a column that indicates if a fixe was recorder before or after
+# dispersal
+data$AfterDispersal <- ifelse(data$Timestamp > data$EndDate, T, F)
 
 # Lets join the birth and postdispersal pack to each fix
 data <- left_join(data, packs, by = "DogName")
@@ -437,10 +403,6 @@ enddates <- cut %>%
 
 # Join these dates to our dataframe
 data <- left_join(data, enddates, by = "DogName")
-
-# Create new column that indicates whether a fix was taken after dispersal or not
-data$AfterDispersal <- FALSE
-data$AfterDispersal[data$Timestamp > data$EndDate] <- TRUE
 
 # Finally we merge the "BirthPack" and "PostDispersalPack" columns and create
 # a column that indicates the current pack
