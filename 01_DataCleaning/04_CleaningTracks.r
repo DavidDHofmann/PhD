@@ -15,6 +15,10 @@ setwd(wd)
 # Load packages
 library(tidyverse)  # For data wrangling
 library(lubridate)  # To handle dates easily
+library(pbmcapply)  # To make use of multiple cores
+library(davidoff)   # Custom functions
+library(raster)     # To handle spatial data
+library(rgdal)      # To handle spatial data
 
 ############################################################
 #### Data Source 1: POPECOL
@@ -363,152 +367,136 @@ tail(data)
 # Check the number of data per individual
 table(data$DogName, data$State)
 
+# ############################################################
+# #### Adding Pack Information
+# ############################################################
+# # Let's load the csv containing all pack affiliations
+# packs <- read_csv("03_Data/01_RawData/POPECOL/PackAffiliation.csv")
+#
+# # Create a column that indicates if a fixe was recorder before or after
+# # dispersal
+# data$AfterDispersal <- ifelse(data$Timestamp > data$EndDate, T, F)
+#
+# # Lets join the birth and postdispersal pack to each fix
+# data <- left_join(data, packs, by = "DogName")
+#
+# # During dispersal the individuals are not with their pack anymore so let's put
+# # NAs for the pack during dispersal
+# data$BirthPack[data$State == "Disperser"] <- NA
+#
+# # After dispersal (i.e. settlement) the individuals will be in a new pack. Let's
+# # create a column that indicates whether a GPS fix was taken before or after
+# # dispersal so that we can change the packs accordingly. Note that there are
+# # individuals with multiple dispersal phases. We will only use the most recent
+# # EndDate for them (we assume they haven't settled in a new pack before this
+# # date).
+# enddates <- cut %>%
+#
+#   # Group the enddates by dog
+#   group_by(DogName) %>%
+#
+#   # Keep only the latest date
+#   slice(which.max(EndDate)) %>%
+#
+#   # Remove the start date from the resulting table
+#   select(., -StartDate)
+#
+# # Join these dates to our dataframe
+# data <- left_join(data, enddates, by = "DogName")
+#
+# # Finally we merge the "BirthPack" and "PostDispersalPack" columns and create
+# # a column that indicates the current pack
+# data$CurrentPack <- data$BirthPack
+# data$CurrentPack[data$AfterDispersal] <-
+#   data$PostDispersalPack[data$AfterDispersal]
+#
+# # Remove any undesired column
+# data <- select(data, -c("BirthPack", "PostDispersalPack", "EndDate"))
+#
+# # Now there are some manual adjustments that I do according to Dominik's
+# # instructions. For Fatalii the pack is unknown before the 18.02.2016
+# data$CurrentPack[data$DogName == "Fatalii" &
+#   data$Timestamp < "2016-02-18 00:00:00"] <- NA
+#
+# # Mirage and Kalahri belong to BN only after the 20.09.2017. Let's make anything
+# # after dispersal NA. Then add the BN pack after the 20-09-2017
+# data$CurrentPack[data$AfterDispersal & data$DogName == "Kalahari"] <- NA
+# data$CurrentPack[data$AfterDispersal & data$DogName == "Kalahari" &
+#   data$Timestamp > "2017-09-20"] <- "BN"
+# data$CurrentPack[data$AfterDispersal & data$DogName == "Mirage"] <- NA
+# data$CurrentPack[data$AfterDispersal & data$DogName == "Mirage" &
+#   data$Timestamp > "2017-09-20"] <- "BN"
+#
+# # Kalahari eventually switched the pack from BN to WA. This happened the same
+# # day that Belgium switched to WA. We can use our cutoff data table to find this
+# # date
+# date <- cut$EndDate[cut$DogName == "Belgium"]
+#
+# # Let's change Kalaharis pack after this timestamp to WA
+# data$CurrentPack[data$Timestamp > date & data$DogName == "Kalahari"] <- "WA"
+#
+# # Appalachia's "after-dispersal-pack" is called APL
+# data$CurrentPack[data$AfterDispersal & data$DogName == "Appalachia"] <- "APL"
+#
+# # Bongwe eventually dispersed socially
+# data$CurrentPack[data$DogName == "Bongwe"
+#   & data$Timestamp > "2012-09-22 00:00:00"] <- "HU"
+#
+# # Remove unnecessary columns
+# data <- select(data, -c("AfterDispersal"))
+#
+# # Order the dataframe according to: DogName, Timestamp
+# data <- arrange(data, DogName, Timestamp)
 
 ################################################################################
-#### CONTINUE TO WORK FROM HERE
+#### Resampmling Data
 ################################################################################
-############################################################
-#### Adding Pack Information
-############################################################
-# Let's load the csv containing all pack affiliations
-packs <- read_csv("03_Data/01_RawData/POPECOL/PackAffiliation.csv")
+# Remove NA fixes
+table(is.na(data$x))
+table(is.na(data$y))
+data <- subset(data, !is.na(x) & !is.na(y))
 
-# Create a column that indicates if a fixe was recorder before or after
-# dispersal
-data$AfterDispersal <- ifelse(data$Timestamp > data$EndDate, T, F)
-
-# Lets join the birth and postdispersal pack to each fix
-data <- left_join(data, packs, by = "DogName")
-
-# During dispersal the individuals are not with their pack anymore so let's put
-# NAs for the pack during dispersal
-data$BirthPack[data$State == "Disperser"] <- NA
-
-# After dispersal (i.e. settlement) the individuals will be in a new pack. Let's
-# create a column that indicates whether a GPS fix was taken before or after
-# dispersal so that we can change the packs accordingly. Note that there are
-# individuals with multiple dispersal phases. We will only use the most recent
-# EndDate for them (we assume they haven't settled in a new pack before this
-# date).
-enddates <- cut %>%
-
-  # Group the enddates by dog
-  group_by(DogName) %>%
-
-  # Keep only the latest date
-  slice(which.max(EndDate)) %>%
-
-  # Remove the start date from the resulting table
-  select(., -StartDate)
-
-# Join these dates to our dataframe
-data <- left_join(data, enddates, by = "DogName")
-
-# Finally we merge the "BirthPack" and "PostDispersalPack" columns and create
-# a column that indicates the current pack
-data$CurrentPack <- data$BirthPack
-data$CurrentPack[data$AfterDispersal] <-
-  data$PostDispersalPack[data$AfterDispersal]
-
-# Remove any undesired column
-data <- select(data, -c("BirthPack", "PostDispersalPack", "EndDate"))
-
-# Now there are some manual adjustments that I do according to Dominik's
-# instructions. For Fatalii the pack is unknown before the 18.02.2016
-data$CurrentPack[data$DogName == "Fatalii" &
-  data$Timestamp < "2016-02-18 00:00:00"] <- NA
-
-# Mirage and Kalahri belong to BN only after the 20.09.2017. Let's make anything
-# after dispersal NA. Then add the BN pack after the 20-09-2017
-data$CurrentPack[data$AfterDispersal & data$DogName == "Kalahari"] <- NA
-data$CurrentPack[data$AfterDispersal & data$DogName == "Kalahari" &
-  data$Timestamp > "2017-09-20"] <- "BN"
-data$CurrentPack[data$AfterDispersal & data$DogName == "Mirage"] <- NA
-data$CurrentPack[data$AfterDispersal & data$DogName == "Mirage" &
-  data$Timestamp > "2017-09-20"] <- "BN"
-
-# Kalahari eventually switched the pack from BN to WA. This happened the same
-# day that Belgium switched to WA. We can use our cutoff data table to find this
-# date
-date <- cut$EndDate[cut$DogName == "Belgium"]
-
-# Let's change Kalaharis pack after this timestamp to WA
-data$CurrentPack[data$Timestamp > date & data$DogName == "Kalahari"] <- "WA"
-
-# Appalachia's "after-dispersal-pack" is called APL
-data$CurrentPack[data$AfterDispersal & data$DogName == "Appalachia"] <- "APL"
-
-# Bongwe eventually dispersed socially
-data$CurrentPack[data$DogName == "Bongwe"
-  & data$Timestamp > "2012-09-22 00:00:00"] <- "HU"
-
-# Remove unnecessary columns
-data <- select(data, -c("AfterDispersal"))
-
-# Order the dataframe according to: DogName, Timestamp
+# Sort data
 data <- arrange(data, DogName, Timestamp)
 
-############################################################
-#### Create Shapefile and Store the Output
-############################################################
-# As a last step before we store the data we might want to resample the
-# remaining fixes to 2 hours such that there is only one fix every two hours.
-# This will make sure that we don't have too many fixes
+# Some of the data has a very high resolution that we don't need. We will
+# therefore subsample to a resolution we can work with.
+backup <- data
 data <- data %>% group_by(DogName) %>% nest()
 data$data <- suppressMessages(
-  mclapply(data$data, mc.cores = detectCores() - 1, function(x){
-    resFix2(x, hours = 2, start = 1)
-  })
+  pbmclapply(data$data
+    , ignore.interactive =  T
+    , mc.cores = detectCores() - 1
+    , FUN = function(x){resFix2(x, hours = 1, start = 1)}
+  )
 )
 data <- unnest(data)
 
-# We can use this data to create shapefiles that we can use for visual
-# inspection. Let's create a track
-tracks <- data %>% make_track(.
-    , .x    = x
-    , .y    = y
-    , .t    = Timestamp
-    , id    = DogName
-    , state = State
-    , pack  = CurrentPack
-    , crs   = CRS("+init=epsg:4326")) %>%
+############################################################
+#### Store the Output
+############################################################
+# Write the data to file
+write_csv(data, "03_Data/02_CleanData/00_General_Dispersers_Popecol.csv")
 
-  # Transform to utm
-  transform_coords(CRS("+init=epsg:32734")) %>%
+# Create a shapefile for visualization
+data <- data %>% group_by(DogName) %>% nest()
+tracks <- pbmclapply(1:nrow(data), ignore.interactive = T, mc.cores = detectCores() - 1, function(x){
+  coords <- data$data[[x]]
+  coords$DogName <- data$DogName[x]
+  x <- coords
+  coordinates(x) <- c("x", "y")
+  crs(x) <- CRS("+init=epsg:4326")
+  lines <- spLines(x)
+  lines <- createSegments(lines)
+  lines <- as(lines, "SpatialLinesDataFrame")
+  lines@data <- x@data[1:(nrow(x) - 1), ]
+  return(lines)
+}) %>% do.call(rbind, .)
 
-  # And nest the tracks
-  nest(data = -"id") %>%
-
-  # Turn to a step representation (note that the option "keep_cols" allows us to
-  # retain the information about dispersers in the resulting object)
-  mutate(., data = map(data, function(x){
-    x %>% steps(., keep_cols = "start")
-  })) %>%
-
-  # Unnest the tibble
-  unnest() %>%
-
-  # Make the turning angles clockwise
-  mutate(., ta_ = ta_ * (-1)) %>%
-
-  # Add a column that indicates the absolute turning angle (heading)
-  mutate(., absta_ = absAngle(.))
-
-# Use our custom function to create spatial lines
-lines <- lineTrack(tracks, CRS("+init=epsg:32734"))
-
-# Coerce the lines to WGS84
-lines <- spTransform(lines, CRS("+init=epsg:4326"))
-
-# To store the shapefiles we need to coerce the difftame column to a numeric
-# column
-lines$dt_ <- as.numeric(lines$dt_)
-
-# Store the merged dataframe and shapefile to the different locations
-write_csv(data, "03_Data/02_CleanData/00_General_Dispersers_Popecol(Regular).csv")
-writeOGR(lines
-  , "03_Data/02_CleanData"
-  , "00_General_Dispersers_Popecol(Regular)"
-  , driver = "ESRI Shapefile"
+# Store them
+writeOGR(tracks
+  , dsn       = "03_Data/02_CleanData"
+  , layer     = "00_General_Dispersers_Popecol"
+  , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
