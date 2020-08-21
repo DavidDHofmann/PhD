@@ -1,0 +1,44 @@
+############################################################
+#### Preparation of Major Water Areas
+############################################################
+# Description: Preparation of a shapefile of all major water areas. This might
+# be handy for a nice plot
+
+# Clean environment
+rm(list = ls())
+
+# Change the working directory.
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
+setwd(wd)
+
+# Load required packages
+library(rgdal)
+library(raster)
+library(rgeos)
+library(tidyverse)
+library(parallel)
+
+# Load water shapefiles
+water <- readOGR("03_Data/01_RawData/GEOFABRIK/Water.shp")
+
+# Specify the areas that we want to keep for plotting later
+object1 <- water[grepl(water@data$name, pattern = "Okavango.*Delta"), ][2, ]
+object2 <- water[grepl(water@data$name, pattern = "Linyanti.*Delta"), ]
+object3 <- water[grepl(water@data$name, pattern = "Garangwe.*Pan"), ][2, ]
+object4 <- water[grepl(water@data$name, pattern = "Lake.*Kariba"), ]
+object5 <- water[grepl(water@data$name, pattern = "Lake.*Ngami"), ]
+
+# Put all objects together
+water <- rbind(object1, object2, object3, object4, object5)
+
+# Visualize them
+plot(water, col = "lightblue", border = NA)
+
+# Store the file
+writeOGR(
+    water
+  , dsn       = "03_Data/02_CleanData"
+  , layer     = "03_LandscapeFeatures_MajorWaters_GEOFABRIK"
+  , driver    = "ESRI Shapefile"
+  , overwrite = TRUE
+)
