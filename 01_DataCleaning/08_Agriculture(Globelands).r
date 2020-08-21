@@ -1,16 +1,15 @@
-############################################################
+################################################################################
 #### Resampling and Cropping of the Globeland Agriculture Data
-############################################################
-# Description: Although we will remove agricultural fields from the final land
-# cover class layer we can still use globeland's agricultural fields to augment
-# our croplands layer. In this script I therefore extract agricultural fields so
-# we can merge them.
+################################################################################
+# Description: We can use globeland's agricultural fields to augment our
+# croplands layer. In this script I therefore extract agricultural fields so we
+# can merge them.
 
 # Clear R's brain
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -30,18 +29,19 @@ rcl <- data.frame(
 crops <- reclassify(crops, rcl)
 
 # Load the reference raster
-r250 <- raster("03_Data/02_CleanData/00_General_Raster250.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Aggregate the globelands dataset to match the resolution of the reference
 # raster
 crops <- aggregate(crops, fact = round(250 / 30), fun = max)
 
 # Resample the layer to match the reference raster
-crops_res <- resample(crops, r250, "ngb")
+crops_res <- resample(crops, r, "ngb")
 
 # Save the result to file
-writeRaster(crops_res
-  , "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_Globelands.tif"
+writeRaster(
+    x         = crops_res
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_Globelands.tif"
   , overwrite = TRUE
 )
 

@@ -10,7 +10,7 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -23,16 +23,21 @@ beginCluster()
 crops <- raster("03_Data/01_RawData/CROPLANDS/Croplands.tif")
 
 # Load the reference raster
-r250 <- raster("03_Data/02_CleanData/00_General_Raster250.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Crop the croplands layer to the desired extent
-crops <- crop(crops, r250)
+# # Crop the croplands layer to the desired extent
+# crops <- crop(crops, r)
+#
+# # Because the original file is so massive I will replace it with the cropped
+# # version
+# writeRaster(
+#     x         = crops
+#   , filename  = "03_Data/01_RawData/CROPLANDS/Croplands.tif"
+#   , overwrite = T
+# )
 
-# Because the original file is so massive I will replace it with the cropped
-# version
-writeRaster(crops, "03_Data/01_RawData/CROPLANDS/Croplands.tif", overwrite = T)
-
-# Aggregate the croplands dataset to match the resolution of the reference raster
+# Aggregate the croplands dataset to match the resolution of the reference
+# raster
 crops <- aggregate(crops, fact = round(250 / 30), fun = max)
 
 # Now water is still included in the raster. Let's reclassify the values so we
@@ -41,7 +46,7 @@ rcl <- data.frame(old = c(1,2), new = c(0,1))
 crops <- reclassify(crops, rcl)
 
 # Resample the layer to match the reference raster
-crops_res <- resample(crops, r250, "ngb")
+crops_res <- resample(crops, r, "ngb")
 
 # Save the result to file
 writeRaster(crops_res

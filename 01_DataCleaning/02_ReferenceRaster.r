@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of the Reference Raster (250m)
-############################################################
+################################################################################
 # Description: In order to facilitate the manipulation of raster files, I create
 # a reference raster according to which I can crop and resample all other
 # rasters. This will ensure that all rasters ultimately have the same

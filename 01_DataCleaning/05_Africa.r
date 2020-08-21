@@ -1,33 +1,35 @@
-############################################################
+################################################################################
 #### Preparation of the Africa Shapefile
-############################################################
-# Description: For plotting purposes it will be nice to have an Africa map as
-# background and to show the extent of our study. The file was downloaded from
+################################################################################
+# Description: Preparation of the Africa shapefile that was downloaded from
 # http://www.maplibrary.org/library/stacks/Africa/index.htm
 
 # Clean environment
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # load packages
-library(rgdal)
-library(raster)
-library(rgeos)
+library(rgdal)    # To handle spatial data
+library(raster)   # To handle spatial data
+library(rgeos)    # To manipulate spatial data
 
 # Load the Africa shapefile
 africa <- readOGR("03_Data/01_RawData/ESRI/Africa.shp")
 
-# Assign correct projection
+# The file currently misses a correct projection. Let's assign it.
 crs(africa) <- CRS("+init=epsg:4326")
 
 # Check if the geometry is valid
 gIsValid(africa)
 
-# Make it valid then
+# Make it valid
 africa <- gBuffer(africa, width = 0, byid = TRUE)
+
+# Check again
+gIsValid(africa)
 
 # Now save the projected file to our data folder
 writeOGR(africa

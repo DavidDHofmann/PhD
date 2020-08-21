@@ -480,18 +480,24 @@ write_csv(data, "03_Data/02_CleanData/00_General_Dispersers_Popecol.csv")
 
 # Create a shapefile for visualization
 data <- data %>% group_by(DogName) %>% nest()
-tracks <- pbmclapply(1:nrow(data), ignore.interactive = T, mc.cores = detectCores() - 1, function(x){
-  coords <- data$data[[x]]
-  coords$DogName <- data$DogName[x]
-  x <- coords
-  coordinates(x) <- c("x", "y")
-  crs(x) <- CRS("+init=epsg:4326")
-  lines <- spLines(x)
-  lines <- createSegments(lines)
-  lines <- as(lines, "SpatialLinesDataFrame")
-  lines@data <- x@data[1:(nrow(x) - 1), ]
-  return(lines)
-}) %>% do.call(rbind, .)
+tracks <- suppressMessages(
+  pbmclapply(1:nrow(data)
+    , ignore.interactive = T
+    , mc.cores = detectCores() - 1
+    , function(x){
+      coords <- data$data[[x]]
+      coords$DogName <- data$DogName[x]
+      x <- coords
+      coordinates(x) <- c("x", "y")
+      crs(x) <- CRS("+init=epsg:4326")
+      lines <- spLines(x)
+      lines <- createSegments(lines)
+      lines <- as(lines, "SpatialLinesDataFrame")
+      lines@data <- x@data[1:(nrow(x) - 1), ]
+      return(lines)
+    }
+  ) %>% do.call(rbind, .)
+)
 
 # Store them
 writeOGR(tracks

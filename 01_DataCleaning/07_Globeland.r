@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of Globeland Data
-############################################################
+################################################################################
 # Description: The script stitches together the seperated tiles downloaded from
 # Globeland. After stitching the resulting raster is cropped, simplified
 # (reclassified) and resampled to 250m.
@@ -9,34 +9,32 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
-library(tidyverse)
-library(raster)
-library(rgdal)
-library(gdalUtils)
-library(parallel)
+library(raster)     # To handle raster data
+library(rgdal)      # To handle spatial data
+library(gdalUtils)  # To stitch raster tiles
+library(parallel)   # To use multiple cores
+library(davidoff)   # Custom functions
 
-# Load custom functions
-source("Functions.r")
-
-# Make use of multicore abilities
+# Start cluster
 beginCluster()
 
-############################################################
+################################################################################
 #### Stitching the Tiles
-############################################################
-# Identify all the tifs in our folder
+################################################################################
+# Identify all the tifs that need to be stitched
 files <- dir(
     path        = "03_Data/01_RawData/GLOBELAND"
   , pattern     = "030.tif$"
   , full.names  = T
 )
 
-# Before we can merge the rasters they need to be reprojected to a uniform
-# projection
+# As of now, the rasters come with different projections. We need to adjust this
+# and make them equal. Note that by default the algorithm uses "nearest
+# neighbor" for resampling
 new_files <- c()
 for (i in 1:length(files)){
   new_files[i] <- tempfile(fileext = ".tif")
@@ -63,9 +61,9 @@ gdal_translate(
   , options       = c("BIGTIFFS=YES")
 )
 
-############################################################
-#### Cropping the Stitched Raster
-############################################################
+################################################################################
+#### Cropping, Aggregating, and Simplifying the Stitched Raster
+################################################################################
 # Load the merged file
 merged <- raster("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 
@@ -77,23 +75,15 @@ merged <- crop(merged, s)
 
 # Store the result to file
 writeRaster(
-    merged
-  , "03_Data/01_RawData/GLOBELAND/Globeland.tif"
+    x         = merged
+  , filename  = "03_Data/01_RawData/GLOBELAND/Globeland.tif"
   , overwrite = TRUE
+  ,
 )
 
-############################################################
-#### Reduce Resolution to 250m
-############################################################
-# Load the layer again
-glo <- raster("03_Data/01_RawData/GLOBELAND/Globeland.tif")
-
 # Aggregate the layer to 250m
-coarse <- aggregate(glo, fact = round(250 / 30), fun = modal)
+coarse <- aggregate(merged, fact = round(250 / 30), fun = modal)
 
-############################################################
-#### Simplify Land Cover to Water
-############################################################
 # We only want to use the water layer from the globeland dataset. Let's
 # reclassify the values accordingly
 classes <- data.frame(
@@ -131,19 +121,16 @@ rcl <- data.frame(old = classes[, 1], new = classes[, 3])
 # Run the reclassification
 new <- reclassify(coarse, rcl)
 
-############################################################
-#### Resampling
-############################################################
-# Load the reference raster
-r250 <- raster("03_Data/02_CleanData/00_General_Raster250.tif")
+# Finally, we will need to resample the raster to our reference raster
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Resample the globeland layer to the reference raster
-new <- resample(new, r250, "ngb")
+new <- resample(new, r, method = "ngb")
 
 # Store the result
 writeRaster(
-    new
-  , "03_Data/02_CleanData/01_LandCoverClasses30_Globeland.tif"
+    x         = new
+  , filename  = "03_Data/02_CleanData/01_WaterCover_Globeland.tif"
   , overwrite = TRUE
 )
 

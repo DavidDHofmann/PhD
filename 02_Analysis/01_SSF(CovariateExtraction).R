@@ -1,52 +1,151 @@
-############################################################
+################################################################################
 #### Step Selection Function - Extraction of Covariates
-############################################################
-# Description: In this script we create regular tracks (either 4 or 24 hours)
-# and create random steps for the step selection function. Finally, we also
-# extract the desired covariates along each of the steps. Note that the script
-# needs to be run twice to get the 4 hourly and 24 hourly extractions. Also be
-# warned that the extraction takes a good amount of time to complete.
+################################################################################
+# Description: In this script we use our gps data to create steps and propose
+# potential alternative steps. Along all steps we then extract underlying
+# covariates
 
 # Clear R's brain
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
-library(rgdal)
-library(raster)
-library(data.table)
-library(lubridate)
-library(amt)
-library(tidyverse)
-library(spatstat)
-library(rgeos)
-library(maptools)
-library(velox)
-library(parallel)
+library(tidyverse)    # For data wrangling
+library(davidoff)     # Custom functions
+library(lubridate)    # To handle dates
+library(amt)          # To coerce gps fixes to steps
 
-# Load custom functions
-source("Functions.r")
-
-# Set seed
+# Set seed for reproducability
 set.seed(1234)
 
-# Make use of multicore abilities
-beginCluster()
+# Load the gps data
+data <- read_csv("03_Data/02_CleanData/00_General_Dispersers_Popecol.csv")
 
-# Load the merged dataset containing all GPS fixes
-data <- "03_Data/02_CleanData/00_General_Dispersers_Popecol(Regular).csv" %>%
-  read_csv()
+# We only need dispersers' data
+data <- subset(data, State == "Disperser")
 
-# Do you want to extract for the 4 hourly or the 24 hourly fixes?
-# selection <- 24
-selection <- 4
+# Let's create a timestamp that is rounded to the nearest hour
+data$TimestampRounded <- round_date(data$Timestamp, "1 hour")
 
-############################################################
-#### Data Cleaning (For 4 Hourly Fixes)
-############################################################
+# Make sure there are no duplicates!
+table(duplicated(data[, c("DogName", "TimestampRounded")]))
+table(hour(data$TimestampRounded))
+
+# We want to convert the fixes to steps. However, we don't want to consider any
+# steps that take longer than 8.25 hours. Let's therefore identify consecutive
+# bursts with fixes spread < 8.25 for each individual
+data <- data %>%
+  group_by(DogName) %>%
+  mutate(dt_ = Timestamp - lag(Timestamp)) %>%
+  mutate(dt_ = as.numeric(dt_, units = "hours")) %>%
+  ungroup()
+
+# A new burst starts whenever a step takes longer than 8.25 hours
+data <- data %>%
+  mutate(NewBurst = ifelse(dt_ > 8.25 | is.na(dt_), yes = 1, no = 0)) %>%
+  mutate(BurstID = cumsum(NewBurst)) %>%
+  dplyr::select(-c(NewBurst))
+
+# We can only work with bursts that contain at least three fixes (since we will
+# need to calculate turning angles)
+data <- data %>%
+  group_by(DogName, BurstID) %>%
+  nest() %>%
+  mutate(Nrow = map(data, nrow) %>% do.call(rbind, .)) %>%
+  subset(Nrow >= 3) %>%
+  unnest(data) %>%
+  ungroup() %>%
+  select(-c(Nrow, dt_))
+
+# Now we can coerce the data to proper steps. Note that we pretend that the
+# burst is the animal.
+tracks <- data %>%
+  make_track(.
+    , .x      = x
+    , .y      = y
+    , .t      = Timestamp
+    , id      = BurstID
+    , crs     = CRS("+init=epsg:4326")
+    , State   = State
+    , DogName = DogName
+  ) %>%
+
+  # Transform the tracks to utm
+  transform_coords(CRS("+init=epsg:32734")) %>%
+
+  # Nest the tracks
+  nest(-"id") %>%
+
+  # Turn to a step representation (look up the amt vignette for details)
+  mutate(data = map(data, function(x){
+    x %>%
+
+      # The function creates steps from the fixes in each tibble row. The option
+      # "keep_cols" allows to keep the time of day (tod) column that we added
+      steps(keep_cols = "start") %>%
+
+      # Transform the difftime column to a numeric column to avoid that there
+      # are heterogeneous units
+      mutate(., dt_ = as.numeric(dt_, units = "hours"))
+  })) %>%
+
+  # Unnest the tibble
+  unnest(data) %>%
+
+  # Multiply turning angles with negative one (for some reason the package
+  # calculates the turning angles conuterclockwise but we want them clockwise)
+  mutate(ta_ = ta_ * (-1)) %>%
+
+  # Add a column indicating the absolute turning angle (important for the
+  # ellipses). We can use the function we created above.
+  mutate(absta_ = absAngle(.)) %>%
+
+  # We can only work with steps for which we have a turning angle. Let's get rid
+  # of any steps where the turning angle is NA
+  filter(!is.na(ta_))
+
+# Reproject coordinates
+tracks[, c("x1_", "y1_")] <- reprojCoords(
+    xy    = cbind(tracks$x1_, tracks$y1_)
+  , from  = CRS("+init=epsg:32734")
+  , to    = CRS("+init=epsg:4326")
+)
+tracks[, c("x2_", "y2_")] <- reprojCoords(
+    xy    = cbind(tracks$x2_, tracks$y2_)
+  , from  = CRS("+init=epsg:32734")
+  , to    = CRS("+init=epsg:4326")
+)
+
+# Function to reproject coordinates
+reprojCoords <- function(xy, from, to){
+  xy <- as.data.frame(xy)
+  coordinates(xy) <- as.matrix(xy)
+  crs(xy) <- from
+  reproj <- spTransform(xy, to)
+  reproj <- coordinates(reproj)
+  reproj <- as.matrix(reproj)
+  reproj <- unname(reproj)
+  return(reproj)
+}
+
+test <- lineTrack(track = tracks, crs = CRS("+init=epsg:4326"))
+
+library(rgdal)
+writeOGR(test, ".", "test", driver = "ESRI Shapefile")
+plot(test)
+
+################################################################################
+#### LEGACYY
+################################################################################
+################################################################################
+#### WORK HERE!!!
+################################################################################
+################################################################################
+#### Data Cleaning
+################################################################################
 # For this part we will use the GPS fixes from dispersers only
 tracks <- data %>%
 
