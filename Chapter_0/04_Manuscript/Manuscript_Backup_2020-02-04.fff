@@ -1,0 +1,444 @@
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+        \includegraphics[width=0.9\textwidth]{99_StudyArea2.pdf}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            % % next four lines will help you to locate the point needed by forming a grid.
+            % % comment these four lines in the final picture.
+            % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+            % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+            % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+            % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+            % % upto here
+            \draw[black] (0.202, 0.255) -- (0.36, 0.955);
+            \draw[black] (0.202, 0.205) -- (0.36, 0.070);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Overview of our study area. (a) The red rectangle depicts our
+    \textit{extended study area}, which was confined by the extent of the
+    KAZA-TFCA. Purple areas indicate remaining wild dog populations according to
+    the IUCN \citep{Woodroffe.2012}. (b) The orange rectangle illustrates our
+    \textit{core study area}, from which all dispersers departed. Yellow lines
+    depict all dispersal trajectories that were recorded between the years 2011
+    and 2019. Since game reserves in Botswana virtually serve the same purpose as
+    National Parks, we will use the terms interchangeably for this region.}
+    \label{StudyArea}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_Trajectories2.pdf}
+    \caption{Illustration of the dispersal trajectories that we recorded. Each
+    color represents a different dispersal coalition. All coalitions departed
+    from the core study area, which is indicated by the white rectangle. The
+    coalition dispersing towards the far east of the map covered over 360 km in
+    under 10 days.}
+    \label{Trajectories}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_Covariates.pdf}
+    \caption{Overview of covariates that we used in our models. Although all
+    covariates were prepared for the extended study area, we present only an
+    extract to maximize visibility. The white rectangle in each plot depicts our
+    core study area. (a) Averaged layer of all binary maps of water and dryland
+    that we acquired using our floodmapping algorithm. (b) Percentage cover of
+    trees. (c) Percentage cover of shrubs/grassland. Note that anything not
+    covered by trees or shrubs/grassland was deemed to be bare land. (d)
+    Protection status of the area. (e) Human influence proxy, taking into
+    account human density, farms, and roads. (f) Distance to nearest road (white
+    lines depict actual roads).}
+    \label{Covariates}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+  \begin{minipage}{.25\linewidth}
+    \begin{subfigure}[t]{.9\linewidth}
+        \includegraphics[width=\textwidth]{99_LeastCostPaths(Example1).pdf}
+    \end{subfigure}
+  \end{minipage}
+  \begin{minipage}{.25\linewidth}
+    \begin{subfigure}[t]{.9\linewidth}
+        \includegraphics[width=\textwidth]{99_LeastCostPaths(Example2).pdf}
+    \end{subfigure}
+  \end{minipage}
+  \begin{minipage}{.25\linewidth}
+    \begin{subfigure}[t]{.9\linewidth}
+        \includegraphics[width=\textwidth]{99_LeastCostPaths(Example3).pdf}
+    \end{subfigure}
+  \end{minipage}
+  \caption{Figures illustrating the process of identifying a least-cost corridor
+  between source points A and B following \cite{Pinto.2009}. (a) Example of a
+  permeability surface, which determines the costs of movement. (b1) Cumulative
+  cost map for point A, depicting the total minimal costs necessary to get from
+  point A to every other location. (b2) Cumulative cost map for point B,
+  depicting the total minimal costs to get from point B to every other location.
+  (c) Summed cost maps of points A and B. (d) Masked out corridor containing
+  pixels that do not exceed the cheapest pixel by more than 5\%.}
+  \label{LCCExample}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_PermeabilityResults.pdf}
+    \caption{(a) Estimated selection coefficients from the most parsimonious
+    habitat selection model. Negative coefficients indicate avoidance of a
+    covariate, positive coefficients selection of a covariate. Whiskers
+    delineate the 95\%-CIs for estimated parameters. The intercept is
+    meaningless in the iSSF framework and was thus omitted. (b) Results from the
+    k-fold cross validation for case-control studies. The left graph shows rank
+    frequencies of \textit{realized} steps according to predictions, whereas the
+    right graph shows rank frequencies of \textit{randomly selected} steps
+    according to predictions. \(\bar{r}_s\) indicates the mean correlation
+    coefficient resulting from 100 repetitions of the k-fold cross validation.
+    The blue smoothing line was fitted using a LOESS regression and solely
+    serves to aid the eye in detecting the trends. Correlation coefficients
+    suggest that our prediction is significant and robust, evidenced by the fact
+    that the confidence intervals of \(\bar{r}_{s, realized}\) and \(\bar{r}_{s,
+    random}\) do not overlap and that there is strong and significant
+    correlation between ranks and associated frequency for realized steps.}
+    \label{PermeabilityResults}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+          \begin{minipage}{0.65\textwidth}
+            \includegraphics[width = \textwidth]{99_PermeabilityMap.pdf}
+          \end{minipage}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+           %  % next four lines will help you to locate the point needed by
+           %  % forming a grid. comment these four lines in the final picture.\protect \begingroup \immediate \write \@unused   \def \MessageBreak  
+ \let \protect \edef  Your command was ignored.\MessageBreak Type  I <command> <return>  to replace it with another command,\MessageBreak or  <return>  to continue without it.  \errhelp \let \def \MessageBreak  
+(inputenc)                 \def   \errmessage  Package inputenc Error: Unicode char ↓ (U+2193)\MessageBreak not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help   \endgroup 
+           % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+           % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+           % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+           % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+           %  % upto here
+          % \node[text=white, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=white] (No1) at (0.440, 0.350){1};
+          % \node[text=white, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=white] (No2) at (0.520, 0.438){2};
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Predicted permeability surface for the extent of the KAZA-TFCA.
+    Permability was predicted by calculating selection scores \(w(x) =
+    exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)\) for each pixel based on
+    the pixel's underlying covariates (\(x_i\)) and estimated habitat
+    preferences (\(\beta_i\)). Areas that dispersers find easy to traverse are
+    depicted in bright colors. Bold white lines delineate the borders of the
+    KAZA-TFCA, whereas dashed white lines show country borders.}
+    \label{PermeabilityMap}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+          \begin{minipage}{0.95\textwidth}
+            \includegraphics[width = \textwidth]{99_LeastCostPaths.pdf}
+            \includegraphics[width = \textwidth]{99_LeastCostCorrs.pdf}
+          \end{minipage}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+          % % next four lines will help you to locate the point needed by
+          % % forming a grid. comment these four lines in the final picture.
+          % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+          % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+          % \foreach \x in {0,1,...,9} {\node [anchor=north] at (\x/10,0) {0.\x};}
+          % \foreach \y in {0,1,...,9} {\node [anchor=east] at (0,\y/10) {0.\y};}
+          % % upto here
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No1) at (0.400, 0.700){1};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No2) at (0.370, 0.760){2};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No3) at (0.585, 0.780){3};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No4) at (0.647, 0.697){4};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No5) at (0.910, 0.770){5};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No6) at (0.580, 0.658){6};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No7) at (0.410, 0.640){7};
+          % \node[text=black, circle, scale=1, font=\bfseries, inner sep = 0.5pt
+          %   , draw=black] (No8) at (0.380, 0.665){8};
+          % \draw[black, line width = 1pt, densely dotted] (No1) -- (0.500, 0.710);
+          % \draw[black, line width = 1pt, densely dotted] (No2) -- (0.438, 0.760);
+          % \draw[black, line width = 1pt, densely dotted] (No3) -- (0.565, 0.805);
+          % \draw[black, line width = 1pt, densely dotted] (No4) -- (0.665, 0.685);
+          % \draw[black, line width = 1pt, densely dotted] (No5) -- (0.885, 0.765);
+          % \draw[black, line width = 1pt, densely dotted] (No6) -- (0.540, 0.650);
+          % \draw[black, line width = 1pt, densely dotted] (No7) -- (0.450, 0.645);
+          % \draw[black, line width = 1pt, densely dotted] (No8) -- (0.345, 0.690);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{(a) Source points (black dots) and corresponding least-cost paths
+    leaving from protected areas (light grey). Note that only contiguous
+    protected areas covering more than 700 km\textsuperscript{2} are depicted.
+    Continuous thin black lines indicate the borders of the KAZA-TFCA, whereas
+    dashed black lines delineate country-borders. (b) Least-cost corridors
+    between the same source points as illustrated in subfigure (a). For ease of
+    spatial reference we also labeled some national parks (dark-grey).}
+    \label{LeastCost}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_Floodmapping.pdf}
+    \caption{Figures describing the floodmapping algorithm. (a) The colored
+    polygons indicate permanent waters and permanent dryland. Below these
+    polygons we extracted reflectance values of MODIS Terra Band 7 and used
+    their repsective medians to calculate a classification threshold. (b)
+    Example of a classified MODIS Terra Band 7 image after application of the
+    threshold.}
+    \label{Floodmapping}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[ht]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_FloodmappingValidation.pdf}
+    \caption{Validation procedure of our floodmapping algorithm. (a) Classified
+    image that was provided to us by ORI. (b) Image for the same date but now
+    classified using our own algorithm. (c) Difference image indicating false
+    positives and false negatives in our own classification.}
+    \label{FloodmappingValidation}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_FloodPulse.pdf}
+    \caption{Sequence of floodmaps showing a typical flood pulse throughout the
+    year. The flood arrives from the north-western corner (so called
+    ``pan-handle'') of the Okavango Delta and slowly descents through the delta
+    in south-eastern direction, where it nourishes several tributaries. The
+    extent of the flood peaks around August or September and then slowly
+    retracts. Between December and March the reflectance properties of water and
+    dryland change, which is why often no accurate floodmaps can be obtained for
+    these months using remote sensing techniques.}
+    \label{FloodPulse}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}[node distance=5mm and 5mm]
+      \node (mod2) [nonterminal
+        , minimum width = 30mm
+        , fill          = red!20
+        ] {Movement Model};
+      \node (mod1) [nonterminal
+        , above         = of mod2
+        , fill          = blue!20
+        , minimum width = 30mm
+        ] {Permeability Model};
+      \node (mod3) [nonterminal
+        , below         = of mod2
+        , fill          = yellow!20
+        , minimum width = 30mm
+        ] {Social Model};
+      \node (dat1) [nonterminal
+        , above left    = of mod2
+        , fill          = blue!20
+        , yshift        = -5mm
+        , minimum width = 30mm
+        ] {GPS Data};
+      \node (dat2) [nonterminal
+        , below left    = of mod2
+        , fill          = blue!20
+        , yshift        = +5mm
+        , minimum width = 30mm
+        ] {Spatial Covariates};
+      \node (for1) [nonterminal
+        , right         = of mod1
+        , fill          = blue!20
+        , minimum width = 35mm
+        ] {Permeability Map};
+      \node (forfor1) [nonterminal
+        , right         = of for1
+        , fill          = blue!20
+        , minimum width = 35mm
+        , yshift        = +5mm
+        ] {Least-Cost Paths};
+      \node (forfor2) [nonterminal
+        , right         = of for1
+        , fill          = blue!20
+        , minimum width = 35mm
+        , yshift        = -5mm
+        ] {Least-Cost Corridors};
+      \node (for2) [nonterminal
+        , right         = of mod2
+        , fill          = red!20
+        , minimum width = 35mm
+        ] {Dispersal Simulation};
+      \node (box) [draw
+        , dotted
+        , very thick
+        , minimum width   = 35mm
+        , minimum height  = 35mm
+        ] {};
+      \node [above = of box, yshift = -5mm] {iSSF};
+      \path (dat1) edge[->] (box);
+      \path (dat2) edge[->] (box);
+      \path (mod1) edge[->] (for1);
+      \path (mod2) edge[->] (for2);
+      \path (for1) edge[->] (forfor1);
+      \path (for1) edge[->] (forfor2);
+    \end{tikzpicture}
+    \caption{Schematic overview of our methodological approaches. The blue boxes
+    highlight our main line of work which resulted in the identification of
+    least-cost paths and least-cost corridors. The red boxes show that we
+    additionally used the iSSF framework to analyze movement behavior in more
+    detail and to simulate dispersal events. Finally, the yellow box indicates
+    our attempt to use the iSSF framework to model and analyze the influence of
+    the social landscape on dispersal behavior.}
+    \label{SchematicOverview}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+          \begin{minipage}{0.95\textwidth}
+            \begin{center}
+              \includegraphics[width = 0.80\textwidth]
+                {99_MovementModel.pdf}\\
+              \includegraphics[width = 1\textwidth]
+                {99_MovementModel(Interactions).pdf}
+            \end{center}
+          \end{minipage}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+           %  % next four lines will help you to locate the point needed by
+           %  % forming a grid. comment these four lines in the final picture.\protect \begingroup \immediate \write \@unused   \def \MessageBreak  
+ \let \protect \edef  Your command was ignored.\MessageBreak Type  I <command> <return>  to replace it with another command,\MessageBreak or  <return>  to continue without it.  \errhelp \let \def \MessageBreak  
+(inputenc)                 \def   \errmessage  Package inputenc Error: Unicode char ↓ (U+2193)\MessageBreak not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help   \endgroup 
+           % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+           % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+           % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+           % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+           %  % upto here
+            \draw [red, dashed] (0.13, 0.50) rectangle (0.405, 0.645);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{(a) Results from the most parsimonious movement model. Negative
+    coefficients indicate avoidance of a covariate, positive coefficients
+    selection of a covariate. Whiskers delineate the 95\%-CIs for estimated
+    parameters. The intercept is meaningless in the iSSF framework and was thus
+    omitted. (b) Corresponding surface plots for two-way interactions. Light
+    areas depict a combination of covariates that were preferred by dispersers,
+    whereas darker areas correspond to avoided combinations. The absolute values
+    along the axes have no meaning as original values were normalized to 0 (low)
+    and 1 (high).}
+    \label{MovementModel}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = 0.83\textwidth]{99_Simulations.pdf}
+    \caption{(a) Heatmap of 1000 simulated dispersal events departing from the
+    core study area (white rectangle) in northern Botswana (countries with
+    dashed white lines). (b) Permeability map for the same extent to illustrate
+    that simulated dispersal trajectories typically cover highly permeable
+    landscapes.}
+    \label{Simulations}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = 0.95\textwidth]{99_SocialLandscapeExample.pdf}
+    \caption{(a) Example of a layer depicting the probability of encountering a
+    resident pack in July 2017. The layer was derived from utility distributions
+    of all packs residing in the core study area. (b) Example of a layer
+    depicting all 95\% home ranges of the packs residing in the core study area.
+    This layer served to identify whether a disperser still moved through his
+    natal pack's home range, or whether it moved through a foreign packs home
+    range. The layers in (a) and (b) were updated each month to take into
+    account only the latest GPS relocation data of resident individuals.}
+    \label{SocialLandscapeExample}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+          \begin{minipage}{0.95\textwidth}
+            \begin{center}
+              \includegraphics[width = 0.75\textwidth]
+                {99_SocialModel.pdf}\\
+              \includegraphics[width = 0.8\textwidth]
+                {99_SocialModel(Interactions).pdf}
+            \end{center}
+          \end{minipage}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+           %  % next four lines will help you to locate the point needed by
+           %  % forming a grid. comment these four lines in the final picture.\protect \begingroup \immediate \write \@unused   \def \MessageBreak  
+ \let \protect \edef  Your command was ignored.\MessageBreak Type  I <command> <return>  to replace it with another command,\MessageBreak or  <return>  to continue without it.  \errhelp \let \def \MessageBreak  
+(inputenc)                 \def   \errmessage  Package inputenc Error: Unicode char ↓ (U+2193)\MessageBreak not set up for use with LaTeX.
+
+See the inputenc package documentation for explanation.
+Type  H <return>  for immediate help   \endgroup 
+           % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+           % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+           % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+           % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+           %  % upto here
+            \draw [red, dashed] (0.15, 0.60) rectangle (0.43, 0.75);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{(a) Estimated parameters from the social model. Negative
+    coefficients indicate avoidance of a covariate, positive coefficients
+    selection of a covariate. Whiskers delineate the 95\%-CIs for estimated
+    parameters. The intercept is meaningless in the iSSF framework and was thus
+    omitted. (b) Corresponding surface plots for two-way interactions (red box).
+    Light areas in the surface plots depict preferred combinations of the
+    covariates, whereas darker areas correspond to avoided combinations. The
+    absolute values along the axes have no meaning as original values were
+    normalized to 0 (low) and 1 (high).}
+    \label{SocialModel}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 

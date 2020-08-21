@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: Manuscript.aux
+The style file: apalike.bst
+Database file #1: Literatur.bib
+Warning--there's a number but no volume in Diniz.2020
+Warning--empty journal in Elliot.2014
+You've used 47 entries,
+            1935 wiz_defined-function locations,
+            793 strings with 15111 characters,
+and the built_in function-call counts, 21988 in all, are:
+= -- 2073
+> -- 1239
+< -- 12
++ -- 440
+- -- 440
+* -- 2109
+:= -- 3890
+add.period$ -- 143
+call.type$ -- 47
+change.case$ -- 449
+chr.to.int$ -- 47
+cite$ -- 49
+duplicate$ -- 666
+empty$ -- 1355
+format.name$ -- 497
+if$ -- 4148
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 49
+newline$ -- 240
+num.names$ -- 143
+pop$ -- 373
+preamble$ -- 2
+purify$ -- 453
+quote$ -- 0
+skip$ -- 487
+stack$ -- 0
+substring$ -- 1522
+swap$ -- 56
+text.length$ -- 1
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 276
+warning$ -- 2
+while$ -- 164
+width$ -- 0
+write$ -- 615
+(There were 2 warnings)

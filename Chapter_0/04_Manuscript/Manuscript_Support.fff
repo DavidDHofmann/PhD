@@ -1,0 +1,24 @@
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = 0.8\textwidth]{99_NSD.pdf}
+    \caption{NSD displacement graph for one of our dispersers. Blue colors
+    indicate the period during which we calssified the individual as
+    dispersing.}
+    \label{NSD}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = 0.9\textwidth]{99_Trajectories.pdf}
+    \caption{Illustration of the dispersal trajectories that we recorded. Each
+    color represents a different dispersing coalition. All coalitions departed
+    from the core study area, which is indicated by the white rectangle. The
+    coalition dispersing towards the far east of the map covered over 360 km in
+    under 10 days.}
+    \label{Trajectories}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 

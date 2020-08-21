@@ -1,0 +1,199 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Abrahms et~al., 2016]{Abrahms.2016}
+Abrahms, B., Jordan, N.~R., Golabek, K.~A., McNutt, J.~W., Wilson, A.~M., and
+  Brashares, J.~S. (2016).
+\newblock {Lessons from Integrating Behaviour and Resource Selection:
+  Activity-Specific Responses of African Wild Dogs to Roads}.
+\newblock {\em {Animal Conservation}}, 19(3):247--255.
+
+\bibitem[Avgar et~al., 2016]{Avgar.2016}
+Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
+\newblock {Integrated Step Selection Analysis: Bridging the Gap Between
+  Resource Selection and Animal Movement}.
+\newblock {\em {Methods in Ecology and Evolution}}, 7(5):619--630.
+
+\bibitem[Brooks et~al., 2017]{Mollie.2017}
+Brooks, M.~E., Kristensen, K., {van Benthem}, K.~J., Magnusson, A., Berg,
+  C.~W., Nielsen, A., Skaug, H.~J., Maechler, M., and Bolker, B.~M. (2017).
+\newblock {glmmTMB Balances Speed and Flexibility among Packages for
+  Zero-Inflated Generalized Linear Mixed Modeling}.
+\newblock {\em {The R Journal}}, 9(2):378--400.
+
+\bibitem[Burnham and Anderson, 2002]{Burnham.2002}
+Burnham, K.~P. and Anderson, D.~R. (2002).
+\newblock {\em {Model Selection and Multimodel Inference: A Practical
+  Information-Theoretic Approach}}.
+\newblock {Springer Science \& Business Media}, Ney York, NY, USA.
+
+\bibitem[Chen et~al., 2015]{Chen.2015}
+Chen, J., Chen, J., Liao, A., Cao, X., Chen, L., Chen, X., He, C., Han, G.,
+  Peng, S., and Lu, M. (2015).
+\newblock {Global Land Cover Mapping at 30m Resolution: A POK-Based Operational
+  Approach}.
+\newblock {\em {ISPRS Journal of Photogrammetry and Remote Sensing}},
+  103:7--27.
+
+\bibitem[Cozzi et~al., 2020]{Cozzi.2020}
+Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
+  Mcnutt, J.~W., and Ozgul, A. (2020).
+\newblock {African Wild Dog Dispersal and Implications for Management}.
+\newblock {\em {The Journal of Wildlife Management}}, 84(4):614--621.
+
+\bibitem[Davies-Mostert et~al., 2012]{DaviesMostert.2012}
+Davies-Mostert, H.~T., Kamler, J.~F., Mills, M. G.~L., Jackson, C.~R.,
+  Rasmussen, G. S.~A., Groom, R.~J., and Macdonald, D.~W. (2012).
+\newblock {Long--Distance Transboundary Dispersal of African Wild Dogs among
+  Protected Areas in Southern Africa}.
+\newblock {\em {African Journal of Ecology}}, 50(4):500--506.
+
+\bibitem[Dimiceli et~al., 2015]{Dimiceli.2015}
+Dimiceli, C., Carroll, M., Sohlberg, R., Kim, D., Kelly, M., and Townshend, J.
+  (2015).
+\newblock {MOD44B MODIS/Terra Vegetation Continuous Fields Yearly L3 Global
+  250m SIN Grid v006}.
+\newblock {\em {NASA EOSDIS Land Processes DAAC}}.
+\newblock Accessed 2019-11-12 from
+  \url{https://doi.org/10.5067/MODIS/MOD44B.006}.
+
+\bibitem[Elliot et~al., 2014]{Elliot.2014}
+Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
+\newblock {The Devil is in the Dispersers: Predictions of Landscape
+  Connectivity Change with Demography}.
+\newblock 51(5):1169--1178.
+
+\bibitem[Facebook, 2019]{Facebook.2019}
+Facebook (2019).
+\newblock {High Resolution Population Density Maps}.
+\newblock Accessed 2019-11-12 from
+  \url{https://data.humdata.org/dataset/highresolutionpopulationdensitymaps}.
+
+\bibitem[Forester et~al., 2009]{Forester.2009}
+Forester, J.~D., Im, H.~K., and Rathouz, P.~J. (2009).
+\newblock {Accounting for Animal Movement in Estimation of Resource Selection
+  Functions: Sampling and Data Analysis}.
+\newblock {\em {Ecology}}, 90(12):3554--3565.
+
+\bibitem[Fortin et~al., 2005]{Fortin.2005}
+Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
+  J.~S. (2005).
+\newblock {Wolves Influence Elk Movements: Behavior Shapes a Trophic Cascade in
+  Yellowstone National Park}.
+\newblock {\em {Ecology}}, 86(5):1320--1330.
+
+\bibitem[Fortin et~al., 2009]{Fortin.2009}
+Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
+  Dancose, K. (2009).
+\newblock {Group-Size-Mediated Habitat Selection and Group Fusion–Fission
+  Dynamics of Bison under Predation Risk}.
+\newblock {\em {Ecology}}, 90(9):2480--2490.
+
+\bibitem[Latham et~al., 2011]{Latham.2011}
+Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
+\newblock {Movement Responses by Wolves to Industrial Linear Features and Their
+  Effect on Woodland Caribou in Northeastern Alberta}.
+\newblock {\em {Ecological Applications}}, 21(8):2854--2865.
+
+\bibitem[Masenga et~al., 2016]{Masenga.2016}
+Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
+  Lyamuya, R.~D., Fyumagwa, R.~D., Borner, M., and Røskaft, E. (2016).
+\newblock {Insights into Long-Distance Dispersal by African Wild Dogs in East
+  Africa}.
+\newblock {\em {African Journal of Ecology}}, 54(1):95--98.
+
+\bibitem[Muff et~al., 2020]{Muff.2020}
+Muff, S., Signer, J., and Fieberg, J. (2020).
+\newblock {Accounting for Individual-Specific Variation in Habitat-Selection
+  Studies: Efficient Estimation of Mixed-Effects Models Using Bayesian or
+  Frequentist Computation}.
+\newblock {\em {Journal of Animal Ecology}}, 89(1):80--92.
+
+\bibitem[{Open Street Map}, 2019]{OpenStreetMap.2019}
+{Open Street Map} (2019).
+\newblock {Planet dump retrieved from https://planet.osm.org}.
+\newblock Accessed 2019-11-12 from \url{https://www.openstreetmap.org}.
+
+\bibitem[{Peace Parks Foundation}, 2019]{PeaceParks.2019}
+{Peace Parks Foundation} (2019).
+\newblock {SADC Protected Areas}.
+\newblock Accessed 2019-11-12 from
+  \url{http://new-ppfmaps.opendata.arcgis.com/datasets/ppf-protected-areas-detailed?geometry=-13.87,-25.558,69.846,-11.001}.
+
+\bibitem[Pinto and Keitt, 2009]{Pinto.2009}
+Pinto, N. and Keitt, T.~H. (2009).
+\newblock {Beyond the Least-Cost Path: Evaluating Corridor Redundancy Using a
+  Graph-Theoretic Approach}.
+\newblock {\em {Landscape Ecology}}, 24(2):253--266.
+
+\bibitem[{R Core Team}, 2019]{R.2019}
+{R Core Team} (2019).
+\newblock {\em {R: A Language and Environment for Statistical Computing}}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+
+\bibitem[Sawyer et~al., 2011]{Sawyer.2011}
+Sawyer, S.~C., Epps, C.~W., and Brashares, J.~S. (2011).
+\newblock {Placing Linkages among Fragmented Habitats: Do Least-Cost Models
+  Reflect How Animals Use Landscapes?}
+\newblock {\em {Journal of Applied Ecology}}, 48(3):668--678.
+
+\bibitem[Schaaf and Wang, 2015]{Schaaf.2015}
+Schaaf, C. and Wang, Z. (2015).
+\newblock {MCD43A4 MODIS/Terra + Aqua BRDF/Albedo Nadir BRDF Adjusted RefDaily
+  L3 Global - 500m v006}.
+\newblock {\em {NASA EOSDIS Land Processes DAAC}}.
+\newblock Accessed 2019-11-12 from
+  \url{https://doi.org/10.5067/MODIS/MCD43A4.006}.
+
+\bibitem[Schwalb-Willmann, 2018]{Schwalb.2018}
+Schwalb-Willmann, J. (2018).
+\newblock {\em {getSpatialData: Get Different Kinds of Freely Available Spatial
+  Datasets}}.
+\newblock R package version 0.0.4.
+
+\bibitem[Signer et~al., 2019]{Amt.2019}
+Signer, J., Fieberg, J., and Avgar, T. (2019).
+\newblock {Animal Movement Tools (amt): R Package for Managing Tracking Data
+  and Conducting Habitat Selection Analyses}.
+\newblock {\em {Ecology and Evolution}}, 9:880--890.
+
+\bibitem[Turchin, 1998]{Turchin.1998}
+Turchin, P. (1998).
+\newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
+  Population Redistribution in Plants and Animals}}.
+\newblock Sinauer Associates, Sunderland, MA, USA.
+
+\bibitem[van Etten, 2017]{vanEtten.2017}
+van Etten, J. (2017).
+\newblock {\em {R Package gdistance: Distances and Routes on Geographical
+  Grids}}.
+
+\bibitem[Warton and Aarts, 2013]{Warton.2013}
+Warton, D. and Aarts, G. (2013).
+\newblock {Advancing our Thinking in Presence-Only and Used-Available
+  Analysis}.
+\newblock {\em {Journal of Animal Ecology}}, 82(6):1125--1134.
+
+\bibitem[Wolski et~al., 2017]{Wolski.2017}
+Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
+\newblock {Keeping it Simple: Monitoring Flood Extent in Large Data-Poor
+  Wetlands Wsing MODIS SWIR Data}.
+\newblock {\em {International Journal of Applied Earth Observation and
+  Geoinformation}}, 57:224--234.
+
+\bibitem[Xiong et~al., 2017]{Xiong.2017}
+Xiong, J., Thenkabail, P., Tilton, J., Gumma, M., Teluguntla, P., Oliphant, A.,
+  Congalton, R., Yadav, K., and Gorelick, N. (2017).
+\newblock {Nominal 30m Cropland Extent Map of Continental Africa by Integrating
+  Pixel-Based and Object-Based Algorithms Using Sentinel-2 and Landsat-8 Data
+  on Google Earth Engine}.
+\newblock {\em {Remote Sensing}}, 9(10):1065.
+
+\bibitem[Yamazaki et~al., 2019]{Yamazaki.2019}
+Yamazaki, D., Ikeshima, D., Sosa, J., Bates, P.~D., Allen, G.~H., and Pavelsky,
+  T.~M. (2019).
+\newblock {MERIT Hydro: A High-Resolution Global Hydrography Map Based on
+  Latest Topography Dataset}.
+\newblock {\em {Water Resources Research}}, 55(6):5053--5073.
+
+\end{thebibliography}

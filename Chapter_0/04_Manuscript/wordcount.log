@@ -1,0 +1,70 @@
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=latex 2020.4.16)  12 JUN 2020 13:58
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**/usr/share/texlive/texmf-dist/tex/latex/wordcount/wordcount.tex
+(/usr/share/texlive/texmf-dist/tex/latex/wordcount/wordcount.tex
+LaTeX2e <2017-04-15>
+Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
+File: wordcount.tex 2016/06/03 v1.7 Michael Downes
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1enc.def
+File: t1enc.def 2017/04/05 v2.0i Standard LaTeX file
+LaTeX Font Info:    Redeclaring font encoding T1 on input line 48.
+))
+\thickmuskip=\muskip10
+\@charfontname=\skip41
+\hfuzz=\dimen102
+
+No auxiliary output files.
+
+
+The 'wordcount' utility provides a way of estimating the number of
+words in a LaTeX document.
+
+[Warning: The counting method uses a large log file as an intermediate
+step. If your disk space is extremely low the counting process
+may end prematurely for lack of space.]
+
+File name [press RETURN to cancel]: /home/david/ownCloud/University/15.space Ph
+D/00_WildDogs/04_Manuscript/Manuscript.tex
+
+To get a count of characters, run
+
+  grep -c '3[.]0863[23]' wordcount.log
+
+or equivalent when processing is finished.
+
+Processing /home/david/ownCloud/University/15.space PhD/00_WildDogs/04_Manuscri
+pt/Manuscript.tex...
+
+
+! LaTeX Error: Missing \begin{document}.
+
+See the LaTeX manual or LaTeX Companion for explanation.
+Type  H <return>  for immediate help.
+ ...                                              
+                                                  
+l.194 ...ts{\wcFileName}{\batchmode}{\nonstopmode}
+                                                  
+? 
+! Emergency stop.
+ ...                                              
+                                                  
+l.194 ...ts{\wcFileName}{\batchmode}{\nonstopmode}
+                                                  
+You're in trouble here.  Try typing  <return>  to proceed.
+If that doesn't work, type  X <return>  to quit.
+
+ 
+Here is how much of TeX's memory you used:
+ 239 strings out of 492983
+ 2209 string characters out of 6134922
+ 54135 words of memory out of 5000000
+ 3892 multiletter control sequences out of 15000+600000
+ 6053 words of font info for 16 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 21i,0n,17p,169b,37s stack positions out of 5000i,500n,10000p,200000b,80000s
+No pages of output.

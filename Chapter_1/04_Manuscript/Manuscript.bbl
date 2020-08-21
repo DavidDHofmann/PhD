@@ -1,0 +1,80 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Avgar et~al., 2016]{Avgar.2016}
+Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
+\newblock {Integrated Step Selection Analysis: Bridging the Gap Between
+  Resource Selection and Animal Movement}.
+\newblock {\em {Methods in Ecology and Evolution}}, 7(5):619--630.
+
+\bibitem[Bastille-Rousseau et~al., 2018]{Bastille.2018}
+Bastille-Rousseau, G., Douglas-Hamilton, I., Blake, S., Northrup, J.~M., and
+  Wittemyer, G. (2018).
+\newblock {Applying Network Theory to Animal Movements to Identify Properties
+  of Landscape Space Use}.
+\newblock {\em {Ecological Applications}}, 28(3):854--864.
+
+\bibitem[Behr et~al., 2020]{Behr.2020}
+Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2020).
+\newblock {When to Stay and When to Leave? Proximate Causes of Dispersal in an
+  Endangered Social Carnivore}.
+\newblock {\em {Journal of Animal Ecology}}.
+\newblock In press.
+
+\bibitem[Burnham and Anderson, 2002]{Burnham.2002}
+Burnham, K.~P. and Anderson, D.~R. (2002).
+\newblock {\em {Model Selection and Multimodel Inference: A Practical
+  Information-Theoretic Approach}}.
+\newblock {Springer Science \& Business Media}, Ney York, NY, USA.
+
+\bibitem[Börger and Fryxell, 2012]{Borger.2012}
+Börger, L. and Fryxell, J. (2012).
+\newblock {Quantifying Individual Differences in Dispersal Using Net Squared
+  Displacement}.
+\newblock In Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M.,
+  editors, {\em {Dispersal Ecology and Evolution}}. Oxford University Press,
+  Oxford, UK.
+
+\bibitem[Cozzi et~al., 2020]{Cozzi.2020}
+Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
+  Mcnutt, J.~W., and Ozgul, A. (2020).
+\newblock {African Wild Dog Dispersal and Implications for Management}.
+\newblock {\em {The Journal of Wildlife Management}}, 84(4):614--621.
+
+\bibitem[Hijmans, 2020]{Hijmans.2020}
+Hijmans, R.~J. (2020).
+\newblock {\em {terra: Spatial Data Analysis}}.
+\newblock R package version 0.7-11.
+
+\bibitem[McNutt, 1996]{McNutt.1996}
+McNutt, J. (1996).
+\newblock {Sex-Biased Dispersal in African Wild Dogs (Lycaon pictus)}.
+\newblock {\em {Animal Behaviour}}, 52(6):1067--1077.
+
+\bibitem[Muff et~al., 2020]{Muff.2020}
+Muff, S., Signer, J., and Fieberg, J. (2020).
+\newblock {Accounting for Individual-Specific Variation in Habitat-Selection
+  Studies: Efficient Estimation of Mixed-Effects Models Using Bayesian or
+  Frequentist Computation}.
+\newblock {\em {Journal of Animal Ecology}}, 89(1):80--92.
+
+\bibitem[Osofsky et~al., 1996]{Osofsky.1996}
+Osofsky, S.~A., McNutt, J.~W., and Hirsch, K.~J. (1996).
+\newblock {Immobilization of Free-Ranging African Wild Dogs (Lycaon pictus)
+  Using a Ketamine/xylazine/Atropine Combination}.
+\newblock {\em {Journal of Zoo and Wildlife Medicine}}, 27(4):528--532.
+
+\bibitem[Wolski et~al., 2017]{Wolski.2017}
+Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
+\newblock {Keeping it Simple: Monitoring Flood Extent in Large Data-Poor
+  Wetlands Wsing MODIS SWIR Data}.
+\newblock {\em {International Journal of Applied Earth Observation and
+  Geoinformation}}, 57:224--234.
+
+\bibitem[Woodroffe et~al., 2019]{Woodroffe.2019}
+Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,
+  and O'Neill, H. M.~K. (2019).
+\newblock {Dispersal Behaviour of African Wild Dogs in Kenya}.
+\newblock {\em {African Journal of Ecology}}, 58(1):46--57.
+
+\end{thebibliography}

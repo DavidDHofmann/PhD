@@ -1,0 +1,10 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Burnham and Anderson, 2002]{Burnham.2002}
+Burnham, K.~P. and Anderson, D.~R. (2002).
+\newblock {\em {Model Selection and Multimodel Inference: A Practical
+  Information-Theoretic Approach}}.
+\newblock {Springer Science \& Business Media}, Ney York, NY, USA.
+
+\end{thebibliography}

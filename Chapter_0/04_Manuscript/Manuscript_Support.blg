@@ -1,0 +1,48 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: Manuscript_Support.aux
+The style file: apalike.bst
+Database file #1: Literatur.bib
+Warning--empty journal in Elliot.2014
+You've used 30 entries,
+            1935 wiz_defined-function locations,
+            682 strings with 10909 characters,
+and the built_in function-call counts, 12984 in all, are:
+= -- 1237
+> -- 708
+< -- 11
++ -- 250
+- -- 250
+* -- 1207
+:= -- 2325
+add.period$ -- 91
+call.type$ -- 30
+change.case$ -- 270
+chr.to.int$ -- 30
+cite$ -- 31
+duplicate$ -- 403
+empty$ -- 793
+format.name$ -- 288
+if$ -- 2427
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 26
+newline$ -- 155
+num.names$ -- 90
+pop$ -- 223
+preamble$ -- 2
+purify$ -- 275
+quote$ -- 0
+skip$ -- 301
+stack$ -- 0
+substring$ -- 868
+swap$ -- 29
+text.length$ -- 0
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 176
+warning$ -- 1
+while$ -- 99
+width$ -- 0
+write$ -- 387
+(There was 1 warning)

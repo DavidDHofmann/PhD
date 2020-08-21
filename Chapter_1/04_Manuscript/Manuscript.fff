@@ -1,0 +1,18 @@
+\begin{figure}
+  \includegraphics[width = \textwidth]{99_SourcePoints}
+  \caption{Illustration of source points from which dispersal was simulated.
+  Although in reality we simulated 1'000 per source point, we illustrate an
+  example assuming 10 dispersers from each source point. (a) Static source
+  points similar to the source points reported in ... (b) Source points that
+  were randomized within the catchment areas (dark gray).}
+  \label{SourcePoints}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \includegraphics{99_MovementModel}
+  \caption{Most parsimonious movement model.}
+  \label{MovementModel}
+\end{figure}
+\efloatseparator
+ 

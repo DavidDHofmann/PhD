@@ -1,0 +1,113 @@
+\begin{figure}[h]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+        \includegraphics[width=\textwidth]{99_StudyArea.pdf}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+            % % next four lines will help you to locate the point needed by forming a grid.
+            % % comment these four lines in the final picture.
+            % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+            % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+            % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+            % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+            % % upto here
+            \draw[black] (0.202, 0.255) -- (0.36, 0.955);
+            \draw[black] (0.202, 0.205) -- (0.36, 0.070);
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Overview of our study area. (a) The red dotted rectangle depicts
+    the study area, which was confined by a bounding box encompassing the entire
+    KAZA-TFCA. Gray areas indicate remaining wild dog populations according to
+    the IUCN \citep{Woodroffe.2012}. (b) The white rectangle illustrates the
+    area within which dispersing coalitions were collared. Since Game Reserves
+    in Botswana virtually serve the same purpose as National Parks, we use the
+    terms interchangeably for this region.}
+    \label{StudyArea}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_Covariates.pdf}
+    \caption{Overview of spatial covariates that we included in our models. We
+    prepared all covariates for the entire study area but for better visibility
+    we only plot them for the surroundings of the Okavango Delta. The white
+    rectangle in each plot depicts the area within which dispersing coalitions
+    were collared. (a) Averaged layer of all dynamic (binary) water maps. (b)
+    Percentage cover of trees. (c) Percentage cover of shrubs/grassland.
+    Anything that was not covered by trees or shrubs/grassland was deemed to be
+    bare land. (d) Protection status of the area. (e) Human influence proxy
+    composed of human density, farms, and roads. (f) Distance to nearest road
+    (white lines depict actual roads).}
+    \label{Covariates}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[h]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_PermeabilityResults.pdf}
+    \caption{(a) Estimated selection coefficients from the most parsimonious
+    habitat selection model. Negative coefficients indicate avoidance of a
+    covariate, positive coefficients selection of a covariate. Whiskers
+    delineate the 95\%-CIs for estimated parameters. (b) Results from the k-fold
+    cross validation for case-control studies. The left graph shows rank
+    frequencies of \textit{realized} steps according to predictions, whereas the
+    right graph shows rank frequencies of \textit{randomly selected} steps
+    according to predictions. \(\bar{r}_s\) indicates the mean correlation
+    coefficient resulting from 100 repetitions of the k-fold cross validation.
+    The blue smoothing line was fitted using a locally weighted polynomial
+    regression and serves to aid the eye in detecting the trends. Correlation
+    coefficients suggest that our prediction was significant and robust,
+    evidenced by the fact that the confidence intervals of \(\bar{r}_{s,
+    realized}\) and \(\bar{r}_{s, random}\) did overlap and by the fact that
+    there was strong and significant correlation between ranks and associated
+    frequency for realized steps.}
+    \label{PermeabilityResults}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+    \begin{tikzpicture}
+        \node[anchor=south west,inner sep=0] (image) at (0,0,0) {
+          \begin{minipage}{\textwidth}
+            \includegraphics[width = \textwidth]{99_PermeabilityMap.pdf}
+          \end{minipage}
+        };
+        \begin{scope}[x={(image.south east)},y={(image.north west)}]
+        \end{scope}
+    \end{tikzpicture}
+    \caption{Predicted permeability surface for the extent of the KAZA-TFCA.
+    Permeability was predicted by calculating selection scores \(w(x) =
+    exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)\) for each raster cell
+    based on the raster cell's underlying covariates (\(x_i\)) and estimated
+    habitat preferences (\(\beta_i\)). Areas that dispersers find easy to
+    traverse are depicted in bright colors. Bold white lines delineate the
+    borders of the KAZA-TFCA, whereas dashed white lines show country borders.}
+    \label{PermeabilityMap}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[hbtp]
+  \begin{center}
+    \begin{minipage}{0.95\textwidth}
+      \includegraphics[width = 0.95\textwidth]{99_LeastCostPaths.pdf}
+      \includegraphics[width = 0.95\textwidth]{99_LeastCostCorrs.pdf}
+    \end{minipage}
+    \caption{(a) Source points (black dots) and corresponding least-cost paths
+    leaving from protected areas (light grey). Note that only contiguous
+    protected areas covering more than 700 km\textsuperscript{2} are depicted.
+    Continuous thin black lines indicate the borders of the KAZA-TFCA, whereas
+    dashed black lines delineate country-borders. (b) Least-cost corridors
+    between the same source points as illustrated in subfigure (a). For ease of
+    spatial reference, we also labeled some national parks (NPs, in dark-grey).}
+    \label{LeastCost}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
