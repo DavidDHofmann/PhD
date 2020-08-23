@@ -16,8 +16,8 @@ setwd(wd)
 library(tidyverse)
 library(raster)
 library(gdalUtils)
-library(terra)
 library(parallel)
+library(terra)
 
 # Make use of multicore abilities
 beginCluster()
@@ -97,7 +97,7 @@ for (i in 1:length(patterns)){
   # Reproject, resample and store the merged files
   merged <- rast(newnames[i]) %>%
     terra::project(., r250) %>%
-    terra::resample(., r250, "ngb")
+    terra::resample(., r250, "near")
   writeRaster(merged, newnames[i], overwrite = TRUE)
 
   # Print status
@@ -121,7 +121,7 @@ files <- dir(
   , full.names  = T
 )
 names <- substr(files, start = 55, stop = nchar(files) - 10)
-modis <- stack(files)
+modis <- rast(files)
 names(modis) <- names
 
 # Extract the separate layers
@@ -136,7 +136,7 @@ values(modis_noveg)[values(modis_noveg) > 100] <- 100
 values(modis_trees)[values(modis_trees) > 100] <- 0
 
 # Visualize again
-plot(stack(modis_shrub, modis_noveg, modis_trees))
+plot(c(modis_shrub, modis_noveg, modis_trees))
 
 # Add up all of the rasters
 summed <- sum(modis_shrub, modis_noveg, modis_trees)
@@ -145,10 +145,10 @@ summed <- sum(modis_shrub, modis_noveg, modis_trees)
 hist(summed)
 
 # Load the Globeland Layer
-glo <- raster("03_Data/02_CleanData/01_LandCoverClasses30_Globeland.tif")
+glo <- rast("03_Data/02_CleanData/01_LandCoverClasses30_Globeland.tif")
 
 # Also load the dynamic water layers
-water <- stack("03_Data/02_CleanData/01_LandCover_Water(Merged).tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_Water(Merged).tif")
 
 # Identify all dates for which we have a closest watermap
 dates_globe <- names(water) %>%
@@ -173,6 +173,9 @@ files <- files[dates_ori %in% dates_globe]
 
 # Load those dynamice water layers
 ori <- stack(files)
+
+# Convert globeland to raster
+glo <- raster(glo)
 
 # Extend floodmaps so that their extent matches the one of the globeland layer
 ori <- suppressMessages(
@@ -231,7 +234,7 @@ modis_trees <- suppressMessages(
   }) %>% stack()
 )
 
-# Coerce all layers to terra rasters
+# Convert to terra again
 modis_shrub <- rast(modis_shrub)
 modis_noveg <- rast(modis_noveg)
 modis_trees <- rast(modis_trees)

@@ -62,13 +62,8 @@ modis_trees <- mask(modis_trees
   , updatevalue = 0
 )
 
-# Coerce all layers to terra rasters
-modis_shrub <- rast(modis_shrub)
-modis_noveg <- rast(modis_noveg)
-modis_trees <- rast(modis_trees)
-
 # Visualize layers again
-plot(c(modis_shrub, modis_noveg, modis_trees))
+plot(stack(modis_shrub, modis_noveg, modis_trees))
 
 # Make sure that the layers range from 0 to 1 rather than from 0 to 100
 modis_shrub <- modis_shrub / 100
@@ -76,7 +71,7 @@ modis_noveg <- modis_noveg / 100
 modis_trees <- modis_trees / 100
 
 # Visualize layers again
-plot(c(modis_shrub, modis_noveg, modis_trees))
+plot(stack(modis_shrub, modis_noveg, modis_trees))
 
 # Put the stacks into a list
 modis <- list(modis_shrub, modis_noveg, modis_trees)
@@ -87,11 +82,6 @@ names <- c(
   , "03_Data/02_CleanData/01_LandCover_NonVegetated_Averaged.tif"
   , "03_Data/02_CleanData/01_LandCover_TreeCover_Averaged.tif"
 )
-
-# Coerce to rasters (raster is currently more space efficient than terra)
-for (i in 1:length(modis)){
-  modis[[1]] <- raster(modis[[i]])
-}
 
 # Store the rasterstacks
 for (i in 1:length(names)){

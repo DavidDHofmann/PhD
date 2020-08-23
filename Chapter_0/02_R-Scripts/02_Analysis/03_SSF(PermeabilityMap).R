@@ -127,12 +127,6 @@ layers <- lapply(layers, function(x){
 # Stack the layers
 layers <- stack(layers)
 
-################################################################################
-#### NEED TO SCALE THESE VALUES
-################################################################################
-# Note: We have decided to scale the log_sl_ and cos_ta_ prior to modelling.
-# Thus, I'll need to scale them here too.
-
 # We will also need layers for the turning angles and step lengths. Actually,
 # they simply inflate the probabilities. For the step length layer we can use
 # the average step length (around 2650)
@@ -144,10 +138,6 @@ names(`log(sl_)`) <- "log(sl_)"
 `cos(ta_)` <- layers[[1]]
 values(`cos(ta_)`) <- cos(0)
 names(`cos(ta_)`) <- "cos(ta_)"
-
-################################################################################
-#### NEED TO SCALE THESE VALUES
-################################################################################
 
 # Stack all layers into a single rasterstack
 layers <- stack(`cos(ta_)`, `log(sl_)`, layers)
@@ -169,37 +159,16 @@ lower <- quantile(values(permeability), 0.01, na.rm = TRUE)
 values(permeability)[values(permeability) > upper] <- upper
 values(permeability)[values(permeability) < lower] <- lower
 
-# # Scale the map values to 0-1
-# permeability <- calc(permeability, fun = function(x){
-#   (x - min(x)) / (max(x) - min(x))
-# })
-#
-# # Invert the map
-# resistance <- calc(permeability, fun = function(x){
-#   x * (-1) + max(x)
-# })
-
 # Reload the kaza shapefile for plotting
 kaza <- shapefile("03_Data/02_CleanData/00_General_KAZA_KAZA")
 
 # Plot the permeability map
-png("99_PermeabilityMap.png"
-  , width     = 1980
-  , height    = 1080
-  , bg        = "transparent"
-  , pointsize = 30
-)
 plot(permeability, col = viridis(50))
-plot(kaza
-  , add = TRUE
-  , border = "white"
-  , lwd = 5
-)
-dev.off()
 
 # Store the permeability map to file
-writeRaster(permeability
-  , "03_Data/03_Results/99_PermeabilityMap.tif"
+writeRaster(
+    x         = permeability
+  , filename  = "03_Data/03_Results/99_PermeabilityMap.tif"
   , overwrite = TRUE
 )
 
@@ -332,116 +301,3 @@ round(IQR(count_prot$Permeability), 2)
 # Save the data
 write_rds(count_kaza, "03_Data/03_Results/99_PermeabilityValues(KAZA).rds")
 write_rds(count_prot, "03_Data/03_Results/99_PermeabilityValues(Prot).rds")
-
-# ############################################################
-# #### Create Alternative Scenarios (Change Permeability Artificially)
-# ############################################################
-# # Load shapefile which tells us what to change
-# change <- shapefile("99_RemoveResistance")
-#
-# # Create an alternative covariate layer-stack
-# layers <- backup
-#
-# # We remove the Zambezi river
-# layers$Water <- mask(
-#     layers$Water
-#   , change
-#   , inverse = TRUE
-#   , updatevalue = 0
-# )
-#
-# # We need to update the distance to water layer
-# waterppp <- layers$Water %>%
-#
-#   # Coerce the inhabited cells to Spatial Points
-#   rasterToPoints(., fun = function(x){x == 1}, spatial = TRUE) %>%
-#
-#   # Transform the points to utm
-#   spTransform(., CRS("+init=epsg:32734")) %>%
-#
-#   # Coerce the object to a ppp object
-#   as(., "ppp")
-#
-# # Load the reference raster to prepare a distance to water
-# distance <- raster("00_General_Raster250.tif")
-#
-# # Now replace the values of the raster with the distances to the nearest water
-# # covered cell
-# values(distance) <- distance %>%
-#
-#   # Coerce the layer to a spatial points object
-#   as(., "SpatialPoints") %>%
-#
-#   # Reproject the points to utm
-#   spTransform(., CRS("+init=epsg:32734")) %>%
-#
-#   # Turn the object into a ppp
-#   as(., "ppp") %>%
-#
-#   # Calculate the distance to the nearest water cell
-#   nncross(., waterppp) %>%
-#
-#   # Select only the distance column
-#   .[["dist"]]
-#
-# # Add the layer to the stack
-# layers$DistanceToWater <- sqrt(distance)
-#
-# # Make name proper
-# names(layers$DistanceToWater) <- "DistanceToWater"
-#
-# # Apply the scaling function to the different layers in the list
-# layers <- lapply(layers, function(x){
-#   scaleLayer(x, scaling)
-# })
-#
-# # Stack the layers
-# layers <- stack(layers)
-#
-# # We will also need layers for the turning angles and step lengths. Actually,
-# # they simply inflate the probabilities. For the step length layer we can use
-# # the average step length (around 2650)
-# `log(sl_)` <- layers[[1]]
-# values(`log(sl_)`) <- log(2650)
-# names(`log(sl_)`) <- "log(sl_)"
-#
-# # For the turning angles we will use zero
-# `cos(ta_)` <- layers[[1]]
-# values(`cos(ta_)`) <- cos(0)
-# names(`cos(ta_)`) <- "cos(ta_)"
-#
-# # Stack all layers into a single rasterstack
-# layers <- stack(`cos(ta_)`, `log(sl_)`, layers)
-#
-# # Prepare permeability map using the form "exp(beta0 + beta1 * X1 + ...)"
-# permeability <- exp(sum(
-#     pred["cos(ta_)", ]        * layers[["cos.ta_."]]
-#   , pred["log(sl_)", ]        * layers[["log.sl_."]]
-#   , pred["Water", ]           * layers[["Water"]]
-#   , pred["DistanceToWater", ] * layers[["DistanceToWater"]]
-#   , pred["Shrubs", ]          * layers[["Shrubs"]]
-#   , pred["HumansBuff5000", ]  * layers[["HumansBuff5000"]]
-#   , pred["Trees", ]           * layers[["Trees"]]
-# ))
-#
-# # Remove outliers
-# upper <- quantile(values(permeability), 0.99, na.rm = TRUE)
-# lower <- quantile(values(permeability), 0.01, na.rm = TRUE)
-# values(permeability)[values(permeability) > upper] <- upper
-# values(permeability)[values(permeability) < lower] <- lower
-#
-# # Scale the map values to 0-1
-# permeability <- calc(permeability, fun = function(x){
-#   (x - min(x)) / (max(x) - min(x))
-# })
-#
-# # Invert the map
-# resistance <- calc(permeability, fun = function(x){
-#   x * (-1) + max(x)
-# })
-#
-# # Store the permeability map to file
-# writeRaster(permeability
-#   , "99_PermeabilityMap_Alt.tif"
-#   , overwrite = TRUE
-# )
