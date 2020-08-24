@@ -85,9 +85,10 @@ writeRaster(
 coarse <- aggregate(merged, fact = round(250 / 30), fun = modal)
 
 # We only want to use the water layer from the globeland dataset. Let's
-# reclassify the values accordingly
+# reclassify the values accordingly (note that there is only one single value
+# 255)
 classes <- data.frame(
-    CodesOld = c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100)
+    CodesOld = c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 255)
   , DescriptionOld = c(
       "CultivatedLand"
     , "Forest"
@@ -99,8 +100,9 @@ classes <- data.frame(
     , "ArtificialSurfaces"
     , "Bareland"
     , "PermanentIceSnow"
+    , "NA"
   )
-  , CodesNew = c(0, 0, 0, 0, 1, 1, 0, 0, 0, 0)
+  , CodesNew = c(0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0)
   , DescriptionNew = c(
       "Dryland"
     , "Dryland"
@@ -108,6 +110,7 @@ classes <- data.frame(
     , "Dryland"
     , "Water"
     , "Water"
+    , "Dryland"
     , "Dryland"
     , "Dryland"
     , "Dryland"

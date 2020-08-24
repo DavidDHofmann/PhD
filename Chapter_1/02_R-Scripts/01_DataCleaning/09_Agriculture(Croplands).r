@@ -14,7 +14,7 @@ wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)
+library(raster)   # To handle reaster data
 
 # Make use of multicore abilities
 beginCluster()
@@ -49,8 +49,9 @@ crops <- reclassify(crops, rcl)
 crops_res <- resample(crops, r, "ngb")
 
 # Save the result to file
-writeRaster(crops_res
-  , "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_Croplands.tif"
+writeRaster(
+    x         = crop_res
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_Croplands.tif"
   , overwrite = TRUE
 )
 

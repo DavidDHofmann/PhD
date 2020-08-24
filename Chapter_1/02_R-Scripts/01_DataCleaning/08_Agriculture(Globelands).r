@@ -13,7 +13,7 @@ wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)
+library(raster)   # To handle raster data
 
 # Make use of multicore abilities
 beginCluster()

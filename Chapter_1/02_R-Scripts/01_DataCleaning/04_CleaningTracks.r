@@ -67,7 +67,7 @@ dat1 <- lapply(files, function(x){
     setNames(gsub(names(.), pattern = "\\]", replacement = "")) %>%
 
     # Keep only desired columns
-    select(.
+    dplyr::select(.
       , DogName   = DogName
       , DOP       = DOP
       , CollarID  = CollarID
@@ -102,7 +102,7 @@ collars <- read_csv2("03_Data/01_RawData/POPECOL/CollarSettings.csv") %>%
   # Keep only the desired columns and rename them nicely. Note that we want to
   # keep the Dog Code because it provides information about the birth pack of
   # each dog.
-  select(.
+  dplyr::select(.
     , CollarID  = `Collar Nr.`
     , DogName   = `Dog Name`
     , DogCode   = `Dog Code`
@@ -158,18 +158,14 @@ collars$LastDate <- collars$LastDate + minutes(5)
 collars$LastDate1 <- NULL
 collars$LastDate2 <- NULL
 
-# Logical check that LastDate > FirstDate
+# Logical check that LastDate > FirstDate and make sure there are no duplicates
 table(collars$LastDate > collars$FirstDate)
-
-# Make sure there are no duplicates
 table(paste(collars$CollarID, collars$DogName))
 table(table(paste(collars$CollarID, collars$DogName)))
 
-# Left-join the dataset to the gps locations
-dat1 <- left_join(dat1, collars, by = c("CollarID", "DogName"))
-
 # Create a column that indicates if the respective fix lies within the first and
 # last date
+dat1 <- left_join(dat1, collars, by = c("CollarID", "DogName"))
 dat1$Keep <- ifelse(
     test  = dat1$Timestamp >= dat1$FirstDate & dat1$Timestamp <= dat1$LastDate
   , yes   = T
@@ -183,7 +179,7 @@ table(dat1$CollarID, dat1$Keep)
 
 # Subset data and remove unnecessary columns
 dat1 <- subset(dat1, Keep)
-dat1 <- select(dat1, -c("FirstDate", "LastDate", "Keep", "DogCode"))
+dat1 <- dplyr::select(dat1, -c("FirstDate", "LastDate", "Keep", "DogCode"))
 
 # Prepare data for visualization
 vis <- dat1 %>% group_by(DogName, CollarID) %>% summarize(
@@ -219,7 +215,7 @@ dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
   filter(., !is.na(`Longitude..deg.`)) %>%
 
   # Select only the columns of interest
-  select(.,
+  dplyr::select(.,
       DogName   = `id`
     , x         = `Longitude..deg.`
     , y         = `Latitude..deg.`
@@ -252,7 +248,7 @@ dat3 <- lapply(files, function(x){
   read_delim(x, delim = "\t", skip = 2) %>%
 
     # Keep only the columns of interest
-    select(
+    dplyr::select(
         x                   = `Longitude (deg)`
       , y                   = `Latitude (deg)`
       , Timestamp           = `UTC time (yyyy-mm-dd HH:MM:SS)`
@@ -292,7 +288,9 @@ dat3 <- dat3 %>%
   filter(., HorizontalAccuracy < quantile(HorizontalAccuracy, 0.9)) %>%
   filter(., year(Timestamp) != 1970) %>%
   filter(., speed < quantile(speed, 0.9, na.rm = TRUE)) %>%
-  select(., c("DogName", "CollarID", "x", "y", "Timestamp", "DOP", "Sex", "Source"))
+  dplyr::select(.
+    , c("DogName", "CollarID", "x", "y", "Timestamp", "DOP", "Sex", "Source")
+  )
 
 # Put data of all sources together
 data <- rbind(dat1, dat2, dat3)
@@ -303,9 +301,11 @@ table(data$Source)
 # Check if there are any duplicates
 dups_complete <- duplicated(data)
 sum(dups_complete)
+dups_incomplete <- duplicated(data[, c("DogName", "Timestamp")])
+sum(dups_incomplete)
 
-# Store data for exploration
-write_csv(data, "GPS_Data.csv")
+# Remove them
+data <- subset(data, !dups_incomplete)
 
 ################################################################################
 #### Adding Cutoff Dates
@@ -315,7 +315,7 @@ write_csv(data, "GPS_Data.csv")
 cut <- read_csv("03_Data/01_RawData/POPECOL/CutoffDates.csv") %>%
 
   # Remove undesired columns
-  select(c("CollarID", "DogName", "StartDate", "EndDate")) %>%
+  dplyr::select(c("CollarID", "DogName", "StartDate", "EndDate")) %>%
 
   # Add Minutes to the timestamps
   mutate(
@@ -461,7 +461,6 @@ data <- arrange(data, DogName, Timestamp)
 
 # Some of the data has a very high resolution that we don't need. We will
 # therefore subsample to a resolution we can work with.
-backup <- data
 data <- data %>% group_by(DogName) %>% nest()
 data$data <- suppressMessages(
   pbmclapply(data$data
