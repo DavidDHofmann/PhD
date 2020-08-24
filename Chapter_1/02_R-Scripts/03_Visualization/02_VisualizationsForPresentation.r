@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Set the working directory
-setwd("C:/Users/david/switchdrive/University/15. PhD/00_WildDogs")
+setwd("/home/david/Schreibtisch/15. PhD/Chapter_1")
 
 # Load required packages
 library(tidyverse)
@@ -132,7 +132,7 @@ p2 <- tm_shape(africa) +
 
 # Store the plot
 CairoPDF("Test", width = 5.25, height = 6)
-p1
+p2
 dev.off()
 
 ############################################################
@@ -141,7 +141,7 @@ dev.off()
 # Load required data
 africa2 <- "03_Data/02_CleanData/00_General_Africa.shp" %>% readOGR()
 kaza <- "03_Data/02_CleanData/00_General_KAZA_KAZA.shp" %>% readOGR()
-prot <- "03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks(1Class).shp" %>% readOGR()
+prot <- "03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks.shp" %>% readOGR()
 water <- "03_Data/02_CleanData/03_LandscapeFeatures_MajorWaters_GEOFABRIK.shp" %>% readOGR(.)
 
 # Clip africa layer
@@ -229,24 +229,16 @@ dev.off()
 # Prepare a map of Kaza
 p2 <- tm_shape(prot) +
     tm_polygons(
-      , col           = "gray30"
-      , border.col    = "black"
-      , alpha         = 0.5
-      , lwd           = 0.2
+      , col           = "gray40"
+      , border.col    = NA
+      , lwd           = 0
       , legend.show   = F
     ) +
-  tm_shape(water) +
-    tm_polygons(
-        col           = "cornflowerblue"
-      , border.col    = "cornflowerblue"
-      , border.alpha  = 0.6
-      , lwd           = 0.2
-    ) +
   tm_shape(kaza, is.master = T) +
-    tm_borders(
+    tm_polygons(
         col = "orange"
-      , lty = 1
-      , lwd = 2
+      , alpha = 0.5
+      , border.col = "orange"
     ) +
   tm_shape(africa) +
     tm_borders(

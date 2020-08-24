@@ -16,7 +16,7 @@ options(scipen = 999)
 set.seed(12345)
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
 setwd(wd)
 
 # Load required packages
@@ -33,9 +33,7 @@ library(tictoc)
 library(measurements)
 library(tictoc)
 library(parallel)
-
-# Load custom functions
-source("Functions.r")
+library(davidoff)
 
 # Reload the permeability map that we derived in the last script
 permeability <- "03_Data/03_Results/99_PermeabilityMap.tif" %>% raster()

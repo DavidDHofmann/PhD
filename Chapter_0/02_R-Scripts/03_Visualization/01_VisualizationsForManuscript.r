@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
 setwd(wd)
 
 # Set a seed
@@ -39,20 +39,7 @@ library(ggmap)
 library(mapview)
 library(knitr)
 library(kableExtra)
-
-# Load custom functions
-source("Functions.r")
-
-############################################################
-#### Useful Functions
-############################################################
-# Function to darken a color
-darken <- function(color, factor = 1.4){
-    col <- col2rgb(color)
-    col <- col / factor
-    col <- rgb(t(col), maxColorValue = 255)
-    col
-}
+library(davidoff)
 
 ############################################################
 #### General Statistics
