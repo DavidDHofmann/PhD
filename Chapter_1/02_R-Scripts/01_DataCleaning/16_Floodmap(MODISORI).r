@@ -1,28 +1,22 @@
-############################################################
+################################################################################
 #### Merging ORI and MODIS Floodmaps
-############################################################
+################################################################################
 # Description: We now have two different sources for floodmaps: ORI and MODIS.
-# Classified images of both are stored in our MODIS output folder. Let's
-# resample them to the extent of our study and put them into a huge single
-# rasterstack
+# Classified images of both are stored in our floodmaps folder. Let's resample
+# them to the extent of our study and put them into a huge single rasterstack
 
 # clear r's brain
 rm(list = ls())
 
 # Define the working directories
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(tidyverse)
-library(raster)
-library(lubridate)
-
-# Load custom functions
-source("Functions.r")
-
-# make use of multiple cores
-beginCluster()
+library(tidyverse)    # For data wrangling
+library(lubridate)    # To handle dates nicely
+library(raster)       # To handle raster data
+library(terra)        # To handle reaster data quickly
 
 ############################################################
 #### Identify Floodmaps to Resample
@@ -33,15 +27,15 @@ files <- dir(
   , pattern     = "*.tif$"
   , full.names  = T
 )
-flood <- stack(files)
+flood <- rast(files)
 
 # Extract the dates from the layer descriptions
 flood_dates <- names(flood) %>%
-  substr(start = 2, stop = 11) %>%
-  as.Date(., format = "%Y.%m.%d")
+  substr(start = 1, stop = 10) %>%
+  as.Date(., format = "%Y-%m-%d")
 
 # Load all dispersal tracks
-disp <- "03_Data/02_CleanData/00_General_Dispersers_Popecol(Regular).csv" %>%
+disp <- "03_Data/02_CleanData/00_General_Dispersers_Popecol.csv" %>%
   read.csv() %>%
   subset(., State == "Disperser")
 
@@ -65,6 +59,7 @@ dates <- data.frame(
   , Closest2    = closest2
   , Difference  = abs(dis_dates - closest1)
 )
+arrange(dates, -Difference)
 
 # Look at the result
 summary(as.numeric(dates$Difference))
@@ -72,6 +67,7 @@ summary(as.numeric(dates$Difference))
 # Let's now subset to the floodmaps which are closest to some dispersal event.
 # Let's select only these maps that are closest to some dispersal event
 indices <- which(flood_dates %in% dates$Closest1)
+length(indices)
 
 # I also want to conserve the last floodmap
 indices <- c(indices, length(flood_dates))
@@ -80,23 +76,24 @@ files <- files[indices]
 
 # Reclassify the floodmaps to values 0 and 1
 rcl <- data.frame(old = c(0, 127, 255), new = c(1, 0, 0))
-flood <- mcreclassify(flood, rcl)
+flood <- classify(flood, rcl)
 
 ############################################################
 #### Resample Floodmaps
 ############################################################
 # Load the reference raster
-r250 <- raster("03_Data/02_CleanData/00_General_Raster250.tif")
-r250 <- crop(r250, flood)
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- crop(r, flood)
 
-# Loop through the floodmaps, resample and store them 
+# Create directory for resampled floodmaps
+dir.create("03_Data/02_CleanData/00_Floodmaps/02_Resampled")
+
+# Loop through the floodmaps, resample and store them
 for (i in 1:length(files)){
-  map <- resample(flood[[i]], r250, "ngb")
+  map <- terra::resample(flood[[i]], r250, "near")
   newname <- substr(files[i], start = 47, stop = 56) %>% paste0(., ".tif")
   newname <- paste0("03_Data/02_CleanData/00_Floodmaps/02_Resampled/", newname)
+  map <- raster(map)
   writeRaster(map, newname, overwrite = TRUE)
   cat(i, "of", length(files), "done...\n")
 }
-
-# Terminate the cluster
-endCluster()

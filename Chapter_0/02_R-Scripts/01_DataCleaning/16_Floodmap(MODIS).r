@@ -13,6 +13,7 @@ library(terra)
 library(tidyverse)
 library(lubridate)
 library(splitstackshape)
+library(floodmapr)
 
 # Set the working directory
 wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
