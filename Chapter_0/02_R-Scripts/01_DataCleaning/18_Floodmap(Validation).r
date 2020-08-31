@@ -8,8 +8,8 @@
 rm(list = ls())
 
 # Specify working directories
-input1 <- "/home/david/Schreibtisch/15. PhD/Chapter_0/03_Data/02_CleanData/00_Floodmaps/01_Original"
-input2 <- "/home/david/Schreibtisch/15. PhD/Chapter_0/03_Data/02_CleanData/00_Floodmaps/03_Validation"
+input1 <- "/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_Floodmaps/01_Original"
+input2 <- "/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_Floodmaps/03_Validation"
 
 # Load required packages.
 library(tidyverse)
