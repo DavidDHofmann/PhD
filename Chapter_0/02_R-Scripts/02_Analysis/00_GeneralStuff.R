@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_0"
 setwd(wd)
 
 # Load required packages
@@ -193,6 +193,17 @@ info
 summary(info$DaysDispersing)
 summary(info$DistanceTravelled)
 summary(info$StraightLineDistanceTravelled)
+
+mean(info$NoFixesTotal)
+sd(info$NoFixesTotal)
+mean(info$NoFixesDispersal)
+sd(info$NoFixesDispersal)
+mean(info$DaysDispersing)
+sd(info$DaysDispersing)
+mean(info$StraightLineDistanceTravelled)
+sd(info$StraightLineDistanceTravelled)
+mean(info$DistanceTravelled)
+sd(info$DistanceTravelled)
 
 ############################################################
 #### Identify Pack IDs

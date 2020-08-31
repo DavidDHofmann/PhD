@@ -1,10 +1,10 @@
-PWD /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript
+PWD /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.tex
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.log
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.tex
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.log
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -208,9 +208,21 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/endfloat/endfloat.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/endfloat/endfloat.sty
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.aux
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.aux
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.aux
+INPUT /usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex
+INPUT /usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
+INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
+INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.aux
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.aux
 INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
@@ -223,14 +235,14 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
 INPUT /usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
@@ -281,35 +293,35 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.fff
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.ttt
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.bbl
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.bbl
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.fff
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.fff
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_StudyArea.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_StudyArea.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_StudyArea.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_Covariates.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_Covariates.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_Covariates.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityResults.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityResults.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityResults.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityMap.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityMap.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityMap.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostPaths.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostPaths.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostPaths.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostCorrs.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostCorrs.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostCorrs.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.ttt
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.ttt
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.aux
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.fff
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.ttt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.bbl
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.bbl
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.fff
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.fff
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_StudyArea.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_StudyArea.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_StudyArea.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_Covariates.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_Covariates.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_Covariates.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityResults.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityResults.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityResults.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityMap.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityMap.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityMap.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostCorrs.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostCorrs.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostCorrs.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.ttt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.ttt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb

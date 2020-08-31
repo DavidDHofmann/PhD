@@ -21,6 +21,7 @@
 \usepackage{multirow}
 \usepackage{arydshln}
 \usepackage[nomarkers, nolists]{endfloat}
+\usepackage{todonotes}
 
 %------------------------------------------------------------------------------
 %	Some Styling
@@ -130,11 +131,12 @@ a free-ranging population in the Kavango-Zambezi Transfrontier Conservation Area
 (KAZA-TFCA). Spanning five countries and 520'000 km\textsuperscript{2} the
 KAZA-TFCA is the world's largest transboundary conservation area and a prime
 example for international conservation efforts. We used integrated step
-selection analysis to estimate habitat preferences of dispersers and to create a
-permeability surface for the entire KAZA-TFCA. We compared landscape
-permeability across different regions within the KAZA-TFCA as well as outside
-its boundaries. Lastly, we calculated least-cost paths and corridors to verify
-that major movement routes were adequately encompassed within the KAZA-TFCA.
+selection analysis to estimate relative selection strenghts\todo{as per reviewer
+1} of dispersers and to create a permeability surface for the entire KAZA-TFCA.
+We compared landscape permeability across different regions within the KAZA-TFCA
+as well as outside its boundaries. Lastly, we calculated least-cost paths and
+corridors to verify that major movement routes were adequately encompassed
+within the KAZA-TFCA.
 
 \noindent 3. Permeability within the boundaries of the KAZA-TFCA was more than
 double compared to areas outside it. Furthermore, we observed a five-fold
@@ -152,7 +154,8 @@ pertinent dispersal data of a highly mobile species can be used to empirically
 evaluate the adequacy of already-existing or planned protected areas.
 Furthermore, observed regional differences in landscape permeability highlight
 the need for a coordinated effort towards maintaining or restoring connectivity,
-especially where international effort is required.
+especially where transboundary dispersal occurs.\todo{According to suggestions
+by reviewer 2}
 \end{abstract}
 
 %------------------------------------------------------------------------------
@@ -169,15 +172,17 @@ especially where international effort is required.
 \section{Introduction}
 Connectivity among subpopulations is a crucial pre-requisite for many species to
 thrive and persist \citep{Fahrig.2003}. Accordingly, preserving and protecting
-movement corridors between wildlife reserves has become an utmost task for
-conservation management \citep{Doerr.2011, Rudnick.2012}, resulting in an
-ever-growing number of large and often transboundary protected areas. While
-boundaries of such areas are often drawn according to expert opinion and
-socio-political needs, subjective assessments have revealed deficiencies in the
-past \citep{Clevenger.2002, Pullinger.2010}. Thus, an empirical assessment of
-the adequacy of already-existing or planned protected areas using pertinent
-animal movement data is paramount for targeted use of valuable and scarce
-conservation funds \citep{Pullinger.2010}.
+movement corridors between wildlife reserves has become a task of utmost
+\todo{Reviewer one pointed out an awkward use of the word utmost. I have changed
+it according to his suggestion.} importance for conservation management
+\citep{Doerr.2011, Rudnick.2012}, resulting in an ever-growing number of large
+and often transboundary protected areas. While boundaries of such areas are
+often drawn according to expert opinion and socio-political needs, subjective
+assessments have revealed deficiencies in the past \citep{Clevenger.2002,
+Pullinger.2010}. Thus, an empirical assessment of the adequacy of
+already-existing or planned protected areas using pertinent animal movement data
+is paramount for targeted use of valuable and scarce conservation funds
+\citep{Pullinger.2010}.
 
 In recent years, a growing body of research has used animal relocation data to
 identify movement corridors and assess connectivity at large scales (e.g.
@@ -185,25 +190,30 @@ identify movement corridors and assess connectivity at large scales (e.g.
 potential corridors typically relies on the estimation of permeability surfaces,
 which return the ease or willingness at which the focal species traverses a
 specific landscape \citep{Sawyer.2011}. Such surfaces are created based on a
-species' habitat preferences, which can be quantified using a suite of selection
-functions \citep{Zeller.2012}. Specifically, habitat preferences are estimated
-by comparing spatial covariates (e.g. environmental and anthropogenic) at
-locations visited by the animal to the same spatial covariates at randomly
-selected locations \citep{Zeller.2012}. Importantly, selection functions rely on
-adequate landscape and relocation data that are representative of the process
-being studied \citep{Diniz.2020}. For instance, relocation data collected on
-dispersing individuals has been shown to outperform data collected on resident
-individuals in the detection of large-scale movement corridors
-\citep{Elliot.2014, Diniz.2020}. Nevertheless, dispersal data is inherently
-difficult to collect and remains scarce in the connectivity literature
-\citep{Vasudev.2015}. As such, most permeability surfaces upon which movement
-corridors are identified are created using relocation data collected on resident
-individuals. This introduces severe biases and substantially reduces the power
-to reveal meaningful movement corridors, for dispersing individuals have
-different needs and drives compared to resident individuals \citep{Elliot.2014,
-Cozzi.2020}. Such biases have limited our ability to meaningfully assess the
-effectiveness of protected areas in securing connectivity for their protected
-species.
+species' relative selection strengths\todo{reviewer 1}, which can be quantified
+using a suite of selection functions \citep{Zeller.2012}. Specifically, relative
+selection strenghts \todo{reviewer 1} are estimated by comparing spatial
+covariates (e.g. environmental and anthropogenic) at locations visited by the
+animal to the same spatial covariates at locations avilable to, yet unused by
+\todo{Reviewer 1 pointed out correctly that we should talk about available
+locations, rather than randomly selected locations} the animal
+\citep{Zeller.2012}. Importantly, selection functions rely on adequate landscape
+and relocation data that are representative of the process being studied
+\citep{Diniz.2020}. For instance, relocation data collected on dispersing
+individuals has been shown to outperform data collected on resident individuals
+in the detection of large-scale movement corridors \citep{Elliot.2014,
+Diniz.2020}. Nevertheless, dispersal data is inherently difficult to collect and
+remains scarce in the connectivity literature \citep{Vasudev.2015}. As such,
+most permeability surfaces upon which movement corridors are identified are
+created using relocation data collected on resident individuals. While some
+species use the same habitats during residence and dispersal
+\citep{Fattebert.2015}, others depict vastly different habitat selection
+depending on the movement mode \citep{Elliot.2014, Abrahms.2017}. Thus, the use
+of data collected during residency can introduce severe biases in estimated
+landscape permeability and has likely limited our ability to meaningfully assess
+the effectiveness of protected areas in securing connectivity for their
+protected species.\todo{Reviewer 2 desired to change from: this introduces - to:
+this can introduce}
 
 One initiative that aims at restoring and enhancing connectivity across large
 scales is the Kavango-Zambezi Transfrontier Conservation Area (KAZA-TFCA), which
@@ -216,10 +226,10 @@ to the conservation of other wide-ranging species such as African wild dogs
 (\textit{Panthera leo}; \citealp{Elliot.2014, Cushman.2018}), and cheetahs
 (\textit{Acinonyx jubatus}; \citealp{Weise.2017}). To date, however, few studies
 have attempted to assess the adequacy of the KAZA-TFCA using relevant global
-positioning system (GPS) relocation data of its protected species at the
-appropriate spatial scale \citep{Elliot.2014, Tshipa.2017}. Thus, how well the
-boundaries of the KAZA-TFCA reflect natural movement patterns and dispersal
-corridors of its most mobile protected species is virtually unknown.
+positioning system (GPS) relocation data of its protected species at large
+spatial scales \citep{Elliot.2014, Tshipa.2017}. Thus, how well the boundaries
+of the KAZA-TFCA reflect natural movement patterns and dispersal corridors of
+its most mobile protected species is virtually unknown.
 
 Across the KAZA-TFCA, the African wild dog (\textit{Lycaon pictus}) represents a
 highly mobile and endangered flagship species for conservation efforts. Once
@@ -246,13 +256,14 @@ Cozzi.2020}.
 Here, we collected GPS relocation data on 16 dispersing wild dogs in as many
 dispersing coalitions from a free-ranging population in northern Botswana and
 analyzed it to assess the adequacy of the KAZA-TFCA in securing connectivity. We
-estimated the degree of selection or avoidance for environmental and
-anthropogenic landscape features and used the obtained habitat preferences to
-predict a permeability surface spanning the entire KAZA-TFCA. We then
-investigated how landscape permeability varies regionally and internationally
-and compared permeability within and outside the KAZA-TFCA boundaries. Finally,
-we calculated least-cost paths and corridors to identify major movement routes
-and to verify that these are successfully covered by the KAZA-TFCA.
+estimated the relative selection strengths\todo{reviewer 1} towards or agains
+environmental and anthropogenic landscape features and used the obtained habitat
+coefficients to predict a permeability surface spanning the entire KAZA-TFCA. We
+then investigated how landscape permeability varies regionally and
+internationally and compared permeability within and outside the KAZA-TFCA
+boundaries. Finally, we calculated least-cost paths and corridors to identify
+major movement routes and to verify that these are successfully covered by the
+KAZA-TFCA.
 
 \section{Methods}
 \subsection{Study Area}
@@ -315,11 +326,19 @@ This population has been extensively studied since 1989 \citep{McNutt.1996,
 Cozzi.2013, Cozzi.2020, Behr.2020}. Between 2011 and 2019, we systematically
 collected GPS relocation data on 16 coalitions of dispersing African wild dogs
 (7 female and 9 male coalitions). Candidate dispersing individuals were
-identified based on criteria reported in \cite{Behr.2020}, immobilized according
-to protocols described in \cite{Osofsky.1996}, and fitted with GPS/Satellite
-radio collars (\textit{Vertex Lite; Vectronic Aerospace GmbH, Berlin}) while
-still with their natal pack. All procedures were undertaken and supervised by a
-Botswana-registered wildlife veterinarian. During dispersal, GPS collars were
+identified based on age, number of same‐sex siblings, pack size, and presence of
+unrelated individuals of the opposite sex in ther pack citep \citep{McNutt.1996,
+Behr.2020}\todo{We originally only pointed to Behr and did not include the
+criteria. The editor desired to include those}. Individuals were immobilized
+according to protocols described in \cite{Osofsky.1996}, and fitted with
+GPS/Satellite radio collars (\textit{Vertex Lite; Vectronic Aerospace GmbH,
+Berlin, Germany}) while still with their natal pack. All procedures were
+undertaken and supervised by a Botswana-registered wildlife veterinarian. Fully
+assembled collars produced a tag weight of approximately xx kg, which conforms
+to the proposed threshold of 3\% of an animal's body weight
+\citep{Kenward.2000}. Collars were mounted using leather belts and included a
+drop off mechanism triggered by a slowly decomposing piece of cloth.\todo{Editor
+desired more information on GPS collar} During dispersal, GPS collars were
 programmed to record GPS relocation data every 4 hours and to regularly transmit
 them via Iridium satellite system to a base station.
 
@@ -328,31 +347,30 @@ collected while individuals were still with their natal packs and after
 settlement in a new territory \citep{Cozzi.2020}. We identified the exact time
 of emigration and settlement based on direct field observations and through
 visual inspection of the net squared displacement (NSD) metric. NSD quantifies
-the Euclidean distance of a relocation to a reference point \citep{Borger.2012},
-which in our case was the center of the dispersing coalition's natal home range.
-Thus, dispersal was deemed to have started when a coalition had left its natal
-home range and continued until the NSD metric remained stationary, implying that
-the coalition had successfully settled (Figure S1). In total, we collected 4'169
-GPS relocations during dispersal (Figure S2 \& Table S1), resulting in an
-average of 260 locations per dispersing coalition (min = 37, max = 729). In our
-analysis, we did not differentiate between male and female dispersing
-coalitions, for previous research found little differences between sexes during
-dispersal \citep{Woodroffe.2019, Cozzi.2020}.
+the squared \todo{Reviewer 1 pointed out correctly that we need to talk about
+the \textit{squared} euclidean distance} Euclidean distance of a relocation to a
+reference point \citep{Borger.2012}, which in our case was the center of the
+dispersing coalition's natal home range. Thus, dispersal was deemed to have
+started when a coalition had left its natal home range and continued until the
+NSD metric remained stationary, implying that the coalition had successfully
+settled (Figure S1). In our analysis, we did not differentiate between male and
+female dispersing coalitions, for previous research found little differences
+between sexes during dispersal \citep{Woodroffe.2019, Cozzi.2020}.
 
 \subsection{Spatial Covariates}
-To investigate habitat preferences of dispersing wild dogs, we used a set of
-geo-referenced covariates (\Cref{Covariates}) that we aggregated in the
-categories \textit{land cover} (which included water cover, distance to water,
-shrubs/grassland cover, and tree cover), \textit{protection status} (protected
-vs. unprotected), and \textit{human pressure} (which included human influence,
-presence of roads, and distance to roads). For each of these covariates we
-prepared spatial raster layers from freely available online services or from
-remotely sensed satellite imagery. To ensure a consistent resolution (i.e.
-cell-size or grain) across covariates, we coarsened or interpolated all layers
-to match a resolution of 250m x 250m. For further details on the preparation of
-each covariate, see Appendix A.3. We performed processing and manipulation of
-data as well as all spatial and statistical analyses using R, version 3.6.1
-\citep{R.2019}.
+To investigate habitat relative selection strength\todo{As per reviewer 1} of
+dispersing wild dogs, we used a set of geo-referenced covariates
+(\Cref{Covariates}) that we aggregated in the categories \textit{land cover}
+(which included water cover, distance to water, shrubs/grassland cover, and tree
+cover), \textit{protection status} (protected vs. unprotected), and
+\textit{human pressure} (which included human density, presence of roads, and
+distance to roads). For each of these covariates we prepared spatial raster
+layers from freely available online services or from remotely sensed satellite
+imagery. To ensure a consistent resolution (i.e. cell-size or grain) across
+covariates, we coarsened or interpolated all layers to match a resolution of
+250m x 250m. For further details on the preparation of each covariate, see
+Appendix A.3. We performed processing and manipulation of data as well as all
+spatial and statistical analyses using R, version 3.6.1 \citep{R.2019}.
 
 \begin{figure}[h]
   \begin{center}
@@ -373,20 +391,22 @@ data as well as all spatial and statistical analyses using R, version 3.6.1
 
 \subsection{Habitat Selection Model}
 We used an integrated step selection function (iSSF; \citealp{Avgar.2016}) to
-investigate dispersers' selection or avoidance for the above-mentioned spatial
-covariates. That is, we paired each realized step (i.e. the connecting line
-between two consecutive GPS relocations; \citealp{Turchin.1998}) with 24 random
-steps. We generated random steps by sampling turning angles from a uniform
-distribution U(\(-\pi, +\pi\)) and step lengths from a gamma distribution that
-was fitted using realized steps \citep{Avgar.2016}. A realized step and its 24
-associated random steps formed a stratum that received a unique identifier.
-Along each step, we extracted the above-mentioned covariates (Table S3),
-standardized extracted values using a z-score transformation, and checked for
-correlation using Pearson's Correlation Coefficient \(r\). None of the
-covariates were overly correlated (\(|r| > 0.6\); \citealp{Latham.2011}) and we
-retained all of them for modeling. Our habitat selection model then assumed that
-dispersing wild dogs assigned a selection score \(w(x)\) of the following
-exponential form to each realized and random step \citep{Fortin.2005}:
+investigate dispersers' relative selection strentgh \todo{Reviewer 1 suggested
+to use relative selection strength, rather than preference} for the
+above-mentioned spatial covariates. That is, we paired each realized step (i.e.
+the connecting line between two consecutive GPS relocations;
+\citealp{Turchin.1998}) with 24 random steps. We generated random steps by
+sampling turning angles from a uniform distribution U(\(-\pi, +\pi\)) and step
+lengths from a gamma distribution that was fitted using realized steps
+\citep{Avgar.2016}. A realized step and its 24 associated random steps formed a
+stratum that received a unique identifier. Along each step, we extracted the
+above-mentioned covariates (Table S3), standardized extracted values using a
+z-score transformation, and checked for correlation using Pearson's Correlation
+Coefficient \(r\). None of the covariates were overly correlated (\(|r| > 0.6\);
+\citealp{Latham.2011}) and we retained all of them for modeling. Our habitat
+selection model then assumed that dispersing wild dogs assigned a selection
+score \(w(x)\) of the following exponential form to each realized and random
+step \citep{Fortin.2005}:
 
 \begin{equation}
 \label{EQ1}
@@ -394,21 +414,26 @@ exponential form to each realized and random step \citep{Fortin.2005}:
 \end{equation}
 
 \noindent The selection score \(w(x)\) of a step depended on its associated
-covariates (\(x_1, x_2, ..., x_n\)), as well as on the animal's preferences for
-these covariates (\(\beta_1, \beta_2, ..., \beta_n\)). To estimate habitat
-preferences (i.e. the \(\beta\)'s), we used mixed effects conditional logistic
+covariates (\(x_1, x_2, ..., x_n\)), as well as on the animal's relative
+selection strength \todo{As per reviewer 1} for these covariates (\(\beta_1,
+\beta_2, ..., \beta_n\)). To estimate relative selection strengths \todo{As per
+reviewer 1} (i.e. the \(\beta\)'s), we used mixed effects conditional logistic
 regression analysis as suggested by \cite{Muff.2020}. We implemented their
 method using the R-package \textit{glmmTMB} \citep{Mollie.2017} and used
-dispersing coalition ID to model random intercepts and slopes. We defined two
-movement metrics, namely the cosine of the turning angle (\(cos(ta)\)) and the
-log of the step length (\(log(sl)\)), as core covariates and ran stepwise
-forward model selection based on Akaike's Information Criterion (AIC;
-\citealp{Burnham.2002}) for all other covariates. The inclusion of movement
-metrics served to reduce biases in estimated habitat preferences that may have
-arisen due to movement preferences \citep{Avgar.2016}. To validate the
-predictive power of the most parsimonious habitat selection model, we ran k-fold
-cross-validation for case-control studies as described in \cite{Fortin.2009}
-(details in Appendix A.5).
+dispersing coalition ID to model random slopes. We also modeled random
+intercepts with an arbitrary high variance of 1e6 to make use of the
+\textit{poisson trick} (see \cite{Muff.2020}). We defined three movement
+metrics, namely the cosine of the turning angle (\(cos(ta)\)), the step length
+\(sl_\) and the natural logarithm of the step length (\(log(sl)\)), as core
+covariates and ran stepwise forward model selection based on Akaike's
+Information Criterion (AIC; \citealp{Burnham.2002}) for all other
+covariates.\todo{Reviewer 1 asked for more details in the random effects. I
+therefore decided to update this section too} The inclusion of movement metrics
+served to reduce biases in estimated habitat selection coefficients \todo{as per
+revierwer 1} that may have arisen due to movement behavior \citep{Avgar.2016}.
+To validate the predictive power of the most parsimonious habitat selection
+model, we ran k-fold cross-validation for case-control studies as described in
+\cite{Fortin.2009} (details in Appendix A.5).
 
 \subsection{Permeability Surface}
 Using the most parsimonious habitat selection model, we predicted a permeability
@@ -444,23 +469,36 @@ details see Appendix A.6). After computation, we tallied overlapping LCPs and
 LCCs, respectively, into single connectivity maps.
 
 \section{Results}
+\subsection{Dispersal Events}
+In total, we collected 4'169 GPS relocations during dispersal (Figure S2 \&
+Table S1), resulting in an average of 261 (\(SD\) = 207) locations per
+dispersing coalition. Dispersers on dispersed on average for 48 days (\(SD\) =
+44), covered a mean euclidean distance of 54 km (\(SD\) = 71) and a cumulative
+distance of 597 km (\(SD\) = 508). One female coalition dispersed far east into
+the Hwange Hwange National Park and covered a cumulative distance of over 360 km
+in under 9 days.\todo{Editor desired a quick summary of the dispersal data.}
+
 \subsection{Habitat Selection Model}
 Our most parsimonious habitat selection model (\(\Delta AIC > 2\) than any
 alternative model; Table S4) retained the covariates \textit{water},
 \textit{distance to water}, \textit{trees}, \textit{shrubs/grassland}, and
 \textit{human influence}, beside the fixed covariates \textit{cos(ta)} and
-\textit{log(sl)} (\Cref{PermeabilityResults}a). Parameter estimates showed that
-dispersing wild dogs moved in a directional and fast manner, as indicated by a
-positive selection for small turning angles, i.e. high \(cos(ta)\) (\(\beta\) =
-0.14; 95\% CI = 0.07 to 0.21) and longer steps, i.e. high \(log(sl)\) (\(\beta\)
-= 0.06, 95\% CI = 0.02 to 0.09). Dispersers avoided moving through water
-(\(\beta\) = -0.52, 95\% CI -0.77 to -0.26) but selected for locations in its
-vicinity, although the latter effect was not significant (\(\beta\) = -0.32,
-95\% CI = -0.72 to 0.08). Dispersers avoided areas that were densely covered by
-trees (\(\beta\) = -0.31, CI = -0.46 to -0.15) and preferred areas covered by
-shrubs/grassland (\(\beta\) = 0.25, 95\% CI = 0.07 to 0.42). Finally, dispersers
-avoided areas that were influenced by humans (\(\beta\) = -0.41, 95\% CI = -0.78
-to -0.05).
+\textit{log(sl)} (\Cref{PermeabilityResults}a). The positive coefficient for
+\(log(sl)\) (\(\beta\) = 0.06, 95\% CI = 0.02 to 0.09) showed that our fitted
+(yet selection-biased) gamma distribution produced step-lengths slightly shorter
+than under a selection-free gamma distribution. Similarly, the positive
+coefficient for \(cos(ta)\) (\(\beta\) = 0.14; 95\% CI = 0.07 to 0.21) indicates
+that the uniform distribution for turning angles produced turning angles with
+too little directionality.\todo{Reviewer 1 nicely explained that the
+coefficients for log(sl) and cos(ta) imply that the initial distributions were
+selection-biased} With respect to environmental covariates, dispersers avoided
+moving through water (\(\beta\) = -0.52, 95\% CI -0.77 to -0.26) but selected
+for locations in its vicinity, although the latter effect was not significant
+(\(\beta\) = -0.32, 95\% CI = -0.72 to 0.08). Dispersers avoided areas that were
+densely covered by trees (\(\beta\) = -0.31, CI = -0.46 to -0.15) and preferred
+areas covered by shrubs/grassland (\(\beta\) = 0.25, 95\% CI = 0.07 to 0.42).
+Finally, dispersers avoided areas that were influenced by humans (\(\beta\) =
+-0.41, 95\% CI = -0.78 to -0.05).
 
 \begin{figure}[h]
   \begin{center}
@@ -527,7 +565,7 @@ unprotected landscapes (\Cref{PermeabilityComp}).
     Permeability was predicted by calculating selection scores \(w(x) =
     exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)\) for each raster cell
     based on the raster cell's underlying covariates (\(x_i\)) and estimated
-    habitat preferences (\(\beta_i\)). Areas that dispersers find easy to
+    selection strenghts (\(\beta_i\)). Areas that dispersers find easy to
     traverse are depicted in bright colors. Bold white lines delineate the
     borders of the KAZA-TFCA, whereas dashed white lines show country borders.}
     \label{PermeabilityMap}
@@ -625,24 +663,27 @@ movement corridors, thus highlighting areas that are exceptionally valuable for
 the conservation of several species.
 
 Our results emphasize that human influences constitute some of the main barriers
-to connectivity among wild dog populations. This conforms to findings on
-dispersing wild dogs from eastern Africa \citep{Masenga.2016, Oneill.2020} but
-conflicts with findings from South Africa by \cite{DaviesMostert.2012}, who
-reported a high willingness of dispersers to cross human-dominated landscapes.
-We believe that such differences are due to the unavailability of alternative
-routes through natural landscapes, which may have forced dispersers in South
-Africa to cross human dominated landscapes despite a strong aversion to do so.
-In this regard, our representation of dispersal corridors and the resulting
-connectivity appear conservative, as dispersers may be able to make the best out
-of a bad situation and cross landscapes characterized by considerably
-unfavorable conditions \citep{Palomares.2000, Elliot.2014}. Nevertheless,
-successful conservation of this species relies on policymakers' and local
-authorities' willingness and ability to provide and conserve natural areas that
-remain free from anthropogenic pressures. This is not only paramount in light of
-increasing connectivity and facilitating dispersal, but also in terms of
-reducing human-caused mortality during dispersal. In fact, previous studies have
-shown that human-caused mortality represents a major threat to wild dogs'
-ability to disperse \citep{Woodroffe.2019, Cozzi.2020}.
+to connectivity among wild dog populations. According to our model, dispersers
+avoided corssing human dominated landscapes whenever given the
+choice.\todo{According to reviewer 1 we should point out that our model compares
+available vs. unavailable} This conforms to findings on dispersing wild dogs
+from eastern Africa \citep{Masenga.2016, Oneill.2020} but conflicts with
+findings from South Africa by \cite{DaviesMostert.2012}, who reported a high
+willingness of dispersers to cross human-dominated landscapes. We believe that
+such differences are due to the unavailability of alternative routes through
+natural landscapes, which may have forced dispersers in South Africa to cross
+human dominated landscapes despite a strong aversion to do so. In this regard,
+our representation of dispersal corridors and the resulting connectivity appear
+conservative, as dispersers may be able to make the best out of a bad situation
+and cross landscapes characterized by considerably unfavorable conditions
+\citep{Palomares.2000, Elliot.2014}. Nevertheless, successful conservation of
+this species relies on policymakers' and local authorities' willingness and
+ability to provide and conserve natural areas that remain free from
+anthropogenic pressures. This is not only paramount in light of increasing
+connectivity and facilitating dispersal, but also in terms of reducing
+human-caused mortality during dispersal. In fact, previous studies have shown
+that human-caused mortality represents a major threat to wild dogs' ability to
+disperse \citep{Woodroffe.2019, Cozzi.2020}.
 
 Besides human influences, we identified water as additional obstacle to
 dispersal. This corroborates earlier studies showing that water bodies are
@@ -652,14 +693,24 @@ representation of water is thus imperative and particularly relevant in seasonal
 or flood-pulsing ecosystems such as the Okavango Delta.
 
 Although dispersers avoided moving through water, they selected locations in its
-vicinity. This preference may be caused by the occurence of prey close to water
+vicinity. This behavior may be caused by the occurence of prey close to water
 \citep{Bonyongo.2005}. For the same reason, however, competitors such as lions,
 spotted hyenas, and resident wild dogs may also use areas close to water
 \citep{Valeix.2010}, thereby occasionally forcing dispersing wild dogs to move
-into prey-poorer areas away from water. Given the influence that resident
-conspecifics, competitors, and prey can have on dispersers \citep{Cozzi.2018,
-Armansin.2019} future studies should strive to collect and incorporate intra-
-and interspecific relationships into analyses of landscape connectivity.
+into prey-poorer areas away from water. This could also explain the effect of
+distane to water was insignificant.\todo{Reviewer 1 suggested to add this} Given
+the influence that resident conspecifics, competitors, and prey can have on
+dispersers \citep{Cozzi.2018, Armansin.2019} future studies should strive to
+collect and incorporate intra- and interspecific relationships into analyses of
+landscape connectivity.
+
+Overall, our findings on habitat selection of dispersing wild dogs coincide with
+findings from Kenya by \cite{Oneill.2020}, suggesting that there are strong
+commonalities across ecosystems. Hence, despite wild dogs' ability to cope with
+and adapt to a wide range of habitats, we feel that that the fundamental factors
+included in our study and their influences can be generalized to other
+populations.\todo{Editor desired that we discuss the applicability of our
+ecosystem to other ecosystems.}
 
 Locally, we identified the Okavango-Linyanti region as a potential dispersal hub
 through which dispersing wild dogs gain access to more peripheral regions of the
@@ -685,35 +736,43 @@ traverses this corridor may limit realized connectivity \citep{Cozzi.2020}.
 Our approach of identifying movement corridors based on pre-defined start and
 end points implicitly assumes that individuals know the end point of their
 dispersal journey and that they have almost complete knowledge of associated
-movement costs \citep{Panzacchi.2016}. Since dispersers often move into unknown
-territory, this may not necessarily be the case \citep{Abrahms.2017,
-Cozzi.2020}. However, specification of pre-defined end points might not be
-necessary, as the parametrized iSSF model can be used as mechanistic movement
-model to simulate dispersal events from known source points, yet without
-restricting the domain of potential end points \citep{Signer.2017}.
-Consequently, movement corridors would emerge more naturally as the result of a
-myriad of simulated dispersal events. While a simulation-based approach is
-conceptually straightforward, it requires a comprehensive mechanistic
-understanding of dispersal movements, which is conditional on our ability to
-collect additional dispersal data and adequately represent the landscape through
-which individuals move.
+movement costs \citep{Koen.2014, Panzacchi.2016}. Since dispersers often move
+into unknown territory, this may not necessarily be the case
+\citep{Abrahms.2017, Cozzi.2020}. However, specification of pre-defined end
+points might not be necessary, as the parametrized iSSF model can be used as
+mechanistic movement model to simulate dispersal events from known source
+points, yet without restricting the domain of potential end points
+\citep{Signer.2017}. Consequently, movement corridors (i.e. transient
+utilisation distribution) would emerge more naturally as the result of a myriad
+of simulated dispersal events. A very similar approach could be applied to
+produce permeability surfaces from steady state utilistation distributions
+\citep{Avgar.2016, Signer.2017}. \citep{Signer.2017} have shown that such
+permeability surfaces are less prone to overestimateing permeability in areas
+that lie far from suitable habitats. While a simulation-based approach is
+conceptually straightforward, computational requirements are tremendous,
+especially for such a large extent as constituted by the KAZA-TFCA.
+\todo{Reviewer 1 pointed out that the permeability surface likely overestimates
+permeability in areas far from suitable habitat. Additionally, reviewer 2
+mentioned that our dataset by far suffices for simulations and we should not
+argue with sample size.}
 
-Our work shows how dispersal data of a highly mobile species can be used t
-identify movement corridors and to assess the adequacy of protected areas. In
-our case, the predicted movement corridors of African wild dogs were well
-contained within the boundaries of the world's largest transboundary
-conservation area, namely the KAZA-TFCA, suggesting that it will significantly
-contribute to the long-term viability of this species. Moreover, our
-connectivity network allowed revealing potential dispersal hubs through which
-dispersers gain access to more remote regions of the study area. Finally, our
-investigations showed that human influence constitutes one of the main barriers
-to dispersal and substantially reduces landscape connectivity. Successful
-conservation of wide-ranging species, such as exemplified by the African wild
-dog, will therefore be contingent on the willingness of local authorities,
-policymakers, and land managers to preserve areas that remain free from human
-strains. Ultimately, our work contributes to the growing field of connectivity
-studies and provides and easily expandable framework for assessing the adequacy
-of already-existing or planned protected areas.
+Our work shows how dispersal data of a highly mobile species can be used to
+\todo{to instead of t, pointed out by the editor and reviewer 1} identify
+movement corridors and to assess the adequacy of protected areas. In our case,
+the predicted movement corridors of African wild dogs were well contained within
+the boundaries of the world's largest transboundary conservation area, namely
+the KAZA-TFCA, suggesting that it will significantly contribute to the long-term
+viability of this species. Moreover, our connectivity network allowed revealing
+potential dispersal hubs through which dispersers gain access to more remote
+regions of the study area. Finally, our investigations showed that human
+influence constitutes one of the main barriers to dispersal and substantially
+reduces landscape connectivity. Successful conservation of wide-ranging species,
+such as exemplified by the African wild dog, will therefore be contingent on the
+willingness of local authorities, policymakers, and land managers to preserve
+areas that remain free from human strains. Ultimately, our work contributes to
+the growing field of connectivity studies and provides and easily expandable
+framework for assessing the adequacy of already-existing or planned protected
+areas.
 
 \section{Authors' Contributions}
 D.D.H., D.M.B., A.O. and G.C. conceived the study and designed methodology;
@@ -733,11 +792,12 @@ Camenisch for assisting with wild dog immobilizations. We also thank B. Abrahms
 for sharing her data of three dispersing wild dogs. Furthermore, we are indebted
 to Prof. J. Fieberg, who consulted all statistical aspects of this work and P.
 Wolski, from the Okavango Research Institute, who assisted us in generating
-dynamic water maps. This study was funded by Basler Stiftung für Biologische
-Forschung, Claraz Foundation, Idea Wild, Jacot Foundation, National Geographic
-Society, Parrotia Stiftung, Stiftung Temperatio, Wilderness Wildlife Trust
-Foundation, Forschungkredit der Universität Zürich, and a Swiss National Science
-Foundation Grant (31003A\_182286) to A. Ozgul.
+dynamic water maps. We also thank the anonymous reviewers for their valuable
+comments and suggestions. This study was funded by Basler Stiftung für
+Biologische Forschung, Claraz Foundation, Idea Wild, Jacot Foundation, National
+Geographic Society, Parrotia Stiftung, Stiftung Temperatio, Wilderness Wildlife
+Trust Foundation, Forschungkredit der Universität Zürich, and a Swiss National
+Science Foundation Grant (31003A\_182286) to A. Ozgul.
 
 \newpage
 \begingroup

@@ -1,9 +1,8 @@
 ################################################################################
-#### Merging ORI and MODIS Floodmaps
+#### Resampling MODIS Maps and Preparing for Merge
 ################################################################################
 # Description: We now have two different sources for floodmaps: ORI and MODIS.
-# Classified images of both are stored in our floodmaps folder. Let's resample
-# them to the extent of our study and put them into a huge single rasterstack
+# We want to merge them afterwards, so let's prepare everything.
 
 # clear r's brain
 rm(list = ls())

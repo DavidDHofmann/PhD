@@ -1,10 +1,11 @@
-############################################################
+################################################################################
 #### Algoritm to Model the Flood in the Okavango Delta
-############################################################
+################################################################################
 # Description: Here, we try to parametrize a model that allows us to predict the
 # spatial extent of the flood at a given point in time. This is heavily inspired
 # by the following post: https://stats.stackexchange.com/questions/244042/trend-
-# in-irregular-time-series-data.
+# in-irregular-time-series-data. Also check out this article from medium
+# https://medium.com/analytics-vidhya/a-guide-to-machine-learning-in-r-for-beginners-part-5-4c00f2366b90
 
 # Clear R's brain
 rm(list = ls())
@@ -13,7 +14,7 @@ rm(list = ls())
 library(tidyverse)            # To wrangle code
 library(mgcv)                 # For spatial modelling
 library(viridis)              # To access nice colors
-library(parallel)             # To use multiple cores
+library(pbmcapply)            # To use multiple cores and show progress bars
 library(lubridate)            # To handle dates
 library(tictoc)               # To keep track of time
 library(pkgcond)              # To suppress warnings
@@ -23,13 +24,12 @@ library(rgdal)                # To store shapefiles
 library(animation)            # Package to animate
 library(spatstat)             # To calculate distances on raster
 library(maptools)             # To calculate distances on raster
+library(davidoff)             # Custom functions
+
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
-
-# Load custom functions
-source("Functions.r")
 
 # Identify all classified floodmaps
 files <- dir(
@@ -38,15 +38,19 @@ files <- dir(
   , full.names  = T
 )
 
+# Identify dates
+filedates <- as.Date(substr(basename(files), start = 1, stop = 10))
+
 # Load them
 flood <- stack(files)
 
-# Reclassify pixels to flooded (1) not flooded (0) and clouded (NA)
+# Reclassify pixels to flooded (1) not flooded (0) and clouded (NA) -> In case
+# you don't want to use terra::classify, use davidoff::mcreclassify
 rcl <- data.frame(old = c(0, 127, 255), new = c(1, NA, 0))
 flood <- mcreclassify(flood, rcl)
 
 # Calculate how often each pixel was flooded
-no_inundated <- calc(flood, function(x){sum(x, na.rm = T)})
+no_inundated <- sum(flood, na.rm = T)
 names(no_inundated) <- "NoInundated"
 
 # We will use this raster frequently. Thus, let's save it to file
@@ -55,10 +59,10 @@ writeRaster(no_inundated
   , overwrite = TRUE
 )
 
-# Function to create dataframe from stack of floodmaps and covariate
-# "no_inundated"
+# Function to translate stack of floodmaps into a dataframe and add a column
+# indicating the covariate "no_inundated"
 createData <- function(x, y, n = NA){
-  if (!is.na(n)){x <- x[[sample(nlayers(x), n)]]}
+  if (!is.na(n)){x <- x[[sample(nlyr(x), n)]]}
   dat <- x %>%
     stack(., y) %>%
     as.data.frame(xy = T) %>%
@@ -75,10 +79,13 @@ createData <- function(x, y, n = NA){
 # Apply the function to the stack of floodmaps and the covariate "no_inundated"
 dat <- createData(flood, no_inundated)
 
-############################################################
+# Clear cache
+gc()
+
+################################################################################
 #### Fit Spatio-Temporal Flood-Model
-############################################################
-# Subsample and split data into training and testing set
+################################################################################
+# Subsample data and split into training and testing set
 sub <- dat[sample(nrow(dat), 5e6),]
 sub <- splitDat(sub, ratio = 0.75)
 
@@ -102,12 +109,16 @@ mod <- bam(Inundated ~
   , gc.level  = 2
 )
 
-# # Write the model results to file
-# write_rds(mod, "FloodModel.rds")
-#
 # Look at the model results
 summary(mod)
-#
+
+# Write the model results to file
+write_rds(mod, "03_Data/03_Results/99_FloodModel.rds")
+
+# Remove data
+rm(dat)
+gc()
+
 # # Visualize them
 # plot(mod, pages = 2, shade = T, scale = 0)
 #
@@ -119,71 +130,74 @@ summary(mod)
 # acf(residuals(mod), lag.max = 200, main = "ACF")
 # pacf(residuals(mod), lag.max = 200, main = "pACF")
 
-############################################################
+################################################################################
 #### Identify Classification Threshold using ROCR
-############################################################
-# Function to calculate confusion matrix, sensitivity, and specificity. Note
-# that x represents predicted values, y represents true values
-confMat <- function(x, y, threshold = 0.5){
+################################################################################
+# To predict a floodmap, we'll need to specify a classification threshold. We
+# can balance false positives against false negatives to find a meaningful
+# threshold. Function to calculate confusion matrix, sensitivity, and
+# specificity. Note that x represents predicted values, y represents true values
 
-  # Confusion table
-  conf <- table(x, y >= threshold)
+# confMat <- function(x, y, threshold = 0.5){
+#
+#   # Confusion table
+#   conf <- table(x, y >= threshold)
+#
+#   # Performance metrics
+#   specificity <- conf[1, 1] / sum(conf[1, 1], conf[1, 2])
+#   sensitivity <- conf[2, 2] / sum(conf[2, 1], conf[2, 2])
+#   accuracy <- sum(conf[1, 1], conf[2, 2]) / sum(conf[1, ], conf[2, ])
+#
+#   # Results that are returned
+#   results <- list(
+#       Confusion   = conf
+#     , Specificity = specificity
+#     , Sensitivity = sensitivity
+#     , Accuracy    = accuracy
+#   )
+#   return(results)
+# }
+#
+# # Use the floodmodel to predict the flood extent on the training dataset (to
+# # find the threshold)
+# predictTrain <- predict(mod, type = "response")
+#
+# # Create prediction object. Note that we can only use data that is not NA, as
+# # the bam removed any NA values automatically
+# predictROCR <- prediction(
+#     predictions = predictTrain
+#   , labels      = sub$Training$Inundated[!is.na(sub$Training$Inundated)]
+# )
+#
+# # Create performance object
+# performROCR <- performance(predictROCR, "tpr", "fpr")
+#
+# # Plot the results for different thresholds
+# plot(performROCR
+#   , colorize          = T
+#   , print.cutoffs.at  = seq(0, 1, by = 0.1)
+#   , text.adj          = c(-0.2, 1.7)
+# )
+#
+# # It looks like a threshold of 0.5 works perfectly fine. Let's use it to predict
+# # on the test data
+# predictTest <- predict(mod, sub$Testing, type = "response")
+#
+# # Check the confusion matrix
+# confMat(sub$Testing$Inundated, predictTest, threshold = 0.5)
 
-  # Performance metrics
-  specificity <- conf[1, 1] / sum(conf[1, 1], conf[1, 2])
-  sensitivity <- conf[2, 2] / sum(conf[2, 1], conf[2, 2])
-  accuracy <- sum(conf[1, 1], conf[2, 2]) / sum(conf[1, ], conf[2, ])
-
-  # Results that are returned
-  results <- list(
-      Confusion   = conf
-    , Specificity = specificity
-    , Sensitivity = sensitivity
-    , Accuracy    = accuracy
-  )
-  return(results)
-}
-
-# Use the floodmodel to predict the flood extent on the training dataset (to
-# find the threshold)
-predictTrain <- predict(mod, type = "response")
-
-# Create prediction object. Note that we can only use data that is not NA, as
-# the bam removed any NA values automatically
-predictROCR <- prediction(
-    predictions = predictTrain
-  , labels      = sub$Training$Inundated[!is.na(sub$Training$Inundated)]
-)
-
-# Create performance object
-performROCR <- performance(predictROCR, "tpr", "fpr")
-
-# Plot the results for different thresholds
-plot(performROCR
-  , colorize          = T
-  , print.cutoffs.at  = seq(0, 1, by = 0.1)
-  , text.adj          = c(-0.2, 1.7)
-)
-
-# It looks like a threshold of 0.5 works perfectly fine. Let's use it to predict
-# on the test data
-predictTest <- predict(mod, sub$Testing, type = "response")
-
-# Check the confusion matrix
-confMat(sub$Testing$Inundated, predictTest, threshold = 0.5)
-
-############################################################
+################################################################################
 #### Predict Flood
-############################################################
+################################################################################
 # Reload model results
 mod <- read_rds("03_Data/03_Results/99_FloodModel.rds")
 
 # Load the covariate layer "no_inundated"
-no_inundated <- "03_Data/02_CleanData/03_LandscapeFeatures_NoInundated.tif" %>%
-  raster()
+no_inundated <- raster("03_Data/02_CleanData/03_LandscapeFeatures_NoInundated.tif")
+names(no_inundated) <- "NoInundated"
 
-# Write a function that predicts the flood extent for a desired date
-floodPred <- function(mod, covars, dates = "Desired Date", threshold = 0.5){
+# Write a function that predicts the flood extent for desired dates
+floodPred <- function(mod, covars, dates, threshold = 0.5){
 
   # Prepare new dataframe based on the covariate layer
   dat_new <- covars %>%
@@ -209,133 +223,99 @@ floodPred <- function(mod, covars, dates = "Desired Date", threshold = 0.5){
   # Put date of the map as its name
   names(map) <- dates
 
+  # Clear cache
+  gc()
+
   # Return the prediction
   return(map)
 }
 
-# Create vector of desired dates
-dates <- seq(as.Date("2015-01-01"), as.Date("2015-12-31"), by = "1 days")
-
-# Run the prediction to these dates and stack the results
-predictions <- mclapply(dates, mc.cores = detectCores() - 1, function(x){
-  floodPred(mod = mod, covars = no_inundated, dates = x)
-}) %>% stack(.)
-
-# Visualize
-plot(predictions[[1]], col = viridis(50))
-
-############################################################
-#### Predict Flood Repeatedly
-############################################################
-# Parameterize floodmodel using random subsets of the total data, then
-# predicting flood extent. Let's load the necessary data.
-
-# Function to refit model and predict flood repeatedly
-floodPred2 <- function(
-    mod
-  , covars
-  , dat
-  , n
-  , dates     = "Desired Dates"
-  , threshold = 0.5
-  , size      = 1e5
-  ){
-
-  # Prepare empty list into which the results go
-  results <- list()
-
-  # Refit model and predict flood
-  for (i in 1:n){
-    sub <- dat[sample(nrow(dat), 1e5),]
-    mod <- stats::update(mod, data = sub)
-
-    # Apply prediction to these dates
-    predictions <- mclapply(dates, mc.cores = detectCores() - 1, function(x){
-      floodPred(mod = mod, covars = no_inundated, dates = x)
-    }) %>% stack(.)
-
-    # Put results in stack and sum them
-    results[[i]] <- predictions
-
-    # Print status
-    cat(i, "of", n, "done...\n")
-  }
-
-  # Calculate sum over all maps of the same date
-  new <- list()
-  for (i in 1:nlayers(results[[1]])){
-     stacked <- stack(lapply(results, function(x){x[[i]]}))
-     stacked <- sum(stacked)
-     names(stacked) <- names(results[[1]][[i]])
-     new[[i]] <- stacked
-  }
-
-  # Stack
-  results <- stack(new)
-
-  # Return the results
-  return(results)
-}
-
-# Select some dates
-dates <- seq(as.Date("2015-05-01"), as.Date("2015-05-30"), by = "1 days")
-
-# Run the function
-pred <- floodPred2(
-    mod       = mod
-  , covars    = no_inundated
-  , dat       = dat
-  , dates     = dates
-  , threshold = 0.5
-  , n         = 10
-  , size      = 1e5
+# Create vector of desired dates. We will predict the flood for the same range
+# of dates for which we have input data
+dates <- seq(
+    from  = as.Date("2019-01-01")
+  , to    = as.Date("2019-12-31")
+  , by    = "7 days"
 )
 
-# Plot results
-plot(pred[[1]])
+# Run the prediction to these dates and stack the results
+predictions <- pbmclapply(
+    X                   = dates
+  , ignore.interactive  = T
+  , mc.cores            = detectCores() - 1
+  , FUN                 = function(x){
+    floodPred(mod = mod, covars = no_inundated, dates = x)
+  }) %>% stack(.)
 
-############################################################
+# Visualize
+plot(predictions[[300]], col = viridis(50))
+
+################################################################################
 #### Comparison of Predicted and True Flood-Extent
-############################################################
+################################################################################
+# First we compare the cumulated extent
+dat1 <- data.frame(
+    Date    = as.Date(basename(files))
+  , Extent  = as.vector(cellStats(flood, "sum"))
+  , Type    = "Observed"
+)
+dat2 <- data.frame(
+    Date    = dates
+  , Extent  = as.vector(cellStats(predictions, "sum"))
+  , Type    = "Predicted"
+)
+dat <- rbind(dat1, dat2)
+dat <- subset(dat, Date > "2010-01-01")
+
+# Visualize all
+ggplot(dat, aes(x = Date, y = Extent, col = factor(Type))) +
+  geom_line() +
+  geom_rug(data = subset(dat, Type == "Observed"), sides = "b", length = unit(0.01, "npc")) +
+  scale_color_manual(values = c("gray40", "blue"))
+
 # Randomly select some dates for which we have proper floodmaps
 dates <- flood %>%
-  names(.) %>%
-  length(.) %>%
-  sample(., 5) %>%
+  names() %>%
+  length() %>%
+  sample(5) %>%
   flood[[.]] %>%
-  names(.) %>%
+  names() %>%
   substr(start = 2, stop = 11) %>%
   as.Date(., format = "%Y.%m.%d")
 
 # Predict flood for these dates
-predictions <- mclapply(dates, function(x){
-  floodPred(no_inundated, x)
-}, mc.cores = n - 1) %>% stack(.)
-names(predictions) <- dates
+predictions2 <- pbmclapply(
+    X                   = dates
+  , ignore.interactive  = T
+  , mc.cores            = detectCores() - 1
+  , FUN                 = function(x){
+    floodPred(mod = mod, covars = no_inundated, dates = x)
+  }) %>% stack(.)
+names(predictions2) <- dates
 
 # Plot the results
-index <- 1:4
+index <- 4
 par(mfrow = c(length(index), 2), mar = c(2, 1, 1, 1))
 for(i in 1:length(index)){
 
   # Plot the predicted map
   plot(
-      predictions[[index[i]]]
-    , main    = paste("Prediction", dates[i])
+      predictions2[[index[i]]]
+    , main    = paste("Prediction", dates[index[i]])
     , legend  = F
   )
 
   # Plot the remote sensed (true) map
   plot(
-      flood[[names(flood)[names(flood) == names(predictions)[index[i]]]]]
-    , main    = paste("True", dates[i])
+      flood[[names(flood)[names(flood) == names(predictions2)[index[i]]]]]
+    , main    = paste("True", dates[index[i]])
     , legend  = F
   )
 }
 
-############################################################
+################################################################################
 #### Floodmaps for Dispersal Simulations
-############################################################
+################################################################################
 # Reload flood model
 mod <- read_rds("03_Data/03_Results/99_FloodModel.rds")
 
@@ -433,9 +413,9 @@ writeRaster(globe
   , options   = c("INTERLEAVE = BAND", "COMPRESS = LZW")
 )
 
-############################################################
+################################################################################
 #### Distance to Water for Dispersal Simulations
-############################################################
+################################################################################
 # Split the stack to make use of mclapply
 globe <- splitStack(globe, n = detectCores() - 1)
 
@@ -452,9 +432,9 @@ writeRaster(distances
   , options   = c("INTERLEAVE = BAND", "COMPRESS = LZW")
 )
 
-############################################################
+################################################################################
 #### Animation
-############################################################
+################################################################################
 # Create an animation of the flood
 ani.options(interval = .025, ani.width = 1920, ani.height = 1080)
 saveVideo({

@@ -11,7 +11,7 @@ rm(list = ls())
 options(scipen = 999)
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_0"
 setwd(wd)
 
 # Load required packages
@@ -33,9 +33,7 @@ ssf <- "03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv" %>%
 
   # We need to manually set some of the column types
   read_csv(., col_types = cols(
-        Homerange     = "d"
-      , OtherPack     = "d"
-      , id            = "f"
+        id            = "f"
       , tod_          = "f"
       , RoadCrossing  = "f"
       , State         = "f")) %>%
@@ -86,8 +84,8 @@ ssf <- ssf %>%
     , HumansBuff5000        = scale(HumansBuff5000)
     , DistanceToHumans      = scale(DistanceToHumans)
     , DistanceToRoads       = scale(DistanceToRoads)
-    # , log_sl_               = scale(log_sl_)
-    # , cos_ta_               = scale(cos_ta_)
+    , log_sl_               = scale(log_sl_)
+    , cos_ta_               = scale(cos_ta_)
     , sl_                   = scale(sl_)
 )
 
@@ -154,6 +152,21 @@ correlated$Corr <- na.omit(correlations[mat])
 
 # Look at the result
 correlated
+
+############################################################
+#### Single Model
+############################################################
+# Write model forumla
+form <- writeForm(
+  c("Water", "DistanceToWater", "Trees", "Shrubs", "HumansBuff5000")
+)
+
+# Fit model
+mod <- glmm_clogit(form, data = ssf)
+
+# Check and plot results
+summary(mod)
+showCoeffs(getCoeffs(mod)[-1, ])
 
 ############################################################
 #### Forward Model Selection for Main Effects

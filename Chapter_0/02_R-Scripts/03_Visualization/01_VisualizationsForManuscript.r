@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_0"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_0"
 setwd(wd)
 
 # Set a seed
@@ -836,7 +836,7 @@ p6 <- tm_shape(roads1, bbox = bbox) +
       palette = "viridis"
     , style   = "cont"
     , title   = "Distance to\nRoads (km)"
-    , labels  = c("Low", "", "High")
+    , labels  = c("Short", "", "Long")
   ) +
   tm_shape(roads2, bbox = bbox) +
     tm_lines(col = "white") +

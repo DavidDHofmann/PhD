@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.4.16)  15 JUN 2020 08:39
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  28 AUG 2020 15:37
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
 **Manuscript.tex
-(/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.tex
+(/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.tex
 LaTeX2e <2017-04-15>
 Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -890,28 +890,58 @@ Package: endfloat 2011/12/25 v2.5d LaTeX2e package puts figures and tables at en
 \c@posttable=\count162
 \efloat@postttt=\write5
 \@ef@tttopen=\count163
+) (/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
+Package: todonotes 2015/07/09 .dtx Todonotes source and documentation.
+Package: todonotes 2012/07/25
+
+(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
+) (/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
+ (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks41
+\XKV@tempa@toks=\toks42
+)
+\XKV@depth=\count164
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
+File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
+) (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count165
+\calc@Bcount=\count166
+\calc@Adimen=\dimen266
+\calc@Bdimen=\dimen267
+\calc@Askip=\skip55
+\calc@Bskip=\skip56
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count167
+\calc@Cskip=\skip57
+)
+\c@@todonotes@numberoftodonotes=\count168
 )
 
 LaTeX Warning: Unused global option(s):
     [abstract=on,bibliography=totocnumbered].
 
-(/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.aux)
+(/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.aux)
 \openout1 = `Manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 71.
+LaTeX Font Info:    ... okay on input line 71.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -949,17 +979,17 @@ LaTeX Font Info:    ... okay on input line 70.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count164
-\scratchdimen=\dimen266
+\scratchcounter=\count169
+\scratchdimen=\dimen268
 \scratchbox=\box42
-\nofMPsegments=\count165
-\nofMParguments=\count166
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count167
-\MPscratchDim=\dimen267
-\MPnumerator=\count168
-\makeMPintoPDFobject=\count169
-\everyMPtoPDFconversion=\toks42
+\nofMPsegments=\count170
+\nofMParguments=\count171
+\everyMPshowfont=\toks43
+\MPscratchCnt=\count172
+\MPscratchDim=\dimen269
+\MPnumerator=\count173
+\makeMPintoPDFobject=\count174
+\everyMPtoPDFconversion=\toks44
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
  (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -972,14 +1002,14 @@ Package grfext Info: Graphics extension search list:
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Info: Redefining \celsius on input line 70.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 70.
+LaTeX Info: Redefining \celsius on input line 71.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 71.
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 70.
-Package gensymb Info: Using \Omega for \ohm on input line 70.
+LaTeX Info: Redefining \ohm on input line 71.
+Package gensymb Info: Using \Omega for \ohm on input line 71.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -988,89 +1018,109 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box43
-Package hyperref Info: Link coloring OFF on input line 70.
+Package hyperref Info: Link coloring OFF on input line 71.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count170
+\c@section@level=\count175
 )
-LaTeX Info: Redefining \ref on input line 70.
-LaTeX Info: Redefining \pageref on input line 70.
-LaTeX Info: Redefining \nameref on input line 70.
- (/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out) (/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.out)
+LaTeX Info: Redefining \ref on input line 71.
+LaTeX Info: Redefining \pageref on input line 71.
+LaTeX Info: Redefining \nameref on input line 71.
+ (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out) (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.out)
 \@outlinefile=\write6
 \openout6 = `Manuscript.out'.
 
-LaTeX Font Info:    Try loading font information for U+msa on input line 80.
+LaTeX Font Info:    Try loading font information for U+msa on input line 81.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 80.
+LaTeX Font Info:    Try loading font information for U+msb on input line 81.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 80.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 81.
  (/usr/share/texlive/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <8> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 80.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 81.
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 95.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 96.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.161 \newpage
-               [2] [1] [2]
+l.162 \newpage
+               [2]
+Package hyperref Info: bookmark level for unknown todo defaults to 0 on input line 175.
+ [1] [2]
 \openout4 = `Manuscript.fff'.
 
- (Manuscript.fff) [3] [4] [5] [6]
+ (Manuscript.fff) [3]
+
+LaTeX Warning: Marginpar on page 4 moved.
+
+
+LaTeX Warning: Marginpar on page 4 moved.
+
+
+LaTeX Warning: Marginpar on page 4 moved.
+
+[4]
+
+LaTeX Warning: Marginpar on page 5 moved.
+
+[5] [6]
+
+LaTeX Warning: Marginpar on page 7 moved.
+
+[7]
 \openout5 = `Manuscript.ttt'.
 
- (Manuscript.ttt) [7] [8] [9] [10] [11] (/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.bbl [12] [13]) AED endfloat: Processing end Figures and Tables [14] (/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.fff
-<99_StudyArea.pdf, id=424, 650.43pt x 379.4175pt>
+ (Manuscript.ttt) [8] [9] [10] [11] [12] (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.bbl [13] [14]) AED endfloat: Processing end Figures and Tables [15] (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.fff
+<99_StudyArea.pdf, id=457, 650.43pt x 379.4175pt>
 File: 99_StudyArea.pdf Graphic file (type pdf)
 <use 99_StudyArea.pdf>
 Package pdftex.def Info: 99_StudyArea.pdf  used on input line 5.
 (pdftex.def)             Requested size: 398.3386pt x 232.37064pt.
- [15
+ [16
 
 
- </home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_StudyArea.pdf>]
-<99_Covariates.pdf, id=453, 780.51598pt x 455.30101pt>
+ </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_StudyArea.pdf>]
+<99_Covariates.pdf, id=487, 780.51598pt x 455.30101pt>
 File: 99_Covariates.pdf Graphic file (type pdf)
 <use 99_Covariates.pdf>
 Package pdftex.def Info: 99_Covariates.pdf  used on input line 33.
 (pdftex.def)             Requested size: 398.3386pt x 232.36717pt.
- [16
+ [17
 
- </home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_Covariates.pdf>]
-<99_PermeabilityResults.pdf, id=476, 578.16pt x 202.356pt>
+ </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_Covariates.pdf>]
+<99_PermeabilityResults.pdf, id=511, 578.16pt x 202.356pt>
 File: 99_PermeabilityResults.pdf Graphic file (type pdf)
 <use 99_PermeabilityResults.pdf>
 Package pdftex.def Info: 99_PermeabilityResults.pdf  used on input line 51.
 (pdftex.def)             Requested size: 398.3386pt x 139.4189pt.
- [17
+ [18
 
- </home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityResults.pdf>]
-<99_PermeabilityMap.pdf, id=504, 433.62pt x 379.4175pt>
+ </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityResults.pdf>]
+<99_PermeabilityMap.pdf, id=537, 433.62pt x 379.4175pt>
 File: 99_PermeabilityMap.pdf Graphic file (type pdf)
 <use 99_PermeabilityMap.pdf>
 Package pdftex.def Info: 99_PermeabilityMap.pdf  used on input line 78.
 (pdftex.def)             Requested size: 398.3386pt x 348.56465pt.
- [18
+ [19
 
- </home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_PermeabilityMap.pdf>]
-<99_LeastCostPaths.pdf, id=525, 433.62pt x 379.4175pt>
+ </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_PermeabilityMap.pdf>]
+<99_LeastCostPaths.pdf, id=558, 433.62pt x 379.4175pt>
 File: 99_LeastCostPaths.pdf Graphic file (type pdf)
 <use 99_LeastCostPaths.pdf>
 Package pdftex.def Info: 99_LeastCostPaths.pdf  used on input line 99.
 (pdftex.def)             Requested size: 359.49826pt x 314.57486pt.
-<99_LeastCostCorrs.pdf, id=526, 433.62pt x 379.4175pt>
+<99_LeastCostCorrs.pdf, id=559, 433.62pt x 379.4175pt>
 File: 99_LeastCostCorrs.pdf Graphic file (type pdf)
 <use 99_LeastCostCorrs.pdf>
 Package pdftex.def Info: 99_LeastCostCorrs.pdf  used on input line 100.
@@ -1083,37 +1133,37 @@ Underfull \hbox (badness 10000) in paragraph at lines 99--101
 
 LaTeX Warning: Float too large for page by 27.59302pt on input line 111.
 
-[19 </home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostPaths.pdf> </home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostCorrs.pdf
+[20 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths.pdf> </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostCorrs.pdf
 
-pdfTeX warning: pdflatex (file /home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/99_LeastCostCorrs.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->]) (/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.ttt [20
+pdfTeX warning: pdflatex (file /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostCorrs.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>]) (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.ttt [21
 
 
 
 ])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 748.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 748.
- (/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 748.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 748.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 773.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 773.
+ (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 773.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 773.
 Package rerunfilecheck Info: File `Manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 9161EF6E1A2DB0B818227AB10C660997;989.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 748.
+(rerunfilecheck)             Checksum: D0E85EF5B9034AAF26A4C5E8273F6F3A;1055.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 773.
  ) 
 Here is how much of TeX's memory you used:
- 21515 strings out of 492982
- 396862 string characters out of 6134896
- 485967 words of memory out of 5000000
- 24600 multiletter control sequences out of 15000+600000
+ 22214 strings out of 492982
+ 410624 string characters out of 6134896
+ 500966 words of memory out of 5000000
+ 25263 multiletter control sequences out of 15000+600000
  14515 words of font info for 56 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,11n,54p,1298b,853s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,11n,78p,1299b,910s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvri.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/00_WildDogs/04_Manuscript/Manuscript.pdf" (22 pages, 25956148 bytes).
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript.pdf" (23 pages, 25962635 bytes).
 PDF statistics:
- 658 PDF objects out of 1000 (max. 8388607)
- 568 compressed objects within 6 object streams
- 93 named destinations out of 1000 (max. 500000)
- 171 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 694 PDF objects out of 1000 (max. 8388607)
+ 602 compressed objects within 7 object streams
+ 106 named destinations out of 1000 (max. 500000)
+ 179 words of extra memory for PDF output out of 10000 (max. 10000000)
 
