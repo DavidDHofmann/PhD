@@ -217,12 +217,12 @@ replace calssified with classified}
 To investigate habitat preferences of dispersing wild dogs, we used a set of
 geo-referenced covariates that we aggregated in the categories \textit{land
 cover}, \textit{protection status}, and \textit{human influence}. We did not
-include terrain features as covariates due to the absence of noteworthy
-elevational gradients in our study area. For each covariate, we prepared spatial
-raster layers from freely available online services or from remotely sensed
-satellite imagery. To ensure a consistent resolution (i.e. cell-size or grain)
-across covariates, we coarsened or interpolated all layers to match a resolution
-of 250m x 250m. We performed processing and manipulation of data as well as all
+include any terrain features due to the absence of noteworthy elevational
+gradients in our study area. For each covariate, we prepared spatial raster
+layers from freely available online services or from remotely sensed satellite
+imagery. To ensure a consistent resolution (i.e. cell-size or grain) across
+covariates, we coarsened or interpolated all layers to match a resolution of
+250m x 250m. We performed processing and manipulation of data as well as all
 spatial and statistical analyses using R, version 3.6.1 \citep{R.2019}.
 
 \subsection{Land Cover}
@@ -767,7 +767,19 @@ in case the confidence intervals of \(\bar{r}_{s, realized}\) and \(\bar{r}_{s,
 random}\) did not overlap.
 
 %------------------------------------------------------------------------------
-%  Appendix S6: Least Cost Paths and Least Cost Corridors
+%  Appendix S6: Random Effects Variability
+%------------------------------------------------------------------------------
+\newpage
+\section{Habitat Selection Model: Random Effects}
+\begin{figure}[hbtp]
+  \includegraphics[width = \textwidth]{99_RandomEffects}
+  \caption{Plot of random effects showing variability across dispersal
+  coalitions.}
+  \label{RandomEffects}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%  Appendix S7: Least Cost Paths and Least Cost Corridors
 %------------------------------------------------------------------------------
 \newpage
 \section{Identification of Least-Cost Paths \& Corridors}
@@ -829,7 +841,7 @@ single connectivity map.
 \end{figure}
 
 %------------------------------------------------------------------------------
-%  Appendix S7: AIC Model Selection
+%  Appendix S8: AIC Model Selection
 %------------------------------------------------------------------------------
 \newpage
 \section{Model Selection Results}
@@ -846,48 +858,49 @@ single connectivity map.
         \toprule
           Covariates & AIC & \(\Delta\)AIC & Weight & LogLik \\
           \midrule
-          cos(ta) + log(sl) + W + T + DTW + HI + S & 90091.40 & 0.00 & 1.00 & -45030.70 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + S + DTR & 90093.51 & 2.11 & 0.00 & -45029.75 \\
-          cos(ta) + log(sl) + W + T + DTW + HI & 90094.79 & 3.38 & 0.00 & -45034.39 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + S + P & 90095.05 & 3.65 & 0.00 & -45030.52 \\
-          cos(ta) + log(sl) + W + T + DTW + S & 90096.95 & 5.55 & 0.00 & -45035.47 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + DTR & 90097.02 & 5.62 & 0.00 & -45033.51 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + S + DTR + P & 90097.38 & 5.98 & 0.00 & -45029.69 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + S + RC & 90097.53 & 6.13 & 0.00 & -45029.76 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + P & 90098.46 & 7.06 & 0.00 & -45034.23 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + S + DTR + RC & 90099.62 & 8.22 & 0.00 & -45028.81 \\
-          cos(ta) + log(sl) + W + T + DTW & 90099.97 & 8.57 & 0.00 & -45038.99 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + RC & 90100.68 & 9.28 & 0.00 & -45033.34 \\
-          cos(ta) + log(sl) + W + T + DTW + DTR & 90101.68 & 10.28 & 0.00 & -45037.84 \\
-          cos(ta) + log(sl) + W + T + DTW + P & 90103.07 & 11.67 & 0.00 & -45038.54 \\
-          cos(ta) + log(sl) + W + T + DTW + HI + S + DTR + P + RC & 90103.48 & 12.08 & 0.00 & -45028.74 \\
-          cos(ta) + log(sl) + W + T + DTW + RC & 90104.72 & 13.32 & 0.00 & -45037.36 \\
-          cos(ta) + log(sl) + W + T + HI & 90123.71 & 32.31 & 0.00 & -45050.85 \\
-          cos(ta) + log(sl) + W + T & 90128.17 & 36.77 & 0.00 & -45055.09 \\
-          cos(ta) + log(sl) + W + T + S & 90129.36 & 37.96 & 0.00 & -45053.68 \\
-          cos(ta) + log(sl) + W + T + DTR & 90130.11 & 38.71 & 0.00 & -45054.05 \\
-          cos(ta) + log(sl) + W + T + P & 90131.75 & 40.35 & 0.00 & -45054.88 \\
-          cos(ta) + log(sl) + W + T + RC & 90133.53 & 42.13 & 0.00 & -45053.77 \\
-          cos(ta) + log(sl) + W + DTW & 90138.92 & 47.52 & 0.00 & -45060.46 \\
-          cos(ta) + log(sl) + W + HI & 90149.30 & 57.90 & 0.00 & -45065.65 \\
-          cos(ta) + log(sl) + W + S & 90151.14 & 59.74 & 0.00 & -45066.57 \\
-          cos(ta) + log(sl) + W & 90153.70 & 62.30 & 0.00 & -45069.85 \\
-          cos(ta) + log(sl) + W + DTR & 90156.32 & 64.92 & 0.00 & -45069.16 \\
-          cos(ta) + log(sl) + W + P & 90157.23 & 65.83 & 0.00 & -45069.62 \\
-          cos(ta) + log(sl) + W + RC & 90159.32 & 67.91 & 0.00 & -45068.66 \\
-          cos(ta) + log(sl) + S & 90161.07 & 69.67 & 0.00 & -45073.54 \\
-          cos(ta) + log(sl) + DTW & 90262.03 & 170.63 & 0.00 & -45124.01 \\
-          cos(ta) + log(sl) + T & 90301.56 & 210.16 & 0.00 & -45143.78 \\
-          cos(ta) + log(sl) + HI & 90307.55 & 216.15 & 0.00 & -45146.78 \\
-          cos(ta) + log(sl) + DTR & 90316.37 & 224.97 & 0.00 & -45151.19 \\
-          cos(ta) + log(sl) + P & 90316.62 & 225.22 & 0.00 & -45151.31 \\
-          cos(ta) + log(sl) + RC & 90318.46 & 227.06 & 0.00 & -45150.23 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S & 90068.15 & 0.00 & 1.00 & -45017.08 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI & 90071.84 & 3.69 & 0.00 & -45020.92 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S + DTR & 90071.94 & 3.79 & 0.00 & -45016.97 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S + P & 90071.94 & 3.79 & 0.00 & -45016.97 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S + RC & 90073.46 & 5.30 & 0.00 & -45015.73 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + DTR & 90075.66 & 7.50 & 0.00 & -45020.83 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + P & 90075.66 & 7.51 & 0.00 & -45020.83 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S + DTR + P & 90075.79 & 7.64 & 0.00 & -45016.89 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + S & 90076.71 & 8.56 & 0.00 & -45023.36 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + RC & 90076.84 & 8.69 & 0.00 & -45019.42 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S + DTR + RC & 90077.20 & 9.05 & 0.00 & -45015.60 \\
+          cos(ta) + sl + log(sl) + W + T + DTW & 90080.08 & 11.92 & 0.00 & -45027.04 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + HI + S + DTR + P + RC & 90080.96 & 12.81 & 0.00 & -45015.48 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + DTR & 90082.95 & 14.79 & 0.00 & -45026.47 \\
+          cos(ta) + sl + log(sl) + W + T + DTW + P & 90083.31 & 15.16 & 0.00 & -45026.66 \\
+          cos(ta) + sl + log(sl) + W + T + HI & 90103.28 & 35.13 & 0.00 & -45038.64 \\
+          cos(ta) + sl + log(sl) + W + T & 90109.40 & 41.25 & 0.00 & -45043.70 \\
+          cos(ta) + sl + log(sl) + W + T + S & 90110.35 & 42.20 & 0.00 & -45042.17 \\
+          cos(ta) + sl + log(sl) + W + T + DTR & 90112.55 & 44.40 & 0.00 & -45043.27 \\
+          cos(ta) + sl + log(sl) + W + T + P & 90113.11 & 44.96 & 0.00 & -45043.56 \\
+          cos(ta) + sl + log(sl) + W + T + RC & 90113.60 & 45.45 & 0.00 & -45041.80 \\
+          cos(ta) + sl + log(sl) + W + DTW & 90118.55 & 50.40 & 0.00 & -45048.28 \\
+          cos(ta) + sl + log(sl) + W + HI & 90128.70 & 60.54 & 0.00 & -45053.35 \\
+          cos(ta) + sl + log(sl) + W + S & 90132.22 & 64.06 & 0.00 & -45055.11 \\
+          cos(ta) + sl + log(sl) + W & 90134.85 & 66.69 & 0.00 & -45058.42 \\
+          cos(ta) + sl + log(sl) + W + DTR & 90138.31 & 70.16 & 0.00 & -45058.16 \\
+          cos(ta) + sl + log(sl) + W + P & 90138.50 & 70.35 & 0.00 & -45058.25 \\
+          cos(ta) + sl + log(sl) + W + RC & 90139.30 & 71.15 & 0.00 & -45056.65 \\
+          cos(ta) + sl + log(sl) + S & 90141.98 & 73.83 & 0.00 & -45061.99 \\
+          cos(ta) + sl + log(sl) + DTW & 90225.64 & 157.49 & 0.00 & -45103.82 \\
+          cos(ta) + sl + log(sl) + T & 90271.73 & 203.58 & 0.00 & -45126.86 \\
+          cos(ta) + sl + log(sl) + HI & 90273.18 & 205.02 & 0.00 & -45127.59 \\
+          cos(ta) + sl + log(sl) + P & 90285.24 & 217.08 & 0.00 & -45133.62 \\
+          cos(ta) + sl + log(sl) + DTR & 90285.33 & 217.18 & 0.00 & -45133.67 \\
+          cos(ta) + sl + log(sl) + RC & - & - & - & - \\
+          cos(ta) + sl + log(sl) + W + T + DTW + RC & - & - & - & - \\
          \bottomrule
        \end{tabular}
        \begin{tablenotes}
          \item \textit{Note:} W = Water, DTW = Distance To Water, S =
          Shrubs/Grassland, T = Trees, P = Protected, HI = Human Influence, RC =
-         Road Crossing, DTR = Distance To Roads.
+         Road Crossing, DTR = Distance To Roads. The two models at the bottom
+         failed to converge, which is why no AIC value could be obtained.
        \end{tablenotes}
      \end{threeparttable}
     }

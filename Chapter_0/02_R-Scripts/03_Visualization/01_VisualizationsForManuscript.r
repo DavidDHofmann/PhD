@@ -1408,7 +1408,7 @@ aics$Covariates <- aics$Covariates %>%
   gsub(pattern = "\\bDistanceToRoads\\b", replacement = "DTR") %>%
   gsub(pattern = "\\bRoadCrossing\\b", replacement = "RC") %>%
   gsub(pattern = ",", replacement = " +") %>%
-  paste("cos(ta) + log(sl) +", .)
+  paste("cos(ta) + sl + log(sl) +", .)
 
 # We will also add cos(ta) and log(sl) as covariates
 aics
@@ -1446,12 +1446,13 @@ best_table <- getCoeffs(best, pvalue = TRUE) %>%
 
 # Rename Covariates
 best_table$Covariate[best_table$Covariate == "Shrubs"] <- "Shrubs/Grassland"
-best_table$Covariate[best_table$Covariate == "cos(ta_)"] <- "cos(ta)"
-best_table$Covariate[best_table$Covariate == "log(sl_)"] <- "log(sl)"
+best_table$Covariate[best_table$Covariate == "cos_ta_"] <- "cos(ta)"
+best_table$Covariate[best_table$Covariate == "sl_"] <- "sl"
+best_table$Covariate[best_table$Covariate == "log_sl_"] <- "log(sl)"
 best_table$Covariate[best_table$Covariate == "HumansBuff5000"] <- "HumanInfluence"
 
 # Print the result as a table to a tex file
-options(scipen=999)
+options(scipen = 999)
 print(xtable(best_table)
   , floating            = FALSE
   , latex.environments  = NULL
@@ -1464,8 +1465,9 @@ print(xtable(best_table)
 # Prepare and store a plot of the coefficients
 coeffs <- getCoeffs(best)[-1, ]
 coeffs$Covariate[coeffs$Covariate == "Shrubs"] <- "Shrubs/Grassland"
-coeffs$Covariate[coeffs$Covariate == "cos(ta_)"] <- "cos(ta)"
-coeffs$Covariate[coeffs$Covariate == "log(sl_)"] <- "log(sl)"
+coeffs$Covariate[coeffs$Covariate == "cos_ta_"] <- "cos(ta)"
+coeffs$Covariate[coeffs$Covariate == "sl_"] <- "sl"
+coeffs$Covariate[coeffs$Covariate == "log_sl_"] <- "log(sl)"
 coeffs$Covariate[coeffs$Covariate == "HumansBuff5000"] <- "HumanInfluence"
 p1 <- showCoeffs(coeffs
   , shape     = 1
@@ -1473,6 +1475,7 @@ p1 <- showCoeffs(coeffs
   , whiskers  = 1.96
   , order     = c(
       "cos(ta)"
+    , "sl"
     , "log(sl)"
     , "Water"
     , "DistanceToWater"
@@ -1563,6 +1566,113 @@ grid.arrange(p1, p2, ncol = 2, widths = c(0.4, 0.6))
 dev.off()
 
 ############################################################
+#### Permeability Model Random Effects
+############################################################
+# Reload model
+mod <- read_rds("03_Data/03_Results/99_ModelSelection.rds")
+mod <- mod$Model[[1]]
+
+# Check out coefficients per individual
+coeffs <- coef(mod)
+ranefs <- ranef(mod, condVar = T)
+coeffs$cond$id
+ranefs$cond$id
+
+# Note: ranef yields the difference between the individual specific effect and
+# the mean level effect. coef, on the other hand, yields the individual specific
+# effect. Thus, the followin two lines yield (approximately) the same
+mean(coeffs$cond$id$cos_ta_) + ranefs$cond$id$cos_ta_[3]
+
+# We now want to visualize the individual variation. There are two possibilities
+# for this: lme4::dotplot() or a ggplot. The dotplot is easier, yet not
+# customizable. Let's first do the dotplot, then recreate it in ggplot.
+lme4:::dotplot.ranef.mer(ranef(mod)$cond)
+
+# Maybe scalefree?
+lme4:::dotplot.ranef.mer(ranef(mod)$cond, scales = list(x = list(relation = "free")))
+
+# Prepare dataframe that we need to plot the same in ggplot
+rfs <- ranefs$cond$id %>%
+  rownames_to_column() %>%
+  gather(key = Covariate, value = Mean, 2:9)
+names(rfs)[1] <- "id"
+
+# We need to add the conditional variance
+condVar <- attributes(ranefs$cond$id)$condVar
+names(condVar) <- attributes(ranefs$cond$id)$names
+condVar <- as.data.frame(do.call(rbind, condVar))
+names(condVar) <- attributes(ranefs$cond$id)$row.names
+condVar <- rownames_to_column(condVar)
+names(condVar)[1] <- "Covariate"
+condVar <- gather(condVar, key = id, value = Variance, 2:17)
+
+# Join data to rfs dataframe
+rfs <- left_join(rfs, condVar)
+
+# Rename stuff nicely
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "cos_ta_", replacement = "cos(ta)")
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "log_sl_", replacement = "log(sl)")
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "sl_", replacement = "sl")
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "HumansBuff5000", replacement = "HumanInfluence")
+
+# Make covariates a factor
+rfs$Covariate <- factor(rfs$Covariate, levels = c(
+  "cos(ta)", "sl", "log(sl)", "Water", "DistanceToWater", "Shrubs"
+  , "Trees", "HumanInfluence"
+))
+
+# Visualize. Note that I am transforming the variance using mean - 2 *
+# sqrt(Variance). This was taken from here: https://stackoverflow.com/questions
+# /13847936/plot-random-effects-from-lmer-lme4-package-using-qqmath-or-dotplot-
+# how-to-mak
+p <- ggplot(rfs, aes(x = Mean, y = id)) +
+  geom_point() +
+  facet_wrap("Covariate", nrow = 2) +
+  geom_errorbarh(aes(
+      xmin = Mean - 2 * sqrt(Variance)
+    , xmax = Mean + 2 * sqrt(Variance)
+  ), colour = "black", height = 0) +
+  xlim(-2.1, 2.1)
+
+# Store the plot
+CairoPDF(
+    "04_Manuscript/99_RandomEffects.pdf"
+  , width   = 8
+  , height  = 6
+)
+p
+dev.off()
+
+# Check out the variation in effects
+as.data.frame(apply(coeffs$cond$id, 2, mean))
+as.data.frame(apply(coeffs$cond$id, 2, sd))
+as.data.frame(apply(coeffs$cond$id, 2, var))
+
+# Put into a dataframe
+dat <- data.frame(
+    Covariate = names(coeffs$cond$id)
+  , Mean_RE   = apply(coeffs$cond$id, 2, mean)
+  , SD_RE     = apply(coeffs$cond$id, 2, sd)
+)
+dat <- dat[-1, ]
+rownames(dat) <- NULL
+
+# Convert to xtable
+dat <- xtable(dat, auto = T, digits = 3)
+
+# Write the table to a .tex table
+print(dat
+  , floating            = FALSE
+  , latex.environments  = NULL
+  , booktabs            = TRUE
+  , include.rownames    = FALSE
+)
+
+# Note: Variance of some random terms is mereley 0. This shouldn't be an issue
+# though -> Check this post: # https://stats.stackexchange.com/questions/115090/
+# why-do-i-get-zero-variance-of-a-random-effect-in-my-mixed-model-despite-some-va
+
+############################################################
 #### Permeability Surface
 ############################################################
 # Load required data
@@ -1580,11 +1690,12 @@ africa_crop <- "03_Data/02_CleanData/00_General_Africa.shp" %>%
 
 # Select only countries of interest
 africa_crop <- subset(africa_crop, COUNTRY %in% c(
-    "Angola"
-  , "Namibia"
-  , "Botswana"
-  , "Zimbabwe"
-  , "Zambia")
+      "Angola"
+    , "Namibia"
+    , "Botswana"
+    , "Zimbabwe"
+    , "Zambia"
+  )
 )
 
 # Prepare the extent of our core area
@@ -1592,9 +1703,7 @@ core <- as(extent(c(23.25, 24, -19.8, -19.05)), "SpatialLines")
 crs(core) <- CRS("+init=epsg:4326")
 
 # Rescale between 0 and 1 (necessary to get nice names)
-permeability <- calc(permeability, fun = function(x){
-  (x - min(x)) / (max(x) - min(x))
-})
+permeability <- normalizeMap(permeability)
 
 # Add some pseudodata to the kaza shapefile
 kaza$Pseudo <- ""
@@ -1653,10 +1762,11 @@ crs(villages_pointers) <- crs(villages)
 # Prepare the plot of the entire region
 p1 <- tm_shape(permeability) +
     tm_raster(
-        palette     = "viridis"
-      , style       = "cont"
-      , title       = "Permeability"
-      , labels      = c("Low", "", "High")
+        palette         = "viridis"
+      , style           = "cont"
+      , title           = "Permeability"
+      , labels          = c("Low", "", "High")
+      , legend.reverse  = T
     ) +
   tm_grid(
       n.x = 5
@@ -1738,10 +1848,11 @@ p1 <- tm_shape(permeability) +
 # Prepare a plot of the Okavango Delta only
 p2 <- tm_shape(permeability, bbox = bbox) +
     tm_raster(
-        palette     = "viridis"
-      , style       = "cont"
-      , title       = "Permeability"
-      , labels      = c("Low", "", "High")
+        palette         = "viridis"
+      , style           = "cont"
+      , title           = "Permeability"
+      , labels          = c("Low", "", "High")
+      , legend.reverse  = T
     ) +
   tm_shape(core) +
     tm_lines(
@@ -1913,10 +2024,8 @@ write(table, "04_Manuscript/99_PermeabilityComparisons.tex")
 #### Plot Permeability Values Below Different Polygons
 ############################################################
 # Reload the required data
-dat_kaza <- "03_Data/03_Results/99_PermeabilityValues(KAZA).rds" %>%
-  read_rds()
-dat_nati <- "03_Data/03_Results/99_PermeabilityValues(Prot).rds" %>%
-  read_rds()
+dat_kaza <- read_rds("03_Data/03_Results/99_PermeabilityValues(KAZA).rds")
+dat_nati <- read_rds("03_Data/03_Results/99_PermeabilityValues(Prot).rds")
 
 # Prepare a new column for facetting
 dat_kaza$Facet <- "Comparison 1"
@@ -2270,10 +2379,11 @@ p1 <- tm_shape(corrs) +
   tm_shape(paths_rast) +
     tm_raster(
         # palette = "-RdYlBu"
-        palette = "-Spectral"
-      , style   = "cont"
-      , title   = "Least-Cost Paths"
-      , labels  = c("Low-Frequency", "", "High-Frequency")
+        palette         = "-Spectral"
+      , style           = "cont"
+      , title           = "Least-Cost Paths"
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
     ) +
   tm_shape(points) +
     tm_dots(
@@ -2334,9 +2444,10 @@ p1_alt <- tm_shape(corrs) +
   tm_shape(paths_rast) +
     tm_raster(
         palette = viridis(20)[c(7:20)]
-      , style   = "cont"
-      , title   = "Least-Cost Paths"
-      , labels  = c("Low-Frequency", "", "High-Frequency")
+      , style           = "cont"
+      , title           = "Least-Cost Paths"
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
     ) +
   tm_shape(points) +
     tm_dots(

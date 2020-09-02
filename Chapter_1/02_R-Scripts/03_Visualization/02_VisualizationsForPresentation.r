@@ -5,7 +5,8 @@
 rm(list = ls())
 
 # Set the working directory
-setwd("/home/david/Schreibtisch/15. PhD/Chapter_1")
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
+setwd(wd)
 
 # Load required packages
 library(tidyverse)
@@ -16,6 +17,7 @@ library(tmap)
 library(Cairo)
 library(igraph)
 library(rgdal)
+library(davidoff)
 
 ############################################################
 #### Random Network
@@ -64,6 +66,10 @@ africa2 <- gBuffer(africa, width = 100/111000)
 # Simplify and smoothen kaza
 kaza <- gSimplify(kaza, tol = 0.1)
 kaza <- smooth(kaza, method = "ksmooth")
+plot(dogs)
+
+# Identify wild dog strongholds
+strong <- rbind(disaggregate(dogs)[c(7, 19, 29), ])
 
 # Prepare a map of Africa
 p1 <- tm_shape(africa2) +
@@ -85,6 +91,11 @@ p1 <- tm_shape(africa2) +
     tm_polygons(
         col           = "orange"
       , alpha         = 0.8
+      , border.alpha  = 0
+    ) +
+  tm_shape(strong) +
+    tm_polygons(
+        col           = lighten("orange", 1.3)
       , border.alpha  = 0
     ) +
   tm_layout(

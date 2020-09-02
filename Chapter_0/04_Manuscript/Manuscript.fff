@@ -85,7 +85,7 @@
     Permeability was predicted by calculating selection scores \(w(x) =
     exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)\) for each raster cell
     based on the raster cell's underlying covariates (\(x_i\)) and estimated
-    habitat preferences (\(\beta_i\)). Areas that dispersers find easy to
+    selection strenghts (\(\beta_i\)). Areas that dispersers find easy to
     traverse are depicted in bright colors. Bold white lines delineate the
     borders of the KAZA-TFCA, whereas dashed white lines show country borders.}
     \label{PermeabilityMap}

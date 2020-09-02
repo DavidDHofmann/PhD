@@ -334,13 +334,13 @@ according to protocols described in \cite{Osofsky.1996}, and fitted with
 GPS/Satellite radio collars (\textit{Vertex Lite; Vectronic Aerospace GmbH,
 Berlin, Germany}) while still with their natal pack. All procedures were
 undertaken and supervised by a Botswana-registered wildlife veterinarian. Fully
-assembled collars produced a tag weight of approximately xx kg, which conforms
-to the proposed threshold of 3\% of an animal's body weight
-\citep{Kenward.2000}. Collars were mounted using leather belts and included a
-drop off mechanism triggered by a slowly decomposing piece of cloth.\todo{Editor
-desired more information on GPS collar} During dispersal, GPS collars were
-programmed to record GPS relocation data every 4 hours and to regularly transmit
-them via Iridium satellite system to a base station.
+assembled collars produced a tag weight of approximately 330 g, accounting for
+approximately 1.2\% of a wild dog's average body weight. Collars were mounted
+using leather belts and included a drop off mechanism, triggered by a slowly
+decomposing piece of cloth.\todo{Editor desired more information on GPS collar}
+During dispersal, GPS collars were programmed to record GPS relocation data
+every 4 hours and to regularly transmit them via Iridium satellite system to a
+base station.
 
 Because we were interested in dispersal behavior only, we discarded any GPS data
 collected while individuals were still with their natal packs and after
@@ -358,19 +358,24 @@ female dispersing coalitions, for previous research found little differences
 between sexes during dispersal \citep{Woodroffe.2019, Cozzi.2020}.
 
 \subsection{Spatial Covariates}
-To investigate habitat relative selection strength\todo{As per reviewer 1} of
+To investigate relative selection strengths \todo{As per reviewer 1} of
 dispersing wild dogs, we used a set of geo-referenced covariates
-(\Cref{Covariates}) that we aggregated in the categories \textit{land cover}
-(which included water cover, distance to water, shrubs/grassland cover, and tree
-cover), \textit{protection status} (protected vs. unprotected), and
-\textit{human pressure} (which included human density, presence of roads, and
-distance to roads). For each of these covariates we prepared spatial raster
-layers from freely available online services or from remotely sensed satellite
-imagery. To ensure a consistent resolution (i.e. cell-size or grain) across
-covariates, we coarsened or interpolated all layers to match a resolution of
-250m x 250m. For further details on the preparation of each covariate, see
-Appendix A.3. We performed processing and manipulation of data as well as all
-spatial and statistical analyses using R, version 3.6.1 \citep{R.2019}.
+(\Cref{Covariates}) that we aggregated in the categories \textit{land cover},
+\textit{protection status}, and \textit{human influence}. Land cover comprised
+of the covariates water cover, distance to water, percentage cover by
+shrubs/grassland, and percentage cover by trees. To capture the pulsing behavior
+of the Okavango Delta we frequently updated water cover layers and corresponding
+distance to water layers. Protection status contained a binary indicator of
+whether an area was protected or not. Human influence included covariates
+rendering human density, the presence of roads, and the distance to
+roads.\todo{Reviewer 2 found the description of the covariates unclear} For each
+of these covariates we prepared spatial raster layers from freely available
+online services or from remotely sensed satellite imagery. To ensure a
+consistent resolution (i.e. cell-size or grain) across covariates, we coarsened
+or interpolated all layers to match a resolution of 250m x 250m. For further
+details on the preparation of each covariate, see Appendix A.3. We performed
+processing and manipulation of data as well as all spatial and statistical
+analyses using R, version 3.6.1 \citep{R.2019}.
 
 \begin{figure}[h]
   \begin{center}
@@ -420,11 +425,11 @@ selection strength \todo{As per reviewer 1} for these covariates (\(\beta_1,
 reviewer 1} (i.e. the \(\beta\)'s), we used mixed effects conditional logistic
 regression analysis as suggested by \cite{Muff.2020}. We implemented their
 method using the R-package \textit{glmmTMB} \citep{Mollie.2017} and used
-dispersing coalition ID to model random slopes. We also modeled random
-intercepts with an arbitrary high variance of 1e6 to make use of the
-\textit{poisson trick} (see \cite{Muff.2020}). We defined three movement
+dispersing coalition ID to model random slopes. We also modelled random
+intercepts with an arbitrary high variance of 10\textsuperscript{6} to make use
+of the poisson trick (see \citealp{Muff.2020}). We defined three movement
 metrics, namely the cosine of the turning angle (\(cos(ta)\)), the step length
-\(sl_\) and the natural logarithm of the step length (\(log(sl)\)), as core
+(\(sl\)) and the natural logarithm of the step length (\(log(sl)\)), as core
 covariates and ran stepwise forward model selection based on Akaike's
 Information Criterion (AIC; \citealp{Burnham.2002}) for all other
 covariates.\todo{Reviewer 1 asked for more details in the random effects. I
@@ -465,14 +470,14 @@ were not assigned any source points from the regular grid. In total, we
 generated 68 source points, which resulted in 2'278 unique pairwise combinations
 and therefore 2'278 unique LCPs and LCCs. We computed factorial LCPs and LCCs
 between source points using the R-package \textit{gdistance} (for further
-details see Appendix A.6). After computation, we tallied overlapping LCPs and
+details see Appendix A.7). After computation, we tallied overlapping LCPs and
 LCCs, respectively, into single connectivity maps.
 
 \section{Results}
 \subsection{Dispersal Events}
 In total, we collected 4'169 GPS relocations during dispersal (Figure S2 \&
 Table S1), resulting in an average of 261 (\(SD\) = 207) locations per
-dispersing coalition. Dispersers on dispersed on average for 48 days (\(SD\) =
+dispersing coalition. Coalitions on average dispersed for 48 days (\(SD\) =
 44), covered a mean euclidean distance of 54 km (\(SD\) = 71) and a cumulative
 distance of 597 km (\(SD\) = 508). One female coalition dispersed far east into
 the Hwange Hwange National Park and covered a cumulative distance of over 360 km
@@ -484,12 +489,12 @@ alternative model; Table S4) retained the covariates \textit{water},
 \textit{distance to water}, \textit{trees}, \textit{shrubs/grassland}, and
 \textit{human influence}, beside the fixed covariates \textit{cos(ta)} and
 \textit{log(sl)} (\Cref{PermeabilityResults}a). The positive coefficient for
-\(log(sl)\) (\(\beta\) = 0.06, 95\% CI = 0.02 to 0.09) showed that our fitted
-(yet selection-biased) gamma distribution produced step-lengths slightly shorter
-than under a selection-free gamma distribution. Similarly, the positive
+\(log(sl)\) (\(\beta\) = 0.06, 95\% CI = 0.02 to 0.09) showed that our initial
+(selection-biased) gamma distribution produced step-lengths slightly shorter
+than a selection-free gamma distribution would. Similarly, the positive
 coefficient for \(cos(ta)\) (\(\beta\) = 0.14; 95\% CI = 0.07 to 0.21) indicates
-that the uniform distribution for turning angles produced turning angles with
-too little directionality.\todo{Reviewer 1 nicely explained that the
+that our uniform distribution for turning angles produced turning angles with
+too little directionality. \todo{Reviewer 1 nicely explained that the
 coefficients for log(sl) and cos(ta) imply that the initial distributions were
 selection-biased} With respect to environmental covariates, dispersers avoided
 moving through water (\(\beta\) = -0.52, 95\% CI -0.77 to -0.26) but selected
@@ -498,7 +503,10 @@ for locations in its vicinity, although the latter effect was not significant
 densely covered by trees (\(\beta\) = -0.31, CI = -0.46 to -0.15) and preferred
 areas covered by shrubs/grassland (\(\beta\) = 0.25, 95\% CI = 0.07 to 0.42).
 Finally, dispersers avoided areas that were influenced by humans (\(\beta\) =
--0.41, 95\% CI = -0.78 to -0.05).
+-0.41, 95\% CI = -0.78 to -0.05). With the exepction of \textit{DistanceToWater}
+(\(SD_{RE}\) = 0.57), random effects revealed little variability in different
+dispersal coalitions' selection strengths (i.e. \(SD_{RE} \leq 0.22\), Figure
+S7).\todo{Reviewer 1 desired more information on the random effects}
 
 \begin{figure}[h]
   \begin{center}
@@ -586,13 +594,13 @@ unprotected landscapes (\Cref{PermeabilityComp}).
     \cmidrule(l{3pt}r{3pt}){2-3} \cmidrule(l{3pt}r{3pt}){4-5}
     Country & Inside & Outside & Protected & Pastoral & Overall\\
     \midrule
-    Angola & 0.36 (0.41) & 0.12 (0.32) & 0.36 (0.41) & 0.12 (0.33) & 0.20 (0.39)\\
-    Botswana & 0.25 (0.30) & 0.15 (0.16) & 0.28 (0.35) & 0.15 (0.18) & 0.19 (0.25)\\
-    Namibia & 0.22 (0.30) & 0.13 (0.18) & 0.24 (0.30) & 0.11 (0.15) & 0.16 (0.24)\\
-    Zambia & 0.05 (0.09) & 0.03 (0.06) & 0.04 (0.10) & 0.03 (0.05) & 0.03 (0.07)\\
-    Zimbabwe & 0.07 (0.16) & 0.06 (0.05) & 0.08 (0.17) & 0.05 (0.05) & 0.06 (0.07)\\
+    Angola & 0.35 (0.41) & 0.12 (0.32) & 0.35 (0.41) & 0.12 (0.32) & 0.19 (0.38)\\
+    Botswana & 0.24 (0.30) & 0.14 (0.16) & 0.27 (0.35) & 0.14 (0.18) & 0.18 (0.25)\\
+    Namibia & 0.20 (0.30) & 0.12 (0.17) & 0.22 (0.30) & 0.10 (0.14) & 0.14 (0.24)\\
+    Zambia & 0.05 (0.09) & 0.02 (0.05) & 0.04 (0.09) & 0.03 (0.05) & 0.03 (0.06)\\
+    Zimbabwe & 0.06 (0.16) & 0.05 (0.04) & 0.07 (0.17) & 0.04 (0.04) & 0.05 (0.06)\\
     \hline
-    Overall & 0.16 (0.30) & 0.07 (0.15) & 0.15 (0.30) & 0.07 (0.15) & 0.10 (0.22)\\
+    Overall & 0.15 (0.29) & 0.06 (0.14) & 0.14 (0.30) & 0.06 (0.14) & 0.08 (0.21)\\
     \bottomrule
   \end{tabular}
   \end{center}

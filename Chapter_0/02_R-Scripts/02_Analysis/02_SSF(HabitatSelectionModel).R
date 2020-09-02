@@ -496,6 +496,84 @@ models <- subset(models, Weight > 0)
 # Store the result for later
 write_rds(models, "03_Data/03_Results/99_ModelSelection.rds")
 
+##############################################################
+#### Examine Random Effects
+##############################################################
+# Reload model
+mod <- read_rds("03_Data/03_Results/99_ModelSelection.rds")
+mod <- models$Model[[1]]
+
+# Check out coefficients per individual
+coeffs <- coef(mod)
+ranefs <- ranef(mod, condVar = T)
+coeffs$cond$id
+ranefs$cond$id
+
+# Note: ranef yields the difference between the individual specific effect and
+# the mean level effect. coef, on the other hand, yields the individual specific
+# effect. Thus, the followin two lines yield (approximately) the same
+mean(coeffs$cond$id$cos_ta_) + ranefs$cond$id$cos_ta_[3]
+
+# We now want to visualize the individual variation. There are two possibilities
+# for this: lme4::dotplot() or a ggplot. The dotplot is easier, yet not
+# customizable. Let's first do the dotplot, then recreate it in ggplot.
+lme4:::dotplot.ranef.mer(ranef(mod)$cond)
+
+# Maybe scalefree?
+lme4:::dotplot.ranef.mer(ranef(mod)$cond, scales = list(x = list(relation = "free")))
+
+# Prepare dataframe that we need to plot the same in ggplot
+rfs <- ranefs$cond$id %>%
+  rownames_to_column() %>%
+  gather(key = Covariate, value = Mean, 2:9)
+names(rfs)[1] <- "id"
+
+# We need to add the conditional variance
+condVar <- attributes(ranefs$cond$id)$condVar
+names(condVar) <- attributes(ranefs$cond$id)$names
+condVar <- as.data.frame(do.call(rbind, condVar))
+names(condVar) <- attributes(ranefs$cond$id)$row.names
+condVar <- rownames_to_column(condVar)
+names(condVar)[1] <- "Covariate"
+condVar <- gather(condVar, key = id, value = Variance, 2:17)
+
+# Join data to rfs dataframe
+rfs <- left_join(rfs, condVar)
+
+# Rename stuff nicely
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "cos_ta_", replacement = "cos(ta)")
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "log_sl_", replacement = "log(sl)")
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "sl_", replacement = "sl")
+rfs$Covariate <- gsub(rfs$Covariate, pattern = "HumansBuff5000", replacement = "HumanInfluence")
+
+# Make covariates a factor
+rfs$Covariate <- factor(rfs$Covariate, levels = c(
+  "cos(ta)", "sl", "log(sl)", "Water", "DistanceToWater", "Shrubs"
+  , "Trees", "HumanInfluence"
+))
+
+# Visualize. Note that I am transforming the variance using mean - 2 *
+# sqrt(Variance). This was taken from here: https://stackoverflow.com/questions
+# /13847936/plot-random-effects-from-lmer-lme4-package-using-qqmath-or-dotplot-
+# how-to-mak
+ggplot(rfs, aes(x = Mean, y = id)) +
+  geom_point() +
+  facet_wrap("Covariate", nrow = 2) +
+  geom_errorbarh(aes(
+      xmin = Mean - 2 * sqrt(Variance)
+    , xmax = Mean + 2 * sqrt(Variance)
+  ), colour = "black", height = 0) +
+  xlim(-2.1, 2.1)
+
+# Check out the variation in effects
+as.data.frame(apply(coeffs$cond$id, 2, mean))
+as.data.frame(apply(coeffs$cond$id, 2, sd))
+as.data.frame(apply(coeffs$cond$id, 2, var))
+
+# Note: Variance of some random terms is mereley 0. This shouldn't be an issue
+# though -> Check this post: # https://stats.stackexchange.com/questions/115090/
+# why-do-i-get-zero-variance-of-a-random-effect-in-my-mixed-model-despite-some-va
+
 # ############################################################
 # #### Interpretation of Interactions
 # ############################################################

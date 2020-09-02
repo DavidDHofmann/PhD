@@ -37,7 +37,7 @@ library(davidoff)
 models <- readRDS("03_Data/03_Results/99_ModelSelection.rds")
 
 # Look at the model results again
-print(models, n = 100)
+print(models)
 
 # Subset to the best model and identify the coefficients
 coeffs <- models$Model[[1]] %>% getCoeffs()
@@ -98,11 +98,28 @@ for (i in 1:length(layers)){
   names(layers[[i]]) <- names[i]
 }
 
-############################################################
-#### Scale Covariate Layers
-############################################################
-# Before we scale we create a backup
-backup <- layers
+# Finally, we'll create layers for the cos_ta_, sl_, and log_sl
+cos_ta_ <- layers[[1]]
+sl_ <- layers[[1]]
+log_sl_ <- layers[[1]]
+
+# Fill them with meaningful values (we will use a turning angle of 0, and a step
+# length of 2300, which corresponds to the mean)
+values(cos_ta_) <- cos(0)
+values(sl_) <- 2300
+values(log_sl_) <- log(2300)
+
+# Make names
+names(cos_ta_) <- "cos_ta_"
+names(sl_) <- "sl_"
+names(log_sl_) <- "log_sl_"
+
+# Put all together
+layers <- stack(layers)
+layers <- stack(layers, cos_ta_, sl_, log_sl_)
+
+# Split into list
+layers <- splitStack(layers, n = nlayers(layers))
 
 # We need to scale the layers using the same scaling parameters that we used to
 # scale the covariates during the modelling part
@@ -127,25 +144,11 @@ layers <- lapply(layers, function(x){
 # Stack the layers
 layers <- stack(layers)
 
-# We will also need layers for the turning angles and step lengths. Actually,
-# they simply inflate the probabilities. For the step length layer we can use
-# the average step length (around 2650)
-`log(sl_)` <- layers[[1]]
-values(`log(sl_)`) <- log(2650)
-names(`log(sl_)`) <- "log(sl_)"
-
-# For the turning angles we will use zero
-`cos(ta_)` <- layers[[1]]
-values(`cos(ta_)`) <- cos(0)
-names(`cos(ta_)`) <- "cos(ta_)"
-
-# Stack all layers into a single rasterstack
-layers <- stack(`cos(ta_)`, `log(sl_)`, layers)
-
 # Prepare permeability map using the form "exp(beta0 + beta1 * X1 + ...)"
 permeability <- exp(sum(
-    pred["cos_ta_", ]        * layers[["cos.ta_."]]
-  , pred["log_sl_", ]        * layers[["log.sl_."]]
+    pred["cos_ta_", ]         * layers[["cos_ta_"]]
+  , pred["sl_", ]             * layers[["sl_"]]
+  , pred["log_sl_", ]         * layers[["log_sl_"]]
   , pred["Water", ]           * layers[["Water"]]
   , pred["DistanceToWater", ] * layers[["DistanceToWater"]]
   , pred["Shrubs", ]          * layers[["Shrubs"]]
@@ -164,6 +167,7 @@ kaza <- shapefile("03_Data/02_CleanData/00_General_KAZA_KAZA")
 
 # Plot the permeability map
 plot(permeability, col = viridis(50))
+plot(kaza, add = T, border = "white")
 
 # Store the permeability map to file
 writeRaster(

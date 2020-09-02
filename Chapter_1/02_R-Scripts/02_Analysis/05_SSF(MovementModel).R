@@ -199,6 +199,9 @@ ggplot(sub, aes(x = log(CumDistancePast50Fixes), y = log(sl_), color = Time)) +
   ggtitle("Past 50 Fixes")
 
 # Let's also calculate the distance to the first fix
+################################################################################
+#### I THINK THIS IS WRONG -> Also need to take into account y2_ - y1_
+################################################################################
 sub <- sub %>%
   group_by(id) %>%
   nest() %>%
