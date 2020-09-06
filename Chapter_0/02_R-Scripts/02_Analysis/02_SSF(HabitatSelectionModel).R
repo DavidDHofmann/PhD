@@ -682,26 +682,14 @@ crossVal <- function(formula, data, ratio, random = FALSE){
   # Train the model using the training data
   model <- glmm_clogit(formula, data = ssf_train)
 
-  # Identify the coefficients from the model
-  coeffs <- getCoeffs(model)
+  # Extract coefficients
+  coeffs <- fixef(model)$cond
 
-  # We want to use the derived model to predict the selection scores in the
-  # validation data. Let's create a simplified dataframe of the model coefficients
-  pred <- as.data.frame(select(coeffs, Coefficient))
+  # Prepare model matrix
+  modeldat <- model.matrix(terms(model), data = ssf_valid)
 
-  # For easier indexing we assign the covariates as row-names
-  rownames(pred) <- coeffs$Covariate
-
-  # Predict the selection scores for the validation data
-  ssf_valid$Scores <- exp(
-    pred["cos(ta_)", ]        * cos(ssf_valid[, "ta_"]) +
-    pred["log(sl_)", ]        * log(ssf_valid[, "sl_"]) +
-    pred["Water", ]           * ssf_valid[, "Water"] +
-    pred["DistanceToWater", ] * ssf_valid[, "DistanceToWater"] +
-    pred["Shrubs", ]          * ssf_valid[, "Shrubs"] +
-    pred["HumansBuff5000", ]  * ssf_valid[, "HumansBuff5000"] +
-    pred["Trees", ]           * ssf_valid[, "Trees"]
-  )
+  # Calculate selection score
+  ssf_valid$Scores <- as.vector(exp(modeldat %*% coeffs))
 
   # Depending on whether we want to randomize preferences, we include or exclude
   # realized steps

@@ -144,10 +144,11 @@ permeability difference among the five KAZA-TFCA countries. We further showed
 that major movement corridors of wild dogs run within the KAZA-TFCA, although
 some minor routes remained outside formally protected areas.
 
-\noindent 4. Differences in permeability were mainly caused by different degrees
-of human activities across regions, which hampered dispersal. Rivers, swamps  or
-open water also limited dispersal, while other landscape features had a limited
-effect.
+\noindent 4. Differences in permeability were mainly related to different
+degrees of human activities across regions, as well as to the presence of
+rivers, swamps or open water. The relation between other landscape features and
+landscape permeability was less evident.\todo{Editor indicated that the
+relationships are correlative and not necessarily causal.}
 
 \noindent 5. \textit{Synthesis and Applications}: In this study, we showed how
 pertinent dispersal data of a highly mobile species can be used to empirically
@@ -333,14 +334,14 @@ criteria. The editor desired to include those}. Individuals were immobilized
 according to protocols described in \cite{Osofsky.1996}, and fitted with
 GPS/Satellite radio collars (\textit{Vertex Lite; Vectronic Aerospace GmbH,
 Berlin, Germany}) while still with their natal pack. All procedures were
-undertaken and supervised by a Botswana-registered wildlife veterinarian. Fully
-assembled collars produced a tag weight of approximately 330 g, accounting for
-approximately 1.2\% of a wild dog's average body weight. Collars were mounted
-using leather belts and included a drop off mechanism, triggered by a slowly
-decomposing piece of cloth.\todo{Editor desired more information on GPS collar}
-During dispersal, GPS collars were programmed to record GPS relocation data
-every 4 hours and to regularly transmit them via Iridium satellite system to a
-base station.
+undertaken and supervised by a Botswana-registered wildlife veterinarian.
+Collars produced a tag weight of 1.2\% of a wild dog's average body weight,
+which is well within published recommendations \citep{Kenward.2000}. Collars
+were attached through a leather belt that included a drop off mechanism,
+triggered by a slowly decomposing piece of cloth.\todo{Editor desired more
+information on GPS collar} During dispersal, GPS collars were programmed to
+record GPS relocation data every 4 hours and to regularly transmit them via
+Iridium satellite system to a base station.
 
 Because we were interested in dispersal behavior only, we discarded any GPS data
 collected while individuals were still with their natal packs and after
@@ -421,24 +422,25 @@ step \citep{Fortin.2005}:
 \noindent The selection score \(w(x)\) of a step depended on its associated
 covariates (\(x_1, x_2, ..., x_n\)), as well as on the animal's relative
 selection strength \todo{As per reviewer 1} for these covariates (\(\beta_1,
-\beta_2, ..., \beta_n\)). To estimate relative selection strengths \todo{As per
-reviewer 1} (i.e. the \(\beta\)'s), we used mixed effects conditional logistic
-regression analysis as suggested by \cite{Muff.2020}. We implemented their
-method using the R-package \textit{glmmTMB} \citep{Mollie.2017} and used
-dispersing coalition ID to model random slopes. We also modelled random
-intercepts with an arbitrary high variance of 10\textsuperscript{6} to make use
-of the poisson trick (see \citealp{Muff.2020}). We defined three movement
-metrics, namely the cosine of the turning angle (\(cos(ta)\)), the step length
-(\(sl\)) and the natural logarithm of the step length (\(log(sl)\)), as core
-covariates and ran stepwise forward model selection based on Akaike's
-Information Criterion (AIC; \citealp{Burnham.2002}) for all other
-covariates.\todo{Reviewer 1 asked for more details in the random effects. I
-therefore decided to update this section too} The inclusion of movement metrics
-served to reduce biases in estimated habitat selection coefficients \todo{as per
-revierwer 1} that may have arisen due to movement behavior \citep{Avgar.2016}.
-To validate the predictive power of the most parsimonious habitat selection
-model, we ran k-fold cross-validation for case-control studies as described in
-\cite{Fortin.2009} (details in Appendix A.5).
+\beta_2, ..., \beta_n\)). To estimate relative selection strength \todo{As per
+reviewer 1} (i.e. the \(\beta\)'s) for each covariate, we used mixed effects
+conditional logistic regression analysis as suggested by \cite{Muff.2020}. We
+implemented their method using the R-package \textit{glmmTMB}
+\citep{Mollie.2017} and used dispersing coalition ID to model random slopes. We
+also modelled random intercepts with an arbitrary high variance of
+10\textsuperscript{6} to make use of the poisson trick (see
+\citealp{Muff.2020}). We defined three movement metrics, namely the cosine of
+the turning angle (\(cos(ta)\)), the step length (\(sl\)) and the natural
+logarithm of the step length (\(log(sl)\)), as core covariates and ran stepwise
+forward model selection based on Akaike's Information Criterion (AIC;
+\citealp{Burnham.2002}) for all other covariates.\todo{Reviewer 1 asked for more
+details in the random effects. I therefore decided to update this section too}
+The inclusion of movement metrics served to reduce biases in estimated habitat
+selection coefficients \todo{as per revierwer 1} that may have arisen due to
+movement behavior \citep{Avgar.2016}. To validate the predictive power of the
+most parsimonious habitat selection model, we ran k-fold cross-validation for
+case-control studies as described in \cite{Fortin.2009} (details in Appendix
+A.5).
 
 \subsection{Permeability Surface}
 Using the most parsimonious habitat selection model, we predicted a permeability

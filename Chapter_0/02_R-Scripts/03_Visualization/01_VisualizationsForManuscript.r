@@ -2378,7 +2378,6 @@ p1 <- tm_shape(corrs) +
   ) +
   tm_shape(paths_rast) +
     tm_raster(
-        # palette = "-RdYlBu"
         palette         = "-Spectral"
       , style           = "cont"
       , title           = "Least-Cost Paths"
@@ -2424,102 +2423,6 @@ p1 <- tm_shape(corrs) +
   , col       = "black"
 )
 
-p1_alt <- tm_shape(corrs) +
-    tm_raster(
-      palette     = "black"
-    , legend.show = FALSE
-  ) +
-  tm_shape(prot) +
-    tm_polygons(
-      col           = viridis(20)[5]
-    , border.col    = viridis(20)[5]
-  ) +
-  tm_grid(
-      n.x                 = 5
-    , n.y                 = 5
-    , labels.inside.frame = FALSE
-    , lines               = FALSE
-    , ticks               = TRUE
-  ) +
-  tm_shape(paths_rast) +
-    tm_raster(
-        palette = viridis(20)[c(7:20)]
-      , style           = "cont"
-      , title           = "Least-Cost Paths"
-      , labels          = c("Low-Frequency", "", "High-Frequency")
-      , legend.reverse  = T
-    ) +
-  tm_shape(points) +
-    tm_dots(
-        col   = viridis(20)[20]
-      , size  = 0.1
-    ) +
-  tm_shape(kaza) +
-    tm_lines(
-        col = "white"
-      , lwd = 2
-    ) +
-  tm_shape(africa) +
-    tm_lines(
-        col = "white"
-      , lwd = 1
-      , lty = 2
-    ) +
-  tm_shape(africa_crop) +
-    tm_text("COUNTRY"
-      , col   = "white"
-      , just  = "bottom"
-    ) +
-  tm_scale_bar(
-      position    = "left"
-    , text.size   = 0.5
-    , text.color  = "white"
-    , width       = 0.125
-  ) +
-  tm_compass(
-      text.color  = "white"
-    , color.dark  = "white"
-  ) +
-  tm_add_legend(
-      type    = "line"
-    , labels  = "KAZA TFCA"
-    , col     = "white"
-    , lwd     = 2
-  ) +
-  tm_add_legend(
-      type    = "line"
-    , labels  = "Country Borders"
-    , col     = "white"
-    , lwd     = 1
-    , lty     = 2
-  ) +
-  tm_add_legend(
-      type    = "fill"
-    , labels  = "Protected Areas"
-    , col     = c(viridis(20)[5])
-  ) +
-  tm_add_legend(
-      type    = "symbol"
-    , shape   = 20
-    , labels  = "  Source Points"
-    , col     = viridis(20)[20]
-    , size    = 0.3
-  ) +
-  tm_layout(
-      bg.color            = "black"
-    , legend.text.color   = "white"
-    , legend.title.color  = "white"
-    , legend.title.size   = 0.7
-    , legend.text.size    = 0.45
-    , legend.bg.color     = "black"
-    , legend.position     = c("left", "top")
-  ) +
-  tm_credits("(a)"
-  , position  = c("right", "top")
-  , size      = 1.5
-  , col       = "white"
-)
-
 # Store the plot
 CairoPDF("04_Manuscript/99_LeastCostPaths.pdf", width = 6, height = 5.25)
 p1
@@ -2528,11 +2431,11 @@ dev.off()
 # Prepare the plot for LCCs
 p2 <- tm_shape(corrs) +
     tm_raster(
-        # palette = rev(brewer.pal(10, "RdYlBu")[2:10])
-        palette = "-Spectral"
-      , style   = "cont"
-      , title   = "Least-Cost Corridors"
-      , labels = c("Low-Frequency", "", "High-Frequency")
+        palette         = "-Spectral"
+      , style           = "cont"
+      , title           = "Least-Cost Corridors"
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
     ) +
   tm_grid(
       n.x                 = 5
@@ -2585,86 +2488,6 @@ p2 <- tm_shape(corrs) +
       text.color   = "white"
     , color.dark   = "white"
     , color.light  = "white"
-  ) +
-  tm_credits("(b)"
-  , position  = c("right", "top")
-  , size      = 1.5
-  , col       = "white"
-)
-
-p2_alt <- tm_shape(corrs) +
-    tm_raster(
-        palette = "viridis"
-      , style   = "cont"
-      , title   = "Least-Cost Corridors"
-      , labels = c("Low-Frequency", "", "High-Frequency")
-    ) +
-  tm_grid(
-      n.x                 = 5
-    , n.y                 = 5
-    , labels.inside.frame = FALSE
-    , lines               = FALSE
-    , ticks               = TRUE
-  ) +
-  tm_shape(nati) +
-    tm_borders(
-        col   = "white"
-      , alpha = 0.2
-    ) +
-  tm_shape(kaza) +
-    tm_lines(
-        col = "white"
-      , lwd = 2
-    ) +
-  tm_shape(nati_text) +
-    tm_text("Name"
-      , col       = "white"
-      , alpha     = 0.5
-      , fontface  = 3
-      , size      = 0.5
-    ) +
-  tm_shape(africa) +
-    tm_lines(
-        col     = "white"
-      , lwd     = 1
-      , lty     = 2
-    ) +
-  tm_shape(africa_crop) +
-    tm_text("COUNTRY"
-      , col     = "white"
-      , just    = "bottom"
-      , shadow  = TRUE
-    ) +
-  tm_scale_bar(
-      position    = "left"
-    , text.size   = 0.5
-    , text.color  = "white"
-    , width       = 0.125
-  ) +
-  tm_compass(
-      text.color  = "white"
-    , color.dark  = "white"
-  ) +
-  tm_add_legend(
-      type    = "line"
-    , labels  = "KAZA TFCA"
-    , col     = "white"
-    , lwd     = 2
-  ) +
-  tm_add_legend(
-      type    = "line"
-    , labels  = "Country Borders"
-    , col     = "white"
-    , lwd     = 1
-    , lty     = 2
-  ) +
-  tm_layout(
-      legend.position     = c("left", "top")
-    , legend.text.color   = "white"
-    , legend.title.color  = "white"
-    , legend.title.size   = 0.7
-    , legend.text.size    = 0.45
-    , legend.bg.color     = viridis(1, begin = 0)
   ) +
   tm_credits("(b)"
   , position  = c("right", "top")

@@ -44,6 +44,9 @@ library(igraph)
 # Reload the permeability map that we derived in the last script
 permeability <- raster("03_Data/03_Results/99_PermeabilityMap.tif")
 
+# Load kaza shapefile for plotting
+kaza <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
+
 # Load protected areas
 prot <- shapefile(
   "03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks(1Class).shp"
@@ -190,6 +193,15 @@ writeOGR(points2
 )
 
 ################################################################################
+#### Reload Points
+################################################################################
+points1 <- readOGR("03_Data/03_Results/99_SourcePoints1.shp")
+points2 <- readOGR("03_Data/03_Results/99_SourcePoints2.shp")
+plot(prot)
+plot(points1, add = T, col = "blue")
+plot(points2, add = T, col = "purple")
+
+################################################################################
 #### Visualize Connections
 ################################################################################
 # Identify all possible connections for "points1"
@@ -332,6 +344,7 @@ shortest_rast2 <- rasterizeTerra(
 # Plot
 plot(shortest_rast1, col = viridis(50))
 plot(shortest_rast2, col = viridis(50))
+plot(points2, add = T, col = "white", pch = 20)
 
 # Store the rasterized LCPs
 writeRaster(
@@ -346,10 +359,6 @@ writeRaster(
   , "03_Data/03_Results/99_LeastCostPaths2.tif"
   , overwrite = TRUE
 )
-
-################################################################################
-#### TRY TO USE MULTIPLE CORES HERE
-################################################################################
 
 ############################################################
 #### Least Cost Corridors: Points I
@@ -371,13 +380,14 @@ cost <- stackSave(cost, tempfile())
 
 # Prepare an empty raster onto which we will add all least cost corridors
 r0 <- raster(cost[[1]])
+values(r0) <- 0
 
 # Loop through all combinations and calculate a least cost corridor
-for (i in 1:nrow(combis1)){
+for (i in 1:nrow(combis1)){ <- 0
 
   # Sum cost maps of the two poitns
-  cost1 <- cost[[combis[i, "Origin"]]]
-  cost2 <- cost[[combis[i, "Destin"]]]
+  cost1 <- cost[[combis1[i, "Origin"]]]
+  cost2 <- cost[[combis1[i, "Destin"]]]
   corr <- calc(stack(cost1, cost2), sum)
 
   # Calculate threshold below which the costs are not higher than + x% of the
@@ -408,10 +418,11 @@ r0 <- r0 * (-1) + 1
 
 # Plot the result
 plot(r0, col = viridis(50))
+plot(kaza, add = T, border = "white")
 
 # Write result to file
 writeRaster(r0
-  , "03_Data/03_Results/99_LeastCostCorridors.tif"
+  , "03_Data/03_Results/99_LeastCostCorridors1.tif"
   , overwrite = TRUE
 )
 
@@ -435,13 +446,14 @@ cost <- stackSave(cost, tempfile())
 
 # Prepare an empty raster onto which we will add all least cost corridors
 r0 <- raster(cost[[1]])
+values(r0) <- 0
 
 # Loop through all combinations and calculate a least cost corridor
-for (i in 1:nrow(combis1)){
+for (i in 1:nrow(combis2)){
 
   # Sum cost maps of the two poitns
-  cost1 <- cost[[combis[i, "Origin"]]]
-  cost2 <- cost[[combis[i, "Destin"]]]
+  cost1 <- cost[[combis2[i, "Origin"]]]
+  cost2 <- cost[[combis2[i, "Destin"]]]
   corr <- calc(stack(cost1, cost2), sum)
 
   # Calculate threshold below which the costs are not higher than + x% of the
@@ -472,9 +484,27 @@ r0 <- r0 * (-1) + 1
 
 # Plot the result
 plot(r0, col = viridis(50))
+plot(kaza, add = T, border = "white")
 
 # Write result to file
 writeRaster(r0
-  , "03_Data/03_Results/99_LeastCostCorridors.tif"
+  , "03_Data/03_Results/99_LeastCostCorridors2.tif"
   , overwrite = TRUE
 )
+
+################################################################################
+#### Pearson Correlation
+################################################################################
+# Reload LCC maps
+lcc1 <- raster("03_Data/03_Results/99_LeastCostCorridors1.tif")
+lcc2 <- raster("03_Data/03_Results/99_LeastCostCorridors2.tif")
+
+# Plot both
+par(mfrow = c(2, 1))
+plot(lcc1, col = viridis(50))
+plot(kaza, add = T, border = "white")
+plot(lcc2, col = viridis(50))
+plot(kaza, add = T, border = "white")
+
+# Check correlation
+cor(values(lcc1), values(lcc2))
