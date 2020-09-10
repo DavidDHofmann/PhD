@@ -25,6 +25,10 @@ source("Functions.r")
 ################################################################################
 #### Identify Reached Areas
 ################################################################################
+################################################################################
+#### NOTE: THIS CAN BE DONE USING IGRAPH RATHER THAN THE STUPID RGEOS
+################################################################################
+
 # Load source areas and points
 areas <- shapefile("03_Data/03_Results/99_SourceAreas2.shp")
 points <- shapefile("03_Data/03_Results/99_SourcePoints2.shp")

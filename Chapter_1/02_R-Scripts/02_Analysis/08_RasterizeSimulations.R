@@ -9,7 +9,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
 setwd(wd)
 
 # Load required packages
@@ -23,9 +23,7 @@ library(tictoc)           # To keep track of processing time
 library(pbmcapply)        # To show progress bar in mclapply calls
 library(tmap)             # For nice spatial plots
 library(Cairo)            # To store plots
-
-# Load custom functions
-source("Functions.r")
+library(davidoff)         # Custom functions
 
 ################################################################################
 #### Function to Rasterize Simulated Trajectory
@@ -250,6 +248,155 @@ for (i in 1:nrow(rasterized2)){
 
 # Write the tibble to file too
 write_rds(rasterized2, "03_Data/03_Results/99_RasterizedSimulationsBootstrap.rds")
+
+################################################################################
+#### Visualizations
+################################################################################
+# Required Data
+rasterized <- read_rds("03_Data/03_Results/99_RasterizedSimulations.rds")
+heatmaps <- stack("03_Data/03_Results/99_RasterizedSimulations.tif")
+points1 <- shapefile("03_Data/03_Results/99_SourcePoints.shp")
+points2 <- shapefile("03_Data/03_Results/99_SourcePoints2.shp")
+kaza <- "03_Data/02_CleanData/00_General_KAZA_KAZA.shp" %>%
+  readOGR() %>%
+  as("SpatialLines")
+africa <- "03_Data/02_CleanData/00_General_Africa.shp" %>%
+  readOGR() %>%
+  as("SpatialLines")
+africa_crop <- "03_Data/02_CleanData/00_General_Africa.shp" %>%
+  readOGR() %>%
+  crop(kaza)
+nati        <- shapefile("03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks(3Classes)")
+
+# Subset to national parks
+nati <- subset(nati, Desig == "National Park")
+
+# Subset to national parks that we want to plot
+nati <- subset(nati, Name %in% c("Mavinga", "Luengue-Luiana", "Kafue"
+  , "Hwange", "Central Kalahari", "Chobe", "Moremi", "Matusadona", "Khaudum"))
+
+# There is a double entry for Kafue, get rid of the erronous one
+nati$Area <- gArea(nati, byid = TRUE)
+nati <- subset(nati, Area != min(Area))
+
+# Create a separate shapefile for the text. We have to change some of the
+# coordinates to make sure that they don't overlap
+nati_text <- nati
+nati_text$x <- coordinates(nati_text)[, 1]
+nati_text$y <- coordinates(nati_text)[, 2]
+nati_text <- nati_text@data
+nati_text$y[nati_text$Name == "Kafue"] <-
+  nati_text$y[nati_text$Name == "Kafue"] + 0.5
+nati_text$y[nati_text$Name == "Chobe"] <-
+  nati_text$y[nati_text$Name == "Chobe"] - 0.1
+nati_text$y[nati_text$Name == "Matusadona"] <-
+  nati_text$y[nati_text$Name == "Matusadona"] - 0.1
+coordinates(nati_text) <- c("x", "y")
+crs(nati_text) <- CRS("+init=epsg:4326")
+
+# Check how they align
+plot(nati)
+points(nati_text)
+
+# Add "NP" to the text (on a new line)
+head(nati_text)
+nati_text$Name <- paste0(nati_text$Name, "\nNP")
+
+# We only keep the countries of interest in the cropped africa file
+africa_crop <- subset(africa_crop, COUNTRY %in% c(
+    "Angola"
+  , "Namibia"
+  , "Botswana"
+  , "Zimbabwe"
+  , "Zambia")
+)
+
+# Normalize heatmaps
+for (i in 1:nlayers(heatmaps)){
+  heatmaps[[i]] <- normalizeMap(heatmaps[[i]])
+}
+
+# Prepare plot of each map
+p <- list()
+for (i in 1:nlayers(heatmaps)){
+  p[[i]] <- tm_shape(heatmaps[[i]]) +
+      tm_raster(
+          palette         = "-Spectral"
+        , style           = "cont"
+        , title           = "Traversal Frequency"
+        , labels          = c("Low-Frequency", "", "High-Frequency")
+        , legend.reverse  = T
+      ) +
+    tm_grid(
+        n.x                 = 5
+      , n.y                 = 5
+      , labels.inside.frame = FALSE
+      , lines               = FALSE
+      , ticks               = TRUE
+    ) +
+    tm_shape(nati) +
+      tm_borders(
+          col   = "black"
+        , alpha = 0.6
+      ) +
+    tm_shape(kaza) +
+      tm_lines(
+          col = "black"
+        , lwd = 2
+      ) +
+    tm_shape(nati_text) +
+      tm_text("Name"
+        , col       = "black"
+        , alpha     = 0.6
+        , fontface  = 3
+        , size      = 0.5
+        , shadow    = F
+      ) +
+    tm_shape(africa) +
+      tm_lines(
+          col = "black"
+        , lwd = 1
+        , lty = 2
+      ) +
+    tm_shape(africa_crop) +
+      tm_text("COUNTRY"
+        , col       = "black"
+        , just      = "bottom"
+        , fontface  = 2
+      ) +
+    tm_layout(
+        legend.text.color   = "white"
+      , legend.title.color  = "white"
+    ) +
+    tm_scale_bar(
+        position    = "left"
+      , text.size   = 0.5
+      , text.color  = "white"
+      , width       = 0.125
+    ) +
+    tm_compass(
+        text.color   = "white"
+      , color.dark   = "white"
+      , color.light  = "white"
+    ) +
+    tm_credits(paste0("Points: ", rasterized$sampling[[i]], "\nSteps: ", rasterized$steps[[i]])
+    , position  = c("right", "top")
+    , size      = 1.5
+    , col       = "white"
+  )
+}
+
+# Store the plots
+for (i in 1:length(p)){
+  name <- paste0(
+      "04_Manuscript/99_RasterizedSims_Points"
+    , rasterized$sampling[[i]]
+    , "_Steps"
+    , rasterized$steps[[i]]
+    , ".png"
+  )
+  tmap_save(tm = p[[i]], name)
+}
 
 # ################################################################################
 # #### Combine Heatmaps

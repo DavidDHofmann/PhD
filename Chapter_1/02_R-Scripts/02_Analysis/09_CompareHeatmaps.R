@@ -10,15 +10,13 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
 setwd(wd)
 
 # Load required packages
-library(raster)           # For general raster manipulation
-library(tidyverse)        # For data wrangling
-
-# Load custom functions
-source("Functions.r")
+library(raster)     # For general raster manipulation
+library(tidyverse)  # For data wrangling
+library(davidoff)   # Custom functions
 
 ################################################################################
 #### Prepare Data

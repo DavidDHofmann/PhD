@@ -1,15 +1,15 @@
 # Fdb version 3
-["bibtex Manuscript_Support"] 1598967140 "Manuscript_Support.aux" "Manuscript_Support.bbl" "Manuscript_Support" 1599030501
+["bibtex Manuscript_Support"] 1599720520 "Manuscript_Support.aux" "Manuscript_Support.bbl" "Manuscript_Support" 1599725672
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/apalike.bst" 1480098433 24635 604dafcc79f521a11ea73e506e1fbd98 ""
-  "Literatur.bib" 1598872688 47741 27dd9f23d44737ebc1735b14571f36ef ""
-  "Manuscript_Support.aux" 1599030501 18357 5ce3995f1c516f205c0f5d8fc63a985f ""
+  "Literatur.bib" 1599548559 50308 eab16a164563d85a4582ba89c64b7c10 ""
+  "Manuscript_Support.aux" 1599720520 18357 e19b4c77e075299d80d5c867ddea238d ""
   "Manuscript_Support.bcf" 0 -1 0 ""
   (generated)
   "Manuscript_Support.bbl"
   "Manuscript_Support.blg"
-["pdflatex"] 1599030500 "Manuscript_Support.tex" "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.pdf" "Manuscript_Support" 1599030501
+["pdflatex"] 1599720520 "Manuscript_Support.tex" "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.pdf" "Manuscript_Support" 1599725672
   "/etc/texmf/web2c/texmf.cnf" 1587028156 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.aux" 1599030501 18357 5ce3995f1c516f205c0f5d8fc63a985f ""
+  "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.aux" 1599720520 18357 e19b4c77e075299d80d5c867ddea238d ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1480098698 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -213,14 +213,14 @@
   "99_NSD.pdf" 1598272441 37230 c5b51f5dc16b8d03bbbd3af534f7c7be ""
   "99_RandomEffects.pdf" 1598966043 19761 beac828fb525d86ff45a398512f03318 ""
   "99_Trajectories.pdf" 1598272402 1417595 908b280e67a0fcb8338d7e8cb7118c21 ""
-  "Manuscript_Support.aux" 1599030501 18357 5ce3995f1c516f205c0f5d8fc63a985f ""
-  "Manuscript_Support.bbl" 1598967141 8683 0474ac2df3850e10ab0c1b1d93728756 "bibtex Manuscript_Support"
-  "Manuscript_Support.out" 1599030501 966 912c1ff698e5e83506e91a501dfce5b5 ""
-  "Manuscript_Support.tex" 1599030500 44152 abd1a6e46aa4a82187731ec087048f78 ""
+  "Manuscript_Support.aux" 1599720520 18357 e19b4c77e075299d80d5c867ddea238d ""
+  "Manuscript_Support.bbl" 1599720520 8683 0474ac2df3850e10ab0c1b1d93728756 "bibtex Manuscript_Support"
+  "Manuscript_Support.out" 1599720520 966 912c1ff698e5e83506e91a501dfce5b5 ""
+  "Manuscript_Support.tex" 1599720519 44141 1b996fb5688860aa4483df430d82759a ""
   (generated)
   "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.log"
-  "Manuscript_Support.pdf"
-  "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.pdf"
-  "Manuscript_Support.aux"
   "Manuscript_Support.log"
   "Manuscript_Support.out"
+  "Manuscript_Support.pdf"
+  "Manuscript_Support.aux"
+  "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.pdf"

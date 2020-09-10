@@ -3,48 +3,47 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
-Warning--I didn't find a database entry for "Koen.2014"
 Warning--there's a number but no volume in Diniz.2020
 Warning--empty journal in Elliot.2014
-You've used 48 entries,
+You've used 56 entries,
             1935 wiz_defined-function locations,
-            800 strings with 15360 characters,
-and the built_in function-call counts, 22497 in all, are:
-= -- 2122
-> -- 1267
-< -- 12
-+ -- 450
-- -- 450
-* -- 2160
-:= -- 3978
-add.period$ -- 146
-call.type$ -- 48
-change.case$ -- 459
-chr.to.int$ -- 48
-cite$ -- 50
-duplicate$ -- 680
-empty$ -- 1387
-format.name$ -- 508
-if$ -- 4244
+            851 strings with 17144 characters,
+and the built_in function-call counts, 26342 in all, are:
+= -- 2491
+> -- 1468
+< -- 15
++ -- 520
+- -- 520
+* -- 2523
+:= -- 4645
+add.period$ -- 171
+call.type$ -- 56
+change.case$ -- 533
+chr.to.int$ -- 56
+cite$ -- 58
+duplicate$ -- 803
+empty$ -- 1637
+format.name$ -- 588
+if$ -- 4985
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 50
-newline$ -- 245
-num.names$ -- 146
-pop$ -- 381
+missing$ -- 58
+newline$ -- 285
+num.names$ -- 172
+pop$ -- 441
 preamble$ -- 2
-purify$ -- 463
+purify$ -- 537
 quote$ -- 0
-skip$ -- 497
+skip$ -- 588
 stack$ -- 0
-substring$ -- 1565
-swap$ -- 57
-text.length$ -- 1
+substring$ -- 1849
+swap$ -- 72
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 282
+type$ -- 330
 warning$ -- 2
-while$ -- 168
+while$ -- 200
 width$ -- 0
-write$ -- 628
-(There were 3 warnings)
+write$ -- 734
+(There were 2 warnings)

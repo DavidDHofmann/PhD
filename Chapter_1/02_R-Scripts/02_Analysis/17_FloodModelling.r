@@ -25,10 +25,10 @@ library(animation)            # Package to animate
 library(spatstat)             # To calculate distances on raster
 library(maptools)             # To calculate distances on raster
 library(davidoff)             # Custom functions
-
+library(mgcViz)               # For nice plots
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
+wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Identify all classified floodmaps
@@ -119,16 +119,28 @@ write_rds(mod, "03_Data/03_Results/99_FloodModel.rds")
 rm(dat)
 gc()
 
-# # Visualize them
-# plot(mod, pages = 2, shade = T, scale = 0)
-#
-# # Check diagnostic plots
-# gam.check(mod)
+# Visualize them
+plot(mod, pages = 2, shade = T, scale = 0)
+
+# Check diagnostic plots
+gam.check(mod)
 #
 # # Check for temporal dependence in residuals
 # par(mfrow = c(2, 1))
 # acf(residuals(mod), lag.max = 200, main = "ACF")
 # pacf(residuals(mod), lag.max = 200, main = "pACF")
+
+# Some nice visuals
+b <- getViz(mod)
+
+# On individual covariates
+o <- plot( sm(b, 2) )
+o + l_fitLine(colour = "red") + l_rug(mapping = aes(x=x, y=y), alpha = 0.8) +
+    l_ciLine(mul = 5, colour = "blue", linetype = 2) +
+    l_points(shape = 19, size = 1, alpha = 0.1) + theme_classic()
+
+# Summary plot
+print(plot(b, select = 1:3), pages = 1)
 
 ################################################################################
 #### Identify Classification Threshold using ROCR
@@ -253,65 +265,78 @@ plot(predictions[[300]], col = viridis(50))
 ################################################################################
 #### Comparison of Predicted and True Flood-Extent
 ################################################################################
-# First we compare the cumulated extent
-dat1 <- data.frame(
-    Date    = as.Date(basename(files))
-  , Extent  = as.vector(cellStats(flood, "sum"))
-  , Type    = "Observed"
-)
-dat2 <- data.frame(
-    Date    = dates
-  , Extent  = as.vector(cellStats(predictions, "sum"))
-  , Type    = "Predicted"
-)
-dat <- rbind(dat1, dat2)
-dat <- subset(dat, Date > "2010-01-01")
+# # First we compare the cumulated extent
+# dat1 <- data.frame(
+#     Date    = as.Date(basename(files))
+#   , Extent  = as.vector(cellStats(flood, "sum"))
+#   , Type    = "Observed"
+# )
+# dat2 <- data.frame(
+#     Date    = dates
+#   , Extent  = as.vector(cellStats(predictions, "sum"))
+#   , Type    = "Predicted"
+# )
+# dat <- rbind(dat1, dat2)
+# dat <- subset(dat, Date > "2010-01-01")
+#
+# # Visualize all
+# ggplot(dat, aes(x = Date, y = Extent, col = factor(Type))) +
+#   geom_line() +
+#   geom_rug(data = subset(dat, Type == "Observed"), sides = "b", length = unit(0.01, "npc")) +
+#   scale_color_manual(values = c("gray40", "blue"))
+# Identify all classified floodmaps
 
-# Visualize all
-ggplot(dat, aes(x = Date, y = Extent, col = factor(Type))) +
-  geom_line() +
-  geom_rug(data = subset(dat, Type == "Observed"), sides = "b", length = unit(0.01, "npc")) +
-  scale_color_manual(values = c("gray40", "blue"))
+files <- dir(
+    path        = "03_Data/02_CleanData/00_Floodmaps/01_Original"
+  , pattern     = ".tif$"
+  , full.names  = T
+)
 
-# Randomly select some dates for which we have proper floodmaps
-dates <- flood %>%
-  names() %>%
-  length() %>%
-  sample(5) %>%
-  flood[[.]] %>%
-  names() %>%
-  substr(start = 2, stop = 11) %>%
-  as.Date(., format = "%Y.%m.%d")
+# Sample five files
+files <- sample(files, 5)
+
+# Identify dates
+dates <- as.Date(substr(basename(files), start = 1, stop = 10))
+
+# Load them
+flood <- stack(files)
+
+# Reclassify pixels to flooded (1) not flooded (0) and clouded (NA) -> In case
+# you don't want to use terra::classify, use davidoff::mcreclassify
+rcl <- data.frame(old = c(0, 127, 255), new = c(1, NA, 0))
+flood <- reclassify(flood, rcl)
 
 # Predict flood for these dates
-predictions2 <- pbmclapply(
+predictions2 <- lapply(
     X                   = dates
-  , ignore.interactive  = T
-  , mc.cores            = detectCores() - 1
+  # , ignore.interactive  = T
+  # , mc.cores            = detectCores() - 1
   , FUN                 = function(x){
     floodPred(mod = mod, covars = no_inundated, dates = x)
   }) %>% stack(.)
 names(predictions2) <- dates
 
 # Plot the results
-index <- 4
-par(mfrow = c(length(index), 2), mar = c(2, 1, 1, 1))
-for(i in 1:length(index)){
-
-  # Plot the predicted map
-  plot(
-      predictions2[[index[i]]]
-    , main    = paste("Prediction", dates[index[i]])
-    , legend  = F
-  )
-
-  # Plot the remote sensed (true) map
-  plot(
-      flood[[names(flood)[names(flood) == names(predictions2)[index[i]]]]]
-    , main    = paste("True", dates[index[i]])
-    , legend  = F
-  )
-}
+png("test3.png", width = 1980, height = 1080)
+i <- 2
+par(mfrow = c(1, 2), mar = c(2, 1, 1, 1))
+plot(
+    predictions2[[i]]
+  , main    = paste("Prediction", dates[i])
+  , legend  = F
+  , col = c("white", "blue")
+  , box = F
+  , axes = F
+)
+plot(
+    flood[[i]]
+  , main    = paste("True", dates[i])
+  , legend  = F
+  , col = c("white", "blue")
+  , box = F
+  , axes = F
+)
+dev.off()
 
 ################################################################################
 #### Floodmaps for Dispersal Simulations

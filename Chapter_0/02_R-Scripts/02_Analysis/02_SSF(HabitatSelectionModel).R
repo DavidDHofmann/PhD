@@ -801,7 +801,6 @@ dat_pref <- lapply(valid_pref, function(x){
   x[[1]]
 }) %>% do.call(rbind, .)
 
-
 ############################################################
 #### Validation with random preferences
 ############################################################

@@ -15,6 +15,12 @@ Armansin, N.~C., Stow, A.~J., Cantor, M., Leu, S.~T., Klarevas-Irby, J.~A.,
   Hypothesis}.
 \newblock {\em {Trends in Ecology \& Evolution}}, pages 137--148.
 
+\bibitem[Avgar et~al., 2017]{Avgar.2017}
+Avgar, T., Lele, S.~R., Keim, J.~L., and Boyce, M.~S. (2017).
+\newblock {Relative Selection Strength: Quantifying Effect Size in Habitat‐
+  and Step‐Selection Inference}.
+\newblock {\em {Ecology and Evolution}}, 7(14):5322--5330.
+
 \bibitem[Avgar et~al., 2016]{Avgar.2016}
 Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
 \newblock {Integrated Step Selection Analysis: Bridging the Gap Between
@@ -33,6 +39,13 @@ Bonyongo, C.~M. (2005).
 \newblock {Habitat Utilization by Impala (Aepyceros memmpus) in the Okavango
   Delta}.
 \newblock {\em {Botswana Notes \& Records}}, 37(1):227--235.
+
+\bibitem[Brennan et~al., 2020]{Brennan.2020}
+Brennan, A., Beytell, P., Aschenborn, O., Du~Preez, P., Funston, P., Hanssen,
+  L., Kilian, J., Stuart‐Hill, G., Taylor, R., and Naidoo, R. (2020).
+\newblock {Characterizing Multispecies Connectivity Across a Transfrontier
+  Conservation Landscape}.
+\newblock {\em {Journal of Applied Ecology}}, 57:1700--1710.
 
 \bibitem[Brooks et~al., 2017]{Mollie.2017}
 Brooks, M.~E., Kristensen, K., {van Benthem}, K.~J., Magnusson, A., Berg,
@@ -149,6 +162,13 @@ Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
   Dynamics of Bison under Predation Risk}.
 \newblock {\em {Ecology}}, 90(9):2480--2490.
 
+\bibitem[Hauenstein et~al., 2019]{Hauenstein.2019}
+Hauenstein, S., Fattebert, J., Grüebler, M.~U., Naef‐Daenzer, B., Pe'er, G.,
+  and Hartig, F. (2019).
+\newblock {Calibrating an Individual‐Based Movement Model to Predict
+  Functional Connectivity for Little Owls}.
+\newblock {\em [Ecological Applications]}, 29(4):e01873.
+
 \bibitem[Latham et~al., 2011]{Latham.2011}
 Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
 \newblock {Movement Responses by Wolves to Industrial Linear Features and Their
@@ -166,6 +186,12 @@ Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
 McNutt, J. (1996).
 \newblock {Sex-Biased Dispersal in African Wild Dogs (Lycaon pictus)}.
 \newblock {\em {Animal Behaviour}}, 52(6):1067--1077.
+
+\bibitem[Mills and Gorman, 1997]{Mills.1997}
+Mills, M. G.~L. and Gorman, M.~L. (1997).
+\newblock {Factors Affecting the Density and Distribution of Wild Dogs in the
+  Kruger National Park}.
+\newblock {\em {Conservation Biology}}, 11(6):1397--1406.
 
 \bibitem[Muff et~al., 2020]{Muff.2020}
 Muff, S., Signer, J., and Fieberg, J. (2020).
@@ -245,6 +271,12 @@ Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
   Corridors for Canada Lynx at their Southern Range Periphery}.
 \newblock {\em {Biological Conservation}}, 157:187--195.
 
+\bibitem[Taylor et~al., 2006]{Taylor.2006}
+Taylor, P.~D., Fahrig, L., and With, K.~A. (2006).
+\newblock {Landscape Connectivity: A Return to the Basics}.
+\newblock In Crooks, K.~R. and Sanjayan, M., editors, {\em {Connectivity
+  Conservation}}, pages 29--43. {Cambridge University Press}, Cambridge.
+
 \bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
 Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
 \newblock {Applications of Step-Selection Functions in Ecology and
@@ -272,6 +304,12 @@ Valeix, M., Loveridge, A.~J., Davidson, Z., Madzikanda, H., Fritz, H., and
   North-Western Zimbabwe}.
 \newblock {\em {Landscape Ecology}}, 25(3):337--351.
 
+\bibitem[Van~der Meer et~al., 2014]{VanDerMeer.2014}
+Van~der Meer, E., Fritz, H., Blinston, P., and Rasmussen, G.~S. (2014).
+\newblock {Ecological Trap in the Buffer Zone of a Protected Area: Effects of
+  Indirect Anthropogenic Mortality on the African Wild Dog (Lycaon pictus)}.
+\newblock {\em {Oryx}}, 48(2):285--293.
+
 \bibitem[Vasudev et~al., 2015]{Vasudev.2015}
 Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
 \newblock {From Dispersal Constraints to Landscape Connectivity: Lessons from
@@ -294,6 +332,12 @@ Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
 \newblock {\em {International Journal of Applied Earth Observation and
   Geoinformation}}, 57:224--234.
 
+\bibitem[Woodroffe, 2011]{Woodroffe.2011}
+Woodroffe, R. (2011).
+\newblock {Ranging behaviour of African Wild Dog Packs in a Human-Dominated
+  Landscape}.
+\newblock {\em {Journal of Zoology}}, 283(2):88--97.
+
 \bibitem[Woodroffe et~al., 2019]{Woodroffe.2019}
 Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,
   and O'Neill, H. M.~K. (2019).
@@ -310,5 +354,11 @@ Woodroffe, R. and Sillero-Zubiri, C. (2012).
 Zeller, K.~A., McGarigal, K., and Whiteley, A.~R. (2012).
 \newblock {Estimating Landscape Resistance to Movement: A Review}.
 \newblock {\em {Landscape Ecology}}, 27(6):777--797.
+
+\bibitem[Zeller et~al., 2020]{Zeller.2020}
+Zeller, K.~A., Wattles, D.~W., Bauder, J.~M., and DeStefano, S. (2020).
+\newblock {Forecasting Seasonal Habitat Connectivity in a Developing
+  Landscape}.
+\newblock {\em {Land}}, 9(7):233.
 
 \end{thebibliography}

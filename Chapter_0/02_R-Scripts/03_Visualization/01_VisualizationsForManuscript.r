@@ -602,11 +602,11 @@ core$Pseudo <- ""
 # Plot the layers
 p1 <- tm_shape(water, bbox = bbox) +
   tm_raster(
-      palette = "viridis"
-      # palette = "Greys"
-    , style   = "cont"
-    , title   = "Inundation\nFrequency"
-    , labels  = c("Low", "", "High")
+      palette         = "viridis"
+    , style           = "cont"
+    , title           = "Inundation\nFrequency"
+    , labels          = c("Low", "", "High")
+    , legend.reverse  = T
   ) +
   tm_shape(core) +
     tm_lines("Pseudo"
@@ -649,10 +649,11 @@ p1 <- tm_shape(water, bbox = bbox) +
 
 p2 <- tm_shape(trees, bbox = bbox) +
   tm_raster(
-      palette = "viridis"
-    , style   = "cont"
-    , title   = "Tree Cover (%)"
-    , labels  = c("Low", "", "High")
+      palette         = "viridis"
+    , style           = "cont"
+    , title           = "Tree Cover (%)"
+    , labels          = c("Low", "", "High")
+    , legend.reverse  = T
   ) +
   tm_shape(core) +
     tm_lines("Pseudo"
@@ -695,10 +696,11 @@ p2 <- tm_shape(trees, bbox = bbox) +
 
 p3 <- tm_shape(shrubs, bbox = bbox) +
   tm_raster(
-      palette = "viridis"
-    , style   = "cont"
-    , title   = "Shrub/Grassland\nCover (%)"
-    , labels  = c("Low", "", "High")
+      palette         = "viridis"
+    , style           = "cont"
+    , title           = "Shrub/Grassland\nCover (%)"
+    , labels          = c("Low", "", "High")
+    , legend.reverse  = T
   ) +
   tm_shape(core) +
     tm_lines("Pseudo"
@@ -741,10 +743,11 @@ p3 <- tm_shape(shrubs, bbox = bbox) +
 
 p4 <- tm_shape(prot, bbox = bbox) +
   tm_raster(
-    , palette = viridis(10)[c(1, 8)]
-    , style   = "cat"
-    , title   = "Protection\nStatus"
-    , labels  = c("Pastoral", "Proctected")
+    , palette         = viridis(10)[c(1, 8)]
+    , style           = "cat"
+    , title           = "Protection\nStatus"
+    , labels          = c("Pastoral", "Proctected")
+    , legend.reverse  = T
   ) +
   tm_shape(core) +
     tm_lines("Pseudo"
@@ -787,10 +790,11 @@ p4 <- tm_shape(prot, bbox = bbox) +
 
 p5 <- tm_shape(humans, bbox = bbox) +
   tm_raster(
-      palette = "viridis"
-    , style   = "cont"
-    , title   = "Human\nInfluence"
-    , labels  = c("Low", "", "High")
+      palette         = "viridis"
+    , style           = "cont"
+    , title           = "Human\nInfluence"
+    , labels          = c("Low", "", "High")
+    , legend.reverse  = T
   ) +
   tm_shape(core) +
     tm_lines("Pseudo"
@@ -833,10 +837,11 @@ p5 <- tm_shape(humans, bbox = bbox) +
 
 p6 <- tm_shape(roads1, bbox = bbox) +
   tm_raster(
-      palette = "viridis"
-    , style   = "cont"
-    , title   = "Distance to\nRoads (km)"
-    , labels  = c("Short", "", "Long")
+      palette         = "viridis"
+    , style           = "cont"
+    , title           = "Distance to\nRoads (km)"
+    , labels          = c("Short", "", "Long")
+    , legend.reverse  = T
   ) +
   tm_shape(roads2, bbox = bbox) +
     tm_lines(col = "white") +
@@ -1451,6 +1456,7 @@ best_table$Covariate[best_table$Covariate == "sl_"] <- "sl"
 best_table$Covariate[best_table$Covariate == "log_sl_"] <- "log(sl)"
 best_table$Covariate[best_table$Covariate == "HumansBuff5000"] <- "HumanInfluence"
 
+
 # Print the result as a table to a tex file
 options(scipen = 999)
 print(xtable(best_table)
@@ -1463,7 +1469,20 @@ print(xtable(best_table)
 )
 
 # Prepare and store a plot of the coefficients
-coeffs <- getCoeffs(best)[-1, ]
+coeffs <- getCoeffs(best, pvalue = T)[-1, ]
+
+# Add stars indicating the significance
+coeffs$Significance <- sapply(1:nrow(coeffs), function(x){
+  if (coeffs$pvalue[x] <= 0.01){
+    return("***")
+  } else if (coeffs$pvalue[x] <= 0.05){
+    return("**")
+  } else if (coeffs$pvalue[x] <= 0.1){
+    return("*")
+  }
+})
+
+# Rename covariates nicely
 coeffs$Covariate[coeffs$Covariate == "Shrubs"] <- "Shrubs/Grassland"
 coeffs$Covariate[coeffs$Covariate == "cos_ta_"] <- "cos(ta)"
 coeffs$Covariate[coeffs$Covariate == "sl_"] <- "sl"
@@ -1482,7 +1501,8 @@ p1 <- showCoeffs(coeffs
     , "Trees"
     , "Shrubs/Grassland"
     , "HumanInfluence"
-))
+  )) +
+  geom_text(aes(label = Significance, hjust = 0.5, vjust = -0.2), show.legend = F)
 
 ############################################################
 #### Permeability Model Validation
