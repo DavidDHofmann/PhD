@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
 setwd(wd)
 
 # Set a seed
@@ -868,7 +868,7 @@ p
 dev.off()
 
 ################################################################################
-#### Heatmap Metrics
+#### Heatmap Metrics (Affinity)
 ################################################################################
 # Load required data
 metrics1 <- read_rds("03_Data/03_Results/99_HeatmapMetrics.rds")
@@ -879,9 +879,9 @@ metrics2 <- read_rds("03_Data/03_Results/99_HeatmapMetrics2.rds") %>%
 # Summarize bootstrapped affinity metrics
 metrics1 <- metrics1 %>%
   dplyr::select(steps, sampling, BhattacharyyaAffinityPerm, BhattacharyyaAffinityCorr) %>%
-  gather(key = Map, value = Correlation, 3:4) %>%
+  gather(key = Map, value = Affinity, 3:4) %>%
   group_by(steps, sampling, Map) %>%
-  summarize(Mean = mean(Correlation), SD = sd(Correlation)) %>%
+  summarize(Mean = mean(Affinity), SD = sd(Affinity)) %>%
   mutate(
       Mean    = as.numeric(format(round(Mean, 2), nsmall = 2))
     , Metric  = "Affinity"
@@ -906,15 +906,65 @@ metrics <- rbind(metrics1, metrics2) %>%
   mutate(Group = factor(paste("Heat vs.", Map), levels = c("Heat vs. Perm", "Heat vs. Corr", "Heat vs. Heat")))
 
 # Visualize them
-ggplot(metrics, aes(x = steps, y = Mean, col = Group)) +
+pal <- colorRampPalette(c("orange", "white"))
+p1 <- ggplot(metrics, aes(x = steps, y = Mean, col = Group)) +
   geom_point(aes(shape = sampling)) +
   geom_line(aes(lty = sampling)) +
-  geom_errorbar(aes(ymin = Mean - SD, ymax = Mean + SD)) +
+  # geom_errorbar(aes(ymin = Mean - SD, ymax = Mean + SD)) +
   dark_theme_minimal() +
-  scale_color_manual(values = viridis(20)[c(15, 5, 20)]) +
+  scale_color_manual(values = pal(3)) +
   scale_shape_manual(values = c(2, 4, 6)) +
   theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
 
+################################################################################
+#### Heatmap Metrics (Correlation)
+################################################################################
+# Load required data
+metrics1 <- read_rds("03_Data/03_Results/99_HeatmapMetrics.rds")
+metrics2 <- read_rds("03_Data/03_Results/99_HeatmapMetrics2.rds") %>%
+  mutate(Correlation = as.numeric(format(round(Correlation, 2), nsmall = 2))) %>%
+  mutate(Affinity = as.numeric(format(round(Affinity, 2), nsmall = 2)))
+
+# Summarize bootstrapped affinity metrics
+metrics1 <- metrics1 %>%
+  dplyr::select(steps, sampling, CorrelationPerm, CorrelationCorr) %>%
+  gather(key = Map, value = Correlation, 3:4) %>%
+  group_by(steps, sampling, Map) %>%
+  summarize(Mean = mean(Correlation), SD = sd(Correlation)) %>%
+  mutate(
+      Mean    = as.numeric(format(round(Mean, 2), nsmall = 2))
+    , Metric  = "Correlation"
+    , SD      = as.numeric(format(round(SD, 2), nsmall = 2))
+    , Map     = substr(Map, start = 12, 15)
+  ) %>%
+  ungroup()
+
+# Clean heatmap comparisons
+metrics2 <- metrics2 %>%
+  mutate(
+      sampling  = "n.a."
+    , Metric    = "Correlation"
+    , Map       = "Heat"
+    , SD        = NA
+    , Mean      = Affinity
+  ) %>% select(steps, sampling, Map, Mean, SD, Metric)
+
+# Put metrics together and do some cleaning
+metrics <- rbind(metrics1, metrics2) %>%
+  subset(Metric == "Correlation") %>%
+  mutate(Group = factor(paste("Heat vs.", Map), levels = c("Heat vs. Perm", "Heat vs. Corr", "Heat vs. Heat")))
+
+# Visualize them
+p2 <- ggplot(metrics, aes(x = steps, y = Mean, col = Group)) +
+  geom_point(aes(shape = sampling)) +
+  geom_line(aes(lty = sampling)) +
+  # geom_errorbar(aes(ymin = Mean - SD, ymax = Mean + SD)) +
+  dark_theme_minimal() +
+  scale_color_manual(values = pal(3)) +
+  scale_shape_manual(values = c(2, 4, 6)) +
+  theme(legend.position = "bottom", legend.box = "vertical", legend.margin = margin())
+
+grid.arrange(p1, p2, ncol = 2)
 ################################################################################
 #### Plot of Areas Reached
 ################################################################################

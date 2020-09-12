@@ -27,9 +27,11 @@ library(maptools)             # To calculate distances on raster
 library(davidoff)             # Custom functions
 library(mgcViz)               # For nice plots
 
+# Set seed for reproducability
+set.seed(12345)
+
 # Set the working directory
-wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_1"
-setwd(wd)
+setwd("/home/david/ownCloud/University/15. PhD/Chapter_1")
 
 # Identify all classified floodmaps
 files <- dir(
@@ -145,58 +147,60 @@ print(plot(b, select = 1:3), pages = 1)
 ################################################################################
 #### Identify Classification Threshold using ROCR
 ################################################################################
+# Reload model results
+mod <- read_rds("03_Data/03_Results/99_FloodModel.rds")
+
 # To predict a floodmap, we'll need to specify a classification threshold. We
 # can balance false positives against false negatives to find a meaningful
 # threshold. Function to calculate confusion matrix, sensitivity, and
 # specificity. Note that x represents predicted values, y represents true values
+confMat <- function(x, y, threshold = 0.5){
 
-# confMat <- function(x, y, threshold = 0.5){
-#
-#   # Confusion table
-#   conf <- table(x, y >= threshold)
-#
-#   # Performance metrics
-#   specificity <- conf[1, 1] / sum(conf[1, 1], conf[1, 2])
-#   sensitivity <- conf[2, 2] / sum(conf[2, 1], conf[2, 2])
-#   accuracy <- sum(conf[1, 1], conf[2, 2]) / sum(conf[1, ], conf[2, ])
-#
-#   # Results that are returned
-#   results <- list(
-#       Confusion   = conf
-#     , Specificity = specificity
-#     , Sensitivity = sensitivity
-#     , Accuracy    = accuracy
-#   )
-#   return(results)
-# }
-#
-# # Use the floodmodel to predict the flood extent on the training dataset (to
-# # find the threshold)
-# predictTrain <- predict(mod, type = "response")
-#
-# # Create prediction object. Note that we can only use data that is not NA, as
-# # the bam removed any NA values automatically
-# predictROCR <- prediction(
-#     predictions = predictTrain
-#   , labels      = sub$Training$Inundated[!is.na(sub$Training$Inundated)]
-# )
-#
-# # Create performance object
-# performROCR <- performance(predictROCR, "tpr", "fpr")
-#
-# # Plot the results for different thresholds
-# plot(performROCR
-#   , colorize          = T
-#   , print.cutoffs.at  = seq(0, 1, by = 0.1)
-#   , text.adj          = c(-0.2, 1.7)
-# )
-#
-# # It looks like a threshold of 0.5 works perfectly fine. Let's use it to predict
-# # on the test data
-# predictTest <- predict(mod, sub$Testing, type = "response")
-#
-# # Check the confusion matrix
-# confMat(sub$Testing$Inundated, predictTest, threshold = 0.5)
+  # Confusion table
+  conf <- table(x, y >= threshold)
+
+  # Performance metrics
+  specificity <- conf[1, 1] / sum(conf[1, 1], conf[1, 2])
+  sensitivity <- conf[2, 2] / sum(conf[2, 1], conf[2, 2])
+  accuracy <- sum(conf[1, 1], conf[2, 2]) / sum(conf[1, ], conf[2, ])
+
+  # Results that are returned
+  results <- list(
+      Confusion   = conf
+    , Specificity = specificity
+    , Sensitivity = sensitivity
+    , Accuracy    = accuracy
+  )
+  return(results)
+}
+
+# Use the floodmodel to predict the flood extent on the training dataset (to
+# find the threshold)
+predictTrain <- predict(mod, type = "response")
+
+# Create prediction object. Note that we can only use data that is not NA, as
+# the bam removed any NA values automatically
+predictROCR <- prediction(
+    predictions = predictTrain
+  , labels      = sub$Training$Inundated[!is.na(sub$Training$Inundated)]
+)
+
+# Create performance object
+performROCR <- performance(predictROCR, "tpr", "fpr")
+
+# Plot the results for different thresholds
+plot(performROCR
+  , colorize          = T
+  , print.cutoffs.at  = seq(0, 1, by = 0.1)
+  , text.adj          = c(-0.2, 1.7)
+)
+
+# It looks like a threshold of 0.5 works perfectly fine. Let's use it to predict
+# on the test data
+predictTest <- predict(mod, sub$Testing, type = "response")
+
+# Check the confusion matrix
+confMat(sub$Testing$Inundated, predictTest, threshold = 0.50)
 
 ################################################################################
 #### Predict Flood

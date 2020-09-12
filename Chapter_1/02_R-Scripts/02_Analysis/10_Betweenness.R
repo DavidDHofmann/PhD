@@ -9,7 +9,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
 setwd(wd)
 
 # Load required packages
@@ -20,55 +20,10 @@ library(pbmcapply)      # To run on multiple cores with progress bar
 library(igraph)         # For network analysis
 library(viridis)        # For nice colors
 library(RColorBrewer)   # For more nice colors
-
-# Load custom functions
-source("Functions.r")
+library(davidoff)       # Custom functions
 
 # Set a seed
 set.seed(12345)
-
-################################################################################
-#### Prepare Some Color Palettes
-################################################################################
-# Function to create color-ramp-palette from "coolors.co"
-prepCols <- function(x){
-  x <- paste0("#", x)
-  return(colorRampPalette(x))
-}
-
-# Function to visualize a colorpalette
-plotCols <- function(color){
-  plot(1:20, 1:20, cex = 20, pch = 20, pty = 20, col = color(20))
-}
-
-# Codes exported from coolors.co
-pal1 <- c("23231a","322f20","6a5837","fe5f00","f8dda4")
-pal2 <- c("54478c","2c699a","048ba8","0db39e","16db93","83e377","b9e769","efea5a","f1c453","f29e4c")
-pal3 <- c("1f271b","19647e","28afb0","f4d35e","ee964b")
-pal4 <- c("390099","9e0059","ff0054","ff5400","ffbd00")
-pal5 <- rev(c("ffc857","e9724c","c5283d","481d24","255f85"))
-pal6 <- c("000000","3d348b","7678ed","f7b801","f18701","f35b04")
-
-# Prepare palettes
-cols1 <- prepCols(pal1)
-cols2 <- prepCols(pal2)
-cols3 <- prepCols(pal3)
-cols4 <- prepCols(pal4)
-cols5 <- prepCols(pal5)
-cols6 <- prepCols(pal6)
-
-# Some further color ramps
-cols7 <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
-
-# Visualize
-par(mfrow = c(3, 3))
-plotCols(cols1)
-plotCols(cols2)
-plotCols(cols3)
-plotCols(cols4)
-plotCols(cols5)
-plotCols(cols6)
-plotCols(cols7)
 
 ################################################################################
 #### Load and Clean Data
@@ -78,7 +33,7 @@ sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
 
 # Subset to simulations of interest
 sims <- subset(sims
-  , StepNumber    <= 68
+  , StepNumber    <= 200
   & PointSampling == "Static"
 )
 
@@ -151,20 +106,24 @@ visits <- data.frame(
 # depicts all transitions from one raster cell to another. To do this
 # repeatedly, we write a function to retrieve the visitation history from a
 # sequence of values
-visitHist <- function(x){
+visitHist <- function(x, singlecount = F){
   transitions <- data.frame(from = lag(x), to = x) %>%
     group_by(from, to) %>%
     na.omit() %>%
-    summarize(TotalConnections = n())
+    summarize(TotalConnections = n(), .groups = "drop")
+  if (singlecount){
+    transitions$TotalConnections = 1
+  }
   return(transitions)
 }
 
 # Let's check what the function does exactly
-visitHist(c(1, 2, 2, 3, 4, 5, 1, 2))
+visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = F)
+visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = T)
 
 # We want to retrieve the visitation history to each trajectory seperately, so
 # let's nest them.
-visits <- visits %>% group_by(ID) %>% nest()
+visits <- visits %>% nest(data = -ID)
 
 # Apply the function to each trajectory for each raster. We therefore identify
 # the visitation history of each trajectory for each of the different spatial
@@ -173,19 +132,19 @@ visits$History10000 <- pbmclapply(1:nrow(visits)
   , mc.cores            = detectCores() - 1
   , ignore.interactive  = T
   , function(x){
-    visitHist(visits$data[[x]]$R10000)
+    visitHist(visits$data[[x]]$R10000, singlecount = T)
   })
 visits$History5000 <- pbmclapply(1:nrow(visits)
   , mc.cores            = detectCores() - 1
   , ignore.interactive  = T
   , function(x){
-    visitHist(visits$data[[x]]$R5000)
+    visitHist(visits$data[[x]]$R5000, singlecount = T)
   })
 visits$History2500 <- pbmclapply(1:nrow(visits)
   , mc.cores            = detectCores() - 1
   , ignore.interactive  = T
   , function(x){
-    visitHist(visits$data[[x]]$R2500)
+    visitHist(visits$data[[x]]$R2500, singlecount = T)
   })
 
 # Check the result
@@ -209,7 +168,7 @@ netMet <- function(
   , metrics = c("betweenness", "closeness", "degree")
   ){
 
-    # Calculate the desired network metrics and put them as raster values
+    # Calculate the desired network metrics and return them as rasters
     result <- vector(mode = "list", length = 3)
     if ("betweenness" %in% metrics){
       betweenness <- raster
@@ -245,9 +204,7 @@ netMet <- function(
     return(result)
 }
 
-# We are going to run the above function on a list of graphs. Therefore, we are
-# going to get out a list of rasterstacks, which we may want to combine into a
-# single map. Let's therefore write a function to combine a desired metric.
+# Function to combine metrics from multiple graphs
 stackMet <- function(
     metrics   = NULL                  # The stack of metrics
   , metric    = "betweenness"         # The metric to be combined
@@ -261,6 +218,32 @@ stackMet <- function(
     }
     return(funned)
 }
+################################################################################
+#### TESTING: SINGLE TRJAJECTORIES
+################################################################################
+# Select an index
+i <- 2000
+
+# Extract first trajectory
+traj <- visits$data[[i]]
+coordinates(traj) <- c("x", "y")
+traj <- spLines(traj)
+
+# Visualize it
+plot(r10000)
+plot(traj, add = T, col = "red")
+
+# Create graph from visitation history
+graph <- graph_from_data_frame(visits$History10000[[i]], vertices = vertices10000)
+
+# Visualize the transitions
+plot(graph, layout = lay10000, vertex.size = 0, edge.size = 0.1, edge.arrow.size = 0, vertex.label = NA)
+
+# Calculate network metrics
+mets <- netMet(network = graph, raster = r10000)
+
+# Visualize them
+plot(mets)
 
 ################################################################################
 #### TESTING: WEIGHTS VS NO WEIGHTS
@@ -314,15 +297,16 @@ centralization.betweenness(net_ww2)$centralization
 centralization.betweenness(net_nw)$centralization
 
 # Compare results
+getwd()
 par(mfrow = c(2, 2))
-plot(sqrt(res_ww1[["betweenness"]]), col = cols6(20), main = "With Weights fun 1")
-plot(sqrt(res_ww2[["betweenness"]]), col = cols6(20), main = "With Weights fun 2")
-plot(sqrt(res_nw[["betweenness"]]), col = cols6(20), main = "Without Weights")
+plot(sqrt(res_ww1[["betweenness"]]), col = viridis(20), main = "With Weights fun 1")
+plot(sqrt(res_ww2[["betweenness"]]), col = viridis(20), main = "With Weights fun 2")
+plot(sqrt(res_nw[["betweenness"]]), col = viridis(20), main = "Without Weights")
 
 par(mfrow = c(2, 2))
-plot(sqrt(res_ww1[["degree"]]), col = cols6(20), main = "With Weights fun 1")
-plot(sqrt(res_ww2[["degree"]]), col = cols6(20), main = "With Weights fun 2")
-plot(sqrt(res_nw[["degree"]]), col = cols6(20), main = "Without Weights")
+plot(sqrt(res_ww1[["degree"]]), col = viridis(20), main = "With Weights fun 1")
+plot(sqrt(res_ww2[["degree"]]), col = viridis(20), main = "With Weights fun 2")
+plot(sqrt(res_nw[["degree"]]), col = viridis(20), main = "Without Weights")
 
 ################################################################################
 #### Approach I: Calculate Network Metrics Over All Trajectories
@@ -400,7 +384,7 @@ plot(
 )
 
 ###############################################################################
-#### Approach II: Apply to each Trajectory Individuall, Then Merge Metrics
+#### Approach II: Apply to each Trajectory Individually, Then Merge Metrics
 ################################################################################
 # In contrast to be approach above, we know create a network for each dispersal
 # trajectory individually.
@@ -467,7 +451,7 @@ visits$Metrics2500 <- pbmclapply(1:nrow(visits)
 betweenness <- stackMet(
     metrics = visits$Metrics10000
   , metric  = "betweenness"
-  , fun     = function(x){max(x)}
+  , fun     = function(x){mean(x)}
 )
 degree <- stackMet(
     metrics = visits$Metrics10000
