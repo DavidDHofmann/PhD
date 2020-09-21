@@ -137,8 +137,8 @@ protected areas, wildlife management
 %------------------------------------------------------------------------------
 %	Appendix S1: Net Squared Displacement
 %------------------------------------------------------------------------------
-\section{Net Squared Displacement}\todo{Reviewer 1 pointed out that we need to
-replace calssified with classified}
+\section{Net Squared Displacement}
+
 \begin{figure}[hbpt]
   \begin{center}
     \includegraphics[width = \textwidth]{99_NSD.pdf}
@@ -359,7 +359,7 @@ categories as unprotected (e.g. communal pastoral land, private land). We
 rasterized the two categories to the binary raster \textit{protection status} (1
 = protected, 0 = unprotected) with a resolution of 250m x 250m.
 
-\subsection{Human Influence}
+\subsection{Anthropogenic}
 We created a raster layer representing human influence by integrating
 information on (1) human density, (2) farming, and (3) roads.
 
@@ -669,7 +669,7 @@ by four hours, \(log(sl)\) can also be interpreted as movement rate.
               & 0-100\%
                 & (5) \\
         \hdashline
-        \multirow{3}{*}{Human Influence}
+        \multirow{3}{*}{Anthropogenic}
           & Human Influence
             & Average human influence
               & \(\geq\) 0
@@ -685,18 +685,18 @@ by four hours, \(log(sl)\) can also be interpreted as movement rate.
         \hline
         \end{tabular}
         \begin{tablenotes}
-          \item \textit{Sources:} (1) \cite{Chen.2015} (2) \cite{Schaaf.2015} (3)
-          \cite{Yamazaki.2019} (4) \cite{Dimiceli.2015} (5) \cite{PeaceParks.2019}
-          (6) \cite{Facebook.2019} (7) \cite{OpenStreetMap.2019} (8)
-          \cite{Xiong.2017}
+          \item \textit{Sources:} (1) \cite{Chen.2015} (2) \cite{Schaaf.2015}
+          (3) \cite{Yamazaki.2019} (4) \cite{Dimiceli.2015} (5)
+          \cite{PeaceParks.2019} (6) \cite{Facebook.2019} (7)
+          \cite{OpenStreetMap.2019} (8) \cite{Xiong.2017}
           \item
           \item \textit{* Note:} The covariates \textit{Water} and
-          \textit{Dryland} added up to 100\%, which is why only \textit{Water} was
-          included as explanatory variable in our models. The same applied for the
-          group \textit{Shrubs/Grassland}, \textit{Trees}, and \textit{Bareland},
-          where we omitted \textit{Bareland} for modeling. Finally, from the group
-          \textit{Protected} and \textit{Unprotected}, we only included
-          \textit{Protected} in our models.
+          \textit{Dryland} added up to 100\%, which is why only \textit{Water}
+          was included as explanatory variable in our models. The same applied
+          for the group \textit{Shrubs/Grassland}, \textit{Trees}, and
+          \textit{Bareland}, where we omitted \textit{Bareland} for modeling.
+          Finally, from the group \textit{Protected} and \textit{Unprotected},
+          we only included \textit{Protected} in our models.
         \end{tablenotes}
       \end{threeparttable}
     }

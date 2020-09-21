@@ -23,10 +23,6 @@ library(davidoff)       # Custom functions
 ################################################################################
 #### Identify Reached Areas
 ################################################################################
-################################################################################
-#### NOTE: THIS CAN BE DONE USING IGRAPH RATHER THAN THE STUPID RGEOS
-################################################################################
-
 # Load source areas and points
 areas <- shapefile("03_Data/03_Results/99_SourceAreas2.shp")
 points <- shapefile("03_Data/03_Results/99_SourcePoints2.shp")
@@ -179,6 +175,13 @@ plotNet(reached$Networks[[3]])
 plotNet(reached$Networks[[4]])
 plotNet(reached$Networks[[5]])
 plotNet(reached$Networks[[6]])
+
+plotNet(reached$Networks[[7]])
+plotNet(reached$Networks[[8]])
+plotNet(reached$Networks[[9]])
+plotNet(reached$Networks[[10]])
+plotNet(reached$Networks[[11]])
+plotNet(reached$Networks[[12]])
 
 ################################################################################
 #### Calculate Network Metrics

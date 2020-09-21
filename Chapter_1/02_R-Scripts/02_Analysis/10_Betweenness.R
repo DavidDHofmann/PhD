@@ -449,16 +449,19 @@ visits$Metrics2500 <- pbmclapply(1:nrow(visits)
 
 # Put metrics them into single maps
 betweenness <- stackMet(
-    metrics = visits$Metrics10000
+    metrics = visits$Metrics5000
   , metric  = "betweenness"
   , fun     = function(x){mean(x)}
 )
 degree <- stackMet(
-    metrics = visits$Metrics10000
+    metrics = visits$Metrics5000
   , metric  = "degree"
   , fun     = function(x){mean(x)}
 )
 
 # Visualize
-plot(betweenness, col = viridis(20))
-plot(degree, col = viridis(20))
+kaza <- shapefile("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
+plot(sqrt(betweenness), col = viridis(20))
+plot(kaza, add = T, border = "white")
+plot(sqrt(degree), col = viridis(20))
+plot(kaza, add = T, border = "white")
