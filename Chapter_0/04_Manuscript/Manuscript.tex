@@ -145,8 +145,8 @@ some minor routes remained outside formally protected areas.
 
 \noindent 4. Differences in permeability were mainly related to different
 degrees of human activities across regions, and to the presence or absence of
-rivers, swamps or open water. The relation between permeability and other
-landscape features was less evident.
+rivers, swamps or open water. The relationship between permeability and other
+landscape features was less pronounced.
 
 \noindent 5. \textit{Synthesis and Applications}: In this study, we showed how
 pertinent dispersal data of a highly mobile species can be used to empirically
@@ -455,7 +455,9 @@ LCPs and LCCs between source points using the R-package \textit{gdistance}
 (further details in Appendix A.7). After computation, we tallied overlapping
 LCPs and LCCs, respectively, into single connectivity maps. Because LCPs return
 discrete paths, whereas LCCs return continuous corridors, we present both
-methods.
+methods. R-codes showcasing the main steps for sections 2.5 to 2.6 can be
+downloaded from GitHub
+(\url{https://github.com/DavidDHofmann/LeastCostAnalysis}).
 
 \section{Results}
 \subsection{Dispersal Events}
@@ -689,21 +691,22 @@ vicinity. This behavior may be caused by the occurence of prey close to water
 spotted hyenas, and resident wild dogs may also use areas close to water
 \citep{Valeix.2010}, thereby occasionally forcing dispersing wild dogs to switch
 behavior and move into prey-poorer areas away from water \citep{Creel.2002,
-Mills.1997}. This reasoning may also explain the large confidence intervals
-surrounding the corresponding \(\beta\)-estimate. Given the influence that
-resident conspecifics, competitors, and prey can have on dispersers
-\citep{Cozzi.2018, Armansin.2019} future studies should strive to collect and
-incorporate intra- and interspecific relationships into analyses of landscape
-connectivity.
+Mills.1997}. This may explain the large confidence intervals for the
+corresponding \(\beta\)-estimate of \textit{distance to water}. Given the
+influence that resident conspecifics, competitors, and prey can have on
+dispersers \citep{Cozzi.2018, Armansin.2019} future studies should strive to
+collect and incorporate intra- and interspecific relationships into analyses of
+landscape connectivity.
 
 Overall, our findings on habitat selection during dispersal coincide with
-findings from dipsersing wild dogs in Kenya \citep{Oneill.2020}, suggesting that
-there are strong commonalities between dispersers from these very different
-ecosystems. Thus, despite wild dogs' ability to cope with diverse habitats and
-adapt to changing conditions \citep{Woodroffe.2011}, the fundamental factors
-included in our study appear to influence wild dogs from other ecosystems alike.
-Nevertheless, expanding our analysis to dispersers emigrating from other source
-populations would invaluably contribute to our understanding of dispersal.
+findings from dipsersing wild dogs in Kenya \citep{Oneill.2020} and Tanzania
+\citep{Masenga.2016}, suggesting that there are strong commonalities between
+dispersers from these very different ecosystems. Thus, despite wild dogs'
+ability to cope with diverse habitats and adapt to changing conditions
+\citep{Woodroffe.2011}, the fundamental factors included in our study appear to
+influence wild dogs from other ecosystems alike. Nevertheless, expanding our
+analysis to dispersers emigrating from other source populations would invaluably
+contribute to our understanding of dispersal.
 
 Locally, we identified the Okavango-Linyanti region as a potential dispersal hub
 through which dispersing wild dogs gain access to more peripheral regions of the
@@ -749,8 +752,10 @@ generate permeability surfaces \citep{Avgar.2016, Signer.2017}. Such surfaces
 have been shown to reduce the risk of overestimating \(w(x)\) and conesquently
 connectivity, particularly in areas that lie far from suitable habitats
 \citep{Signer.2017}. While a simulation-based approach is conceptually
-straightforward, computational requirements are high, especially for such a
-large extent as constituted by the KAZA-TFCA.
+straightforward, computational requirements for such a large spatial extent as
+the KAZA-TFCA are very high, making the use of this approach challenging. We
+urge future studies to optimize the simulation of corridors from iSSFs that
+capture a more mechanistic model of dispersal.
 
 Our work shows how dispersal data of a highly mobile species can be used to
 identify movement corridors and to assess the adequacy of protected areas. In
@@ -778,9 +783,9 @@ several stages and gave final approval for publication.
 
 \section{Data Availability}
 GPS movement data of dispersing coalitions will be made available on dryad at
-the time of publication. We will also provide example R-code on Github to
-demonstrate our least-cost modelling approach
-(\url{https://github.com/DavidDHofmann}).
+the time of publication. R-code showcasing the main steps for sections 2.5 to
+2.6 can be downloaded from GitHub
+(\url{https://github.com/DavidDHofmann/LeastCostAnalysis}).
 
 \section{Acknowledgements}
 We thank the Ministry of Environment and Tourism of Botswana for granting

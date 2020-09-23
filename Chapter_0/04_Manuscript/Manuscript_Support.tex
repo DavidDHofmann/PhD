@@ -153,10 +153,11 @@ protected areas, wildlife management
 %	Appendix S2: GPS Data
 %------------------------------------------------------------------------------
 \newpage
+\newgeometry{left=35mm,right=35mm,top=25mm,bottom=10mm,footskip=0pt}
 \section{GPS Data}
 \begin{figure}[hbtp]
   \begin{center}
-    \includegraphics[width = 0.86\textwidth]{99_Trajectories.pdf}
+    \includegraphics[width = 0.84\textwidth]{99_Trajectories.pdf}
     \caption{Illustration of all trajectories that we recorded. Each color
     represents a different dispersing coalition. All coalitions departed from
     the area which is indicated by the white dashed rectangle. The coalition
@@ -168,10 +169,12 @@ protected areas, wildlife management
 
 \begin{table}[hbtp]
   \caption{Summary statistics of all GPS relocations that have been recorded on
-  dispersing coalitions.}
+  dispersing coalitions. The coalition ID refers to the individual in the
+  dispersal coalition that was equipped with a GPS collar. All coalitions
+  consisted of same-sex individuals.}
   \label{GPSData}
   \begin{center}
-    \resizebox{\textwidth}{!}{
+    \resizebox{0.95\textwidth}{!}{
       \begin{tabular}{lccccccc}
       \toprule
       \parbox[]{2cm}{\centering Coalition ID} &
@@ -208,6 +211,7 @@ protected areas, wildlife management
     }
   \end{center}
 \end{table}
+\restoregeometry
 
 %------------------------------------------------------------------------------
 %	Appendix S3: Spatial Covariates
@@ -774,7 +778,8 @@ random}\) did not overlap.
 \begin{figure}[hbtp]
   \includegraphics[width = \textwidth]{99_RandomEffects}
   \caption{Plot of random effects showing variability across dispersal
-  coalitions.}
+  coalitions. The coalition ID refers to the individual in the dispersal
+  coalition that was equipped with a GPS collar.}
   \label{RandomEffects}
 \end{figure}
 

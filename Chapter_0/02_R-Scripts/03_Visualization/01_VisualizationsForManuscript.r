@@ -1641,6 +1641,10 @@ rfs$Covariate <- factor(rfs$Covariate, levels = c(
   , "Trees", "HumanInfluence"
 ))
 
+# # # Create running number for individuals
+# rfs$id <- as.numeric(as.factor(rfs$id))
+# rfs$id <- sprintf("%02d", rfs$id)
+
 # Visualize. Note that I am transforming the variance using mean - 2 *
 # sqrt(Variance). This was taken from here: https://stackoverflow.com/questions
 # /13847936/plot-random-effects-from-lmer-lme4-package-using-qqmath-or-dotplot-
@@ -1652,7 +1656,9 @@ p <- ggplot(rfs, aes(x = Mean, y = id)) +
       xmin = Mean - 2 * sqrt(Variance)
     , xmax = Mean + 2 * sqrt(Variance)
   ), colour = "black", height = 0) +
-  xlim(-2.1, 2.1)
+  xlim(-2.1, 2.1) +
+  labs(y = "Coalition ID") +
+  labs(x = expression(beta*"-Coefficient"))
 
 # Store the plot
 CairoPDF(
