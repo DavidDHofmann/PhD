@@ -428,14 +428,16 @@ surface spanning the entire extent of the KAZA-TFCA. That is, we applied
 for each raster cell. Because our representation of water was dynamic we
 collapsed all dynamic water maps into a single map using areas that were covered
 by water in at least 10\% of the cases. We used the resulting map to also
-calculate a layer returning the distance to water. To reduce the influence of
-outliers in predicted permeability scores, we followed \cite{Squires.2013} and
-curtailed predicted scores between the 1\textsuperscript{st} and
-99\textsuperscript{th} percentile of their original values. To compare
-permeability across different regions, we normalized the permeability surface to
-a range between 0 (most impermeable) and 1 (most permeable), and we determined
-median permeability within and outside the KAZA-TFCA, within and outside
-formally protected areas, and within each of the five KAZA-TFCA countries.
+calculate a layer returning the distance to water. Given that the delta only
+covers 6\% of the study extent, ignoring seasonality should introduce little
+bias in predicted permeability. To reduce the influence of outliers in predicted
+permeability scores, we followed \cite{Squires.2013} and curtailed predicted
+scores between the 1\textsuperscript{st} and 99\textsuperscript{th} percentile
+of their original values. To compare permeability across different regions, we
+normalized the permeability surface to a range between 0 (most impermeable) and
+1 (most permeable), and we determined median permeability within and outside the
+KAZA-TFCA, within and outside formally protected areas, and within each of the
+five KAZA-TFCA countries.
 
 \subsection{Least-Cost Paths and Corridors}
 To identify movement corridors of dispersing wild dogs, we specified source
@@ -474,14 +476,16 @@ alternative model; Table S4) retained the covariates \textit{water},
 \textit{human influence}, beside the fixed covariates \textit{cos(ta)},
 \textit{sl}, and \textit{log(sl)} (\Cref{PermeabilityResults}a). With respect to
 environmental covariates, dispersers avoided moving through water (\(\beta\) =
--0.53, 95\% CI -0.79 to -0.27) but selected for locations in its vicinity,
-although the latter effect was not significant (\(\beta\) = -0.33, 95\% CI =
--0.73 to 0.08). Dispersers avoided areas that were densely covered by trees
-(\(\beta\) = -0.31, CI = -0.47 to -0.15) and preferred areas covered by
-shrubs/grassland (\(\beta\) = 0.25, 95\% CI = 0.07 to 0.42). Finally, dispersers
-avoided areas that were influenced by humans (\(\beta\) = -0.45, 95\% CI = -0.82
-to -0.08). With the exepction of \textit{distance to water}, random effects
-revealed little variability between dispersal coalitions (Appendix A6).
+-0.53, 95\% CI -0.79 to -0.27, SD\textsubscript{RE} = 0.17) but selected for
+locations in its vicinity, although the latter effect was not significant
+(\(\beta\) = -0.33, 95\% CI = -0.73 to 0.08, SD\textsubscript{RE} = 0.57).
+Dispersers avoided areas that were densely covered by trees (\(\beta\) = -0.31,
+CI = -0.47 to -0.15, SD\textsubscript{RE} = 0.14) and preferred areas covered by
+shrubs/grassland (\(\beta\) = 0.25, 95\% CI = 0.07 to 0.42, SD\textsubscript{RE}
+\(<\) 0.01). Finally, dispersers avoided areas that were influenced by humans
+(\(\beta\) = -0.45, 95\% CI = -0.82 to -0.08, SD\textsubscript{RE} = 0.22). With
+the exepction of \textit{distance to water}, random effects revealed little
+variability between dispersal coalitions (Appendix A6).
 
 % The positive coefficient for \(cos(ta)\) (\(\beta\) = 0.10; 95\% CI = 0.05 to
 % 0.15) suggested that the uniform distribution for turning angles produced too

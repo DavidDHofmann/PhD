@@ -1598,6 +1598,10 @@ ranefs <- ranef(mod, condVar = T)
 coeffs$cond$id
 ranefs$cond$id
 
+# Calculate the SD of the REs
+apply(coeffs$cond$id, 2, sd)
+apply(ranefs$cond$id, 2, sd)
+
 # Note: ranef yields the difference between the individual specific effect and
 # the mean level effect. coef, on the other hand, yields the individual specific
 # effect. Thus, the followin two lines yield (approximately) the same
