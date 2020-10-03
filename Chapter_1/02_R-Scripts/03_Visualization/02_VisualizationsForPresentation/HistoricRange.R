@@ -66,7 +66,47 @@ strong <- rbind(disaggregate(dogs)[c(7, 19, 29), ])
 ################################################################################
 #### Plot
 ################################################################################
-# Prepare a map of Africa
+# Prepare a map of Africa (with KAZA)
+p1 <- tm_shape(africa2) +
+    tm_polygons(col = "gray70", border.col = "gray70", lwd = 2) +
+  tm_shape(africa) +
+    tm_polygons(
+        col = "black"
+      , lwd = 0.7
+      , border.col = "gray70"
+    ) +
+  tm_shape(historic) +
+    tm_polygons(
+        col = "orange"
+      , lwd = 0.7
+      , border.col = "black"
+      , alpha = 0.2
+    ) +
+  tm_shape(dogs) +
+    tm_polygons(
+        col           = "orange"
+      , alpha         = 0.8
+      , border.alpha  = 0
+    ) +
+  tm_shape(strong) +
+    tm_polygons(
+        col           = lighten("orange", 1.3)
+      , border.alpha  = 0
+    ) +
+  tm_shape(kaza) +
+    tm_borders(
+        col = "white"
+      , lwd = 4
+    ) +
+  tm_layout(
+      asp         = 0.8
+    , frame       = "white"
+    , frame.lwd   = 3
+    , legend.show = FALSE
+    , bg.color    = "white"
+)
+
+# Prepare a map of Africa (without KAZA)
 p1 <- tm_shape(africa2) +
     tm_polygons(col = "gray70", border.col = "gray70", lwd = 2) +
   tm_shape(africa) +
