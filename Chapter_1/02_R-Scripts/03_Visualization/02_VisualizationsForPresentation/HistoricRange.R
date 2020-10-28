@@ -8,6 +8,7 @@ rm(list = ls())
 
 # Set the working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
+wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -68,12 +69,12 @@ strong <- rbind(disaggregate(dogs)[c(7, 19, 29), ])
 ################################################################################
 # Prepare a map of Africa (with KAZA)
 p1 <- tm_shape(africa2) +
-    tm_polygons(col = "gray70", border.col = "gray70", lwd = 2) +
+    tm_polygons(col = "gray30", border.col = "gray50", lwd = 5) +
   tm_shape(africa) +
     tm_polygons(
-        col = "black"
+        col = "gray10"
       , lwd = 0.7
-      , border.col = "gray70"
+      , border.col = "gray30"
     ) +
   tm_shape(historic) +
     tm_polygons(
@@ -93,50 +94,16 @@ p1 <- tm_shape(africa2) +
         col           = lighten("orange", 1.3)
       , border.alpha  = 0
     ) +
-  tm_shape(kaza) +
-    tm_borders(
-        col = "white"
-      , lwd = 4
-    ) +
+  # tm_shape(kaza) +
+  #   tm_borders(
+  #       col = "white"
+  #     , lwd = 4
+  #   ) +
   tm_layout(
-      asp         = 0.8
-    , frame       = "white"
-    , frame.lwd   = 3
-    , legend.show = FALSE
-    , bg.color    = "white"
+      bg.color = "transparent"
+    , frame = F
 )
 
-# Prepare a map of Africa (without KAZA)
-p1 <- tm_shape(africa2) +
-    tm_polygons(col = "gray70", border.col = "gray70", lwd = 2) +
-  tm_shape(africa) +
-    tm_polygons(
-        col = "black"
-      , lwd = 0.7
-      , border.col = "gray70"
-    ) +
-  tm_shape(historic) +
-    tm_polygons(
-        col = "orange"
-      , lwd = 0.7
-      , border.col = "black"
-      , alpha = 0.2
-    ) +
-  tm_shape(dogs) +
-    tm_polygons(
-        col           = "orange"
-      , alpha         = 0.8
-      , border.alpha  = 0
-    ) +
-  tm_shape(strong) +
-    tm_polygons(
-        col           = lighten("orange", 1.3)
-      , border.alpha  = 0
-    ) +
-  tm_layout(
-      asp         = 0.8
-    , frame       = "white"
-    , frame.lwd   = 3
-    , legend.show = FALSE
-    , bg.color    = "white"
-)
+png("Historic1.png", width = 1080, height = 720, bg = "transparent", pointsize = 30)
+p1
+dev.off()
