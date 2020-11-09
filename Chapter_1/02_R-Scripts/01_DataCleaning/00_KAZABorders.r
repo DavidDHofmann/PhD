@@ -8,7 +8,7 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages

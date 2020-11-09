@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Cleaning and Preparing Tracks from GPS Fixes
-############################################################
+################################################################################
 # Description: In this script I put together all gps fixes, regardless of
 # whether an individual is a disperser or not. I then clean the data and add
 # additional information, such as dispersal dates and pack-affiliation.
@@ -9,7 +9,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
@@ -19,13 +19,16 @@ library(pbmcapply)  # To make use of multiple cores
 library(davidoff)   # Custom functions
 library(raster)     # To handle spatial data
 library(rgdal)      # To handle spatial data
+library(plotKML)    # To store the cleaned tracks to a kml
+library(spacetime)  # To store the cleaned tracks to a kml (required for slider)
+library(viridis)    # For nice colors
 
-############################################################
+################################################################################
 #### Data Source 1: POPECOL
-############################################################
+################################################################################
 # Identify all files containing GPS data
 files <- dir(
-    path        = "03_Data/01_RawData/POPECOL"
+    path        = "03_Data/01_RawData/POPECOL/01_GPS"
   , pattern     = "GPS_Collar"
   , full.names = T
 )
@@ -62,7 +65,7 @@ dat1 <- lapply(files, function(x){
       paste(UTC_Date, UTC_Time), tz = "UTC", format = "%d.%m.%Y %H:%M:%S")
     ) %>%
 
-    # Remove stuff like [°]
+    # Remove special characters like [°]
     setNames(gsub(names(.), pattern = " \\[*", replacement = "")) %>%
     setNames(gsub(names(.), pattern = "\\]", replacement = "")) %>%
 
@@ -95,8 +98,7 @@ range(dat1$Timestamp)
 # information about pack-affiliations
 collars <- read_csv2("03_Data/01_RawData/POPECOL/CollarSettings.csv") %>%
 
-  # Remove rows where the Dog Names are NA since these rows do not contain any
-  # useful information
+  # Remove rows where the Dog Names are NA
   subset(., !is.na(`Dog Name`)) %>%
 
   # Keep only the desired columns and rename them nicely. Note that we want to
@@ -112,10 +114,9 @@ collars <- read_csv2("03_Data/01_RawData/POPECOL/CollarSettings.csv") %>%
     , LastDate2 = `Last fix date`
   )
 
-# Looking at the table we can see that we are missing exact times for some of
-# the timestamps. This will cause errors when we convert those to posixct. We
-# Will therefore assign very conservative times (i.e. 24:00 for first dates,
-# 00:01 for last dates)
+# We are missing exact times for some of the timestamps. This will cause errors
+# when we convert those to posixct. We Will therefore assign very conservative
+# times (i.e. 24:00 for first dates, 00:01 for last dates)
 for (i in 1:nrow(collars)){
   if (!is.na(collars$FirstDate[i]) & nchar(collars$FirstDate[i]) == 10){
     collars$FirstDate[i] <- paste0(collars$FirstDate[i], " 24:00")
@@ -128,7 +129,7 @@ for (i in 1:nrow(collars)){
   }
 }
 
-# Taryn's collar number is also entered incorrectly
+# Taryn's collar number is wrong
 collars$CollarID[collars$DogName == "Taryn" & collars$CollarID == 22028] <- 20228
 
 # Now we can coerce the date columns to true dates. Note that we subtract two
@@ -196,7 +197,8 @@ ggplot(vis, aes(color = factor(CollarID))) +
   )
 
 # Maybe look at some in more detail
-ggplot(subset(vis, DogName == "Taryn"), aes(color = factor(CollarID))) +
+sub <- c("Taryn", "Abel")
+ggplot(subset(vis, DogName %in% sub), aes(color = factor(CollarID))) +
   geom_segment(
       aes(x = First, xend = Last, y = DogName, yend = DogName)
     , size = 10
@@ -208,7 +210,7 @@ ggplot(subset(vis, DogName == "Taryn"), aes(color = factor(CollarID))) +
 ################################################################################
 # We also want to import the GPS fixes provided by Abrahms. Note that I will not
 # clean this data anymore, as this is the cleaned data that Abrahms used for her
-# publication
+# publication. Her timestamps are in UTC already.
 dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
 
   # Remove rows with missing fixes
@@ -222,7 +224,8 @@ dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
     , Timestamp = `Timestamp`
   ) %>%
 
-  # Add all columns that are also in dat1
+  # Add columns that are also in dat1 (so we can bind the data afterwards). Note
+  # that all individuals from Abrahms are males.
   mutate(., CollarID = NA, DOP = NA, Sex = "M", Source = "Abrahms")
 
 ################################################################################
@@ -230,7 +233,8 @@ dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
 ################################################################################
 # Lastly, we retrieved fixes from the camp in Botswana that were collected prior
 # to own our project in Botswana. This is data from residents only! I only
-# include it for completeness. This data requires some intensive cleaning
+# include it for completeness. This data requires some intensive cleaning. Also
+# note that the data is in UTC already.
 files <- dir(
     path        = "03_Data/01_RawData/DOMINIK"
   , pattern     = ".txt$"
@@ -326,7 +330,7 @@ cut <- read_csv("03_Data/01_RawData/POPECOL/CutoffDates.csv") %>%
   # Make proper dates and subtract 2 hours
   mutate(
       StartDate = as.POSIXct(StartDate, tz = "UTC"
-        , format = "%d.%m.%Y %H:%M") - hours(2)
+      , format = "%d.%m.%Y %H:%M") - hours(2)
     , EndDate = as.POSIXct(EndDate, tz = "UTC"
       , format = "%d.%m.%Y %H:%M") - hours(2)
   ) %>%
@@ -340,6 +344,11 @@ cut <- cut %>%
   group_by(DogName) %>%
   mutate(DispersalNo = row_number()) %>%
   ungroup()
+
+# We can now check hof often each individual "dispersed"
+cut %>%
+  group_by(DogName) %>%
+  summarize(max(DispersalNo))
 
 # Store the merged cutoff dates
 write.csv(cut, "03_Data/02_CleanData/00_General_Dispersers_Popecol_CutoffDates.csv")
@@ -366,6 +375,13 @@ tail(data)
 
 # Check the number of data per individual
 table(data$DogName, data$State)
+
+# Note: For Abrahms individuals there is an overlap between data collected by
+# Abrahms and data collected by the Staff in Botswana (its actually the same
+# data). Because of a tiny mismatch in the timestamps they are not recognized as
+# duplicates. However, the coordinates align perfectly and the temporal mismatch
+# is minor. Thus, the issue will be resolved once we resample the data to a
+# coarser resolution.
 
 # ############################################################
 # #### Adding Pack Information
@@ -471,15 +487,15 @@ data$data <- suppressMessages(
 )
 data <- unnest(data)
 
-############################################################
-#### Store the Output
-############################################################
+################################################################################
+#### Store the Output (as csv and shapefile)
+################################################################################
 # Write the data to file
 write_csv(data, "03_Data/02_CleanData/00_General_Dispersers_Popecol.csv")
 
-# Create a shapefile for visualization
+# Create SpatialLinesDataFrame for visualization
 data <- data %>% group_by(DogName) %>% nest()
-tracks <- suppressMessages(
+data$Tracks <- suppressMessages(
   pbmclapply(1:nrow(data)
     , ignore.interactive = T
     , mc.cores = detectCores() - 1
@@ -493,15 +509,108 @@ tracks <- suppressMessages(
       lines <- createSegments(lines)
       lines <- as(lines, "SpatialLinesDataFrame")
       lines@data <- x@data[1:(nrow(x) - 1), ]
+      crs(lines) <- CRS("+init=epsg:4326")
       return(lines)
     }
-  ) %>% do.call(rbind, .)
+  )
 )
 
-# Store them
+# Create SpatialPointsDataFrame for visualization
+data$Points <- lapply(data$data, function(x){
+  coordinates(x) <- c("x", "y")
+  crs(x) <- CRS("+init=epsg:4326")
+  return(x)
+})
+
+# Store shapefile
+tracks <- do.call(rbind, data$Tracks)
 writeOGR(tracks
   , dsn       = "03_Data/02_CleanData"
   , layer     = "00_General_Dispersers_Popecol"
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
+
+################################################################################
+#### Create KML Files
+################################################################################
+# We may also want to create kml files for visualization in google earth. Let's
+# first point to the shapes visualized in google earth.
+shape1 <- "http://maps.google.com/mapfiles/kml/shapes/placemark_circle.png"
+shape2 <- "http://maps.google.com/mapfiles/kml/shapes/square.png"
+
+# Prepare a folder into which we will store the kmls
+dir.create("03_Data/02_CleanData/00_KML")
+
+# Loop through the individuals and prepare kml files for them
+lapply(1:nrow(data), function(x){
+
+  # Access required data
+  name    <- data$DogName[[x]]
+  points  <- data$Points[[x]]
+  track   <- data$Tracks[[x]]
+
+  # Identify start and endpoints
+  first <- as(points[1, ], "SpatialPoints")
+  last  <- as(points[nrow(points), ], "SpatialPoints")
+
+  # Make row-names valid
+  row.names(points) <- as.character(1:nrow(points))
+  row.names(track) <- as.character(1:nrow(track))
+
+  # Create spacetime object from points
+  points_st <-STIDF(
+      sp   = as(points, "SpatialPoints")
+    , time = points$Timestamp
+    , data = points@data
+  )
+
+  # Create spacetime object from track
+  track_st <- STIDF(
+      sp   = as(track, "SpatialLines")
+    , time = track$Timestamp
+    , data = track@data
+  )
+
+  # Generate a name for the kml file
+  filename <- paste0("03_Data/02_CleanData/00_KML/", name, ".kml")
+
+  # Generate kml file (note that for some individuals we can't produce an
+  # info-table because there are too many GPS fixes)
+  kml_open(filename)
+  kml_layer(first
+    , colour     = "green"
+    , size       = 1
+    , shape      = shape2
+    , LabelScale = 0
+  )
+  kml_layer(last
+    , colour     = "red"
+    , size       = 1
+    , shape      = shape2
+    , LabelScale = 0
+  )
+  kml_layer(track_st
+    , colour       = State
+    , colour_scale = rev(viridis(2, begin = 0.6))
+    , width        = 2.5
+  )
+  tryCatch(kml_layer(points_st
+    , colour       = State
+    , colour_scale = rev(viridis(2, begin = 0.6))
+    , size         = 0.75
+    , balloon      = T
+    , shape        = shape
+    , LabelScale   = 0
+  ), error = function(e){
+    kml_layer(points_st
+      , colour       = State
+      , colour_scale = rev(viridis(2, begin = 0.6))
+      , size         = 0.75
+      , balloon      = F
+      , shape        = shape
+      , LabelScale   = 0
+    )
+  })
+  kml_close(filename)
+})

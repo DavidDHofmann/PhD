@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of Major Water Areas
-############################################################
+################################################################################
 # Description: Preparation of a shapefile of all major water areas. This might
 # be handy for a nice plot
 
@@ -8,7 +8,7 @@
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -28,7 +28,7 @@ object5 <- water[grepl(water@data$name, pattern = "Lake.*Ngami"), ]
 water <- rbind(object1, object2, object3, object4, object5)
 
 # Visualize them
-plot(water, col = "lightblue")
+plot(water, col = "lightblue", border = "lightblue")
 
 # Store the file
 writeOGR(

@@ -8,7 +8,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # load packages
@@ -30,6 +30,9 @@ africa <- gBuffer(africa, width = 0, byid = TRUE)
 
 # Check again
 gIsValid(africa)
+
+# Visualize
+plot(africa)
 
 # Now save the projected file to our data folder
 writeOGR(africa

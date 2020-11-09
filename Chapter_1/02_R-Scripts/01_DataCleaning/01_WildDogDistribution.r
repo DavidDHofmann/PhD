@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of the Wild Dog Distribution Data
-############################################################
+################################################################################
 # Description: Preparation of a shapefile depicting the current spatial
 # distribution of wild dogs.
 
@@ -8,7 +8,7 @@
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages

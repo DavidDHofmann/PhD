@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of a Reference Shapefile
-############################################################
+################################################################################
 # Description: Here I create a reference shapefile according to which I will
 # crop all the other shapefiles. This is comparable to the reference raster, yet
 # for vector data. I will thus use the reference raster to define the spatial
@@ -10,7 +10,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages

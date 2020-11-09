@@ -10,7 +10,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
@@ -110,9 +110,15 @@ prot_r <- terra::rasterize(
   , background  = 0
 )
 
+# Coerce back to regular raster
+prot_r <- raster(prot_r)
+
+# Visualize
+plot(prot_r)
+
 # Convert to raster and store
 writeRaster(
-    x         = raster(prot_r)
+    x         = prot_r
   , filename  = "03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks.tif"
   , overwrite = T
 )
