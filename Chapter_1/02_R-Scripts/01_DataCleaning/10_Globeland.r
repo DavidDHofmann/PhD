@@ -17,8 +17,7 @@ library(raster)     # To handle raster data
 library(terra)      # To handle raster data
 library(rgdal)      # To handle spatial data
 library(gdalUtils)  # To stitch raster tiles
-library(parallel)   # To use multiple cores
-library(davidoff)   # Custom functions
+library(tidyverse)  # For data wrangling
 
 ################################################################################
 #### Stitching the Tiles
@@ -65,17 +64,17 @@ gdal_translate(
 # Load the merged file
 merged <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 
-# Load the reference shapefile
-s <- vect("03_Data/02_CleanData/00_General_Shapefile.shp")
+# Load the reference raster
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Crop the merged globeland tiles to our extent
-merged <- crop(merged, s, snap = "out")
+merged <- crop(merged, r, snap = "out")
 
 # Prepare classes. Note that I'm going to use the same class description and
 # codes as for the copernicus dataset.
-classes <- data.frame(
-    CodesOld = c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 255)
-  , DescriptionOld = c(
+info <- data.frame(
+    Code = c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 255)
+  , Class = c(
       "CultivatedLand"
     , "Forest"
     , "Grassland"
@@ -88,8 +87,8 @@ classes <- data.frame(
     , "PermanentIceSnow"
     , "NA"
   )
-  , CodesNew = c(3, 4, 6, 5, 1, 1, 6, 2, 7, 7, 0)
-  , DescriptionNew = c(
+  , CodeNew = c(3, 4, 6, 5, 1, 1, 6, 2, 7, 7, 0)
+  , ClassNew = c(
       "Cropland"
     , "Forest"
     , "Grassland"
@@ -104,35 +103,49 @@ classes <- data.frame(
   )
 )
 
-# Prepare a reclassification matrix
-rcl <- data.frame(old = classes[, 1], new = classes[, 3])
+# Arrange
+info <- arrange(info, CodeNew)
 
-# Run the reclassification
+# Assign a color to the new classes
+info$Color[info$CodeNew == 0] <- "transparent"
+info$Color[info$CodeNew == 1] <- "blue"
+info$Color[info$CodeNew == 2] <- "red"
+info$Color[info$CodeNew == 3] <- "pink"
+info$Color[info$CodeNew == 4] <- "darkgreen"
+info$Color[info$CodeNew == 5] <- "orange"
+info$Color[info$CodeNew == 6] <- "beige"
+info$Color[info$CodeNew == 7] <- "grey"
+
+# Reclassify raster
+rcl <- dplyr::select(info, c(Code, CodeNew))
 new <- classify(merged, rcl)
 
-# Aggregate the layer to 250m
+# Aggregate to 250m
 coarse <- aggregate(new, fact = round(250 / 30), fun = modal)
 
-# We will also need to resample the raster to our reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
-
-# Resample the globeland layer to the reference raster
-coarse <- resample(coarse, r, method = "ngb")
+# Resample to reference raster
+coarse <- resample(coarse, r, method = "near")
 
 # Visualize it
-plot(coarse)
+plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
 
-# Store aggregated layer to file
+# Store the raster
 writeRaster(
-    x         = coarse
+    x         = raster(coarse)
   , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.tif"
   , overwrite = TRUE
 )
 
-# Store layer for water seperately
+# Also store the water-cover layer seperately
 water <- coarse == 1
 writeRaster(
-    x         = water
+    x         = raster(water)
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif"
   , overwrite = TRUE
 )
+
+# Store the information table
+info %>%
+  dplyr::select(, Class = ClassNew, Code = CodeNew, Color) %>%
+  distinct() %>%
+  write_csv("03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.csv")

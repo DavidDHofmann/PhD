@@ -12,10 +12,9 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
-library(terra)
-library(raster)
-library(sp)
-library(tidyverse)
+library(terra)      # To handle rasters
+library(raster)     # To handle rasters
+library(tidyverse)  # For data wrangling
 
 # Load the data
 dat <- dir(
@@ -32,6 +31,13 @@ dat <- do.call(merge, dat)
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 dat <- crop(dat, r, snap = "out")
 
+# Store the merged object to file
+writeRaster(
+    x         = raster(dat)
+  , filename  = "03_Data/01_RawData/COPERNICUS/Copernicus.tif"
+  , overwrite = T
+)
+
 # Load land cover classes
 info <- read_csv("03_Data/01_RawData/COPERNICUS/LandCoverClasses.csv")
 info <- arrange(info, Code)
@@ -43,7 +49,14 @@ info <- subset(info, Code %in% vals[, 2])
 # Prepare reclassification table
 info$ClassNew <- info$Class
 info$ClassNew[info$Code >= 111 & info$Code <= 126] <- "Forest"
-info$ClassNew[info$Code == 90] <- "Permanent water bodies"
+info$ClassNew[info$Code == 0] <- "NA"
+info$ClassNew[info$Code == 20] <- "Shrubs"
+info$ClassNew[info$Code == 30] <- "Grassland"
+info$ClassNew[info$Code == 40] <- "Cropland"
+info$ClassNew[info$Code == 50] <- "Urban"
+info$ClassNew[info$Code == 60] <- "Bare"
+info$ClassNew[info$Code == 80] <- "Water"
+info$ClassNew[info$Code == 90] <- "Water"
 
 # Create new codes
 info$CodeNew <- NA
@@ -77,14 +90,14 @@ dat <- classify(dat, rcl)
 coarse <- aggregate(dat, fact = round(250 / 110), fun = modal)
 
 # Resample to reference raster
-coarse <- resample(coarse, r, method = "ngb")
+coarse <- resample(coarse, r, method = "near")
 
 # Visualize it
 plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
 
 # Store the raster
 writeRaster(
-    x         = coarse
+    x         = raster(coarse)
   , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.tif"
   , overwrite = T
 )
@@ -92,7 +105,7 @@ writeRaster(
 # Also store the water-cover layer seperately
 water <- coarse == 1
 writeRaster(
-    x         = water
+    x         = raster(water)
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif"
   , overwrite = T
 )

@@ -8,16 +8,14 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
 library(raster)     # To handle raster data
+library(terra)      # To handle raster data
 library(rgdal)      # To handle vector data
 library(davidoff)   # Custom functions
-
-# Make use of multicore abilities
-beginCluster()
 
 ################################################################################
 #### Merging and Cropping the Files
@@ -29,19 +27,22 @@ files <- dir(
   , full.names = T
 )
 
-# Load them
+# Load and merge them (merge appears to fail in terra due to origin issues)
 pop <- lapply(files, raster)
 pop <- do.call(merge, pop)
 
+# Coerce to terra raster
+pop <- rast(pop)
+
 # Load the reference shapefile
-s <- readOGR("03_Data/02_CleanData/00_General_Shapefile.shp")
+s <- vect("03_Data/02_CleanData/00_General_Shapefile.shp")
 
 # Crop the merged file to our extent
 pop <- crop(pop, s)
 
 # Store the result to file
 writeRaster(
-    x         = pop
+    x         = raster(pop)
   , filename  = "03_Data/01_RawData/FACEBOOK/PopulationDensity.tif"
   , overwrite = TRUE
 )
@@ -50,20 +51,14 @@ writeRaster(
 coarse <- aggregate(pop, fact = round(250 / 30), fun = sum)
 
 # Finally we need to resample the layer. Lets load the reference raster
-r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Resample the population density layer to the reference raster
 coarse <- resample(coarse, r, "bilinear")
 
-# Replace NAs with 0s
-coarse <- reclassify(coarse, rcl = c(NA, NA, 0))
-
 # Store the result
 writeRaster(
-    x         = coarse
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanDensity_Facebook.tif"
+    x         = raster(coarse)
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanDensity_FACEBOOK.tif"
   , overwrite = TRUE
 )
-
-# End cluster
-endCluster()

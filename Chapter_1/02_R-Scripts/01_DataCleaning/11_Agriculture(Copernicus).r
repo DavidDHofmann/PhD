@@ -1,7 +1,7 @@
 ################################################################################
-#### Resampling and Cropping of the Globeland Agriculture Data
+#### Resampling and Cropping of the Copernicus Agriculture Data
 ################################################################################
-# Description: We can use globeland's agricultural fields to augment our
+# Description: We can use copernicus's agricultural fields to augment our
 # croplands layer. In this script I therefore extract agricultural fields so we
 # can merge them.
 
@@ -17,10 +17,10 @@ library(raster)   # To handle raster data
 library(terra)    # To handle raster data
 
 # Import the Globelands dataset
-crops <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
+crops <- rast("03_Data/01_RawData/COPERNICUS/Copernicus.tif")
 
 # Keep only crops
-crops <- crops == 10
+crops <- crops == 40
 
 # Load the reference raster
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
@@ -35,6 +35,6 @@ crops_res <- resample(crops, r, "near")
 # Save the result to file
 writeRaster(
     x         = raster(crops_res)
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GLOBELANDS.tif"
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_COPERNICUS.tif"
   , overwrite = TRUE
 )
