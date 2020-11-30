@@ -1,4 +1,3 @@
-
 ################################################################################
 #### Plot Source Areas and Source Points
 ################################################################################
@@ -8,13 +7,14 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
+wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
 library(tidyverse)  # For data wrangling
 library(lubridate)  # To handle dates nicely
 library(ggpubr)     # For nice plots
+library(rgdal)      # To load spatial data
 
 # Load required data
 areas1  <- readOGR("03_Data/03_Results/99_SourceAreas.shp")

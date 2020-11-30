@@ -21,6 +21,7 @@ library(lemon)      # For nice axis labels
 library(imager)     # To import images
 library(viridis)    # For nice colors
 library(raster)     # To create rasters (visInt)
+library(ggdark)     # Dark ggplot theme
 
 ################################################################################
 #### Prepare Data
@@ -58,7 +59,7 @@ coeffs$Significance <- sapply(1:nrow(coeffs), function(x){
 
 # Rename covariates
 coeffs$Covariate[coeffs$Covariate == "Shrubs"] <- "Shrubs/Grassland"
-coeffs$Covariate[coeffs$Covariate == "Trees"] <- "Trees"
+coeffs$Covariate[coeffs$Covariate == "Trees"] <- "Woodland"
 coeffs$Covariate[coeffs$Covariate == "Water"] <- "Water"
 coeffs$Covariate[coeffs$Covariate == "DistanceToWater"] <- "DistanceToWater"
 coeffs$Covariate[coeffs$Covariate == "cos_ta_"] <- "cos(ta)"
@@ -66,7 +67,7 @@ coeffs$Covariate[coeffs$Covariate == "log_sl_"] <- "log(sl)"
 coeffs$Covariate[coeffs$Covariate == "HumansBuff5000"] <- "HumanInfluence"
 coeffs$Covariate[coeffs$Covariate == "log_sl_:ActivityMainActivity"] <- "log(sl):MainActivity"
 coeffs$Covariate[coeffs$Covariate == "log_sl_:Water"] <- "log(sl):Water"
-coeffs$Covariate[coeffs$Covariate == "log_sl_:Trees"] <- "log(sl):Trees"
+coeffs$Covariate[coeffs$Covariate == "log_sl_:Trees"] <- "log(sl):Woodland"
 coeffs$Covariate[coeffs$Covariate == "cos_ta_:DistanceToWater"] <- "cos(ta):DistanceToWater"
 coeffs$Covariate[coeffs$Covariate == "cos_ta_:HumansBuff5000"] <- "cos(ta):HumanInfluence"
 coeffs$Preference <- ifelse(coeffs$Coefficient > 0, "Preferred", "Avoided")
@@ -76,60 +77,64 @@ coeffs$Preference <- factor(coeffs$Preference, levels = c("Preferred", "Avoided"
 order <- c(
       "Water"
     , "DistanceToWater"
-    , "Trees"
+    , "Woodland"
     , "Shrubs/Grassland"
     , "HumanInfluence"
-    , "cos(ta)"
     , "cos(ta):HumanInfluence"
     , "cos(ta):DistanceToWater"
-    , "log(sl)"
-    , "log(sl):MainActivity"
+    # , "log(sl):MainActivity"
     , "log(sl):Water"
-    , "log(sl):Trees"
+    , "log(sl):Woodland"
+    , "log(sl)"
+    , "cos(ta)"
 )
 
 # Specify colors of axis labels
 labcols <- c("black", "orange")[c(2, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 2)]
 
+# Let's ignore "main activity" for the moment
+coeffs <- subset(coeffs, Covariate != "log(sl):MainActivity")
+
 # Prepare plot with Covariates on the y-axis and the corresponding
 # coefficients on the x-axis
 p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
-  geom_point(shape = 1, size = 2) +
+  geom_point(shape = 20, size = 2) +
   geom_errorbarh(aes(
       xmin = Coefficient - 1.96 * SE
     , xmax = Coefficient + 1.96 * SE
-    , height = 0.2)
+    , height = 0)
   ) +
   geom_text(aes(label = Significance, hjust = 0.5, vjust = -0.2), show.legend = F) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "darkgrey") +
   scale_y_discrete(limits = rev(order)) +
-  theme_cowplot() +
-  xlim(c(-2, 2)) +
+  # theme_cowplot() +
+  xlim(c(-1.2, 1.2)) +
   coord_capped_cart(left = "both", bottom = "both") +
   labs(x = expression(beta*"-Coefficient")) +
-  scale_color_manual(values = c("orange", "black")) +
+  # scale_color_manual(values = c("#548CBE", "#FFA500")) +
+  scale_color_manual(values = c("#5B9BD5", "orange")) +
+  dark_theme_classic() +
   theme(
-      panel.grid.minor = element_line(size = 0.0)
-    , panel.grid.major = element_line(size = 0.0)
-    , panel.border     = element_blank()
-    , axis.line        = element_line()
-    , axis.ticks       = element_line(colour = "black")
+    #   panel.grid.minor = element_line(size = 0.0)
+    # , panel.grid.major = element_line(size = 0.0)
+    # , panel.border     = element_blank()
+    # , axis.line        = element_line()
+    # , axis.ticks       = element_line(colour = "black")
     , legend.title     = element_blank()
     # , axis.text.y      = element_text(color = rev(labcols))
   )
 
 # Load a picture of a wild dog to the plot
-dog <- load.image("/home/david/ownCloud/University/15. PhD/General/Images/WildDog_Running.svg")
+# dog <- load.image("/home/david/ownCloud/University/15. PhD/General/Images/WildDog_Running.svg")
 
 # Add it to the previous plot
-p <- ggdraw() +
-  draw_image(dog, x = 0.9, y = 0.7, hjust = 0.5, vjust = 0.5, scale = 0.2) +
-  draw_plot(p1)
+# p <- ggdraw() +
+#   draw_image(dog, x = 0.9, y = 0.7, hjust = 0.5, vjust = 0.5, scale = 0.2) +
+#   draw_plot(p1)
 
-# # Store the plot
+# Store the plot
 # CairoPDF("test.pdf", width = 8, height = 5, bg = "transparent")
-# p
-# dev.off()
+ggsave("test.png", device = "png", width = 10, height = 5, scale = 0.65)
 
 ################################################################################
 #### Interactions
@@ -142,20 +147,20 @@ summary(best)
 
 # Visualize them
 visInt(best, xVar = "log_sl_", yVar = "Water", colorPalette = pal)
-visInt(best, xVar = "log_sl_", yVar = "Trees", colorPalette = pal)
+visInt(best, xVar = "log_sl_", yVar = "Woodland", colorPalette = pal)
 visInt(best, xVar = "cos_ta_", yVar = "DistanceToWater", colorPalette = pal)
 visInt(best, xVar = "cos_ta_", yVar = "HumansBuff5000", colorPalette = pal)
 
 # Prepare visualizations using raster
 int1 <- visInt2(best, yVar = "log_sl_", xVar = "Water")
-int2 <- visInt2(best, yVar = "log_sl_", xVar = "Trees")
+int2 <- visInt2(best, yVar = "log_sl_", xVar = "Woodland")
 int3 <- visInt2(best, yVar = "cos_ta_", xVar = "DistanceToWater")
 int4 <- visInt2(best, yVar = "cos_ta_", xVar = "HumansBuff5000")
 
 # Visualize using raster
 par(mfrow = c(2, 2))
 plot(int1, col = pal(20), ylab = "log_sl_", xlab = "Water")
-plot(int2, col = pal(20), ylab = "log_sl_", xlab = "Trees")
+plot(int2, col = pal(20), ylab = "log_sl_", xlab = "Woodland")
 plot(int3, col = pal(20), ylab = "cos_ta_", xlab = "DistanceToWater")
 plot(int4, col = pal(20), ylab = "cos_ta_", xlab = "HumansBuff5000")
 
@@ -211,7 +216,7 @@ rfs$Covariate <- gsub(rfs$Covariate, pattern = "HumansBuff5000", replacement = "
 # Make covariates a factor
 rfs$Covariate <- factor(rfs$Covariate, levels = c(
   "cos(ta)", "sl", "log(sl)", "Water", "DistanceToWater", "Shrubs"
-  , "Trees", "HumanInfluence"
+  , "Woodland", "HumanInfluence"
 ))
 
 # Visualize. Note that I am transforming the variance using mean - 2 *

@@ -26,7 +26,7 @@ dat <- dir(
 dat <- lapply(dat, rast)
 
 # Merge the tiles
-dat <- merge(dat[[1]], dat[[2]], dat[[3]], dat[[4]])
+dat <- do.call(merge, dat)
 
 # Crop the data to our study area
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
@@ -63,23 +63,26 @@ info <- arrange(info, CodeNew)
 info$Color[info$CodeNew == 0] <- "transparent"
 info$Color[info$CodeNew == 1] <- "blue"
 info$Color[info$CodeNew == 2] <- "red"
-info$Color[info$CodeNew == 3] <- "beige"
+info$Color[info$CodeNew == 3] <- "pink"
 info$Color[info$CodeNew == 4] <- "darkgreen"
 info$Color[info$CodeNew == 5] <- "orange"
-info$Color[info$CodeNew == 6] <- "grey"
-info$Color[info$CodeNew == 7] <- "white"
+info$Color[info$CodeNew == 6] <- "beige"
+info$Color[info$CodeNew == 7] <- "grey"
 
 # Reclassify raster
 rcl <- dplyr::select(info, c(Code, CodeNew))
 dat <- classify(dat, rcl)
 
+# Aggregate to 250 meters
+coarse <- aggregate(dat, fact = round(250 / 110), fun = modal)
+
 # Visualize it
-plot(raster(dat), col = unique(info$Color), breaks = unique(info$CodeNew) - 1)
+plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
 
 # Store the raster
 writeRaster(
-    x         = dat
-  , filename  = "03_Data/02_CleanData/03_LandscapeFeatures_LandCover_COPERNICUS.tif"
+    x         = coarse
+  , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.tif"
   , overwrite = T
 )
 
@@ -87,4 +90,4 @@ writeRaster(
 info %>%
   dplyr::select(, Class = ClassNew, Code = CodeNew, Color) %>%
   distinct() %>%
-  write_csv("03_Data/02_CleanData/03_LandscapeFeatures_LandCover_COPERNICUS.csv")
+  write_csv("03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.csv")

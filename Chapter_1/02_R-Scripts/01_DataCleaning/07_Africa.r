@@ -37,7 +37,7 @@ plot(africa)
 # Now save the projected file to our data folder
 writeOGR(africa
   , dsn       = "03_Data/02_CleanData"
-  , layer     = "00_General_Africa"
+  , layer     = "00_General_Africa_ESRI"
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )

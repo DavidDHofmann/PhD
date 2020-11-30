@@ -170,3 +170,65 @@ plot(
 )
 text(metrics[[2]], col = colTrans("white", percent = 50))
 dev.off()
+
+################################################################################
+#### "Simulated" Movement
+################################################################################
+# Generate raster
+n <- 100
+r <- raster(ncol = n, nrow = n, vals = 1:(n ** 2), xmn = 0, xmx = n, ymn = 0, ymx = n)
+
+# Create two circles
+library(rgeos)
+circle1 <- gBuffer(SpatialPoints(matrix(c(20, 50), ncol = 2)), width = 10, quadsegs = 50)
+circle2 <- gBuffer(SpatialPoints(matrix(c(80, 50), ncol = 2)), width = 10, quadsegs = 50)
+circle1 <- as(circle1, "SpatialPolygonsDataFrame")
+circle2 <- as(circle2, "SpatialPolygonsDataFrame")
+circles <- rbind(circle1, circle2)
+
+# Create corridor
+corr <- as(extent(c(20, 80, 45, 55)), "SpatialPolygons") - circles
+
+# Create paths
+createPath <- function(){
+  points1 <- spsample(circle1, 20, type = "random")
+  points2 <- SpatialPoints(arrange(as.data.frame(coordinates(spsample(corr, 10, type = "random"))), x))
+  points3 <- spsample(circle2, 20, type = "random")
+  return(spLines(rbind(points1, points2, points3)))
+}
+path <- createPath()
+
+# Extract visitation history
+rx <- aggregate(r, fact = 2)
+values(rx) <- 1:ncell(rx)
+plot(rx)
+hist <- visitHist(path, rx)
+
+# Generate graph
+graph <- graph_from_data_frame(hist, vertices = 1:ncell(rx))
+lay <- as.matrix(as.data.frame(r, xy = T)[, c("x", "y")])
+is.weighted(graph)
+
+# Apply the function to our data
+metrics <- netMet(network = graph, raster = rx, metrics = c("betweenness", "degree"))
+betw <- metrics[["betweenness"]]
+
+# Plot
+png("test1.png", width = 1080, height = 1080, bg = "transparent")
+plot(r, col = "black", box = F, axes = F, horizontal = T, legend.width = 2)
+plot(circle1, add = T, border = "gray60", lty = 2, lwd = 4)
+plot(circle2, add = T, border = "gray60", lty = 2, lwd = 4)
+plot(corr, add = T, border = "gray60", lty = 2, lwd = 4)
+plot(path, add = T, col = "orange", lwd = 4)
+dev.off()
+
+# Visualize
+png("test2.png", width = 1080, height = 1080, bg = "transparent")
+plot(betw, col = magma(20), box = F, axes = F, horizontal = T, legend.width = 2)
+# plot(path, add = T, col = "black")
+dev.off()
+
+# Can we extrapolate?
+test <- metrics[["betweenness"]]
+test <- disaggregate(test, fact = 4, method = "bilinear")
+plot(test, col = magma(20))

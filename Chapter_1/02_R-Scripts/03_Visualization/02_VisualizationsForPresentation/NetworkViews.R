@@ -43,24 +43,29 @@ lay2  <- as.matrix(as.data.frame(r, xy = T)[, c(1, 2)])
 r <- as(r, "SpatialPolygons")
 
 # Visualize Option 1
-plot(areas, border = "gray50")
+png("test1.png", width = 1080, height = 1080, bg = "transparent")
+plot(areas, col = "gray30", border = "gray50", bg = "transparent", lwd = 3)
+plot(kaza, add = T, border = "gray80", lwd = 5)
 plot(
     net1
   , layout       = lay1
-  , vertex.size  = 12
+  , vertex.size  = 18
   , vertex.label = NA
   , add          = T
   , rescale      = F
 )
+dev.off()
 
 # Visualize Option 2
-plot(r, border = "gray50")
-plot(kaza, add = T)
+png("test2.png", width = 1080, height = 1080, bg = "transparent")
+plot(r, col = "gray30", border = "gray50", bg = "transparent", lwd = 3)
+plot(kaza, add = T, border = "gray80", lwd = 5)
 plot(
     net2
   , layout       = lay2
-  , vertex.size  = 12
+  , vertex.size  = 15
   , vertex.label = NA
   , add          = T
   , rescale      = F
 )
+dev.off()

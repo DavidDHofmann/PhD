@@ -84,7 +84,7 @@ legend("topleft", legend = u, col = pal, pch = 19)
 # Store the layer
 writeOGR(prot
   , "03_Data/02_CleanData"
-  , "02_LandUseTypes_Protected_PeaceParks"
+  , "02_LandUse_Protected_PEACEPARKS"
   , driver = "ESRI Shapefile"
   , overwrite = TRUE
 )
@@ -119,6 +119,6 @@ plot(prot_r)
 # Convert to raster and store
 writeRaster(
     x         = prot_r
-  , filename  = "03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks.tif"
+  , filename  = "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.tif"
   , overwrite = T
 )

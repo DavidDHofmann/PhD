@@ -351,7 +351,7 @@ cut %>%
   summarize(max(DispersalNo))
 
 # Store the merged cutoff dates
-write.csv(cut, "03_Data/02_CleanData/00_General_Dispersers_Popecol_CutoffDates.csv")
+write.csv(cut, "03_Data/02_CleanData/00_General_CutoffDates_POPECOL.csv")
 
 # We can use the table to create a new column that indicates the state of the
 # animal. By default we say that our individuals are resident.
@@ -491,7 +491,7 @@ data <- unnest(data)
 #### Store the Output (as csv and shapefile)
 ################################################################################
 # Write the data to file
-write_csv(data, "03_Data/02_CleanData/00_General_Dispersers_Popecol.csv")
+write_csv(data, "03_Data/02_CleanData/00_General_Dispersers_POPECOL.csv")
 
 # Create SpatialLinesDataFrame for visualization
 data <- data %>% group_by(DogName) %>% nest()
@@ -526,7 +526,7 @@ data$Points <- lapply(data$data, function(x){
 tracks <- do.call(rbind, data$Tracks)
 writeOGR(tracks
   , dsn       = "03_Data/02_CleanData"
-  , layer     = "00_General_Dispersers_Popecol"
+  , layer     = "00_General_Dispersers_POPECOL"
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )

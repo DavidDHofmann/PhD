@@ -33,7 +33,7 @@ sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
 
 # Subset to simulations of interest
 sims <- subset(sims
-  , StepNumber    <= 200
+  , StepNumber    <= 500
   & PointSampling == "Static"
 )
 
@@ -222,7 +222,7 @@ stackMet <- function(
 #### TESTING: SINGLE TRJAJECTORIES
 ################################################################################
 # Select an index
-i <- 2000
+i <- 2500
 
 # Extract first trajectory
 traj <- visits$data[[i]]
@@ -244,6 +244,7 @@ mets <- netMet(network = graph, raster = r10000)
 
 # Visualize them
 plot(mets)
+plot(mets[[1]])
 
 ################################################################################
 #### TESTING: WEIGHTS VS NO WEIGHTS
@@ -286,6 +287,11 @@ is_weighted(net_ww1)
 is_weighted(net_ww2)
 is_weighted(net_nw)
 
+# Check if connected
+is_connected(net_ww1)
+is_connected(net_ww2)
+is_connected(net_nw)
+
 # Calculate metrics
 res_ww1 <- netMet(network = net_ww1, raster = r10000)
 res_ww2 <- netMet(network = net_ww2, raster = r10000)
@@ -297,7 +303,6 @@ centralization.betweenness(net_ww2)$centralization
 centralization.betweenness(net_nw)$centralization
 
 # Compare results
-getwd()
 par(mfrow = c(2, 2))
 plot(sqrt(res_ww1[["betweenness"]]), col = viridis(20), main = "With Weights fun 1")
 plot(sqrt(res_ww2[["betweenness"]]), col = viridis(20), main = "With Weights fun 2")
@@ -307,6 +312,11 @@ par(mfrow = c(2, 2))
 plot(sqrt(res_ww1[["degree"]]), col = viridis(20), main = "With Weights fun 1")
 plot(sqrt(res_ww2[["degree"]]), col = viridis(20), main = "With Weights fun 2")
 plot(sqrt(res_nw[["degree"]]), col = viridis(20), main = "Without Weights")
+
+# Plot betweenness against degree
+par(mfrow = c(1, 2))
+plot(sqrt(res_ww2[["betweenness"]]), col = viridis(20), main = "With Weights fun 2")
+plot(sqrt(res_ww2[["degree"]]), col = viridis(20), main = "With Weights fun 2")
 
 ################################################################################
 #### Approach I: Calculate Network Metrics Over All Trajectories

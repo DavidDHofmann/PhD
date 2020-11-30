@@ -133,7 +133,7 @@ new <- resample(new, r, method = "ngb")
 # Store the result
 writeRaster(
     x         = new
-  , filename  = "03_Data/02_CleanData/01_WaterCover_Globeland.tif"
+  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif"
   , overwrite = TRUE
 )
 
