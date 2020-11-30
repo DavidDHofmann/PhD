@@ -14,13 +14,11 @@ setwd(wd)
 
 # Load packages
 library(raster)     # To handle raster data
+library(terra)      # To handle raster data
 library(rgdal)      # To handle spatial data
 library(gdalUtils)  # To stitch raster tiles
 library(parallel)   # To use multiple cores
 library(davidoff)   # Custom functions
-
-# Start cluster
-beginCluster()
 
 ################################################################################
 #### Stitching the Tiles
@@ -65,28 +63,16 @@ gdal_translate(
 #### Cropping, Aggregating, and Simplifying the Stitched Raster
 ################################################################################
 # Load the merged file
-merged <- raster("03_Data/01_RawData/GLOBELAND/Globeland.tif")
+merged <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 
 # Load the reference shapefile
-s <- shapefile("03_Data/02_CleanData/00_General_Shapefile")
+s <- vect("03_Data/02_CleanData/00_General_Shapefile.shp")
 
 # Crop the merged globeland tiles to our extent
-merged <- crop(merged, s)
+merged <- crop(merged, s, snap = "out")
 
-# Store the result to file
-writeRaster(
-    x         = merged
-  , filename  = "03_Data/01_RawData/GLOBELAND/Globeland.tif"
-  , overwrite = TRUE
-  ,
-)
-
-# Aggregate the layer to 250m
-coarse <- aggregate(merged, fact = round(250 / 30), fun = modal)
-
-# We only want to use the water layer from the globeland dataset. Let's
-# reclassify the values accordingly (note that there is only one single value
-# 255)
+# Prepare classes. Note that I'm going to use the same class description and
+# codes as for the copernicus dataset.
 classes <- data.frame(
     CodesOld = c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 255)
   , DescriptionOld = c(
@@ -102,19 +88,19 @@ classes <- data.frame(
     , "PermanentIceSnow"
     , "NA"
   )
-  , CodesNew = c(0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0)
+  , CodesNew = c(3, 4, 6, 5, 1, 1, 6, 2, 7, 7, 0)
   , DescriptionNew = c(
-      "Dryland"
-    , "Dryland"
-    , "Dryland"
-    , "Dryland"
+      "Cropland"
+    , "Forest"
+    , "Grassland"
+    , "Shrubs"
     , "Water"
     , "Water"
-    , "Dryland"
-    , "Dryland"
-    , "Dryland"
-    , "Dryland"
-    , "Dryland"
+    , "Grassland"
+    , "Urban"
+    , "Bare"
+    , "Bare"
+    , "NA"
   )
 )
 
@@ -122,20 +108,31 @@ classes <- data.frame(
 rcl <- data.frame(old = classes[, 1], new = classes[, 3])
 
 # Run the reclassification
-new <- reclassify(coarse, rcl)
+new <- classify(merged, rcl)
 
-# Finally, we will need to resample the raster to our reference raster
-r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+# Aggregate the layer to 250m
+coarse <- aggregate(new, fact = round(250 / 30), fun = modal)
+
+# We will also need to resample the raster to our reference raster
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Resample the globeland layer to the reference raster
-new <- resample(new, r, method = "ngb")
+coarse <- resample(coarse, r, method = "ngb")
 
-# Store the result
+# Visualize it
+plot(coarse)
+
+# Store aggregated layer to file
 writeRaster(
-    x         = new
-  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif"
+    x         = coarse
+  , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.tif"
   , overwrite = TRUE
 )
 
-# End cluster
-endCluster()
+# Store layer for water seperately
+water <- coarse == 1
+writeRaster(
+    x         = water
+  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif"
+  , overwrite = TRUE
+)

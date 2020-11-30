@@ -47,14 +47,14 @@ info$ClassNew[info$Code == 90] <- "Permanent water bodies"
 
 # Create new codes
 info$CodeNew <- NA
-info$CodeNew[info$ClassNew == "No input data available"] <- 0
-info$CodeNew[info$ClassNew == "Permanent water bodies"] <- 1
-info$CodeNew[info$ClassNew == "Urban / built up"] <- 2
-info$CodeNew[info$ClassNew == "Cultivated and managed vegetation/agriculture (cropland)"] <- 3
+info$CodeNew[info$ClassNew == "NA"] <- 0
+info$CodeNew[info$ClassNew == "Water"] <- 1
+info$CodeNew[info$ClassNew == "Urban"] <- 2
+info$CodeNew[info$ClassNew == "Cropland"] <- 3
 info$CodeNew[info$ClassNew == "Forest"] <- 4
 info$CodeNew[info$ClassNew == "Shrubs"] <- 5
-info$CodeNew[info$ClassNew == "Herbaceous vegetation"] <- 6
-info$CodeNew[info$ClassNew == "Bare / sparse vegetation"] <- 7
+info$CodeNew[info$ClassNew == "Grassland"] <- 6
+info$CodeNew[info$ClassNew == "Bare"] <- 7
 
 # Arrange
 info <- arrange(info, CodeNew)
@@ -76,6 +76,9 @@ dat <- classify(dat, rcl)
 # Aggregate to 250 meters
 coarse <- aggregate(dat, fact = round(250 / 110), fun = modal)
 
+# Resample to reference raster
+coarse <- resample(coarse, r, method = "ngb")
+
 # Visualize it
 plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
 
@@ -83,6 +86,14 @@ plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
 writeRaster(
     x         = coarse
   , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.tif"
+  , overwrite = T
+)
+
+# Also store the water-cover layer seperately
+water <- coarse == 1
+writeRaster(
+    x         = water
+  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif"
   , overwrite = T
 )
 
