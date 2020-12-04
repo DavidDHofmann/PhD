@@ -35,6 +35,6 @@ crops_res <- resample(crops, r, "near")
 # Save the result to file
 writeRaster(
     x         = raster(crops_res)
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GLOBELANDS.tif"
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GLOBELAND.tif"
   , overwrite = TRUE
 )

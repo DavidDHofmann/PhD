@@ -1,23 +1,20 @@
-############################################################
+################################################################################
 #### Preparation of the River Widths By Merit
-############################################################
+################################################################################
 # Description: Preparation and cleaning of the Merit river layers
 
 # Clear R's brain
 rm(list = ls())
 
 # Specify the working directories
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
 library(raster)
 library(rgdal)
 
-# Make use of multicore abilities
-beginCluster()
-
-# Identify the images to load
+# Identify the files to load
 files <- dir(
     path        = "03_Data/01_RawData/MERIT"
   , pattern     = ".tif$"
@@ -52,6 +49,3 @@ writeRaster(
   , "03_Data/02_CleanData/03_LandscapeFeatures_Rivers_Merit.tif"
   , overwrite = TRUE
 )
-
-# End cluster
-endCluster()
