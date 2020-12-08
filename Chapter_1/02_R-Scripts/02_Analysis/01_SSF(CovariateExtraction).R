@@ -9,7 +9,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/Schreibtisch/15. PhD/Chapter_1"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load packages
@@ -22,7 +22,7 @@ library(amt)          # To coerce gps fixes to steps
 set.seed(1234)
 
 # Load the gps data
-data <- read_csv("03_Data/02_CleanData/00_General_Dispersers_Popecol.csv")
+data <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL.csv")
 
 # We only need dispersers' data
 data <- subset(data, State == "Disperser")

@@ -76,6 +76,6 @@ plot(distance2roads)
 # Store the rasters to file
 writeRaster(
     x         = distance2roads
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToRoads.tif"
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToRoads_GEOFABRIK.tif"
   , overwrite = TRUE
 )

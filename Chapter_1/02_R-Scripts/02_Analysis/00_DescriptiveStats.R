@@ -1,62 +1,71 @@
-############################################################
+################################################################################
 #### Some Descriptive Statistics
-############################################################
+################################################################################
 # Clear R's brain
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)
-library(rgdal)
-library(RColorBrewer)
-library(viridis)
-library(adehabitatLT)
-library(animation)
-library(rosm)
-library(lubridate)
-library(tidyverse)
-library(rgeos)
-library(spatstat)
-library(maptools)
-library(GISTools)
-library(adehabitatHR)
-library(NLMR)
-library(gdistance)
+library(tidyverse)      # For data wrangling
+library(lubridate)      # To handle dates
+library(amt)            # For step representation
+library(davidoff)       # For custom functions
+library(raster)         # For spatial data handling
+library(tmaptools)
+library(tmap)
 
-############################################################
-#### Loading GPS Data
-############################################################
-# Load the original gps fixes
-data <- "03_Data/02_CleanData/00_General_Dispersers_Popecol(Regular).csv" %>%
-  read_csv()
+################################################################################
+#### Load Data
+################################################################################
+# Load the dispersal data
+data <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL.csv")
 
-# Maybe we want to plot the gps fixes. So make them spatial
-gps_dots <- data
-coordinates(gps_dots) <- c("x", "y")
-crs(gps_dots) <- CRS("+init=epsg:4326")
+# Subset to those individuals that eventually dispersed
+dispersers <- data %>%
+  subset(State == "Disperser") %>%
+  .[["DogName"]] %>%
+  unique()
+data <- subset(data, DogName %in% dispersers)
 
-# Let's also load and reproject the trajectories
-gps_traj <- "03_Data/02_CleanData/00_General_Dispersers_Popecol(Regular).shp" %>%
-  readOGR() %>%
-  spTransform(CRS("+init=epsg:4326"))
+# Make data spatial
+track <- data %>%
+  make_track(
+      .x    = x
+    , .y    = y
+    , .t    = Timestamp
+    , id    = DogName
+    , state = State
+    , sex   = Sex
+    , crs   = sp::CRS("+init=epsg:4326")
+  ) %>%
+  nest(data = -id) %>%
+  mutate(steps = map(data, function(x){
+    steps(x, keep_cols = "start")
+  })) %>%
+  unnest(cols = "steps") %>%
+  dplyr::select(-data) %>%
+  lineTrack(crs = CRS("+init=epsg:4326"))
 
-############################################################
-#### Preparing Bounding Boxes
-############################################################
-# Define a bounding box for the reduced extent
-box1 <- extent(c(22, 27, -20.7, -17.7))
+# Check the number of fixes during dispersal and residence
+summary <- as.data.frame.matrix(table(data$DogName, data$State))
 
-# Define a bounding box for which we calculated dynamic floodmaps
-box2 <- extent(c(21.74909, 24.30089, -20.64901, -18.14901))
+# Let's also remove rownames and make them a proper column
+summary <- rownames_to_column(summary, var = "DogName")
 
-# Prepare a third bounding box for the extent of Maun
-box3 <- extent(c(23.2, 24.1, -20.3, -19.8))
+# Let's identify how long each dispersal event lasted
+summary$DispersalDuration1 <- data %>%
+  subset(State == "Disperser") %>%
+  group_by(DogName) %>%
+  summarize(DispersalDuration = max(Timestamp) - min(Timestamp)) %>%
+  .[["DispersalDuration"]]
 
-# Prepare bounding box for which we will do the social analysis
-box4 <- extent(c(23.25, 24, -19.8, -19.05)) %>% as(., "SpatialPolygons")
+# L
+summary$DispersalDuration2 <- data %>%
+  subset(State == "Disperser") %>%
+  summarize(DispersalDuration = sum(Timestamp))
 
 ############################################################
 #### General Statistics

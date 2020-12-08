@@ -236,7 +236,7 @@ dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
 # include it for completeness. This data requires some intensive cleaning. Also
 # note that the data is in UTC already.
 files <- dir(
-    path        = "03_Data/01_RawData/DOMINIK"
+    path        = "03_Data/01_RawData/DOMINIK/GPS"
   , pattern     = ".txt$"
   , full.names  = T
 )
@@ -376,6 +376,9 @@ tail(data)
 # Check the number of data per individual
 table(data$DogName, data$State)
 
+# Order the data nicely
+data <- data %>% arrange(DogName, Timestamp)
+
 # Note: For Abrahms individuals there is an overlap between data collected by
 # Abrahms and data collected by the Staff in Botswana (its actually the same
 # data). Because of a tiny mismatch in the timestamps they are not recognized as
@@ -383,15 +386,138 @@ table(data$DogName, data$State)
 # is minor. Thus, the issue will be resolved once we resample the data to a
 # coarser resolution.
 
-# ############################################################
+################################################################################
+#### Visualize Dispersal Phases
+################################################################################
+# We now want to create a plot illustrating the dispersal phases. For this, we
+# need to create a table indicating the start and end of each "phase"
+phases <- data %>%
+  group_by(DogName) %>%
+  nest() %>%
+  mutate(data = map(data, function(x){
+    phase <- x$State != lag(x$State)
+    phase <- replace_na(phase, F)
+    x$Phase <- cumsum(phase)
+    return(x)
+  })) %>%
+  unnest(cols = data) %>%
+  group_by(DogName, State, Phase) %>%
+  summarize(FirstDate = min(Timestamp), LastDate = max(Timestamp)) %>%
+  mutate(DogName = as.factor(DogName))
+
+# Reorder the factors
+# phases$DogName <- fct_reorder(phases$DogName, phases$DogName, .desc = T)
+
+# Visualize them
+ggplot(phases, aes(x = rbind(FirstDate, LastDate), y = DogName)) +
+
+  # Add segments for the resident phase
+  geom_segment(data = subset(phases, State == "Resident"), aes(
+      x     = FirstDate
+    , xend  = LastDate
+    , y     = DogName
+    , yend  = DogName
+  ), size = 2.5, color = "cornflowerblue") +
+
+  # Add segments for the resident phase
+  geom_segment(data = subset(phases, State == "Disperser"), aes(
+      x     = FirstDate
+    , xend  = LastDate
+    , y     = DogName
+    , yend  = DogName
+  ), size = 1.0, color = "black") +
+
+  # Reverse the y scale
+  scale_y_discrete(limits = rev(levels(phases$DogName))) +
+
+  # Put a useful title and axis labels
+  ggtitle("GPS Observations") +
+  xlab("Date") +
+  ylab("Name")
+
+# ################################################################################
 # #### Adding Pack Information
-# ############################################################
+# ################################################################################
+# # Load pack affiliation table
+# packs <- read_csv("03_Data/01_RawData/POPECOL/PackAffiliations.csv")
+# packs <- subset(packs, DogName %in% toupper(unique(data$DogName)))
+# write_csv(packs, "test.csv")
+#
+# # Coerce the dates to posixct (subtract 2 hours)
+# packs$FirstDate <- update(as.POSIXct(packs$FirstDate), hours = 0, tz = "UTC") -
+#   hours(2)
+# packs$LastDate <- update(as.POSIXct(packs$LastDate), hours = 24, tz = "UTC") -
+#   hours(2)
+#
+# # Let's check if all individuals are represented in the table
+# dogs <- unique(data$DogName)
+# present <- toupper(dogs) %in% packs$DogName
+#
+# # Apparently we're missing one individual
+# table(present)
+# dogs[!present]
+#
+# # Let's now join the pack information to each GPS fix
+# data$Pack <- pbmclapply(
+#     X                   = 1:nrow(data)
+#   , mc.cores            = detectCores() - 1
+#   , ignore.interactive  = T
+#   , FUN                 = function(x){
+#     pack <- subset(packs, DogName == toupper(data$DogName[x]))
+#     index <- data$Timestamp[x] >= pack$FirstDate & data$Timestamp[x] <= pack$LastDate
+#     index <- which(index)
+#     pack <- pack$Pack[index]
+#     pack <- ifelse(is.null(pack), NA, pack)
+#     return(pack)
+# }) %>% do.call(c, .)
+#
+# # Identify the different phases
+# phases <- data %>%
+#   group_by(DogName, State, Pack) %>%
+#   summarize(FirstDate = min(Timestamp), LastDate = max(Timestamp)) %>%
+#   mutate(DogName = as.factor(DogName))
+#
+# # Visualize them
+# p <- ggplot(phases, aes(x = rbind(FirstDate, LastDate), y = DogName, col = Pack)) +
+#
+#   # Add segments for the resident phase
+#   geom_segment(data = subset(phases, State == "Resident"), aes(
+#       x     = FirstDate
+#     , xend  = LastDate
+#     , y     = DogName
+#     , yend  = DogName
+#   ), size = 2.5) +
+#
+#   # Add segments for the resident phase
+#   geom_segment(data = subset(phases, State == "Disperser"), aes(
+#       x     = FirstDate
+#     , xend  = LastDate
+#     , y     = DogName
+#     , yend  = DogName
+#   ), size = 1.0, color = "black") +
+#
+#   # Reverse the y scale
+#   scale_y_discrete(limits = rev(levels(phases$DogName))) +
+#
+#   # Put a useful title and axis labels
+#   ggtitle("GPS Observations") +
+#   xlab("Date") +
+#   ylab("Name")
+
+# ################################################################################
+# #### Adding Pack Information
+# ################################################################################
 # # Let's load the csv containing all pack affiliations
 # packs <- read_csv("03_Data/01_RawData/POPECOL/PackAffiliation.csv")
 #
-# # Create a column that indicates if a fixe was recorder before or after
-# # dispersal
+# # Create a column that indicates if a fix was recorded before or after dispersal
+# data <- data %>%
+#   subset(State == "Disperser") %>%
+#   group_by(DogName) %>%
+#   summarize(StartDate = min(Timestamp), EndDate = max(Timestamp)) %>%
+#   left_join(data, .)
 # data$AfterDispersal <- ifelse(data$Timestamp > data$EndDate, T, F)
+# data$AfterDispersal[is.na(data$AfterDispersal)] <- F
 #
 # # Lets join the birth and postdispersal pack to each fix
 # data <- left_join(data, packs, by = "DogName")
@@ -400,26 +526,6 @@ table(data$DogName, data$State)
 # # NAs for the pack during dispersal
 # data$BirthPack[data$State == "Disperser"] <- NA
 #
-# # After dispersal (i.e. settlement) the individuals will be in a new pack. Let's
-# # create a column that indicates whether a GPS fix was taken before or after
-# # dispersal so that we can change the packs accordingly. Note that there are
-# # individuals with multiple dispersal phases. We will only use the most recent
-# # EndDate for them (we assume they haven't settled in a new pack before this
-# # date).
-# enddates <- cut %>%
-#
-#   # Group the enddates by dog
-#   group_by(DogName) %>%
-#
-#   # Keep only the latest date
-#   slice(which.max(EndDate)) %>%
-#
-#   # Remove the start date from the resulting table
-#   select(., -StartDate)
-#
-# # Join these dates to our dataframe
-# data <- left_join(data, enddates, by = "DogName")
-#
 # # Finally we merge the "BirthPack" and "PostDispersalPack" columns and create
 # # a column that indicates the current pack
 # data$CurrentPack <- data$BirthPack
@@ -427,21 +533,24 @@ table(data$DogName, data$State)
 #   data$PostDispersalPack[data$AfterDispersal]
 #
 # # Remove any undesired column
-# data <- select(data, -c("BirthPack", "PostDispersalPack", "EndDate"))
+# data <- dplyr::select(
+#     data
+#   , -c(StartDate, EndDate, BirthPack, PostDispersalPack)
+# )
 #
 # # Now there are some manual adjustments that I do according to Dominik's
 # # instructions. For Fatalii the pack is unknown before the 18.02.2016
 # data$CurrentPack[data$DogName == "Fatalii" &
-#   data$Timestamp < "2016-02-18 00:00:00"] <- NA
+#   data$Timestamp < "2016-02-17 22:00:00"] <- NA
 #
 # # Mirage and Kalahri belong to BN only after the 20.09.2017. Let's make anything
 # # after dispersal NA. Then add the BN pack after the 20-09-2017
 # data$CurrentPack[data$AfterDispersal & data$DogName == "Kalahari"] <- NA
 # data$CurrentPack[data$AfterDispersal & data$DogName == "Kalahari" &
-#   data$Timestamp > "2017-09-20"] <- "BN"
+#   data$Timestamp > "2017-09-19 22:00:00"] <- "BN"
 # data$CurrentPack[data$AfterDispersal & data$DogName == "Mirage"] <- NA
 # data$CurrentPack[data$AfterDispersal & data$DogName == "Mirage" &
-#   data$Timestamp > "2017-09-20"] <- "BN"
+#   data$Timestamp > "2017-09-19 22:00:00"] <- "BN"
 #
 # # Kalahari eventually switched the pack from BN to WA. This happened the same
 # # day that Belgium switched to WA. We can use our cutoff data table to find this
@@ -459,13 +568,103 @@ table(data$DogName, data$State)
 #   & data$Timestamp > "2012-09-22 00:00:00"] <- "HU"
 #
 # # Remove unnecessary columns
-# data <- select(data, -c("AfterDispersal"))
+# data <- dplyr::select(data, -c("AfterDispersal"))
 #
 # # Order the dataframe according to: DogName, Timestamp
 # data <- arrange(data, DogName, Timestamp)
+#
+# ################################################################################
+# #### Plotting GPS Observation Phases
+# ################################################################################
+# # Identify all individuals that eventually dispersed
+# dispersers <- data %>%
+#   subset(State == "Disperser") %>%
+#   .[["DogName"]] %>%
+#   unique()
+#
+# # Replace NAs in the current packs after dispersal with character NA (i.e.
+# # "NA"). This will avoid some errors.
+# data$CurrentPack[is.na(data$CurrentPack) & data$State == "Resident"] <- "NA"
+#
+# # We want to plot a graph that depicts the period for which each individual was
+# # collared and the time during which the individual was dispersing. The colours
+# # should indicate to which pack each individual belongs. As a first step we get
+# # the earliest and latest gps recording for each dog and collar, and current
+# # pack
+# collars <- data %>%
+#
+#   # Subset to dispersers only
+#   subset(DogName %in% dispersers) %>%
+#
+#   # Group by CollarID, DogName and Currentpack
+#   group_by(., CollarID, DogName, CurrentPack) %>%
+#
+#   # Now we can calculate the first and last observation for each group.
+#   summarize(.
+#     , FirstDate = min(Timestamp)
+#     , LastDate  = max(Timestamp)
+#   ) %>%
+#
+#   # We get rid of the "non-character" NAs since they refer to the either
+#   # Abrahms' individuals, or the dispersal part of our individuals. We don't
+#   # want these in our plot anyways so let's remove them
+#   subset(., !is.na(CurrentPack)) %>%
+#
+#   # Order the data. We put the focus on the pack identities since we assume that
+#   # members of the same pack are at the same location. The individual is
+#   # therefore not really interesting for us.
+#   arrange(., CurrentPack, FirstDate)
+#
+# # Make the dog names factorial. Note that the factors are now ordered as we specified them in the ordering above. This is helpful for plotting
+# collars$DogName <- as.factor(as.character(collars$DogName))
+#
+# # We could now make the character "NAs" true NAs again
+# collars$CurrentPack[collars$CurrentPack == "NA"] <- NA
+#
+# # Since we also want to depict the dispersal phase, we need to get the dispersal
+# # dates. Since these dates are stored in the cutoff dates table we can load it
+# # again
+# cut <- read_csv("03_Data/02_CleanData/00_General_CutoffDates_POPECOL.csv")
+#
+# # Prepare the plot
+# ggplot(collars, aes(x = rbind(FirstDate, LastDate), y = DogName)) +
+#
+#   # Add segments for the gps observation phase
+#   geom_segment(data = collars, aes(
+#       x       = FirstDate
+#     , xend    = LastDate
+#     , y       = DogName
+#     , yend    = DogName
+#     , colour  = CurrentPack
+#   ), size = 3.5) +
+#
+#   scale_fill_viridis() +
+#
+#   # Add segments for the dispersal phase
+#   geom_segment(data = cut, aes(
+#       x       = StartDate
+#     , xend    = EndDate
+#     , y       = DogName
+#     , yend    = DogName
+#   ), size = 2, colour = "black") +
+#
+#   # Revert the y scale (top to bottom)
+#   scale_y_discrete(limits = rev(levels(collars$DogName))) +
+#
+#   # Put a useful title and axis labels
+#   ggtitle("GPS Observations") +
+#   xlab("Date") +
+#   ylab("Name") +
+#
+#   # Use the viridis colour scheme for the entire plot
+#   scale_color_viridis(
+#       discrete  = TRUE
+#     , begin     = 0.3
+#     , na.value  = "darkgrey"
+#   )
 
 ################################################################################
-#### Resampmling Data
+#### Resampling Data
 ################################################################################
 # Remove NA fixes
 table(is.na(data$x))

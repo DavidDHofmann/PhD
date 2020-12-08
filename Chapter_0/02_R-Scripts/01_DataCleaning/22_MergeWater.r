@@ -66,7 +66,7 @@ globe <- rast(globe)
 names(globe) <- names(flood)
 
 # Save the result to file
-terra::writeRaster(
+writeRaster(
     globe
   , filename  = "03_Data/02_CleanData/01_LandCover_Water(Merged).tif"
   , overwrite = TRUE
@@ -74,3 +74,29 @@ terra::writeRaster(
 
 # Terminate the cluster
 endCluster()
+
+
+
+test <- stack("03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.tif")
+# Save the result to file
+writeRaster(
+    test
+  , filename  = "03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.tif"
+  , overwrite = TRUE
+)
+
+test <- stack("03_Data/02_CleanData/01_LandCover_NonVegetated_MODIS.tif")
+# Save the result to file
+writeRaster(
+    test
+  , filename  = "03_Data/02_CleanData/01_LandCover_NonVegetated_MODIS.tif"
+  , overwrite = TRUE
+)
+
+test <- stack("03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.tif")
+# Save the result to file
+writeRaster(
+    test
+  , filename  = "03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.tif"
+  , overwrite = TRUE
+)

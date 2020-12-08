@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Preparation of the Modis Vegetation Data
-############################################################
+################################################################################
 # Description: Stitching, resampling and preparation of the modis continuous
 # vegetation maps. Note that the MODIS treecover maps are dated the 6 March
 # 2017.
@@ -9,22 +9,19 @@
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # load packages
-library(tidyverse)
-library(raster)
-library(gdalUtils)
-library(terra)
-library(parallel)
+library(tidyverse)    # For data wrangling
+library(raster)       # For handling spatial data
+library(terra)        # For handling spatial data
+library(gdalUtils)    # To stitch files
+library(pbmcapply)    # To run stuff in parallel
 
-# Make use of multicore abilities
-beginCluster()
-
-############################################################
+################################################################################
 #### Extracting TIFF files
-############################################################
+################################################################################
 # Identify files as they were downloaded
 files <- dir(
     path        = "03_Data/01_RawData/MODIS/MOD44B"
@@ -46,11 +43,11 @@ for (i in 1:length(files)){
   }
 }
 
-############################################################
+################################################################################
 #### Stitching TIFFs together
-############################################################
+################################################################################
 # Load the reference raster
-r250 <- rast("03_Data/02_CleanData/00_General_Raster250.tif")
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Specify layers that need to be stitched
 patterns <- c(
@@ -96,8 +93,8 @@ for (i in 1:length(patterns)){
 
   # Reproject, resample and store the merged files
   merged <- rast(newnames[i]) %>%
-    terra::project(., r250) %>%
-    terra::resample(., r250, "ngb")
+    project(., r) %>%
+    resample(., r, "near")
   writeRaster(merged, newnames[i], overwrite = TRUE)
 
   # Print status
@@ -111,9 +108,9 @@ files <- dir(
   , full.names  = T
 ) %>% file.remove()
 
-############################################################
+################################################################################
 #### Remove Water Areas
-############################################################
+################################################################################
 # Load the vegetation layers again
 files <- dir(
     path        = "03_Data/01_RawData/MODIS/MOD44B/Stitched"
@@ -144,16 +141,15 @@ summed <- sum(modis_shrub, modis_noveg, modis_trees)
 # Check if summed values add up to 1
 hist(summed)
 
-# Load the Globeland Layer
-glo <- raster("03_Data/02_CleanData/01_LandCoverClasses30_Globeland.tif")
+# Load the Globeland and Copernicus watercover layers
+glo <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
+cop <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
 
-# Also load the dynamic water layers
-water <- stack("03_Data/02_CleanData/01_LandCover_Water(Merged).tif")
+# Put them together
+water <- max(glo, cop)
 
-# Identify all dates for which we have a closest watermap
-dates_globe <- names(water) %>%
-  substr(start = 2, stop = nchar(.)) %>%
-  as.Date(format = "%Y.%m.%d")
+# Load dates
+dates_wat <- read_csv("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")$Date
 
 # For the same dates we now want to create dynamic vegetation layers. However,
 # in contrast to the merged globeland layer we now don't want to rasterize
@@ -165,28 +161,20 @@ files <- dir(
 
 # Get their dates
 dates_ori <- files %>%
-  substr(start = 49, stop = 58) %>%
-  as.Date("%Y.%m.%d")
+  basename() %>%
+  substr(start = 1, stop = 10) %>%
+  as.Date("%Y-%m-%d")
 
 # Subset to relevant dates
-files <- files[dates_ori %in% dates_globe]
+files <- files[dates_ori %in% dates_wat]
 
 # Load those dynamice water layers
 ori <- stack(files)
 
-# Extend floodmaps so that their extent matches the one of the globeland layer
-ori <- suppressMessages(
-  mclapply(1:nlayers(ori), mc.cores = detectCores() - 1, function(x){
-    extended <- extend(ori[[x]], glo, value = NA)
-    extended <- writeRaster(extended, tempfile())
-    return(extended)
-  }) %>% stack()
-)
-
 # Cover missing values in the ori layers with globeland data
 ori <- suppressMessages(
-  mclapply(1:nlayers(ori), mc.cores = detectCores() - 1, function(x){
-    covered <- cover(ori[[x]], glo)
+  pbmclapply(1:nlayers(ori), mc.cores = detectCores() - 1, ignore.interactive = T, function(x){
+    covered <- raster::cover(ori[[x]], water)
     covered <- writeRaster(covered, tempfile())
     return(covered)
   }) %>% stack()
@@ -194,7 +182,7 @@ ori <- suppressMessages(
 
 # Mask water in shrub layer
 modis_shrub <- suppressMessages(
-  mclapply(1:nlayers(ori), mc.cores = detectCores() - 1, function(x){
+  pbmclapply(1:nlayers(ori), mc.cores = detectCores() - 1, ignore.interactive = T, function(x){
     masked <- mask(modis_shrub
       , mask        = ori[[x]]
       , maskvalue   = 1
@@ -207,7 +195,7 @@ modis_shrub <- suppressMessages(
 
 # Mask water in nonvegetated layer
 modis_noveg <- suppressMessages(
-  mclapply(1:nlayers(ori), mc.cores = detectCores() - 1, function(x){
+  pbmclapply(1:nlayers(ori), mc.cores = detectCores() - 1, ignore.interactive = T, function(x){
     masked <- mask(modis_noveg
       , mask        = ori[[x]]
       , maskvalue   = 1
@@ -244,9 +232,9 @@ names(modis_trees) <- dates_ori
 # Visualize layers again
 plot(c(modis_shrub[[1]], modis_noveg[[1]], modis_trees[[1]]))
 
-############################################################
+################################################################################
 #### Store the Final Maps
-############################################################
+################################################################################
 # Make sure that the layers range from 0 to 1 rather than from 0 to 100
 modis_shrub <- modis_shrub / 100
 modis_noveg <- modis_noveg / 100
@@ -265,10 +253,12 @@ names <- c(
   , "03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.tif"
 )
 
+# Coerce to raster
+modis[[1]] <- stack(modis[[1]])
+modis[[2]] <- stack(modis[[2]])
+modis[[3]] <- stack(modis[[3]])
+
 # Store the rasterstacks
 for (i in 1:length(names)){
-  terra::writeRaster(modis[[i]], names[i], overwrite = TRUE)
+  writeRaster(modis[[i]], names[i], overwrite = TRUE)
 }
-
-# Terminate cluster
-endCluster()

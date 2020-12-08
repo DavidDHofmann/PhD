@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Averaged Vegetation Layer
-############################################################
+################################################################################
 # Description: Prepare layer that depicts the average vegetation layer. Note
 # that this is basically the counterpart of the average water layer
 
@@ -8,19 +8,13 @@
 rm(list = ls())
 
 # Define the working directories
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(tidyverse)
-library(raster)
-library(terra)
-
-# Load custom functions
-source("Functions.r")
-
-# Make use of multiple cores
-beginCluster()
+library(tidyverse)  # For data wrangling
+library(raster)     # For manipulating spatial data
+library(terra)      # For manipulating spatial data
 
 # Load the vegetation layers again
 files <- dir(
@@ -28,8 +22,12 @@ files <- dir(
   , pattern     = ".*MODIS.tif$"
   , full.names  = T
 )
-names <- substr(files, start = 55, stop = nchar(files) - 10)
-modis <- stack(files)
+names <- substr(
+    x     = basename(files)
+  , start = 14
+  , stop  = nchar(basename(files)) - 10
+)
+modis <- rast(files)
 names(modis) <- names
 
 # Extract the separate layers
@@ -43,10 +41,10 @@ values(modis_noveg)[values(modis_noveg) > 100] <- 100
 values(modis_trees)[values(modis_trees) > 100] <- 0
 
 # Visualize again
-plot(stack(modis_shrub, modis_noveg, modis_trees))
+plot(c(modis_shrub, modis_noveg, modis_trees))
 
 # Load averaged water layer
-water <- raster("03_Data/02_CleanData/01_LandCover_Water_Averaged.tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.tif")
 
 # Replace values below water to 0
 modis_shrub <- mask(modis_shrub
@@ -65,11 +63,6 @@ modis_trees <- mask(modis_trees
   , updatevalue = 0
 )
 
-# Coerce all layers to terra rasters
-modis_shrub <- rast(modis_shrub)
-modis_noveg <- rast(modis_noveg)
-modis_trees <- rast(modis_trees)
-
 # Visualize layers again
 plot(c(modis_shrub, modis_noveg, modis_trees))
 
@@ -86,15 +79,12 @@ modis <- list(modis_shrub, modis_noveg, modis_trees)
 
 # Prepare filenames
 names <- c(
-    "03_Data/02_CleanData/01_LandCover_NonTreeVegetation_Averaged.tif"
-  , "03_Data/02_CleanData/01_LandCover_NonVegetated_Averaged.tif"
-  , "03_Data/02_CleanData/01_LandCover_TreeCover_Averaged.tif"
+    "03_Data/02_CleanData/01_LandCover_NonTreeVegetationAveraged_MODIS.tif"
+  , "03_Data/02_CleanData/01_LandCover_NonVegetatedAveraged_MODIS.tif"
+  , "03_Data/02_CleanData/01_LandCover_TreeCoverAveraged_MODIS.tif"
 )
 
 # Store the rasterstacks
 for (i in 1:length(names)){
-  terra::writeRaster(modis[[i]], names[i], overwrite = TRUE)
+  writeRaster(raster(modis[[i]]), names[i], overwrite = TRUE)
 }
-
-# Terminate the cluster
-endCluster()

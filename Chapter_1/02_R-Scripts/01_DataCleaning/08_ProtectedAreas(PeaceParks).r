@@ -71,7 +71,7 @@ gIsValid(prot, reason = TRUE)
 
 # Plot the stuff with each designation in a different colour. Note that the
 # country borders will look pretty nasty due to the low resolution.
-map <- shapefile("03_Data/02_CleanData/00_General_Africa.shp")
+map <- shapefile("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 u <- unique(prot$Desig)
 m <- match(prot$Desig, u)
 n <- length(unique(prot$Desig))
@@ -80,6 +80,15 @@ plot(prot, col = pal[m])
 plot(map, add = TRUE)
 text(subset(prot, prot$Desig == "National Park"), 'Name', cex = 0.5, halo = TRUE)
 legend("topleft", legend = u, col = pal, pch = 19)
+
+# Let's assign a value to each class
+values <- data.frame(
+    Desig  = c("Forest Reserve", "Protected", "National Park")
+  , Values = 1:3
+)
+
+# Join the values to the shapefile
+prot@data <- left_join(prot@data, values, by = "Desig")
 
 # Store the layer
 writeOGR(prot
@@ -92,33 +101,44 @@ writeOGR(prot
 ################################################################################
 #### Rasterize Protected Areas
 ################################################################################
-# We will also create a binary indicator of whether an area is protected or not.
-# Here it suffices to have a single category and we will directly rasterized it.
-prot$Desig <- "Protected"
-
 # Load the reference raster
-r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Assign an arbitrary value of 1 to protected areas
-prot$Value <- 1
+# Coerce protected areas to vect
+prot <- vect(prot)
 
 # Rasterize protected areas
-prot_r <- terra::rasterize(
-    x           = vect(prot)
-  , y           = rast(r)
-  , field       = "Value"
+prot_r <- rasterize(
+    x           = prot
+  , y           = r
+  , field       = "Values"
   , background  = 0
 )
 
-# Coerce back to regular raster
-prot_r <- raster(prot_r)
+# Create also a binary map
+prot_rb <- prot_r > 0
 
 # Visualize
-plot(prot_r)
+plot(raster(prot_r))
+plot(raster(prot_rb))
 
 # Convert to raster and store
 writeRaster(
-    x         = prot_r
-  , filename  = "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.tif"
+    x         = raster(prot_rb)
+  , filename  = "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(1Class).tif"
+  , overwrite = T
+)
+
+# Store the categorical raster
+writeRaster(
+    x         = raster(prot_r)
+  , filename  = "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(3Classes).tif"
+  , overwrite = T
+)
+
+# Store the binary raster
+writeRaster(
+    x         = raster(prot_rb)
+  , filename  = "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(1Class).tif"
   , overwrite = T
 )
