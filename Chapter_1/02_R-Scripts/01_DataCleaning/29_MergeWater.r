@@ -16,7 +16,7 @@ library(tidyverse)  # For data wrangling
 library(raster)     # To handle spatial data
 library(terra)      # To handle spatial data
 library(rgdal)      # To handle spatial data
-library(parallel)   # To use multiple cores
+library(pbmcapply)  # To use multiple cores
 
 # Load the layers we want to merge (Globeland, Dynamic Floodmaps, Merit Rivers)
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
@@ -41,10 +41,14 @@ globe <- max(globe, coper, merit)
 
 # Fill the globeland layer with data from the dynamic floodmaps
 globe <- suppressMessages(
-  mclapply(1:nlayers(flood), mc.cores = detectCores() - 1, function(x){
-    filled <- mask(globe, flood[[x]], maskvalue = 1, updatevalue = 1)
-    filled <- writeRaster(filled, tempfile())
-    return(filled)
+  pbmclapply(
+      X                   = 1: nlayers(flood)
+    , mc.cores            = detectCores() - 1
+    , ignore.interactive  = T
+    , FUN                 = function(x){
+      filled <- mask(globe, flood[[x]], maskvalue = 1, updatevalue = 1)
+      filled <- writeRaster(filled, tempfile())
+      return(filled)
   }) %>% stack()
 )
 
@@ -58,9 +62,12 @@ df <- data.frame(
 )
 write_csv(df, "03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")
 
-# Save the result to file
-writeRaster(
-    globe
-  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.tif"
+# Save the result to file. Note that compressing the file will result in very
+# slow extraction time. I'll thus leave the layers uncompressed, although this
+# substantially inflates file sizes
+terra::writeRaster(
+    x         = rast(globe)
+  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd"
   , overwrite = TRUE
+  , options   = c("COMPRESSION=NONE")
 )

@@ -19,7 +19,7 @@ library(terra)        # To handle spatial data
 library(davidoff)     # Custom functions
 
 # Load water layers
-water <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")
 
 # We want to create an "average" water map. For this we calculate how often
 # each cell was covered by water. If this is more than a desired threshold, we

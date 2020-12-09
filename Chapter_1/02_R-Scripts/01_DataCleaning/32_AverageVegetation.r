@@ -44,7 +44,7 @@ values(modis_trees)[values(modis_trees) > 100] <- 0
 plot(c(modis_shrub, modis_noveg, modis_trees))
 
 # Load averaged water layer
-water <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.grd")
 
 # Replace values below water to 0
 modis_shrub <- mask(modis_shrub

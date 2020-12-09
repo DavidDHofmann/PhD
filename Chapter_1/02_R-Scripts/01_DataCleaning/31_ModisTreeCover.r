@@ -117,7 +117,7 @@ files <- dir(
   , pattern     = ".*MODIS.tif$"
   , full.names  = T
 )
-names <- substr(files, start = 55, stop = nchar(files) - 10)
+names <- substr(basename(files), start = 14, stop = nchar(basename(files)) - 10)
 modis <- stack(files)
 names(modis) <- names
 
@@ -126,11 +126,16 @@ modis_shrub <- modis[[1]]
 modis_noveg <- modis[[2]]
 modis_trees <- modis[[3]]
 
+# Make sure that the layers range from 0 to 1 rather than from 0 to 100
+modis_shrub <- modis_shrub / 100
+modis_noveg <- modis_noveg / 100
+modis_trees <- modis_trees / 100
+
 # Values above 100 are water. Let's reclassify those to 0% Vegetation, i.e. 100%
 # NonVegetated
-values(modis_shrub)[values(modis_shrub) > 100] <- 0
-values(modis_noveg)[values(modis_noveg) > 100] <- 100
-values(modis_trees)[values(modis_trees) > 100] <- 0
+values(modis_shrub)[values(modis_shrub) > 1] <- 0
+values(modis_noveg)[values(modis_noveg) > 1] <- 1
+values(modis_trees)[values(modis_trees) > 1] <- 0
 
 # Visualize again
 plot(stack(modis_shrub, modis_noveg, modis_trees))
@@ -149,7 +154,8 @@ cop <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
 water <- max(glo, cop)
 
 # Load dates
-dates_wat <- read_csv("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")$Date
+dates_wat <- read_csv("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")
+dates_wat <- dates_wat$Date
 
 # For the same dates we now want to create dynamic vegetation layers. However,
 # in contrast to the merged globeland layer we now don't want to rasterize
@@ -173,49 +179,65 @@ ori <- stack(files)
 
 # Cover missing values in the ori layers with globeland data
 ori <- suppressMessages(
-  pbmclapply(1:nlayers(ori), mc.cores = detectCores() - 1, ignore.interactive = T, function(x){
-    covered <- raster::cover(ori[[x]], water)
-    covered <- writeRaster(covered, tempfile())
-    return(covered)
+  pbmclapply(
+      X                  = 1: nlayers(ori)
+    , mc.cores           = detectCores() - 1
+    , ignore.interactive = T
+    , FUN                = function(x){
+      covered <- raster::cover(ori[[x]], water)
+      covered <- writeRaster(covered, tempfile())
+      return(covered)
   }) %>% stack()
 )
 
 # Mask water in shrub layer
 modis_shrub <- suppressMessages(
-  pbmclapply(1:nlayers(ori), mc.cores = detectCores() - 1, ignore.interactive = T, function(x){
-    masked <- mask(modis_shrub
-      , mask        = ori[[x]]
-      , maskvalue   = 1
-      , updatevalue = 0
-    )
-    masked <- writeRaster(masked, tempfile())
-    return(masked)
+  pbmclapply(
+      X                  = 1: nlayers(ori)
+    , mc.cores           = detectCores() - 1
+    , ignore.interactive = T
+    , FUN                = function(x){
+      masked <- mask(modis_shrub
+        , mask        = ori[[x]]
+        , maskvalue   = 1
+        , updatevalue = 0
+      )
+      masked <- writeRaster(masked, tempfile())
+      return(masked)
   }) %>% stack()
 )
 
 # Mask water in nonvegetated layer
 modis_noveg <- suppressMessages(
-  pbmclapply(1:nlayers(ori), mc.cores = detectCores() - 1, ignore.interactive = T, function(x){
-    masked <- mask(modis_noveg
-      , mask        = ori[[x]]
-      , maskvalue   = 1
-      , updatevalue = 100
-    )
-    masked <- writeRaster(masked, tempfile())
-    return(masked)
+  pbmclapply(
+      X                  = 1: nlayers(ori)
+    , mc.cores           = detectCores() - 1
+    , ignore.interactive = T
+    , FUN                = function(x){
+      masked <- mask(modis_noveg
+        , mask        = ori[[x]]
+        , maskvalue   = 1
+        , updatevalue = 1
+      )
+      masked <- writeRaster(masked, tempfile())
+      return(masked)
   }) %>% stack()
 )
 
 # Mask water in trees layer
 modis_trees <- suppressMessages(
-  mclapply(1:nlayers(ori), mc.cores = detectCores() - 1, function(x){
-    masked <- mask(modis_trees
-      , mask        = ori[[x]]
-      , maskvalue   = 1
-      , updatevalue = 0
-    )
-    masked <- writeRaster(masked, tempfile())
-    return(masked)
+  pbmclapply(
+      X                  = 1: nlayers(ori)
+    , mc.cores           = detectCores() - 1
+    , ignore.interactive = T
+    , FUN                = function(x){
+      masked <- mask(modis_trees
+        , mask        = ori[[x]]
+        , maskvalue   = 1
+        , updatevalue = 0
+      )
+      masked <- writeRaster(masked, tempfile())
+      return(masked)
   }) %>% stack()
 )
 
@@ -235,30 +257,22 @@ plot(c(modis_shrub[[1]], modis_noveg[[1]], modis_trees[[1]]))
 ################################################################################
 #### Store the Final Maps
 ################################################################################
-# Make sure that the layers range from 0 to 1 rather than from 0 to 100
-modis_shrub <- modis_shrub / 100
-modis_noveg <- modis_noveg / 100
-modis_trees <- modis_trees / 100
-
-# Visualize layers again
-plot(c(modis_shrub[[1]], modis_noveg[[1]], modis_trees[[1]]))
-
 # Put the stacks into a list
 modis <- list(modis_shrub, modis_noveg, modis_trees)
 
 # Prepare filenames
 names <- c(
-    "03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.tif"
-  , "03_Data/02_CleanData/01_LandCover_NonVegetated_MODIS.tif"
-  , "03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.tif"
+    "03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.grd"
+  , "03_Data/02_CleanData/01_LandCover_NonVegetated_MODIS.grd"
+  , "03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.grd"
 )
-
-# Coerce to raster
-modis[[1]] <- stack(modis[[1]])
-modis[[2]] <- stack(modis[[2]])
-modis[[3]] <- stack(modis[[3]])
 
 # Store the rasterstacks
 for (i in 1:length(names)){
-  writeRaster(modis[[i]], names[i], overwrite = TRUE)
+  terra::writeRaster(
+      x         = modis[[i]]
+    , filename  = names[i]
+    , overwrite = TRUE
+    , options   = c("COMPRESSION=NONE")
+  )
 }
