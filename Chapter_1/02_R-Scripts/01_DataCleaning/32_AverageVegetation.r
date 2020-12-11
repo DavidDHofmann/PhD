@@ -30,21 +30,25 @@ names <- substr(
 modis <- rast(files)
 names(modis) <- names
 
+# Make sure values range from 0 to 1
+modis <- modis / 100
+
 # Extract the separate layers
 modis_shrub <- modis[[1]]
 modis_noveg <- modis[[2]]
 modis_trees <- modis[[3]]
 
-# Values above 100 are water. Let's reclassify vegetation below water to 0
-values(modis_shrub)[values(modis_shrub) > 100] <- 0
-values(modis_noveg)[values(modis_noveg) > 100] <- 100
-values(modis_trees)[values(modis_trees) > 100] <- 0
+# Values above 1 are water. Let's reclassify those to 0% Vegetation, i.e. 100%
+# NonVegetated
+values(modis_shrub)[values(modis_shrub) > 1] <- 0
+values(modis_noveg)[values(modis_noveg) > 1] <- 1
+values(modis_trees)[values(modis_trees) > 1] <- 0
 
 # Visualize again
 plot(c(modis_shrub, modis_noveg, modis_trees))
 
 # Load averaged water layer
-water <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.grd")
+water <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.tif")
 
 # Replace values below water to 0
 modis_shrub <- mask(modis_shrub
@@ -55,21 +59,13 @@ modis_shrub <- mask(modis_shrub
 modis_noveg <- mask(modis_noveg
   , mask        = water
   , maskvalue   = 1
-  , updatevalue = 100
+  , updatevalue = 1
 )
 modis_trees <- mask(modis_trees
   , mask        = water
   , maskvalue   = 1
   , updatevalue = 0
 )
-
-# Visualize layers again
-plot(c(modis_shrub, modis_noveg, modis_trees))
-
-# Make sure that the layers range from 0 to 1 rather than from 0 to 100
-modis_shrub <- modis_shrub / 100
-modis_noveg <- modis_noveg / 100
-modis_trees <- modis_trees / 100
 
 # Visualize layers again
 plot(c(modis_shrub, modis_noveg, modis_trees))

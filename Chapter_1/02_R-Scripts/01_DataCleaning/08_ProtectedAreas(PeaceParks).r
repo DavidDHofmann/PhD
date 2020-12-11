@@ -118,6 +118,12 @@ prot_r <- rasterize(
 # Create also a binary map
 prot_rb <- prot_r > 0
 
+# Create dataframe with class information
+info <- data.frame(
+    Class = c("Unprotected", "ForestReserve", "Protected", "NationalPark")
+  , Code  = 0:3
+)
+
 # Visualize
 plot(raster(prot_r))
 plot(raster(prot_rb))
@@ -136,9 +142,5 @@ writeRaster(
   , overwrite = T
 )
 
-# Store the binary raster
-writeRaster(
-    x         = raster(prot_rb)
-  , filename  = "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(1Class).tif"
-  , overwrite = T
-)
+# Store the information table
+write_csv(info, "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(3Classes).csv")

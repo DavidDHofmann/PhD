@@ -2,7 +2,9 @@
 #### Combining all Sources for Water Layers
 ################################################################################
 # Description: In this script I combine the water layers from all different
-# sources (Globeland, ORI, OSM, Dominik, MERIT)
+# sources (Globeland, ORI, OSM, Dominik, MERIT) to create dynamic watermaps.
+# Note that the dynamic representation will be limited to the smaller extent of
+# the Okavango Delta, whereas the remainder will be based on static watermaps.
 
 # Clean environment
 rm(list = ls())
@@ -18,55 +20,52 @@ library(terra)      # To handle spatial data
 library(rgdal)      # To handle spatial data
 library(pbmcapply)  # To use multiple cores
 
-# Load the layers we want to merge (Globeland, Dynamic Floodmaps, Merit Rivers)
+# Load the layers we want to merge
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   dir(path = ., pattern = ".tif$", full.names = T) %>%
-  stack()
-globe <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
-coper <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
-merit <- raster("03_Data/02_CleanData/03_LandscapeFeatures_Rivers_MERIT.tif")
+  rast()
+globe <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
+coper <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
+merit <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers_MERIT.tif")
 
-# We need to remove the globeland and copernicus waterbodies for the extent of
-# the dynamic floodmaps. Let's get a polygon for the extent for which we have
-# dynamic floodmaps first
-p <- as(extent(trim(flood[[1]])), "SpatialPolygons")
+# Before we generate the dynamic floodmaps, let's merge the globeland,
+# copernicus, and merit data
+water <- max(globe, coper, merit)
 
-# Replace the values below the polygon to 0
-globe[cellsFromExtent(globe, p)] <- 0
-coper[cellsFromExtent(coper, p)] <- 0
+# We only need dynamic watermaps for the extent on which we have GPS data. So
+# let's crop with a slight buffer
+tracks <- vect("03_Data/02_CleanData/00_General_Dispersers_POPECOL.shp")
+extent <- ext(tracks)
+extent <- ext(c(xmin(extent)-1, xmax(extent)+1, ymin(extent)-1, ymax(extent)+1))
 
-# Before we add the dynamic floodmaps, let's merge the globeland, copernicus,
-# and merit data
-globe <- max(globe, coper, merit)
+# Crop watermaps
+water <- crop(water, extent)
+flood <- crop(flood, extent)
 
-# Fill the globeland layer with data from the dynamic floodmaps
-globe <- suppressMessages(
+# Coerce to raster
+water <- raster(water)
+flood <- stack(flood)
+
+# "Expand" floodmaps and fill values with values from static floodmaps
+water <- suppressMessages(
   pbmclapply(
-      X                   = 1: nlayers(flood)
-    , mc.cores            = detectCores() - 1
-    , ignore.interactive  = T
-    , FUN                 = function(x){
-      filled <- mask(globe, flood[[x]], maskvalue = 1, updatevalue = 1)
-      filled <- writeRaster(filled, tempfile())
-      return(filled)
+      X                  = 1:nlayers(flood)
+    , mc.cores           = detectCores() - 1
+    , ignore.interactive = T
+    , FUN                = function(x){
+      covered <- cover(flood[[x]], water)
+      covered <- writeRaster(covered, tempfile())
+      return(covered)
   }) %>% stack()
 )
 
 # Let's also transfer the layernames
-names(globe) <- names(flood)
+names(water) <- names(flood)
 
-# Let's also write the dates as seperate file
-df <- data.frame(
-    Layer = names(flood)
-  , Date  = as.Date(substr(names(flood), start = 2, stop = 11), format = "%Y.%m.%d")
-)
-write_csv(df, "03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")
-
-# Save the result to file. Note that compressing the file will result in very
-# slow extraction time. I'll thus leave the layers uncompressed, although this
-# substantially inflates file sizes
-terra::writeRaster(
-    x         = rast(globe)
+# Save the result to file. We'll store them uncompressed which allows faster
+# reading times
+writeRaster(
+    x         = water
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd"
   , overwrite = TRUE
   , options   = c("COMPRESSION=NONE")

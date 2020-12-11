@@ -2,8 +2,8 @@
 #### Preparation of the Modis Vegetation Data
 ################################################################################
 # Description: Stitching, resampling and preparation of the modis continuous
-# vegetation maps. Note that the MODIS treecover maps are dated the 6 March
-# 2017.
+# vegetation maps. We will again create "pseudodynamic" layers that take the
+# dynamic watermaps into account.
 
 # Clean environment
 rm(list = ls())
@@ -95,7 +95,7 @@ for (i in 1:length(patterns)){
   merged <- rast(newnames[i]) %>%
     project(., r) %>%
     resample(., r, "near")
-  writeRaster(merged, newnames[i], overwrite = TRUE)
+  writeRaster(raster(merged), newnames[i], overwrite = TRUE)
 
   # Print status
   cat(i, "of", length(patterns), "done...\n")
@@ -109,7 +109,7 @@ files <- dir(
 ) %>% file.remove()
 
 ################################################################################
-#### Remove Water Areas
+#### Remove Water Areas - Create Dynamic Maps
 ################################################################################
 # Load the vegetation layers again
 files <- dir(
@@ -118,27 +118,30 @@ files <- dir(
   , full.names  = T
 )
 names <- substr(basename(files), start = 14, stop = nchar(basename(files)) - 10)
-modis <- stack(files)
+modis <- rast(files)
 names(modis) <- names
+
+# We only need "dynamic" layers for the extent on which GPS data was collected
+tracks <- vect("03_Data/02_CleanData/00_General_Dispersers_POPECOL.shp")
+extent <- ext(tracks)
+extent <- ext(c(xmin(extent)-1, xmax(extent)+1, ymin(extent)-1, ymax(extent)+1))
+
+# Crop
+modis <- crop(modis, extent)
+
+# Make sure values range from 0 to 1
+modis <- modis / 100
 
 # Extract the separate layers
 modis_shrub <- modis[[1]]
 modis_noveg <- modis[[2]]
 modis_trees <- modis[[3]]
 
-# Make sure that the layers range from 0 to 1 rather than from 0 to 100
-modis_shrub <- modis_shrub / 100
-modis_noveg <- modis_noveg / 100
-modis_trees <- modis_trees / 100
-
-# Values above 100 are water. Let's reclassify those to 0% Vegetation, i.e. 100%
+# Values above 1 are water. Let's reclassify those to 0% Vegetation, i.e. 100%
 # NonVegetated
 values(modis_shrub)[values(modis_shrub) > 1] <- 0
 values(modis_noveg)[values(modis_noveg) > 1] <- 1
 values(modis_trees)[values(modis_trees) > 1] <- 0
-
-# Visualize again
-plot(stack(modis_shrub, modis_noveg, modis_trees))
 
 # Add up all of the rasters
 summed <- sum(modis_shrub, modis_noveg, modis_trees)
@@ -147,44 +150,38 @@ summed <- sum(modis_shrub, modis_noveg, modis_trees)
 hist(summed)
 
 # Load the Globeland and Copernicus watercover layers
-glo <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
-cop <- raster("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
+glo <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
+cop <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
 
 # Put them together
 water <- max(glo, cop)
+water <- crop(water, extent)
+water <- raster(water)
 
-# Load dates
-dates_wat <- read_csv("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")
-dates_wat <- dates_wat$Date
+# Load floodmaps
+flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
+  dir(path = ., pattern = ".tif$", full.names = T) %>%
+  rast()
+flood <- flood[[1:4]]
+names_flood <- names(flood)
 
-# For the same dates we now want to create dynamic vegetation layers. However,
-# in contrast to the merged globeland layer we now don't want to rasterize
-# rivers again.
-files <- dir(
-    path        = "03_Data/02_CleanData/00_Floodmaps/02_Resampled/"
-  , full.names  = T
-)
+# Crop them to the extent of interest
+flood <- crop(flood, extent)
+flood <- stack(flood)
 
-# Get their dates
-dates_ori <- files %>%
-  basename() %>%
-  substr(start = 1, stop = 10) %>%
-  as.Date("%Y-%m-%d")
+# Coerce modis layers to raster
+modis_shrub <- raster(modis_shrub)
+modis_trees <- raster(modis_trees)
+modis_noveg <- raster(modis_noveg)
 
-# Subset to relevant dates
-files <- files[dates_ori %in% dates_wat]
-
-# Load those dynamice water layers
-ori <- stack(files)
-
-# Cover missing values in the ori layers with globeland data
-ori <- suppressMessages(
+# Cover missing values in the floodmaps with our globeland/copernicus water
+flood <- suppressMessages(
   pbmclapply(
-      X                  = 1: nlayers(ori)
+      X                  = 1:nlayers(flood)
     , mc.cores           = detectCores() - 1
     , ignore.interactive = T
     , FUN                = function(x){
-      covered <- raster::cover(ori[[x]], water)
+      covered <- cover(flood[[x]], water)
       covered <- writeRaster(covered, tempfile())
       return(covered)
   }) %>% stack()
@@ -193,12 +190,12 @@ ori <- suppressMessages(
 # Mask water in shrub layer
 modis_shrub <- suppressMessages(
   pbmclapply(
-      X                  = 1: nlayers(ori)
+      X                  = 1:nlayers(flood)
     , mc.cores           = detectCores() - 1
     , ignore.interactive = T
     , FUN                = function(x){
       masked <- mask(modis_shrub
-        , mask        = ori[[x]]
+        , mask        = flood[[x]]
         , maskvalue   = 1
         , updatevalue = 0
       )
@@ -210,12 +207,12 @@ modis_shrub <- suppressMessages(
 # Mask water in nonvegetated layer
 modis_noveg <- suppressMessages(
   pbmclapply(
-      X                  = 1: nlayers(ori)
+      X                  = 1:nlayers(flood)
     , mc.cores           = detectCores() - 1
     , ignore.interactive = T
     , FUN                = function(x){
       masked <- mask(modis_noveg
-        , mask        = ori[[x]]
+        , mask        = flood[[x]]
         , maskvalue   = 1
         , updatevalue = 1
       )
@@ -227,12 +224,12 @@ modis_noveg <- suppressMessages(
 # Mask water in trees layer
 modis_trees <- suppressMessages(
   pbmclapply(
-      X                  = 1: nlayers(ori)
+      X                  = 1:nlayers(flood)
     , mc.cores           = detectCores() - 1
     , ignore.interactive = T
     , FUN                = function(x){
       masked <- mask(modis_trees
-        , mask        = ori[[x]]
+        , mask        = flood[[x]]
         , maskvalue   = 1
         , updatevalue = 0
       )
@@ -247,9 +244,9 @@ modis_noveg <- rast(modis_noveg)
 modis_trees <- rast(modis_trees)
 
 # Put dates as layer names
-names(modis_shrub) <- dates_ori
-names(modis_noveg) <- dates_ori
-names(modis_trees) <- dates_ori
+names(modis_shrub) <- names_flood
+names(modis_noveg) <- names_flood
+names(modis_trees) <- names_flood
 
 # Visualize layers again
 plot(c(modis_shrub[[1]], modis_noveg[[1]], modis_trees[[1]]))

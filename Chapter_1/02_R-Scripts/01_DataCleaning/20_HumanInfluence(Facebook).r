@@ -98,6 +98,6 @@ plot(humans_buff[[1:8]], col = viridis(50))
 # Write the buffered layers to file
 writeRaster(
     x         = humans_buff
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.tif"
+  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.grd"
   , overwrite = TRUE
 )

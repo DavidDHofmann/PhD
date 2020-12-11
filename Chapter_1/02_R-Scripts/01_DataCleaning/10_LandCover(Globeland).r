@@ -67,11 +67,15 @@ merged <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 # Load the reference raster
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Crop the merged globeland tiles to our extent
-merged <- crop(merged, r, snap = "out")
+# Crop the merged tiles to our extent (with a slight buffer of 1km)
+extent <- vect(as(extent(raster(r)) + c(-1, 1, -1, 1) / 111, "SpatialPolygons"))
+merged <- crop(merged, extent, snap = "out")
+
+# Check out the distribution of values
+freq(merged)
 
 # Prepare classes. Note that I'm going to use the same class description and
-# codes as for the copernicus dataset.
+# codes as for the copernicus dataset. Note that I'll replace NAs with grassland
 info <- data.frame(
     Code = c(10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 255)
   , Class = c(
@@ -87,7 +91,7 @@ info <- data.frame(
     , "PermanentIceSnow"
     , "NA"
   )
-  , CodeNew = c(3, 4, 6, 5, 1, 1, 6, 2, 7, 7, 0)
+  , CodeNew = c(3, 4, 6, 5, 1, 1, 6, 2, 7, 7, 6)
   , ClassNew = c(
       "Cropland"
     , "Forest"
@@ -99,7 +103,7 @@ info <- data.frame(
     , "Urban"
     , "Bare"
     , "Bare"
-    , "NA"
+    , "Grassland"
   )
 )
 
@@ -107,7 +111,6 @@ info <- data.frame(
 info <- arrange(info, CodeNew)
 
 # Assign a color to the new classes
-info$Color[info$CodeNew == 0] <- "transparent"
 info$Color[info$CodeNew == 1] <- "blue"
 info$Color[info$CodeNew == 2] <- "red"
 info$Color[info$CodeNew == 3] <- "pink"
@@ -126,9 +129,15 @@ coarse <- aggregate(new, fact = round(250 / 30), fun = modal)
 # Resample to reference raster
 coarse <- resample(coarse, r, method = "near")
 
-# Visualize it
-plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
+# Check out the frequency of different values
+freq(coarse)
 
+# Visualize it
+plot(raster(coarse), col = unique(info$Color), breaks = 0:6)
+
+################################################################################
+#### Store Final Raster
+################################################################################
 # Store the raster
 writeRaster(
     x         = raster(coarse)
@@ -146,6 +155,6 @@ writeRaster(
 
 # Store the information table
 info %>%
-  dplyr::select(, Class = ClassNew, Code = CodeNew, Color) %>%
+  dplyr::select(Class = ClassNew, Code = CodeNew, Color) %>%
   distinct() %>%
   write_csv("03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.csv")

@@ -27,9 +27,12 @@ dat <- lapply(dat, rast)
 # Merge the tiles
 dat <- do.call(merge, dat)
 
-# Crop the data to our study area
+# Load reference raster
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
-dat <- crop(dat, r, snap = "out")
+
+# Crop the merged tiles to our extent (with a slight buffer of 1km)
+extent <- vect(as(extent(raster(r)) + c(-1, 1, -1, 1) / 111, "SpatialPolygons"))
+dat <- crop(dat, extent, snap = "out")
 
 # Store the merged object to file
 writeRaster(
@@ -46,10 +49,10 @@ info <- arrange(info, Code)
 vals <- freq(dat)
 info <- subset(info, Code %in% vals[, 2])
 
-# Prepare reclassification table
+# Prepare reclassification table. Note that I'll replace the NAs with grassland.
 info$ClassNew <- info$Class
 info$ClassNew[info$Code >= 111 & info$Code <= 126] <- "Forest"
-info$ClassNew[info$Code == 0] <- "NA"
+info$ClassNew[info$Code == 0] <- "Grassland"
 info$ClassNew[info$Code == 20] <- "Shrubs"
 info$ClassNew[info$Code == 30] <- "Grassland"
 info$ClassNew[info$Code == 40] <- "Cropland"
@@ -60,7 +63,7 @@ info$ClassNew[info$Code == 90] <- "Water"
 
 # Create new codes
 info$CodeNew <- NA
-info$CodeNew[info$ClassNew == "NA"] <- 0
+info$CodeNew[info$ClassNew == "NA"] <- 6
 info$CodeNew[info$ClassNew == "Water"] <- 1
 info$CodeNew[info$ClassNew == "Urban"] <- 2
 info$CodeNew[info$ClassNew == "Cropland"] <- 3
@@ -73,7 +76,6 @@ info$CodeNew[info$ClassNew == "Bare"] <- 7
 info <- arrange(info, CodeNew)
 
 # Assign a color to the new classes
-info$Color[info$CodeNew == 0] <- "transparent"
 info$Color[info$CodeNew == 1] <- "blue"
 info$Color[info$CodeNew == 2] <- "red"
 info$Color[info$CodeNew == 3] <- "pink"
@@ -92,9 +94,15 @@ coarse <- aggregate(dat, fact = round(250 / 110), fun = modal)
 # Resample to reference raster
 coarse <- resample(coarse, r, method = "near")
 
-# Visualize it
-plot(raster(coarse), col = unique(info$Color), breaks = 0:8 - 1)
+# Check out the frequency of different values
+freq(coarse)
 
+# Visualize it
+plot(raster(coarse), col = unique(info$Color), breaks = 0:6)
+
+################################################################################
+#### Store Final Raster
+################################################################################
 # Store the raster
 writeRaster(
     x         = raster(coarse)

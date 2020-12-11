@@ -33,9 +33,10 @@ dat <- mosaic(dat[[1]], dat[[2]], dat[[3]], dat[[4]], dat[[5]], fun = max)
 # Convert to terra
 dat <- rast(dat)
 
-# Crop the data to our study area
+# Crop the merged tiles to our extent (with a slight buffer of 1km)
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
-dat <- crop(dat, r, snap = "out")
+extent <- vect(as(extent(raster(r)) + c(-1, 1, -1, 1) / 111, "SpatialPolygons"))
+dat <- crop(dat, extent, snap = "out")
 
 # Replace NAs with 0s
 dat <- classify(dat, rcl = matrix(c(NA, 0), nrow = 1))

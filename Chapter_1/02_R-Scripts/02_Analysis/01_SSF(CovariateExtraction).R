@@ -21,19 +21,72 @@ library(rgdal)        # To handle spatial data
 library(pbmcapply)    # For multicore abilities
 
 # Load the generated steps
-lines <- readOGR("03_Data/02_CleanData/00_General_Dispersers_Popecol(iSSF).shp")
+lines <- readOGR("03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF).shp")
+
 
 ################################################################################
-#### Water
+#### Land Cover - Globeland
+################################################################################
+# Load the copernicus land cover map
+dat <- raster("03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.tif")
+inf <- read_csv("03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.csv")
+
+# Split categories into different layers
+dat <- layerize(dat)
+
+# Put nice layernames
+names(dat) <- inf$Class
+
+# Extract land cover along each line
+extracted <- extrCov(dat, lines)
+
+# Add nice column names
+names(extracted) <- paste0("Globeland_", names(dat))
+
+# Let's look at the result
+head(extracted)
+
+# Add the data to the lines
+lines@data <- cbind(lines@data, extracted)
+
+################################################################################
+#### Land Cover - Copernicus
+################################################################################
+# Load the copernicus land cover map
+dat <- raster("03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.tif")
+inf <- read_csv("03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.csv")
+
+# Split categories into different layers
+dat <- layerize(dat)
+
+# Put nice layernames
+names(dat) <- inf$Class
+
+# Extract land cover along each line
+extracted <- extrCov(dat, lines)
+
+# Add nice column names
+names(extracted) <- paste0("Copernicus_", names(dat))
+
+# Let's look at the result
+head(extracted)
+
+# Add the data to the lines
+lines@data <- cbind(lines@data, extracted)
+
+################################################################################
+#### LandCover - Water
 ################################################################################
 # Load the merged water cover dataset
-wat <- brick("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")
+dat <- stack("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")
 
-# Also load the dates
-dates <- read_csv("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.csv")
+# Extract dates from layernames
+dates <- names(dat) %>%
+  substr(start = 2, stop = 11) %>%
+  as.Date(format = "%Y.%m.%d")
 
 # Now we can extract the percentage cover of Water along each step
-extracted <- extrCov(wat, lines)
+extracted <- extrCov(dat, lines)
 
 # For completeness we might want to add the dates into the dataframe
 names(extracted) <- as.character(dates)
@@ -43,54 +96,55 @@ head(extracted)
 
 # We only want to keep the values from the dates that are closest in time to the
 # steps
-lines$Water <- sapply(1:nrow(lines), function(x){
-  index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
-  value <- extracted[x, index]
-})
-
-# Remove layers and clear garbage
-rm(water)
-gc()
+lines$Water <- pbmclapply(1:nrow(lines)
+  , mc.cores           = detectCores() - 1
+  , ignore.interactive = T
+  , FUN                = function(x){
+    index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
+    value <- extracted[x, index]
+    return(value)
+}) %>% do.call(c, .)
 
 ################################################################################
-#### Trees
+#### LandCover - Trees
 ################################################################################
 # Load the treecover map
-trees <- brick("03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.tif")
+dat <- stack("03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.grd")
 
-# Read all layers to memory. This substantially decreases extraction times
-trees <- readAll(trees)
+# Extract dates from layernames
+dates <- names(dat) %>%
+  substr(start = 2, stop = 11) %>%
+  as.Date(format = "%Y.%m.%d")
 
-# Extract the average tree cover along each line
-extracted <- extrCov(trees, lines)
+# Now we can extract the percentage cover of water along each step
+extracted <- extrCov(dat, lines)
 
 # For completeness we might want to add the dates into the dataframe
 names(extracted) <- as.character(dates)
 
-# Let's look at the result
-head(extracted)
-
 # Keep only values closest in date
-lines$Trees <- sapply(1:nrow(lines), function(x){
-  index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
-  value <- extracted[x, index]
-})
-
-# Remove layers and clear garbage
-rm(Trees)
-gc()
+lines$Trees <- pbmclapply(1:nrow(lines)
+  , mc.cores           = detectCores() - 1
+  , ignore.interactive = T
+  , FUN                = function(x){
+    index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
+    value <- extracted[x, index]
+    return(value)
+}) %>% do.call(c, .)
 
 ################################################################################
-#### Shrubs
+#### LandCover - Shrubs
 ################################################################################
 # Load the shrubcover map
-shrubs <- brick("03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.tif")
+dat <- stack("03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.grd")
 
-# Read all layers to memory. This substantially decreases extraction times
-shrubs <- readAll(shrubs)
+# Extract dates from layernames
+dates <- names(dat) %>%
+  substr(start = 2, stop = 11) %>%
+  as.Date(format = "%Y.%m.%d")
 
-# Extract the average shrub cover in each ellipse
-extracted <- extrCov(shrubs, lines)
+# Extract the average shrub cover along each line
+extracted <- extrCov(dat, lines)
 
 # For completeness we might want to add the dates into the dataframe
 names(extracted) <- as.character(dates)
@@ -99,27 +153,105 @@ names(extracted) <- as.character(dates)
 head(extracted)
 
 # Keep only values closest in date
-lines$Shrubs <- sapply(1:nrow(lines), function(x){
-  index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
-  value <- extracted[x, index]
-})
+lines$Shrubs <- pbmclapply(1:nrow(lines)
+  , mc.cores           = detectCores() - 1
+  , ignore.interactive = T
+  , FUN                = function(x){
+    index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
+    value <- extracted[x, index]
+    return(value)
+}) %>% do.call(c, .)
 
-# Remove layers and clear garbage
-rm(Shrubs)
-gc()
+################################################################################
+#### Land Use - Protection
+################################################################################
+# Load protection zones
+dat <- raster("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(3Classes).tif")
+inf <- read_csv("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS(3Classes).csv")
 
-############################################################
-#### Extraction of Covariates: Land Use Types
-############################################################
-# Load the protected areas raster layer
-prot <- "03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks(1Class).tif" %>%
-  raster()
+# Separate layers
+dat <- layerize(dat)
 
 # Extract the percentage coverage
-extracted <- extrCov(prot, lines)
+extracted <- extrCov(dat, lines)
+
+# Add nice column names
+names(extracted) <- inf$Class
 
 # Put the extracted values into the dataframe
-lines$Protected <- extracted[, 1]
+lines@data <- cbind(lines@data, extracted)
+
+################################################################################
+#### Anthropogenic - Various
+################################################################################
+# Load different anthropogenic layers
+dat <- stack(c(
+    "03_Data/02_CleanData/04_AnthropogenicFeatures_Villages_FACEBOOK.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_Villages_WORLDPOP.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToVillages_FACEBOOK.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToVillages_WORLDPOP.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToRoads_GEOFABRIK.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToHumans_FACEBOOK.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_DistanceToHumans_WORLDPOP.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanDensity_FACEBOOK.tif"
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanDensity_WORLDPOP.tif"
+))
+
+# Assign nice layernames
+names(dat) <- c(
+    "Facebook_Villages"
+  , "Worldpop_Villages"
+  , "Facebook_DistanceToVillages"
+  , "Worldpop_DistanceToVillages"
+  , "DistanceToRoads"
+  , "Facebook_DistanceToHumans"
+  , "Worldpop_DistanceToHumans"
+  , "Facebook_HumanDensity"
+  , "Worldpop_HumanDensity"
+)
+
+# Extract values
+extracted <- extrCov(dat, lines)
+
+# Assign nice names
+names(extracted) <- names(dat)
+
+# Put the extracted values into the dataframe
+lines@data <- cbind(lines@data, extracted)
+
+################################################################################
+#### Anthropogenic - Human Influence (Facebook)
+################################################################################
+# Load human influence data
+dat <- stack("03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.tif")
+
+# Extract values
+extracted <- extrCov(dat, lines)
+
+# Assign names
+names(extracted) <- names(dat)
+
+# Put the extracted values into the dataframe
+lines@data <- cbind(lines@data, extracted)
+
+################################################################################
+#### Anthropogenic - Human Influence (Worldpop)
+################################################################################
+# Load human influence data
+dat <- stack("03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_WORLDPOP.tif")
+
+# Extract values
+extracted <- extrCov(dat, lines)
+
+# Assign names
+names(extracted) <- names(dat)
+
+# Put the extracted values into the dataframe
+lines@data <- cbind(lines@data, extracted)
+
+################################################################################
+#### CONTINUE HERE
+################################################################################
 
 ############################################################
 #### Extraction of Covariates: Human Influence

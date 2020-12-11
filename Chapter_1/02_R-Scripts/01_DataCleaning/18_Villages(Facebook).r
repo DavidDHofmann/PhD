@@ -26,7 +26,7 @@ dens <- aggregate(dens, fact = 3, fun = sum)
 # Remove pixels that are inhabited by less than two people
 dens_bin <- dens > 2
 
-# Aggregate to a coarser resolution
+# Aggregate to even coarser resolution
 dens_bin <- aggregate(dens_bin, fact = 3, fun = max)
 
 # Apply focal filter
