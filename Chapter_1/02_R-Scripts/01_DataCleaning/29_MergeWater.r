@@ -28,9 +28,9 @@ globe <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
 coper <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
 merit <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers_MERIT.tif")
 
-# Before we generate the dynamic floodmaps, let's merge the globeland,
-# copernicus, and merit data
-water <- max(globe, coper, merit)
+# Before we generate the dynamic floodmaps, let's merge the globeland and
+# copernicus data. Note that I'll add in the MERIT layer later.
+water <- max(globe, coper)
 
 # We only need dynamic watermaps for the extent on which we have GPS data. So
 # let's crop with a slight buffer
@@ -41,6 +41,17 @@ extent <- ext(c(xmin(extent)-1, xmax(extent)+1, ymin(extent)-1, ymax(extent)+1))
 # Crop watermaps
 water <- crop(water, extent)
 flood <- crop(flood, extent)
+merit <- crop(merit, extent)
+
+# We need to remove the waterbodies for the extent of the dynamic floodmaps.
+# Let's get a polygon for the extent for which we have dynamic floodmaps first
+p <- ext(trim(flood[[1]]))
+
+# Replace the values below the polygon to 0
+water[cells(water, p)] <- 0
+
+# Before we add the dynamic floodmaps, let's merge the globeland and merit data
+water <- max(water, merit)
 
 # Coerce to raster
 water <- raster(water)
@@ -53,9 +64,9 @@ water <- suppressMessages(
     , mc.cores           = detectCores() - 1
     , ignore.interactive = T
     , FUN                = function(x){
-      covered <- cover(flood[[x]], water)
-      covered <- writeRaster(covered, tempfile())
-      return(covered)
+      filled <- mask(water, flood[[x]], maskvalue = 1, updatevalue = 1)
+      filled <- writeRaster(filled, tempfile())
+      return(filled)
   }) %>% stack()
 )
 

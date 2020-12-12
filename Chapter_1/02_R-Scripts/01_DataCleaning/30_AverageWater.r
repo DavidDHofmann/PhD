@@ -25,7 +25,7 @@ library(davidoff)     # Custom functions
 globe <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
 coper <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
 merit <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers_MERIT.tif")
-water <- max(globe, coper, merit)
+water <- max(globe, coper)
 
 # Load dyanmic layers
 flood <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")
@@ -53,6 +53,9 @@ flood <- classify(flood, rcl)
 # Combine dynamic with static water layer
 flood <- expand(flood, water, value = NA)
 water <- cover(flood, water)
+
+# Add merit rivers
+water <- max(water, merit)
 
 # Visualize
 plot(water, col = c("white", "blue"))
