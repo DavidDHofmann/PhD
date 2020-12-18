@@ -197,7 +197,7 @@ ggplot(vis, aes(color = factor(CollarID))) +
   )
 
 # Maybe look at some in more detail
-sub <- c("Taryn", "Abel")
+sub <- c("Taryn", "Sishen", "Abel")
 ggplot(subset(vis, DogName %in% sub), aes(color = factor(CollarID))) +
   geom_segment(
       aes(x = First, xend = Last, y = DogName, yend = DogName)
@@ -449,14 +449,21 @@ data <- arrange(data, DogName, Timestamp)
 # Some of the data has a very high resolution that we don't need. We will
 # therefore subsample to a resolution we can work with.
 data <- data %>% group_by(DogName) %>% nest()
+
+# Resmaple
 data$data <- suppressMessages(
-  pbmclapply(data$data
-    , ignore.interactive =  T
-    , mc.cores = detectCores() - 1
-    , FUN = function(x){resFix2(x, hours = 1, start = 1)}
+  pbmclapply(1:nrow(data)
+    , ignore.interactive = T
+    , mc.cores           = detectCores() - 1
+    , FUN                = function(x){
+      resFix2(data$data[[x]], hours = 1, start = 1, tol = 0.5)
+    }
   )
 )
 data <- unnest(data)
+
+# Check out nrow of remaining data
+nrow(data)
 
 ################################################################################
 #### Store the Output (as csv and shapefile)
@@ -530,7 +537,7 @@ lapply(1:nrow(data), function(x){
   row.names(track) <- as.character(1:nrow(track))
 
   # Create spacetime object from points
-  points_st <-STIDF(
+  points_st <- STIDF(
       sp   = as(points, "SpatialPoints")
     , time = points$Timestamp
     , data = points@data
@@ -571,7 +578,7 @@ lapply(1:nrow(data), function(x){
     , colour_scale = rev(viridis(2, begin = 0.6))
     , size         = 0.75
     , balloon      = T
-    , shape        = shape
+    , shape        = shape1
     , LabelScale   = 0
   ), error = function(e){
     kml_layer(points_st
@@ -579,7 +586,7 @@ lapply(1:nrow(data), function(x){
       , colour_scale = rev(viridis(2, begin = 0.6))
       , size         = 0.75
       , balloon      = F
-      , shape        = shape
+      , shape        = shape1
       , LabelScale   = 0
     )
   })

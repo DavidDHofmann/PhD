@@ -1,6 +1,6 @@
-############################################################
+################################################################################
 #### Step Selection Function - Model Selection
-############################################################
+################################################################################
 # Description: In this script I run forward model selection using the 4-hourly
 # fixes of our dispersers
 
@@ -11,21 +11,320 @@ rm(list = ls())
 options(scipen = 999)
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)
-library(data.table)
-library(rgeos)
 library(tidyverse)
-library(glmmTMB)
-library(caTools)
-library(lemon)
+library(davidoff)
 library(corrplot)
+library(parallel)
+library(cowplot)
+library(ggpubr)
+library(glmmTMB)
 
-# Load custom functions
-source("Functions.r")
+################################################################################
+#### Loading Data
+################################################################################
+# Load the 4 hourly fixes
+dat <- read_csv("03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF_Extracted).csv")
+
+# Remove columns that we don't need
+dat <- dat %>% select(
+  -c(X1, burst, State, x1_, x2_, y1_, y2_, t1_, t2_, dt_, drctn_p, absta_)
+)
+
+# We want to add the log of the step length and the cosine of the turning angle
+dat <- dat %>% mutate(
+    log_sl_ = log(sl_)
+  , cos_ta_ = cos(ta_)
+)
+
+# Let's also move all movement metrics to the front
+dat <- dat %>% select(
+  c(id = dog, step_id_, case_, sl_, log_sl_, ta_, cos_ta_, everything())
+)
+
+# Let's check for each covariate how many non-zero entries there are
+dat %>%
+  select("sl_":ncol(.)) %>%
+  apply(2, function(x){
+    sum(x > 0)
+  }) %>% as.data.frame()
+
+# Simplify protection categories
+dat$Protected <- dat$ForestReserve + dat$Protected + dat$NationalPark
+dat$ForestReserve <- NULL
+dat$NationalPark <- NULL
+
+# Calculate square rooted distances
+dat <- dat %>% mutate(
+    SqrtDistanceToWater             = sqrt(DistanceToWater)
+  , SqrtFacebook_DistanceToVillages = sqrt(Facebook_DistanceToVillages)
+  , SqrtWorldpop_DistanceToVillages = sqrt(Worldpop_DistanceToVillages)
+  , SqrtDistanceToRoads             = sqrt(DistanceToRoads)
+  , SqrtFacebook_DistanceToHumans   = sqrt(Facebook_DistanceToHumans)
+  , SqrtWorldpop_DistanceToHumans   = sqrt(Worldpop_DistanceToHumans)
+)
+
+################################################################################
+#### Scaling Data
+################################################################################
+# Scale continuous covariates
+dat <- dat %>%
+  mutate(
+      log_sl_                             = scale(log_sl_)
+    , cos_ta_                             = scale(cos_ta_)
+    , sl_                                 = scale(sl_)
+    , Globeland_Water                     = scale(Globeland_Water)
+    , Globeland_Urban                     = scale(Globeland_Urban)
+    , Globeland_Cropland                  = scale(Globeland_Cropland)
+    , Globeland_Forest                    = scale(Globeland_Forest)
+    , Globeland_Shrubs                    = scale(Globeland_Shrubs)
+    , Globeland_Grassland                 = scale(Globeland_Grassland)
+    , Copernicus_Water                    = scale(Copernicus_Water)
+    , Copernicus_Urban                    = scale(Copernicus_Urban)
+    , Copernicus_Cropland                 = scale(Copernicus_Cropland)
+    , Copernicus_Forest                   = scale(Copernicus_Forest)
+    , Copernicus_Shrubs                   = scale(Copernicus_Shrubs)
+    , Copernicus_Grassland                = scale(Copernicus_Grassland)
+    , DistanceToWater                     = scale(DistanceToWater)
+    , SqrtDistanceToWater                 = scale(SqrtDistanceToWater)
+    , Water                               = scale(Water)
+    , Trees                               = scale(Trees)
+    , Shrubs                              = scale(Shrubs)
+    , Protected                           = scale(Protected)
+    , Facebook_Villages                   = scale(Facebook_Villages)
+    , Worldpop_Villages                   = scale(Worldpop_Villages)
+    , Facebook_DistanceToVillages         = scale(Facebook_DistanceToVillages)
+    , SqrtFacebook_DistanceToVillages     = scale(SqrtFacebook_DistanceToVillages)
+    , Worldpop_DistanceToVillages         = scale(Worldpop_DistanceToVillages)
+    , SqrtWorldpop_DistanceToVillages     = scale(SqrtWorldpop_DistanceToVillages)
+    , DistanceToRoads                     = scale(DistanceToRoads)
+    , SqrtDistanceToRoads                 = scale(SqrtDistanceToRoads)
+    , Facebook_DistanceToHumans           = scale(Facebook_DistanceToHumans)
+    , SqrtFacebook_DistanceToHumans       = scale(SqrtFacebook_DistanceToHumans)
+    , Worldpop_DistanceToHumans           = scale(Worldpop_DistanceToHumans)
+    , SqrtWorldpop_DistanceToHumans       = scale(SqrtWorldpop_DistanceToHumans)
+    , Facebook_HumanDensity               = scale(Facebook_HumanDensity)
+    , Worldpop_HumanDensity               = scale(Worldpop_HumanDensity)
+    , Facebook_HumanInfluenceBuffer_0000  = scale(Facebook_HumanInfluenceBuffer_0000)
+    , Facebook_HumanInfluenceBuffer_2500  = scale(Facebook_HumanInfluenceBuffer_2500)
+    , Facebook_HumanInfluenceBuffer_5000  = scale(Facebook_HumanInfluenceBuffer_5000)
+    , Facebook_HumanInfluenceBuffer_7500  = scale(Facebook_HumanInfluenceBuffer_7500)
+    , Facebook_HumanInfluenceBuffer_10000 = scale(Facebook_HumanInfluenceBuffer_10000)
+    , Facebook_HumanInfluenceBuffer_15000 = scale(Facebook_HumanInfluenceBuffer_15000)
+    , Facebook_HumanInfluenceBuffer_20000 = scale(Facebook_HumanInfluenceBuffer_20000)
+    , Worldpop_HumanInfluenceBuffer_0000  = scale(Worldpop_HumanInfluenceBuffer_0000)
+    , Worldpop_HumanInfluenceBuffer_2500  = scale(Worldpop_HumanInfluenceBuffer_2500)
+    , Worldpop_HumanInfluenceBuffer_5000  = scale(Worldpop_HumanInfluenceBuffer_5000)
+    , Worldpop_HumanInfluenceBuffer_7500  = scale(Worldpop_HumanInfluenceBuffer_7500)
+    , Worldpop_HumanInfluenceBuffer_10000 = scale(Worldpop_HumanInfluenceBuffer_10000)
+    , Worldpop_HumanInfluenceBuffer_15000 = scale(Worldpop_HumanInfluenceBuffer_15000)
+    , Worldpop_HumanInfluenceBuffer_20000 = scale(Worldpop_HumanInfluenceBuffer_20000)
+  )
+
+################################################################################
+#### Investigate Correlation Among Covariates
+################################################################################
+# Investigate correlations among covariates
+correlations <- dat %>%
+  select(., c(Globeland_Water:ncol(.)), - RoadCrossing) %>%
+  cor(., use = "pairwise.complete.obs")
+
+# Visualize
+corrplot(correlations, type = "upper")
+corrplot(correlations, method = "number", type = "upper")
+
+# We only need to look at the upper triangle of the derived matrix
+correlations[upper.tri(correlations, diag = TRUE)] <- NA
+
+# Now look at the correlation matrix
+correlations
+
+# Identify the covariates with a correlation above a specific value (some say
+# that correlation should not lie above 0.6, others say that 0.7 is fine)
+mat <- abs(correlations) > 0.6
+
+# Prepare a dataframe that shows the covariates with a correlation above 0.6
+df <- mat %>%
+  as.table() %>%
+  as.data.frame(., stringsAsFactors = FALSE)
+
+# Remove the NAs
+correlated <- na.omit(df[df$Freq, ])
+
+# Add the correlation values to the table
+correlated$Corr <- na.omit(correlations[mat])
+
+# Look at the result
+correlated
+
+# # Visualize globeland selection
+# dat %>%
+#   select(case_, contains("Globeland")) %>%
+#   select(-c(Globeland_Cropland, Globeland_Urban)) %>%
+#   gather(key = Covariate, value = Cover, 2:ncol(.)) %>%
+#   ggplot(aes(x = Covariate, y = Cover, col = as.factor(case_))) + geom_boxplot()
+
+################################################################################
+#### Contrast Covariates: DistanceTo vs. SqrtDistanceTo
+################################################################################
+# Distance to Roads
+mod1 <- glmm_clogit(writeForm("DistanceToRoads"), data = dat)
+mod2 <- glmm_clogit(writeForm("SqrtDistanceToRoads"), data = dat)
+summary(mod1)
+summary(mod2)
+AIC(mod1, mod2)
+
+# Distance to Water
+mod1 <- glmm_clogit(writeForm("DistanceToWater"), data = dat)
+mod2 <- glmm_clogit(writeForm("SqrtDistanceToWater"), data = dat)
+summary(mod1)
+summary(mod2)
+AIC(mod1, mod2)
+
+# Distance to Humans (Facebook)
+mod1 <- glmm_clogit(writeForm("Facebook_DistanceToHumans"), data = dat)
+mod2 <- glmm_clogit(writeForm("SqrtFacebook_DistanceToHumans"), data = dat)
+summary(mod1)
+summary(mod2)
+AIC(mod1, mod2)
+
+# Distance to Humans (Worldpop)
+mod1 <- glmm_clogit(writeForm("Worldpop_DistanceToHumans"), data = dat)
+mod2 <- glmm_clogit(writeForm("SqrtWorldpop_DistanceToHumans"), data = dat)
+summary(mod1)
+summary(mod2)
+AIC(mod1, mod2)
+
+# Distance to Villages (Facebook)
+mod1 <- glmm_clogit(writeForm("Facebook_DistanceToVillages"), data = dat)
+mod2 <- glmm_clogit(writeForm("SqrtFacebook_DistanceToVillages"), data = dat)
+summary(mod1)
+summary(mod2)
+AIC(mod1, mod2)
+
+# Distance to Villages (Worldpop)
+mod1 <- glmm_clogit(writeForm("Worldpop_DistanceToVillages"), data = dat)
+mod2 <- glmm_clogit(writeForm("SqrtWorldpop_DistanceToVillages"), data = dat)
+summary(mod1)
+summary(mod2)
+AIC(mod1, mod2)
+
+# Since the square-rooted version appears to outperform the linear form, remove
+# the linear covariates
+dat$DistanceToRoads <- NULL
+dat$DistanceToWater <- NULL
+dat$Facebook_DistanceToHumans <- NULL
+dat$Worldpop_DistanceToHumans <- NULL
+dat$Facebook_DistanceToVillages <- NULL
+dat$Worldpop_DistanceToVillages <- NULL
+
+################################################################################
+#### Compare Covariates: LandCover (Globeland, Copernicus, MODIS)
+################################################################################
+mod1 <- glmm_clogit(writeForm(c("Globeland_Water", "Globeland_Shrubs",
+  "Globeland_Grassland", "Globeland_Forest")), data = dat)
+mod2 <- glmm_clogit(writeForm(c("Copernicus_Water", "Copernicus_Shrubs",
+  "Copernicus_Grassland", "Copernicus_Forest")), data = dat)
+mod3 <- glmm_clogit(writeForm(c("Water", "Shrubs", "Trees")), data = dat)
+summary(mod1)
+summary(mod2)
+summary(mod3)
+AIC(mod1, mod2, mod3)
+
+################################################################################
+#### Contrast Covairates: Water (Globeland, Copernicus, MODIS)
+################################################################################
+mod1 <- glmm_clogit(writeForm("Globeland_Water"), data = dat)
+mod2 <- glmm_clogit(writeForm("Copernicus_Water"), data = dat)
+mod3 <- glmm_clogit(writeForm("Water"), data = dat)
+summary(mod1)
+summary(mod2)
+summary(mod3)
+AIC(mod1, mod2, mod3)
+
+################################################################################
+#### Contrast Covairates: Shrubs (Globeland, Copernicus, MODIS)
+################################################################################
+mod1 <- glmm_clogit(writeForm("Globeland_Shrubs"), data = dat)
+mod2 <- glmm_clogit(writeForm("Copernicus_Shrubs"), data = dat)
+mod3 <- glmm_clogit(writeForm("Shrubs"), data = dat)
+summary(mod1)
+summary(mod2)
+summary(mod3)
+AIC(mod1, mod2, mod3)
+
+################################################################################
+#### Contrast Covairates: Trees (Globeland, Copernicus, MODIS)
+################################################################################
+mod1 <- glmm_clogit(writeForm("Globeland_Forest"), data = dat)
+mod2 <- glmm_clogit(writeForm("Copernicus_Forest"), data = dat)
+mod3 <- glmm_clogit(writeForm("Trees"), data = dat)
+summary(mod1)
+summary(mod2)
+summary(mod3)
+AIC(mod1, mod2, mod3)
+
+################################################################################
+#### Contrast Covariates: Facebook vs Worldpop Human Buffer
+################################################################################
+# Prepare Comparison Table
+comp <- data.frame(
+    Covariate = select(dat, contains("HumanInfluenceBuffer")) %>% names()
+  , AIC       = NA
+  , Coeff     = NA
+)
+
+# Create additional helper columns
+comp$Buffer <- as.numeric(str_split_fixed(comp$Covariate, pattern = "_", 3)[, 3])
+comp$Source <- str_split_fixed(comp$Covariate, pattern = "_", 3)[, 1]
+
+# Run unimodal model for each of the covariates
+models <- mclapply(1:nrow(comp), mc.cores = detectCores() - 1, function(x){
+  covar <- as.character(comp$Covariate[x])
+  mod <- glmm_clogit(writeForm(c(covar, "Water")), data = dat)
+  return(list(AIC = AIC(mod), Coeff = last(getCoeffs(mod)$Coefficient)))
+})
+
+# Extract the results and put them into the comparison dataframe
+comp$AIC <- sapply(models, function(x){x$AIC})
+comp$Coeff <- sapply(models, function(x){x$Coeff})
+
+# Visualize results on AIC
+backup <- comp
+p1 <- ggplot(comp, aes(x = Buffer, y = AIC, col = as.factor(Source))) +
+  geom_point() +
+  geom_line() +
+  theme_cowplot()
+
+# Visualize results on Coefficient
+p2 <- ggplot(comp, aes(x = Buffer, y = Coeff, col = as.factor(Source))) +
+  geom_point() +
+  geom_line() +
+  theme_cowplot()
+
+# Put plots together
+ggarrange(p1, p2, ncol = 1)
+
+# Create new column with the covariate producing the lowest AIC
+dat$HumanInfluenceBuff <- comp$Covariate[comp$AIC == min(comp$AIC)] %>%
+  select(dat, .) %>%
+  as.matrix() %>%
+  as.vector()
+
+# Remove the others
+names(dat)
+dat <- dat %>%
+  select(
+    -c(Facebook_HumanInfluenceBuffer_0000:Worldpop_HumanInfluenceBuffer_20000)
+  )
+
+################################################################################
+#### Correlation Analysis
+################################################################################
+
 
 ############################################################
 #### Loading and Examining Data

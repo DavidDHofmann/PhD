@@ -162,12 +162,15 @@ water <- raster(water)
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   dir(path = ., pattern = ".tif$", full.names = T) %>%
   rast()
-flood <- flood[[1:4]]
 names_flood <- names(flood)
 
 # Crop them to the extent of interest
 flood <- crop(flood, extent)
 flood <- stack(flood)
+
+# Write stack to tempfile
+flood <- writeRaster(flood, tempfile())
+gc()
 
 # Coerce modis layers to raster
 modis_shrub <- raster(modis_shrub)
