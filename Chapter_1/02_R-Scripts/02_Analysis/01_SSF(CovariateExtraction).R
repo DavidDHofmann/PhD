@@ -24,7 +24,9 @@ library(maptools)     # For point patter analysis (calculate distance)
 library(rgeos)        # For spatial manipulation
 
 # Load the generated steps
-lines <- readOGR("03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF).shp")
+dat1 <- readOGR("03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF).shp")
+dat2 <- readOGR("03_Data/02_CleanData/00_General_Dispersers_POPECOL(TiSSF).shp")
+lines <- rbind(dat1, dat2)
 
 ################################################################################
 #### Land Cover - Globeland
@@ -344,16 +346,30 @@ lines@data <- dplyr::select(lines@data, c(
   )
 )
 
+# Rename dog
+names(lines)[1] <- "id"
+
 # To store the files we need to coerce the duration column to a numeric
 lines$DistanceToWater <- as.vector(lines$DistanceToWater)
 
-# Prepare filename
-filename <- "00_General_Dispersers_Popecol(SSF_Extracted)"
+# Prepare filenames
+filename1 <- "00_General_Dispersers_POPECOL(iSSF_Extracted)"
+filename2 <- "00_General_Dispersers_POPECOL(TiSSF_Extracted)"
 
-# Also save the lines to a spatial lines dataframe
-writeOGR(lines
+# Split the data
+lines1 <- subset(lines, method == "iSSF")
+lines2 <- subset(lines, method == "TiSSF")
+
+# Save the lines to a spatial lines dataframe
+writeOGR(lines1
   , "03_Data/02_CleanData"
-  , filename
+  , filename1
+  , driver = "ESRI Shapefile"
+  , overwrite = TRUE
+)
+writeOGR(lines2
+  , "03_Data/02_CleanData"
+  , filename2
   , driver = "ESRI Shapefile"
   , overwrite = TRUE
 )
@@ -361,4 +377,5 @@ writeOGR(lines
 # Let's also store the data to a regular csv. We can use this file to restore
 # the original column names since the ESRI shapefiles will store abbreviated
 # names
-write.csv(lines@data, paste0("03_Data/02_CleanData/", filename, ".csv"))
+write.csv(lines1@data, paste0("03_Data/02_CleanData/", filename1, ".csv"))
+write.csv(lines2@data, paste0("03_Data/02_CleanData/", filename2, ".csv"))

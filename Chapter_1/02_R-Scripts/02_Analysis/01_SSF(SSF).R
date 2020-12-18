@@ -28,6 +28,7 @@ set.seed(1234)
 ################################################################################
 # Select method ("iSSF" or "TiSSF")
 method <- "TiSSF"
+# method <- "iSSF"
 
 # Load the gps data
 data <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL.csv")
@@ -192,8 +193,8 @@ tracks <- tracks %>% mutate(speed_ = sl_ / dtcorr_)
 #### Generation of Random Steps
 ################################################################################
 # We can't work with 0 step lengths or step speeds
-tracks$sl_[tracks$sl_ == 0] <- min(tracks$sl_[tracks$sl_ > 0])
-tracks$speed_[tracks$speed_ == 0] <- min(tracks$speed_[tracks$speed_ > 0])
+tracks$sl_[tracks$sl_ == 0] <- 1
+tracks$speed_[tracks$speed_ == 0] <- 1
 
 # Fit a Gamma distribution to the step speed (again, fitting a gamma to step
 # speeds or fitting a gamma to (normalized) step lengths yields the same under
@@ -250,6 +251,7 @@ randomSteps <- pbmclapply(
       , case_   = 0
       , x2_     = x1_ + sin(absta_) * sl_
       , y2_     = y1_ + cos(absta_) * sl_
+      , speed_  = sl_ / dtcorr_
     )
 
   # Return the sampled steps
@@ -270,9 +272,9 @@ ssf <- rbind(tracks, randomSteps) %>%
 
 # Prepare a filename
 if (method == "iSSF"){
-  filename <- "00_General_Dispersers_Popecol(iSSF)"
+  filename <- "00_General_Dispersers_POPECOL(iSSF)"
   } else {
-  filename <- "00_General_Dispersers_Popecol(TiSSF)"
+  filename <- "00_General_Dispersers_POPECOL(TiSSF)"
 }
 
 # Store to file

@@ -15,26 +15,32 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(tidyverse)
-library(davidoff)
-library(corrplot)
-library(parallel)
-library(cowplot)
-library(ggpubr)
-library(glmmTMB)
+library(tidyverse)    # For data wrangling
+library(davidoff)     # Custom functions
+library(parallel)     # To run stuff in parallel
+library(corrplot)     # To plot correlations
+library(cowplot)      # For nice plots
+library(ggpubr)       # For nice plots
+library(glmmTMB)      # For modelling
 
 ################################################################################
 #### Loading Data
 ################################################################################
-# Load the 4 hourly fixes
-dat <- read_csv("03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF_Extracted).csv")
+# Load data (and put iSSF and TiSSF data together)
+dat1 <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF_Extracted).csv")
+dat2 <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(TiSSF_Extracted).csv")
+dat <- rbind(dat1, dat2)
+
+# IMPORTANT: For simplicity I'll replace the step length by the step speed
+dat$sl_ <- dat$speed_
+dat$speed_ <- NULL
 
 # Remove columns that we don't need
 dat <- dat %>% select(
   -c(X1, burst, State, x1_, x2_, y1_, y2_, t1_, t2_, dt_, drctn_p, absta_)
 )
 
-# We want to add the log of the step length and the cosine of the turning angle
+# We want to add the log of the step speed and the cosine of the turning angle
 dat <- dat %>% mutate(
     log_sl_ = log(sl_)
   , cos_ta_ = cos(ta_)
@@ -42,15 +48,15 @@ dat <- dat %>% mutate(
 
 # Let's also move all movement metrics to the front
 dat <- dat %>% select(
-  c(id = dog, step_id_, case_, sl_, log_sl_, ta_, cos_ta_, everything())
+  c(id, step_id_, case_, sl_, log_sl_, ta_, cos_ta_, everything())
 )
 
-# Let's check for each covariate how many non-zero entries there are
-dat %>%
-  select("sl_":ncol(.)) %>%
-  apply(2, function(x){
-    sum(x > 0)
-  }) %>% as.data.frame()
+# # Let's check for each covariate how many non-zero entries there are
+# dat %>%
+#   select("sl_":ncol(.)) %>%
+#   apply(2, function(x){
+#     sum(x > 0)
+#   }) %>% as.data.frame()
 
 # Simplify protection categories
 dat$Protected <- dat$ForestReserve + dat$Protected + dat$NationalPark
@@ -67,68 +73,78 @@ dat <- dat %>% mutate(
   , SqrtWorldpop_DistanceToHumans   = sqrt(Worldpop_DistanceToHumans)
 )
 
+# Nest the data
+dat <- dat %>%
+  group_by(method) %>%
+  nest()
+
+# Compare the number of individuals in the two datasets
+dat$NoDogs <- sapply(dat$data, function(x){length(unique(x$id))})
+dat$NoSteps <- sapply(dat$data, function(x){sum(x$case_)})
+
 ################################################################################
 #### Scaling Data
 ################################################################################
-# Scale continuous covariates
-dat <- dat %>%
-  mutate(
-      log_sl_                             = scale(log_sl_)
-    , cos_ta_                             = scale(cos_ta_)
-    , sl_                                 = scale(sl_)
-    , Globeland_Water                     = scale(Globeland_Water)
-    , Globeland_Urban                     = scale(Globeland_Urban)
-    , Globeland_Cropland                  = scale(Globeland_Cropland)
-    , Globeland_Forest                    = scale(Globeland_Forest)
-    , Globeland_Shrubs                    = scale(Globeland_Shrubs)
-    , Globeland_Grassland                 = scale(Globeland_Grassland)
-    , Copernicus_Water                    = scale(Copernicus_Water)
-    , Copernicus_Urban                    = scale(Copernicus_Urban)
-    , Copernicus_Cropland                 = scale(Copernicus_Cropland)
-    , Copernicus_Forest                   = scale(Copernicus_Forest)
-    , Copernicus_Shrubs                   = scale(Copernicus_Shrubs)
-    , Copernicus_Grassland                = scale(Copernicus_Grassland)
-    , DistanceToWater                     = scale(DistanceToWater)
-    , SqrtDistanceToWater                 = scale(SqrtDistanceToWater)
-    , Water                               = scale(Water)
-    , Trees                               = scale(Trees)
-    , Shrubs                              = scale(Shrubs)
-    , Protected                           = scale(Protected)
-    , Facebook_Villages                   = scale(Facebook_Villages)
-    , Worldpop_Villages                   = scale(Worldpop_Villages)
-    , Facebook_DistanceToVillages         = scale(Facebook_DistanceToVillages)
-    , SqrtFacebook_DistanceToVillages     = scale(SqrtFacebook_DistanceToVillages)
-    , Worldpop_DistanceToVillages         = scale(Worldpop_DistanceToVillages)
-    , SqrtWorldpop_DistanceToVillages     = scale(SqrtWorldpop_DistanceToVillages)
-    , DistanceToRoads                     = scale(DistanceToRoads)
-    , SqrtDistanceToRoads                 = scale(SqrtDistanceToRoads)
-    , Facebook_DistanceToHumans           = scale(Facebook_DistanceToHumans)
-    , SqrtFacebook_DistanceToHumans       = scale(SqrtFacebook_DistanceToHumans)
-    , Worldpop_DistanceToHumans           = scale(Worldpop_DistanceToHumans)
-    , SqrtWorldpop_DistanceToHumans       = scale(SqrtWorldpop_DistanceToHumans)
-    , Facebook_HumanDensity               = scale(Facebook_HumanDensity)
-    , Worldpop_HumanDensity               = scale(Worldpop_HumanDensity)
-    , Facebook_HumanInfluenceBuffer_0000  = scale(Facebook_HumanInfluenceBuffer_0000)
-    , Facebook_HumanInfluenceBuffer_2500  = scale(Facebook_HumanInfluenceBuffer_2500)
-    , Facebook_HumanInfluenceBuffer_5000  = scale(Facebook_HumanInfluenceBuffer_5000)
-    , Facebook_HumanInfluenceBuffer_7500  = scale(Facebook_HumanInfluenceBuffer_7500)
-    , Facebook_HumanInfluenceBuffer_10000 = scale(Facebook_HumanInfluenceBuffer_10000)
-    , Facebook_HumanInfluenceBuffer_15000 = scale(Facebook_HumanInfluenceBuffer_15000)
-    , Facebook_HumanInfluenceBuffer_20000 = scale(Facebook_HumanInfluenceBuffer_20000)
-    , Worldpop_HumanInfluenceBuffer_0000  = scale(Worldpop_HumanInfluenceBuffer_0000)
-    , Worldpop_HumanInfluenceBuffer_2500  = scale(Worldpop_HumanInfluenceBuffer_2500)
-    , Worldpop_HumanInfluenceBuffer_5000  = scale(Worldpop_HumanInfluenceBuffer_5000)
-    , Worldpop_HumanInfluenceBuffer_7500  = scale(Worldpop_HumanInfluenceBuffer_7500)
-    , Worldpop_HumanInfluenceBuffer_10000 = scale(Worldpop_HumanInfluenceBuffer_10000)
-    , Worldpop_HumanInfluenceBuffer_15000 = scale(Worldpop_HumanInfluenceBuffer_15000)
-    , Worldpop_HumanInfluenceBuffer_20000 = scale(Worldpop_HumanInfluenceBuffer_20000)
-  )
+dat <- dat %>% mutate(data = map(data, function(x){
+  x %>%
+    mutate(
+        log_sl_                             = scale(log_sl_)
+      , cos_ta_                             = scale(cos_ta_)
+      , sl_                                 = scale(sl_)
+      , Globeland_Water                     = scale(Globeland_Water)
+      , Globeland_Urban                     = scale(Globeland_Urban)
+      , Globeland_Cropland                  = scale(Globeland_Cropland)
+      , Globeland_Forest                    = scale(Globeland_Forest)
+      , Globeland_Shrubs                    = scale(Globeland_Shrubs)
+      , Globeland_Grassland                 = scale(Globeland_Grassland)
+      , Copernicus_Water                    = scale(Copernicus_Water)
+      , Copernicus_Urban                    = scale(Copernicus_Urban)
+      , Copernicus_Cropland                 = scale(Copernicus_Cropland)
+      , Copernicus_Forest                   = scale(Copernicus_Forest)
+      , Copernicus_Shrubs                   = scale(Copernicus_Shrubs)
+      , Copernicus_Grassland                = scale(Copernicus_Grassland)
+      , DistanceToWater                     = scale(DistanceToWater)
+      , SqrtDistanceToWater                 = scale(SqrtDistanceToWater)
+      , Water                               = scale(Water)
+      , Trees                               = scale(Trees)
+      , Shrubs                              = scale(Shrubs)
+      , Protected                           = scale(Protected)
+      , Facebook_Villages                   = scale(Facebook_Villages)
+      , Worldpop_Villages                   = scale(Worldpop_Villages)
+      , Facebook_DistanceToVillages         = scale(Facebook_DistanceToVillages)
+      , SqrtFacebook_DistanceToVillages     = scale(SqrtFacebook_DistanceToVillages)
+      , Worldpop_DistanceToVillages         = scale(Worldpop_DistanceToVillages)
+      , SqrtWorldpop_DistanceToVillages     = scale(SqrtWorldpop_DistanceToVillages)
+      , DistanceToRoads                     = scale(DistanceToRoads)
+      , SqrtDistanceToRoads                 = scale(SqrtDistanceToRoads)
+      , Facebook_DistanceToHumans           = scale(Facebook_DistanceToHumans)
+      , SqrtFacebook_DistanceToHumans       = scale(SqrtFacebook_DistanceToHumans)
+      , Worldpop_DistanceToHumans           = scale(Worldpop_DistanceToHumans)
+      , SqrtWorldpop_DistanceToHumans       = scale(SqrtWorldpop_DistanceToHumans)
+      , Facebook_HumanDensity               = scale(Facebook_HumanDensity)
+      , Worldpop_HumanDensity               = scale(Worldpop_HumanDensity)
+      , Facebook_HumanInfluenceBuffer_0000  = scale(Facebook_HumanInfluenceBuffer_0000)
+      , Facebook_HumanInfluenceBuffer_2500  = scale(Facebook_HumanInfluenceBuffer_2500)
+      , Facebook_HumanInfluenceBuffer_5000  = scale(Facebook_HumanInfluenceBuffer_5000)
+      , Facebook_HumanInfluenceBuffer_7500  = scale(Facebook_HumanInfluenceBuffer_7500)
+      , Facebook_HumanInfluenceBuffer_10000 = scale(Facebook_HumanInfluenceBuffer_10000)
+      , Facebook_HumanInfluenceBuffer_15000 = scale(Facebook_HumanInfluenceBuffer_15000)
+      , Facebook_HumanInfluenceBuffer_20000 = scale(Facebook_HumanInfluenceBuffer_20000)
+      , Worldpop_HumanInfluenceBuffer_0000  = scale(Worldpop_HumanInfluenceBuffer_0000)
+      , Worldpop_HumanInfluenceBuffer_2500  = scale(Worldpop_HumanInfluenceBuffer_2500)
+      , Worldpop_HumanInfluenceBuffer_5000  = scale(Worldpop_HumanInfluenceBuffer_5000)
+      , Worldpop_HumanInfluenceBuffer_7500  = scale(Worldpop_HumanInfluenceBuffer_7500)
+      , Worldpop_HumanInfluenceBuffer_10000 = scale(Worldpop_HumanInfluenceBuffer_10000)
+      , Worldpop_HumanInfluenceBuffer_15000 = scale(Worldpop_HumanInfluenceBuffer_15000)
+      , Worldpop_HumanInfluenceBuffer_20000 = scale(Worldpop_HumanInfluenceBuffer_20000)
+    )
+}))
 
 ################################################################################
-#### Investigate Correlation Among Covariates
+#### Investigate Correlation Among Covariates (iSSF)
 ################################################################################
 # Investigate correlations among covariates
-correlations <- dat %>%
+correlations <- dat1 %>%
   select(., c(Globeland_Water:ncol(.)), - RoadCrossing) %>%
   cor(., use = "pairwise.complete.obs")
 
@@ -160,12 +176,51 @@ correlated$Corr <- na.omit(correlations[mat])
 # Look at the result
 correlated
 
-# # Visualize globeland selection
-# dat %>%
-#   select(case_, contains("Globeland")) %>%
-#   select(-c(Globeland_Cropland, Globeland_Urban)) %>%
-#   gather(key = Covariate, value = Cover, 2:ncol(.)) %>%
-#   ggplot(aes(x = Covariate, y = Cover, col = as.factor(case_))) + geom_boxplot()
+################################################################################
+#### Investigate Correlation Among Covariates (TiSSF)
+################################################################################
+# Investigate correlations among covariates
+correlations <- dat2 %>%
+  select(., c(Globeland_Water:ncol(.)), - RoadCrossing) %>%
+  cor(., use = "pairwise.complete.obs")
+
+# Visualize
+corrplot(correlations, type = "upper")
+corrplot(correlations, method = "number", type = "upper")
+
+# We only need to look at the upper triangle of the derived matrix
+correlations[upper.tri(correlations, diag = TRUE)] <- NA
+
+# Now look at the correlation matrix
+correlations
+
+# Identify the covariates with a correlation above a specific value (some say
+# that correlation should not lie above 0.6, others say that 0.7 is fine)
+mat <- abs(correlations) > 0.6
+
+# Prepare a dataframe that shows the covariates with a correlation above 0.6
+df <- mat %>%
+  as.table() %>%
+  as.data.frame(., stringsAsFactors = FALSE)
+
+# Remove the NAs
+correlated <- na.omit(df[df$Freq, ])
+
+# Add the correlation values to the table
+correlated$Corr <- na.omit(correlations[mat])
+
+# Look at the result
+correlated
+
+################################################################################
+#### Contrast Methods: iSSF vs TiSSF
+################################################################################
+print(dat)
+dat$data[[1]]
+mod1 <- glmm_clogit(writeForm("Water"), data = dat$data[[1]])
+mod2 <- glmm_clogit(writeForm("Water"), data = dat$data[[2]])
+summary(mod1)
+summary(mod2)
 
 ################################################################################
 #### Contrast Covariates: DistanceTo vs. SqrtDistanceTo
@@ -319,6 +374,33 @@ names(dat)
 dat <- dat %>%
   select(
     -c(Facebook_HumanInfluenceBuffer_0000:Worldpop_HumanInfluenceBuffer_20000)
+  )
+
+################################################################################
+#### Keep Desired Covariates
+################################################################################
+# From here on, we're only going to keep the covariates that were used in
+# Hofmann et al. 2020
+names(dat)
+dat %>%
+  unnest() %>%
+  dplyr::select(
+    c(
+        method:dtcorr_
+      , Water
+      , DistanceToWater
+      , SqrtDistanceToWater
+      , Shrubs
+      , Trees
+      , Protected
+      , RoadCrossing
+      , DistanceToRoads
+      , SqrtDistanceToRoads
+      , HumanDensity         = Facebook_HumanDensity
+      , DistanceToHumans     = Facebook_DistanceToHumans
+      , SqrtDistanceToHumans = SqrtFacebook_DistanceToHumans
+      , HumansBuff5000       = Facebook_HumanInfluenceBuffer_5000
+    )
   )
 
 ################################################################################
