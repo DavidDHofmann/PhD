@@ -36,9 +36,9 @@ dat$sl_ <- dat$speed_
 dat$speed_ <- NULL
 
 # Remove columns that we don't need
-dat <- dat %>% select(
-  -c(X1, burst, State, x1_, x2_, y1_, y2_, t1_, t2_, dt_, drctn_p, absta_)
-)
+dat <- dat %>% select(-c(
+  X1, burst, State, x1_, x2_, y1_, y2_, t1_, t2_, dt_, drctn_p, absta_
+))
 
 # We want to add the log of the step speed and the cosine of the turning angle
 dat <- dat %>% mutate(
@@ -47,21 +47,21 @@ dat <- dat %>% mutate(
 )
 
 # Let's also move all movement metrics to the front
-dat <- dat %>% select(
-  c(id, step_id_, case_, sl_, log_sl_, ta_, cos_ta_, everything())
-)
-
-# # Let's check for each covariate how many non-zero entries there are
-# dat %>%
-#   select("sl_":ncol(.)) %>%
-#   apply(2, function(x){
-#     sum(x > 0)
-#   }) %>% as.data.frame()
+dat <- dat %>% select(c(
+  id, step_id_, case_, sl_, log_sl_, ta_, cos_ta_, everything()
+))
 
 # Simplify protection categories
 dat$Protected <- dat$ForestReserve + dat$Protected + dat$NationalPark
 dat$ForestReserve <- NULL
-dat$NationalPark <- NULL
+dat$NationalPark  <- NULL
+dat$Unprotected   <- NULL
+
+# We're not going to consider human influences buffered beyond 5000 meters as
+# this would be simply too much
+dat <- dat %>% select(-c(
+    contains(c("7500", "10000", "12500", "15000", "17500", "20000"))
+))
 
 # Calculate square rooted distances
 dat <- dat %>% mutate(
@@ -81,13 +81,22 @@ dat <- dat %>%
 # Compare the number of individuals in the two datasets
 dat$NoDogs <- sapply(dat$data, function(x){length(unique(x$id))})
 dat$NoSteps <- sapply(dat$data, function(x){sum(x$case_)})
+diff(dat$NoDogs)
+diff(dat$NoSteps)
+print(dat)
+
+# Let's remove the columns again
+dat$NoDogs  <- NULL
+dat$NoSteps <- NULL
 
 ################################################################################
 #### Scaling Data
 ################################################################################
+# Scale the covariates. Depending on the method (iSSF, TiSSF) we'll scale the
+# covariates differrently.
 dat <- dat %>% mutate(data = map(data, function(x){
   x %>%
-    mutate(
+    transform(
         log_sl_                             = scale(log_sl_)
       , cos_ta_                             = scale(cos_ta_)
       , sl_                                 = scale(sl_)
@@ -126,25 +135,46 @@ dat <- dat %>% mutate(data = map(data, function(x){
       , Facebook_HumanInfluenceBuffer_0000  = scale(Facebook_HumanInfluenceBuffer_0000)
       , Facebook_HumanInfluenceBuffer_2500  = scale(Facebook_HumanInfluenceBuffer_2500)
       , Facebook_HumanInfluenceBuffer_5000  = scale(Facebook_HumanInfluenceBuffer_5000)
-      , Facebook_HumanInfluenceBuffer_7500  = scale(Facebook_HumanInfluenceBuffer_7500)
-      , Facebook_HumanInfluenceBuffer_10000 = scale(Facebook_HumanInfluenceBuffer_10000)
-      , Facebook_HumanInfluenceBuffer_15000 = scale(Facebook_HumanInfluenceBuffer_15000)
-      , Facebook_HumanInfluenceBuffer_20000 = scale(Facebook_HumanInfluenceBuffer_20000)
       , Worldpop_HumanInfluenceBuffer_0000  = scale(Worldpop_HumanInfluenceBuffer_0000)
       , Worldpop_HumanInfluenceBuffer_2500  = scale(Worldpop_HumanInfluenceBuffer_2500)
       , Worldpop_HumanInfluenceBuffer_5000  = scale(Worldpop_HumanInfluenceBuffer_5000)
-      , Worldpop_HumanInfluenceBuffer_7500  = scale(Worldpop_HumanInfluenceBuffer_7500)
-      , Worldpop_HumanInfluenceBuffer_10000 = scale(Worldpop_HumanInfluenceBuffer_10000)
-      , Worldpop_HumanInfluenceBuffer_15000 = scale(Worldpop_HumanInfluenceBuffer_15000)
-      , Worldpop_HumanInfluenceBuffer_20000 = scale(Worldpop_HumanInfluenceBuffer_20000)
     )
 }))
+
+# Extract the scaling parameters from the two datasets
+scales <- lapply(dat$data, function(x){
+
+  # Prepare dataframe into which we store the values
+  scaling <- data.frame(
+      ColumnName  = names(x)
+    , Center      = NA
+    , Scale       = NA
+  )
+
+  # Extract the values from the data
+  for (i in 1:ncol(x)){
+    center <- attr(x[, i], "scaled:center")
+    scale <- attr(x[, i], "scaled:scale")
+    scaling$Center[i] <- ifelse(is.null(center), NA, center)
+    scaling$Scale[i] <- ifelse(is.null(scale), NA, scale)
+  }
+
+  # Return the dataframe
+  return(scaling)
+})
+
+# Look at the resulting table
+names(scales) <- c("iSSF", "TiSSF")
+scales
+
+# Store the object to an RDS
+write_rds(scaling, "03_Data/03_Results/99_Scaling.rds")
 
 ################################################################################
 #### Investigate Correlation Among Covariates (iSSF)
 ################################################################################
 # Investigate correlations among covariates
-correlations <- dat1 %>%
+correlations <- dat$data[[1]] %>%
   select(., c(Globeland_Water:ncol(.)), - RoadCrossing) %>%
   cor(., use = "pairwise.complete.obs")
 
@@ -180,7 +210,7 @@ correlated
 #### Investigate Correlation Among Covariates (TiSSF)
 ################################################################################
 # Investigate correlations among covariates
-correlations <- dat2 %>%
+correlations <- dat$data[[2]] %>%
   select(., c(Globeland_Water:ncol(.)), - RoadCrossing) %>%
   cor(., use = "pairwise.complete.obs")
 
@@ -213,387 +243,277 @@ correlated$Corr <- na.omit(correlations[mat])
 correlated
 
 ################################################################################
-#### Contrast Methods: iSSF vs TiSSF
+#### Function to Contrast Covariates
 ################################################################################
-print(dat)
-dat$data[[1]]
-mod1 <- glmm_clogit(writeForm("Water"), data = dat$data[[1]])
-mod2 <- glmm_clogit(writeForm("Water"), data = dat$data[[2]])
-summary(mod1)
-summary(mod2)
+# Function to compare SSF models when using different covariates
+compCovars <- function(covars = NULL){
+
+  # Create comparison table
+  comp <- tibble(
+    expand_grid(
+        Method  = c("iSSF", "TiSSF")
+      , Covars  = covars
+    )
+  )
+
+  # Run models
+  comp$Model <- mclapply(1:nrow(comp), mc.cores = detectCores() - 1, function(x){
+    glmm_clogit(
+        writeForm(comp$Covars[x])
+      , data = dat$data[[which(dat$method == comp$Method[x])]]
+    )
+  })
+
+  # Extract model AICs
+  comp$AIC <- sapply(comp$Model, AIC)
+
+  # Return the tibble
+  return(comp)
+
+}
 
 ################################################################################
 #### Contrast Covariates: DistanceTo vs. SqrtDistanceTo
 ################################################################################
 # Distance to Roads
-mod1 <- glmm_clogit(writeForm("DistanceToRoads"), data = dat)
-mod2 <- glmm_clogit(writeForm("SqrtDistanceToRoads"), data = dat)
-summary(mod1)
-summary(mod2)
-AIC(mod1, mod2)
+comp1 <- compCovars(c("DistanceToRoads", "SqrtDistanceToRoads"))
+print(comp1)
 
 # Distance to Water
-mod1 <- glmm_clogit(writeForm("DistanceToWater"), data = dat)
-mod2 <- glmm_clogit(writeForm("SqrtDistanceToWater"), data = dat)
-summary(mod1)
-summary(mod2)
-AIC(mod1, mod2)
+comp2 <- compCovars(c("DistanceToWater", "SqrtDistanceToWater"))
+print(comp2)
 
 # Distance to Humans (Facebook)
-mod1 <- glmm_clogit(writeForm("Facebook_DistanceToHumans"), data = dat)
-mod2 <- glmm_clogit(writeForm("SqrtFacebook_DistanceToHumans"), data = dat)
-summary(mod1)
-summary(mod2)
-AIC(mod1, mod2)
+comp3 <- compCovars(c("Facebook_DistanceToHumans", "SqrtFacebook_DistanceToHumans"))
+print(comp3)
 
 # Distance to Humans (Worldpop)
-mod1 <- glmm_clogit(writeForm("Worldpop_DistanceToHumans"), data = dat)
-mod2 <- glmm_clogit(writeForm("SqrtWorldpop_DistanceToHumans"), data = dat)
-summary(mod1)
-summary(mod2)
-AIC(mod1, mod2)
+comp4 <- compCovars(c("Worldpop_DistanceToHumans", "SqrtWorldpop_DistanceToHumans"))
+print(comp4)
 
 # Distance to Villages (Facebook)
-mod1 <- glmm_clogit(writeForm("Facebook_DistanceToVillages"), data = dat)
-mod2 <- glmm_clogit(writeForm("SqrtFacebook_DistanceToVillages"), data = dat)
-summary(mod1)
-summary(mod2)
-AIC(mod1, mod2)
+comp5 <- compCovars(c("Facebook_DistanceToVillages", "SqrtFacebook_DistanceToVillages"))
+print(comp5)
 
 # Distance to Villages (Worldpop)
-mod1 <- glmm_clogit(writeForm("Worldpop_DistanceToVillages"), data = dat)
-mod2 <- glmm_clogit(writeForm("SqrtWorldpop_DistanceToVillages"), data = dat)
-summary(mod1)
-summary(mod2)
-AIC(mod1, mod2)
-
-# Since the square-rooted version appears to outperform the linear form, remove
-# the linear covariates
-dat$DistanceToRoads <- NULL
-dat$DistanceToWater <- NULL
-dat$Facebook_DistanceToHumans <- NULL
-dat$Worldpop_DistanceToHumans <- NULL
-dat$Facebook_DistanceToVillages <- NULL
-dat$Worldpop_DistanceToVillages <- NULL
+comp6 <- compCovars(c("Worldpop_DistanceToVillages", "SqrtWorldpop_DistanceToVillages"))
+print(comp6)
 
 ################################################################################
 #### Compare Covariates: LandCover (Globeland, Copernicus, MODIS)
 ################################################################################
+# Compare different land cover datasets (using iSSF data)
 mod1 <- glmm_clogit(writeForm(c("Globeland_Water", "Globeland_Shrubs",
-  "Globeland_Grassland", "Globeland_Forest")), data = dat)
+  "Globeland_Grassland", "Globeland_Forest")), data = dat$data[[1]])
 mod2 <- glmm_clogit(writeForm(c("Copernicus_Water", "Copernicus_Shrubs",
-  "Copernicus_Grassland", "Copernicus_Forest")), data = dat)
-mod3 <- glmm_clogit(writeForm(c("Water", "Shrubs", "Trees")), data = dat)
+  "Copernicus_Grassland", "Copernicus_Forest")), data = dat$data[[1]])
+mod3 <- glmm_clogit(writeForm(c("Water", "Shrubs", "Trees")), data = dat$data[[1]])
 summary(mod1)
 summary(mod2)
 summary(mod3)
 AIC(mod1, mod2, mod3)
 
-################################################################################
-#### Contrast Covairates: Water (Globeland, Copernicus, MODIS)
-################################################################################
-mod1 <- glmm_clogit(writeForm("Globeland_Water"), data = dat)
-mod2 <- glmm_clogit(writeForm("Copernicus_Water"), data = dat)
-mod3 <- glmm_clogit(writeForm("Water"), data = dat)
+# Compare different land cover datasets (using TiSSF data)
+mod1 <- glmm_clogit(writeForm(c("Globeland_Water", "Globeland_Shrubs",
+  "Globeland_Grassland", "Globeland_Forest")), data = dat$data[[2]])
+mod2 <- glmm_clogit(writeForm(c("Copernicus_Water", "Copernicus_Shrubs",
+  "Copernicus_Grassland", "Copernicus_Forest")), data = dat$data[[2]])
+mod3 <- glmm_clogit(writeForm(c("Water", "Shrubs", "Trees")), data = dat$data[[2]])
 summary(mod1)
 summary(mod2)
 summary(mod3)
 AIC(mod1, mod2, mod3)
 
-################################################################################
-#### Contrast Covairates: Shrubs (Globeland, Copernicus, MODIS)
-################################################################################
-mod1 <- glmm_clogit(writeForm("Globeland_Shrubs"), data = dat)
-mod2 <- glmm_clogit(writeForm("Copernicus_Shrubs"), data = dat)
-mod3 <- glmm_clogit(writeForm("Shrubs"), data = dat)
-summary(mod1)
-summary(mod2)
-summary(mod3)
-AIC(mod1, mod2, mod3)
+# Let's compare the water layers in unimodal models
+comp7 <- compCovars(c("Globeland_Water", "Copernicus_Water", "Water"))
+print(comp7)
+
+# Let's compare the shrubs layers in unimodal models
+comp8 <- compCovars(c("Globeland_Shrubs", "Copernicus_Shrubs", "Shrubs"))
+print(comp8)
+
+# Let's compare the forest layers in unimodal models
+comp9 <- compCovars(c("Globeland_Forest", "Copernicus_Forest", "Trees"))
+print(comp9)
 
 ################################################################################
-#### Contrast Covairates: Trees (Globeland, Copernicus, MODIS)
+#### Contrast Covariates: Humans Buffered
 ################################################################################
-mod1 <- glmm_clogit(writeForm("Globeland_Forest"), data = dat)
-mod2 <- glmm_clogit(writeForm("Copernicus_Forest"), data = dat)
-mod3 <- glmm_clogit(writeForm("Trees"), data = dat)
-summary(mod1)
-summary(mod2)
-summary(mod3)
-AIC(mod1, mod2, mod3)
+# Compare different buffers for human influence
+comp10 <- compCovars(c(
+    "Facebook_HumanInfluenceBuffer_0000"
+  , "Facebook_HumanInfluenceBuffer_2500"
+  , "Facebook_HumanInfluenceBuffer_5000"
+  , "Worldpop_HumanInfluenceBuffer_0000"
+  , "Worldpop_HumanInfluenceBuffer_2500"
+  , "Worldpop_HumanInfluenceBuffer_5000"
+))
 
-################################################################################
-#### Contrast Covariates: Facebook vs Worldpop Human Buffer
-################################################################################
-# Prepare Comparison Table
-comp <- data.frame(
-    Covariate = select(dat, contains("HumanInfluenceBuffer")) %>% names()
-  , AIC       = NA
-  , Coeff     = NA
-)
-
-# Create additional helper columns
-comp$Buffer <- as.numeric(str_split_fixed(comp$Covariate, pattern = "_", 3)[, 3])
-comp$Source <- str_split_fixed(comp$Covariate, pattern = "_", 3)[, 1]
-
-# Run unimodal model for each of the covariates
-models <- mclapply(1:nrow(comp), mc.cores = detectCores() - 1, function(x){
-  covar <- as.character(comp$Covariate[x])
-  mod <- glmm_clogit(writeForm(c(covar, "Water")), data = dat)
-  return(list(AIC = AIC(mod), Coeff = last(getCoeffs(mod)$Coefficient)))
-})
-
-# Extract the results and put them into the comparison dataframe
-comp$AIC <- sapply(models, function(x){x$AIC})
-comp$Coeff <- sapply(models, function(x){x$Coeff})
-
-# Visualize results on AIC
-backup <- comp
-p1 <- ggplot(comp, aes(x = Buffer, y = AIC, col = as.factor(Source))) +
-  geom_point() +
-  geom_line() +
-  theme_cowplot()
-
-# Visualize results on Coefficient
-p2 <- ggplot(comp, aes(x = Buffer, y = Coeff, col = as.factor(Source))) +
-  geom_point() +
-  geom_line() +
-  theme_cowplot()
-
-# Put plots together
-ggarrange(p1, p2, ncol = 1)
-
-# Create new column with the covariate producing the lowest AIC
-dat$HumanInfluenceBuff <- comp$Covariate[comp$AIC == min(comp$AIC)] %>%
-  select(dat, .) %>%
-  as.matrix() %>%
-  as.vector()
-
-# Remove the others
-names(dat)
-dat <- dat %>%
-  select(
-    -c(Facebook_HumanInfluenceBuffer_0000:Worldpop_HumanInfluenceBuffer_20000)
-  )
-
-################################################################################
-#### Keep Desired Covariates
-################################################################################
-# From here on, we're only going to keep the covariates that were used in
-# Hofmann et al. 2020
-names(dat)
-dat %>%
-  unnest() %>%
-  dplyr::select(
-    c(
-        method:dtcorr_
-      , Water
-      , DistanceToWater
-      , SqrtDistanceToWater
-      , Shrubs
-      , Trees
-      , Protected
-      , RoadCrossing
-      , DistanceToRoads
-      , SqrtDistanceToRoads
-      , HumanDensity         = Facebook_HumanDensity
-      , DistanceToHumans     = Facebook_DistanceToHumans
-      , SqrtDistanceToHumans = SqrtFacebook_DistanceToHumans
-      , HumansBuff5000       = Facebook_HumanInfluenceBuffer_5000
-    )
-  )
-
-################################################################################
-#### Correlation Analysis
-################################################################################
-
-
-############################################################
-#### Loading and Examining Data
-############################################################
-# Load the 4 hourly fixes
-ssf <- "03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv" %>%
-
-  # We need to manually set some of the column types
-  read_csv(., col_types = cols(
-        Homerange     = "d"
-      , OtherPack     = "d"
-      , id            = "f"
-      , tod_          = "f"
-      , RoadCrossing  = "f"
-      , State         = "f")) %>%
-
-  # Remove undesired columns
-  select(-c("X1", "x1_", "x2_", "y1_", "y2_", "t1_", "t2_", "dt_"))
-
-# Let's check whether there is variation in all covariates for all dispersers
-# (obviously not the case)
-summary <- ssf %>%
-
-  # Select variables for which we want to know the variance
-  select(., id, Water:Homerange) %>%
-
-  # Turn dataframe to long format
-  gather(., "Covariate", "Value", 2:ncol(.)) %>%
-
-  # Group by id and covariate
-  group_by(., id, Covariate) %>%
-
-  # Calculate variances
-  summarize(., Var = var(Value)) %>%
-
-  # Turn back to wide format
-  spread(., Covariate, Var)
-
-# Show the summary
-summary
-
-# Make some adjustments to covariates and scale them. Remember that one cannot
-# scale categorical variables.
-ssf <- ssf %>%
-  mutate(
-      DistanceToWater   = sqrt(DistanceToWater)
-    , DistanceToHumans  = sqrt(DistanceToHumans)
-    , DistanceToRoads   = sqrt(DistanceToRoads)
-    , log_sl_           = log(sl_)
-    , cos_ta_           = cos(ta_)
-  ) %>%
-  transform(
-      Water                 = scale(Water)
-    , DistanceToWater       = scale(DistanceToWater)
-    , Trees                 = scale(Trees)
-    , Shrubs                = scale(Shrubs)
-    , Protected             = scale(Protected)
-    , HumansBase            = scale(HumansBase)
-    , HumansAverage         = scale(HumansAverage)
-    , HumansBuff5000        = scale(HumansBuff5000)
-    , DistanceToHumans      = scale(DistanceToHumans)
-    , DistanceToRoads       = scale(DistanceToRoads)
-    , OtherPack             = scale(OtherPack)
-    , Homerange             = scale(Homerange)
-    , NoHomeranges          = scale(NoHomeranges)
-    , log_sl_               = scale(log_sl_)
-    , cos_ta_               = scale(cos_ta_)
-    , sl_                   = scale(sl_)
-)
-
-# Make sure that the structure of the data is fine
-str(ssf)
-
-# Note that the scaling parameters of a specific covariate can be accessed using
-# the following code. We will need the parameters to rescale the covariates when
-# we run predictions. So lets store these parameters. First we prepare an empty
-# dataframe
-scaling <- data.frame(
-    ColumnName  = names(ssf)
-  , Center      = NA
-  , Scale       = NA
-)
-
-# Extract the scaling and centering parameters from the dataframe
-for (i in 1:ncol(ssf)){
-  center <- attr(ssf[, i], "scaled:center")
-  scale <- attr(ssf[, i], "scaled:scale")
-  scaling$Center[i] <- ifelse(is.null(center), NA, center)
-  scaling$Scale[i] <- ifelse(is.null(scale), NA, scale)
-}
-
-# Look at the resulting table
-scaling
-
-# Store the object to an RDS
-write_rds(scaling, "03_Data/03_Results/99_ScalingSSF.rds")
-
-############################################################
-#### Correlation Analysis
-############################################################
-# We need to exclude covariates that are overly correlated. Let's thus check for
-# correlation among them (not for factorial variables)
-correlations <- ssf %>%
-  select(., c(Water:NoHomeranges), - RoadCrossing) %>%
-  cor(., use = "pairwise.complete.obs")
+# Add some helper columns so that we can easily plot the results
+comp10$Source <- substr(comp10$Covars, 1, 8)
+comp10$Covariates <- substr(comp10$Covars, 10, nchar(comp10$Covars))
+comp10$Buffer <- as.numeric(substr(comp10$Covars, 31, nchar(comp10$Covars)))
 
 # Visualize
-corrplot(correlations, type = "upper")
-corrplot(correlations, method = "number", type = "upper")
+ggplot(comp10, aes(x = Buffer, y = AIC, col = Source)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap("Method", scales = "free")
 
-# We only need to look at the upper triangle of the derived matrix
-correlations[upper.tri(correlations, diag = TRUE)] <- NA
+################################################################################
+#### Contrast Covariates: Distance To Humans, Human Density, Villages
+################################################################################
+# Distance to Humans
+comp11 <- compCovars(c(
+    "SqrtFacebook_DistanceToHumans"
+  , "SqrtWorldpop_DistanceToHumans"
+))
+print(comp11)
 
-# Now look at the correlation matrix
-correlations
+# Human Density
+comp12 <- compCovars(c(
+    "Facebook_HumanDensity"
+  , "Worldpop_HumanDensity"
+))
+print(comp12)
 
-# Identify the covariates with a correlation above a specific value (some say
-# that correlation should not lie above 0.6, others say that 0.7 is fine)
-mat <- abs(correlations) > 0.6
+# Villages
+comp13 <- compCovars(c(
+    "Facebook_Villages"
+  , "Worldpop_Villages"
+))
+print(comp13)
 
-# Prepare a dataframe that shows the covariates with a correlation above 0.6
-df <- mat %>%
-  as.table() %>%
-  as.data.frame(., stringsAsFactors = FALSE)
+################################################################################
+#### Contrast Covariates: Villages, Human Density, Human Buffer, Dist To Humans
+################################################################################
+# We still have some covariates that are correlated. Let's compare them
+comp14 <- compCovars(c(
+    "Facebook_Villages"
+  , "Facebook_HumanDensity"
+  , "Facebook_HumanInfluenceBuffer_5000"
+  , "SqrtFacebook_DistanceToVillages"
+))
+print(comp14)
 
-# Remove the NAs
-correlated <- na.omit(df[df$Freq, ])
+################################################################################
+#### Keep Only Desired Covariates
+################################################################################
+# Overall, the comparisons show that the covariates used in Hofmann et al. 2020
+# were mostly adquate and that only minor improvements may be gained by using
+# alternative data sources. For continuity, I'll thus keep only the covariates
+# used in Hofmann et al. 2020.
+dat <- dat %>% unnest()
 
-# Add the correlation values to the table
-correlated$Corr <- na.omit(correlations[mat])
+# Keep only "SqrtDistanceTo", remove "DistanceTo"
+dat <- dat %>%
+  select(-c(
+      DistanceToRoads
+    , DistanceToWater
+    , Facebook_DistanceToHumans
+    , Worldpop_DistanceToHumans
+    , Facebook_DistanceToVillages
+    , Worldpop_DistanceToVillages
+  ))
 
-# Look at the result
-correlated
+# Keep only MODISD data, remove Globeland and Copernicus land cover
+dat <- dat %>% select(-contains(c("Copernicus", "Globeland")))
 
-############################################################
+# Keep only 5km human influence buffer
+dat <- dat %>% select(-contains(c("Worldpop_HumanInfluence", "0000", "2500")))
+
+# Keep only Facebook human density data, remove worldpop
+dat <- dat %>% select(-contains(c("Worldpop")))
+
+# Keep only buffered human influence, remove "DistanceToHumans" etc.
+dat <- dat %>% select(-c(
+    Facebook_Villages
+  , Facebook_HumanDensity
+  , SqrtFacebook_DistanceToHumans
+  , SqrtFacebook_DistanceToVillages
+))
+
+# Rename the remaining covariates nicely
+dat$HumansBuff5000 <- dat$Facebook_HumanInfluenceBuffer_5000
+dat$Facebook_HumanInfluenceBuffer_5000 <- NULL
+
+# Nest data again
+dat <- dat %>% group_by(method) %>% nest()
+
+################################################################################
+#### TESTING
+################################################################################
+test <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv")
+disps <- unique(test$id)
+sub <- dat$data[[1]]
+subset(sub, t1_ %in% test$t1_)
+mod1 <- glmm_clogit(
+  writeForm(
+    c("Water", "SqrtDistanceToWater", "Trees", "Shrubs", "HumansBuff5000")
+  )
+  , data = sub
+)
+summary(mod1)
+mod2 <- glmm_clogit(
+  writeForm(
+    c("Water", "SqrtDistanceToWater", "Trees", "Shrubs", "HumansBuff5000")
+  )
+  , data = subset(sub, id != "Chiounard")
+)
+mod3 <- glmm_clogit(
+  writeForm(
+    c("Water", "SqrtDistanceToWater", "Trees", "Shrubs", "HumansBuff5000")
+  )
+  , data = subset(sub, id %in% disps)
+)
+summary(mod1)
+summary(mod2)
+summary(mod3)
+
+################################################################################
 #### Forward Model Selection for Main Effects
-############################################################
+################################################################################
 # We now want to run forward model selection. That is, we iteratively increase
 # the complexity of our models and keep track of the changes in the AIC.
 # Ultimately, we will use the model with the lowest AIC as our most parsimonious
-# model. If there are multiple models within a range of 2 AICs, we can average
-# the corresponding models' coefficients if we feel so. To start, we need to
-# know the set of covariates that we can choose from. So let's first identify
-# all possible covariates.
+# model. To start, we need to know the set of covariates that we can choose
+# from. So let's first identify all possible covariates.
 covars <- c(
     "Water"
-  , "DistanceToWater"
+  , "SqrtDistanceToWater"
   , "Trees"
   , "Shrubs"
   , "Protected"
-  # , "HumansBase"
-  # , "HumansAverage"
   , "HumansBuff5000"
-  , "DistanceToRoads"
+  , "SqrtDistanceToRoads"
   , "RoadCrossing"
 )
 
-# Prepare a vector into which we put the covariates that are selected during our
-# model selection loop
+# Initate vector of selected covars
 selected <- c()
 
-# Also prepare a list into which we store all model results
+# Initiate vector into which we store the corresponding models
 model_sel <- list()
 
-# Prepare a counter that increases in every iteration of the loop(s)
+# Prepare loop counter
 i <- 1
 
-# Run a while loop that iteratively adds covariates until there are no more
-# covariates left for selection
-while (length(covars) > 0){
+# Run loop until no more covariates are left for selection
+while(length(covars) > 0){
 
-  # Combine the selected covariates with each of the remaining covariates.
-  # We can use the resulting list to prepare our model formulas. This step only
-  # starts working in the second iteration of the loop
+  # Prepare model formula
   forformulas <- lapply(covars, function(x){
     c(selected, x)
   })
 
-  # Just for easier visibility, we also prepare a vector that contains all
-  # covariates. This will allow us to easily spot the covariates of a specific
-  # model
+  # Prepare a vector that contains all covariates. This will allow us to easily
+  # spot the covariates of a specific model
   covariates <- forformulas %>%
     do.call(rbind, .) %>%
     as.data.frame(.) %>%
     unite(., col = "Covariates", sep = ", ")
 
-  # Prepare an empty tibble to fill
+  # Prepare a tibble that we want to fill
   models <- tibble(
       ModelID     = 1:length(covars)
     , Covariates  = covariates
@@ -602,15 +522,13 @@ while (length(covars) > 0){
     , AIC         = NA # AIC of the model
   )
 
-  # Run all models
-  models <- mutate(models, Model = map(Formula, function(x){
-    glmm_clogit(x, data = ssf)
-  }))
+  # Run all models in parallel
+  models$Model <- mclapply(models$Formula, mc.cores = detectCores() - 1, function(x){
+    glmm_clogit(x, data = dat$data[[2]])
+  })
 
   # Extract the AIC value of each model
-  models$AIC <- lapply(models$Model, AIC) %>%
-    do.call(rbind, .) %>%
-    as.vector()
+  models$AIC <- sapply(models$Model, AIC)
 
   # Identify the model with the lowest AIC and put the respective covariate
   # into the "selected" vector
@@ -628,6 +546,7 @@ while (length(covars) > 0){
 
   # Print how many covariates are left
   cat(length(covars), "covariates left...\n")
+
 }
 
 ############################################################
