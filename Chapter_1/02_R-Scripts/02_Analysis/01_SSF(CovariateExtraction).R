@@ -82,10 +82,10 @@ lines@data <- cbind(lines@data, extracted)
 #### LandCover - DistanceToWater
 ################################################################################
 # Transform the lines to utm
-lines <- spTransform(lines, CRS("+init=epsg:32734"))
+lines_utm <- spTransform(lines, CRS("+init=epsg:32734"))
 
 # To extract distances we need to coerce the lines to a psp object
-linesppp <- lapply(lines@lines, function(z){lapply(z@Lines, as.psp)})
+linesppp <- lapply(lines_utm@lines, function(x){lapply(x@Lines, as.psp)})
 linesppp <- do.call("c", linesppp)
 
 # We also need to create points on the lines to extract average distances. We
@@ -130,8 +130,9 @@ lines$DistanceToWater <- suppressMessages(
   }) %>% do.call(rbind, .)
 )
 
-# Transform lines back to WGS84
-lines <- spTransform(lines, CRS("+init=epsg:4326"))
+# Remove objects we don't need
+rm(lines_utm, linesppp, datppp)
+gc()
 
 ################################################################################
 #### LandCover - Water
@@ -156,9 +157,10 @@ head(extracted)
 # We only want to keep the values from the dates that are closest in time to the
 # steps
 lines$Water <- pbmclapply(1:nrow(lines)
-  , mc.cores           = detectCores() - 1
+  , mc.cores           = detectCores() / 2
   , ignore.interactive = T
   , FUN                = function(x){
+    x <- 1
     index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
     value <- extracted[x, index]
     return(value)
@@ -183,7 +185,7 @@ names(extracted) <- as.character(dates)
 
 # Keep only values closest in date
 lines$Trees <- pbmclapply(1:nrow(lines)
-  , mc.cores           = detectCores() - 1
+  , mc.cores           = detectCores() / 2
   , ignore.interactive = T
   , FUN                = function(x){
     index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
@@ -192,7 +194,7 @@ lines$Trees <- pbmclapply(1:nrow(lines)
 }) %>% do.call(c, .)
 
 ################################################################################
-#### LandCover - Shrubs
+#### LandCover - Shrubs/Grassland
 ################################################################################
 # Load the shrubcover map
 dat <- stack("03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.grd")
@@ -213,7 +215,7 @@ head(extracted)
 
 # Keep only values closest in date
 lines$Shrubs <- pbmclapply(1:nrow(lines)
-  , mc.cores           = detectCores() - 1
+  , mc.cores           = detectCores() / 2
   , ignore.interactive = T
   , FUN                = function(x){
     index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
@@ -364,13 +366,13 @@ lines2 <- subset(lines, method == "TiSSF")
 writeOGR(lines1
   , "03_Data/02_CleanData"
   , filename1
-  , driver = "ESRI Shapefile"
+  , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
 writeOGR(lines2
   , "03_Data/02_CleanData"
   , filename2
-  , driver = "ESRI Shapefile"
+  , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
 

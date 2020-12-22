@@ -24,6 +24,63 @@ library(ggpubr)       # For nice plots
 library(glmmTMB)      # For modelling
 
 ################################################################################
+#### Comparison to Old Data
+################################################################################
+# I want to compare the current dataset to the dataset used in Hofmann et al
+# 2020. Let's thus load the two
+old <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv")
+new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF_Extracted).csv")
+
+# Subset to case_ steps only
+old <- subset(old, case_)
+new <- subset(new, case_ == 1)
+
+# Remove undesired columns
+old <- select(old, c(id, x1_, x2_, y1_, y2_, t1_, t2_))
+new <- select(new, c(id, x1_, x2_, y1_, y2_, t1_, t2_))
+
+# Let's only compare the data of the common individuals
+new <- subset(new, id %in% old$id)
+old <- subset(old, id %in% new$id)
+
+# Create new column indicating dataset
+old$set <- "old"
+new$set <- "new"
+
+# Combine them
+comb <- rbind(old, new)
+
+# Compare number of observations
+table(comb$set)
+diff(as.data.frame(table(comb$set))$Freq)
+
+# Compare fixes per individual
+table(comb$id, comb$set)
+
+# Join the dataframes
+joined <- full_join(old, new, by = c("id", "t1_", "t2_"))
+
+# Sort the columns
+joined <- select(joined, c(
+    id
+  , t1_
+  , t2_
+  , x1_old = x1_.x
+  , x1_new = x1_.y
+  , x2_old = x2_.x
+  , x2_new = x2_.y
+  , y1_old = y1_.x
+  , y1_new = y1_.y
+  , y2_old = y2_.x
+  , y2_new = y2_.y
+  , everything()
+))
+
+# Let's also do an antijoin
+anti_join(old, new, by = c("id", "t1_", "t2_"))
+anti_join(new, old, by = c("id", "t1_", "t2_"))
+
+################################################################################
 #### Loading Data
 ################################################################################
 # Load data (and put iSSF and TiSSF data together)
@@ -168,7 +225,7 @@ names(scales) <- c("iSSF", "TiSSF")
 scales
 
 # Store the object to an RDS
-write_rds(scaling, "03_Data/03_Results/99_Scaling.rds")
+write_rds(scales, "03_Data/03_Results/99_Scaling.rds")
 
 ################################################################################
 #### Investigate Correlation Among Covariates (iSSF)
