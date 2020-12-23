@@ -20,11 +20,14 @@ library(rgeos)      # To manipulate vector data
 # Load the human density estimates from worldpop
 dens <- rast("03_Data/01_RawData/WORLDPOP/HumanDensity.tif")
 
+# Remove NAs
+dens <- classify(dens, matrix(c(NA, 0), ncol = 2))
+
 # Remove pixels that are inhabited by less than two people
 dens_bin <- dens > 2
 
 # Aggregate to a coarser resolution
-dens_bin <- aggregate(dens_bin, fact = 3, fun = max)
+dens_bin <- aggregate(dens_bin, fact = 3, fun = max, na.rm = T)
 
 # Apply focal filter
 dens_bin <- focal(dens_bin, w = 3, fun = modal)

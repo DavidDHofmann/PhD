@@ -19,15 +19,18 @@ library(terra)    # To handle raster data
 # Import the Globelands dataset
 crops <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 
+# Load the reference raster
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+
+# Crop to reference raster
+crops <- crop(crops, r)
+
 # Keep only crops
 crops <- crops == 10
 
 # Aggregate the globelands dataset to match the resolution of the reference
 # raster
 crops <- aggregate(crops, fact = round(250 / 30), fun = max)
-
-# Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Resample the layer to match the reference raster
 crops_res <- resample(crops, r, "near")

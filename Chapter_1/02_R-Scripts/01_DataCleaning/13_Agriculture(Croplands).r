@@ -23,6 +23,9 @@ crops <- rast("03_Data/01_RawData/CROPLANDS/Croplands.tif")
 # Load the reference raster
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
+# Crop to reference raster
+crops <- crop(crops, r)
+
 # Aggregate the croplands dataset to match the resolution of the reference
 # raster
 crops <- aggregate(crops, fact = round(250 / 30), fun = max)

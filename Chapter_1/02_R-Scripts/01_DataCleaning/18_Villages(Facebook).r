@@ -20,6 +20,9 @@ library(rgeos)      # To manipulate vector data
 # Load the human density estimates from worldpop
 dens <- rast("03_Data/01_RawData/FACEBOOK/HumanDensity.tif")
 
+# Remove NAs
+dens <- classify(dens, matrix(c(NA, 0), ncol = 2))
+
 # Aggregate to a coarser resolution (should be equal to worldpop)
 dens <- aggregate(dens, fact = 3, fun = sum)
 
@@ -27,7 +30,7 @@ dens <- aggregate(dens, fact = 3, fun = sum)
 dens_bin <- dens > 2
 
 # Aggregate to even coarser resolution
-dens_bin <- aggregate(dens_bin, fact = 3, fun = max)
+dens_bin <- aggregate(dens_bin, fact = 3, fun = max, na.rm = T)
 
 # Apply focal filter
 dens_bin <- focal(dens_bin, w = 3, fun = modal)
@@ -38,7 +41,7 @@ dens_bin[dens_bin == 0] <- NA
 # Coerce raster to polygon
 pols <- as.polygons(dens_bin)
 
-# Store polygons it to a file and then reload
+# Store polygons to a file and then reload
 file <- tempfile(fileext = ".shp")
 writeVector(pols, file, overwrite = T)
 pols <- readOGR(file)

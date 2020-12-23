@@ -13,7 +13,6 @@ setwd(wd)
 
 # Load required packages
 library(raster)     # To handle raster data
-library(terra)      # To handle raster data
 library(rgdal)      # To handle vector data
 library(gdalUtils)  # Some helpfull tools
 
@@ -30,12 +29,20 @@ writeOGR(
 )
 
 # Load reference raster for 250 meters
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+values(r) <- 0
+
+# Use gdal to rasterize the farms
+writeRaster(
+    r
+  , "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GABRIELE.tif"
+  , overwrite = TRUE
+)
 
 # Rasterize the farms
-r <- rasterize(vect(crops), r, field = 1, background = 0)
-writeRaster(
-    x         = raster(r)
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GABRIELE.tif"
-  , overwrite = TRUE
+gdal_rasterize(
+    src_datasource = "03_Data/02_CleanData/04_AnthropogenicFeatures_Farms_GABRIELE.shp"
+  , dst_filename   = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GABRIELE.tif"
+  , burn           = 1
+  , at             = TRUE
 )
