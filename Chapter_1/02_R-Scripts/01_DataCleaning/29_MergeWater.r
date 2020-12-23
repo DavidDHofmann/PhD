@@ -24,13 +24,8 @@ library(pbmcapply)  # To use multiple cores
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   dir(path = ., pattern = ".tif$", full.names = T) %>%
   rast()
-globe <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
-coper <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
 merit <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers_MERIT.tif")
-
-# Before we generate the dynamic floodmaps, let's merge the globeland and
-# copernicus data. Note that I'll add in the MERIT layer later.
-water <- max(globe, coper)
 
 # We only need dynamic watermaps for the extent on which we have GPS data. So
 # let's crop with a slight buffer
@@ -72,6 +67,9 @@ water <- suppressMessages(
 
 # Let's also transfer the layernames
 names(water) <- names(flood)
+
+# Visualize some maps
+plot(water[[1:4]], col = c("white", "blue"))
 
 # Save the result to file. We'll store them uncompressed which allows faster
 # reading times

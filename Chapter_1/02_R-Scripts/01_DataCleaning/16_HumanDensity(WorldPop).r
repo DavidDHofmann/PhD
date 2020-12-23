@@ -13,7 +13,10 @@ setwd(wd)
 
 # Load required packages
 library(raster)     # To handle raster data
-library(terra)      # To handle raster data
+library(rgdal)      # To handle spatial data
+
+# Make use of multicore abilities
+beginCluster()
 
 ################################################################################
 #### Stitch Tiles
@@ -26,23 +29,16 @@ dat <- dir(
 )
 dat <- lapply(dat, raster)
 
-# Merge the tiles
-dat <- mosaic(dat[[1]], dat[[2]], dat[[3]], dat[[4]], dat[[5]], fun = max)
+# Merge all tiles together
+dat <- do.call(merge, dat)
 
-# Convert to terra
-dat <- rast(dat)
-
-# Crop the merged tiles to our extent (with a slight buffer of 1km)
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
-extent <- vect(as(extent(raster(r)) + c(-1, 1, -1, 1) / 111, "SpatialPolygons"))
-dat <- crop(dat, extent, snap = "out")
-
-# Replace NAs with 0s
-dat <- classify(dat, rcl = matrix(c(NA, 0), nrow = 1))
+# Crop merged files to our extent
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+dat <- crop(dat, r, snap = "out")
 
 # Store the raster to file
 writeRaster(
-    x         = raster(dat)
+    x         = dat
   , filename  = "03_Data/01_RawData/WORLDPOP/HumanDensity.tif"
   , overwrite = TRUE
 )
@@ -56,9 +52,19 @@ coarse <- aggregate(dat, fact = round(250 / 90), fun = sum)
 # Resample the population density layer to the reference raster
 coarse <- resample(coarse, r, "bilinear")
 
+# Replace NAs and values below 0 with 0s
+coarse <- reclassify(coarse, rcl = c(NA, NA, 0))
+coarse <- reclassify(coarse, rcl = c(-Inf, 0, 0))
+
+# Look at final raster
+coarse
+
 # Store the result
 writeRaster(
-    x         = raster(coarse)
+    x         = coarse
   , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanDensity_WORLDPOP.tif"
   , overwrite = TRUE
 )
+
+# End cluster
+endCluster()

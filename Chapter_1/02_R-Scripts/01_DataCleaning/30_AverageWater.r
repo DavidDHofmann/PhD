@@ -22,10 +22,8 @@ library(terra)        # To handle spatial data
 library(davidoff)     # Custom functions
 
 # Load and merge static layers
-globe <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
-coper <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif")
 merit <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers_MERIT.tif")
-water <- max(globe, coper)
 
 # Load dyanmic layers
 flood <- rast("03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")

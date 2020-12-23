@@ -160,7 +160,6 @@ lines$Water <- pbmclapply(1:nrow(lines)
   , mc.cores           = detectCores() / 2
   , ignore.interactive = T
   , FUN                = function(x){
-    x <- 1
     index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
     value <- extracted[x, index]
     return(value)
