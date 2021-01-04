@@ -771,20 +771,7 @@ in case the confidence intervals of \(\bar{r}_{s, realized}\) and \(\bar{r}_{s,
 random}\) did not overlap.
 
 %------------------------------------------------------------------------------
-%  Appendix S6: Random Effects Variability
-%------------------------------------------------------------------------------
-\newpage
-\section{Habitat Selection Model: Random Effects}
-\begin{figure}[hbtp]
-  \includegraphics[width = \textwidth]{99_RandomEffects}
-  \caption{Plot of random effects showing variability across dispersal
-  coalitions. The coalition ID refers to the individual in the dispersal
-  coalition that was equipped with a GPS collar.}
-  \label{RandomEffects}
-\end{figure}
-
-%------------------------------------------------------------------------------
-%  Appendix S7: Least Cost Paths and Least Cost Corridors
+%  Appendix S6: Least Cost Paths and Least Cost Corridors
 %------------------------------------------------------------------------------
 \newpage
 \section{Identification of Least-Cost Paths \& Corridors}
@@ -846,7 +833,7 @@ single connectivity map.
 \end{figure}
 
 %------------------------------------------------------------------------------
-%  Appendix S8: AIC Model Selection
+%  Appendix S7: AIC Model Selection
 %------------------------------------------------------------------------------
 \newpage
 \section{Model Selection Results}
@@ -911,6 +898,72 @@ single connectivity map.
     }
   \end{center}
 \end{table}
+
+%------------------------------------------------------------------------------
+%  Appendix S8: Random Effects Variability
+%------------------------------------------------------------------------------
+\newpage
+\section{Habitat Selection Model: Random Effects}
+\begin{figure}[hbtp]
+  \includegraphics[width = \textwidth]{99_RandomEffects}
+  \caption{Plot of random effects showing variability across dispersal
+  coalitions. The coalition ID refers to the individual in the dispersal
+  coalition that was equipped with a GPS collar.}
+  \label{RandomEffects}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%  Appendix S9: Alternative Source Points
+%------------------------------------------------------------------------------
+\newpage
+\section{Alternative Source Points}
+Because we were interested in assessing the sensitivity of our results with
+respect to the location of source points, we implemented two competing
+approaches to select source points. In a first run, we applied an
+omnidirectional \textit{go-through} approach as proposed by \cite{Koen.2014} and
+applied by \cite{Pitman.2017}. That is, we distributed 68 equally spaced source
+points along the map border and we calculated least-cost paths and least-cost
+corridors for all pairwise combinations of them. In contrast to other methods,
+this approach has been shown to be less subjective and less sensitive to the
+selection of unreasonable source points. Furthermore, such an approach enables
+the identification of dispersal routes that do not necessarily connect patches
+inhabited by the species. In a second run, we followed the approach described in
+\cite{Elliot.2014} and overlayed the study area with a regular grid of points
+spaced 100 km apart. From this regular grid we only considered those points that
+fell within protected areas \(>\) 700 km\textsuperscript{2}, which conforms with
+home-range requirements of African wild dogs \citep{Pomilia.2015}. Finally, we
+defined centroids as source points for those protected areas \(>\) 700
+km\textsuperscript{2} that were not assigned any source points from the regular
+grid. Because wild dogs residing outside of protected areas are rare and
+unviable \citep{VanDerMeer.2014}, we consider such a selection of source points
+within protected areas to be reasonable. The second procedure also resulted in
+68 source points, implying that we calculated 2'278 unique pairwise combinations
+and therefore 2'278 unique LCPs and LCCs per approach.
+\Cref{AlternativeSourcePoints} illustrates the resulting least-cost paths and
+least-cost corridors and highlights that both methods produce qualitatively
+similar results. In fact, map values of \Cref{AlternativeSourcePoints} (b1) and
+(b2) correlate with \(r\) = 0.86. Nevertheless, one can see that connectivity
+following the first approach gets somewhat  ``stretched'' towards the map
+borders, which is expected given that the source points are all located at the
+borders. Regardless of the method, we find that the major dispersal corridors
+run within the borders of the KAZA-TFCA and that mainly impenetrable landscape
+remains beyond its borders.
+
+\begin{figure}[hbtp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_LeastCost_Suppl}
+  \caption{Comparison of least-cost paths (a) and least-cost corridors (b) using
+  different source points. In subfigures (a1) and (b1), 68 source points were
+  placed along the map border (black and white semicircles). In subfigures (a2)
+  and (b2), on the other hand, source points (black and white circles) were
+  placed in protected areas (gray) that were large enough to sustain viable wild
+  dog populations (i.e. larger than 700 km\textsuperscript{2},
+  \citep{Pomilia.2015}). Continuous thin black lines indicate the borders of the
+  KAZA-TFCA, whereas dashed black lines delineate country-borders. For ease of
+  spatial reference, we also labeled some national parks (NPs, in dark-grey).}
+  \label{AlternativeSourcePoints}
+  \end{center}
+\end{figure}
 
 \newpage
 \begingroup

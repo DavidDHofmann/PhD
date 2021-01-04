@@ -5,45 +5,45 @@ The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--there's a number but no volume in Diniz.2020
 Warning--empty journal in Elliot.2014
-You've used 57 entries,
+You've used 58 entries,
             1935 wiz_defined-function locations,
-            854 strings with 17277 characters,
-and the built_in function-call counts, 26569 in all, are:
-= -- 2513
-> -- 1473
+            859 strings with 17660 characters,
+and the built_in function-call counts, 27277 in all, are:
+= -- 2574
+> -- 1536
 < -- 15
-+ -- 522
-- -- 522
-* -- 2551
-:= -- 4692
-add.period$ -- 173
-call.type$ -- 57
-change.case$ -- 540
-chr.to.int$ -- 57
-cite$ -- 59
-duplicate$ -- 806
-empty$ -- 1652
-format.name$ -- 593
-if$ -- 5016
++ -- 546
+- -- 546
+* -- 2628
+:= -- 4820
+add.period$ -- 176
+call.type$ -- 58
+change.case$ -- 557
+chr.to.int$ -- 58
+cite$ -- 60
+duplicate$ -- 820
+empty$ -- 1682
+format.name$ -- 618
+if$ -- 5143
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 59
-newline$ -- 290
-num.names$ -- 173
-pop$ -- 441
+missing$ -- 60
+newline$ -- 295
+num.names$ -- 176
+pop$ -- 456
 preamble$ -- 2
-purify$ -- 544
+purify$ -- 561
 quote$ -- 0
-skip$ -- 590
+skip$ -- 600
 stack$ -- 0
-substring$ -- 1877
-swap$ -- 66
+substring$ -- 1914
+swap$ -- 67
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 336
+type$ -- 342
 warning$ -- 2
-while$ -- 201
+while$ -- 205
 width$ -- 0
-write$ -- 745
+write$ -- 758
 (There were 2 warnings)

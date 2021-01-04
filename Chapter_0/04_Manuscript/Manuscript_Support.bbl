@@ -89,6 +89,12 @@ Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
   Dynamics of Bison under Predation Risk}.
 \newblock {\em {Ecology}}, 90(9):2480--2490.
 
+\bibitem[Koen et~al., 2014]{Koen.2014}
+Koen, E.~L., Bowman, J., Sadowski, C., and Walpole, A.~A. (2014).
+\newblock {Landscape Connectivity for Wildlife: Development and Validation of
+  Multispecies Linkage Maps}.
+\newblock {\em {Methods in Ecology and Evolution}}, 5(7):626--633.
+
 \bibitem[Latham et~al., 2011]{Latham.2011}
 Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
 \newblock {Movement Responses by Wolves to Industrial Linear Features and Their
@@ -126,6 +132,20 @@ Pinto, N. and Keitt, T.~H. (2009).
   Graph-Theoretic Approach}.
 \newblock {\em {Landscape Ecology}}, 24(2):253--266.
 
+\bibitem[Pitman et~al., 2017]{Pitman.2017}
+Pitman, R.~T., Fattebert, J., Williams, S.~T., Williams, K.~S., Hill, R.~A.,
+  Hunter, L. T.~B., Robinson, H., Power, J., Swanepoel, L., Slotow, R., and
+  Balme, G.~A. (2017).
+\newblock {Cats, Connectivity and Conservation: Incorporating Data Sets and
+  Integrating Scales for Wildlife Management}.
+\newblock {\em {Journal of Applied Ecology}}, 54(6):1687--1698.
+
+\bibitem[Pomilia et~al., 2015]{Pomilia.2015}
+Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
+\newblock {Ecological Predictors of African Wild Dog Ranging Patterns in
+  Northern Botswana}.
+\newblock {\em {Journal of Mammalogy}}, 96(6):1214--1223.
+
 \bibitem[{R Core Team}, 2019]{R.2019}
 {R Core Team} (2019).
 \newblock {\em {R: A Language and Environment for Statistical Computing}}.
@@ -162,6 +182,12 @@ Turchin, P. (1998).
 \newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
   Population Redistribution in Plants and Animals}}.
 \newblock Sinauer Associates, Sunderland, MA, USA.
+
+\bibitem[Van~der Meer et~al., 2014]{VanDerMeer.2014}
+Van~der Meer, E., Fritz, H., Blinston, P., and Rasmussen, G.~S. (2014).
+\newblock {Ecological Trap in the Buffer Zone of a Protected Area: Effects of
+  Indirect Anthropogenic Mortality on the African Wild Dog (Lycaon pictus)}.
+\newblock {\em {Oryx}}, 48(2):285--293.
 
 \bibitem[van Etten, 2017]{vanEtten.2017}
 van Etten, J. (2017).

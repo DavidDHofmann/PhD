@@ -425,7 +425,7 @@ A.5).
 Using the most parsimonious habitat selection model, we predicted a permeability
 surface spanning the entire extent of the KAZA-TFCA. That is, we applied
 \ref{EQ1} to our spatial covariates and calculated the selection score \(w(x)\)
-for each raster cell. Because our representation of water was dynamic we
+for each raster cell. Because our representation of water was dynamic, we
 collapsed all dynamic water maps into a single map using areas that were covered
 by water in at least 10\% of the cases. We used the resulting map to also
 calculate a layer returning the distance to water. Because the delta only covers
@@ -440,21 +440,21 @@ KAZA-TFCA, within and outside formally protected areas, and within each of the
 five KAZA-TFCA countries.
 
 \subsection{Least-Cost Paths and Corridors}
-To identify movement corridors of dispersing wild dogs, we specified source
-points and calculated factorial least-cost paths (LCPs) as well as factorial
-least-cost corridors (LCCs) among them \citep{Elliot.2014}. We generated source
-points by overlaying the study area with a regular grid of points spaced at 100
-km. We only considered those points that fell within protected areas \(>\) 700
-km\textsuperscript{2}, which conforms with home-range requirements of African
-wild dogs \citep{Pomilia.2015}. Finally, we defined centroids as source points
-for those protected areas \(>\) 700 km\textsuperscript{2} that were not assigned
-any source points from the regular grid. Because wild dogs residing outside of
-protected areas are rare and unviable \citep{VanDerMeer.2014}, we consider our
-selection of source points within protected areas to be appropriate. In total,
-we generated 68 source points, which resulted in 2'278 unique pairwise
+To identify potential movement corridors of dispersing wild dogs, we specified
+source points and calculated factorial least-cost paths (LCPs) as well as
+factorial least-cost corridors (LCCs) among them \citep{Elliot.2014}. To specify
+source points, we applied the omnidirectional \textit{go-through} approach
+proposed by \citep{Koen.2014} and placed 68 regularly spaced source points along
+the map border. This approach has been shown to reduce potential biases arising
+from the selection of inappropriate source locations \citep{Koen.2014,
+Pitman.2017}. To assess the sensitivity of our results with respect to the
+location of source points, we also applied an alternative method and placed 68
+source points within protected areas that are large enough to sustain viable
+wild dog populations (further details and corresponding results in Appendix
+A.9). In either case, the 68 source points resulted in 2'278 unique pairwise
 combinations and therefore 2'278 unique LCPs and LCCs. We computed factorial
 LCPs and LCCs between source points using the R-package \textit{gdistance}
-(further details in Appendix A.7). After computation, we tallied overlapping
+(details in Appendix A.6). After computation, we tallied overlapping
 LCPs and LCCs, respectively, into single connectivity maps. Because LCPs return
 discrete paths, whereas LCCs return continuous corridors, we present both
 methods. R-codes showcasing the main steps for sections 2.5 to 2.6 can be
@@ -485,7 +485,7 @@ by humans (\(\beta\) = -0.45, 95\% \(CI\) = -0.82 to -0.08). Except for
 \textit{distance to water} (\(SD\)\textsubscript{RandomEffect} = 0.57), we
 observed little variation between dispersal coalitions' relative selection
 strengths (\(SD\)\textsubscript{RandomEffect} \(<\) 0.22 for all other
-covariates, see also Figure S7).
+covariates, see also Figure S8).
 
 \begin{figure}[h]
   \begin{center}
@@ -616,13 +616,12 @@ at the periphery (\Cref{LeastCost}).
       \includegraphics[width = 0.95\textwidth]{99_LeastCostPaths.pdf}
       \includegraphics[width = 0.95\textwidth]{99_LeastCostCorrs.pdf}
     \end{minipage}
-    \caption{(a) Source points (black dots) and corresponding least-cost paths
-    leaving from protected areas (dark grey borders). Note that only contiguous
-    protected areas covering more than 700 km\textsuperscript{2} are depicted.
-    Continuous thin black lines indicate the borders of the KAZA-TFCA, whereas
-    dashed black lines delineate country-borders. (b) Least-cost corridors
-    between the same source points as illustrated in subfigure (a). For ease of
-    spatial reference, we also labeled some national parks (NPs, in dark-grey).}
+    \caption{(a) Source points (black semicircles along the map border) and
+    corresponding least-cost paths between them. Continuous thin black lines
+    indicate the borders of the KAZA-TFCA, whereas dashed black lines delineate
+    country-borders. (b) Least-cost corridors between the same source points as
+    illustrated in subfigure (a). For ease of spatial reference, we also labeled
+    some national parks (NPs, in dark-grey).}
     \label{LeastCost}
   \end{center}
 \end{figure}

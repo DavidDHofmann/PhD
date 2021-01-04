@@ -4,45 +4,45 @@ The top-level auxiliary file: Manuscript_Support.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--empty journal in Elliot.2014
-You've used 30 entries,
+You've used 34 entries,
             1935 wiz_defined-function locations,
-            682 strings with 10909 characters,
-and the built_in function-call counts, 12984 in all, are:
-= -- 1237
-> -- 708
+            707 strings with 11963 characters,
+and the built_in function-call counts, 15046 in all, are:
+= -- 1433
+> -- 830
 < -- 11
-+ -- 250
-- -- 250
-* -- 1207
-:= -- 2325
-add.period$ -- 91
-call.type$ -- 30
-change.case$ -- 270
-chr.to.int$ -- 30
-cite$ -- 31
-duplicate$ -- 403
-empty$ -- 793
-format.name$ -- 288
-if$ -- 2427
++ -- 294
+- -- 294
+* -- 1415
+:= -- 2685
+add.period$ -- 103
+call.type$ -- 34
+change.case$ -- 312
+chr.to.int$ -- 34
+cite$ -- 35
+duplicate$ -- 459
+empty$ -- 917
+format.name$ -- 336
+if$ -- 2813
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 26
-newline$ -- 155
-num.names$ -- 90
-pop$ -- 223
+missing$ -- 30
+newline$ -- 175
+num.names$ -- 102
+pop$ -- 257
 preamble$ -- 2
-purify$ -- 275
+purify$ -- 317
 quote$ -- 0
-skip$ -- 301
+skip$ -- 341
 stack$ -- 0
-substring$ -- 868
-swap$ -- 29
+substring$ -- 1028
+swap$ -- 33
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 176
+type$ -- 200
 warning$ -- 1
-while$ -- 99
+while$ -- 115
 width$ -- 0
-write$ -- 387
+write$ -- 439
 (There was 1 warning)

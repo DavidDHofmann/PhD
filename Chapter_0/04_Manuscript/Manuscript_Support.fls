@@ -312,9 +312,6 @@ INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_HumanIn
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_FloodPulse.pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_FloodPulse.pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_FloodPulse.pdf
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example1).pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example1).pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example1).pdf
@@ -324,6 +321,12 @@ INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCo
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example3).pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example3).pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example3).pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCost_Suppl.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCost_Suppl.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCost_Suppl.pdf
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.bbl
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.bbl
 INPUT /home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.aux
@@ -339,6 +342,7 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb

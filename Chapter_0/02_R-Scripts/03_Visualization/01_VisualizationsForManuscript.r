@@ -2317,14 +2317,19 @@ dev.off()
 ############################################################
 # Load required data
 perm        <- raster("03_Data/03_Results/99_PermeabilityMap.tif")
-corrs       <- raster("03_Data/03_Results/99_LeastCostCorridors.tif")
-paths       <- readOGR("03_Data/03_Results/99_LeastCostPaths.shp")
-paths_rast  <- raster("03_Data/03_Results/99_LeastCostPaths.tif")
+corrs1       <- raster("03_Data/03_Results/99_LeastCostCorridors1.tif")
+corrs2       <- raster("03_Data/03_Results/99_LeastCostCorridors2.tif")
+paths1       <- readOGR("03_Data/03_Results/99_LeastCostPaths1.shp")
+paths2       <- readOGR("03_Data/03_Results/99_LeastCostPaths2.shp")
+paths_rast1  <- raster("03_Data/03_Results/99_LeastCostPaths1.tif")
+paths_rast2  <- raster("03_Data/03_Results/99_LeastCostPaths2.tif")
 kaza        <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp") %>% as(., "SpatialLines")
 africa      <- readOGR("03_Data/02_CleanData/00_General_Africa.shp") %>% as(., "SpatialLines")
 africa_crop <- readOGR("03_Data/02_CleanData/00_General_Africa.shp") %>% crop(., kaza)
-prot        <- readOGR("03_Data/03_Results/99_SourceAreas.shp")
-points      <- readOGR("03_Data/03_Results/99_SourcePoints.shp")
+# prot        <- readOGR("03_Data/03_Results/99_SourceAreas.shp")
+prot        <- readOGR("03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks(1Class).shp")
+points1      <- readOGR("03_Data/03_Results/99_SourcePoints1.shp")
+points2      <- readOGR("03_Data/03_Results/99_SourcePoints2.shp")
 nati        <- readOGR("03_Data/02_CleanData/02_LandUseTypes_Protected_PeaceParks(3Classes).shp")
 
 # Subset to national parks
@@ -2371,25 +2376,34 @@ africa_crop <- subset(africa_crop, COUNTRY %in% c(
 )
 
 # Add some pseudodata to the paths
-paths$Pseudo <- ""
+paths1$Pseudo <- ""
+paths2$Pseudo <- ""
 
 # Take sqrt of LCPs to make lower frequented LPCs more visible
-paths_rast <- sqrt(paths_rast)
+paths_rast1 <- sqrt(paths_rast1)
+paths_rast2 <- sqrt(paths_rast2)
 
 # Replace zeros with NAs
-values(paths_rast)[values(paths_rast) == 0] <- NA
+values(paths_rast1)[values(paths_rast1) == 0] <- NA
+values(paths_rast2)[values(paths_rast2) == 0] <- NA
 
 # Rescale between 0 and 1
-corrs <- calc(corrs, fun = function(x){
+corrs1 <- calc(corrs1, fun = function(x){
   (x - min(x)) / (max(x) - min(x))
 })
-paths_rast <- calc(paths_rast, fun = function(x){
+corrs2 <- calc(corrs2, fun = function(x){
+  (x - min(x)) / (max(x) - min(x))
+})
+paths_rast1 <- calc(paths_rast1, fun = function(x){
+  (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
+})
+paths_rast2 <- calc(paths_rast2, fun = function(x){
   (x - min(x, na.rm = TRUE)) / (max(x, na.rm = TRUE) - min(x, na.rm = TRUE))
 })
 
 # Prepare the plot of LCPs (we only need the corridors to make sure we get a
 # nice plot border)
-p1 <- tm_shape(corrs) +
+p1 <- tm_shape(corrs2) +
     tm_raster(
       palette     = "white"
     , legend.show = FALSE
@@ -2406,18 +2420,19 @@ p1 <- tm_shape(corrs) +
     , lines               = FALSE
     , ticks               = TRUE
   ) +
-  tm_shape(paths_rast) +
+  tm_shape(paths_rast2) +
     tm_raster(
         palette         = "-Spectral"
       , style           = "cont"
-      , title           = "Least-Cost Paths"
+      , title           = "(a) Least-Cost Paths"
+      , breaks          = c(0, 0.5, 1)
       , labels          = c("Low-Frequency", "", "High-Frequency")
       , legend.reverse  = T
     ) +
-  tm_shape(points) +
+  tm_shape(points2) +
     tm_dots(
         col   = "black"
-      , size  = 0.1
+      , size  = 0.9
     ) +
   tm_shape(kaza) +
     tm_lines(
@@ -2447,11 +2462,17 @@ p1 <- tm_shape(corrs) +
     , color.dark    = "black"
     , color.light   = "black"
   ) +
-  tm_credits("(a)"
-  , position  = c("right", "top")
-  , size      = 1.5
-  , col       = "black"
+  tm_layout(
+      legend.bg.color = "white"
+    , legend.frame    = "black"
+    , frame           = "black"
+    , frame.lwd       = 2
 )
+#   tm_credits("(a)"
+#   , position  = c("right", "top")
+#   , size      = 1.5
+#   , col       = "black"
+# )
 
 # Store the plot
 CairoPDF("04_Manuscript/99_LeastCostPaths.pdf", width = 6, height = 5.25)
@@ -2459,11 +2480,12 @@ p1
 dev.off()
 
 # Prepare the plot for LCCs
-p2 <- tm_shape(corrs) +
+p2 <- tm_shape(corrs2) +
     tm_raster(
         palette         = "-Spectral"
       , style           = "cont"
-      , title           = "Least-Cost Corridors"
+      , title           = "(b) Least-Cost Corridors"
+      , breaks          = c(0, 0.5, 1)
       , labels          = c("Low-Frequency", "", "High-Frequency")
       , legend.reverse  = T
     ) +
@@ -2507,6 +2529,10 @@ p2 <- tm_shape(corrs) +
   tm_layout(
       legend.text.color   = "white"
     , legend.title.color  = "white"
+    , legend.bg.color = brewer.pal(11, name = "Spectral")[11]
+    , legend.frame    = "white"
+    , frame           = "black"
+    , frame.lwd       = 2
   ) +
   tm_scale_bar(
       position    = "left"
@@ -2518,16 +2544,302 @@ p2 <- tm_shape(corrs) +
       text.color   = "white"
     , color.dark   = "white"
     , color.light  = "white"
-  ) +
-  tm_credits("(b)"
-  , position  = c("right", "top")
-  , size      = 1.5
-  , col       = "white"
 )
+#   tm_credits("(b)"
+#   , position  = c("right", "top")
+#   , size      = 1.5
+#   , col       = "white"
+# )
 
 # Store the plot
 CairoPDF("04_Manuscript/99_LeastCostCorrs.pdf", width = 6, height = 5.25)
 p2
+dev.off()
+
+# Plot 1 for supplementary material
+ps1 <- tm_shape(corrs1) +
+    tm_raster(
+      palette     = "white"
+    , legend.show = FALSE
+  ) +
+  tm_shape(prot) +
+    tm_polygons(
+      col           = "grey65"
+    , border.col    = "grey65"
+  ) +
+  tm_grid(
+      n.x                 = 5
+    , n.y                 = 5
+    , labels.inside.frame = FALSE
+    , lines               = FALSE
+    , ticks               = TRUE
+  ) +
+  tm_shape(paths_rast1) +
+    tm_raster(
+        palette         = "-Spectral"
+      , style           = "cont"
+      , title           = "(a2) Least-Cost Paths"
+      , breaks          = c(0, 0.5, 1)
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
+    ) +
+  tm_shape(points1) +
+    tm_dots(
+        col   = "black"
+      , size  = 0.2
+    ) +
+  tm_shape(kaza) +
+    tm_lines(
+        col = "black"
+      , lwd = 2
+    ) +
+  tm_shape(africa) +
+    tm_lines(
+        col = "black"
+      , lwd = 1
+      , lty = 2
+    ) +
+  tm_shape(africa_crop) +
+    tm_text("COUNTRY"
+      , col       = "black"
+      , just      = "bottom"
+      , fontface  = 2
+    ) +
+  tm_scale_bar(
+      position    = "left"
+    , text.size   = 0.5
+    , text.color  = "black"
+    , width       = 0.125
+  ) +
+  tm_compass(
+      text.color    = "black"
+    , color.dark    = "black"
+    , color.light   = "black"
+  ) +
+  tm_layout(
+      legend.bg.color = "white"
+    , legend.frame    = "black"
+    , frame           = "black"
+    , frame.lwd       = 2
+)
+
+# Plot 2 for supplementary material
+ps2 <- tm_shape(corrs2) +
+    tm_raster(
+      palette     = "white"
+    , legend.show = FALSE
+  ) +
+  tm_shape(prot) +
+    tm_polygons(
+      col           = "grey65"
+    , border.col    = "grey65"
+  ) +
+  tm_grid(
+      n.x                 = 5
+    , n.y                 = 5
+    , labels.inside.frame = FALSE
+    , lines               = FALSE
+    , ticks               = TRUE
+  ) +
+  tm_shape(paths_rast2) +
+    tm_raster(
+        palette         = "-Spectral"
+      , style           = "cont"
+      , title           = "(a1) Least-Cost Paths"
+      , breaks          = c(0, 0.5, 1)
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
+    ) +
+  tm_shape(points2) +
+    tm_dots(
+        col   = "black"
+      , size  = 0.6
+    ) +
+  tm_shape(kaza) +
+    tm_lines(
+        col = "black"
+      , lwd = 2
+    ) +
+  tm_shape(africa) +
+    tm_lines(
+        col = "black"
+      , lwd = 1
+      , lty = 2
+    ) +
+  tm_shape(africa_crop) +
+    tm_text("COUNTRY"
+      , col       = "black"
+      , just      = "bottom"
+      , fontface  = 2
+    ) +
+  tm_scale_bar(
+      position    = "left"
+    , text.size   = 0.5
+    , text.color  = "black"
+    , width       = 0.125
+  ) +
+  tm_compass(
+      text.color    = "black"
+    , color.dark    = "black"
+    , color.light   = "black"
+  ) +
+  tm_layout(
+      legend.bg.color = "white"
+    , legend.frame    = "black"
+    , frame           = "black"
+    , frame.lwd       = 2
+)
+
+# Plot 3 for supplementary material
+ps3 <- tm_shape(corrs1) +
+    tm_raster(
+        palette         = "-Spectral"
+      , style           = "cont"
+      , title           = "(b2) Least-Cost Corridors"
+      , breaks          = c(0, 0.5, 1)
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
+    ) +
+  tm_grid(
+      n.x                 = 5
+    , n.y                 = 5
+    , labels.inside.frame = FALSE
+    , lines               = FALSE
+    , ticks               = TRUE
+  ) +
+  tm_shape(nati) +
+    tm_borders(
+        col   = "black"
+      , alpha = 0.6
+    ) +
+  tm_shape(points1) +
+    tm_dots(
+        col   = "white"
+      , size  = 0.2
+    ) +
+  tm_shape(kaza) +
+    tm_lines(
+        col = "black"
+      , lwd = 2
+    ) +
+  tm_shape(nati_text) +
+    tm_text("Name"
+      , col       = "black"
+      , alpha     = 0.6
+      , fontface  = 3
+      , size      = 0.5
+      , shadow    = TRUE
+    ) +
+  tm_shape(africa) +
+    tm_lines(
+        col = "black"
+      , lwd = 1
+      , lty = 2
+    ) +
+  tm_shape(africa_crop) +
+    tm_text("COUNTRY"
+      , col       = "black"
+      , just      = "bottom"
+      , fontface  = 2
+    ) +
+  tm_layout(
+      legend.text.color   = "white"
+    , legend.title.color  = "white"
+    , legend.bg.color = brewer.pal(11, name = "Spectral")[11]
+    , legend.frame    = "white"
+    , frame           = "black"
+    , frame.lwd       = 2
+  ) +
+  tm_scale_bar(
+      position    = "left"
+    , text.size   = 0.5
+    , text.color  = "white"
+    , width       = 0.125
+  ) +
+  tm_compass(
+      text.color   = "white"
+    , color.dark   = "white"
+    , color.light  = "white"
+)
+
+# Plot 4 for supplementary material
+ps4 <- tm_shape(corrs2) +
+    tm_raster(
+        palette         = "-Spectral"
+      , style           = "cont"
+      , title           = "(b1) Least-Cost Corridors"
+      , breaks          = c(0, 0.5, 1)
+      , labels          = c("Low-Frequency", "", "High-Frequency")
+      , legend.reverse  = T
+    ) +
+  tm_grid(
+      n.x                 = 5
+    , n.y                 = 5
+    , labels.inside.frame = FALSE
+    , lines               = FALSE
+    , ticks               = TRUE
+  ) +
+  tm_shape(nati) +
+    tm_borders(
+        col   = "black"
+      , alpha = 0.6
+    ) +
+  tm_shape(points2) +
+    tm_dots(
+        col   = "white"
+      , size  = 0.6
+    ) +
+  tm_shape(kaza) +
+    tm_lines(
+        col = "black"
+      , lwd = 2
+    ) +
+  tm_shape(nati_text) +
+    tm_text("Name"
+      , col       = "black"
+      , alpha     = 0.6
+      , fontface  = 3
+      , size      = 0.5
+      , shadow    = TRUE
+    ) +
+  tm_shape(africa) +
+    tm_lines(
+        col = "black"
+      , lwd = 1
+      , lty = 2
+    ) +
+  tm_shape(africa_crop) +
+    tm_text("COUNTRY"
+      , col       = "black"
+      , just      = "bottom"
+      , fontface  = 2
+    ) +
+  tm_layout(
+      legend.text.color  = "white"
+    , legend.title.color = "white"
+    , legend.bg.color    = brewer.pal(11, name = "Spectral")[11]
+    , legend.frame       = "white"
+    , frame              = "black"
+    , frame.lwd          = 2
+  ) +
+  tm_scale_bar(
+      position    = "left"
+    , text.size   = 0.5
+    , text.color  = "white"
+    , width       = 0.125
+  ) +
+  tm_compass(
+      text.color   = "white"
+    , color.dark   = "white"
+    , color.light  = "white"
+)
+
+# Put plots together
+p <- tmap_arrange(ps2, ps1, ps4, ps3, ncol = 2)
+
+# Store final plot to file
+CairoPDF("04_Manuscript/99_LeastCost_Suppl.pdf", width = 6.32 * 2, height = 5.25 * 2)
+p
 dev.off()
 
 ############################################################
