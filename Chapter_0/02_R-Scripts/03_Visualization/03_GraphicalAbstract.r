@@ -153,7 +153,7 @@ dev.off()
 #### Corridor Map
 ############################################################
 # Load required data
-corrs  <- "03_Data/03_Results/99_LeastCostCorridors.tif" %>%
+corrs  <- "03_Data/03_Results/99_LeastCostCorridors2.tif" %>%
   raster()
 kaza <- "03_Data/02_CleanData/00_General_KAZA_KAZA.shp" %>%
   readOGR() %>%

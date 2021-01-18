@@ -51,21 +51,21 @@
     \includegraphics[width = \textwidth]{99_PermeabilityResults.pdf}
     \caption{(a) Estimated selection coefficients from the most parsimonious
     habitat selection model. Negative coefficients indicate avoidance of a
-    covariate, positive coefficients selection of a covariate. Whiskers
-    delineate the 95\%-CIs for estimated parameters. Significance codes: ** \(p
-    < 0.05\), *** \(p < 0.01\).(b) Results from the k-fold cross validation for
-    case-control studies. The left graph shows rank frequencies of
-    \textit{realized} steps according to predictions, whereas the right graph
-    shows rank frequencies of \textit{randomly selected} steps according to
-    predictions. \(\bar{r}_s\) indicates the mean correlation coefficient
-    resulting from 100 repetitions of the k-fold cross validation. The blue
-    smoothing line was fitted using a locally weighted polynomial regression and
-    serves to aid the eye in detecting the trends. Correlation coefficients
-    suggest that our prediction was significant and robust, evidenced by the
-    fact that the confidence intervals of \(\bar{r}_{s, realized}\) and
-    \(\bar{r}_{s, random}\) did overlap and by the fact that there was strong
-    and significant correlation between ranks and associated frequency for
-    realized steps.}
+    covariate, positive coefficients selection of a covariate. \(ta\) = turning
+    angle, \(sl\) = step length. Whiskers delineate the 95\%-CIs for estimated
+    parameters. Significance codes: ** \(p < 0.05\), *** \(p < 0.01\). (b)
+    Results from the k-fold cross validation for case-control studies. The left
+    graph shows rank frequencies of \textit{realized} steps according to
+    predictions, whereas the right graph shows rank frequencies of
+    \textit{randomly selected} steps according to predictions. \(\bar{r}_s\)
+    indicates the mean correlation coefficient resulting from 100 repetitions of
+    the k-fold cross validation. The blue smoothing line was fitted using a
+    locally weighted polynomial regression and serves to aid the eye in
+    detecting the trends. Correlation coefficients suggest that our prediction
+    was significant and robust, evidenced by the fact that the confidence
+    intervals of \(\bar{r}_{s, realized}\) and \(\bar{r}_{s, random}\) did
+    overlap and by the fact that there was strong and significant correlation
+    between ranks and associated frequency for realized steps.}
     \label{PermeabilityResults}
   \end{center}
 \end{figure}
@@ -100,13 +100,12 @@
       \includegraphics[width = 0.95\textwidth]{99_LeastCostPaths.pdf}
       \includegraphics[width = 0.95\textwidth]{99_LeastCostCorrs.pdf}
     \end{minipage}
-    \caption{(a) Source points (black dots) and corresponding least-cost paths
-    leaving from protected areas (dark grey borders). Note that only contiguous
-    protected areas covering more than 700 km\textsuperscript{2} are depicted.
-    Continuous thin black lines indicate the borders of the KAZA-TFCA, whereas
-    dashed black lines delineate country-borders. (b) Least-cost corridors
-    between the same source points as illustrated in subfigure (a). For ease of
-    spatial reference, we also labeled some national parks (NPs, in dark-grey).}
+    \caption{(a) Source points (black semicircles along the map border) and
+    corresponding least-cost paths between them. Continuous black lines indicate
+    the borders of the KAZA-TFCA, whereas dashed black lines delineate
+    country-borders. (b) Least-cost corridors between the same source points as
+    illustrated in subfigure (a). For ease of spatial reference, we also labeled
+    some national parks (NPs, in dark-grey).}
     \label{LeastCost}
   \end{center}
 \end{figure}
