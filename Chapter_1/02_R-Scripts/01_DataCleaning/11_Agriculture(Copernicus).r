@@ -14,27 +14,36 @@ setwd(wd)
 
 # Load required packages
 library(raster)   # To handle raster data
-library(terra)    # To handle raster data
+
+# Make use of multiple cores
+beginCluster()
 
 # Import the Copernicus dataset
-crops <- rast("03_Data/01_RawData/COPERNICUS/Copernicus.tif")
+crops <- raster("03_Data/01_RawData/COPERNICUS/Copernicus.tif")
+
+# Load the reference raster
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Keep only crops
 crops <- crops == 40
 
 # Aggregate the copernicus dataset to match the resolution of the reference
 # raster
-crops <- aggregate(crops, fact = round(250 / 30), fun = max)
-
-# Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+fact <- res(r)[1] / res(crops)[1]
+crops <- aggregate(crops, fact = round(fact), fun = max)
 
 # Resample the layer to match the reference raster
-crops_res <- resample(crops, r, "near")
+crops_res <- resample(crops, r, "ngb")
+
+# Check NAs
+sum(is.na(values(crops_res)))
 
 # Save the result to file
 writeRaster(
-    x         = raster(crops_res)
+    x         = crops_res
   , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_COPERNICUS.tif"
   , overwrite = TRUE
 )
+
+# End cluster
+endCluster()

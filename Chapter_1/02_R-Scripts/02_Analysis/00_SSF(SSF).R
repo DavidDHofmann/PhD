@@ -45,7 +45,6 @@ for (i in 1:length(methods)){
 
   # Make sure there are no duplicates!
   table(duplicated(data[, c("DogName", "TimestampRounded")]))
-  table(hour(data$TimestampRounded))
 
   # Count number of dogs
   length(unique(data$DogName))
@@ -53,8 +52,8 @@ for (i in 1:length(methods)){
   # Nest data by dog
   data <- data %>% group_by(DogName) %>% nest()
 
-  # Resample to two hours. Can't use 1 hourly fixes because step speeds are
-  # unproportionally large with 1 hour.
+  # Resample to two (minimally) hours. Can't use 1 hourly fixes because step
+  # speeds are unproportionally large with 1 hour.
   data$data <- suppressMessages(
     pbmclapply(1:nrow(data)
       , ignore.interactive = T
@@ -76,8 +75,8 @@ for (i in 1:length(methods)){
   }
 
   # We're going to convert the fixes to steps, yet we want to indicate a new
-  # burst if a step takes longer than 4.25 hours (8.25 hours between 07:00 and
-  # 15:00). Let's thus calculate the timelags.
+  # burst if a step takes longer than 4.25 hours (or longer than 8.25 hours
+  # between 07:00 and 15:00). Let's thus calculate the timelags.
   data <- data %>%
     group_by(DogName) %>%
     mutate(dt_ = Timestamp - lag(Timestamp)) %>%
@@ -85,6 +84,8 @@ for (i in 1:length(methods)){
     ungroup()
 
   # Indicate when a new burst starts (a new burst also starts whenever dt_ = NA)
+
+  # In case we're using iSSF
   if (method == "iSSF"){
     data <- data %>%
       mutate(NewBurst = ifelse(
@@ -94,6 +95,8 @@ for (i in 1:length(methods)){
       ) %>%
       mutate(BurstID = cumsum(NewBurst)) %>%
       dplyr::select(-c(NewBurst))
+
+    # In case we're using TiSSF
     } else {
     data <- data %>%
       mutate(NewBurst = ifelse(
@@ -114,7 +117,7 @@ for (i in 1:length(methods)){
     ungroup() %>%
     dplyr::select(-c(Nrow, dt_))
 
-  # Create bursts that are unique
+  # Create burst IDs that are unique
   data$BurstID <- data %>% group_indices(DogName, BurstID)
 
   # Now we can coerce the data to proper steps. We'll trick amt::make_track by
@@ -203,7 +206,7 @@ for (i in 1:length(methods)){
 
   # Fit a Gamma distribution to the step speed (again, fitting a gamma to step
   # speeds or fitting a gamma to (normalized) step lengths yields the same under
-  # iSSF)
+  # iSSF) -> almost at least
   sl <- fit_distr(tracks$speed_, "gamma")
 
   # Let's visualize the fit
@@ -247,7 +250,7 @@ for (i in 1:length(methods)){
 
     # Put the step lengths and turning angles into a new dataframe and calculate
     # the new endpoints of each random step. We also indicate that the steps are
-    # control steps (i.e. 0)
+    # control/random steps (i.e. 0)
     randomSteps <- tracks[rep(x, nsteps), ] %>%
       mutate(.
         , absta_  = absta_ + (ta_new - ta_)

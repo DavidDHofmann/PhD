@@ -20,16 +20,18 @@ library(corrplot)     # To plot correlations
 library(cowplot)      # For nice plots
 library(ggpubr)       # For nice plots
 library(glmmTMB)      # For modelling
+library(gridExtra)    # For laying out multiple plots
 
 ################################################################################
 #### Comparison to Old Data
 ################################################################################
 # I want to compare the current dataset to the dataset used in Hofmann et al
-# 2020. Let's thus load the two
+# 2021. Let's thus load the two
 old <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv")
-new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF_Extracted).csv")
+# new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF_Extracted).csv")
+new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(Extracted).csv")
 
-# Subset to case_ steps only
+# Subset to case_ steps
 old <- subset(old, case_)
 new <- subset(new, case_ == 1)
 
@@ -149,9 +151,22 @@ anti_join(new, old, by = c("id", "t1_", "t2_"))
 ################################################################################
 # Reload data
 old <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv")
-new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF_Extracted).csv")
+# new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF_Extracted).csv")
+new <- read_csv("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(Extracted).csv")
 old <- subset(old, t1_ %in% new$t1_ & id %in% new$id)
 new <- subset(new, t1_ %in% old$t1_ & id %in% old$id)
+
+# Compare fixes by individual (almost identical)
+tab1 <- table(old$id[old$case_]) %>% as.data.frame()
+tab2 <- table(new$id[new$case_ == 1]) %>% as.data.frame()
+tab <- full_join(tab1, tab2, by = "Var1")
+tab$Freq.x[is.na(tab$Freq.x)] <- 0
+tab$Diff <- abs(tab$Freq.x - tab$Freq.y)
+tab
+
+# Remove some individuals
+# old <- subset(old, !(id %in% c("Kalahari", "Dell", "Aspen", "Chiounard", "Encinitas")))
+# new <- subset(new, !(id %in% c("Kalahari", "Dell", "Aspen", "Chiounard", "Sishen")))
 
 # Let's run the model from Hofmann et al. 2020 again and compare the results
 # using the two different datasets
@@ -176,11 +191,23 @@ new <- new %>% mutate(
   , Trees           = scale(Trees)
 )
 
-summary(old$sl_)
-summary(new$sl_)
-
 # Run models
-mod1 <- glmm_clogit(writeForm(c("HumansBuff5000")), data = old)
-mod2 <- glmm_clogit(writeForm(c("HumansBuff5000")), data = new)
+covars <- c("HumansBuff5000", "Water", "DistanceToWater", "Shrubs", "Trees")
+mod1 <- glmm_clogit(writeForm(covars), data = old)
+mod2 <- glmm_clogit(writeForm(covars), data = new)
+
+# Compare results
 summary(mod1)
 summary(mod2)
+coefs1 <- getCoeffs(mod1)[-1, ]
+coefs2 <- getCoeffs(mod2)[-1, ]
+list(coefs1, coefs2)
+
+# Visualize coefficients
+p1 <- showCoeffs(coefs1[-1, ])
+p2 <- showCoeffs(coefs2[-1, ])
+grid.arrange(p1, p2)
+
+# Load step length distributions
+summary(old$sl_[old$case_])
+summary(new$sl_[new$case_ == 1])

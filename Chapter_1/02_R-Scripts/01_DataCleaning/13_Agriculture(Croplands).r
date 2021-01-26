@@ -14,33 +14,42 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)  # To handle reaster data
-library(terra)   # To handle reaster data
+library(raster)      # To handle raster data
+
+# Make use of multiple cores
+beginCluster()
 
 # Import the Croplands dataset
-crops <- rast("03_Data/01_RawData/CROPLANDS/Croplands.tif")
+crops <- raster("03_Data/01_RawData/CROPLANDS/Croplands.tif")
 
 # Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Crop to reference raster
 crops <- crop(crops, r)
 
 # Aggregate the croplands dataset to match the resolution of the reference
 # raster
-crops <- aggregate(crops, fact = round(250 / 30), fun = max)
+fact <- res(r)[1] / res(crops)[1]
+crops <- aggregate(crops, fact = round(fact), fun = max)
 
 # Now water is still included in the raster. Let's reclassify the values so we
 # only keep the crops
 rcl <- data.frame(old = c(1, 2), new = c(0, 1))
-crops <- classify(crops, rcl)
+crops <- reclassify(crops, rcl)
 
 # Resample the layer to match the reference raster
-crops_res <- resample(crops, r, "near")
+crops_res <- resample(crops, r, "ngb")
+
+# Check NAs
+sum(is.na(values(crops_res)))
 
 # Save the result to file
 writeRaster(
-    x         = raster(crops_res)
+    x         = crops_res
   , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_CROPLANDS.tif"
   , overwrite = TRUE
 )
+
+# End cluster
+endCluster()

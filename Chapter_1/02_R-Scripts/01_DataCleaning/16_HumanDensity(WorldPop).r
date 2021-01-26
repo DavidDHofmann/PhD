@@ -30,15 +30,18 @@ dat <- dir(
 dat <- lapply(dat, raster)
 
 # Merge all tiles together
-dat <- do.call(merge, dat)
+merged <- do.call(merge, dat)
 
-# Crop merged files to our extent
+# Load the reference shapefile and raster
+s <- shapefile("03_Data/02_CleanData/00_General_Shapefile.shp")
 r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
-dat <- crop(dat, r, snap = "out")
+
+# Crop the merged tiles to our reference shapefile
+merged <- crop(merged, s)
 
 # Store the raster to file
 writeRaster(
-    x         = dat
+    x         = merged
   , filename  = "03_Data/01_RawData/WORLDPOP/HumanDensity.tif"
   , overwrite = TRUE
 )
@@ -47,7 +50,8 @@ writeRaster(
 #### Aggregate and Resample
 ################################################################################
 # Aggregate the layer to 250m
-coarse <- aggregate(dat, fact = round(250 / 90), fun = sum)
+fact <- res(r)[1] / res(merged)[1]
+coarse <- aggregate(merged, fact = round(fact), fun = sum)
 
 # Resample the population density layer to the reference raster
 coarse <- resample(coarse, r, "bilinear")
@@ -55,9 +59,6 @@ coarse <- resample(coarse, r, "bilinear")
 # Replace NAs and values below 0 with 0s
 coarse <- reclassify(coarse, rcl = c(NA, NA, 0))
 coarse <- reclassify(coarse, rcl = c(-Inf, 0, 0))
-
-# Look at final raster
-coarse
 
 # Store the result
 writeRaster(

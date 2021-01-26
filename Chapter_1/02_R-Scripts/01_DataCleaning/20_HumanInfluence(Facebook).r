@@ -69,7 +69,7 @@ writeRaster(
 #### Buffered Human Density
 ################################################################################
 # Define radii of the buffers that we are going to apply
-radii <- seq(2.5, 20, by = 2.5)
+radii <- seq(1, 5, by = 1)
 
 # Create buffered rasters for the different radii
 humans_buff <- pbmclapply(
@@ -93,7 +93,7 @@ names(humans_buff)[1] <- "Buffer_0000"
 humans_buff <- log(humans_buff + 1)
 
 # Plot the result
-plot(humans_buff[[1:8]], col = viridis(50))
+plot(humans_buff, col = viridis(50))
 
 # Write the buffered layers to file
 writeRaster(

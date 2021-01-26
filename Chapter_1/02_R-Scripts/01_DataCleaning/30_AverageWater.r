@@ -56,7 +56,7 @@ water <- cover(flood, water)
 water <- max(water, merit)
 
 # Visualize
-plot(water, col = c("white", "blue"))
+plot(raster(water), col = c("white", "blue"))
 
 # Store the raster to file
 writeRaster(raster(water)

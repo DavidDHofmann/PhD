@@ -42,7 +42,8 @@ r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 # First, we aggregate the layer to match the resolution of the reference raster
 # The reference raster is resolve around 250 meters, the river layer at around
 # 90 meters
-dat <- aggregate(dat, fact = round(250 / 90), fun = max)
+fact <- res(r)[1] / res(dat)[1]
+dat <- aggregate(dat, fact = round(fact), fun = max)
 
 # Secondly, we ca resample the river layer to match the origin and extent of the
 # reference raster

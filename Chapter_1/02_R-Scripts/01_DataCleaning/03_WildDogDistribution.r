@@ -18,7 +18,7 @@ library(rgdal)    # To load spatial data
 dogs <- readOGR("03_Data/01_RawData/IUCN/data_0.shp")
 
 # Visualize
-plot(dogs, col = "purple")
+plot(dogs, col = "purple", border = "black", lwd = 0.5)
 
 # Store the file
 writeOGR(

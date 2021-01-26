@@ -28,7 +28,7 @@ crs(s) <- crs(r)
 
 # Plot the shapefile to make sure that it properly frames the reference raster
 plot(r)
-plot(s, border = "red", add = T)
+plot(s, border = "red", add = T, lwd = 2)
 
 # Assign an ID
 s <- SpatialPolygonsDataFrame(s, data = data.frame(Name = "ReferenceShapefile"))

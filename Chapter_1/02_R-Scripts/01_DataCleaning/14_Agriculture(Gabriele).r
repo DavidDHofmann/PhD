@@ -14,7 +14,7 @@ setwd(wd)
 # Load required packages
 library(raster)     # To handle raster data
 library(rgdal)      # To handle vector data
-library(gdalUtils)  # Some helpfull tools
+library(gdalUtils)  # Some helpful tools
 
 # Import Gabriele's farms
 crops <- readOGR("03_Data/01_RawData/GABRIELE/Farmland.shp")

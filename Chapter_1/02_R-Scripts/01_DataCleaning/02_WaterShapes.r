@@ -28,7 +28,7 @@ object5 <- water[grepl(water@data$name, pattern = "Lake.*Ngami"), ]
 water <- rbind(object1, object2, object3, object4, object5)
 
 # Visualize them
-plot(water, col = "lightblue", border = "lightblue")
+plot(water, col = "lightblue", border = "black", lwd = 0.4)
 
 # Store the file
 writeOGR(

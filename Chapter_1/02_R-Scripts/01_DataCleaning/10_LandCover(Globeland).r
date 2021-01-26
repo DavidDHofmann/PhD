@@ -14,10 +14,12 @@ setwd(wd)
 
 # Load packages
 library(raster)     # To handle raster data
-library(terra)      # To handle raster data
 library(rgdal)      # To handle spatial data
 library(gdalUtils)  # To stitch raster tiles
 library(tidyverse)  # For data wrangling
+
+# Make use of multiple cores
+beginCluster()
 
 ################################################################################
 #### Stitching the Tiles
@@ -62,17 +64,28 @@ gdal_translate(
 #### Cropping, Aggregating, and Simplifying the Stitched Raster
 ################################################################################
 # Load the merged file
-merged <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
+merged <- raster("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 
-# Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+# Load the reference shapefile
+s <- shapefile("03_Data/02_CleanData/00_General_Shapefile.shp")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Crop the merged tiles to our extent (with a slight buffer of 1km)
-extent <- vect(as(extent(raster(r)) + c(-1, 1, -1, 1) / 111, "SpatialPolygons"))
-merged <- crop(merged, extent, snap = "out")
+# Crop the merged tiles to our reference shapefile
+merged <- crop(merged, s)
+
+# Store the merged object to file
+writeRaster(
+    x         = merged
+  , filename  = "03_Data/01_RawData/GLOBELAND/Globeland.tif"
+  , overwrite = T
+)
+
+# Aggregate to coarser resolution
+fact <- res(r)[1] / res(merged)[1]
+coarse <- aggregate(merged, fact = round(fact), fun = modal)
 
 # Check out the distribution of values
-freq(merged)
+freq(coarse, useNA = "ifany")
 
 # Prepare classes. Note that I'm going to use the same class description and
 # codes as for the copernicus dataset. Note that I'll replace NAs with grassland
@@ -121,34 +134,32 @@ info$Color[info$CodeNew == 7] <- "grey"
 
 # Reclassify raster
 rcl <- dplyr::select(info, c(Code, CodeNew))
-new <- classify(merged, rcl)
-
-# Aggregate to 250m
-coarse <- aggregate(new, fact = round(250 / 30), fun = modal)
+new <- reclassify(coarse, rcl)
 
 # Resample to reference raster
-coarse <- resample(coarse, r, method = "near")
+new <- resample(new, r, method = "ngb")
 
-# Check out the frequency of different values
-freq(coarse)
+# Check out the frequency of different values (especially NAs)
+freq(new, useNA = "ifany")
+sum(is.na(values(new)))
 
 # Visualize it
-plot(raster(coarse), col = unique(info$Color), breaks = 0:6)
+plot(new, col = unique(info$Color), breaks = 0:6)
 
 ################################################################################
 #### Store Final Raster
 ################################################################################
 # Store the raster
 writeRaster(
-    x         = raster(coarse)
+    x         = new
   , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.tif"
   , overwrite = TRUE
 )
 
 # Also store the water-cover layer seperately
-water <- coarse == 1
+water <- new == 1
 writeRaster(
-    x         = raster(water)
+    x         = water
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_GLOBELAND.tif"
   , overwrite = TRUE
 )
@@ -158,3 +169,6 @@ info %>%
   dplyr::select(Class = ClassNew, Code = CodeNew, Color) %>%
   distinct() %>%
   write_csv("03_Data/02_CleanData/01_LandCover_LandCover_GLOBELAND.csv")
+
+# End cluster
+endCluster()

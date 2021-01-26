@@ -29,13 +29,9 @@ legend <- read_csv2("03_Data/01_RawData/GEOFABRIK/RoadsDescription.csv")
 # Keep only the largest roads (1-4) and their links (9-12)
 roads <- subset(roads, roads$fclass %in% legend$Value[c(1:4, 9:12)])
 
-# Crop the shapefile to our study extent. I therefore import the blank shapefile
-# I created earlier
+# Crop the shapefile to our study extent
 s <- vect("03_Data/02_CleanData/00_General_Shapefile.shp")
-roads_crop <- crop(roads, s)
-
-# Plot the remaining roads
-plot(roads)
+roads <- crop(roads, ext(s))
 
 # Save the cropped shapefile
 writeVector(
@@ -51,7 +47,8 @@ writeVector(
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Rasterize the roads
-roads_r <- rasterize(roads, r, field = 1, background = 0)
+roads$value <- 1
+roads_r <- rasterize(roads, r, field = "value", background = 0)
 
 # Store the layer
 writeRaster(

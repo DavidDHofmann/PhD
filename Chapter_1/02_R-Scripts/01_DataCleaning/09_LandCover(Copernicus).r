@@ -16,38 +16,54 @@ library(terra)      # To handle rasters
 library(raster)     # To handle rasters
 library(tidyverse)  # For data wrangling
 
+# Make use of multiple cores
+beginCluster()
+
+################################################################################
+#### Stitching the Tiles
+################################################################################
 # Load the data
 dat <- dir(
     path       = "03_Data/01_RawData/COPERNICUS"
   , full.names = T
   , pattern    = ".tif$"
 )
-dat <- lapply(dat, rast)
+dat <- lapply(dat, raster)
 
 # Merge the tiles
-dat <- do.call(merge, dat)
+merged <- do.call(merge, dat)
 
-# Load reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+################################################################################
+#### Cropping, Aggregating, and Simplifying the Stitched Raster
+################################################################################
+# Load the reference shapefile and raster
+s <- shapefile("03_Data/02_CleanData/00_General_Shapefile.shp")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Crop the merged tiles to our extent (with a slight buffer of 1km)
-extent <- vect(as(extent(raster(r)) + c(-1, 1, -1, 1) / 111, "SpatialPolygons"))
-dat <- crop(dat, extent, snap = "out")
+# Crop the merged tiles to our reference shapefile
+merged <- crop(merged, s)
 
 # Store the merged object to file
 writeRaster(
-    x         = raster(dat)
+    x         = merged
   , filename  = "03_Data/01_RawData/COPERNICUS/Copernicus.tif"
   , overwrite = T
 )
+
+# Aggregate to coarser resolution
+fact <- res(r)[1] / res(merged)[1]
+coarse <- aggregate(merged, fact = round(fact), fun = modal)
+
+# Check out the distribution of values
+freq(coarse, useNA = "ifany")
 
 # Load land cover classes
 info <- read_csv("03_Data/01_RawData/COPERNICUS/LandCoverClasses.csv")
 info <- arrange(info, Code)
 
 # Not all classes are represented in the cropped study area
-vals <- freq(dat)
-info <- subset(info, Code %in% vals[, 2])
+vals <- freq(coarse)
+info <- subset(info, Code %in% vals[, 1])
 
 # Prepare reclassification table. Note that I'll replace the NAs with grassland.
 info$ClassNew <- info$Class
@@ -86,34 +102,32 @@ info$Color[info$CodeNew == 7] <- "grey"
 
 # Reclassify raster
 rcl <- dplyr::select(info, c(Code, CodeNew))
-dat <- classify(dat, rcl)
-
-# Aggregate to 250 meters
-coarse <- aggregate(dat, fact = round(250 / 110), fun = modal)
+new <- reclassify(coarse, rcl)
 
 # Resample to reference raster
-coarse <- resample(coarse, r, method = "near")
+new <- resample(new, r, method = "ngb")
 
 # Check out the frequency of different values
-freq(coarse)
+freq(new, useNA = "ifany")
+sum(is.na(values(new)))
 
 # Visualize it
-plot(raster(coarse), col = unique(info$Color), breaks = 0:6)
+plot(new, col = unique(info$Color), breaks = 0:6)
 
 ################################################################################
 #### Store Final Raster
 ################################################################################
 # Store the raster
 writeRaster(
-    x         = raster(coarse)
+    x         = new
   , filename  = "03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.tif"
   , overwrite = T
 )
 
 # Also store the water-cover layer seperately
-water <- coarse == 1
+water <- new == 1
 writeRaster(
-    x         = raster(water)
+    x         = water
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_COPERNICUS.tif"
   , overwrite = T
 )
@@ -123,3 +137,6 @@ info %>%
   dplyr::select(, Class = ClassNew, Code = CodeNew, Color) %>%
   distinct() %>%
   write_csv("03_Data/02_CleanData/01_LandCover_LandCover_COPERNICUS.csv")
+
+# End cluster
+endCluster()

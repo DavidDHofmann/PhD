@@ -44,6 +44,7 @@ values(r250) <- runif(ncell(r250))
 
 # Visualize
 plot(r250)
+plot(kaza, add = T)
 
 # Save the rasters to file
 writeRaster(
