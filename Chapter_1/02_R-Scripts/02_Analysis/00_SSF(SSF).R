@@ -20,8 +20,10 @@ library(raster)       # To handle spatial data
 library(rgdal)        # To handle spatial data
 library(pbmcapply)    # For multicore abilities
 
-# Set seed for reproducability
+# Set seed for reproducability (need to change random sampler for parallel)
 set.seed(1234)
+RNGkind("L'Ecuyer-CMRG")
+mc.reset.stream()
 
 # Big loop over the two methods
 methods <- c("iSSF", "TiSSF")
@@ -171,7 +173,7 @@ for (i in 1:length(methods)){
   # Generate unique step id and indicate that steps are observed (case_) steps
   tracks <- tracks %>% mutate(
       step_id_ = 1:nrow(.)
-    , case_    = 1
+    , case_    = T
   )
 
   # Add a row indicating the method
@@ -196,6 +198,10 @@ for (i in 1:length(methods)){
   # under iSSF. Yet under TiSSF the step lengths are not comparable because of
   # irregular sampling.
   tracks <- tracks %>% mutate(speed_ = sl_ / dtcorr_)
+
+  # Check difference between step length and "adjusted" step length
+  adjustment <- tracks$sl_ - tracks$speed_ * 4
+  summary(adjustment)
 
 ################################################################################
 #### Generation of Random Steps
@@ -251,7 +257,7 @@ for (i in 1:length(methods)){
     # Put the step lengths and turning angles into a new dataframe and calculate
     # the new endpoints of each random step. We also indicate that the steps are
     # control/random steps (i.e. 0)
-    randomSteps <- tracks[rep(x, nsteps), ] %>%
+    rand <- tracks[rep(x, nsteps), ] %>%
       mutate(.
         , absta_  = absta_ + (ta_new - ta_)
         , ta_     = ta_new
@@ -263,7 +269,7 @@ for (i in 1:length(methods)){
       )
 
     # Return the sampled steps
-    return(randomSteps)
+    return(rand)
 
   }) %>% do.call(rbind, .)
 

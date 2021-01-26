@@ -211,3 +211,24 @@ grid.arrange(p1, p2)
 # Load step length distributions
 summary(old$sl_[old$case_])
 summary(new$sl_[new$case_ == 1])
+
+################################################################################
+#### Identify Sources for Differences
+################################################################################
+# It looks like the biggest differences come from the water layers.
+library(raster)
+library(rgdal)
+old <- readOGR("/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).shp")
+new <- readOGR("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/00_General_Dispersers_POPECOL(Extracted).shp")
+
+# Calculate differences in water cover
+new$WaterOld <- old$Water
+new$WaterNew <- new$Water
+new$WaterDiff <- abs(new$WaterOld - new$WaterNew)
+
+# Subset to steps with largest differences
+sub <- new[new$WaterDiff > 0, ]
+
+# Store them
+writeOGR(sub, ".", "test", driver = "ESRI Shapefile", overwrite = T)
+plot(sub)

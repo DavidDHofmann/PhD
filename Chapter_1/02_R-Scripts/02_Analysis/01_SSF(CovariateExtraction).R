@@ -24,10 +24,10 @@ library(maptools)     # For point patter analysis (calculate distance)
 library(rgeos)        # For spatial manipulation
 
 # Load the generated steps
-# dat1 <- readOGR("03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF).shp")
-# dat2 <- readOGR("03_Data/02_CleanData/00_General_Dispersers_POPECOL(TiSSF).shp")
-# lines <- rbind(dat1, dat2)
-lines <- readOGR("03_Data/02_CleanData/00_General_Dispersers_Popecol(Random4Hours).shp")
+dat1 <- readOGR("03_Data/02_CleanData/00_General_Dispersers_POPECOL(iSSF).shp")
+dat2 <- readOGR("03_Data/02_CleanData/00_General_Dispersers_POPECOL(TiSSF).shp")
+lines <- rbind(dat1, dat2)
+# lines <- readOGR("/home/david/ownCloud/University/15. PhD/Chapter_0/03_Data/02_CleanData/00_General_Dispersers_Popecol(Random4Hours).shp")
 
 ################################################################################
 #### Land Cover - Globeland
@@ -50,6 +50,7 @@ names(extracted) <- paste0("Globeland_", names(dat))
 
 # Let's look at the result
 head(extracted)
+table(rowSums(extracted))
 
 # Add the data to the lines
 lines@data <- cbind(lines@data, extracted)
@@ -75,6 +76,7 @@ names(extracted) <- paste0("Copernicus_", names(dat))
 
 # Let's look at the result
 head(extracted)
+table(rowSums(extracted))
 
 # Add the data to the lines
 lines@data <- cbind(lines@data, extracted)
@@ -112,6 +114,7 @@ datppp <- suppressMessages(
       points <- spTransform(points, CRS("+init=epsg:32734"))
       points <- as(points, "ppp")
       return(points)
+      gc()
   })
 )
 
@@ -123,15 +126,15 @@ lines$DistanceToWater <- suppressMessages(
     , mc.cores           = detectCores() / 2
     , ignore.interactive = T
     , FUN                = function(x){
-    index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
-    distance <- nncross(linesppp[[x]], datppp[[index]])
-    distance <- mean(distance$dist)
-    return(distance)
-    gc()
+      index <- which.min(abs(as.Date(lines$t1_[x]) - dates))[1]
+      distance <- nncross(linesppp[[x]], datppp[[index]])
+      distance <- mean(distance$dist)
+      return(distance)
+      gc()
   }) %>% do.call(rbind, .)
 )
 
-# Remove objects we don't need
+# Remove objects we don't need (release some memory)
 rm(lines_utm, linesppp, datppp)
 gc()
 
@@ -326,12 +329,12 @@ lines@data <- cbind(lines@data, extracted)
 #### Storing
 ################################################################################
 names(lines)
+head(lines)
 
 # Reorder the columns
 lines@data <- dplyr::select(lines@data, c(
-  # , dog   = DogName
-  # , burst = id
-  , DogName = id
+  , dog   = DogName
+  , burst = id
   , step_id_ = step_d_
   , State
   , case_
@@ -355,38 +358,41 @@ names(lines)[1] <- "id"
 # To store the files we need to coerce the duration column to a numeric
 lines$DistanceToWater <- as.vector(lines$DistanceToWater)
 
+# Make case_ logical
+lines$case_ <- as.logical(lines$case_)
+
 # Prepare filenames
-# filename1 <- "00_General_Dispersers_POPECOL(iSSF_Extracted)"
-# filename2 <- "00_General_Dispersers_POPECOL(TiSSF_Extracted)"
-filename <- "00_General_Dispersers_POPECOL(Extracted)"
+filename1 <- "00_General_Dispersers_POPECOL(iSSF_Extracted)"
+filename2 <- "00_General_Dispersers_POPECOL(TiSSF_Extracted)"
+# filename <- "00_General_Dispersers_POPECOL(Extracted)"
 
 # Split the data
-# lines1 <- subset(lines, method == "iSSF")
-# lines2 <- subset(lines, method == "TiSSF")
+lines1 <- subset(lines, method == "iSSF")
+lines2 <- subset(lines, method == "TiSSF")
 
 # Save the lines to a spatial lines dataframe
-# writeOGR(lines1
-#   , "03_Data/02_CleanData"
-#   , filename1
-#   , driver    = "ESRI Shapefile"
-#   , overwrite = TRUE
-# )
-# writeOGR(lines2
-#   , "03_Data/02_CleanData"
-#   , filename2
-#   , driver    = "ESRI Shapefile"
-#   , overwrite = TRUE
-# )
-writeOGR(lines
+writeOGR(lines1
   , "03_Data/02_CleanData"
-  , filename
+  , filename1
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
+writeOGR(lines2
+  , "03_Data/02_CleanData"
+  , filename2
+  , driver    = "ESRI Shapefile"
+  , overwrite = TRUE
+)
+# writeOGR(lines
+#   , "03_Data/02_CleanData"
+#   , filename
+#   , driver    = "ESRI Shapefile"
+#   , overwrite = TRUE
+# )
 
 # Let's also store the data to a regular csv. We can use this file to restore
 # the original column names since the ESRI shapefiles will store abbreviated
 # names
-# write.csv(lines1@data, paste0("03_Data/02_CleanData/", filename1, ".csv"))
-# write.csv(lines2@data, paste0("03_Data/02_CleanData/", filename2, ".csv"))
-write.csv(lines@data, paste0("03_Data/02_CleanData/", filename, ".csv"))
+write.csv(lines1@data, paste0("03_Data/02_CleanData/", filename1, ".csv"))
+write.csv(lines2@data, paste0("03_Data/02_CleanData/", filename2, ".csv"))
+# write.csv(lines@data, paste0("03_Data/02_CleanData/", filename, ".csv"))

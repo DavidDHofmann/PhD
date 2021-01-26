@@ -35,11 +35,11 @@ ori_dates <- files %>%
   substr(start = 1, stop = 10) %>%
   as.Date()
 
-# Put filenames their respective date  into a dataframe
+# Put filenames of their respective date into a dataframe
 files <- data.frame(Filename = files, Date = ori_dates)
 
 # Load the disperser's tracks
-dispersal <- "03_Data/02_CleanData/00_General_Dispersers_Popecol.csv" %>%
+dispersal <- "03_Data/02_CleanData/00_General_Dispersers_POPECOL.csv" %>%
   read_csv() %>%
   subset(State == "Disperser")
 

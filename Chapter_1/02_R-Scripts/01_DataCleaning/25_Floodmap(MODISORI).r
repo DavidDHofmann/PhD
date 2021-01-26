@@ -17,9 +17,9 @@ library(lubridate)    # To handle dates nicely
 library(raster)       # To handle raster data
 library(terra)        # To handle reaster data quickly
 
-############################################################
+################################################################################
 #### Identify Floodmaps to Resample
-############################################################
+################################################################################
 # Load all classified maps
 files <- dir(
     path        = "03_Data/02_CleanData/00_Floodmaps/01_Original"
@@ -77,9 +77,9 @@ files <- files[indices]
 rcl <- data.frame(old = c(0, 127, 255), new = c(1, 0, 0))
 flood <- classify(flood, rcl)
 
-############################################################
+################################################################################
 #### Resample Floodmaps
-############################################################
+################################################################################
 # Load the reference raster
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 r <- crop(r, flood)
