@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  5 AUG 2020 10:09
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  4 FEB 2021 13:32
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
 **Manuscript.tex
-(/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.tex
+(/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.tex
 LaTeX2e <2017-04-15>
 Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -870,7 +870,7 @@ Package: arydshln 2016/04/28 v1.73
 LaTeX Warning: Unused global option(s):
     [abstract=on,bibliography=totocnumbered].
 
-(/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.aux)
+(/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.aux)
 \openout1 = `Manuscript.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
@@ -974,7 +974,7 @@ Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 LaTeX Info: Redefining \ref on input line 70.
 LaTeX Info: Redefining \pageref on input line 70.
 LaTeX Info: Redefining \nameref on input line 70.
- (/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.out) (/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.out)
+ (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.out) (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.out)
 \@outlinefile=\write4
 \openout4 = `Manuscript.out'.
 
@@ -1014,43 +1014,43 @@ Package natbib Warning: Citation `Turching.1998' on page 2 undefined on input li
 
 Package natbib Warning: Citation `Hofmann.2020' on page 3 undefined on input line 249.
 
-[3 </home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_StudyArea.pdf>] [4] [5]
+[3 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_StudyArea.pdf>] [4] [5]
 <99_SourcePoints.pdf, id=176, 867.24pt x 379.4175pt>
 File: 99_SourcePoints.pdf Graphic file (type pdf)
 <use 99_SourcePoints.pdf>
-Package pdftex.def Info: 99_SourcePoints.pdf  used on input line 335.
+Package pdftex.def Info: 99_SourcePoints.pdf  used on input line 337.
 (pdftex.def)             Requested size: 398.3386pt x 174.27364pt.
- [6 </home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_SourcePoints.pdf>] [7]
+ [6 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_SourcePoints.pdf>] [7]
 <99_MovementModel.pdf, id=201, 578.16pt x 252.945pt>
 File: 99_MovementModel.pdf Graphic file (type pdf)
 <use 99_MovementModel.pdf>
-Package pdftex.def Info: 99_MovementModel.pdf  used on input line 406.
+Package pdftex.def Info: 99_MovementModel.pdf  used on input line 408.
 (pdftex.def)             Requested size: 318.67209pt x 139.41736pt.
 <99_Heatmaps.pdf, id=203, 766.06201pt x 433.62pt>
 File: 99_Heatmaps.pdf Graphic file (type pdf)
 <use 99_Heatmaps.pdf>
-Package pdftex.def Info: 99_Heatmaps.pdf  used on input line 429.
+Package pdftex.def Info: 99_Heatmaps.pdf  used on input line 431.
 (pdftex.def)             Requested size: 398.3386pt x 225.47708pt.
- [8 </home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_MovementModel.pdf> </home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_Heatmaps.pdf
+ [8 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MovementModel.pdf> </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_Heatmaps.pdf
 
-pdfTeX warning: pdflatex (file /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_Heatmaps.pdf): PDF inclusion: multiple pdfs with page group included in a single page
->] [9] [10] (/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.bbl)
+pdfTeX warning: pdflatex (file /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_Heatmaps.pdf): PDF inclusion: multiple pdfs with page group included in a single page
+>] [9] [10] (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.bbl)
 
 Package natbib Warning: There were undefined citations.
 
 [11]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 522.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 522.
- (/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 522.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 522.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 524.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 524.
+ (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 524.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 524.
 Package rerunfilecheck Info: File `Manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 8EDF9D47E16F3EB5B7F7573C77BDE10A;1085.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 522.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 524.
  ) 
 Here is how much of TeX's memory you used:
  20943 strings out of 492982
- 387047 string characters out of 6134896
+ 387002 string characters out of 6134896
  485966 words of memory out of 5000000
  24091 multiletter control sequences out of 15000+600000
  13702 words of font info for 53 fonts, out of 8000000 for 9000
@@ -1058,7 +1058,7 @@ Here is how much of TeX's memory you used:
  55i,11n,54p,515b,444s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvri.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript.pdf" (13 pages, 8107823 bytes).
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf" (13 pages, 8107777 bytes).
 PDF statistics:
  323 PDF objects out of 1000 (max. 8388607)
  268 compressed objects within 3 object streams

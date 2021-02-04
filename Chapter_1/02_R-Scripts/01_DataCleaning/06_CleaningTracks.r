@@ -38,13 +38,23 @@ files <- dir(
 # "°" symbols. We need to get rid of this stuff. This only needs to be run once
 # as it overwrites the default csv files. This also makes sure that every file
 # is stored exactly the same way
-# lapply(files, function(x){
-#   dat <- read_file(x, local = locale(encoding = "latin1"))
-#   dat <- gsub(dat, pattern = ",", replacement = ".")
-#   dat <- gsub(dat, pattern = "°", replacement = "")
-#   dat <- gsub(dat, pattern = "/", replacement = ".")
-#   write(dat, x)
-# })
+lapply(files, function(x){
+
+  # Identify separator
+  sep <- readLines(x, n = 1)
+  sep <- if_else(grepl(x = sep, pattern = ";", useBytes = T), ";", ",")
+
+  # Load the file as plain text and remove funny characters
+  dat <- read_file(x, local = locale(encoding = "latin1"))
+  if (sep == ","){
+      dat <- gsub(dat, pattern = ",", replacement = ";")
+    } else {
+      dat <- gsub(dat, pattern = ",", replacement = ".")
+  }
+  dat <- gsub(dat, pattern = "°", replacement = "")
+  dat <- gsub(dat, pattern = "/", replacement = ".")
+  write(dat, x)
+})
 
 # Load all of them and do some cleaning
 dat1 <- lapply(files, function(x){
@@ -67,6 +77,7 @@ dat1 <- lapply(files, function(x){
 
     # Remove special characters like [°]
     setNames(gsub(names(.), pattern = " \\[*", replacement = "")) %>%
+    setNames(gsub(names(.), pattern = "°", replacement = "")) %>%
     setNames(gsub(names(.), pattern = "\\]", replacement = "")) %>%
 
     # Keep only desired columns
@@ -196,15 +207,6 @@ ggplot(vis, aes(color = factor(CollarID))) +
     , alpha = 0.6
   )
 
-# Maybe look at some in more detail
-sub <- c("Taryn", "Sishen", "Abel")
-ggplot(subset(vis, DogName %in% sub), aes(color = factor(CollarID))) +
-  geom_segment(
-      aes(x = First, xend = Last, y = DogName, yend = DogName)
-    , size = 10
-    , alpha = 0.6
-  )
-
 ################################################################################
 #### Data Source 2: Abrahms
 ################################################################################
@@ -319,21 +321,7 @@ data <- subset(data, !dups_incomplete)
 cut <- read_csv("03_Data/01_RawData/POPECOL/CutoffDates.csv") %>%
 
   # Remove undesired columns
-  dplyr::select(c("CollarID", "DogName", "StartDate", "EndDate")) %>%
-
-  # Add Minutes to the timestamps
-  mutate(
-      StartDate = paste0(StartDate, ":00")
-    , EndDate   = paste0(EndDate, ":00")
-  ) %>%
-
-  # Make proper dates and subtract 2 hours
-  mutate(
-      StartDate = as.POSIXct(StartDate, tz = "UTC"
-      , format = "%d.%m.%Y %H:%M") - hours(2)
-    , EndDate = as.POSIXct(EndDate, tz = "UTC"
-      , format = "%d.%m.%Y %H:%M") - hours(2)
-  ) %>%
+  dplyr::select(c(DogName, StartDate = StartDate_UTC, EndDate = EndDate_UTC)) %>%
 
   # Sort
   arrange(DogName, StartDate)
@@ -438,6 +426,10 @@ ggplot(phases, aes(x = rbind(FirstDate, LastDate), y = DogName)) +
 ################################################################################
 #### Resampling Data
 ################################################################################
+# Only keep individuals that eventually dispersed
+dispersers <- unique(subset(data, State == "Disperser")$DogName)
+data <- subset(data, DogName %in% dispersers)
+
 # Remove NA fixes
 table(is.na(data$x))
 table(is.na(data$y))
