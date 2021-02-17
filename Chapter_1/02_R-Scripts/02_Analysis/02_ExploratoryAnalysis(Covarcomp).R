@@ -31,7 +31,7 @@ dat <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(SSF_Extracte
 
 # Remove columns that we don't need
 dat <- dat %>% select(-c(
-  X1, burst, State, x1_, x2_, y1_, y2_, t1_, t2_, dt_, absta_
+  X1, State, x1_, x2_, y1_, y2_, t1_, t2_, dt_, absta_
 ))
 
 # We want to add the log of the step speed and the cosine of the turning angle
@@ -118,9 +118,3 @@ comp2$Buffer <- as.numeric(substr(comp2$Covars, 22, nchar(comp2$Covars)))
 ggplot(comp2, aes(x = Buffer, y = AIC)) +
   geom_point() +
   geom_line()
-
-# Prepare a more "cheesy" version of this plot
-ggplot(comp2, aes(x = Buffer, y = AIC)) +
-  geom_point() +
-  geom_line() +
-  scale_color_manual(values = c("black", "gray"))

@@ -255,11 +255,15 @@ write_rds(models, "03_Data/03_Results/99_BaseModel.rds")
 base <- models$Covariates[1, ] %>% strsplit(., ", ") %>% .[[1]]
 
 # Now combine all of these covariates with the cos(ta_) and the log(sl_)
-covars <- c(paste0(base, ":", "log_sl_"), paste0(base, ":", "cos_ta_"))
+covars <- c(
+    paste0(base, ":", "sl_")
+  , paste0(base, ":", "log_sl_")
+  , paste0(base, ":", "cos_ta_")
+)
 
 # We also want to test for an interaction between the step length and the
 # activity phase
-covars <- c(covars, "log_sl_:inactive")
+covars <- c(covars, "log_sl_:inactive", "sl_:inactive")
 # covars <- c(covars, "log_sl_:inactive", "sl_:inactive")
 
 # Look at the covariates that we are going to test for

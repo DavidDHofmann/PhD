@@ -196,7 +196,8 @@ for (i in 1:nrow(tracks)){
   # Draw random step lengths with the fitted parameters
   sl_new <- rgamma(nsteps
     , shape = sl$params$shape
-    , scale = sl$params$scale)
+    , scale = sl$params$scale
+  )
 
   # Put the step lengths and turning angles into a new dataframe and calculate the
   # new endpoints of each random step. We also indicate that the steps are control

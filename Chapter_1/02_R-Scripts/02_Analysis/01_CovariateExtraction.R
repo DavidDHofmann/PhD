@@ -195,7 +195,7 @@ lines$drctn_p <- NULL
 # Reorder the columns
 lines@data <- dplyr::select(lines@data, c(
   , id
-  , step_id_
+  , step_id_ = step_d_
   , State
   , case_
   , x1_
@@ -208,6 +208,7 @@ lines@data <- dplyr::select(lines@data, c(
   , sl_
   , ta_
   , absta_
+  , inactive = inactiv
   , everything()
   )
 )
