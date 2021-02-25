@@ -236,7 +236,7 @@ differences between males and females during dispersal \citep{Woodroffe.2019,
 Cozzi.2020}, so we did not distinguish sexes in our analyses. GPS relocations
 were then converted to steps, where a step represented the straight-line
 distance travelled between two consequtive GPS relocations
-\citep{Turching.1998}.
+\citep{Turchin.1998}.
 
 \subsection{Covariates}
 To represent environmental covariates spatially, we prepared a set of raster
@@ -291,9 +291,13 @@ factors and movement metrics, we also proposed the interaction
 \(log(sl\_):MainActivity\) to account for the diurnal activity pattern of wild
 dogs. A preliminary revealed little differences in turning angles during main
 and low activity, hence we did not include the interaction
-\(cos(ta\_):MainActivity\). We then ran stepwise modal forward selection absed
+\(cos(ta\_):MainActivity\). We then ran stepwise model forward selection based
 on Akaike's Information Criterion (AIC, \citealp{Burnham.2002}) values and
-identified the most parsimonious movement model.
+identified the most parsimonious movement model. Although several models
+received an AIC weight above one, we decided to only consider the  ``best''
+model for simplicity. In either way, the models with positive weights contained
+almost identical covariates and an averaged model would have only given weak
+support to additional covariates.
 
 \subsection{Dispersal Simulation}
 We used the most parsimonious movement model to simulate dispersing wild dogs

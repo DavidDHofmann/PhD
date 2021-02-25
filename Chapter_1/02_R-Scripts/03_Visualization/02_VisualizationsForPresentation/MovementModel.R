@@ -22,12 +22,15 @@ library(imager)     # To import images
 library(viridis)    # For nice colors
 library(raster)     # To create rasters (visInt)
 library(ggdark)     # Dark ggplot theme
+library(latex2exp)  # For latex expressions
 
 ################################################################################
 #### Prepare Data
 ################################################################################
 # Old directory
-wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
+# wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
+# setwd(wd)
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load the movement model
@@ -42,8 +45,12 @@ summary(best)
 # Calculate Confidence intervals
 coeffs <- getCoeffs(best, pvalue = TRUE)[-1, ] %>%
   mutate(
-      LCI = Coefficient - 1.96 * SE
-    , UCI = Coefficient + 1.96 * SE
+      LCI_90 = Coefficient - 1.645 * SE
+    , UCI_90 = Coefficient + 1.645 * SE
+    , LCI_95 = Coefficient - 1.96 * SE
+    , UCI_95 = Coefficient + 1.96 * SE
+    , LCI_99 = Coefficient - 2.575 * SE
+    , UCI_99 = Coefficient + 2.575 * SE
   )
 
 # Add stars indicating the significance
@@ -58,62 +65,111 @@ coeffs$Significance <- sapply(1:nrow(coeffs), function(x){
 })
 
 # Rename covariates
-coeffs$Covariate[coeffs$Covariate == "Shrubs"] <- "Shrubs/Grassland"
-coeffs$Covariate[coeffs$Covariate == "Trees"] <- "Woodland"
-coeffs$Covariate[coeffs$Covariate == "Water"] <- "Water"
-coeffs$Covariate[coeffs$Covariate == "DistanceToWater"] <- "DistanceToWater"
-coeffs$Covariate[coeffs$Covariate == "cos_ta_"] <- "cos(ta)"
-coeffs$Covariate[coeffs$Covariate == "log_sl_"] <- "log(sl)"
-coeffs$Covariate[coeffs$Covariate == "HumansBuff5000"] <- "HumanInfluence"
-coeffs$Covariate[coeffs$Covariate == "log_sl_:ActivityMainActivity"] <- "log(sl):MainActivity"
-coeffs$Covariate[coeffs$Covariate == "log_sl_:Water"] <- "log(sl):Water"
-coeffs$Covariate[coeffs$Covariate == "log_sl_:Trees"] <- "log(sl):Woodland"
-coeffs$Covariate[coeffs$Covariate == "cos_ta_:DistanceToWater"] <- "cos(ta):DistanceToWater"
-coeffs$Covariate[coeffs$Covariate == "cos_ta_:HumansBuff5000"] <- "cos(ta):HumanInfluence"
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "cos_ta_"
+  , replacement = "cos(ta)"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "log_sl_"
+  , replacement = "log(sl)"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "sl_"
+  , replacement = "sl"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "Shrubs"
+  , replacement = "Shrubs/Grassland"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "Trees"
+  , replacement = "Woodland"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "HumansBuff5000"
+  , replacement = "HumanInfluence"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "inactiveTRUE"
+  , replacement = "LowActivity"
+)
+coeffs$Covariate <- gsub(coeffs$Covariate
+  , pattern     = "SqrtDistanceToWater"
+  , replacement = "DistanceToWater '*m^0.5'"
+)
 coeffs$Preference <- ifelse(coeffs$Coefficient > 0, "Preferred", "Avoided")
 coeffs$Preference <- factor(coeffs$Preference, levels = c("Preferred", "Avoided"))
 
 # Specify the order in which the coefficients should be plotted
 order <- c(
       "Water"
-    , "DistanceToWater"
+    , "DistanceToWater '*m^0.5'"
     , "Woodland"
     , "Shrubs/Grassland"
     , "HumanInfluence"
-    , "cos(ta):HumanInfluence"
-    , "cos(ta):DistanceToWater"
-    # , "log(sl):MainActivity"
-    , "log(sl):Water"
-    , "log(sl):Woodland"
-    , "log(sl)"
+    , "sl"
     , "cos(ta)"
+    , "log(sl)"
+    , "cos(ta):sl"
+    , "cos(ta):log(sl)"
+    , "sl:LowActivity"
+    , "sl:Water"
+    , "sl:Woodland"
+    , "sl:Shrubs/Grassland"
+    , "sl:DistanceToWater '*m^0.5'"
+    , "cos(ta):HumanInfluence"
+    , "cos(ta):DistanceToWater '*m^0.5'"
 )
 
-# Specify colors of axis labels
-labcols <- c("black", "orange")[c(2, 2, 2, 1, 2, 1, 2, 1, 1, 1, 2, 2)]
-
-# Let's ignore "main activity" for the moment
-coeffs <- subset(coeffs, Covariate != "log(sl):MainActivity")
+# Prepare groups with "expressions"
+groups <- c(
+      "Water"
+    , expression(DistanceToWater^0.5)
+    , "Woodland"
+    , "Shrubs/Grassland"
+    , "HumanInfluence"
+    , "sl"
+    , "cos(ta)"
+    , "log(sl)"
+    , "cos(ta):sl"
+    , "cos(ta):log(sl)"
+    , "sl:LowActivity"
+    , "sl:Water"
+    , "sl:Woodland"
+    , "sl:Shrubs/Grassland"
+    , expression(sl:DistanceToWater^0.5)
+    , "cos(ta):HumanInfluence"
+    , expression(cos(ta):DistanceToWater^0.5)
+)
 
 # Prepare plot with Covariates on the y-axis and the corresponding
 # coefficients on the x-axis
-p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
-  geom_point(shape = 20, size = 2) +
+ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
+  geom_point(shape = 3, size = 2.5) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 1.645 * SE
+    , xmax = Coefficient + 1.645 * SE)
+    , height = 0, size = 1.5, alpha = 0.5
+  ) +
   geom_errorbarh(aes(
       xmin = Coefficient - 1.96 * SE
-    , xmax = Coefficient + 1.96 * SE
-    , height = 0)
+    , xmax = Coefficient + 1.96 * SE)
+    , height = 0, size = 0.5, alpha = 0.75
+  ) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 2.575 * SE
+    , xmax = Coefficient + 2.575 * SE)
+    , height = 0, size = 0.2, alpha = 1
   ) +
   geom_text(aes(label = Significance, hjust = 0.5, vjust = -0.2), show.legend = F) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "darkgrey") +
-  scale_y_discrete(limits = rev(order)) +
-  # theme_cowplot() +
-  xlim(c(-1.2, 1.2)) +
+  scale_y_discrete(labels = rev(groups), limits = rev(order)) +
+  theme_classic() +
+  xlim(c(-1.3, 1.3)) +
   coord_capped_cart(left = "both", bottom = "both") +
   labs(x = expression(beta*"-Coefficient")) +
-  # scale_color_manual(values = c("#548CBE", "#FFA500")) +
   scale_color_manual(values = c("#5B9BD5", "orange")) +
-  dark_theme_classic() +
+  # dark_theme_classic() +
   theme(
     #   panel.grid.minor = element_line(size = 0.0)
     # , panel.grid.major = element_line(size = 0.0)
@@ -124,17 +180,77 @@ p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Pre
     # , axis.text.y      = element_text(color = rev(labcols))
   )
 
-# Load a picture of a wild dog to the plot
-# dog <- load.image("/home/david/ownCloud/University/15. PhD/General/Images/WildDog_Running.svg")
-
-# Add it to the previous plot
-# p <- ggdraw() +
-#   draw_image(dog, x = 0.9, y = 0.7, hjust = 0.5, vjust = 0.5, scale = 0.2) +
-#   draw_plot(p1)
-
 # Store the plot
-# CairoPDF("test.pdf", width = 8, height = 5, bg = "transparent")
 ggsave("test.png", device = "png", width = 10, height = 5, scale = 0.65)
+
+################################################################################
+#### Validation
+################################################################################
+# Load required data
+validation <- read_rds("03_Data/03_Results/99_ModelValidation.rds")
+dat_pref <- read_rds("03_Data/03_Results/99_ModelValidation(Data).rds")[[1]]
+dat_rand <- read_rds("03_Data/03_Results/99_ModelValidation(Data).rds")[[2]]
+
+# Put the k-fold cross validation data from observed and random preferences
+# together
+dat_pref$Group <- "Realized"
+dat_rand$Group <- "Random"
+dat <- rbind(dat_pref, dat_rand)
+
+# We want to plot this data and add the information from the validation table
+# too. Let's prepare a column that indicates the text that we want to plot on
+# top of the data. Let's first round the values from the validation table
+validation[, c(2:4)] <- round(validation[, c(2:4)], 2)
+
+# Match the Grouping names of the validation table to the groups above
+validation$Group <- as.factor(c("Realized", "Random"))
+
+# Create a dataframe which we use to annotate the two facets
+text <- data.frame(
+    Group = c("Realized", "Random")
+  , Text = c(
+        paste0(
+            "$\\bar{r}_s = "
+          , validation$Mean[1]
+          , "$, $95%-CI = "
+          , validation$LCL[1]
+          , "$, $"
+          , validation$UCL[1], "$"
+        )
+      , paste0(
+            "$\\bar{r}_s = "
+          , validation$Mean[2]
+          , "$, $95%-CI = "
+          , validation$LCL[2]
+          , "$, $"
+          , validation$UCL[2], "$"
+        )
+    #   "$\\bar{r}_s = -0.45$, $95%-CI = -0.48$, $-0.42$"
+    # , "$\\bar{r}_s = 0.04$, $95%-CI = 0.01$, $0.08$"
+  )
+)
+
+# Reorder the factors in the Group variable
+dat$Group <- factor(dat$Group, levels = c("Realized", "Random"))
+
+# Plot the data
+ggplot(data = dat, aes(x = Rank, y = Frequency)) +
+  geom_jitter(alpha = 0.2, size = 1) +
+  geom_smooth(method = "loess") +
+  theme_classic() +
+  facet_wrap("Group") +
+  coord_capped_cart(left = "both", bottom = "both") +
+  geom_text(data = text
+    , mapping = aes(
+        x = -Inf
+      , y = -Inf
+      , label = TeX(Text, output = "character")
+    )
+    , hjust   = -0.05
+    , vjust   = -0.5
+    , parse   = TRUE
+    , size    = 3
+  )
 
 ################################################################################
 #### Interactions

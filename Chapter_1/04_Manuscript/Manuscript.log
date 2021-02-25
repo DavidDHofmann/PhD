@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  4 FEB 2021 13:32
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  17 FEB 2021 15:16
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1006,27 +1006,23 @@ File: 99_StudyArea.pdf Graphic file (type pdf)
 <use 99_StudyArea.pdf>
 Package pdftex.def Info: 99_StudyArea.pdf  used on input line 209.
 (pdftex.def)             Requested size: 398.3386pt x 232.37064pt.
-
-
-Package natbib Warning: Citation `Turching.1998' on page 2 undefined on input line 239.
-
-[2]
+ [2]
 
 Package natbib Warning: Citation `Hofmann.2020' on page 3 undefined on input line 249.
 
 [3 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_StudyArea.pdf>] [4] [5]
-<99_SourcePoints.pdf, id=176, 867.24pt x 379.4175pt>
+<99_SourcePoints.pdf, id=180, 867.24pt x 379.4175pt>
 File: 99_SourcePoints.pdf Graphic file (type pdf)
 <use 99_SourcePoints.pdf>
 Package pdftex.def Info: 99_SourcePoints.pdf  used on input line 337.
 (pdftex.def)             Requested size: 398.3386pt x 174.27364pt.
  [6 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_SourcePoints.pdf>] [7]
-<99_MovementModel.pdf, id=201, 578.16pt x 252.945pt>
+<99_MovementModel.pdf, id=204, 578.16pt x 252.945pt>
 File: 99_MovementModel.pdf Graphic file (type pdf)
 <use 99_MovementModel.pdf>
 Package pdftex.def Info: 99_MovementModel.pdf  used on input line 408.
 (pdftex.def)             Requested size: 318.67209pt x 139.41736pt.
-<99_Heatmaps.pdf, id=203, 766.06201pt x 433.62pt>
+<99_Heatmaps.pdf, id=206, 766.06201pt x 433.62pt>
 File: 99_Heatmaps.pdf Graphic file (type pdf)
 <use 99_Heatmaps.pdf>
 Package pdftex.def Info: 99_Heatmaps.pdf  used on input line 431.
@@ -1049,19 +1045,19 @@ Package rerunfilecheck Info: File `Manuscript.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 524.
  ) 
 Here is how much of TeX's memory you used:
- 20943 strings out of 492982
- 387002 string characters out of 6134896
+ 20946 strings out of 492982
+ 387064 string characters out of 6134896
  485966 words of memory out of 5000000
- 24091 multiletter control sequences out of 15000+600000
+ 24093 multiletter control sequences out of 15000+600000
  13702 words of font info for 53 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,11n,54p,515b,444s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvri.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf" (13 pages, 8107777 bytes).
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf" (13 pages, 8108508 bytes).
 PDF statistics:
- 323 PDF objects out of 1000 (max. 8388607)
- 268 compressed objects within 3 object streams
- 49 named destinations out of 1000 (max. 500000)
+ 326 PDF objects out of 1000 (max. 8388607)
+ 271 compressed objects within 3 object streams
+ 50 named destinations out of 1000 (max. 500000)
  177 words of extra memory for PDF output out of 10000 (max. 10000000)
 

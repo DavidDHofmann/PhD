@@ -24,6 +24,7 @@ library(corrplot)     # To plot correlations
 library(cowplot)      # For nice plots
 library(ggpubr)       # For nice plots
 library(glmmTMB)      # For modelling
+library(pbmcapply)    # For progress bar parallel
 
 # Identify number of cores for parallel computing
 cores <- detectCores()
@@ -65,8 +66,7 @@ dat <- dat %>% select(c(
 ################################################################################
 #### Scaling Data
 ################################################################################
-# Scale the covariates. Depending on the method (iSSF, TiSSF) we'll scale the
-# covariates differrently.
+# Scale the covariates
 dat <- transform(dat
   , log_sl_             = scale(log_sl_)
   , cos_ta_             = scale(cos_ta_)
@@ -262,9 +262,14 @@ covars <- c(
 )
 
 # We also want to test for an interaction between the step length and the
-# activity phase
-covars <- c(covars, "log_sl_:inactive", "sl_:inactive")
-# covars <- c(covars, "log_sl_:inactive", "sl_:inactive")
+# activity phase. In addition, we may want to check for interactions between
+# step lengths and turning angles
+covars <- c(covars
+  , "log_sl_:inactive"
+  , "sl_:inactive"
+  , "sl_:cos_ta_"
+  , "log_sl_:cos_ta_"
+)
 
 # Look at the covariates that we are going to test for
 covars
@@ -449,162 +454,8 @@ models <- subset(models, Weight > 0)
 write_rds(models, "03_Data/03_Results/99_MovementModel.rds")
 
 # ################################################################################
-# #### Forward Model Selection for Interaction Terms
-# ################################################################################
-# # Let's now take the best model and use the selected covariates and check for
-# # possible interactions that are important
-# base <- models$Covariates[1, ] %>% strsplit(., split = ", ") %>% .[[1]]
-#
-# # Now clean the "selected" vector as we will use it to store the selected
-# # interaction terms
-# selected <- c()
-#
-# # Identify all possible 2-way interaction terms for the baseline covariates
-# covars <- base %>%
-#
-#   # Find all possible 2-way combinations
-#   combn(., 2) %>%
-#
-#   # Transpose resulting matrix
-#   t(.) %>%
-#
-#   # Convert matrix to dataframe
-#   as.data.frame(.) %>%
-#
-#   # Merge columns to create interaction terms
-#   unite(., col, sep = ":") %>%
-#
-#   # Get rid of the dataframe format
-#   .[["col"]]
-#
-# # Look at all interactions
-# covars
-#
-# # We now remove all interaction terms which we don't want to consider since we
-# # believe it does not make any sense to look at them
-# covars <- covars[-1]
-#
-# # Run a loop that iteratively adds interaction terms until none are left for
-# # selection
-# while (length(covars) > 0){
-#
-#   # Write down all of the covariates for the different models
-#   forformulas <- lapply(covars, function(x){
-#     c(base, selected, x)
-#   })
-#
-#   # Prepare a vector that makes the covariates of a model slightly better
-#   # visible
-#   covariates <- forformulas %>%
-#
-#     # Collapse the list
-#     do.call(rbind, .) %>%
-#
-#     # Convert the matrix to a dataframe
-#     as.data.frame(.) %>%
-#
-#     # Combine the columns into a vector that shows all covariates of a specific
-#     # model
-#     unite(., col = "Covariates", sep = ", ")
-#
-#   # Prepare an empty tibble to fill
-#   models <- tibble(
-#       ModelID     = 1:length(covars)
-#     , Covariates  = covariates
-#     , Formula     = lapply(covars, function(x){
-#
-#       # Write the model for the baseline covariates
-#       formula <- writeForm(base)
-#
-#       # Check if we selected some interaction terms in the previous iteration
-#       if (length(selected) > 0){
-#
-#         # If so, add them to the models as seperate terms (without random slope)
-#         toadd <- selected %>%
-#
-#           # Transpose the matrix
-#           t(.) %>%
-#
-#           # Convert the matrix to a dataframe
-#           as.data.frame(.) %>%
-#
-#           # Combine the interactions using + as a seperator
-#           unite(., col, sep = " + ") %>%
-#
-#           # Get rid of the dataframe structure
-#           .[["col"]]
-#
-#         # Update the baseline model with the selected interaction terms
-#         formula <- update(formula, paste("~ . +", toadd))
-#       }
-#
-#       # Add the interaction terms we still need to check
-#       formula <- update(formula, paste("~ . +", x))
-#
-#       # Return the model formula that we just created
-#       return(formula)
-#     })
-#     , Model       = NA # Result of the model
-#     , AIC         = NA # AIC of the model
-#   )
-#
-#   # Run all models
-#   models <- mutate(models, Model = map(Formula, function(x){
-#     glmm_clogit(x, data = ssf)
-#   }))
-#
-#   # Extract the AIC value of each model
-#   models$AIC <- lapply(models$Model, AIC) %>%
-#     do.call(rbind, .) %>%
-#     as.vector()
-#
-#   # Identify the model with the lowest AIC and put the respective covariate
-#   # into the "selected" vector
-#   best_covar <- na.omit(covars[models$AIC == min(models$AIC, na.rm = TRUE)])
-#   selected <- c(selected, best_covar)
-#
-#   # Update which covariates remain for selection
-#   covars <- covars[!(covars %in% selected)]
-#
-#   # Store the model results into the list
-#   model_sel[[i]] <- models
-#
-#   # Update the index
-#   i <- i + 1
-# }
-#
-# # Put all relevant information into a single tibble
-# models <- tibble(
-#     Covariates  = model_sel %>%
-#     lapply(., function(x){x$Covariates}) %>% do.call(rbind, .)
-#   , Formula     = model_sel %>%
-#     lapply(., function(x){x$Formula}) %>% do.call(c, .)
-#   , Model       = model_sel %>%
-#     lapply(., function(x){x$Model}) %>% do.call(c, .)
-#   , AIC         = model_sel %>%
-#     lapply(., function(x){x$AIC}) %>% do.call(c, .)
-#   , DeltaAIC    = NA # Difference in AIC to the "best" model
-#   , Weight      = NA # Weight assigned according to AIC
-#   , LogLik      = NA # Loglikelihood of the model
-# )
-#
-# # Extract the LogLiks
-# models$LogLik <- lapply(models$Model, logLik) %>%
-#   do.call(rbind, .) %>%
-#   as.vector()
-#
-# # Add a unique model id
-# models$ModelID <- 1:nrow(models)
-#
-# # Calculate the DeltaAIC to the most parsimonious model
-# models$DeltaAIC <- models$AIC - min(models$AIC, na.rm = TRUE)
-#
-# # Sort the tibble by the DeltaAIC
-# models <- arrange(models, DeltaAIC)
-#
-# ############################################################
 # #### Model Averaging
-# ############################################################
+# ################################################################################
 # # Check the paper by Symonds and Moussalli (2011) for details on the formulas
 # # In our case model averaging isn't really necessary since the first model gets
 # # a weight of 1 anyways. However, this might still be a useful exercise. First
@@ -661,57 +512,43 @@ write_rds(models, "03_Data/03_Results/99_MovementModel.rds")
 # # Look at the results
 # showCoeffs(coeffs[-1, ])
 
-############################################################
-#### Model Validation: Necessary Function
-############################################################
+################################################################################
+#### Model Validation: Necessary Functions
+################################################################################
 # Finally I validate the best model using the procedure described in Fortin et
 # al. 2009. Let's reload the model results
-models <- read_rds("03_Data/03_Results/99_ModelSelection.rds")
+models <- read_rds("03_Data/03_Results/99_MovementModel.rds")
 
 # Set a seed for reproducibility
 set.seed(1234)
 
 # Write a function that allows us to run the validation process
-crossVal <- function(formula, data, ratio, random = FALSE){
+crossVal <- function(model, data, ratio, random = FALSE){
 
-  # Identify all unique step_ids
+  # Identify all unique step IDs
   step_ids <- unique(data$step_id_)
 
-  # Split the step_ids into two groups with x% and (100-x)% of all data
-  index <- !(sample.split(step_ids, SplitRatio = ratio))
-
-  # Identify the step_ids of the training steps and those of the validation
-  # steps
-  steps_train <- step_ids[index]
-  steps_valid <- step_ids[!index]
+  # Split IDs according to ratio
+  sampled <- sample(step_ids, size = length(step_ids) * ratio)
 
   # Split the data into training and validation datasets
-  ssf_train <- subset(ssf, step_id_ %in% steps_train)
-  ssf_valid <- subset(ssf, step_id_ %in% steps_valid)
+  ssf_train <- subset(dat, step_id_ %in% sampled)
+  ssf_valid <- subset(dat, !step_id_ %in% sampled)
 
   # Train the model using the training data
-  model <- glmm_clogit(formula, data = ssf_train)
+  formula <- formula(model$call)
+  mod <- glmm_clogit(formula, data = ssf_train)
 
-  # Identify the coefficients from the model
-  coeffs <- getCoeffs(model)
+  # Use our "prepareModel" function to get the model coefficients and a cleaned
+  # model formula
+  mod <- prepareModel(mod)
 
-  # We want to use the derived model to predict the selection scores in the
-  # validation data. Let's create a simplified dataframe of the model coefficients
-  pred <- as.data.frame(select(coeffs, Coefficient))
+  # Prepare model matrix for validation data
+  modeldat <- model.matrix(mod$formula, data = ssf_valid)
 
-  # For easier indexing we assign the covariates as row-names
-  rownames(pred) <- coeffs$Covariate
-
-  # Predict the selection scores for the validation data
-  ssf_valid$Scores <- exp(
-    pred["cos(ta_)", ]        * cos(ssf_valid[, "ta_"]) +
-    pred["log(sl_)", ]        * log(ssf_valid[, "sl_"]) +
-    pred["Water", ]           * ssf_valid[, "Water"] +
-    pred["DistanceToWater", ] * ssf_valid[, "DistanceToWater"] +
-    pred["Shrubs", ]          * ssf_valid[, "Shrubs"] +
-    pred["HumansBuff5000", ]  * ssf_valid[, "HumansBuff5000"] +
-    pred["Trees", ]           * ssf_valid[, "Trees"]
-  )
+  # Multiply the matrix with estimated selection coefficients to calculate
+  # predicted selection scores
+  ssf_valid$Scores <- exp(modeldat %*% mod$coefficients)
 
   # Depending on whether we want to randomize preferences, we include or exclude
   # realized steps
@@ -747,23 +584,11 @@ crossVal <- function(formula, data, ratio, random = FALSE){
 
   # Now do some transformations
   validation <- validation %>%
-
-    # Ungroup
     ungroup(.) %>%
-
-    # Select the rank column
     select(., Rank) %>%
-
-    # Prepare a table that gives the frequency of each rank
     table(.) %>%
-
-    # Coerce table to dataframe
     as.data.frame(.) %>%
-
-    # Rename columns nicer
     set_names(., c("Rank", "Frequency")) %>%
-
-    # Make the rank a numeric variable
     mutate(., Rank = as.numeric(Rank))
 
   # Run a pearson rank corrleation test
@@ -777,41 +602,38 @@ crossVal <- function(formula, data, ratio, random = FALSE){
   # Return the spearman test result as well as the data
   return(
     list(
-        "Data" = validation
+        "Data"                = validation
       , "SpearmanCorrelation" = as.vector(spearman$estimate)
     )
   )
 }
 
-############################################################
-#### Validation with observed preferences
-############################################################
-# Run the function 100 times without randomized preferences, but skip an
-# iteration if there is an erorr (due to convergence)
-valid_pref <- list()
+################################################################################
+#### Validation
+################################################################################
+# Set seed for multicore processes
+set.seed(1234)
+RNGkind("L'Ecuyer-CMRG")
+mc.reset.stream()
 
-# We run the loop until there are 100 models
-i <- 1
-while (i < 101){
-   output <- tryCatch(crossVal(
-      formula = models$Formula[[1]]
-    , data    = ssf
-    , ratio   = 0.2
-    , random  = FALSE
-  ), warning = function(w){return("skip")})
-
-  # In case there was a warning, we skip the iteration, otherwise we store the
-  # output and increase the counter
-  if (class(output) != "list"){
-    next
-  } else {
-    valid_pref[[i]] <- output
-    i <- i + 1
-  }
-
-  # Print status
-  cat(i, "of", 100, "done... \n")
-}
+# Run validation repeadedly with observed preferences
+valid_pref <- pbmclapply(
+    X                  = 1:100
+  , ignore.interactive = T
+  , mc.cores           = detectCores() - 1
+  , FUN                = function(x){
+    success <- F
+    while (!success){
+      output <- tryCatch(crossVal(
+          model   = models$Model[[1]]
+        , data    = dat
+        , ratio   = 0.8
+        , random  = FALSE
+      ), warning = function(w){return("skip")})
+      success <- ifelse (class(output) == "list", T, F)
+    }
+    return(output)
+})
 
 # Extract all the rhos
 rho_pref <- lapply(valid_pref, function(x){
@@ -823,33 +645,24 @@ dat_pref <- lapply(valid_pref, function(x){
   x[[1]]
 }) %>% do.call(rbind, .)
 
-
-############################################################
-#### Validation with random preferences
-############################################################
-# Run the function 100 times with randomized preferences, but skip an iteration
-# if there is an erorr (due to convergence)
-valid_rand <- list()
-
-# We run the loop until there are 100 models
-i <- 1
-while (i < 101){
-   output <- tryCatch(crossVal(
-      formula = models$Formula[[1]]
-    , data    = ssf
-    , ratio   = 0.2
-    , random  = TRUE
-  ), warning = function(w){return("skip")})
-
-  # In case there was a warning, we skip the iteration, otherwise we store the
-  # output and increase the counter
-  if (class(output) != "list"){
-    next
-  } else {
-    valid_rand[[i]] <- output
-    i <- i + 1
-  }
-}
+# Run validation repeadedly with random preferences
+valid_rand <- pbmclapply(
+    X                  = 1:100
+  , ignore.interactive = T
+  , mc.cores           = detectCores() - 1
+  , FUN                = function(x){
+    success <- F
+    while (!success){
+      output <- tryCatch(crossVal(
+          model   = models$Model[[1]]
+        , data    = dat
+        , ratio   = 0.8
+        , random  = TRUE
+      ), warning = function(w){return("skip")})
+      success <- ifelse (class(output) == "list", T, F)
+    }
+    return(output)
+})
 
 # Extract all the rhos
 rho_rand <- lapply(valid_rand, function(x){
@@ -861,9 +674,9 @@ dat_rand <- lapply(valid_rand, function(x){
   x[[1]]
 }) %>% do.call(rbind, .)
 
-############################################################
+################################################################################
 #### Validation: Testing
-############################################################
+################################################################################
 # Find the means and confidence intervals of the rho's from the two datasets
 test_pref <- t.test(rho_pref)
 test_rand <- t.test(rho_rand)

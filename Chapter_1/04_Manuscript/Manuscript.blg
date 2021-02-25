@@ -3,47 +3,46 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
-Warning--I didn't find a database entry for "Turching.1998"
 Warning--I didn't find a database entry for "Hofmann.2020"
-You've used 12 entries,
+You've used 13 entries,
             1935 wiz_defined-function locations,
-            567 strings with 6521 characters,
-and the built_in function-call counts, 5113 in all, are:
-= -- 485
-> -- 263
-< -- 4
-+ -- 90
-- -- 90
-* -- 468
-:= -- 914
-add.period$ -- 38
-call.type$ -- 12
-change.case$ -- 101
-chr.to.int$ -- 12
-cite$ -- 12
-duplicate$ -- 170
-empty$ -- 333
-format.name$ -- 106
-if$ -- 969
+            572 strings with 6681 characters,
+and the built_in function-call counts, 5392 in all, are:
+= -- 511
+> -- 270
+< -- 5
++ -- 92
+- -- 92
+* -- 486
+:= -- 966
+add.period$ -- 41
+call.type$ -- 13
+change.case$ -- 106
+chr.to.int$ -- 13
+cite$ -- 13
+duplicate$ -- 184
+empty$ -- 356
+format.name$ -- 109
+if$ -- 1024
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 12
-newline$ -- 65
-num.names$ -- 38
-pop$ -- 87
+missing$ -- 14
+newline$ -- 70
+num.names$ -- 41
+pop$ -- 94
 preamble$ -- 2
-purify$ -- 103
+purify$ -- 109
 quote$ -- 0
-skip$ -- 121
+skip$ -- 131
 stack$ -- 0
-substring$ -- 334
-swap$ -- 13
+substring$ -- 346
+swap$ -- 14
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 70
+type$ -- 74
 warning$ -- 0
-while$ -- 40
+while$ -- 42
 width$ -- 0
-write$ -- 160
-(There were 2 warnings)
+write$ -- 173
+(There was 1 warning)

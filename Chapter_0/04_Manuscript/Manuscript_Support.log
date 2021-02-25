@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  11 FEB 2021 13:49
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  25 FEB 2021 09:55
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1051,7 +1051,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
 <99_NSD.pdf, id=85, 578.16pt x 325.215pt>
 File: 99_NSD.pdf Graphic file (type pdf)
 <use 99_NSD.pdf>
-Package pdftex.def Info: 99_NSD.pdf  used on input line 144.
+Package pdftex.def Info: 99_NSD.pdf  used on input line 143.
 (pdftex.def)             Requested size: 398.3386pt x 224.0661pt.
  [1 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_NSD.pdf>]
 *geometry* verbose mode - [ newgeometry ] result:
@@ -1089,10 +1089,10 @@ Package pdftex.def Info: 99_NSD.pdf  used on input line 144.
 <99_Trajectories.pdf, id=101, 722.7pt x 469.755pt>
 File: 99_Trajectories.pdf Graphic file (type pdf)
 <use 99_Trajectories.pdf>
-Package pdftex.def Info: 99_Trajectories.pdf  used on input line 160.
+Package pdftex.def Info: 99_Trajectories.pdf  used on input line 159.
 (pdftex.def)             Requested size: 334.60295pt x 217.49483pt.
 
-Overfull \hbox (3.1543pt too wide) in paragraph at lines 211--211
+Overfull \hbox (3.1543pt too wide) in paragraph at lines 210--210
  []\OT1/cmr/m/n/10 Dispersing 
  []
 
@@ -1104,16 +1104,16 @@ Overfull \hbox (3.1543pt too wide) in paragraph at lines 211--211
 <99_Floodmapping.pdf, id=152, 650.43pt x 321.6015pt>
 File: 99_Floodmapping.pdf Graphic file (type pdf)
 <use 99_Floodmapping.pdf>
-Package pdftex.def Info: 99_Floodmapping.pdf  used on input line 276.
+Package pdftex.def Info: 99_Floodmapping.pdf  used on input line 275.
 (pdftex.def)             Requested size: 398.3386pt x 196.96178pt.
  [4 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_Floodmapping.pdf>]
 <99_FloodmappingValidation.pdf, id=178, 650.43pt x 202.356pt>
 File: 99_FloodmappingValidation.pdf Graphic file (type pdf)
 <use 99_FloodmappingValidation.pdf>
-Package pdftex.def Info: 99_FloodmappingValidation.pdf  used on input line 320.
+Package pdftex.def Info: 99_FloodmappingValidation.pdf  used on input line 319.
 (pdftex.def)             Requested size: 398.3386pt x 123.931pt.
 
-Overfull \hbox (21.2599pt too wide) in paragraph at lines 346--355
+Overfull \hbox (21.2599pt too wide) in paragraph at lines 345--354
 \OT1/cmr/m/n/10 age cover of tree-vegetation (hence-forth \OT1/cmr/m/it/10 trees\OT1/cmr/m/n/10 ), non-tree-vegetation (hence-forth \OT1/cmr/m/it/10 shrubs/grassland\OT1/cmr/m/n/10 ),
  []
 
@@ -1121,16 +1121,16 @@ Overfull \hbox (21.2599pt too wide) in paragraph at lines 346--355
 <99_HumanInfluence.pdf, id=248, 578.16pt x 567.31952pt>
 File: 99_HumanInfluence.pdf Graphic file (type pdf)
 <use 99_HumanInfluence.pdf>
-Package pdftex.def Info: 99_HumanInfluence.pdf  used on input line 529.
+Package pdftex.def Info: 99_HumanInfluence.pdf  used on input line 528.
 (pdftex.def)             Requested size: 378.42044pt x 371.32433pt.
  [8 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_HumanInfluence.pdf>]
 <99_FloodPulse.pdf, id=288, 433.62pt x 433.62pt>
 File: 99_FloodPulse.pdf Graphic file (type pdf)
 <use 99_FloodPulse.pdf>
-Package pdftex.def Info: 99_FloodPulse.pdf  used on input line 558.
+Package pdftex.def Info: 99_FloodPulse.pdf  used on input line 557.
 (pdftex.def)             Requested size: 398.3386pt x 398.3596pt.
  [9 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_FloodPulse.pdf>] [10]
-Overfull \hbox (2.36674pt too wide) in paragraph at lines 721--727
+Overfull \hbox (2.36674pt too wide) in paragraph at lines 720--726
 \OT1/cmr/m/n/10 That is, the se-lec-tion score $\OML/cmm/m/it/10 w\OT1/cmr/m/n/10 (\OML/cmm/m/it/10 x\OT1/cmr/m/n/10 )$ of a step de-pended on its as-so-ci-ated co-vari-ates ($\OML/cmm/m/it/10 x[]; x[]; :::; x[]$\OT1/cmr/m/n/10 ),
  []
 
@@ -1138,17 +1138,17 @@ Overfull \hbox (2.36674pt too wide) in paragraph at lines 721--727
 <99_LeastCostPaths(Example1).pdf, id=419, 216.81pt x 216.81pt>
 File: 99_LeastCostPaths(Example1).pdf Graphic file (type pdf)
 <use 99_LeastCostPaths(Example1).pdf>
-Package pdftex.def Info: 99_LeastCostPaths(Example1).pdf  used on input line 810.
+Package pdftex.def Info: 99_LeastCostPaths(Example1).pdf  used on input line 809.
 (pdftex.def)             Requested size: 127.47125pt x 127.47348pt.
 <99_LeastCostPaths(Example2).pdf, id=420, 216.81pt x 433.62pt>
 File: 99_LeastCostPaths(Example2).pdf Graphic file (type pdf)
 <use 99_LeastCostPaths(Example2).pdf>
-Package pdftex.def Info: 99_LeastCostPaths(Example2).pdf  used on input line 815.
+Package pdftex.def Info: 99_LeastCostPaths(Example2).pdf  used on input line 814.
 (pdftex.def)             Requested size: 127.47125pt x 254.94698pt.
 <99_LeastCostPaths(Example3).pdf, id=421, 216.81pt x 433.62pt>
 File: 99_LeastCostPaths(Example3).pdf Graphic file (type pdf)
 <use 99_LeastCostPaths(Example3).pdf>
-Package pdftex.def Info: 99_LeastCostPaths(Example3).pdf  used on input line 820.
+Package pdftex.def Info: 99_LeastCostPaths(Example3).pdf  used on input line 819.
 (pdftex.def)             Requested size: 127.47125pt x 254.94698pt.
  [13] [14 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example1).pdf> </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCostPaths(Example2).pdf
 
@@ -1160,13 +1160,13 @@ pdfTeX warning: pdflatex (file /home/david/ownCloud/University/15. PhD/Chapter_0
 <99_RandomEffects.pdf, id=481, 578.16pt x 433.62pt>
 File: 99_RandomEffects.pdf Graphic file (type pdf)
 <use 99_RandomEffects.pdf>
-Package pdftex.def Info: 99_RandomEffects.pdf  used on input line 908.
+Package pdftex.def Info: 99_RandomEffects.pdf  used on input line 907.
 (pdftex.def)             Requested size: 398.3386pt x 298.75482pt.
  [16 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_RandomEffects.pdf>]
 <99_LeastCost_Suppl.pdf, id=512, 913.49281pt x 758.835pt>
 File: 99_LeastCost_Suppl.pdf Graphic file (type pdf)
 <use 99_LeastCost_Suppl.pdf>
-Package pdftex.def Info: 99_LeastCost_Suppl.pdf  used on input line 955.
+Package pdftex.def Info: 99_LeastCost_Suppl.pdf  used on input line 954.
 (pdftex.def)             Requested size: 398.3386pt x 330.9011pt.
  [17] [18 </home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/99_LeastCost_Suppl.pdf>] (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.bbl [19]
 Underfull \hbox (badness 10000) in paragraph at lines 124--128
@@ -1174,14 +1174,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 124--128
  []
 
 [20]) [21]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 976.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 976.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 975.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 975.
  (/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 976.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 976.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 975.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 975.
 Package rerunfilecheck Info: File `Manuscript_Support.out' has not changed.
 (rerunfilecheck)             Checksum: 2107FEBFE8269218B25BC95CEA00CCEB;1026.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 976.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 975.
  ) 
 Here is how much of TeX's memory you used:
  21938 strings out of 492982
@@ -1193,7 +1193,7 @@ Here is how much of TeX's memory you used:
  55i,14n,77p,1323b,597s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
 /cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvb.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb></usr/share/texmf/fonts/type1/public/tex-gyre/qhvri.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.pdf" (22 pages, 8334233 bytes).
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_0/04_Manuscript/Manuscript_Support.pdf" (22 pages, 8334402 bytes).
 PDF statistics:
  673 PDF objects out of 1000 (max. 8388607)
  538 compressed objects within 6 object streams

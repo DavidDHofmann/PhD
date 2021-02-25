@@ -1,17 +1,17 @@
 \babel@toc {english}{}
-\contentsline {section}{\numberline {A.1 -}Net Squared Displacement}{1}{appendix.A}
-\contentsline {section}{\numberline {A.2 -}GPS Data}{3}{appendix.B}
-\contentsline {section}{\numberline {A.3 -}Spatial Covariates}{4}{appendix.C}
-\contentsline {subsection}{\numberline {A.3 -.1}Land Cover}{4}{subsection.C.1}
-\contentsline {subsubsection}{\numberline {A.3 -.1.1}Water}{4}{subsubsection.C.1.1}
-\contentsline {subsubsection}{\numberline {A.3 -.1.2}Dryland}{6}{subsubsection.C.1.2}
-\contentsline {subsection}{\numberline {A.3 -.2}Protection Status}{7}{subsection.C.2}
-\contentsline {subsection}{\numberline {A.3 -.3}Anthropogenic}{7}{subsection.C.3}
-\contentsline {section}{\numberline {A.4 -}Typical Flood Pulse}{10}{appendix.D}
-\contentsline {section}{\numberline {A.5 -}Integrated Step Selection Function}{11}{appendix.E}
-\contentsline {section}{\numberline {A.6 -}Identification of Least-Cost Paths \& Corridors}{14}{appendix.F}
-\contentsline {subsection}{\numberline {A.6 -.1}Least-Cost Paths}{14}{subsection.F.1}
-\contentsline {subsection}{\numberline {A.6 -.2}Least-Cost Corridors}{14}{subsection.F.2}
-\contentsline {section}{\numberline {A.7 -}Model Selection Results}{16}{appendix.G}
-\contentsline {section}{\numberline {A.8 -}Habitat Selection Model: Random Effects}{17}{appendix.H}
-\contentsline {section}{\numberline {A.9 -}Alternative Source Points}{18}{appendix.I}
+\contentsline {section}{\numberline {A.1}Net Squared Displacement}{1}{appendix.A}
+\contentsline {section}{\numberline {A.2}GPS Data}{3}{appendix.B}
+\contentsline {section}{\numberline {A.3}Spatial Covariates}{4}{appendix.C}
+\contentsline {subsection}{\numberline {A.3.1}Land Cover}{4}{subsection.C.1}
+\contentsline {subsubsection}{\numberline {A.3.1.1}Water}{4}{subsubsection.C.1.1}
+\contentsline {subsubsection}{\numberline {A.3.1.2}Dryland}{6}{subsubsection.C.1.2}
+\contentsline {subsection}{\numberline {A.3.2}Protection Status}{7}{subsection.C.2}
+\contentsline {subsection}{\numberline {A.3.3}Anthropogenic}{7}{subsection.C.3}
+\contentsline {section}{\numberline {A.4}Typical Flood Pulse}{10}{appendix.D}
+\contentsline {section}{\numberline {A.5}Integrated Step Selection Function}{11}{appendix.E}
+\contentsline {section}{\numberline {A.6}Identification of Least-Cost Paths \& Corridors}{14}{appendix.F}
+\contentsline {subsection}{\numberline {A.6.1}Least-Cost Paths}{14}{subsection.F.1}
+\contentsline {subsection}{\numberline {A.6.2}Least-Cost Corridors}{14}{subsection.F.2}
+\contentsline {section}{\numberline {A.7}Model Selection Results}{16}{appendix.G}
+\contentsline {section}{\numberline {A.8}Habitat Selection Model: Random Effects}{17}{appendix.H}
+\contentsline {section}{\numberline {A.9}Alternative Source Points}{18}{appendix.I}
