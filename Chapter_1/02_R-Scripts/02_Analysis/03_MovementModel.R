@@ -94,6 +94,12 @@ for (i in 1:ncol(dat)){
   scaling$Scale[i] <- ifelse(is.null(scale), NA, scale)
 }
 
+# Prepare a list of named vectors
+scaling <- list(
+      center = setNames(scaling[, 2], scaling$ColumnName)
+    , scale  = setNames(scaling[, 3], scaling$ColumnName)
+)
+
 # Store the object to an RDS
 write_rds(scaling, "03_Data/03_Results/99_Scaling.rds")
 

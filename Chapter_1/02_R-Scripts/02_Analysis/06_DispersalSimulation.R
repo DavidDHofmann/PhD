@@ -11,39 +11,27 @@ rm(list = ls())
 options(scipen = 999)
 
 # Change the working directory
-wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)
-library(rgeos)
-library(tidyverse)
-library(rgdal)
-library(velox)
-library(glmmTMB)
-library(viridis)
-library(RColorBrewer)
-library(tictoc)
-library(parallel)
-library(lubridate)
-library(dismo)
-library(pbmcapply)
-library(profvis)
-library(microbenchmark)
-library(Rcpp)
-
-# Load custom functions
-source("Functions.r")
-sourceCpp("Functions.cpp")
+library(davidoff)   # Custom Functions
+library(raster)     # For raster manipulation
+library(tidyverse)  # For data wrangling
+library(glmmTMB)    # For handling logistic model
+library(rgdal)      # To handle spatial data
+library(velox)      # For quick extraction
+library(lubridate)  # To handle timestamps
+library(tictoc)     # For simple benchmarking
 
 # How many steps do you want to simulate?
-n_steps <- 2000
+n_steps <- 100
 
 # How many random steps do you want to simulate per realized step?
 n_rsteps <- 25
 
 # How many dispersers do you want to simulate per source point?
-n_disp <- 50
+n_disp <- 1
 
 # Do you want to break the simulation of a track if it hits a boundary?
 stop <- FALSE
@@ -55,7 +43,7 @@ sl_max <- 35000
 #### Load and Prepare the Parametrized Movement Model
 ################################################################################
 # Load the movement model
-move.mod <- "03_Data/03_Results/99_MovementModel.rds" %>% readRDS()
+move.mod <- read_rds("03_Data/03_Results/99_MovementModel.rds")
 
 # Take a look at the models
 print(move.mod)
@@ -68,7 +56,7 @@ showCoeffs(getCoeffs(move.mod)[-1, ], xlim = c(-2, 2))
 
 # We will need to simulate random step lengths. For this we will use the gamma
 # distribution that we fitted to create random steps in the iSSF model.
-gamma <- "03_Data/03_Results/99_GammaDistribution.rds" %>% readRDS()
+sl_dist <- read_rds("03_Data/03_Results/99_GammaDistribution.rds")
 
 ################################################################################
 #### Load Covariate Layers
@@ -76,33 +64,36 @@ gamma <- "03_Data/03_Results/99_GammaDistribution.rds" %>% readRDS()
 # Specify the filenames of the layers we need for prediction. Note that we will
 # use averaged layers whenever there is a dynamic counterpart.
 layers <- c(
-      "01_LandCover_Water_Averaged.tif"
-    , "01_LandCover_Water_DistanceToWater.tif"
-    , "01_LandCover_TreeCover_Averaged.tif"
-    , "01_LandCover_NonTreeVegetation_Averaged.tif"
-    , "04_AnthropogenicFeatures_HumanInfluence(Buffer5000).tif"
+      "01_LandCover_WaterCoverAveraged_MERGED.tif"
+    , "01_LandCover_DistanceToWaterAveraged_MERGED.tif"
+    , "01_LandCover_TreeCoverAveraged_MODIS.tif"
+    , "01_LandCover_NonTreeVegetationAveraged_MODIS.tif"
+    , "04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.grd"
   ) %>%
 
   # Combine with souce directory
   paste0("03_Data/02_CleanData/", .) %>%
 
   # Load each file as rasterlayer into a list
-  lapply(., raster) %>%
+  lapply(., stack) %>%
 
   # Set correct layernames
   set_names(
     c(
         "Water"
-      , "DistanceToWater"
+      , "SqrtDistanceToWater"
       , "Trees"
       , "Shrubs"
       , "HumansBuff5000"
     )
   )
 
+# Note that we only need to keep one of the human influence layers
+layers$HumansBuff5000 <- layers$HumansBuff5000[["Buffer_5000"]]
+
 # We also need to take the sqrt for the "DistanceTo"-layers since we fitted the
 # model using the sqrt of these distances
-layers[["DistanceToWater"]] <- sqrt(layers[["DistanceToWater"]])
+layers[["SqrtDistanceToWater"]] <- sqrt(layers[["SqrtDistanceToWater"]])
 
 # Assign correct layernames
 names <- names(layers)
@@ -119,73 +110,43 @@ plot(layers)
 ################################################################################
 #### Sampling Source Points
 ################################################################################
-# We want to sample source points following two different approaches. First, we
-# want to create source points at the same 68 locations that we used to
-# calculate least-cost paths. Second, we want to randomize source points within
-# the catchment area of each of these start points. Let's load the source points
-# and source areas for this first.
-source_areas <- shapefile("03_Data/03_Results/99_SourceAreas.shp")
-source_points <- shapefile("03_Data/03_Results/99_SourcePoints.shp")
+# Load protected areas
+prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
-# Rename column names that were abbreviated when stored
-names(source_points)[2] <- "ProtectedArea"
+# Plot them nicely
+u <- unique(prot$Desig)
+m <- match(prot$Desig, u)
+n <- length(unique(prot$Desig))
+pal <- c("#E5F5E0", "#A1D99B", "#31A354")
+plot(prot, col = pal[m])
+  legend("topleft", legend = u, col = pal, pch = 19)
 
-# We now want to cut protected areas into separated polygons such that each
-# source point is allocated to one polygon. We will call this area catchement
-# area. We can create voronoi polygons for this purpose.
-source_areas <- lapply(1:length(unique(source_areas$ID)), function(x){
+# Subset to national parks only, we'll use those as source areas
+source_areas <- subset(prot, Desig == "National Park")
+source_areas$AreaID <- 1:nrow(source_areas)
 
-  # Subset to respective areas and points
-  areas_sub <- subset(source_areas, ID == x)
-  points_sub <- subset(source_points, ProtectedArea == x)
-
-  # Can only tesselate the source area if it contains more than 1 point
-  if (nrow(points_sub) > 1){
-
-    # Create voronoi polygons based on the selected points. We make the extent
-    # larger to make sure the entire source_area is covered by the tesselated
-    # polygon.
-    voris <- voronoi(points_sub, ext = extent(areas_sub) + c(-1, 1, -1, 1))
-
-    # For each voronoi polygon we now create a clipped area
-    areas_sub <- gIntersection(voris, areas_sub, byid = T)
-  }
-
-  # Return the clipped area
-  return(as(areas_sub, "SpatialPolygons"))
-
+# Sample points within each national park
+source_points <- lapply(1:nrow(source_areas), function(x){
+  spsample(source_areas[x, ], n = 10, type = "random")
 }) %>% do.call(rbind, .)
-
-# Assign ID to each area, corresponding to the ID of the point that it contains.
-source_areas$ID <- source_areas %>%
-
-  # Check the point$ID over wach each polygon
-  over(source_points) %>%
-
-  # Keep only the ID
-  dplyr::select(ID) %>%
-
-  # Coerce to matrix
-  as.matrix() %>%
-
-  # Finally coerce to vector
-  as.vector()
+source_points$AreaID <- over(source_points, source_areas)$AreaID
+source_points$PointID <- 1:nrow(source_points)
 
 # Visualize the results and visually verify that IDs were assigned correctly
-plot(source_areas, border = source_areas$ID)
-plot(source_points, col = source_points$ID, add = T)
-text(x = source_points, labels = source_points$ID, cex = 1)
+plot(source_areas, border = source_areas$AreaID)
+  plot(source_points, col = source_points$AreaID, add = T)
+  text(x = source_points, labels = source_points$PointID, cex = 0.6)
 
 # Store the source points and areas
 writeOGR(source_areas
   , dsn       = "03_Data/03_Results"
-  , layer     = "99_SourceAreas2"
+  , layer     = "99_SourceAreas"
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
 writeOGR(source_points
   , dsn       = "03_Data/03_Results"
-  , layer     = "99_SourcePoints2"
+  , layer     = "99_SourcePoints"
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
@@ -204,22 +165,7 @@ model <- prepareModel(move.mod)
 
 # Prepare scaling parameters. We will need them to scale covariates extracted
 # along steps.
-scaling <- "03_Data/03_Results/99_ScalingSSF.rds" %>% read_rds() %>% na.omit()
-
-# Make some nice rownames
-rownames(scaling) <- scaling$ColumnName
-
-# Create some random points using a custom function that allows to select points
-# statically, or randomly.
-points <- createPoints(
-    points    = source_points
-  , areas     = source_areas
-  , randomize = F
-  , n         = 1
-)
-
-# Visualize them
-plot(points)
+scaling <- read_rds("03_Data/03_Results/99_Scaling.rds")
 
 ################################################################################
 #### TESTING
@@ -274,7 +220,10 @@ disperse <- function(
     begincoords <- track[i, c("x", "y")]
 
     # Calculate new absolute turning angles
-    absta_new <- getAbsNewC(absta = track$absta_[i], ta = ta_new)
+    absta_new <- getAbsNewC(
+        absta = track$absta_[i]
+      , ta    = ta_new
+    )
 
     # Calculate new endpoints
     endpoints_new <- calcEndpointsC(
@@ -284,7 +233,10 @@ disperse <- function(
     )
 
     # Check which endpoints leave the study extent
-    inside <- pointsInside(xy = endpoints_new, extent = covars$extent)
+    inside <- pointsInside(
+        xy     = endpoints_new
+      , extent = covars$extent
+    )
 
     # In case some steps are not inside the study area and we want the loop to
     # break
@@ -336,15 +288,13 @@ disperse <- function(
       , absta_      = absta_new
       , ta_         = ta_new
       , sl_         = sl_new
-      , BoundaryHit = sum(!inside)
+      , BoundaryHit = sum(!inside) > 0
     )
 
     # Check if the timestamp corresponds to low or high activity
-    Activity <- strftime(date, tz = "UTC", format = "%H:%M:%S")
-    Activity <- factor(ifelse(Activity %in% c("03:00:00", "15:00:00")
-        , yes = "MainActivity"
-        , no  = "LowActivity"
-      ), levels = c("LowActivity", "MainActivity"))
+    inactive <- strftime(date, tz = "UTC", format = "%H:%M:%S")
+    inactive <- ifelse(inactive %in% c("03:00:00", "15:00:00"), T, F)
+    inactive <- factor(inactive, levels = c(T, F))
 
     # Put all covariates into a dataframe. We will use this to calculate
     # selection scores
@@ -355,12 +305,11 @@ disperse <- function(
       , sl_       = sl_new
     )
 
-    # Scale Covariates using the scaling parameters used to fit the movement
-    # model
+    # Scale covariates
     covariates <- scaleCovars(covariates, scaling)
 
     # Put the activity phase into the covariate table as well
-    covariates$Activity <- Activity
+    covariates$inactive <- inactive
 
     # Calculate selection scores
     SelectionScore <- as.numeric(predictScore(
@@ -400,21 +349,51 @@ disperse <- function(
 #### TESTING
 ################################################################################
 # Try out the function
+# tic()
+# test <- mclapply(1:nrow(points), mc.cores = detectCores() - 1, function(x){
+#   disperse(
+#       source    = points[x, ]
+#     , covars    = covars
+#     , model     = model
+#     , sl_dist   = gamma
+#     , sl_max    = sl_max
+#     , n_rsteps  = n_rsteps
+#     , n_steps   = n_steps
+#     , stop      = F
+#     , scaling   = scaling
+#     , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
+#   )
+# })
+# toc()
+
 tic()
-test <- mclapply(1:nrow(points), mc.cores = detectCores() - 1, function(x){
-  disperse(
-      source    = points[x, ]
-    , covars    = covars
-    , model     = model
-    , sl_dist   = gamma
-    , sl_max    = sl_max
-    , n_rsteps  = n_rsteps
-    , n_steps   = n_steps
-    , stop      = F
-    , scaling   = scaling
-    , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
-  )
-})
+test <- disperse_old(
+    source    = source_points[1, ]
+  , covars    = covars
+  , model     = model
+  , sl_dist   = sl_dist
+  , sl_max    = sl_max
+  , n_rsteps  = n_rsteps
+  , n_steps   = 100
+  , stop      = F
+  , scaling   = scaling
+  , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
+)
+toc()
+
+tic()
+test <- disperse_new(
+    source    = source_points[1, ]
+  , covars    = covars
+  , model     = model
+  , sl_dist   = sl_dist
+  , sl_max    = sl_max
+  , n_rsteps  = n_rsteps
+  , n_steps   = 100
+  , stop      = F
+  , scaling   = scaling
+  , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
+)
 toc()
 
 # ################################################################################

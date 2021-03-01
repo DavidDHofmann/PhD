@@ -448,7 +448,7 @@ data$data <- suppressMessages(
     , ignore.interactive = T
     , mc.cores           = detectCores() - 1
     , FUN                = function(x){
-      resFix2(data$data[[x]], hours = 1, start = 1, tol = 0.5)
+      resFix(data$data[[x]], hours = 1, start = 1, tol = 0.5)
     }
   )
 )
