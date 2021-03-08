@@ -23,15 +23,16 @@ library(rgdal)      # To handle spatial data
 library(velox)      # For quick extraction
 library(lubridate)  # To handle timestamps
 library(tictoc)     # For simple benchmarking
+library(pbmcapply)  # For multicore lapply with progress bar
 
 # How many steps do you want to simulate?
-n_steps <- 100
+n_steps <- 2000
 
 # How many random steps do you want to simulate per realized step?
 n_rsteps <- 25
 
 # How many dispersers do you want to simulate per source point?
-n_disp <- 1
+n_disp <- 100
 
 # Do you want to break the simulation of a track if it hits a boundary?
 stop <- FALSE
@@ -104,11 +105,27 @@ for (i in 1:length(layers)){
 # Stack the layers
 layers <- stack(layers)
 
-# Visualize all layers
+# Extent to which we want to expand covariates artifically
+ext1 <- extent(layers)
+ext2 <- extent(layers) + c(-1, 1, -1, 1) * metersToDegrees(100000)
+ext1 <- as(ext1, "SpatialPolygons")
+ext2 <- as(ext2, "SpatialPolygons")
+
+# Loop through the layers and extend them
+layers <- lapply(1:nlayers(layers), function(x){
+  extendRaster(layers[[x]], ext2)
+}) %>% stack()
+
+# Visualize the covariates
 plot(layers)
 
+# Visualize the original extent
+plot(layers[[2]])
+plot(ext1, add = T)
+plot(ext2, add = T)
+
 ################################################################################
-#### Sampling Source Points
+#### Source Areas
 ################################################################################
 # Load protected areas
 prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
@@ -118,35 +135,42 @@ u <- unique(prot$Desig)
 m <- match(prot$Desig, u)
 n <- length(unique(prot$Desig))
 pal <- c("#E5F5E0", "#A1D99B", "#31A354")
-plot(prot, col = pal[m])
-  legend("topleft", legend = u, col = pal, pch = 19)
+plot(ext2)
+plot(ext1, add = T)
+plot(prot, col = pal[m], add = T)
+legend("topleft", legend = u, col = pal, pch = 19)
 
 # Subset to national parks only, we'll use those as source areas
 source_areas <- subset(prot, Desig == "National Park")
 source_areas$AreaID <- 1:nrow(source_areas)
 
-# Sample points within each national park
+# Let's add a source area around the map border
+buffer <- ext2 - ext1
+crs(buffer) <- crs("+init=epsg:4326")
+buffer$Name <- "Buffer"
+buffer$IUCN <- NA
+buffer$Country <- NA
+buffer$Desig <- NA
+buffer$Values <- NA
+buffer$AreaID <- max(source_areas$AreaID + 1)
+source_areas <- rbind(source_areas, buffer)
+
+# Exemplify how we're going to sample source points
 source_points <- lapply(1:nrow(source_areas), function(x){
-  spsample(source_areas[x, ], n = 10, type = "random")
+  spsample(source_areas[x, ], n = n_disp, type = "random")
 }) %>% do.call(rbind, .)
 source_points$AreaID <- over(source_points, source_areas)$AreaID
 source_points$PointID <- 1:nrow(source_points)
 
 # Visualize the results and visually verify that IDs were assigned correctly
 plot(source_areas, border = source_areas$AreaID)
-  plot(source_points, col = source_points$AreaID, add = T)
-  text(x = source_points, labels = source_points$PointID, cex = 0.6)
+plot(source_points, col = source_points$AreaID, add = T)
+text(source_areas, labels = source_areas$AreaID, cex = 0.7)
 
 # Store the source points and areas
 writeOGR(source_areas
   , dsn       = "03_Data/03_Results"
   , layer     = "99_SourceAreas"
-  , driver    = "ESRI Shapefile"
-  , overwrite = TRUE
-)
-writeOGR(source_points
-  , dsn       = "03_Data/03_Results"
-  , layer     = "99_SourcePoints"
   , driver    = "ESRI Shapefile"
   , overwrite = TRUE
 )
@@ -167,9 +191,6 @@ model <- prepareModel(move.mod)
 # along steps.
 scaling <- read_rds("03_Data/03_Results/99_Scaling.rds")
 
-################################################################################
-#### TESTING
-################################################################################
 # Function to simulate dispersal based on a step selection model that was fitted
 # in the glmmTMB framework
 disperse <- function(
@@ -350,132 +371,78 @@ disperse <- function(
 ################################################################################
 # Try out the function
 # tic()
-# test <- mclapply(1:nrow(points), mc.cores = detectCores() - 1, function(x){
-#   disperse(
-#       source    = points[x, ]
-#     , covars    = covars
-#     , model     = model
-#     , sl_dist   = gamma
-#     , sl_max    = sl_max
-#     , n_rsteps  = n_rsteps
-#     , n_steps   = n_steps
-#     , stop      = F
-#     , scaling   = scaling
-#     , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
-#   )
+# sim <- pbmclapply(1:10
+#   , mc.cores           = detectCores() - 1
+#   , ignore.interactive = T
+#   , FUN                = function(x){
+#     disperse(
+#         source    = source_points[source_points$AreaID == 34, ][2, ]
+#       , covars    = covars
+#       , model     = model
+#       , sl_dist   = sl_dist
+#       , sl_max    = sl_max
+#       , n_rsteps  = n_rsteps
+#       , n_steps   = 50
+#       , stop      = F
+#       , scaling   = scaling
+#       , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
+#     )
 # })
 # toc()
+#
+# # Coerce the simulations to tracks
+# sims <- lapply(sim, function(x){
+#   coordinates(x) <- c("x", "y")
+#   l <- spLines(x)
+#   return(l)
+# }) %>% do.call(rbind, .)
+#
+# # Visualize them
+# plot(crop(layers[[1]], sims))
+# plot(crop(prot, sims), add = T, border = "purple")
+# plot(sims, add = T)
+# plot(source_points[source_points$AreaID == 34, ][2, ], add = T, col = "red")
 
-tic()
-test <- disperse_old(
-    source    = source_points[1, ]
-  , covars    = covars
-  , model     = model
-  , sl_dist   = sl_dist
-  , sl_max    = sl_max
-  , n_rsteps  = n_rsteps
-  , n_steps   = 100
-  , stop      = F
-  , scaling   = scaling
-  , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
-)
-toc()
-
-tic()
-test <- disperse_new(
-    source    = source_points[1, ]
-  , covars    = covars
-  , model     = model
-  , sl_dist   = sl_dist
-  , sl_max    = sl_max
-  , n_rsteps  = n_rsteps
-  , n_steps   = 100
-  , stop      = F
-  , scaling   = scaling
-  , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
-)
-toc()
-
-# ################################################################################
-# #### TESTING
-# ################################################################################
-# plot(source_areas, border = source_areas$ID)
-# plot(source_points, col = source_points$ID, add = T)
-# text(x = source_points, labels = source_points$ID, cex = 1)
-#
-# # Try out the function
-# test <- list()
-# for (j in 1:20){
-#   i <- sample(1:68, 1)
-#   random <- disperse(
-#       source    = points[i, ]
-#     , covars    = covars
-#     , model     = model
-#     , sl_dist   = gamma
-#     , n_rsteps  = n_rsteps
-#     , n_steps   = 100
-#     , stop      = F
-#     , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
-#   )
-#   test[[j]] <- random
-# }
-# dat <- do.call(rbind, test)
-#
-# # Load true dispersal data
-# observed <- read_csv("03_Data/02_CleanData/00_General_Dispersers_Popecol(SSF4Hours).csv")
-# observed <- subset(observed, case_)
-#
-# # Compare step lengths
-# dat <- data.frame(
-#     sl = c(random$sl_, observed$sl_)
-#   , type = c(rep("random", nrow(random)), rep("observed", nrow(observed)))
-# )
-#
-# # Compare data
-# tapply(dat$sl, dat$type, summary)
-#
-# # Visualize
-# ggplot(dat, aes(x = sl, col = type)) + geom_density()
-#
-# ################################################################################
-# #### TESTING
-# ################################################################################
-
+################################################################################
+#### Setting up the Simulation
+################################################################################
 # We will have to run the simulations using two different approaches. First, we
 # will select static source points. In a second run, source points will be
 # randomized. Let's therefore write a wrapper function that allows to achieve
 # this.
-simulateDispersal <- function(randomize = F, filename = NULL){
+simulateDispersal <- function(filename = NULL){
 
-  # Sample start points
-  points <- createPoints(
-      points    = source_points
-    , areas     = source_areas
-    , n         = n_disp
-    , randomize = randomize
-  )
+  # Sample fresh source points
+  source_points <- lapply(1:nrow(source_areas), function(x){
+    spsample(source_areas[x, ], n = n_disp, type = "random")
+  }) %>% do.call(rbind, .)
+  source_points$AreaID <- over(source_points, source_areas)$AreaID
+  source_points$PointID <- 1:nrow(source_points)
 
-  # Run the simulation according to the preliminary inputs for each point
+  # Run the simulation for each source point
   tracks <- pbmclapply(
-      X                   = 1:length(points)
+      X                   = 1:length(source_points)
     , mc.cores            = detectCores() - 1
     , ignore.interactive  = T
     , FUN                 = function(x){
-      sim <- suppressWarnings(disperse(
-          source    = points[x, ]
-        , covars    = covars
-        , model     = model
-        , sl_dist   = gamma
-        , n_rsteps  = n_rsteps
-        , n_steps   = n_steps
-        , stop      = F
-      ))
+      sim <- suppressWarnings(
+        disperse(
+            source    = source_points[x, ]
+          , covars    = covars
+          , model     = model
+          , sl_dist   = sl_dist
+          , n_rsteps  = n_rsteps
+          , n_steps   = n_steps
+          , stop      = F
+          , scaling   = scaling
+        )
+      )
 
       # Assign ID that corresponds to the iteration number
-      sim$ID <- x
+      sim$TrackID <- x
 
-      # Assign Point ID from which the disperser originated
-      sim$StartPoint <- points$ID[x]
+      # Assign Source Area ID from which the disperser originated
+      sim$SourceArea <- source_points$AreaID[x]
 
       # Return the simulation
       return(sim)
@@ -493,37 +460,18 @@ simulateDispersal <- function(randomize = F, filename = NULL){
 }
 
 # Prepare directories into which we can store the results
-dir.create("03_Data/03_Results/99_Simulations"
-  , showWarnings = F
-)
-dir.create("03_Data/03_Results/99_Simulations/BigComputer"
-  , showWarnings = F
-)
-dir.create("03_Data/03_Results/99_Simulations/BigComputer/Static"
-  , showWarnings = F
-)
-dir.create("03_Data/03_Results/99_Simulations/BigComputer/Random"
-  , showWarnings = F
-)
+dir.create("03_Data/03_Results/99_Simulations", showWarnings = F)
 
 ################################################################################
 #### Run Simulation
 ################################################################################
-# Run each simulation 10 times
+# Run simulation 10 times
 tic()
-for (i in 1:1){
-  simulateDispersal(
-      randomize = F
-    , filename  = paste0(
-        "03_Data/03_Results/99_Simulations/Static/Iteration_"
-      , i
-      , ".rds"
-    )
-  )
-  simulateDispersal(
-      randomize = T
-    , filename  = paste0(
-        "03_Data/03_Results/99_Simulations/Random/Iteration_"
+for (i in 9:10){
+
+  # Run simulation
+  simulateDispersal(filename  = paste0(
+        "03_Data/03_Results/99_Simulations/Iteration_"
       , i
       , ".rds"
     )

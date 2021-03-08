@@ -16,9 +16,7 @@ library(lubridate)  # To handle dates nicely
 library(ggpubr)     # For nice plots
 library(davidoff)   # Custom functions
 library(glmmTMB)    # To handle model results
-library(cowplot)    # To add image to ggplot
 library(lemon)      # For nice axis labels
-library(imager)     # To import images
 library(viridis)    # For nice colors
 library(raster)     # To create rasters (visInt)
 library(ggdark)     # Dark ggplot theme
@@ -45,12 +43,12 @@ summary(best)
 # Calculate Confidence intervals
 coeffs <- getCoeffs(best, pvalue = TRUE)[-1, ] %>%
   mutate(
-      LCI_90 = Coefficient - 1.645 * SE
-    , UCI_90 = Coefficient + 1.645 * SE
-    , LCI_95 = Coefficient - 1.96 * SE
-    , UCI_95 = Coefficient + 1.96 * SE
-    , LCI_99 = Coefficient - 2.575 * SE
-    , UCI_99 = Coefficient + 2.575 * SE
+      LCI_90 = Coefficient - qnorm(1 - (1 - 0.90) / 2) * SE
+    , UCI_90 = Coefficient + qnorm(1 - (1 - 0.90) / 2) * SE
+    , LCI_95 = Coefficient - qnorm(1 - (1 - 0.95) / 2) * SE
+    , UCI_95 = Coefficient + qnorm(1 - (1 - 0.95) / 2) * SE
+    , LCI_99 = Coefficient - qnorm(1 - (1 - 0.99) / 2) * SE
+    , UCI_99 = Coefficient + qnorm(1 - (1 - 0.99) / 2) * SE
   )
 
 # Add stars indicating the significance
@@ -154,7 +152,7 @@ ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preferenc
   geom_errorbarh(aes(
       xmin = Coefficient - 1.96 * SE
     , xmax = Coefficient + 1.96 * SE)
-    , height = 0, size = 0.5, alpha = 0.75
+    , height = 0, size = 0.8, alpha = 0.75
   ) +
   geom_errorbarh(aes(
       xmin = Coefficient - 2.575 * SE
@@ -233,10 +231,56 @@ text <- data.frame(
 # Reorder the factors in the Group variable
 dat$Group <- factor(dat$Group, levels = c("Realized", "Random"))
 
+library(msir)
+loess <- dat %>%
+  group_by(Group) %>%
+  nest() %>%
+  mutate(data = lapply(data, function(x){
+    l <- loess.sd(x$Frequency ~ x$Rank)
+    df <- data.frame(
+        Loess = l$y
+      , Rank  = l$x
+      , Upper = l$upper
+      , Lower = l$lower
+    )
+    return(df)
+  })) %>%
+  unnest(data)
+
+# Plot the data
+ggplot(loess, aes(x = Rank, y = Loess)) +
+  geom_jitter(aes(x = Rank, y = Frequency)
+    , data  = dat,
+    , alpha = 0.15
+    , size  = 1
+  ) +
+  geom_ribbon(aes(ymin = Lower, ymax = Upper)
+    , alpha    = 0.4
+    , fill     = "darkorchid4"
+    , col      = "darkorchid4"
+    , linetype = "dashed"
+  ) +
+  geom_line(size = 1, col = "darkorchid4") +
+  facet_wrap("Group") +
+  theme_classic() +
+  coord_capped_cart(left = "both", bottom = "both") +
+  geom_text(data = text
+    , mapping = aes(
+        x = -Inf
+      , y = -Inf
+      , label = TeX(Text, output = "character")
+    )
+    , hjust   = -0.05
+    , vjust   = -0.5
+    , parse   = TRUE
+    , size    = 3
+  ) +
+  ylab("Frequency")
+
 # Plot the data
 ggplot(data = dat, aes(x = Rank, y = Frequency)) +
-  geom_jitter(alpha = 0.2, size = 1) +
-  geom_smooth(method = "loess") +
+  geom_jitter(alpha = 0.15, size = 1) +
+  geom_smooth(method = "loess", se = T, level = 0.95, fill = "blue") +
   theme_classic() +
   facet_wrap("Group") +
   coord_capped_cart(left = "both", bottom = "both") +

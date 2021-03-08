@@ -9,7 +9,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -66,13 +66,13 @@ rasterizeSims <- function(
 #### Load and Prepare Data
 ################################################################################
 # Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster250.tif")
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # For this part we can reduce the resolution of the raster drastically
 r <- aggregate(r, fact = 10)
 
 # Load the simulated dispersal trajectories
-sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
 
 # Check out the number of rows
 nrow(sims) / 1e6

@@ -7,7 +7,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -19,46 +19,18 @@ library(rgdal)        # For handling spatial data
 #### Putting Data Together
 ################################################################################
 # Identify all simulation files
-dir1 <- dir(
-    "03_Data/03_Results/99_Simulations/BigComputer/Static"
+files <- dir(
+    "03_Data/03_Results/99_Simulations"
   , pattern     = ".rds$"
   , full.names  = T
 )
-dir2 <- dir(
-    "03_Data/03_Results/99_Simulations/BigComputer/Random"
-  , pattern     = ".rds$"
-  , full.names  = T
-)
-
-# Put them together
-files <- rbind(
-    data.frame(filename = dir1, StartPoints = rep("Static", length(dir1)))
-  , data.frame(filename = dir2, StartPoints = rep("Random", length(dir2)))
-)
-
-# Let's check the files
-files
 
 # Load the files and bind their rows together
-sims <- lapply(1:nrow(files), function(x){
-
-  # Read the respective file
-  data <- read_rds(as.character(files$filename[x]))
-
-  # Add an indicator of the simID
-  data$SimID = x
-
-  # Indicate if start points where sampled statically or randomly
-  data$PointSampling = files$StartPoints[x]
-
-  # Return the respective data
-  return(data)
-
-  # Bind everything together
+sims <- lapply(1:length(files), function(x){
+  dat <- read_rds(files[x])
+  dat$SimID <- x
+  return(dat)
 }) %>% do.call(rbind, .)
-
-# Free some memory
-gc()
 
 # Take a look at the data
 head(sims)
@@ -69,17 +41,17 @@ nrow(sims) / 1e6
 # Because in each simulation we start off with new IDs for trajectories, they
 # are not unique across simulations. We thus combine ID and SimID to create an
 # ID that is unqiue to each simulated path, across all simulations
-sims <- sims %>% mutate(ID = group_indices(., SimID, ID))
+sims <- sims %>% mutate(TrackID = group_indices(., SimID, TrackID))
 
 # Make sure it worked
-table(table(sims$ID))
+table(table(sims$TrackID))
 
 # Collect garbage
 gc()
 
 # Let's also create a step counter, indicating the number of the step in its
 # respective trajectory
-sims <- sims %>% group_by(ID) %>% mutate(StepNumber = (row_number() - 1))
+sims <- sims %>% group_by(TrackID) %>% mutate(StepNumber = (row_number() - 1))
 
 # Check object size
 format(object.size(sims), units = "Gb")
