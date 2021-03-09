@@ -1,11 +1,12 @@
 ################################################################################
 #### Movement Model
 ################################################################################
-# Interpreting the movement model. I have fitted two different model. One were
-# all covariates (habitat AND movement covariates) have been scaled and one were
-# only habitat covariates have been scaled, yet the step length was converted to
-# kilometers. We'll use the first model to interpret the habitat kernel, yet the
-# second model to investigate the movement kernel.
+# Interpreting the movement model. I have fitted two different models. One were
+# all covariates (habitat AND movement covariates) were scaled and one were only
+# habitat covariates were scaled. In order for the second model to converge I
+# needed to convert the step lengths to  kilometers. We'll use the first model
+# to interpret the habitat kernel, yet the second model to investigate the
+# movement kernel.
 
 # Clear R's brain
 rm(list = ls())
@@ -21,12 +22,12 @@ options(scipen = 999)
 library(tidyverse)    # For data wrangling
 library(glmmTMB)      # To handle glmm models
 library(davidoff)     # Custom functions
-library(amt)          # For fitting distribution
+library(amt)          # For updating distributions
 library(lemon)        # For nice capped coords
-library(skimr)        # To skim through a dataframe
 library(viridis)      # For nice colors
+library(ggpubr)       # To arrange plots
 
-# Load our movement models
+# Load our movement models (scaled and partly scaled with km steps)
 model1 <- read_rds("03_Data/03_Results/99_MovementModel.rds")$Model[[1]]
 model2 <- read_rds("03_Data/03_Results/99_MovementModelUnscaled.rds")
 
@@ -39,13 +40,15 @@ sc_scal <- scaling$scale
 sl_dist <- read_rds("03_Data/03_Results/99_GammaDistribution.rds")
 sl_dist$params$scale <- sl_dist$params$scale / 1000
 
-# Prepare a turning angle distribution
+# Prepare a turning angle distribution. We used a uniform distribution, which is
+# similar to a vonmises distribution with kappa = 0
 ta_dist <- list(
     name   = "vonmises"
   , params = list(kappa = 0)
 )
 
-# Extract data from the movement model and unscale (un) the data
+# Extract data from the movement model and "unscale" the data. I'll refer to
+# unscaled data as data_un
 modeldat <- model1 %>%
   model.frame() %>%
   subset(case_) %>%
@@ -58,12 +61,13 @@ modeldat <- model1 %>%
     , SqrtDistanceToWater_un = SqrtDistanceToWater * sc_scal["SqrtDistanceToWater"] + sc_cent["SqrtDistanceToWater"]
     , Shrubs_un = Shrubs * sc_scal["Shrubs"] + sc_cent["Shrubs"]
     , Trees_un = Trees * sc_scal["Trees"] + sc_cent["Trees"]
-    , HumansBuff5000_un = Trees * sc_scal["HumansBuff5000"] + sc_cent["HumansBuff5000"]
+    , HumansBuff5000_un = HumansBuff5000 * sc_scal["HumansBuff5000"] + sc_cent["HumansBuff5000"]
   ) %>%
   mutate_all(as.numeric) %>%
   dplyr::select(sort(names(.)))
 
-# Identify the range on which we observed each covariate (scaled and unscaled)
+# Identify the range on which we observed each covariate on the scaled and
+# unscaled scale
 ranges <- modeldat %>%
   gather(key = Covariate, value = Value) %>%
   group_by(Covariate) %>%
@@ -116,24 +120,77 @@ dat <- lapply(seq_sl_, function(x){
 
 }) %>% do.call(rbind, .)
 
+# Backtransform the covariates
+dat$sl_ <- dat$sl_ * 1000
+
 # Visualize using contour
-ggplot(dat, aes(x = ta_, y = sl_, z = prob)) +
+p1a <- ggplot(dat, aes(x = ta_, y = sl_, z = prob)) +
   geom_contour_filled() +
   geom_contour(col = "black") +
-  scale_fill_viridis_d(option = "magma") +
+  scale_fill_viridis(
+      super  = metR::ScaleDiscretised
+    , option = "magma"
+    , name   = "Probability"
+    , guide  = guide_colorsteps(
+        show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
   theme_classic() +
   coord_capped_cart(left = "both", bottom = "both") +
-  labs(fill = "Probability")
+  scale_y_continuous(
+      breaks = seq(0, 35000, by = 5000)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  scale_x_continuous(
+      breaks = c(-pi, -pi/2, 0, pi/2, pi)
+    , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
+  ) +
+  xlab("Turning Angle") +
+  ylab("Step Length") +
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
 
-# Visualize using ggplot
-ggplot(dat, aes(x = ta_, y = prob, color = factor(sl_))) +
+# Visualize using x-y plot
+p1b <- ggplot(dat, aes(x = ta_, y = prob, group = sl_, color = sl_)) +
   geom_line(size = 1) +
   theme_classic() +
-  scale_color_viridis_d(begin = 0.2, end = 0.8, option = "magma") +
+  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 0.3)) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = "Step Length"
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
+  scale_y_continuous(
+      breaks = seq(0, 0.3, by = 0.05)
+    , labels = sprintf("%0.2f", seq(0, 0.3, by = 0.05))
+  ) +
+  scale_x_continuous(
+      breaks = c(-pi, -pi/2, 0, pi/2, pi)
+    , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
+  ) +
   xlab("Turning Angle") +
   ylab("Probability Density") +
-  labs(color = "Step Length") +
-  theme(legend.position = "none")
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
+
+# Arrange plots
+ggarrange(p1a, p1b)
 
 ################################################################################
 #### Turning Angle vs SqrtDistanceToWater
@@ -176,24 +233,73 @@ dat <- lapply(seq_wat_, function(x){
 
 }) %>% do.call(rbind, .)
 
+# Backtransform the covariates
+dat$SqrtDistanceToWater <- dat$SqrtDistanceToWater *
+  scaling$scale["SqrtDistanceToWater"] + scaling$center["SqrtDistanceToWater"]
+
 # Visualize using contour
-ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
+p2a <- ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
   geom_contour_filled() +
   geom_contour(col = "black") +
-  scale_fill_viridis_d(option = "magma") +
+  scale_fill_viridis(
+      super  = metR::ScaleDiscretised
+    , option = "magma"
+    , name   = "Probability"
+    , guide  = guide_colorsteps(
+        show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
   theme_classic() +
   coord_capped_cart(left = "both", bottom = "both") +
-  labs(fill = "Probability")
+  scale_y_continuous(
+      labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  scale_x_continuous(
+      breaks = c(-pi, -pi/2, 0, pi/2, pi)
+    , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
+  ) +
+  xlab("Turning Angle") +
+  ylab(expression(DistanceToWater^0.5)) +
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
 
-# Visualize using ggplot
-ggplot(dat, aes(x = ta_, y = prob, color = factor(SqrtDistanceToWater))) +
+# Visualize using x-y plot
+p2b <- ggplot(dat, aes(x = ta_, y = prob, group = SqrtDistanceToWater, color = SqrtDistanceToWater)) +
   geom_line(size = 1) +
   theme_classic() +
-  scale_color_viridis_d(begin = 0.2, end = 0.8, option = "magma") +
+  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 0.3)) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = expression(DistanceToWater^0.5)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = c(-pi, -pi/2, 0, pi/2, pi)
+    , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
+  ) +
   xlab("Turning Angle") +
   ylab("Probability Density") +
-  labs(color = "SqrtDistanceToWater") +
-  theme(legend.position = "none")
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
+
+# Arrange plots
+ggarrange(p2a, p2b)
 
 ################################################################################
 #### Turning Angle vs Humans
@@ -236,24 +342,73 @@ dat <- lapply(seq_hum_, function(x){
 
 }) %>% do.call(rbind, .)
 
+# Backtransform the covariates
+dat$HumansBuff5000 <- dat$HumansBuff5000 *
+  scaling$scale["HumansBuff5000"] + scaling$center["HumansBuff5000"]
+
 # Visualize using contour
-ggplot(dat, aes(x = ta_, y = HumansBuff5000, z = prob)) +
+p3a <- ggplot(dat, aes(x = ta_, y = HumansBuff5000, z = prob)) +
   geom_contour_filled() +
   geom_contour(col = "black") +
-  scale_fill_viridis_d(option = "magma") +
+  scale_fill_viridis(
+      super  = metR::ScaleDiscretised
+    , option = "magma"
+    , name   = "Probability"
+    , guide  = guide_colorsteps(
+        show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both") +
-  labs(fill = "Probability")
+  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 10)) +
+  scale_y_continuous(
+      breaks = seq(0, 10, by = 2)
+    , labels = seq(0, 10, by = 2)
+  ) +
+  scale_x_continuous(
+      breaks = c(-pi, -pi/2, 0, pi/2, pi)
+    , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
+  ) +
+  xlab("Turning Angle") +
+  ylab("Human Influence Index") +
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
 
-# Visualize using lines
-ggplot(dat, aes(x = ta_, y = prob, color = factor(SqrtDistanceToWater))) +
+# Visualize using x-y plot
+p3b <- ggplot(dat, aes(x = ta_, y = prob, group = HumansBuff5000, color = HumansBuff5000)) +
   geom_line(size = 1) +
   theme_classic() +
-  scale_color_viridis_d(begin = 0.2, end = 0.8, option = "magma") +
+  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 0.3)) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = "Human Influence Index"
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = c(-pi, -pi/2, 0, pi/2, pi)
+    , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
+  ) +
   xlab("Turning Angle") +
   ylab("Probability Density") +
-  labs(color = "SqrtDistanceToWater") +
-  theme(legend.position = "none")
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
+
+# Arrange plots
+ggarrange(p3a, p3b)
 
 ################################################################################
 #### Step Length vs Water
@@ -263,12 +418,12 @@ summary(model2)
 
 # Sequence for different distances to water
 seq_wat_ <- seq(
-    ranges$Min[ranges$Covariate == "SqrtDistanceToWater"]
-  , ranges$Max[ranges$Covariate == "SqrtDistanceToWater"]
+    ranges$Min[ranges$Covariate == "Water"]
+  , ranges$Max[ranges$Covariate == "Water"]
   , length.out = 100
 )
 
-# Show turning angle for different values of sl_
+# Show sl_ for different values of water
 dat <- lapply(seq_wat_, function(x){
 
   # Calculate updated vonmises distribution
@@ -290,40 +445,148 @@ dat <- lapply(seq_wat_, function(x){
   )
 
   # Prepare dataframe for plot
-  plot_ta <- data.frame(ta_ = seq(from = -pi, to = +pi, length.out = 1000))
+  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35000, length.out = 1000) / 1000)
 
-  # Insert the water cover
-  plot_ta$SqrtDistanceToWater <- x
+  # Insert the distance to water
+  plot_sl$Water <- x
 
   # Get probabilities from updated distribution
-  plot_ta$prob <- circular::dvonmises(plot_ta$ta_
-    , kappa = updated$params$kappa
-    , mu    = 0
+  plot_sl$prob <- dgamma(plot_sl$sl_
+    , scale = updated$params$scale
+    , shape = updated$params$shape
   )
 
   # Return the final data
-  return(plot_ta)
+  return(plot_sl)
 
 }) %>% do.call(rbind, .)
 
-# Visualize using contour
-ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
-  geom_contour_filled() +
-  geom_contour(col = "black") +
-  scale_fill_viridis_d(option = "magma") +
-  theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both") +
-  labs(fill = "Probability")
+# Backtransform covariates
+dat$sl_ <- dat$sl_ * 1000
+dat$Water <- dat$Water *
+  scaling$scale["Water"] + scaling$center["Water"]
 
-# Visualize using ggplot
-ggplot(dat, aes(x = ta_, y = prob, color = factor(SqrtDistanceToWater))) +
-  geom_line(size = 1) +
+# Visualize using x-y plot
+p4a <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
+  geom_line(size = 0.2) +
   theme_classic() +
-  scale_color_viridis_d(begin = 0.2, end = 0.8, option = "magma") +
-  xlab("Turning Angle") +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.3)
+    , xlim   = c(0, 35000)
+  ) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = "Water Cover"
+    , limits = c(0, 1)
+    , breaks = seq(0, 1, by = 0.2)
+    , labels = seq(0, 1, by = 0.2)
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = seq(0, 35000, 5000)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  xlab("Step Length") +
   ylab("Probability Density") +
-  labs(color = "SqrtDistanceToWater") +
-  theme(legend.position = "none")
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
+
+################################################################################
+#### Step Length vs SqrtDistanceToWater
+################################################################################
+# Sequence for different distances to water
+seq_wat_ <- seq(
+    ranges$Min[ranges$Covariate == "SqrtDistanceToWater"]
+  , ranges$Max[ranges$Covariate == "SqrtDistanceToWater"]
+  , length.out = 100
+)
+
+# Show sl_ for different values of water
+dat <- lapply(seq_wat_, function(x){
+
+  # Calculate updated vonmises distribution
+  updated <- update_gamma(dist = sl_dist
+    , beta_sl = coefs["sl_"] +
+      coefs["sl_:inactiveTRUE"] *
+        0 +
+      coefs["sl_:Water"] *
+        ranges$Center[ranges$Covariate == "Water"] +
+      coefs["sl_:Trees"] *
+        ranges$Center[ranges$Covariate == "Trees"] +
+      coefs["sl_:Shrubs"] *
+        ranges$Center[ranges$Covariate == "Shrubs"] +
+      coefs["sl_:SqrtDistanceToWater"] *
+        x
+    , beta_log_sl = coefs["log_sl_"] +
+      coefs["cos_ta_:log_sl_"] *
+        ranges$Center[ranges$Covariate == "cos_ta_un"]
+  )
+
+  # Prepare dataframe for plot
+  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35000, length.out = 1000) / 1000)
+
+  # Insert the distance to water
+  plot_sl$SqrtDistanceToWater <- x
+
+  # Get probabilities from updated distribution
+  plot_sl$prob <- dgamma(plot_sl$sl_
+    , scale = updated$params$scale
+    , shape = updated$params$shape
+  )
+
+  # Return the final data
+  return(plot_sl)
+
+}) %>% do.call(rbind, .)
+
+# Backtransform covariates
+dat$sl_ <- dat$sl_ * 1000
+dat$SqrtDistanceToWater <- dat$SqrtDistanceToWater *
+  scaling$scale["SqrtDistanceToWater"] + scaling$center["SqrtDistanceToWater"]
+
+# Visualize using x-y plot
+p4a <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = SqrtDistanceToWater)) +
+  geom_line(size = 0.2) +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.1)
+    , xlim   = c(0, 35000)
+  ) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = expression(DistanceToWater^0.5)
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = seq(0, 35000, 5000)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  xlab("Step Length") +
+  ylab("Probability Density") +
+  theme(
+      legend.position  = "bottom"
+    , legend.key.width = unit(2, "cm")
+  )
 
 
 
