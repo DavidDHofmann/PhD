@@ -26,12 +26,17 @@ library(amt)          # For updating distributions
 library(lemon)        # For nice capped coords
 library(viridis)      # For nice colors
 library(ggpubr)       # To arrange plots
+library(metR)         # To be able to get nice colorscales for factorial data
+
+# Load original data used to fit the model
+orig <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(SSF_Extracted).csv")
+orig <- subset(orig, case_)
 
 # Load our movement models (scaled and partly scaled with km steps)
 model1 <- read_rds("03_Data/03_Results/99_MovementModel.rds")$Model[[1]]
 model2 <- read_rds("03_Data/03_Results/99_MovementModelUnscaled.rds")
 
-# Load the scaling parameters
+# Load the scaling parameters so that we can rescale stuff for visuals
 scaling <- read_rds("03_Data/03_Results/99_Scaling.rds")
 sc_cent <- scaling$center
 sc_scal <- scaling$scale
@@ -39,6 +44,9 @@ sc_scal <- scaling$scale
 # Load the tentative gamma distribution and adjust it to kilometers
 sl_dist <- read_rds("03_Data/03_Results/99_GammaDistribution.rds")
 sl_dist$params$scale <- sl_dist$params$scale / 1000
+
+# It may be worth pointing out that this is the same as the following
+fit_distr(orig$sl_ / 1000, dist_name = "gamma")
 
 # Prepare a turning angle distribution. We used a uniform distribution, which is
 # similar to a vonmises distribution with kappa = 0
@@ -54,14 +62,14 @@ modeldat <- model1 %>%
   subset(case_) %>%
   dplyr::select(-c(case_, step_id_, id, inactive)) %>%
   mutate(
-      sl_un = sl_ * sc_scal["sl_"] + sc_cent["sl_"]
-    , log_sl_un = log_sl_ * sc_scal["log_sl_"] + sc_cent["log_sl_"]
-    , cos_ta_un = cos_ta_ * sc_scal["cos_ta_"] + sc_cent["cos_ta_"]
-    , Water_un = Water * sc_scal["Water"] + sc_cent["Water"]
+      sl_un                  = sl_ * sc_scal["sl_"] + sc_cent["sl_"]
+    , log_sl_un              = log_sl_ * sc_scal["log_sl_"] + sc_cent["log_sl_"]
+    , cos_ta_un              = cos_ta_ * sc_scal["cos_ta_"] + sc_cent["cos_ta_"]
+    , Water_un               = Water * sc_scal["Water"] + sc_cent["Water"]
     , SqrtDistanceToWater_un = SqrtDistanceToWater * sc_scal["SqrtDistanceToWater"] + sc_cent["SqrtDistanceToWater"]
-    , Shrubs_un = Shrubs * sc_scal["Shrubs"] + sc_cent["Shrubs"]
-    , Trees_un = Trees * sc_scal["Trees"] + sc_cent["Trees"]
-    , HumansBuff5000_un = HumansBuff5000 * sc_scal["HumansBuff5000"] + sc_cent["HumansBuff5000"]
+    , Shrubs_un              = Shrubs * sc_scal["Shrubs"] + sc_cent["Shrubs"]
+    , Trees_un               = Trees * sc_scal["Trees"] + sc_cent["Trees"]
+    , HumansBuff5000_un      = HumansBuff5000 * sc_scal["HumansBuff5000"] + sc_cent["HumansBuff5000"]
   ) %>%
   mutate_all(as.numeric) %>%
   dplyr::select(sort(names(.)))
@@ -71,18 +79,27 @@ modeldat <- model1 %>%
 ranges <- modeldat %>%
   gather(key = Covariate, value = Value) %>%
   group_by(Covariate) %>%
-  summarize(Min = min(Value), Max = max(Value), Center = (Min + Max) / 2)
+  summarize(
+      Min    = min(Value)
+    , Max    = max(Value)
+    , Center = (Min + Max) / 2
+    , Mean   = mean(Value)
+    , Median = median(Value)
+    , Q25    = quantile(Value, 0.25)
+    , Q75    = quantile(Value, 0.75)
+  )
 
 ################################################################################
 #### Turning Angle vs Step Length
 ################################################################################
-# Check out model to see on which variables the effect of turning angle depends
+# Check out the movement model to see on which interactions the effect of
+# turning angle depends
 summary(model2)
 
-# Extract model Coefficients
+# Extract model Coefficients from the partly scaled model in km
 coefs <- fixef(model2)$cond
 
-# Sequence for different step lengths
+# Sequence for different step lengths (unscaled)
 seq_sl_ <- seq(
     ranges$Min[ranges$Covariate == "sl_un"]
   , ranges$Max[ranges$Covariate == "sl_un"]
@@ -120,27 +137,41 @@ dat <- lapply(seq_sl_, function(x){
 
 }) %>% do.call(rbind, .)
 
-# Backtransform the covariates
+# Backtransform the step lengths to km
 dat$sl_ <- dat$sl_ * 1000
 
 # Visualize using contour
 p1a <- ggplot(dat, aes(x = ta_, y = sl_, z = prob)) +
   geom_contour_filled() +
+  geom_rug(data = orig, aes(x = ta_)
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
+  geom_rug(data = orig, aes(y = sl_)
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
   geom_contour(col = "black") +
   scale_fill_viridis(
       super  = metR::ScaleDiscretised
     , option = "magma"
-    , name   = "Probability"
+    , name   = "Probability Density"
     , guide  = guide_colorsteps(
         show.limits    = T
       , title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both") +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  ) +
   scale_y_continuous(
       breaks = seq(0, 35000, by = 5000)
     , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
@@ -151,16 +182,17 @@ p1a <- ggplot(dat, aes(x = ta_, y = sl_, z = prob)) +
   ) +
   xlab("Turning Angle") +
   ylab("Step Length") +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
 
 # Visualize using x-y plot
 p1b <- ggplot(dat, aes(x = ta_, y = prob, group = sl_, color = sl_)) +
   geom_line(size = 1) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 0.3)) +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.3)
+  ) +
   scale_color_viridis_c(
       begin  = 0.2
     , end    = 0.9
@@ -172,6 +204,7 @@ p1b <- ggplot(dat, aes(x = ta_, y = prob, group = sl_, color = sl_)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   scale_y_continuous(
@@ -184,13 +217,11 @@ p1b <- ggplot(dat, aes(x = ta_, y = prob, group = sl_, color = sl_)) +
   ) +
   xlab("Turning Angle") +
   ylab("Probability Density") +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
 
-# Arrange plots
-ggarrange(p1a, p1b)
+# Show plots
+p1a
+p1b
 
 ################################################################################
 #### Turning Angle vs SqrtDistanceToWater
@@ -235,26 +266,40 @@ dat <- lapply(seq_wat_, function(x){
 
 # Backtransform the covariates
 dat$SqrtDistanceToWater <- dat$SqrtDistanceToWater *
-  scaling$scale["SqrtDistanceToWater"] + scaling$center["SqrtDistanceToWater"]
+  sc_scal["SqrtDistanceToWater"] + sc_cent["SqrtDistanceToWater"]
 
 # Visualize using contour
 p2a <- ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
   geom_contour_filled() +
   geom_contour(col = "black") +
+  geom_rug(data = orig, aes(x = ta_)
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
+  geom_rug(data = orig, aes(y = sqrt(DistanceToWater))
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
   scale_fill_viridis(
       super  = metR::ScaleDiscretised
     , option = "magma"
-    , name   = "Probability"
+    , name   = "Probability Density"
     , guide  = guide_colorsteps(
         show.limits    = T
       , title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both") +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  ) +
   scale_y_continuous(
       labels = function(x){paste0(format(x, big.mark = "'"), "m")}
   ) +
@@ -264,16 +309,17 @@ p2a <- ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
   ) +
   xlab("Turning Angle") +
   ylab(expression(DistanceToWater^0.5)) +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
 
 # Visualize using x-y plot
 p2b <- ggplot(dat, aes(x = ta_, y = prob, group = SqrtDistanceToWater, color = SqrtDistanceToWater)) +
   geom_line(size = 1) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 0.3)) +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.3)
+  ) +
   scale_color_viridis_c(
       begin  = 0.2
     , end    = 0.9
@@ -285,6 +331,7 @@ p2b <- ggplot(dat, aes(x = ta_, y = prob, group = SqrtDistanceToWater, color = S
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   scale_x_continuous(
@@ -293,13 +340,11 @@ p2b <- ggplot(dat, aes(x = ta_, y = prob, group = SqrtDistanceToWater, color = S
   ) +
   xlab("Turning Angle") +
   ylab("Probability Density") +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
 
-# Arrange plots
-ggarrange(p2a, p2b)
+# Show plots
+p2a
+p2b
 
 ################################################################################
 #### Turning Angle vs Humans
@@ -344,26 +389,41 @@ dat <- lapply(seq_hum_, function(x){
 
 # Backtransform the covariates
 dat$HumansBuff5000 <- dat$HumansBuff5000 *
-  scaling$scale["HumansBuff5000"] + scaling$center["HumansBuff5000"]
+  sc_scal["HumansBuff5000"] + sc_cent["HumansBuff5000"]
 
 # Visualize using contour
 p3a <- ggplot(dat, aes(x = ta_, y = HumansBuff5000, z = prob)) +
   geom_contour_filled() +
   geom_contour(col = "black") +
+  geom_rug(data = orig, aes(x = ta_)
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
+  geom_rug(data = orig, aes(y = HumanInfluenceBuffer_5000)
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
   scale_fill_viridis(
       super  = metR::ScaleDiscretised
     , option = "magma"
-    , name   = "Probability"
+    , name   = "Probability Density"
     , guide  = guide_colorsteps(
         show.limits    = T
       , title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 10)) +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 10)
+  ) +
   scale_y_continuous(
       breaks = seq(0, 10, by = 2)
     , labels = seq(0, 10, by = 2)
@@ -374,16 +434,17 @@ p3a <- ggplot(dat, aes(x = ta_, y = HumansBuff5000, z = prob)) +
   ) +
   xlab("Turning Angle") +
   ylab("Human Influence Index") +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
 
 # Visualize using x-y plot
 p3b <- ggplot(dat, aes(x = ta_, y = prob, group = HumansBuff5000, color = HumansBuff5000)) +
   geom_line(size = 1) +
   theme_classic() +
-  coord_capped_cart(left = "both", bottom = "both", ylim = c(0, 0.3)) +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.3)
+  ) +
   scale_color_viridis_c(
       begin  = 0.2
     , end    = 0.9
@@ -394,6 +455,7 @@ p3b <- ggplot(dat, aes(x = ta_, y = prob, group = HumansBuff5000, color = Humans
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   scale_x_continuous(
@@ -402,13 +464,11 @@ p3b <- ggplot(dat, aes(x = ta_, y = prob, group = HumansBuff5000, color = Humans
   ) +
   xlab("Turning Angle") +
   ylab("Probability Density") +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
 
-# Arrange plots
-ggarrange(p3a, p3b)
+# Show plots
+p3a
+p3b
 
 ################################################################################
 #### Step Length vs Water
@@ -445,7 +505,7 @@ dat <- lapply(seq_wat_, function(x){
   )
 
   # Prepare dataframe for plot
-  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35000, length.out = 1000) / 1000)
+  plot_sl <- data.frame(sl_ = seq(from = 0, to = 35, length.out = 1000))
 
   # Insert the distance to water
   plot_sl$Water <- x
@@ -464,11 +524,16 @@ dat <- lapply(seq_wat_, function(x){
 # Backtransform covariates
 dat$sl_ <- dat$sl_ * 1000
 dat$Water <- dat$Water *
-  scaling$scale["Water"] + scaling$center["Water"]
+  sc_scal["Water"] + sc_cent["Water"]
 
 # Visualize using x-y plot
-p4a <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
+p4 <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
   geom_line(size = 0.2) +
+  geom_rug(data = orig, aes(x = sl_)
+    , inherit.aes = F
+    , size        = 0.3
+    , alpha       = 0.3
+  ) +
   theme_classic() +
   coord_capped_cart(
       left   = "both"
@@ -489,6 +554,7 @@ p4a <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   scale_x_continuous(
@@ -497,10 +563,10 @@ p4a <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
   ) +
   xlab("Step Length") +
   ylab("Probability Density") +
-  theme(
-      legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
-  )
+  theme(legend.position = "bottom")
+
+# Show plot
+p4
 
 ################################################################################
 #### Step Length vs SqrtDistanceToWater
@@ -534,7 +600,7 @@ dat <- lapply(seq_wat_, function(x){
   )
 
   # Prepare dataframe for plot
-  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35000, length.out = 1000) / 1000)
+  plot_sl <- data.frame(sl_ = seq(from = 0, to = 35, length.out = 1000))
 
   # Insert the distance to water
   plot_sl$SqrtDistanceToWater <- x
@@ -553,16 +619,16 @@ dat <- lapply(seq_wat_, function(x){
 # Backtransform covariates
 dat$sl_ <- dat$sl_ * 1000
 dat$SqrtDistanceToWater <- dat$SqrtDistanceToWater *
-  scaling$scale["SqrtDistanceToWater"] + scaling$center["SqrtDistanceToWater"]
+  sc_scal["SqrtDistanceToWater"] + sc_cent["SqrtDistanceToWater"]
 
 # Visualize using x-y plot
-p4a <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = SqrtDistanceToWater)) +
+p5 <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = SqrtDistanceToWater)) +
   geom_line(size = 0.2) +
   theme_classic() +
   coord_capped_cart(
       left   = "both"
     , bottom = "both"
-    , ylim   = c(0, 0.1)
+    , ylim   = c(0, 0.3)
     , xlim   = c(0, 35000)
   ) +
   scale_color_viridis_c(
@@ -570,11 +636,277 @@ p4a <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = S
     , end    = 0.9
     , option = "magma"
     , name   = expression(DistanceToWater^0.5)
+    , limits = c(0, 200)
+    , breaks = seq(0, 200, by = 50)
+    , labels = seq(0, 200, by = 50)
     , guide  = guide_colorbar(
         title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = seq(0, 35000, 5000)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  xlab("Step Length") +
+  ylab("Probability Density") +
+  theme(legend.position = "bottom")
+
+# Show plot
+p5
+
+################################################################################
+#### Step Length vs Shrubs
+################################################################################
+# Sequence for different shrub cover
+seq_shrub_ <- seq(
+    ranges$Min[ranges$Covariate == "Shrubs"]
+  , ranges$Max[ranges$Covariate == "Shrubs"]
+  , length.out = 100
+)
+
+# Show sl_ for different values of water
+dat <- lapply(seq_shrub_, function(x){
+
+  # Calculate updated vonmises distribution
+  updated <- update_gamma(dist = sl_dist
+    , beta_sl = coefs["sl_"] +
+      coefs["sl_:inactiveTRUE"] *
+        0 +
+      coefs["sl_:Water"] *
+        ranges$Center[ranges$Covariate == "Water"] +
+      coefs["sl_:Trees"] *
+        ranges$Center[ranges$Covariate == "Trees"] +
+      coefs["sl_:Shrubs"] *
+        x +
+      coefs["sl_:SqrtDistanceToWater"] *
+        ranges$Center[ranges$Covariate == "SqrtDistanceToWater"]
+    , beta_log_sl = coefs["log_sl_"] +
+      coefs["cos_ta_:log_sl_"] *
+        ranges$Center[ranges$Covariate == "cos_ta_un"]
+  )
+
+  # Prepare dataframe for plot
+  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35, length.out = 1000))
+
+  # Insert the distance to water
+  plot_sl$Shrubs <- x
+
+  # Get probabilities from updated distribution
+  plot_sl$prob <- dgamma(plot_sl$sl_
+    , scale = updated$params$scale
+    , shape = updated$params$shape
+  )
+
+  # Return the final data
+  return(plot_sl)
+
+}) %>% do.call(rbind, .)
+
+# Backtransform covariates
+dat$sl_ <- dat$sl_ * 1000
+dat$Shrubs <- dat$Shrubs *
+  sc_scal["Shrubs"] + sc_cent["Shrubs"]
+
+# Visualize using x-y plot
+p6 <- ggplot(dat, aes(x = sl_, y = prob, group = Shrubs, color = Shrubs)) +
+  geom_line(size = 0.2) +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.3)
+    , xlim   = c(0, 35000)
+  ) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = "Shrubs"
+    , limits = c(0, 1)
+    , breaks = seq(0, 1, by = 0.2)
+    , labels = seq(0, 1, by = 0.2)
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = seq(0, 35000, 5000)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  xlab("Step Length") +
+  ylab("Probability Density") +
+  theme(legend.position = "bottom")
+
+# Show plot
+p6
+
+################################################################################
+#### Step Length vs Trees
+################################################################################
+# Sequence for different shrub cover
+seq_tree_ <- seq(
+    ranges$Min[ranges$Covariate == "Trees"]
+  , ranges$Max[ranges$Covariate == "Trees"]
+  , length.out = 100
+)
+
+# Show sl_ for different values of water
+dat <- lapply(seq_tree_, function(x){
+
+  # Calculate updated vonmises distribution
+  updated <- update_gamma(dist = sl_dist
+    , beta_sl = coefs["sl_"] +
+      coefs["sl_:inactiveTRUE"] *
+        0 +
+      coefs["sl_:Water"] *
+        ranges$Center[ranges$Covariate == "Water"] +
+      coefs["sl_:Trees"] *
+        x +
+      coefs["sl_:Shrubs"] *
+        ranges$Center[ranges$Covariate == "Shrubs"] +
+      coefs["sl_:SqrtDistanceToWater"] *
+        ranges$Center[ranges$Covariate == "SqrtDistanceToWater"]
+    , beta_log_sl = coefs["log_sl_"] +
+      coefs["cos_ta_:log_sl_"] *
+        ranges$Center[ranges$Covariate == "cos_ta_un"]
+  )
+
+  # Prepare dataframe for plot
+  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35, length.out = 1000))
+
+  # Insert the distance to water
+  plot_sl$Trees <- x
+
+  # Get probabilities from updated distribution
+  plot_sl$prob <- dgamma(plot_sl$sl_
+    , scale = updated$params$scale
+    , shape = updated$params$shape
+  )
+
+  # Return the final data
+  return(plot_sl)
+
+}) %>% do.call(rbind, .)
+
+# Backtransform covariates
+dat$sl_ <- dat$sl_ * 1000
+dat$Trees <- dat$Trees *
+  sc_scal["Trees"] + sc_cent["Trees"]
+
+# Visualize using x-y plot
+p7 <- ggplot(dat, aes(x = sl_, y = prob, group = Trees, color = Trees)) +
+  geom_line(size = 0.2) +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.3)
+    , xlim   = c(0, 35000)
+  ) +
+  scale_color_viridis_c(
+      begin  = 0.2
+    , end    = 0.9
+    , option = "magma"
+    , name   = "Tree Cover"
+    , limits = c(0, 0.3)
+    , breaks = seq(0, 0.3, by = 0.05)
+    , labels = seq(0, 0.3, by = 0.05)
+    , guide  = guide_colorbar(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
+    )
+  ) +
+  scale_x_continuous(
+      breaks = seq(0, 35000, 5000)
+    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+  ) +
+  xlab("Step Length") +
+  ylab("Probability Density") +
+  theme(legend.position = "bottom")
+
+# Show plot
+p7
+
+################################################################################
+#### Step Length: Inactive vs Active
+################################################################################
+# Sequence for activity
+seq_active_ <- c(0, 1)
+
+# Show sl_ for different values of water
+dat <- lapply(seq_active_, function(x){
+
+  # Calculate updated vonmises distribution
+  updated <- update_gamma(dist = sl_dist
+    , beta_sl = coefs["sl_"] +
+      coefs["sl_:inactiveTRUE"] *
+        x +
+      coefs["sl_:Water"] *
+        ranges$Center[ranges$Covariate == "Water"] +
+      coefs["sl_:Trees"] *
+        ranges$Center[ranges$Covariate == "Trees"] +
+      coefs["sl_:Shrubs"] *
+        ranges$Center[ranges$Covariate == "Shrubs"] +
+      coefs["sl_:SqrtDistanceToWater"] *
+        ranges$Center[ranges$Covariate == "SqrtDistanceToWater"]
+    , beta_log_sl = coefs["log_sl_"] +
+      coefs["cos_ta_:log_sl_"] *
+        ranges$Center[ranges$Covariate == "cos_ta_un"]
+  )
+
+  # Prepare dataframe for plot
+  plot_sl <- data.frame(sl_ = seq(from = 1, to = 35, length.out = 1000))
+
+  # Insert the distance to water
+  plot_sl$Inactive <- x
+
+  # Get probabilities from updated distribution
+  plot_sl$prob <- dgamma(plot_sl$sl_
+    , scale = updated$params$scale
+    , shape = updated$params$shape
+  )
+
+  # Return the final data
+  return(plot_sl)
+
+}) %>% do.call(rbind, .)
+
+# Backtransform covariates
+dat$sl_ <- dat$sl_ * 1000
+
+# Visualize using x-y plot
+p8 <- ggplot(dat, aes(x = sl_, y = prob, color = factor(Inactive))) +
+  geom_line(size = 1) +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , ylim   = c(0, 0.2)
+    , xlim   = c(0, 35000)
+  ) +
+  scale_color_viridis_d(
+      begin  = 0.2
+    , end    = 0.8
+    , option = "magma"
+    , name   = "Period of Inactivity"
+    , labels = c(F, T)
+    , guide  = guide_legend(
+        title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.3, "cm")
+      , barwidth       = unit(10.0, "cm")
     )
   ) +
   scale_x_continuous(
@@ -588,115 +920,14 @@ p4a <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = S
     , legend.key.width = unit(2, "cm")
   )
 
+# Show plot
+p8
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Check out model
-summary(model2)
-
-# Load tentative gamma distribution and adjust it to kilometers
-sl_dist <- read_rds("03_Data/03_Results/99_GammaDistribution.rds")
-sl_dist$params$scale <- sl_dist$params$scale / 1000
-coefs <- fixef(model2)$cond
-
-# Step length distribution on dryland
-sl_low <- update_gamma(sl_dist
-  , beta_sl = coefs["sl_"] +
-      coefs["sl_:Trees"] * ranges$Min[ranges$Covariate == "Trees"] +
-      coefs["cos_ta_:sl_"] * ranges$Center[ranges$Covariate == "cos_ta_"]
-  , beta_log_sl = coefs["log_sl_"]
-)
-
-# Step length distribution in medium water
-sl_medium <- update_gamma(sl_dist
-  , beta_sl = coefs["sl_"] +
-      coefs["sl_:Trees"] * ranges$Center[ranges$Covariate == "Trees"] +
-      coefs["cos_ta_:sl_"] * ranges$Center[ranges$Covariate == "cos_ta_"]
-  , beta_log_sl = coefs["log_sl_"]
-)
-
-# Step length distribution in water
-sl_high <- update_gamma(sl_dist
-  , beta_sl = coefs["sl_"] +
-      coefs["sl_:Trees"] * ranges$Max[ranges$Covariate == "Trees"] +
-      coefs["cos_ta_:sl_"] * ranges$Center[ranges$Covariate == "cos_ta_"]
-  , beta_log_sl = coefs["log_sl_"]
-)
-
-# Prepare dataframe for plot
-plot_sl <- data.frame(sl_ = seq(from = 0.0, to = 35, length.out = 1000))
-plot_sl$low <- dgamma(plot_sl$sl_
-  , shape = sl_low$params$shape
-  , scale = sl_low$params$scale
-)
-plot_sl$medium <- dgamma(plot_sl$sl_
-  , shape = sl_medium$params$shape
-  , scale = sl_medium$params$scale
-)
-plot_sl$high <- dgamma(plot_sl$sl_
-  , shape = sl_high$params$shape
-  , scale = sl_high$params$scale
-)
-plot_sl <- pivot_longer(plot_sl, cols = -sl_)
-plot_sl$name <- factor(plot_sl$name, levels = c("high", "medium", "low"))
-
-# Visualize
-ggplot(plot_sl, aes(x = 1000 * sl_, y = value, color = name)) +
-  geom_line(size = 1) +
-  theme_classic() +
-  scale_color_viridis_d(begin = 0.2, end = 0.8) +
-  scale_y_sqrt(limits = c(0, 0.25)) +
-  xlab("Step Length (m)") +
-  ylab("Probability Density") +
-  labs(color = "Tree Cover")
-library(ggpubr)
-ggarrange(p1, p2, nrow = 2)
-# # Load observed steps
-# steps <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(SSF_Extracted).csv")
-# steps <- subset(steps, case_)
-#
-# # Categorize steps into small, medium, and large steps
-# steps <- mutate(steps, step_size = case_when(
-#     sl_ <= quantile(steps$sl_, 0.33) ~ "small"
-#   , sl_ > quantile(steps$sl_, 0.33) & sl_ <= quantile(steps$sl_, 0.66) ~ "medium"
-#   , sl_ > quantile(steps$sl_, 0.66) ~ "large"
-# ))
-#
-# # Calculate means per group
-# mean_steps <- steps %>%
-#   group_by(step_size) %>%
-#   summarize(sl_ = round(mean(sl_))) %>%
-#   mutate(log_sl_ = log(sl_))
-#
-# # Scale them
-# mean_steps <- mutate(mean_steps
-#   , sl_s = scale(sl_
-#     , center = scaling$center[["sl_"]]
-#     , scale  = scaling$scale[["sl_"]]
-#   )
-#   , log_sl_s = scale(log_sl_
-#     , center = scaling$center[["log_sl_"]]
-#     , scale  = scaling$scale[["log_sl_"]]
-#   )
-# )
+################################################################################
+#### Show all plots
+################################################################################
+ggarrange(p1a, p2a, p3a, p4, p5, p6, p7, p8)
+ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8)
 
 ################################################################################
 #### Function to Predict the RSS
@@ -817,24 +1048,11 @@ predictRSS <- function(model, df1, df2, ci = NULL, return_data = F){
 # contour(test, add = T)
 # as.matrix(spread(test, cos_ta_, rss))
 
-################################################################################
-#### Water
-################################################################################
-df1 <- data.frame(
-    sl_                 = mean_steps$sl_s[mean_steps$step_size == "medium"]
+# Create a reference dataframe (all covariates need to be scaled)
+ref <- data.frame(
+    sl_                 = scale(2000, center = sc_cent["sl_"], scale = sc_scal["sl_"])
   , cos_ta_             = 0
-  , log_sl_             = mean_steps$log_sl_s[mean_steps$step_size == "medium"]
-  , Shrubs              = 0
-  , Water               = seq(-2, 2, length.out = 1000)
-  , SqrtDistanceToWater = 0
-  , Trees               = 0
-  , HumansBuff5000      = 0
-  , inactive            = F
-)
-df2 <- data.frame(
-    sl_                 = mean_steps$sl_s[mean_steps$step_size == "medium"]
-  , cos_ta_             = 0
-  , log_sl_             = mean_steps$log_sl_s[mean_steps$step_size == "medium"]
+  , log_sl_             = scale(log(2000), center = sc_cent["log_sl_"], scale = sc_scal["log_sl_"])
   , Shrubs              = 0
   , Water               = 0
   , SqrtDistanceToWater = 0
@@ -843,114 +1061,170 @@ df2 <- data.frame(
   , inactive            = F
 )
 
-# Predict scores
-pred <- predictRSS(
-    model       = model
-  , df1         = df1
-  , df2         = df2
-  , ci          = c(0.99, 0.95, 0.9)
-  , return_data = T
-)
+# Function to plot RSS against a covariate
+showRSS <- function(
+    model     = NULL
+  , refdat    = NULL
+  , covariate = NULL
+  , ci        = c(0.99, 0.95, 0.9)
+  , values    = NULL){
 
-# Make tidy
-pred <- pred %>%
-  gather(key = Interval, value = Boundary, Lower_99:Upper_90) %>%
-  separate(Interval, into = c("Type", "Level"), sep = "_") %>%
-  spread(key = Type, value = Boundary)
+  # Create two dataframes. One as reference
+  df1 <- refdat
+  df2 <- refdat
 
-# Visualize
-ggplot(pred, aes(x = Water, y = RSS)) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "gray30") +
-  geom_ribbon(aes(ymin = Lower, ymax = Upper, group = Level)
-    , linetype  = "solid"
-    , alpha     = 0.33
-    , color     = "orange"
-    , fill      = "orange"
-    , lwd = 0.1
-  ) +
-  geom_line(size = 1) +
-  xlab("Water (SD)") +
-  ylab("RSS vs Water") +
-  theme_classic()
-
-################################################################################
-#### Turning Angle
-################################################################################
-# Check the model to see on what the effect of the turning angle depends
-summary(model)
-
-# Its influence depends on the values of "sl_", "HumansBuff5000",
-# and "SqrtDistanceToWater". Let's prepare a dataframe for this
-grid <- expand_grid(
-    step_size           = mean_steps$step_size[2]
-  , HumansBuff5000      = c(-2, 0, 2)
-  , SqrtDistanceToWater = c(-2, 0, 2)[2]
-)
-
-# Run prediction for three different step sizes
-preds <- lapply(1:nrow(grid), function(x){
-
-  # Prepare data frames
-  df1 <- data.frame(
-      sl_                 = mean_steps$sl_s[mean_steps$step_size == grid$step_size[x]]
-    , cos_ta_             = seq(-2, 2, length.out = 1000)
-    , log_sl_             = mean_steps$sl_s[mean_steps$step_size == grid$step_size[x]]
-    , Shrubs              = 0
-    , Water               = 0
-    , SqrtDistanceToWater = grid$SqrtDistanceToWater[x]
-    , Trees               = 0
-    , HumansBuff5000      = grid$HumansBuff5000[x]
-    , inactive            = F
-  )
-  df2 <- data.frame(
-      sl_                 = mean_steps$sl_s[mean_steps$step_size == grid$step_size[x]]
-    , cos_ta_             = 0
-    , log_sl_             = mean_steps$sl_s[mean_steps$step_size == grid$step_size[x]]
-    , Shrubs              = 0
-    , Water               = 0
-    , SqrtDistanceToWater = grid$SqrtDistanceToWater[x]
-    , Trees               = 0
-    , HumansBuff5000      = grid$HumansBuff5000[x]
-    , inactive            = F
-  )
+  # Replace the values of the covariate for which we check the RSS
+  df1 <- df1[rep(1, length(values)), ]
+  df1[, c(covariate)] <- values
 
   # Predict scores
   pred <- predictRSS(
       model       = model
     , df1         = df1
     , df2         = df2
-    , ci          = c(0.99, 0.95, 0.9)
-    , return_data = T
+    , ci          = ci
+    , return_data = F
   )
+
+  # Add the covariate
+  pred[, covariate] <- values
+
+  # Backtransform the covariate
+  pred[, covariate] <- pred[, covariate] * sc_scal[covariate] + sc_cent[covariate]
+  pred$Covariate <- pred[, covariate]
 
   # Make tidy
   pred <- pred %>%
-    gather(key = Interval, value = Boundary, Lower_99:Upper_90) %>%
+    gather(key = Interval, value = Boundary, c(contains("Lower"), contains("Upper"))) %>%
     separate(Interval, into = c("Type", "Level"), sep = "_") %>%
     spread(key = Type, value = Boundary)
 
-  # Indicate step size, human influence, SqrtDistanceToWater
-  pred$step_size <- grid$step_size[x]
-  pred$HumansBuff5000 <- grid$HumansBuff5000[x]
-  pred$SqrtDistanceToWater <- grid$SqrtDistanceToWater[x]
+  # Visualize
+  ggplot(pred, aes(x = Covariate, y = RSS)) +
+    geom_hline(yintercept = 1, linetype = "dashed", color = "gray30") +
+    geom_ribbon(aes(ymin = Lower, ymax = Upper, group = Level)
+      , linetype = "solid"
+      , alpha    = 0.33
+      , color    = "orange"
+      , fill     = "orange"
+      , lwd      = 0.1
+    ) +
+    geom_line(size = 1) +
+    xlab(covariate) +
+    ylab(paste0("RSS vs ", covariate)) +
+    theme_classic()
 
-  # Return the predictions
-  return(pred)
+}
 
-}) %>% do.call(rbind, .)
+# Span vectors for all variables that we want to check
+vars <- c("Water", "SqrtDistanceToWater", "Shrubs", "Trees", "HumansBuff5000")
+vars <- lapply(vars, function(x){
+  df <- seq(
+      ranges$Min[ranges$Covariate == x]
+    , ranges$Max[ranges$Covariate == x]
+    , length.out = 1000
+  ) %>% as.data.frame() %>% setNames(x)
+  return(df)
+}) %>% do.call(cbind, .)
 
-# Visualize
-ggplot(preds, aes(x = cos_ta_, y = RSS)) +
-  geom_hline(yintercept = 1, linetype = "dashed", color = "gray30") +
-  geom_ribbon(aes(ymin = Lower, ymax = Upper, group = Level)
-    , linetype  = "solid"
-    , alpha     = 0.33
-    , color     = "orange"
-    , fill      = "orange"
-    , lwd = 0.1
-  ) +
-  geom_line(size = 1) +
-  xlab("cos_ta_ (SD)") +
-  ylab("RSS vs cos_ta_") +
-  theme_classic() +
-  facet_wrap( ~ step_size + HumansBuff5000)
+# Visualize the RSS
+p9 <-   showRSS(model = model1, refdat = ref
+  , covariate = "Water", values = vars$Water)
+p10 <-  showRSS(model = model1, refdat = ref
+  , covariate = "SqrtDistanceToWater", values = vars$SqrtDistanceToWater)
+p11 <-  showRSS(model = model1, refdat = ref
+  , covariate = "Shrubs", values = vars$Shrubs)
+p12 <-  showRSS(model = model1, refdat = ref
+  , covariate = "Trees", values = vars$Trees)
+p13 <-  showRSS(model = model1, refdat = ref
+  , covariate = "HumansBuff5000", values = vars$HumansBuff5000)
+
+# Arrange them
+ggarrange(p9, p10, p11, p12, p13)
+
+# ################################################################################
+# #### Turning Angle
+# ################################################################################
+# # Check the model to see on what the effect of the turning angle depends
+# summary(model1)
+#
+# sl_ = scale(2000, center = sc_cent["sl_"], scale = sc_scal["sl_"])
+# log_sl_ = scale(log(2000), center = sc_cent["log_sl_"], scale = sc_scal["log_sl_"])
+#
+# # Its influence depends on the values of "sl_", "HumansBuff5000",
+# # and "SqrtDistanceToWater". Let's prepare a dataframe for this
+# grid <- expand_grid(
+#     sl_                 = as.vector(sl_)
+#   , log_sl_             = as.vector(log_sl_)
+#   , HumansBuff5000      = unname(unlist(ranges[ranges$Covariate == "sl_", ][, c("Min", "Center", "Max")]))
+#   , SqrtDistanceToWater = unname(unlist(ranges[, c("Min", "Center", "Max")][ranges$Covariate == "SqrtDistanceToWater", ]))
+# )
+#
+# # Run prediction for three different step sizes
+# preds <- lapply(1:nrow(grid), function(x){
+#
+#   # Prepare data frames
+#   df1 <- data.frame(
+#       sl_                 = grid$sl_[x]
+#     , cos_ta_             = seq(-2, 2, length.out = 1000)
+#     , log_sl_             = grid$log_sl_[x]
+#     , Shrubs              = 0
+#     , Water               = 0
+#     , SqrtDistanceToWater = grid$SqrtDistanceToWater[x]
+#     , Trees               = 0
+#     , HumansBuff5000      = grid$HumansBuff5000[x]
+#     , inactive            = F
+#   )
+#   df2 <- data.frame(
+#       sl_                 = grid$sl_[x]
+#     , cos_ta_             = 0
+#     , log_sl_             = grid$log_sl_[x]
+#     , Shrubs              = 0
+#     , Water               = 0
+#     , SqrtDistanceToWater = grid$SqrtDistanceToWater[x]
+#     , Trees               = 0
+#     , HumansBuff5000      = grid$HumansBuff5000[x]
+#     , inactive            = F
+#   )
+#
+#   # Predict scores
+#   pred <- predictRSS(
+#       model       = model1
+#     , df1         = df1
+#     , df2         = df2
+#     , ci          = c(0.99, 0.95, 0.9)
+#     , return_data = T
+#   )
+#
+#   # Make tidy
+#   pred <- pred %>%
+#     gather(key = Interval, value = Boundary, Lower_99:Upper_90) %>%
+#     separate(Interval, into = c("Type", "Level"), sep = "_") %>%
+#     spread(key = Type, value = Boundary)
+#
+#   # Indicate step size, human influence, SqrtDistanceToWater
+#   pred$sl_ <- grid$sl_[x]
+#   pred$log_sl_ <- grid$log_sl_[x]
+#   pred$HumansBuff5000 <- grid$HumansBuff5000[x]
+#   pred$SqrtDistanceToWater <- grid$SqrtDistanceToWater[x]
+#
+#   # Return the predictions
+#   return(pred)
+#
+# }) %>% do.call(rbind, .)
+#
+# # Visualize
+# ggplot(preds, aes(x = cos_ta_, y = RSS)) +
+#   geom_hline(yintercept = 1, linetype = "dashed", color = "gray30") +
+#   geom_ribbon(aes(ymin = Lower, ymax = Upper, group = Level)
+#     , linetype  = "solid"
+#     , alpha     = 0.33
+#     , color     = "orange"
+#     , fill      = "orange"
+#     , lwd = 0.1
+#   ) +
+#   geom_line(size = 1) +
+#   xlab("cos_ta_ (SD)") +
+#   ylab("RSS vs cos_ta_") +
+#   theme_classic() +
+#   facet_wrap( ~ HumansBuff5000 + SqrtDistanceToWater)

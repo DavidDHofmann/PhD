@@ -77,6 +77,15 @@ sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
 # Check out the number of rows
 nrow(sims) / 1e6
 
+water <- raster("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.tif")
+sub <- subset(sims, SourceArea %in% c(34, 35))
+sub <- subset(sims, TrackID %in% sample(unique(sub$TrackID), 1000))
+sub$ID <- sub$TrackID
+sub$PointSampling <- "Random"
+test <- sims2tracks(sub, steps = 2000, sampling = "Random")
+plot(crop(water, test))
+plot(test, add = T, lwd = 0.1)
+
 ################################################################################
 #### Rasterize Trajectories Once
 ################################################################################
