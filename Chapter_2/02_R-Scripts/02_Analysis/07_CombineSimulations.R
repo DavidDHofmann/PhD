@@ -7,7 +7,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/00_WildDogs"
+wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
 setwd(wd)
 
 # Load required packages

@@ -21,6 +21,7 @@ library(viridis)    # For nice colors
 library(raster)     # To create rasters (visInt)
 library(ggdark)     # Dark ggplot theme
 library(latex2exp)  # For latex expressions
+library(msir)       # For prediction interval around loess
 
 ################################################################################
 #### Prepare Data
@@ -147,17 +148,17 @@ ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preferenc
   geom_errorbarh(aes(
       xmin = Coefficient - 1.645 * SE
     , xmax = Coefficient + 1.645 * SE)
-    , height = 0, size = 1.5, alpha = 0.5
+    , height = 0, size = 3, alpha = 0.5
   ) +
   geom_errorbarh(aes(
       xmin = Coefficient - 1.96 * SE
     , xmax = Coefficient + 1.96 * SE)
-    , height = 0, size = 0.8, alpha = 0.75
+    , height = 0, size = 1.6, alpha = 0.75
   ) +
   geom_errorbarh(aes(
       xmin = Coefficient - 2.575 * SE
     , xmax = Coefficient + 2.575 * SE)
-    , height = 0, size = 0.2, alpha = 1
+    , height = 0, size = 0.4, alpha = 1
   ) +
   geom_text(aes(label = Significance, hjust = 0.5, vjust = -0.2), show.legend = F) +
   geom_vline(xintercept = 0, linetype = "dashed", color = "darkgrey") +
@@ -180,6 +181,61 @@ ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preferenc
 
 # Store the plot
 ggsave("test.png", device = "png", width = 10, height = 5, scale = 0.65)
+
+# Alternative plot
+ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 2.575 * SE
+    , xmax = Coefficient + 2.575 * SE)
+    , height = 0, size = 1, alpha = 0.2
+  ) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 1.96 * SE
+    , xmax = Coefficient + 1.96 * SE)
+    , height = 0, size = 2, alpha = 0.6
+  ) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 1.645 * SE
+    , xmax = Coefficient + 1.645 * SE)
+    , height = 0, size = 4, alpha = 1
+  ) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 2.575 * SE
+    , xmax = Coefficient + 2.575 * SE)
+    , height = 0, size = 0.1, alpha = 1
+    , col = "black"
+  ) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 1.96 * SE
+    , xmax = Coefficient + 1.96 * SE)
+    , height = 0, size = 0.5, alpha = 1
+    , col = "black"
+  ) +
+  geom_errorbarh(aes(
+      xmin = Coefficient - 1.645 * SE
+    , xmax = Coefficient + 1.645 * SE)
+    , height = 0, size = 1, alpha = 1
+    , col = "black"
+  ) +
+  geom_point(shape = 3, size = 3, col = "black") +
+  geom_text(aes(label = Significance, hjust = 0.5, vjust = -0.2), show.legend = F) +
+  geom_vline(xintercept = 0, linetype = "dashed", color = "darkgrey") +
+  scale_y_discrete(labels = rev(groups), limits = rev(order)) +
+  theme_classic() +
+  xlim(c(-1.3, 1.3)) +
+  coord_capped_cart(left = "both", bottom = "both") +
+  labs(x = expression(beta*"-Coefficient")) +
+  scale_color_manual(values = c("#5B9BD5", "orange")) +
+  # dark_theme_classic() +
+  theme(
+    #   panel.grid.minor = element_line(size = 0.0)
+    # , panel.grid.major = element_line(size = 0.0)
+    # , panel.border     = element_blank()
+    # , axis.line        = element_line()
+    # , axis.ticks       = element_line(colour = "black")
+    , legend.title     = element_blank()
+    # , axis.text.y      = element_text(color = rev(labcols))
+  )
 
 ################################################################################
 #### Validation
@@ -231,7 +287,7 @@ text <- data.frame(
 # Reorder the factors in the Group variable
 dat$Group <- factor(dat$Group, levels = c("Realized", "Random"))
 
-library(msir)
+# Get loess
 loess <- dat %>%
   group_by(Group) %>%
   nest() %>%

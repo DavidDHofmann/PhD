@@ -1,3 +1,4 @@
+
 ################################################################################
 #### Analysis of Simulated Dispersal Events
 ################################################################################
@@ -9,7 +10,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/media/david/My Passport/Backups/WildDogs/15. PhD/00_WildDogs"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -30,35 +31,26 @@ set.seed(12345)
 ################################################################################
 # Load the simulated dispersal trajectories
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+length(unique(sims$TrackID))
+sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), 6800))
 
 # Subset to simulations of interest
-sims <- subset(sims
-  , StepNumber    <= 500
-  & PointSampling == "Static"
-)
+sims <- subset(sims, StepNumber <= 500)
 
-# # For now, only keep 5 trajectories per source point
-# set.seed(123)
+# # For now, only keep a few trajectories
 # sims <- sims %>%
-#   group_by(StartPoint, ID) %>%
-#   nest() %>%
-#   group_by(StartPoint) %>%
-#   sample_n(5) %>%
+#   group_by(TrackID) %>%
+#   sample_n(100) %>%
 #   unnest()
 
 # Load the reference raster
-r <- raster("03_Data/02_CleanData/00_General_Raster250.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Prepare multiple rasters with different resolutions for scaling analysis. We
 # will simply use our reference raster and coarsen its resolution.
 r10000  <- aggregate(r, fact = 10000 / 250)
 r5000   <- aggregate(r, fact = 5000 / 250)
 r2500   <- aggregate(r, fact = 2500 / 250)
-
-# Alternatively, we could also run the following commands
-# r10000  <- raster(extent(r), resolution = metersToDegrees(10000))
-# r5000   <- raster(extent(r), resolution = metersToDegrees(5000))
-# r2500   <- raster(extent(r), resolution = metersToDegrees(2500))
 
 # Store them to file to save some memory
 r10000  <- writeRaster(r10000, tempfile())
@@ -94,13 +86,18 @@ crs(sims) <- CRS("+init=epsg:4326")
 
 # At each coordinate we now extract the cell IDs from the different rasters
 visits <- data.frame(
-    ID      = sims$ID
+    TrackID = sims$TrackID
   , x       = coordinates(sims)[, 1]
   , y       = coordinates(sims)[, 2]
   , R10000  = raster::extract(r10000, sims)
-  , R5000   = raster::extract(r5000, sims)
-  , R2500   = raster::extract(r2500, sims)
+  # , R5000   = raster::extract(r5000, sims)
+  # , R2500   = raster::extract(r2500, sims)
 )
+
+# Some visits will happen in the buffer zone, therefore returning NA values
+sum(is.na(visits$R10000))
+sum(is.na(visits$R5000))
+sum(is.na(visits$R2500))
 
 # We now want to create a visitation history for each trajectory. This history
 # depicts all transitions from one raster cell to another. To do this
@@ -120,10 +117,11 @@ visitHist <- function(x, singlecount = F){
 # Let's check what the function does exactly
 visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = F)
 visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = T)
+visitHist(c(1, 2, 2, NA, 4, 5, 1, 2), singlecount = T)
 
 # We want to retrieve the visitation history to each trajectory seperately, so
 # let's nest them.
-visits <- visits %>% nest(data = -ID)
+visits <- visits %>% nest(data = -TrackID)
 
 # Apply the function to each trajectory for each raster. We therefore identify
 # the visitation history of each trajectory for each of the different spatial
@@ -189,7 +187,7 @@ netMet <- function(
       result[[3]] <- degree
     }
 
-    # Remove NULLs from the lsit
+    # Remove NULLs from the list
     result <- plyr::compact(result)
 
     # Put all into a stack
@@ -218,11 +216,12 @@ stackMet <- function(
     }
     return(funned)
 }
+
 ################################################################################
 #### TESTING: SINGLE TRJAJECTORIES
 ################################################################################
 # Select an index
-i <- 2500
+i <- 1000
 
 # Extract first trajectory
 traj <- visits$data[[i]]
@@ -237,7 +236,16 @@ plot(traj, add = T, col = "red")
 graph <- graph_from_data_frame(visits$History10000[[i]], vertices = vertices10000)
 
 # Visualize the transitions
-plot(graph, layout = lay10000, vertex.size = 0, edge.size = 0.1, edge.arrow.size = 0, vertex.label = NA)
+plot(simplify(graph, remove.loops = T), layout = lay10000
+  , vertex.size        = 0
+  , vertex.color       = colTrans("gray")
+  , vertex.frame.color = colTrans("gray")
+  , vertex.label       = NA
+  , edge.size          = 0.1
+  , edge.arrow.size    = 0
+  , edge.curved        = 0
+  , edge.color         = "orange"
+)
 
 # Calculate network metrics
 mets <- netMet(network = graph, raster = r10000)
@@ -256,7 +264,7 @@ visits_all_ww1 <- tibble(
       group_by(from, to) %>%
       summarize(TotalConnections = sum(TotalConnections)) %>%
       ungroup() %>%
-      mutate(weight = max(TotalConnections) - TotalConnections) + 1
+      mutate(weight = max(TotalConnections) - TotalConnections + 1)
   )
 )
 visits_all_ww2 <- tibble(
@@ -278,9 +286,12 @@ visits_all_nw <- tibble(
 )
 
 # Create graphs
-net_ww1 <- graph_from_data_frame(visits_all_ww1$History10000[[1]], vertices = vertices10000)
-net_ww2 <- graph_from_data_frame(visits_all_ww2$History10000[[1]], vertices = vertices10000)
-net_nw <- graph_from_data_frame(visits_all_nw$History10000[[1]], vertices = vertices10000)
+net_ww1 <- graph_from_data_frame(visits_all_ww1$History10000[[1]]
+  , vertices = vertices10000)
+net_ww2 <- graph_from_data_frame(visits_all_ww2$History10000[[1]]
+  , vertices = vertices10000)
+net_nw <- graph_from_data_frame(visits_all_nw$History10000[[1]]
+  , vertices = vertices10000)
 
 # Check if weighted
 is_weighted(net_ww1)
@@ -295,7 +306,7 @@ is_connected(net_nw)
 # Calculate metrics
 res_ww1 <- netMet(network = net_ww1, raster = r10000)
 res_ww2 <- netMet(network = net_ww2, raster = r10000)
-res_nw <- netMet(network = net_nw, raster = r10000)
+res_nw  <- netMet(network = net_nw, raster = r10000)
 
 # Calculate centralization betweenness
 centralization.betweenness(net_ww1)$centralization
@@ -304,9 +315,9 @@ centralization.betweenness(net_nw)$centralization
 
 # Compare results
 par(mfrow = c(2, 2))
-plot(sqrt(res_ww1[["betweenness"]]), col = viridis(20), main = "With Weights fun 1")
-plot(sqrt(res_ww2[["betweenness"]]), col = viridis(20), main = "With Weights fun 2")
-plot(sqrt(res_nw[["betweenness"]]), col = viridis(20), main = "Without Weights")
+plot(sqrt(res_ww1[["betweenness"]]), col = viridis(50), main = "With Weights fun 1")
+plot(sqrt(res_ww2[["betweenness"]]), col = magma(50), main = "With Weights fun 2")
+plot(sqrt(res_nw[["betweenness"]]), col = viridis(50), main = "Without Weights")
 
 par(mfrow = c(2, 2))
 plot(sqrt(res_ww1[["degree"]]), col = viridis(20), main = "With Weights fun 1")

@@ -17,6 +17,7 @@ library(rgdal)        # For handling spatial data
 library(pbmcapply)    # For multicore processes with progress bar
 library(davidoff)     # Access to custom functions
 library(rgeos)        # For spatial data manipulation
+library(lemon)        # For capped coordinates
 
 ################################################################################
 #### Putting Data Together
@@ -27,6 +28,9 @@ files <- dir(
   , pattern     = ".rds$"
   , full.names  = T
 )
+
+# How many are there?
+length(files)
 
 # Load the files and bind their rows together
 sims <- lapply(1:length(files), function(x){
@@ -66,7 +70,7 @@ write_rds(sims, "03_Data/03_Results/99_DispersalSimulationSub.rds")
 #### Test Convergence
 ################################################################################
 # Coerce simulations to proper trajectories
-tracks <- sims2tracks(sims, keep.data = F, steps = 2000)
+tracks <- sims2tracks(sims, keep.data = T, steps = 2000)
 
 # Load reference shapefile
 s <- readOGR("03_Data/02_CleanData/00_General_Shapefile.shp")
@@ -93,12 +97,12 @@ buffer_areas <- readOGR("03_Data/03_Results/99_BufferArea.shp")
 plot(buffer_areas
   , axes   = T
   , las    = 1
-  , col = colTrans("darkgreen", 80)
+  , col    = "gray40"
   , border = NA
   , main   = "Checkpoints in Study Area"
 )
 plot(source_areas
-  , col = colTrans("darkgreen", 40)
+  , col    = colTrans("darkgreen")
   , border = NA
   , main   = "Checkpoints in Study Area"
   , add    = T
@@ -112,21 +116,25 @@ plot(check
 )
 plot(tracks[sample(nrow(tracks), 10), ]
   , add = T
-  , col = colTrans("purple")
+  , col = "gold"
+  , lwd = 0.6
 )
 legend("bottomright"
   , legend = c("Checkpoints", "Source Areas", "Buffer Zone", "Simulated Dispersers")
   , pch    = c(15, 15, 15, NA)
   , lty    = c(NA, NA, NA, 1)
-  , col    = c("blue", colTrans("darkgreen", 40), colTrans("darkgreen", 80), "purple")
+  , col    = c("blue", colTrans("darkgreen"), "gray", "gold")
 )
 
 # Prepare a design matrix through which we will loop
 design <- expand_grid(
-    NTracks    = seq(0, length(ids), by = 100)
+    NTracks    = seq(0, length(unique(tracks$TrackID)), by = 500)
   , Replicate  = c(1:100)
 )
-design <- design[1:400, ]
+
+# Let's shuffle the matrix (makes prediction of calculation time in pbmclapply
+# more accurate)
+design <- design[sample(nrow(design), replace = F), ]
 
 # Go through the design matrix and assess the traversal frequency at the
 # checkpoints
@@ -136,18 +144,34 @@ convergence <- mutate(design, Frequency = pbmclapply(
   , mc.cores           = detectCores() - 1
   , FUN                = function(x){
 
-  # Sample simulated trajectories
-  sub <- subset(tracks, TrackID %in%
-    sample(ids, size = design$NTracks[x], replace = T))
+  # Sample simulated trajectories. Some lines may be sampled twice, which leads
+  # to an issue with non-unique lineIDs. Hence, I'll change them if needed
+  sub <- tracks[sample(length(tracks), size = design$NTracks[x], replace = T), ]
+  if (length(sub) > 0){
+    quiet <- lapply(1:length(sub), function(z){
+      sub@lines[[z]]@ID <<- as.character(z)
+    })
+  }
 
   # Check number of intersections at each checkpoint
-  ints <- suppressWarnings(gIntersects(sub, check, byid = T))
+  ints <- suppressWarnings(gIntersects(sub, check, byid = T, prepared = T))
   ints <- rowSums(ints)
   ints <- enframe(ints, name = "CheckID", value = "Traversals")
 
+  # Remove garbage
+  gc()
+
   # Return the results
   return(ints)
+
 }))
+
+# Check object size
+format(object.size(convergence), units = "Gb")
+
+# Store results
+write_rds(convergence, "03_Data/03_Results/99_Convergence.rds")
+convergence <- read_rds("03_Data/03_Results/99_Convergence.rds")
 
 # Clean results and calculate relative traversal frequency
 convergence <- convergence %>%
@@ -160,21 +184,27 @@ convergence <- convergence %>%
 
 # Look for local convergence
 convergence %>%
-  subset(CheckID %in% sample(unique(convergence$CheckID), 10)) %>%
+  subset(CheckID %in% sample(unique(convergence$CheckID), 8)) %>%
   group_by(NTracks, CheckID) %>%
   summarize(
       MeanRelativeTraversals = mean(RelativeTraversals)
     , Upper = quantile(RelativeTraversals, 0.975)
     , Lower = quantile(RelativeTraversals, 0.025)
   ) %>%
+  # subset(MeanRelativeTraversals > 0) %>%
   ggplot(aes(x = NTracks, y = MeanRelativeTraversals)) +
   geom_ribbon(aes(
       ymin = Lower
     , ymax = Upper
-  ), alpha = 0.5) +
+  ), alpha = 0.5, fill = "orange", color = "orange") +
   geom_line() +
-  geom_point() +
-  facet_wrap("CheckID", scales = "free")
+  geom_point(size = 0.2) +
+  facet_wrap("CheckID", scales = "free", nrow = 4) +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  )
 
 # Look for global convergence
 convergence %>%
@@ -188,44 +218,16 @@ convergence %>%
     , Upper = quantile(RelativeTraversals, 0.975)
     , Lower = quantile(RelativeTraversals, 0.025)
   ) %>%
+  subset(MeanRelativeTraversals > 0) %>%
   ggplot(aes(x = NTracks, y = MeanRelativeTraversals)) +
   geom_ribbon(aes(
       ymin = Lower
     , ymax = Upper
-  ), alpha = 0.5) +
+  ), alpha = 0.5, fill = "orange", color = "orange") +
   geom_line() +
-  geom_point()
-
-# # Identify means per replicate
-# means <- convergence %>%
-#   group_by(NTracks, Replicate) %>%
-#   summarize(MeanRelativeTraversals = mean(RelativeTraversals)) %>%
-#   subset(!is.nan(MeanRelativeTraversals))
-#
-# # Calculate confidence intervals around means
-# ci <- means %>%
-#   ungroup() %>%
-#   pivot_wider(names_from = Replicate, values_from = MeanRelativeTraversals) %>%
-#   dplyr::select(-NTracks) %>%
-#   apply(1, quantile, c(0.025, 0.975)) %>%
-#   t() %>%
-#   as.data.frame() %>%
-#   setNames(c("Lower", "Upper"))
-#
-# # Calculate means per number of simulation
-# means <- means %>%
-#   group_by(NTracks) %>%
-#   summarize(MeanRelativeTraversals = mean(MeanRelativeTraversals)) %>%
-#   cbind(., ci)
-#
-# # Visualize
-# ggplot(means, aes(x = NTracks, y = MeanRelativeTraversals)) +
-#   geom_ribbon(aes(ymin = Lower, ymax = Upper), alpha = 0.3, col = "orange", fill = "orange") +
-#   geom_point() +
-#   geom_line() +
-#   theme_classic()
-#
-# # Or simpler
-# plot(MeanRelativeTraversals ~ NTracks, data = means, type = "b", ylim = c(0, 0.009))
-# lines(Upper ~ NTracks, data = means, lty = 2, col = "gray50")
-# lines(Lower ~ NTracks, data = means, lty = 2, col = "gray50")
+  geom_point() +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  )
