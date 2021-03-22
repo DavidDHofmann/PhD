@@ -64,21 +64,40 @@ sims <- sims %>% group_by(TrackID) %>% mutate(StepNumber = (row_number()))
 format(object.size(sims), units = "Gb")
 
 # Write to an rds
-write_rds(sims, "03_Data/03_Results/99_DispersalSimulationSub.rds")
+write_rds(sims, "03_Data/03_Results/99_DispersalSimulation.rds")
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+
+# Function to subset simulations
+subsims <- function(simulations, nid = NULL){
+
+  # Sample ids
+  ids <- unique(simulations$TrackID)
+  ids <- sample(ids, size = nid, replace = F)
+
+  # Subset to respective simulations
+  sub <- simulations[simulations$TrackID %in% ids, ]
+
+  # Return the subset
+  return(sub)
+}
+
+# Subset simulations
+sub <- subsims(sims, nid = 1000)
+sims <- sub
+gc()
 
 ################################################################################
-#### Test Convergence
+#### Seek Convergence
 ################################################################################
-# Coerce simulations to proper trajectories
-tracks <- sims2tracks(sims, keep.data = T, steps = 2000)
+# Coerce simulations to spatial lines
+tracks <- sims2tracks(sims, keep.data = F, steps = 2000)
 
 # Load reference shapefile
 s <- readOGR("03_Data/02_CleanData/00_General_Shapefile.shp")
 
 # Distribute 1000 "chek points" in our study area. For this, generate 5km2
 # squares in our study area
-check <- raster(s, res = metersToDegrees(5000))
-values(check) <- 0
+check <- raster(s, res = metersToDegrees(5000), vals = 0)
 values(check)[sample(1:ncell(check), 1000)] <- 1
 check <- rasterToPolygons(check, fun = function(x){x == 1})
 
@@ -126,9 +145,13 @@ legend("bottomright"
   , col    = c("blue", colTrans("darkgreen"), "gray", "gold")
 )
 
+# Free space
+rm(sims, buffer_areas, source_areas, files, ints, s)
+gc()
+
 # Prepare a design matrix through which we will loop
 design <- expand_grid(
-    NTracks    = seq(0, length(unique(tracks$TrackID)), by = 500)
+    NTracks    = seq(0, length(unique(tracks$TrackID)), by = 1000)
   , Replicate  = c(1:100)
 )
 
@@ -138,27 +161,29 @@ design <- design[sample(nrow(design), replace = F), ]
 
 # Go through the design matrix and assess the traversal frequency at the
 # checkpoints
-convergence <- mutate(design, Frequency = pbmclapply(
+convergence <- design
+convergence$Frequency <- NULL
+convergence <- mutate(convergence, Frequency = pbmclapply(
     X                  = 1:nrow(design)
   , ignore.interactive = T
-  , mc.cores           = detectCores() - 1
+  , mc.cores           = detectCores() / 2
   , FUN                = function(x){
 
-  # Sample simulated trajectories. Some lines may be sampled twice, which leads
-  # to an issue with non-unique lineIDs. Hence, I'll change them if needed
-  sub <- tracks[sample(length(tracks), size = design$NTracks[x], replace = T), ]
-  if (length(sub) > 0){
-    quiet <- lapply(1:length(sub), function(z){
-      sub@lines[[z]]@ID <<- as.character(z)
-    })
-  }
+  # Sample track ids
+  index <- sort(sample(nrow(tracks), size = design$NTracks[x], replace = T))
+  freq <- as.vector(table(index))
+
+  # Subset to respectice tracks
+  sub <- tracks[unique(index), ]
 
   # Check number of intersections at each checkpoint
-  ints <- suppressWarnings(gIntersects(sub, check, byid = T, prepared = T))
+  ints <- suppressWarnings(gIntersects(sub, check, byid = T, prepared = T)) * 1
+  ints <- t(t(ints) * freq)
   ints <- rowSums(ints)
   ints <- enframe(ints, name = "CheckID", value = "Traversals")
 
-  # Remove garbage
+  # Collect garbage
+  rm(sub)
   gc()
 
   # Return the results
@@ -169,10 +194,6 @@ convergence <- mutate(design, Frequency = pbmclapply(
 # Check object size
 format(object.size(convergence), units = "Gb")
 
-# Store results
-write_rds(convergence, "03_Data/03_Results/99_Convergence.rds")
-convergence <- read_rds("03_Data/03_Results/99_Convergence.rds")
-
 # Clean results and calculate relative traversal frequency
 convergence <- convergence %>%
   unnest(cols = Frequency) %>%
@@ -181,6 +202,10 @@ convergence <- convergence %>%
   , 0
   , RelativeTraversals)
 )
+
+# Store results
+write_rds(convergence, "03_Data/03_Results/99_Convergence.rds")
+convergence <- read_rds("03_Data/03_Results/99_Convergence.rds")
 
 # Look for local convergence
 convergence %>%
@@ -231,3 +256,26 @@ convergence %>%
       left   = "both"
     , bottom = "both"
   )
+
+# Check the width of the confidence interval over time
+convergence %>%
+  subset(CheckID %in% sample(unique(convergence$CheckID), 8)) %>%
+  group_by(NTracks, CheckID) %>%
+  summarize(
+      MeanRelativeTraversals = mean(RelativeTraversals)
+    , Upper = quantile(RelativeTraversals, 0.975)
+    , Lower = quantile(RelativeTraversals, 0.025)
+    , Width = Upper - Lower
+  ) %>%
+  # subset(MeanRelativeTraversals > 0) %>%
+  ggplot(aes(x = NTracks, y = Width)) +
+  geom_hline(yintercept = 0.01, lty = 2, col = "gray40") +
+  geom_line(col = "orange") +
+  geom_point(col = "orange", size = 0.2) +
+  facet_wrap("CheckID", nrow = 4) +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  ) +
+  ylim(c(0, 0.03))

@@ -25,7 +25,6 @@ library(lubridate)    # To handle timestamps
 library(tictoc)       # For simple benchmarking
 library(pbmcapply)    # For multicore lapply with progress bar
 library(rgeos)        # For manipulation of spatial data
-library(adehabitatLT) # For some simple step metrics
 
 # How many steps per disperser do you want to simulate?
 n_steps <- 2000
@@ -558,82 +557,82 @@ disperse <- function(
 ###############################################################################
 ### Test of Function
 ###############################################################################
-# Sample source points
-source_points <- spsample(source_areas, n = 1000, type = "random")
-
-# Visualize
-plot(source_areas)
-plot(source_points, add = T, col = "red", cex = 0.1)
-
-# Try out the function on the first 50 source points
-tic()
-sim <- pbmclapply(1:100
-  , mc.cores           = detectCores() - 1
-  , ignore.interactive = T
-  , FUN                = function(x){
-    si <- disperse(
-        source    = source_points[x, ]
-      , covars    = covars
-      , model     = model
-      , sl_dist   = sl_dist
-      , sl_max    = sl_max
-      , n_rsteps  = n_rsteps
-      , n_steps   = 200
-      , stop      = F
-      , scaling   = scaling
-      , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
-    )
-    si$TrackID <- x
-    return(si)
-})
-toc()
-
-# Coerce the simulations to tracks
-sims <- lapply(sim, function(x){
-  coordinates(x) <- c("x", "y")
-  l <- spLines(x)
-  return(l)
-}) %>% do.call(rbind, .)
-
-# Bind simulations
-sim <- do.call(rbind, sim)
-
-# Visualize simulations
-plot(crop(layers[[1]], sims))
-plot(sims, add = T)
-
-# Load observed dispersers
-obs <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(SSF_Extracted).csv")
-obs <- subset(obs, case_)
-
-# Check the distribution of step lengths and turning angles and compare them to
-# the observed data
-cbind(
-    Simulation  = summary(sim$sl_)
-  , Observerd   = summary(obs$sl_)
-  , Tentative   = summary(rgamma(10000
-      , shape = sl_dist$params$shape
-      , scale = sl_dist$params$scale
-    ))
-)
-
-# Visualize
-turns <- data.frame(
-    Group        = c(rep("Simulation", nrow(sim)), rep("Observed", nrow(obs)))
-  , TurningAngle = c(sim$ta_, obs$ta_)
-)
-lengths <- data.frame(
-    Group        = c(rep("Simulation", nrow(sim)), rep("Observed", nrow(obs)))
-  , StepLength   = c(sim$sl_, obs$sl_)
-)
-ggplot(turns, aes(x = cos(TurningAngle), fill = Group)) +
-  geom_density(alpha = 0.2)
-ggplot(lengths, aes(x = StepLength, fill = Group)) +
-  geom_density(alpha = 0.2)
-
-# Compare steps lengths during activity and inactivity
-ggplot(sim, aes(x = factor(inactive), y = sl_)) + geom_boxplot()
-
+# # Sample source points
+# source_points <- spsample(source_areas, n = 1000, type = "random")
+#
+# # Visualize
+# plot(source_areas)
+# plot(source_points, add = T, col = "red", cex = 0.1)
+#
+# # Try out the function on the first 50 source points
+# tic()
+# sim <- pbmclapply(1:100
+#   , mc.cores           = detectCores() - 1
+#   , ignore.interactive = T
+#   , FUN                = function(x){
+#     si <- disperse(
+#         source    = source_points[x, ]
+#       , covars    = covars
+#       , model     = model
+#       , sl_dist   = sl_dist
+#       , sl_max    = sl_max
+#       , n_rsteps  = n_rsteps
+#       , n_steps   = 200
+#       , stop      = F
+#       , scaling   = scaling
+#       , date      = as.POSIXct("2015-06-15 03:00:00", tz = "UTC")
+#     )
+#     si$TrackID <- x
+#     return(si)
+# })
+# toc()
+#
+# # Coerce the simulations to tracks
+# sims <- lapply(sim, function(x){
+#   coordinates(x) <- c("x", "y")
+#   l <- spLines(x)
+#   return(l)
+# }) %>% do.call(rbind, .)
+#
+# # Bind simulations
+# sim <- do.call(rbind, sim)
+#
+# # Visualize simulations
+# plot(crop(layers[[1]], sims))
+# plot(sims, add = T)
+#
+# # Load observed dispersers
+# obs <- read_csv("03_Data/02_CleanData/00_General_Dispersers_POPECOL(SSF_Extracted).csv")
+# obs <- subset(obs, case_)
+#
+# # Check the distribution of step lengths and turning angles and compare them to
+# # the observed data
+# cbind(
+#     Simulation  = summary(sim$sl_)
+#   , Observerd   = summary(obs$sl_)
+#   , Tentative   = summary(rgamma(10000
+#       , shape = sl_dist$params$shape
+#       , scale = sl_dist$params$scale
+#     ))
+# )
+#
+# # Visualize
+# turns <- data.frame(
+#     Group        = c(rep("Simulation", nrow(sim)), rep("Observed", nrow(obs)))
+#   , TurningAngle = c(sim$ta_, obs$ta_)
+# )
+# lengths <- data.frame(
+#     Group        = c(rep("Simulation", nrow(sim)), rep("Observed", nrow(obs)))
+#   , StepLength   = c(sim$sl_, obs$sl_)
+# )
+# ggplot(turns, aes(x = cos(TurningAngle), fill = Group)) +
+#   geom_density(alpha = 0.2)
+# ggplot(lengths, aes(x = StepLength, fill = Group)) +
+#   geom_density(alpha = 0.2)
+#
+# # Compare steps lengths during activity and inactivity
+# ggplot(sim, aes(x = factor(inactive), y = sl_)) + geom_boxplot()
+#
 ################################################################################
 #### Setting up the Simulation
 ################################################################################
@@ -706,14 +705,50 @@ simulateDispersal <- function(filename = NULL){
 # write_csv(report, "03_Data/03_Results/99_Simulations/Report.csv")
 
 # Run simulation 10 times
-for (i in 23:25){
+# for (i in 31:50){
+#
+#   # Keep track of duration
+#   start <- Sys.time()
+#
+#   # Run simulation
+#   simulateDispersal(filename  = paste0(
+#         "03_Data/03_Results/99_Simulations/Main/Iteration_"
+#       , i
+#       , ".rds"
+#     )
+#   )
+#
+#   # Update report
+#   report <- read_csv("03_Data/03_Results/99_Simulations/Report.csv")
+#   report <- drop_na(rbind(report, data.frame(
+#       iteration    = i
+#     , source_areas = "Main"
+#     , n_steps      = n_steps
+#     , n_points     = n_points
+#     , sl_max       = sl_max
+#     , stop         = stop
+#     , duration     = difftime(Sys.time(), start, units = "mins")
+#     , filename = paste0("03_Data/03_Results/99_Simulations/Main/Iteration_", i, ".rds")
+#   )))
+#   write_csv(report, "03_Data/03_Results/99_Simulations/Report.csv")
+#
+#   # Print the duration
+#   print(Sys.time() - start)
+#
+# }
+
+# Load Buffer
+source_areas <- readOGR("03_Data/03_Results/99_BufferArea.shp")
+
+# Run simulation again
+for (i in 19:30){
 
   # Keep track of duration
   start <- Sys.time()
 
   # Run simulation
   simulateDispersal(filename  = paste0(
-        "03_Data/03_Results/99_Simulations/Main/Iteration_"
+        "03_Data/03_Results/99_Simulations/Buffer/Iteration_"
       , i
       , ".rds"
     )
@@ -723,7 +758,7 @@ for (i in 23:25){
   report <- read_csv("03_Data/03_Results/99_Simulations/Report.csv")
   report <- drop_na(rbind(report, data.frame(
       iteration    = i
-    , source_areas = "Main"
+    , source_areas = "Buffer"
     , n_steps      = n_steps
     , n_points     = n_points
     , sl_max       = sl_max
@@ -735,22 +770,4 @@ for (i in 23:25){
 
   # Print the duration
   print(Sys.time() - start)
-
 }
-
-# Load Buffer
-source_areas <- readOGR("03_Data/03_Results/99_SourceAreas.shp")
-
-# Run simulation again
-tic()
-for (i in 9:10){
-
-  # Run simulation
-  simulateDispersal(filename  = paste0(
-        "03_Data/03_Results/99_Simulations/Iteration_"
-      , i
-      , ".rds"
-    )
-  )
-}
-toc()

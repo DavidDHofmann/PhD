@@ -30,7 +30,7 @@ set.seed(12345)
 #### Load and Clean Data
 ################################################################################
 # Load the simulated dispersal trajectories
-sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
 length(unique(sims$TrackID))
 sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), 6800))
 
@@ -338,7 +338,7 @@ plot(sqrt(res_ww2[["degree"]]), col = viridis(20), main = "With Weights fun 2")
 # convert the "TotalConnections" metric into a "Distance" metric. One way to
 # achieve this is to invert values using the formula f(x) = max(x) - x.
 weights <- c(1, 2, 3, 4)
-max(weights) - weights
+max(weights) - weights + 1
 1/weights
 mean(weights)/weights
 
@@ -348,22 +348,22 @@ visits_all <- tibble(
       group_by(from, to) %>%
       summarize(TotalConnections = sum(TotalConnections)) %>%
       ungroup() %>%
-      mutate(weight = max(TotalConnections) - TotalConnections) + 1
+      mutate(weight = max(TotalConnections) - TotalConnections + 1)
   )
-  , History5000   = list(
-      do.call(rbind, visits$History5000) %>%
-      group_by(from, to) %>%
-      summarize(TotalConnections = sum(TotalConnections)) %>%
-      ungroup() %>%
-      mutate(weight = max(TotalConnections) - TotalConnections) + 1
-  )
-  , History2500   = list(
-      do.call(rbind, visits$History2500) %>%
-      group_by(from, to) %>%
-      summarize(TotalConnections = sum(TotalConnections)) %>%
-      ungroup() %>%
-      mutate(weight = max(TotalConnections) - TotalConnections) + 1
-  )
+  # , History5000   = list(
+  #     do.call(rbind, visits$History5000) %>%
+  #     group_by(from, to) %>%
+  #     summarize(TotalConnections = sum(TotalConnections)) %>%
+  #     ungroup() %>%
+  #     mutate(weight = max(TotalConnections) - TotalConnections) + 1
+  # )
+  # , History2500   = list(
+  #     do.call(rbind, visits$History2500) %>%
+  #     group_by(from, to) %>%
+  #     summarize(TotalConnections = sum(TotalConnections)) %>%
+  #     ungroup() %>%
+  #     mutate(weight = max(TotalConnections) - TotalConnections) + 1
+  # )
 )
 
 # We now use the visitation histories as edgelists to create networks / graphs
@@ -438,7 +438,7 @@ visits$Metrics10000 <- pbmclapply(1:nrow(visits)
       netMet(
           network   = visits$Graph10000[[x]]
         , raster    = r10000
-        , metrics   = c("betweenness", "degree")
+        , metrics   = c("betweenness")
         , tempfile  = T
       )
   }
@@ -450,7 +450,7 @@ visits$Metrics5000 <- pbmclapply(1:nrow(visits)
       netMet(
           network   = visits$Graph5000[[x]]
         , raster    = r5000
-        , metrics   = c("betweenness", "degree")
+        , metrics   = c("betweenness")
         , tempfile  = T
       )
   }
@@ -462,7 +462,7 @@ visits$Metrics2500 <- pbmclapply(1:nrow(visits)
       netMet(
           network   = visits$Graph2500[[x]]
         , raster    = r2500
-        , metrics   = c("betweenness", "degree")
+        , metrics   = c("betweenness")
         , tempfile  = T
       )
   }

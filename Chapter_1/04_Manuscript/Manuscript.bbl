@@ -7,7 +7,14 @@ Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
   Resource Selection and Animal Movement}.
 \newblock {\em {Methods in Ecology and Evolution}}, 7(5):619--630.
 
-\bibitem[Bastille-Rousseau et~al., 2018]{Bastille.2018}
+\bibitem[Baguette et~al., 2013]{Baguette.2013}
+Baguette, M., Blanchet, S., Legrand, D., Stevens, V.~M., and Turlure, C.
+  (2013).
+\newblock {Individual Dispersal, Landscape Connectivity and Ecological
+  Networks}.
+\newblock {\em {Biological Reviews}}, 88(2):310--326.
+
+\bibitem[Bastille-Rousseau et~al., 2018]{BastilleRousseau.2018}
 Bastille-Rousseau, G., Douglas-Hamilton, I., Blake, S., Northrup, J.~M., and
   Wittemyer, G. (2018).
 \newblock {Applying Network Theory to Animal Movements to Identify Properties
@@ -18,8 +25,18 @@ Bastille-Rousseau, G., Douglas-Hamilton, I., Blake, S., Northrup, J.~M., and
 Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2020).
 \newblock {When to Stay and When to Leave? Proximate Causes of Dispersal in an
   Endangered Social Carnivore}.
-\newblock {\em {Journal of Animal Ecology}}.
-\newblock In press.
+\newblock {\em {Journal of Animal Ecology}}, 89(10):2356--2366.
+
+\bibitem[Boyce et~al., 2002]{Boyce.2002}
+Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F. K.~A. (2002).
+\newblock {Evaluating Resource Selection Functions}.
+\newblock {\em {Ecological Modelling}}, 157(2-3):281--300.
+
+\bibitem[Brown and Kodric-Brown, 1977]{Brown.1977}
+Brown, J.~H. and Kodric-Brown, A. (1977).
+\newblock {Turnover Rates in Insular Biogeography: Effect of Immigration on
+  Extinction}.
+\newblock {\em Ecology}, 58(2):445--449.
 
 \bibitem[Burnham and Anderson, 2002]{Burnham.2002}
 Burnham, K.~P. and Anderson, D.~R. (2002).
@@ -35,16 +52,91 @@ Börger, L. and Fryxell, J. (2012).
   editors, {\em {Dispersal Ecology and Evolution}}. Oxford University Press,
   Oxford, UK.
 
+\bibitem[Clobert et~al., 2012]{Clobert.2012}
+Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
+\newblock {\em {Dispersal Ecology and Evolution}}.
+\newblock Oxford University Press, Oxford, UK.
+
 \bibitem[Cozzi et~al., 2020]{Cozzi.2020}
-Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
-  Mcnutt, J.~W., and Ozgul, A. (2020).
-\newblock {African Wild Dog Dispersal and Implications for Management}.
-\newblock {\em {The Journal of Wildlife Management}}, 84(4):614--621.
+Cozzi, G., Behr, D., Webster, H., Claase, M., Bryce, C., Modise, B., McNutt,
+  J., and Ozgul, A. (2020).
+\newblock {The Walk of Life: African Wild Dog Dispersal and its Implications
+  for Management and Conservation across Transfrontier Landscapes}.
+\newblock In press.
+
+\bibitem[Cushman and Lewis, 2010]{Cushman.2010}
+Cushman, S.~A. and Lewis, J.~S. (2010).
+\newblock {Movement Behavior Explains Genetic Differentiation in American Black
+  Bears}.
+\newblock {\em {Landscape Ecology}}, 25(10):1613--1625.
+
+\bibitem[Diniz et~al., 2019]{Diniz.2019}
+Diniz, M.~F., Cushman, S.~A., Machado, R.~B., and De~Marco~Júnior, P. (2019).
+\newblock {Landscape Connectivity Modeling from the Perspective of Animal
+  Dispersal}.
+\newblock {\em {Landscape Ecology}}.
+
+\bibitem[Elliot et~al., 2014]{Elliot.2014}
+Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
+\newblock {The Devil is in the Dispersers: Predictions of Landscape
+  Connectivity Change with Demography}.
+\newblock {\em {Journal of Applied Ecology}}, 51(5):1169--1178.
+
+\bibitem[Fortin et~al., 2005]{Fortin.2005}
+Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
+  J.~S. (2005).
+\newblock {Wolves Influence Elk Movements: Behavior Shapes a Trophic Cascade in
+  Yellowstone National Park}.
+\newblock {\em Ecology}, 86(5):1320--1330.
+
+\bibitem[Frankham et~al., 2002]{Frankham.2002}
+Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
+\newblock {\em {Introduction to Conservation Genetics}}.
+\newblock Cambridge University Press, Cambridge, UK.
+
+\bibitem[Hanski, 1998]{Hanski.1998}
+Hanski, I. (1998).
+\newblock {Metapopulation Dynamics}.
+\newblock {\em Nature}, 396(6706):41--49.
 
 \bibitem[Hijmans, 2020]{Hijmans.2020}
 Hijmans, R.~J. (2020).
-\newblock {\em {terra: Spatial Data Analysis}}.
-\newblock R package version 0.7-11.
+\newblock {\em {raster: Geographic Data Analysis and Modeling}}.
+\newblock R package version 3.3-13.
+
+\bibitem[Hofmann, 2020]{Hofmann.2020}
+Hofmann, D.~D. (2020).
+\newblock {\em {On The Move: Dispersal Corridors of the African Wild Dog
+  (Lycaon pictus) across the Kavango-Zambezi Transfrontier Conservation Area}}.
+\newblock {Master's Thesis}, University of Zurich, Zurich.
+
+\bibitem[Howard, 1960]{Howard.1960}
+Howard, W.~E. (1960).
+\newblock {Innate and Environmental Dispersal of Individual Vertebrates}.
+\newblock {\em {American Midland Naturalist}}, 63(1):152.
+
+\bibitem[Jønsson et~al., 2016]{Jonsson.2016}
+Jønsson, K.~A., Tøttrup, A.~P., Borregaard, M.~K., Keith, S.~A., Rahbek, C.,
+  and Thorup, K. (2016).
+\newblock {Tracking Animal Dispersal: From Individual Movement to Community
+  Assembly and Global Range Dynamics}.
+\newblock {\em {Trends in Ecology \& Evolution}}, 31(3):204--214.
+
+\bibitem[Kays et~al., 2015]{Kays.2015}
+Kays, R., Crofoot, M.~C., Jetz, W., and Wikelski, M. (2015).
+\newblock {Terrestrial Animal Tracking as an Eye on Life and Planet}.
+\newblock {\em {Science}}, 348(6240):aaa2478 -- aaa2478.
+
+\bibitem[Leigh et~al., 2012]{Leigh.2012}
+Leigh, K.~A., Zenger, K.~R., Tammen, I., and Raadsma, H.~W. (2012).
+\newblock {Loss of Genetic Diversity in an Outbreeding Species: Small
+  Population Effects in the African Wild Dog (Lycaon pictus)}.
+\newblock {\em {Conservation Genetics}}, 13(3):767--777.
+
+\bibitem[MacArthur and Wilson, 2001]{MacArthur.2001}
+MacArthur, R.~H. and Wilson, E.~O. (2001).
+\newblock {\em {The Theory of Island Biogeography}}, volume~1.
+\newblock Princeton University Press, Princeton, New Jersey, USA.
 
 \bibitem[McNutt, 1996]{McNutt.1996}
 McNutt, J. (1996).
@@ -61,14 +153,45 @@ Muff, S., Signer, J., and Fieberg, J. (2020).
 \bibitem[Osofsky et~al., 1996]{Osofsky.1996}
 Osofsky, S.~A., McNutt, J.~W., and Hirsch, K.~J. (1996).
 \newblock {Immobilization of Free-Ranging African Wild Dogs (Lycaon pictus)
-  Using a Ketamine/xylazine/Atropine Combination}.
-\newblock {\em {Journal of Zoo and Wildlife Medicine}}, 27(4):528--532.
+  Using a Ketamine/Xylazine/Atropine Combination}.
+\newblock {\em {Journal of Zoo and Wildlife Medicine}}, pages 528--532.
+
+\bibitem[Perrin and Mazalov, 1999]{Perrin.1999}
+Perrin, N. and Mazalov, V. (1999).
+\newblock {Dispersal and Inbreeding Avoidance}.
+\newblock {\em {The American Naturalist}}, 154(3):282--292.
+
+\bibitem[Perrin and Mazalov, 2000]{Perrin.2000}
+Perrin, N. and Mazalov, V. (2000).
+\newblock {Local Competition, Inbreeding, and the Evolution of Sex‐Biased
+  Dispersal}.
+\newblock {\em {The American Naturalist}}, 155(1):116--127.
+
+\bibitem[Pomilia et~al., 2015]{Pomilia.2015}
+Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
+\newblock {Ecological Predictors of African Wild Dog Ranging Patterns in
+  Northern Botswana}.
+\newblock {\em {Journal of Mammalogy}}, 96(6):1214--1223.
 
 \bibitem[Turchin, 1998]{Turchin.1998}
 Turchin, P. (1998).
 \newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
   Population Redistribution in Plants and Animals}}.
 \newblock Sinauer Associates, Sunderland, MA, USA.
+
+\bibitem[Vasudev et~al., 2015]{Vasudev.2015}
+Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
+\newblock {From Dispersal Constraints to Landscape Connectivity: Lessons from
+  Species Distribution Modeling}.
+\newblock {\em Ecography}, 38(10):967--978.
+
+\bibitem[Williams et~al., 2019]{Williams.2019}
+Williams, H.~J., Taylor, L.~A., Benhamou, S., Bijleveld, A.~I., Clay, T.~A.,
+  Grissac, S., Demšar, U., English, H.~M., Franconi, N., Gómez‐Laich, A.,
+  Griffiths, R.~C., Kay, W.~P., Morales, J.~M., Potts, J.~R., Rogerson, K.~F.,
+  Rutz, C., Spelt, A., Trevail, A.~M., Wilson, R.~P., and Börger, L. (2019).
+\newblock {Optimizing the Use of Biologgers for Movement Ecology Research}.
+\newblock {\em {Journal of Animal Ecology}}.
 
 \bibitem[Wolski et~al., 2017]{Wolski.2017}
 Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
@@ -81,6 +204,17 @@ Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
 Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,
   and O'Neill, H. M.~K. (2019).
 \newblock {Dispersal Behaviour of African Wild Dogs in Kenya}.
-\newblock {\em {African Journal of Ecology}}, 58(1):46--57.
+\newblock {\em {African Journal of Ecology}}.
+
+\bibitem[Woodroffe and Sillero-Zubiri, 2012]{Woodroffe.2012}
+Woodroffe, R. and Sillero-Zubiri, C. (2012).
+\newblock Lycaon pictus.
+\newblock {\em The IUCN Red List of Threatened Species}, 2012:e.
+  T12436A16711116.
+
+\bibitem[Zeller et~al., 2012]{Zeller.2012}
+Zeller, K.~A., McGarigal, K., and Whiteley, A.~R. (2012).
+\newblock {Estimating Landscape Resistance to Movement: A Review}.
+\newblock {\em {Landscape Ecology}}, 27(6):777--797.
 
 \end{thebibliography}

@@ -22,7 +22,6 @@ library(viridis)          # For nicer colors
 library(tictoc)           # To keep track of processing time
 library(pbmcapply)        # To show progress bar in mclapply calls
 library(tmap)             # For nice spatial plots
-library(Cairo)            # To store plots
 library(davidoff)         # Custom functions
 
 ################################################################################
@@ -33,29 +32,25 @@ library(davidoff)         # Custom functions
 rasterizeSims <- function(
       simulations = NULL      # Simulated trajectories
     , steps       = 400       # How many steps should be considered
-    , sampling    = "Static"  # For which sampling method we want to rasterize
   ){
 
   # Create tracks that fulfill the above requirements
+  cat("Creating spatial lines...\n")
   sub_traj <- sims2tracks(
       simulations = simulations
     , steps       = steps
-    , sampling    = sampling
+    , id          = "TrackID"
+    , keep.data   = F
   )
-
-  # Remove data by creating spatial lines
   sub_traj <- as(sub_traj, "SpatialLines")
-
-  # Assign correct CRS
   crs(sub_traj) <- CRS("+init=epsg:4326")
 
-  # Coerce to "vect" for faster rasterization
+  # Coerce lines to "vect" and crop raster
   sub_traj <- vect(sub_traj)
-
-  # Speed up rasterization by cropping the raster
   r_crop <- crop(r, ext(sub_traj))
 
   # Rasterize lines onto the cropped raster
+  cat("Rasterizing spatial lines...\n")
   heatmap <- rasterizeTerra(sub_traj, r_crop)
 
   # Return the resulting heatmap
@@ -72,19 +67,18 @@ r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 r <- aggregate(r, fact = 10)
 
 # Load the simulated dispersal trajectories
-sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
 
 # Check out the number of rows
 nrow(sims) / 1e6
 
-water <- raster("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.tif")
-sub <- subset(sims, SourceArea %in% c(34, 35))
-sub <- subset(sims, TrackID %in% sample(unique(sub$TrackID), 1000))
-sub$ID <- sub$TrackID
-sub$PointSampling <- "Random"
-test <- sims2tracks(sub, steps = 2000, sampling = "Random")
-plot(crop(water, test))
-plot(test, add = T, lwd = 0.1)
+################################################################################
+#### TESTING
+################################################################################
+sub <- subset(sims, TrackID %in% sample(unique(sims$TrackID), 100))
+test <- rasterizeSims(sub, steps = 500)
+plot(raster(test), col = magma(50))
+plot(sims2tracks(sub, steps = 500), add = T, lwd = 0.1, col = "white")
 
 ################################################################################
 #### Rasterize Trajectories Once
@@ -94,7 +88,7 @@ plot(test, add = T, lwd = 0.1)
 rasterized <- as_tibble(
   expand.grid(
       steps     = c(68, 125, 250, 500, 1000, 2000)
-    , sampling  = c("Static", "Random")
+    # , sampling  = c("Static", "Random")
   )
 )
 
@@ -103,7 +97,7 @@ rasterized <- as_tibble(
 rasterized$filename <- tempfile(
     pattern = paste0(
         "steps_", rasterized$steps
-      , "_sampling_", rasterized$sampling
+      # , "_sampling_", rasterized$sampling
       , "_"
     )
   , fileext = ".tif"
@@ -121,7 +115,7 @@ heatmaps <- pbmclapply(1:nrow(rasterized)
   heatmap <- rasterizeSims(
       simulations = sims
     , steps       = rasterized$steps[i]
-    , sampling    = rasterized$sampling[i]
+    # , sampling    = rasterized$sampling[i]
   )
 
   # Make sure the map is not stored in memory but on disk

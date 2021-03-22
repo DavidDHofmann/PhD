@@ -23,9 +23,12 @@ object2 <- water[grepl(water@data$name, pattern = "Linyanti.*Delta"), ]
 object3 <- water[grepl(water@data$name, pattern = "Garangwe.*Pan"), ][2, ]
 object4 <- water[grepl(water@data$name, pattern = "Lake.*Kariba"), ]
 object5 <- water[grepl(water@data$name, pattern = "Lake.*Ngami"), ]
+object6 <- water[grepl(water@data$name, pattern = "Barotse"), ]
+object7 <- water[grepl(water@data$name, pattern = "Lukanga"), ]
+object8 <- water[grepl(water@data$name, pattern = "Kafue"), ]
 
 # Put all objects together
-water <- rbind(object1, object2, object3, object4, object5)
+water <- rbind(object1, object2, object3, object4, object5, object6, object7, object8)
 
 # Visualize them
 plot(water, col = "lightblue", border = "black", lwd = 0.4)
