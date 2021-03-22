@@ -684,64 +684,64 @@ simulateDispersal <- function(filename = NULL){
 ################################################################################
 #### Run Simulation
 ################################################################################
-# # Prepare directories into which we can store the results
-# dir.create("03_Data/03_Results/99_Simulations", showWarnings = F)
-#
-# # Prepare subfolders
-# dir.create("03_Data/03_Results/99_Simulations/Main", showWarnings = F)
-# dir.create("03_Data/03_Results/99_Simulations/Buffer", showWarnings = F)
-#
-# Initiate a file to keep track of simulation progress
-# report <- data.frame(
-#     iteration    = NA
-#   , source_areas = NA
-#   , n_steps      = NA
-#   , n_points     = NA
-#   , sl_max       = NA
-#   , stop         = NA
-#   , duration     = NA
-#   , filename     = NA
-# )
-# write_csv(report, "03_Data/03_Results/99_Simulations/Report.csv")
+# Prepare directories into which we can store the results
+dir.create("03_Data/03_Results/99_Simulations", showWarnings = F)
 
-# Run simulation 10 times
-# for (i in 31:50){
-#
-#   # Keep track of duration
-#   start <- Sys.time()
-#
-#   # Run simulation
-#   simulateDispersal(filename  = paste0(
-#         "03_Data/03_Results/99_Simulations/Main/Iteration_"
-#       , i
-#       , ".rds"
-#     )
-#   )
-#
-#   # Update report
-#   report <- read_csv("03_Data/03_Results/99_Simulations/Report.csv")
-#   report <- drop_na(rbind(report, data.frame(
-#       iteration    = i
-#     , source_areas = "Main"
-#     , n_steps      = n_steps
-#     , n_points     = n_points
-#     , sl_max       = sl_max
-#     , stop         = stop
-#     , duration     = difftime(Sys.time(), start, units = "mins")
-#     , filename = paste0("03_Data/03_Results/99_Simulations/Main/Iteration_", i, ".rds")
-#   )))
-#   write_csv(report, "03_Data/03_Results/99_Simulations/Report.csv")
-#
-#   # Print the duration
-#   print(Sys.time() - start)
-#
-# }
+# Prepare subfolders
+dir.create("03_Data/03_Results/99_Simulations/Main", showWarnings = F)
+dir.create("03_Data/03_Results/99_Simulations/Buffer", showWarnings = F)
+
+Initiate a file to keep track of simulation progress
+report <- data.frame(
+    iteration    = NA
+  , source_areas = NA
+  , n_steps      = NA
+  , n_points     = NA
+  , sl_max       = NA
+  , stop         = NA
+  , duration     = NA
+  , filename     = NA
+)
+write_csv(report, "03_Data/03_Results/99_Simulations/Report.csv")
+
+Run simulation 10 times
+for (i in 1:50){
+
+  # Keep track of duration
+  start <- Sys.time()
+
+  # Run simulation
+  simulateDispersal(filename  = paste0(
+        "03_Data/03_Results/99_Simulations/Main/Iteration_"
+      , i
+      , ".rds"
+    )
+  )
+
+  # Update report
+  report <- read_csv("03_Data/03_Results/99_Simulations/Report.csv")
+  report <- drop_na(rbind(report, data.frame(
+      iteration    = i
+    , source_areas = "Main"
+    , n_steps      = n_steps
+    , n_points     = n_points
+    , sl_max       = sl_max
+    , stop         = stop
+    , duration     = difftime(Sys.time(), start, units = "mins")
+    , filename = paste0("03_Data/03_Results/99_Simulations/Main/Iteration_", i, ".rds")
+  )))
+  write_csv(report, "03_Data/03_Results/99_Simulations/Report.csv")
+
+  # Print the duration
+  print(Sys.time() - start)
+
+}
 
 # Load Buffer
 source_areas <- readOGR("03_Data/03_Results/99_BufferArea.shp")
 
 # Run simulation again
-for (i in 19:30){
+for (i in 1:30){
 
   # Keep track of duration
   start <- Sys.time()
