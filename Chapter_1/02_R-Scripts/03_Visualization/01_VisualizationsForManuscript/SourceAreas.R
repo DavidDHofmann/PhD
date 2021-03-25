@@ -25,44 +25,111 @@ library(Cairo)        # To store the plots
 #### Source Points
 ################################################################################
 # Load required data
-source_areas  <- readOGR("03_Data/03_Results/99_SourceAreas.shp")
-buffer_areas  <- readOGR("03_Data/03_Results/99_BufferArea.shp")
+main   <- readOGR("03_Data/03_Results/99_SourceAreas.shp")
+buffer <- readOGR("03_Data/03_Results/99_BufferArea.shp")
 prot   <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 kaza   <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
+africa <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 r      <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+
+# Prepare country labels
+labels_countries <- data.frame(
+    x = c(20.39, 23.94, 20.07, 25.69, 28.22)
+  , y = c(-15.28, -19.94, -19.39, -15.22, -18.9)
+  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
+)
+coordinates(labels_countries) <- c("x", "y")
+crs(labels_countries) <- CRS("+init=epsg:4326")
 
 # Extend the reference raster
 r <- extendRaster(r, extent(r) + c(-1, 1, -1, 1) * metersToDegrees(100000))
 
-# Identify protected areas outside our source areas
-ints <- gIntersects(source_areas, prot, byid = T)
-ints <- unname(rowSums(ints))
-small_areas <- prot[!ints, ]
-small_areas <- aggregate(small_areas)
-small_areas <- as(small_areas, "SpatialPolygonsDataFrame")
+# And crop it to the buffer
+r <- crop(r, extent(buffer))
 
-# Create random source points
-n_buffer  <- 2000
-n_areas   <- 5000
-points1 <- spsample(source_areas, n = n_areas, type = "random")
-points2 <- spsample(buffer_areas, n = n_buffer, type = "random")
-points <- rbind(points1, points2)
+# Identify protected areas too small to be considered
+ints <- gIntersects(main, prot, byid = T)
+ints <- unname(rowSums(ints))
+small <- prot[!ints, ]
+small <- aggregate(small)
+small <- as(small, "SpatialPolygonsDataFrame")
 
 # Put buffer and main study area together
-source_areas@data <- data.frame(ID = 1:nrow(source_areas), Area = "Main")
-buffer_areas@data <- data.frame(ID = nrow(source_areas) + 1, Area = "Buffer")
-small_areas@data  <- data.frame(ID = nrow(source_areas) + 2, Area = "Small")
-areas <- rbind(buffer_areas, source_areas, small_areas)
+main@data <- data.frame(ID = 1:nrow(main), Area = "Source")
+small@data <- data.frame(ID = nrow(main) + 1, Area = "Small")
+main <- rbind(main, small)
 
-# Visualize it
-p1 <- tm_shape(r) +
+# Distribute some random points
+n_main <- spsample(subset(main, Area == "Source")
+  , type = "random"
+  , n    = 5000
+)
+n_buffer <- spsample(buffer
+  , type = "random"
+  , n    = 3000
+)
+points <- rbind(n_main, n_buffer)
+
+# Add labels for main and buffer area
+labels_areas <- data.frame(
+    x     = c(18.1, 18.1)
+  , y     = c(-12.3, -12.9)
+  , Label = c("Buffer Area (n = 30'000)", "Study Area (n = 50'000)")
+)
+coordinates(labels_areas) <- c("x", "y")
+crs(labels_areas) <- CRS("+init=epsg:4326")
+
+# Plot
+tm_shape(r) +
     tm_raster(palette = "white", legend.show = F) +
-  tm_shape(areas) +
-    tm_polygons(col = "Area", palette = c("gray20", "gray40", "gray80"), lwd = 0) +
+  tm_shape(buffer) +
+    tm_polygons(
+        col          = "cornflowerblue"
+      , border.col   = "cornflowerblue"
+      , alpha        = 0.4
+      , border.alpha = 0.5
+    ) +
+  tm_shape(main) +
+    tm_polygons(
+        col         = "Area"
+      , palette     = c("#70ab70", "#d9f0d3")
+      , lwd         = 0
+      , border.col  = "#6ba36b"
+      , legend.show = F
+      , alpha       = 0.6
+    ) +
   tm_shape(kaza) +
-    tm_borders(col = "black", lty = 2, lwd = 2) +
+    tm_borders(
+        col = "black"
+      , lty = 1
+      , lwd = 2
+    ) +
+  tm_shape(africa) +
+    tm_borders(
+        col = "gray50"
+      , lwd = 0.5
+    ) +
   tm_shape(points) +
-    tm_dots(col = "orange", size = 0.01, alpha = 0.7, border.lwd = 0) +
+    tm_dots(
+        col   = "black"
+      , size  = 0.0001
+      , alpha = 0.1
+    ) +
+  tm_shape(labels_countries) +
+    tm_text("Label"
+      , col       = "gray30"
+      , fontface  = 3
+      , size      = 1.5
+    ) +
+  tm_shape(labels_areas) +
+    tm_text("Label"
+      , col             = "Label"
+      , palette         = c("cornflowerblue", "#70ab70")
+      , fontface        = 3
+      , size            = 1
+      , just            = "left"
+      , legend.col.show = F
+    ) +
   tm_grid(
       n.y                 = 5
     , n.x                 = 5
@@ -73,28 +140,29 @@ p1 <- tm_shape(r) +
   tm_layout(
     , frame                   = "gray20"
     , frame.lwd               = 3
+    , asp                     = 1.15
+    , legend.outside          = TRUE
+    , legend.outside.position = "left"
+    , legend.stack            = "vertical"
+    , legend.text.size        = 0.8
   ) +
   tm_scale_bar(
         position  = c("right", "bottom")
       , text.size = 0.5
-      , text.col  = "white"
+      , text.col  = "black"
       , width     = 0.125
   ) +
-  tm_credits("a"
-    , position = c("left", "top")
-    , size     = 1.5
-    , col      = "white"
-    , fontface = "bold"
-  ) +
+  # tm_credits("a"
+  #   , position = c("left", "top")
+  #   , size     = 1.5
+  #   , col      = "black"
+  #   , fontface = "bold"
+  # ) +
   tm_compass(
-      color.dark  = "white"
-    , color.light = "white"
-    , text.color  = "white"
+      color.dark  = "black"
+    , color.light = "black"
+    , text.color  = "black"
     , position    = c("left", "bottom")
-  ) +
-  tm_layout(
-      legend.position = c(0.08, 0.78)
-    , legend.bg.color = "white"
 )
 
 # Store the plot

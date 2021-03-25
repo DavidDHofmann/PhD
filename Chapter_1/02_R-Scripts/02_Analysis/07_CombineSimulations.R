@@ -82,25 +82,10 @@ format(object.size(sims), units = "Gb")
 write_rds(sims, "03_Data/03_Results/99_DispersalSimulation.rds")
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
 
-# # Function to subset simulations
-# subsims <- function(simulations, area = NULL, nid = NULL){
-#
-#   # Sample ids
-#   ids <- unique(simulations$TrackID[simulations$Area == area])
-#   ids <- sample(ids, size = nid, replace = F)
-#
-#   # Subset to respective simulations
-#   sub <- simulations[simulations$TrackID %in% ids, ]
-#
-#   # Return the subset
-#   return(sub)
-# }
-#
-# # Subset simulations
-# sub <- subsims(sims, nid = 100, area = "Main")
-# sub <- sims2tracks(sub, id = "TrackID", steps = 500)
-# plot(sub)
-#
+# Remove raw data of simulations to free some space
+file.remove(files_main)
+file.remove(files_buffer)
+
 # ################################################################################
 # #### Verify Turning Angles and Step Lengths
 # ################################################################################

@@ -19,39 +19,111 @@ library(tidyverse)        # For data wrangling
 library(rgeos)            # For manipulating vector data
 library(lubridate)        # For working with dates
 library(viridis)          # For nicer colors
-library(tictoc)           # To keep track of processing time
 library(pbmcapply)        # To show progress bar in mclapply calls
 library(tmap)             # For nice spatial plots
 library(davidoff)         # Custom functions
+library(spatstat)         # For quick rasterization
+library(maptools)         # For quick rasterization
+
+# sim2tracks2 <- function(simulation = NULL){
+#
+#   # Create spatial line
+#   lines <- vect(
+#       x    = as.matrix(simulation[, c("x", "y")])
+#     , type = "lines"
+#     , crs  = CRS("+init=epsg:4326")
+#   )
+#
+#   # Return it
+#   return(lines)
+#
+# }
+#
+# sims2tracks2 <- function(
+#       simulations = NULL
+#     , id          = "TrackID"
+#     , messages    = T
+#   ){
+#
+#   # Nest by id
+#   nested <- nest(simulations, data = -all_of(id))
+#
+#   # Prepare progress bar
+#   if (messages) {
+#     pb <- txtProgressBar(
+#         min     = 0
+#       , max     = nrow(nested)
+#       , initial = 0
+#       , style   = 3
+#       , width   = 55
+#     )
+#   }
+#
+#   # Create lines
+#   lines <- list()
+#   for (i in 1:nrow(nested)){
+#     lines[[i]] <- sim2tracks2(simulation = nested$data[[i]])
+#     if (messages) {
+#       setTxtProgressBar(pb, i)
+#     }
+#   }
+#
+#   # Put them together
+#   lines <- do.call(c, lines)
+#
+#   # Return lines
+#   return(lines)
+# }
 
 ################################################################################
-#### Function to Rasterize Simulated Trajectory
+#### Function to Rasterize Tracks
 ################################################################################
-# Function to rasterize trajectories of a desired source point after a desired
 # amount of time (i.e. after a desired number of steps)
 rasterizeSims <- function(
       simulations = NULL      # Simulated trajectories
+    , raster      = NULL      # Raster onto which we rasterize
     , steps       = 400       # How many steps should be considered
+    , area        = "Main"    # Simulations from which areas?
+    , messages    = T         # Print update messages?
+    , crop        = F         # Should the raster be cropped?
   ){
 
-  # Create tracks that fulfill the above requirements
-  cat("Creating spatial lines...\n")
+  # Subset to corresponding data
+  sub <- simulations[which(
+      simulations$StepNumber <= steps
+    , simulations$Area %in% area
+  ), ]
+
+  # Create tracks
+  if (messages){
+    cat("Creating spatial lines...\n")
+  }
   sub_traj <- sims2tracks(
-      simulations = simulations
-    , steps       = steps
+      simulations = sub
     , id          = "TrackID"
-    , keep.data   = F
+    , messages    = messages
+    , mc.cores    = 1
   )
+
+  # Remove data and create spatial lines
   sub_traj <- as(sub_traj, "SpatialLines")
   crs(sub_traj) <- CRS("+init=epsg:4326")
 
   # Coerce lines to "vect" and crop raster
   sub_traj <- vect(sub_traj)
-  r_crop <- crop(r, ext(sub_traj))
+
+  # Crop raster if desired
+  if (crop){
+    r_crop <- crop(raster, ext(sub_traj))
+  } else {
+    r_crop <- raster
+  }
 
   # Rasterize lines onto the cropped raster
-  cat("Rasterizing spatial lines...\n")
-  heatmap <- rasterizeTerra(sub_traj, r_crop)
+  if (messages){
+    cat("Rasterizing spatial lines...\n")
+  }
+  heatmap <- rasterizeTerra(sub_traj, r_crop, messages = messages)
 
   # Return the resulting heatmap
   return(heatmap)
@@ -63,32 +135,96 @@ rasterizeSims <- function(
 # Load the reference raster
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
-# For this part we can reduce the resolution of the raster drastically
-r <- aggregate(r, fact = 10)
-
 # Load the simulated dispersal trajectories
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+# sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+sims <- subsims(sims, nid = 5000)
+
+# sims <- subsims(sims, nid = 100)
+sims <- ungroup(sims)
+
+# Remove undesired columns
+sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area")]
+
+# Reproject coordinates to utm (required for spatstat)
+sims[, c("x", "y")] <- reprojCoords(
+    xy   = sims[, c("x", "y")]
+  , from = CRS("+init=epsg:4326")
+  , to   = CRS("+init=epsg:32734")
+)
+
+# Prepare extent that encompassess all coordinates
+ext <- extent(min(sims$x), max(sims$x), min(sims$y), max(sims$y)) +
+  c(-1000, +1000, -1000, +1000)
+
+# Span a raster with the same resolution as the reference raster
+rt <- raster(ext, res = degreesToMeters(res(r)))
+values(rt) <- rnorm(ncell(rt))
+crs(rt) <- CRS("+init=epsg:32734")
+
+# For this part we can reduce the resolution of the raster drastically
+rt <- aggregate(rt, fact = 10)
+
+# Collect garbage
+gc()
 
 # Check out the number of rows
 nrow(sims) / 1e6
 
-################################################################################
-#### TESTING
-################################################################################
-sub <- subset(sims, TrackID %in% sample(unique(sims$TrackID), 100))
-test <- rasterizeSims(sub, steps = 500)
-plot(raster(test), col = magma(50))
-plot(sims2tracks(sub, steps = 500), add = T, lwd = 0.1, col = "white")
+# Reproject coordinates
+tracks <- sims2tracks(sims, crs = CRS("+init=epsg:32734"))
+rasterized <- rasterizeSpatstat(tracks, rt)
+plot(rasterized, col = magma(100))
+
 
 ################################################################################
-#### Rasterize Trajectories Once
+#### Estimating Rasterization Time
+################################################################################
+# Create study design
+# design <- expand.grid(
+#     nsims    = c(100, 500, 1000)
+#   , nsteps   = c(100, 1000, 2000)
+#   , duration = NA
+# )
+#
+# # Loop through the design and keep track of computation time
+# for (i in 1:nrow(design)){
+#
+#   # Subset simulations
+#   sub <- subsims(sims, nid = design$nsims[i])
+#
+#   # Initiate timer
+#   start <- Sys.time()
+#
+#   # Rasterize
+#   rasterizeSims(sub, steps = design$nsteps[i], raster = r)
+#
+#   # Take time
+#   design$duration[i] <- difftime(Sys.time(), start, units = "mins")
+#
+#   # Print update
+#   cat(i, "/", nrow(design), "done...\n")
+#
+# }
+#
+# # Visualize
+# ggplot(design, aes(x = nsims, y = duration, col = factor(nsteps))) +
+#   geom_line() +
+#   geom_point()
+#
+# # The relationship is linear. Let's extrapolate
+# design$duration[design$nsims == 1000][3] * 80 / 60
+
+################################################################################
+#### Rasterize Trajectories
 ################################################################################
 # Create a dataframe with all source points and points in time at which we want
 # to rasterize trajectories
 rasterized <- as_tibble(
   expand.grid(
-      steps     = c(68, 125, 250, 500, 1000, 2000)
-    # , sampling  = c("Static", "Random")
+      steps            = c(68, 125, 250, 500, 1000, 2000)
+    , area             = unique(sims$Area)
+    , stringsAsFactors = F
   )
 )
 
@@ -97,31 +233,31 @@ rasterized <- as_tibble(
 rasterized$filename <- tempfile(
     pattern = paste0(
         "steps_", rasterized$steps
-      # , "_sampling_", rasterized$sampling
+      , "_area_", rasterized$area
       , "_"
     )
   , fileext = ".tif"
 )
 
-# Rasterize simulated trajectories. Note that the number of cores you can use
-# depends a bit on the amount of ram that is available. In some cases memory may
-# overflow.
+# Rasterize simulated trajectories
 heatmaps <- pbmclapply(1:nrow(rasterized)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , FUN                 = function(i){
+  , ignore.interactive = T
+  , mc.cores           = detectCores() - 1
+  , FUN                = function(z){
 
   # Rasterize trajectories
   heatmap <- rasterizeSims(
       simulations = sims
-    , steps       = rasterized$steps[i]
-    # , sampling    = rasterized$sampling[i]
+    , raster      = r
+    , steps       = rasterized$steps[z]
+    , area        = rasterized$area[z]
+    , messages    = T
   )
 
   # Make sure the map is not stored in memory but on disk
-  heatmap <- terra::writeRaster(heatmap, rasterized$filename[i], overwrite = T)
+  heatmap <- terra::writeRaster(heatmap, rasterized$filename[z], overwrite = T)
 
-  # Clear cache
+  # Clean garbage
   gc()
 
   # Return the final raster
@@ -136,7 +272,7 @@ heatmaps <- lapply(1:nrow(rasterized), function(x){
 })
 
 # Prepare nice layernames
-names <- paste0("Steps_", rasterized$steps, "_Sampling_", rasterized$sampling)
+names <- paste0("Steps_", rasterized$steps, "_Sampling_", rasterized$area)
 
 # Put heatmaps into a stack
 heatmaps <- do.call(c, heatmaps)
@@ -488,3 +624,31 @@ for (i in 1:length(p)){
 # # Compare heatmaps based on correlation
 # pairs(summed_static)
 # pairs(summed_random)
+
+
+
+
+
+# # Load protected areas
+# prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
+#
+# # Create SpatialPoints for first location of each trajectory
+# first <- sims %>%
+#   dplyr::select("x", "y", "TrackID") %>%
+#   group_by(TrackID) %>%
+#   slice(1) %>%
+#   SpatialPointsDataFrame(
+#       coords      = cbind(.[["x"]], .[["y"]])
+#     , proj4string = CRS("+init=epsg:4326")
+#   )
+#
+# # Assess from which protected area each trajectory left
+# first$Origin <- as.character(over(first, prot)$Name)
+# first <- first@data[, c("TrackID", "Origin")]
+#
+# # Join information to simulated tracks
+# sims <- left_join(sims, first, by = "TrackID")
+# sims$Origin[sims$Area == "Buffer"] <- "Buffer"
+#
+# # Make sure there are no NAs
+# sum(is.na(sims$Origin))
