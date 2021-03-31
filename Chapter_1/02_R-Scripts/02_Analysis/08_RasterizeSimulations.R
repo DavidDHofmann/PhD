@@ -2,8 +2,7 @@
 #### Rasterization of Simulated Dispersal Trajectories
 ################################################################################
 # Description: In this script, we rasterize the simulated dispersal
-# trajectories. To achieve this, we'll first rasterize trajectories by their
-# source points. Afterwards, we can combine them them into a single "heatmap".
+# trajectories and create "heatmaps".
 
 # Clear R's brain
 rm(list = ls())
@@ -13,134 +12,30 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(terra)            # For quick raster manipulation
-library(raster)           # For general raster manipulation
-library(tidyverse)        # For data wrangling
-library(rgeos)            # For manipulating vector data
-library(lubridate)        # For working with dates
-library(viridis)          # For nicer colors
-library(pbmcapply)        # To show progress bar in mclapply calls
-library(tmap)             # For nice spatial plots
-library(davidoff)         # Custom functions
-library(spatstat)         # For quick rasterization
-library(maptools)         # For quick rasterization
-
-# sim2tracks2 <- function(simulation = NULL){
-#
-#   # Create spatial line
-#   lines <- vect(
-#       x    = as.matrix(simulation[, c("x", "y")])
-#     , type = "lines"
-#     , crs  = CRS("+init=epsg:4326")
-#   )
-#
-#   # Return it
-#   return(lines)
-#
-# }
-#
-# sims2tracks2 <- function(
-#       simulations = NULL
-#     , id          = "TrackID"
-#     , messages    = T
-#   ){
-#
-#   # Nest by id
-#   nested <- nest(simulations, data = -all_of(id))
-#
-#   # Prepare progress bar
-#   if (messages) {
-#     pb <- txtProgressBar(
-#         min     = 0
-#       , max     = nrow(nested)
-#       , initial = 0
-#       , style   = 3
-#       , width   = 55
-#     )
-#   }
-#
-#   # Create lines
-#   lines <- list()
-#   for (i in 1:nrow(nested)){
-#     lines[[i]] <- sim2tracks2(simulation = nested$data[[i]])
-#     if (messages) {
-#       setTxtProgressBar(pb, i)
-#     }
-#   }
-#
-#   # Put them together
-#   lines <- do.call(c, lines)
-#
-#   # Return lines
-#   return(lines)
-# }
-
-################################################################################
-#### Function to Rasterize Tracks
-################################################################################
-# amount of time (i.e. after a desired number of steps)
-rasterizeSims <- function(
-      simulations = NULL      # Simulated trajectories
-    , raster      = NULL      # Raster onto which we rasterize
-    , steps       = 400       # How many steps should be considered
-    , area        = "Main"    # Simulations from which areas?
-    , messages    = T         # Print update messages?
-    , crop        = F         # Should the raster be cropped?
-  ){
-
-  # Subset to corresponding data
-  sub <- simulations[which(
-      simulations$StepNumber <= steps
-    , simulations$Area %in% area
-  ), ]
-
-  # Create tracks
-  if (messages){
-    cat("Creating spatial lines...\n")
-  }
-  sub_traj <- sims2tracks(
-      simulations = sub
-    , id          = "TrackID"
-    , messages    = messages
-    , mc.cores    = 1
-  )
-
-  # Remove data and create spatial lines
-  sub_traj <- as(sub_traj, "SpatialLines")
-  crs(sub_traj) <- CRS("+init=epsg:4326")
-
-  # Coerce lines to "vect" and crop raster
-  sub_traj <- vect(sub_traj)
-
-  # Crop raster if desired
-  if (crop){
-    r_crop <- crop(raster, ext(sub_traj))
-  } else {
-    r_crop <- raster
-  }
-
-  # Rasterize lines onto the cropped raster
-  if (messages){
-    cat("Rasterizing spatial lines...\n")
-  }
-  heatmap <- rasterizeTerra(sub_traj, r_crop, messages = messages)
-
-  # Return the resulting heatmap
-  return(heatmap)
-}
+library(terra)        # For quick raster manipulation
+library(raster)       # For general raster manipulation
+library(rgdal)        # To read spatial data
+library(tidyverse)    # For data wrangling
+library(rgeos)        # For manipulating vector data
+library(lubridate)    # For working with dates
+library(viridis)      # For nicer colors
+library(pbmcapply)    # To show progress bar in mclapply calls
+library(tmap)         # For nice spatial plots
+library(davidoff)     # Custom functions
+library(spatstat)     # For quick rasterization
+library(maptools)     # For quick rasterization
 
 ################################################################################
 #### Load and Prepare Data
 ################################################################################
 # Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Load the simulated dispersal trajectories
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
 # sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
-sims <- subsims(sims, nid = 5000)
 
-# sims <- subsims(sims, nid = 100)
+# Ungroup them
 sims <- ungroup(sims)
 
 # Remove undesired columns
@@ -153,17 +48,14 @@ sims[, c("x", "y")] <- reprojCoords(
   , to   = CRS("+init=epsg:32734")
 )
 
-# Prepare extent that encompassess all coordinates
+# Prepare extent that encompassess all coordinates + some buffer
 ext <- extent(min(sims$x), max(sims$x), min(sims$y), max(sims$y)) +
   c(-1000, +1000, -1000, +1000)
 
-# Span a raster with the same resolution as the reference raster
-rt <- raster(ext, res = degreesToMeters(res(r)))
-values(rt) <- rnorm(ncell(rt))
-crs(rt) <- CRS("+init=epsg:32734")
-
-# For this part we can reduce the resolution of the raster drastically
-rt <- aggregate(rt, fact = 10)
+# Span a raster with desired resolution
+r <- raster(ext, res = 1000)
+values(r) <- runif(ncell(r))
+crs(r) <- CRS("+init=epsg:32734")
 
 # Collect garbage
 gc()
@@ -171,49 +63,58 @@ gc()
 # Check out the number of rows
 nrow(sims) / 1e6
 
-# Reproject coordinates
-tracks <- sims2tracks(sims, crs = CRS("+init=epsg:32734"))
-rasterized <- rasterizeSpatstat(tracks, rt)
-plot(rasterized, col = magma(100))
-
-
 ################################################################################
-#### Estimating Rasterization Time
+#### Function to Rasterize Tracks
 ################################################################################
-# Create study design
-# design <- expand.grid(
-#     nsims    = c(100, 500, 1000)
-#   , nsteps   = c(100, 1000, 2000)
-#   , duration = NA
-# )
-#
-# # Loop through the design and keep track of computation time
-# for (i in 1:nrow(design)){
-#
-#   # Subset simulations
-#   sub <- subsims(sims, nid = design$nsims[i])
-#
-#   # Initiate timer
-#   start <- Sys.time()
-#
-#   # Rasterize
-#   rasterizeSims(sub, steps = design$nsteps[i], raster = r)
-#
-#   # Take time
-#   design$duration[i] <- difftime(Sys.time(), start, units = "mins")
-#
-#   # Print update
-#   cat(i, "/", nrow(design), "done...\n")
-#
-# }
-#
-# # Visualize
-# ggplot(design, aes(x = nsims, y = duration, col = factor(nsteps))) +
-#   geom_line() +
-#   geom_point()
-#
-# # The relationship is linear. Let's extrapolate
-# design$duration[design$nsims == 1000][3] * 80 / 60
+# Function to rasterize trajectories after desired number of steps and from
+# desired source area
+rasterizeSims <- function(
+      simulations = NULL      # Simulated trajectories
+    , raster      = NULL      # Raster onto which we rasterize
+    , steps       = 500       # How many steps should be considered
+    , area        = "Main"    # Simulations from which areas?
+    , messages    = T         # Print update messages?
+    , mc.cores    = detectCores() - 1
+  ){
+
+  # Subset to corresponding data
+  sub <- simulations[which(
+      simulations$StepNumber <= steps
+    & simulations$Area %in% area
+  ), ]
+
+  # Make sure raster values are all 0
+  values(raster) <- 0
+
+  # Create spatial lines
+  sub_traj <- sims2tracks(
+      simulations = sub
+    , id          = "TrackID"
+    , messages    = messages
+    , mc.cores    = mc.cores
+  )
+
+  # Remove data by converting into spatial lines
+  sub_traj <- as(sub_traj, "SpatialLines")
+  crs(sub_traj) <- CRS("+init=epsg:32734")
+
+  # Rasterize lines onto the cropped raster
+  if (messages){
+    cat("Rasterizing spatial lines...\n")
+  }
+  heatmap <- rasterizeSpatstat(
+      l        = sub_traj
+    , r        = raster
+    , mc.cores = 1
+  )
+
+  # Store heatmap to temporary file
+  heatmap <- writeRaster(heatmap, tempfile())
+  crs(heatmap) <- CRS("+init=epsg:32734")
+
+  # Return the resulting heatmap
+  return(heatmap)
+}
 
 ################################################################################
 #### Rasterize Trajectories
@@ -239,161 +140,137 @@ rasterized$filename <- tempfile(
   , fileext = ".tif"
 )
 
-# Rasterize simulated trajectories
-heatmaps <- pbmclapply(1:nrow(rasterized)
-  , ignore.interactive = T
-  , mc.cores           = detectCores() - 1
-  , FUN                = function(z){
+# Loop through the study design and reasterize trajectories
+heatmaps <- list()
+for (i in 1:nrow(rasterized)){
 
-  # Rasterize trajectories
-  heatmap <- rasterizeSims(
+  # Create heatmap
+  heatmaps[[i]] <- rasterizeSims(
       simulations = sims
     , raster      = r
-    , steps       = rasterized$steps[z]
-    , area        = rasterized$area[z]
+    , steps       = rasterized$steps[i]
+    , area        = rasterized$area[i]
     , messages    = T
+    , mc.cores    = detectCores() - 1
   )
-
-  # Make sure the map is not stored in memory but on disk
-  heatmap <- terra::writeRaster(heatmap, rasterized$filename[z], overwrite = T)
 
   # Clean garbage
   gc()
 
-  # Return the final raster
-  return(heatmap)
+  # Print update
+  cat(i, "/", nrow(rasterized), "done...\n")
 
-})
-
-# For whatever reason the final list does not correctly link to the rasters and
-# we need to reload the rasters using their temporary filenames
-heatmaps <- lapply(1:nrow(rasterized), function(x){
-  rast(rasterized$filename[x])
-})
-
-# Prepare nice layernames
-names <- paste0("Steps_", rasterized$steps, "_Sampling_", rasterized$area)
-
-# Put heatmaps into a stack
-heatmaps <- do.call(c, heatmaps)
-names(heatmaps) <- names
-
-# Store the final stack
-heatmaps <- writeRaster(heatmaps
-  , "03_Data/03_Results/99_RasterizedSimulations.tif"
-  , overwrite = T
-)
-
-# Put them into the tibble
-rasterized$heatmap <- vector(mode = "list", length = nrow(rasterized))
-for (i in 1:nrow(rasterized)){
-  rasterized$heatmap[[i]] <- heatmaps[[i]]
 }
 
-# Write the tibble to file too
-write_rds(rasterized, "03_Data/03_Results/99_RasterizedSimulations.rds")
+# Combine maps
+combined <- stack(heatmaps)
 
-################################################################################
-#### Rasterize Trajectories Repeatedly
-################################################################################
-# To get a sense of variability, we will need to create multiple heatmaps for
-# each study design. Let's do so and create 50 heatmaps for each study "facette"
-rasterized2 <- as_tibble(
-  expand.grid(
-      steps     = c(68, 125, 250, 500, 1000, 2000)
-    , sampling  = c("Static", "Random")
-    , bootstrap = 1:10
+# Reproject them
+combined <- rast(combined)
+combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+combined <- stack(combined)
+
+# Crop them to the buffer
+buffer <- readOGR("03_Data/03_Results/99_BufferArea.shp")
+combined <- crop(combined, buffer)
+
+# Store to file
+writeRaster(combined, "03_Data/03_Results/99_Heatmaps.grd", overwrite = T)
+
+# Add maps to the tibble
+rasterized <- mutate(rasterized, heatmap = lapply(1:nlayers(combined), function(x){
+  combined[[x]]
+}))
+
+# Store to file
+write_rds(rasterized, "03_Data/03_Results/99_Heatmaps.rds")
+rasterized <- read_rds("03_Data/03_Results/99_Heatmaps.rds")
+
+library(rasterVis)
+plot(rasterized$heatmap[[1]], col = cols)
+library(RColorBrewer)
+cols <- rev(colorRampPalette(brewer.pal(11, 'Spectral'))(256))
+myTheme <- rasterTheme(region = cols)
+levelplot(rasterized$heatmap[[1]], margin = F, par.settings = myTheme, cuts = 20)
+levelplot(rasterized$heatmap[[1]])
+
+tm_shape(rasterized$heatmap[[1]]) + tm_raster(palette = "-Spectral", style = "cont")
+p1 <- grid.grab()
+tm_shape(rasterized$heatmap[[2]]) + tm_raster(palette = "-Spectral", style = "cont")
+p2 <- grid.grab()
+tm_shape(rasterized$heatmap[[6]] + rasterized$heatmap[[12]]) + tm_raster(palette = "-Spectral", style = "cont")
+p3 <- grid.grab()
+library(cowplot)
+plot_grid(p1, p2, p3, )
+test
+grid.newpage()
+pushViewport(viewport(layout = grid.layout(3, 2)))
+print(p1, vp = viewport(layout.pos.col = 1, layout.pos.row = 1))
+print(p2, vp = viewport(layout.pos.col = 2, layout.pos.row = 1))
+print(p3, vp = viewport(layout.pos.col = 2, layout.pos.row = 2))
+
+p1 <- levelplot(combined[[1]], margin = F)
+p2 <- levelplot(combined[[2]], margin = F)
+p3 <- levelplot(combined[[3]], margin = F)
+p4 <- levelplot(combined[[4]], margin = F)
+p5 <- levelplot(combined[[5]], margin = F)
+p6 <- levelplot(combined[[6]], margin = F)
+p7 <- levelplot(combined[[6]] + combined[[12]], margin = F)
+
+library(gridExtra)
+lattice.options(
+  layout.heights=list(bottom.padding=list(x=0), top.padding=list(x=0)),
+  layout.widths=list(left.padding=list(x=0), right.padding=list(x=0))
+)
+lattice.options(
+  layout.heights=list(bottom.padding=list(x=-1), top.padding=list(x=-1)),
+  layout.widths=list(left.padding=list(x=0), right.padding=list(x=0))
+)
+p1 <- levelplot(combined[[1]]
+  , margin = F
+  , xlab = NULL
+  , ylab = NULL
+  , colorkey = F
+  , scales = list(
+      x = list(draw = FALSE)
+    , y = list(draw = FALSE)
   )
 )
-
-# Add a column for temporary but unique filename. Make sure the tempdir has
-# plenty of storage.
-rasterized2$filename <- tempfile(
-    pattern = paste0(
-        "steps_", rasterized2$steps
-      , "_sampling_", rasterized2$sampling
-      , "_repetition_", rasterized2$bootstrap
-      , "_"
-    )
-  , fileext = ".tif"
+p1 <- levelplot(combined[[1]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p2 <- levelplot(combined[[2]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p3 <- levelplot(combined[[3]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p4 <- levelplot(combined[[4]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p5 <- levelplot(combined[[5]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p6 <- levelplot(combined[[6]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p7 <- levelplot(combined[[7]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p8 <- levelplot(combined[[8]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p9 <- levelplot(combined[[9]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p10 <- levelplot(combined[[10]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p11 <- levelplot(combined[[11]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p12 <- levelplot(combined[[12]], margin = F, xlab = NULL, ylab = NULL, colorkey = F, scales=list(x=list(draw=FALSE), y=list(draw=FALSE)), par.settings = myTheme, cuts = 99)
+p13 <- levelplot(combined[[6]] + combined[[12]], margin = F, xlab = NULL, ylab = NULL, par.settings = myTheme, cuts = 99)
+lay <- rbind(
+    c(1, 2, 3, 4, 5, 6)
+  , c(13, 13, 13, 13, 13, 13)
+  , c(13, 13, 13, 13, 13, 13)
+  , c(13, 13, 13, 13, 13, 13)
+  , c(13, 13, 13, 13, 13, 13)
+  , c(7, 8, 9, 10, 11, 12)
 )
+grid.arrange(p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, layout_matrix = lay)
+levelplot(combined[[6]] + combined[[12]], par.settings = myTheme, cuts = 90, margin = F)
+plot(combined[[6]] + combined[[12]], col = rev(cols(100)), horizontal = T, box = F, axes = F)
+p13 <- tm_shape(combined[[6]] + combined[[12]]) + tm_raster(palette = "-Spectral", style = "cont")
 
-# Rasterize simulated trajectories. Note that the number of cores you can use
-# depends a bit on the amount of ram that is available. In some cases memory may
-# overflow.
-heatmaps2 <- pbmclapply(1:nrow(rasterized2)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , FUN                 = function(i){
-
-  # Only keep 50 simulations per source point and point sampling method
-  sims_sub <- sims %>%
-    subset(.
-      , StepNumber <= rasterized2$steps[i]
-      & PointSampling == rasterized2$sampling[i]
-    ) %>%
-    group_by(StartPoint, ID) %>%
-    nest() %>%
-    group_by(StartPoint) %>%
-    sample_n(50) %>%
-    unnest(data)
-
-  # Rasterize trajectories
-  heatmap <- rasterizeSims(
-      simulations = sims_sub
-    , steps       = rasterized2$steps[i]
-    , sampling    = rasterized2$sampling[i]
-  )
-
-  # Make sure the map is not stored in memory but on disk
-  heatmap <- terra::writeRaster(heatmap, rasterized2$filename[i], overwrite = T)
-
-  # Clear cache
-  gc()
-
-  # Return the final raster
-  return(heatmap)
-
-})
-
-# For whatever reason the final list does not correctly link to the rasters and
-# we need to reload the rasters using their temporary filenames
-heatmaps2 <- lapply(1:nrow(rasterized2), function(x){
-  rast(rasterized2$filename[x])
-})
-
-# Prepare nice layernames
-names <- paste0(
-    "Steps_", rasterized2$steps
-  , "_Sampling_", rasterized2$sampling
-  , "_Bootstrap_", rasterized2$bootstrap
-)
-
-# Put heatmaps into a stack
-heatmaps2 <- do.call(c, heatmaps)
-names(heatmaps2) <- names
-
-# Store the final stack
-heatmaps2 <- writeRaster(heatmaps2
-  , "03_Data/03_Results/99_RasterizedSimulationsBootstrap.tif"
-  , overwrite = T
-)
-
-# Put them into the tibble
-rasterized2$heatmap2 <- vector(mode = "list", length = nrow(rasterized2))
-for (i in 1:nrow(rasterized2)){
-  rasterized2$heatmap2[[i]] <- heatmaps2[[i]]
-}
-
-# Write the tibble to file too
-write_rds(rasterized2, "03_Data/03_Results/99_RasterizedSimulationsBootstrap.rds")
+library(RColorBrewer)
+cols <- colorRampPalette(brewer.pal(n = 11, "Spectral"))
 
 ################################################################################
 #### Visualizations
 ################################################################################
 # Required Data
-rasterized <- read_rds("03_Data/03_Results/99_RasterizedSimulations.rds")
-heatmaps <- stack("03_Data/03_Results/99_RasterizedSimulations.tif")
+# rasterized <- read_rds("03_Data/03_Results/99_RasterizedSimulations.rds")
+# heatmaps <- stack("03_Data/03_Results/99_RasterizedSimulations.tif")
 points1 <- shapefile("03_Data/03_Results/99_SourcePoints.shp")
 points2 <- shapefile("03_Data/03_Results/99_SourcePoints2.shp")
 kaza <- "03_Data/02_CleanData/00_General_KAZA_KAZA.shp" %>%

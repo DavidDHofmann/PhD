@@ -1,0 +1,252 @@
+################################################################################
+#### Animation of Dispersal from Moremi
+################################################################################
+# Clear R's brain
+rm(list = ls())
+
+# Set the working directory
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
+setwd(wd)
+
+# Load required packages
+library(tidyverse)   # For data wrangling
+library(raster)
+library(rgdal)
+library(davidoff)
+library(pbmcapply)
+library(spatstat)
+library(maptools)
+library(viridis)
+library(animation)
+library(tmap)
+
+################################################################################
+#### Prepare Data
+################################################################################
+# Load simulated dispersal data
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+sims <- ungroup(sims)
+
+# Load protected areas
+prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
+
+# Create SpatialPoints for first location of each trajectory
+first <- sims %>%
+  dplyr::select("x", "y", "TrackID") %>%
+  group_by(TrackID) %>%
+  slice(1) %>%
+  SpatialPointsDataFrame(
+      coords      = cbind(.[["x"]], .[["y"]])
+    , proj4string = CRS("+init=epsg:4326")
+  )
+
+# Assess from which protected area each trajectory left
+first$Origin <- as.character(over(first, prot)$Name)
+first <- first@data[, c("TrackID", "Origin")]
+
+# Join information to simulated tracks
+sims <- left_join(sims, first, by = "TrackID")
+sims$Origin[sims$Area == "Buffer"] <- "Buffer"
+
+# Identify tracks leaving from moremi
+sims <- subset(sims, Origin == "Moremi")
+
+# Create trajectories
+sims_tracks <- sims2tracks(sims)
+
+# Prepare reference raster
+r <- raster(
+    extent(sims_tracks) + c(-1, +1, -1, +1) * metersToDegrees(1000)
+  , res = metersToDegrees(1000)
+)
+
+# Loop through the different number of steps and rasterize them
+design <- tibble(
+    StepNumber = 2:max(sims$StepNumber)
+)
+design$Heatmap <- lapply(1:nrow(design), function(x){
+  cat("Create Tracks\n")
+  sub <- sims[sims$StepNumber <= design$StepNumber[x], ]
+  sub_track <- sims2tracks(sub)
+  cat("Create Heatmap\n")
+  heatmap <- rasterizeSpatstat(sub_track, r, mc.cores = 1)
+  heatmap <- writeRaster(heatmap, tempfile())
+  return(heatmap)
+})
+
+# Put all heatmaps together
+heatmaps <- stack(design$Heatmap)
+
+# Store them
+writeRaster(heatmaps, "heatmaps_animation.grd")
+heatmaps <- stack("heatmaps_animation.grd")
+
+################################################################################
+#### Animate
+################################################################################
+# Define extent for which we want to plot
+extent <- extent(22, 27, -20.5, -17.5) %>% as(., "SpatialPolygons")
+crs(extent) <- CRS("+init=epsg:4326")
+
+# # Get extent of kaza
+# kaza <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
+# africa <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
+#
+# # Prepare inset map
+# test <- tm_shape(kaza) +
+#     tm_borders(col = "black") +
+#   # tm_shape(africa) +
+#   #   tm_borders(col = "gray80") +
+#     # tm_text("COUNTRY") +
+#   tm_shape(subset(prot, Name == "Moremi")) +
+#     tm_polygons(
+#         col = "red"
+#       , lwd = 0
+#     ) +
+#   tm_shape(extent) +
+#     tm_borders(
+#         col = "red"
+#       , lty = 2
+#     ) +
+#   tm_layout(
+#       bg.color      = "transparent"
+#     , inner.margins = c(0, 0, 0, 0)
+#     , outer.margins = c(0, 0, 0, 0)
+#     , frame.lwd     = 0
+#   )
+
+# Prepare plots for animation
+anim <- lapply(1:nlayers(heatmaps), function(n){
+  tm_shape(extent) +
+      tm_borders() +
+    tm_shape(sqrt(heatmaps[[n]])) +
+      tm_raster(
+          palette            = "magma"
+        , style              = "cont"
+        , title              = expression("Traversal Frequency"^"0.5")
+      ) +
+    tm_shape(subset(prot, Name == "Moremi")) +
+      tm_borders(
+          col = "white"
+        , lwd = 1
+      ) +
+      tm_text(
+         "Name"
+        , col      = "white"
+        , fontface = 3
+        , alpha    = 0.8
+      ) +
+    tm_layout(
+        title              = paste0("Steps: ", sprintf("%04d", n))
+      , title.color        = "black"
+      , title.size         = 0.8
+      , title.bg.color     = "white"
+      , title.position     = c("center", "top")
+      # , legend.position    = c("left", "top")
+      # , legend.text.color  = "white"
+      # , legend.title.color = "white"
+      , legend.show      = F
+    ) +
+    tm_graticules(
+        n.y                 = 5
+      , n.x                 = 5
+      , labels.inside.frame = FALSE
+      , lines               = FALSE
+      , ticks               = TRUE
+    ) +
+    tm_scale_bar(
+          position  = c("right", "bottom")
+        , text.size = 0.5
+        , text.col  = "white"
+        , width     = 0.125
+    ) +
+    tm_compass(
+        color.dark  = "white"
+      , color.light = "white"
+      , text.color  = "white"
+      , position    = c("left", "bottom")
+  )
+})
+
+# Also prepare some leading and trailing plots
+leading <- tm_shape(extent) +
+      tm_borders() +
+    tm_shape(sqrt(heatmaps[[1]])) +
+      tm_raster(
+          palette            = "black"
+        , style              = "cont"
+        , title              = expression("Traversal Frequency"^"0.5")
+      ) +
+    tm_shape(subset(prot, Name == "Moremi")) +
+      tm_borders(
+          col = "white"
+        , lwd = 1
+      ) +
+      tm_text(
+         "Name"
+        , col      = "white"
+        , fontface = 3
+        , alpha    = 0.8
+      ) +
+    tm_layout(
+        title              = paste0("Steps: ", sprintf("%04d", 0))
+      , title.color        = "black"
+      , title.size         = 0.8
+      , title.bg.color     = "white"
+      , title.position     = c("center", "top")
+      # , legend.position    = c("left", "top")
+      # , legend.text.color  = "white"
+      # , legend.title.color = "white"
+      , legend.show      = F
+    ) +
+    tm_graticules(
+        n.y                 = 5
+      , n.x                 = 5
+      , labels.inside.frame = FALSE
+      , lines               = FALSE
+      , ticks               = TRUE
+    ) +
+    tm_scale_bar(
+          position  = c("right", "bottom")
+        , text.size = 0.5
+        , text.col  = "white"
+        , width     = 0.125
+    ) +
+    tm_compass(
+        color.dark  = "white"
+      , color.light = "white"
+      , text.color  = "white"
+      , position    = c("left", "bottom")
+  )
+
+# Repeat
+leading <- lapply(1:100, function(x){
+  leading
+})
+
+# Repeat last frame
+trailing <- lapply(1:200, function(x){
+  anim[[length(anim)]]
+})
+
+# Combine all
+combined <- c(leading, anim, trailing)
+
+# Prepare the animation
+ani.options(interval = 1 / 100, ani.width = 1000, ani.height = 700)
+saveVideo({
+  for (i in 1:length(combined)){
+    suppressWarnings(
+      print(combined[[i]])
+    )
+  }
+}, video.name = "Dispersal.mp4")
+
+# # Using tmap
+# tmap_animation(
+#     combined
+#   , filename      = "Dispersal.mp4"
+#   , width         = 1200
+#   , height        = 600
+#   , fps           = 50
+# )
