@@ -362,7 +362,7 @@ p4 <- ggplot(loess, aes(x = Rank, y = Loess)) +
   ) +
   geom_line(
       size = 1
-    , col  = darken("steelblue")
+    , col  = "steelblue"
   ) +
   facet_wrap("Group", nrow = 2, scales = "free") +
   theme_classic() +
@@ -391,7 +391,13 @@ p4 <- ggplot(loess, aes(x = Rank, y = Loess)) +
 p5 <- ggarrange(p3, p4, widths = c(1.5, 1), labels = "auto")
 
 # Save all
-ggsave("04_Manuscript/99_MovementModel.pdf", plot = p5, width = 12, height = 7, device = "pdf", scale = 0.7)
+ggsave("04_Manuscript/99_MovementModel.pdf"
+  , plot   = p5
+  , width  = 12
+  , height = 7
+  , device = "pdf"
+  , scale  = 0.7
+)
 
 ################################################################################
 #### Random Effects

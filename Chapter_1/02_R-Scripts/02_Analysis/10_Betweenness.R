@@ -1,4 +1,3 @@
-
 ################################################################################
 #### Analysis of Simulated Dispersal Events
 ################################################################################
@@ -26,135 +25,11 @@ library(davidoff)       # Custom functions
 # Set a seed
 set.seed(12345)
 
-################################################################################
-#### Load and Clean Data
-################################################################################
-# Load the simulated dispersal trajectories
-sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
-length(unique(sims$TrackID))
-sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), 6800))
-
-# Subset to simulations of interest
-sims <- subset(sims, StepNumber <= 500)
-
-# # For now, only keep a few trajectories
-# sims <- sims %>%
-#   group_by(TrackID) %>%
-#   sample_n(100) %>%
-#   unnest()
-
-# Load the reference raster
-r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
-
-# Prepare multiple rasters with different resolutions for scaling analysis. We
-# will simply use our reference raster and coarsen its resolution.
-r10000  <- aggregate(r, fact = 10000 / 250)
-r5000   <- aggregate(r, fact = 5000 / 250)
-r2500   <- aggregate(r, fact = 2500 / 250)
-
-# Store them to file to save some memory
-r10000  <- writeRaster(r10000, tempfile())
-r5000   <- writeRaster(r5000, tempfile())
-r2500   <- writeRaster(r2500, tempfile())
-
-# Clean remaining garbage
-gc()
-
-# Note that the resolution of the raster determines the number of vertices in
-# the resulting network (each raster cell will be turned into a vertex). Let's
-# therefore keep track of the IDs of each raster cell.
-vertices10000 <- 1:ncell(r10000)
-vertices5000  <- 1:ncell(r5000)
-vertices2500  <- 1:ncell(r2500)
-
-# The resolution of the raster therefore also determines the layout of the
-# network (i.e. the spatial location of each vertex). Let's keep track of the
-# coordinates of each raster cell (i.e. each vertex) so that we can nicely plot
-# the network graph afterwards.
-lay10000  <- as.matrix(as.data.frame(r10000, xy = T)[, c(1, 2)])
-lay5000   <- as.matrix(as.data.frame(r5000, xy = T)[, c(1, 2)])
-lay2500   <- as.matrix(as.data.frame(r2500, xy = T)[, c(1, 2)])
-
-# Fill the rasters with unique cell values (we will use the values as cell IDs)
-values(r10000)  <- vertices10000
-values(r5000)   <- vertices5000
-values(r2500)   <- vertices2500
-
-# Make coordinates of simulated trajectories spatial
-coordinates(sims) <- c("x", "y")
-crs(sims) <- CRS("+init=epsg:4326")
-
-# At each coordinate we now extract the cell IDs from the different rasters
-visits <- data.frame(
-    TrackID = sims$TrackID
-  , x       = coordinates(sims)[, 1]
-  , y       = coordinates(sims)[, 2]
-  , R10000  = raster::extract(r10000, sims)
-  # , R5000   = raster::extract(r5000, sims)
-  # , R2500   = raster::extract(r2500, sims)
-)
-
-# Some visits will happen in the buffer zone, therefore returning NA values
-sum(is.na(visits$R10000))
-sum(is.na(visits$R5000))
-sum(is.na(visits$R2500))
-
-# We now want to create a visitation history for each trajectory. This history
-# depicts all transitions from one raster cell to another. To do this
-# repeatedly, we write a function to retrieve the visitation history from a
-# sequence of values
-visitHist <- function(x, singlecount = F){
-  transitions <- data.frame(from = lag(x), to = x) %>%
-    group_by(from, to) %>%
-    na.omit() %>%
-    summarize(TotalConnections = n(), .groups = "drop")
-  if (singlecount){
-    transitions$TotalConnections = 1
-  }
-  return(transitions)
-}
-
-# Let's check what the function does exactly
-visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = F)
-visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = T)
-visitHist(c(1, 2, 2, NA, 4, 5, 1, 2), singlecount = T)
-
-# We want to retrieve the visitation history to each trajectory seperately, so
-# let's nest them.
-visits <- visits %>% nest(data = -TrackID)
-
-# Apply the function to each trajectory for each raster. We therefore identify
-# the visitation history of each trajectory for each of the different spatial
-# resolutions.
-visits$History10000 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = detectCores() - 1
-  , ignore.interactive  = T
-  , function(x){
-    visitHist(visits$data[[x]]$R10000, singlecount = T)
-  })
-visits$History5000 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = detectCores() - 1
-  , ignore.interactive  = T
-  , function(x){
-    visitHist(visits$data[[x]]$R5000, singlecount = T)
-  })
-visits$History2500 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = detectCores() - 1
-  , ignore.interactive  = T
-  , function(x){
-    visitHist(visits$data[[x]]$R2500, singlecount = T)
-  })
-
-# Check the result
-print(visits)
-print(visits$History10000[[1]])
-
-# Important to note: we now derived the vistation history for each simulated
-# trajectory individually. We could easily put them together and calculate a
-# single visitation history throughout all dispersal trajectories.
+# Suppress scientific notation
+options(scipen = 999)
 
 ################################################################################
-#### Calculate Network Metrics
+#### Functions to Calculate Network Metrics
 ################################################################################
 # We will create and use networks in order to derive network metrics that we can
 # plot spatially. Let's prepare a function that we can use to derive all desired
@@ -217,11 +92,384 @@ stackMet <- function(
     return(funned)
 }
 
+# We now want to create a visitation history for each trajectory. This history
+# depicts all transitions from one raster cell to another. To do this
+# repeatedly, we write a function to retrieve the visitation history from a
+# sequence of values
+visitHist <- function(x, singlecount = F){
+  transitions <- data.frame(from = lag(x), to = x) %>%
+    group_by(from, to) %>%
+    na.omit() %>%
+    summarize(TotalConnections = n(), .groups = "drop")
+  if (singlecount){
+    transitions$TotalConnections = 1
+  }
+  return(transitions)
+}
+
 ################################################################################
-#### TESTING: SINGLE TRJAJECTORIES
+#### Load and Clean Data
+################################################################################
+# Load the simulated dispersal trajectories
+# sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+
+# Prepare design through which we want to loop
+design <- expand_grid(
+    steps     = c(125, 500, 2000)
+  # , bootstrap = c(1:100)
+)
+
+# # Let's shuffle the matrix (makes prediction of calculation time in pbmclapply
+# # more accurate)
+# design <- design[sample(nrow(design), replace = F), ]
+
+# Load the reference raster
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+
+# Need to coarsen resolution
+# r  <- aggregate(r, fact = 5000 / 250, fun = max)
+r  <- aggregate(r, fact = 2500 / 250, fun = max)
+
+# Note that the resolution of the raster determines the number of vertices in
+# the resulting network (each raster cell will be turned into a vertex). Let's
+# therefore keep track of the IDs of each raster cell.
+vertices <- 1:ncell(r)
+
+# The resolution of the raster therefore also determines the layout of the
+# network (i.e. the spatial location of each vertex). Let's keep track of the
+# coordinates of each raster cell (i.e. each vertex) so that we can nicely plot
+# the network graph afterwards.
+lay  <- as.matrix(as.data.frame(r, xy = T)[, c(1, 2)])
+
+# Fill the rasters with unique cell values (we will use the values as cell IDs)
+values(r)  <- vertices
+
+# Make coordinates of simulated trajectories spatial
+coordinates(sims) <- c("x", "y")
+crs(sims) <- CRS("+init=epsg:4326")
+
+# At each coordinate of the simulated trajectories we now extract the cell IDs
+# from the different rasters
+visits <- data.frame(
+    TrackID    = sims$TrackID
+  , StepNumber = sims$StepNumber
+  , x          = coordinates(sims)[, 1]
+  , y          = coordinates(sims)[, 2]
+  , r          = raster::extract(r, sims)
+)
+
+# Remove simulations
+rm(sims)
+gc()
+
+# Loop through the design and calculate betweenness map
+maps <- list()
+for (i in 1:nrow(design)){
+
+  # Subset data to desired steps
+  sub <- visits[visits$StepNumber <= design$steps[i], ]
+
+  # Nest tracks
+  sub <- nest(sub, data = -TrackID)
+
+  # Create visitation history
+  cat("Getting visitation history...\n")
+  history <- pbmclapply(
+      X                  = sub$data
+    , ignore.interactive = T
+    , mc.cores           = 1
+    , FUN                = function(y){
+        visitHist(y$r, singlecount = T)
+    }) %>%
+    do.call(rbind, .) %>%
+    group_by(from, to) %>%
+    summarize(TotalConnections = sum(TotalConnections), .groups = "drop") %>%
+    ungroup() %>%
+    mutate(weight = mean(TotalConnections) / TotalConnections)
+
+  # Create network
+  cat("Creating graph...\n")
+  net <- graph_from_data_frame(history, vertices = vertices)
+
+  # Calculate Betweenness
+  cat("Calculating betweenness...\n")
+  met <- netMet(
+      network  = net
+    , raster   = r
+    , metrics  = "betweenness"
+    , tempfile = T
+  )
+
+  # Put into list
+  maps[[i]] <- met
+
+  # Update
+  cat(i, "out of", nrow(design), "done\n")
+
+}
+
+# Store them
+maps <- stack(maps)
+plot(maps)
+plot(sqrt(maps[[3]]), col = magma(100))
+plot(sqrt(focal(maps[[3]], w = matrix(1, 3, 3), fun = sum)), col = magma(100))
+plot(sqrt(focal(maps[[3]], w = matrix(1, 3, 3), fun = max)), col = magma(100))
+writeRaster(maps, "03_Data/03_Results/99_Betweenness2500.grd")
+
+# At each coordinate of the simulated trajectories we now extract the cell IDs
+# from the different rasters
+visits <- data.frame(
+    TrackID = sims$TrackID
+  , x       = coordinates(sims)[, 1]
+  , y       = coordinates(sims)[, 2]
+  , R10000  = raster::extract(r10000, sims)
+  , R5000   = raster::extract(r5000, sims)
+  , R2500   = raster::extract(r2500, sims)
+)
+# Let's check what the function does exactly
+visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = F)
+visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = T)
+visitHist(c(1, 2, 2, NA, 4, 5, 1, 2), singlecount = T)
+
+# We want to retrieve the visitation history to each trajectory seperately, so
+# let's nest them.
+visits <- visits %>% nest(data = -TrackID)
+
+# Apply the function to each trajectory for each raster. We therefore identify
+# the visitation history of each trajectory for each of the different spatial
+# resolutions.
+visits$History10000 <- pbmclapply(1:nrow(visits)
+  , mc.cores            = detectCores() / 2
+  , ignore.interactive  = T
+  , function(x){
+    visitHist(visits$data[[x]]$R10000, singlecount = T)
+  })
+visits$History5000 <- pbmclapply(1:nrow(visits)
+  , mc.cores            = detectCores() / 2
+  , ignore.interactive  = T
+  , function(x){
+    visitHist(visits$data[[x]]$R5000, singlecount = T)
+  })
+visits$History2500 <- pbmclapply(1:nrow(visits)
+  , mc.cores            = detectCores() / 2
+  , ignore.interactive  = T
+  , function(x){
+    visitHist(visits$data[[x]]$R2500, singlecount = T)
+  })
+
+# Check the result
+print(visits)
+print(visits$History10000[[1]])
+print(visits$History5000[[1]])
+print(visits$History2500[[1]])
+
+# Important to note: we now derived the vistation history for each simulated
+# trajectory individually. We could easily put them together and calculate a
+# single visitation history throughout all dispersal trajectories. We will
+# actually do this now.
+visits10000 <- do.call(rbind, visits$History10000) %>%
+      group_by(from, to) %>%
+      summarize(TotalConnections = sum(TotalConnections)) %>%
+      ungroup() %>%
+      mutate(weight = mean(TotalConnections) / TotalConnections)
+visits5000 <- do.call(rbind, visits$History5000) %>%
+      group_by(from, to) %>%
+      summarize(TotalConnections = sum(TotalConnections)) %>%
+      ungroup() %>%
+      mutate(weight = mean(TotalConnections) / TotalConnections)
+visits2500 <- do.call(rbind, visits$History2500) %>%
+      group_by(from, to) %>%
+      summarize(TotalConnections = sum(TotalConnections)) %>%
+      ungroup() %>%
+      mutate(weight = mean(TotalConnections) / TotalConnections)
+
+# Create graphs
+net10000 <- graph_from_data_frame(visits10000, vertices = vertices10000)
+net5000 <- graph_from_data_frame(visits5000, vertices = vertices5000)
+net2500 <- graph_from_data_frame(visits2500, vertices = vertices2500)
+
+# Check if weighted
+is_weighted(net10000)
+is_weighted(net5000)
+is_weighted(net2500)
+
+# Check if connected
+is_connected(net10000)
+is_connected(net5000)
+is_connected(net2500)
+
+# Calculate metrics
+met10000 <- netMet(network = net10000, raster = r10000, metrics = "betweenness")
+met5000  <- netMet(network = net5000, raster = r5000, metrics = "betweenness")
+met2500  <- netMet(network = net2500, raster = r2500, metrics = "betweenness")
+
+
+################################################################################
+#### Load and Clean Data
+################################################################################
+# Load the simulated dispersal trajectories
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+# sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+
+# # Subset to simulations of interest
+# sims <- subset(sims, StepNumber <= 2000)
+#
+# For now, only keep a few trajectories
+# sims <- sims %>%
+#   nest(data = -TrackID) %>%
+#   slice_sample(n = 10) %>%
+#   unnest(data)
+
+# Load the reference raster
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+
+# Prepare multiple rasters with different resolutions. Use the reference raster
+# for this
+r10000  <- aggregate(r, fact = 10000 / 250)
+r5000   <- aggregate(r, fact = 5000 / 250)
+r2500   <- aggregate(r, fact = 2500 / 250)
+
+# Store them to file to save some memory
+r10000  <- writeRaster(r10000, tempfile())
+r5000   <- writeRaster(r5000, tempfile())
+r2500   <- writeRaster(r2500, tempfile())
+
+# Clean remaining garbage
+gc()
+
+# Note that the resolution of the raster determines the number of vertices in
+# the resulting network (each raster cell will be turned into a vertex). Let's
+# therefore keep track of the IDs of each raster cell.
+vertices10000 <- 1:ncell(r10000)
+vertices5000  <- 1:ncell(r5000)
+vertices2500  <- 1:ncell(r2500)
+
+# The resolution of the raster therefore also determines the layout of the
+# network (i.e. the spatial location of each vertex). Let's keep track of the
+# coordinates of each raster cell (i.e. each vertex) so that we can nicely plot
+# the network graph afterwards.
+lay10000  <- as.matrix(as.data.frame(r10000, xy = T)[, c(1, 2)])
+lay5000   <- as.matrix(as.data.frame(r5000, xy = T)[, c(1, 2)])
+lay2500   <- as.matrix(as.data.frame(r2500, xy = T)[, c(1, 2)])
+
+# Fill the rasters with unique cell values (we will use the values as cell IDs)
+values(r10000)  <- vertices10000
+values(r5000)   <- vertices5000
+values(r2500)   <- vertices2500
+
+# Make coordinates of simulated trajectories spatial
+coordinates(sims) <- c("x", "y")
+crs(sims) <- CRS("+init=epsg:4326")
+
+# At each coordinate of the simulated trajectories we now extract the cell IDs
+# from the different rasters
+visits <- data.frame(
+    TrackID = sims$TrackID
+  , x       = coordinates(sims)[, 1]
+  , y       = coordinates(sims)[, 2]
+  , R10000  = raster::extract(r10000, sims)
+  , R5000   = raster::extract(r5000, sims)
+  , R2500   = raster::extract(r2500, sims)
+)
+
+# We now want to create a visitation history for each trajectory. This history
+# depicts all transitions from one raster cell to another. To do this
+# repeatedly, we write a function to retrieve the visitation history from a
+# sequence of values
+visitHist <- function(x, singlecount = F){
+  transitions <- data.frame(from = lag(x), to = x) %>%
+    group_by(from, to) %>%
+    na.omit() %>%
+    summarize(TotalConnections = n(), .groups = "drop")
+  if (singlecount){
+    transitions$TotalConnections = 1
+  }
+  return(transitions)
+}
+
+# Let's check what the function does exactly
+visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = F)
+visitHist(c(1, 2, 2, 3, 4, 5, 1, 2), singlecount = T)
+visitHist(c(1, 2, 2, NA, 4, 5, 1, 2), singlecount = T)
+
+# We want to retrieve the visitation history to each trajectory seperately, so
+# let's nest them.
+visits <- visits %>% nest(data = -TrackID)
+
+# Apply the function to each trajectory for each raster. We therefore identify
+# the visitation history of each trajectory for each of the different spatial
+# resolutions.
+visits$History10000 <- pbmclapply(1:nrow(visits)
+  , mc.cores            = detectCores() / 2
+  , ignore.interactive  = T
+  , function(x){
+    visitHist(visits$data[[x]]$R10000, singlecount = T)
+  })
+visits$History5000 <- pbmclapply(1:nrow(visits)
+  , mc.cores            = detectCores() / 2
+  , ignore.interactive  = T
+  , function(x){
+    visitHist(visits$data[[x]]$R5000, singlecount = T)
+  })
+visits$History2500 <- pbmclapply(1:nrow(visits)
+  , mc.cores            = detectCores() / 2
+  , ignore.interactive  = T
+  , function(x){
+    visitHist(visits$data[[x]]$R2500, singlecount = T)
+  })
+
+# Check the result
+print(visits)
+print(visits$History10000[[1]])
+print(visits$History5000[[1]])
+print(visits$History2500[[1]])
+
+# Important to note: we now derived the vistation history for each simulated
+# trajectory individually. We could easily put them together and calculate a
+# single visitation history throughout all dispersal trajectories. We will
+# actually do this now.
+# visits10000 <- do.call(rbind, visits$History10000) %>%
+#       group_by(from, to) %>%
+#       summarize(TotalConnections = sum(TotalConnections)) %>%
+#       ungroup() %>%
+#       mutate(weight = mean(TotalConnections) / TotalConnections)
+visits5000 <- do.call(rbind, visits$History5000) %>%
+      group_by(from, to) %>%
+      summarize(TotalConnections = sum(TotalConnections)) %>%
+      ungroup() %>%
+      mutate(weight = mean(TotalConnections) / TotalConnections)
+# visits2500 <- do.call(rbind, visits$History2500) %>%
+#       group_by(from, to) %>%
+#       summarize(TotalConnections = sum(TotalConnections)) %>%
+#       ungroup() %>%
+#       mutate(weight = mean(TotalConnections) / TotalConnections)
+
+# Create graphs
+# net10000 <- graph_from_data_frame(visits10000, vertices = vertices10000)
+net5000 <- graph_from_data_frame(visits5000, vertices = vertices5000)
+# net2500 <- graph_from_data_frame(visits2500, vertices = vertices2500)
+
+# # Check if weighted
+# is_weighted(net10000)
+# is_weighted(net5000)
+# is_weighted(net2500)
+#
+# # Check if connected
+# is_connected(net10000)
+# is_connected(net5000)
+# is_connected(net2500)
+
+# Calculate metrics
+met10000 <- netMet(network = net10000, raster = r10000, metrics = "betweenness")
+met5000  <- netMet(network = net5000, raster = r5000, metrics = "betweenness")
+met2500  <- netMet(network = net2500, raster = r2500, metrics = "betweenness")
+
+################################################################################
+#### TESTING: SINGLE TRAJECTORIES
 ################################################################################
 # Select an index
-i <- 1000
+i <- 1001
 
 # Extract first trajectory
 traj <- visits$data[[i]]
@@ -308,15 +556,15 @@ res_ww1 <- netMet(network = net_ww1, raster = r10000)
 res_ww2 <- netMet(network = net_ww2, raster = r10000)
 res_nw  <- netMet(network = net_nw, raster = r10000)
 
-# Calculate centralization betweenness
-centralization.betweenness(net_ww1)$centralization
-centralization.betweenness(net_ww2)$centralization
-centralization.betweenness(net_nw)$centralization
+# # Calculate centralization betweenness
+# centralization.betweenness(net_ww1)$centralization
+# centralization.betweenness(net_ww2)$centralization
+# centralization.betweenness(net_nw)$centralization
 
 # Compare results
 par(mfrow = c(2, 2))
 plot(sqrt(res_ww1[["betweenness"]]), col = viridis(50), main = "With Weights fun 1")
-plot(sqrt(res_ww2[["betweenness"]]), col = magma(50), main = "With Weights fun 2")
+plot(sqrt(res_ww2[["betweenness"]]), col = viridis(50), main = "With Weights fun 2")
 plot(sqrt(res_nw[["betweenness"]]), col = viridis(50), main = "Without Weights")
 
 par(mfrow = c(2, 2))
@@ -328,161 +576,3 @@ plot(sqrt(res_nw[["degree"]]), col = viridis(20), main = "Without Weights")
 par(mfrow = c(1, 2))
 plot(sqrt(res_ww2[["betweenness"]]), col = viridis(20), main = "With Weights fun 2")
 plot(sqrt(res_ww2[["degree"]]), col = viridis(20), main = "With Weights fun 2")
-
-################################################################################
-#### Approach I: Calculate Network Metrics Over All Trajectories
-################################################################################
-# Bind the visitation histories of all trajectories together and calculate edge
-# weights. In igraph, edge weights are comparable to costs. That is, igraph uses
-# the weight as a proxy for distance. For our purposes we therefore need to
-# convert the "TotalConnections" metric into a "Distance" metric. One way to
-# achieve this is to invert values using the formula f(x) = max(x) - x.
-weights <- c(1, 2, 3, 4)
-max(weights) - weights + 1
-1/weights
-mean(weights)/weights
-
-visits_all <- tibble(
-    History10000  = list(
-      do.call(rbind, visits$History10000) %>%
-      group_by(from, to) %>%
-      summarize(TotalConnections = sum(TotalConnections)) %>%
-      ungroup() %>%
-      mutate(weight = max(TotalConnections) - TotalConnections + 1)
-  )
-  # , History5000   = list(
-  #     do.call(rbind, visits$History5000) %>%
-  #     group_by(from, to) %>%
-  #     summarize(TotalConnections = sum(TotalConnections)) %>%
-  #     ungroup() %>%
-  #     mutate(weight = max(TotalConnections) - TotalConnections) + 1
-  # )
-  # , History2500   = list(
-  #     do.call(rbind, visits$History2500) %>%
-  #     group_by(from, to) %>%
-  #     summarize(TotalConnections = sum(TotalConnections)) %>%
-  #     ungroup() %>%
-  #     mutate(weight = max(TotalConnections) - TotalConnections) + 1
-  # )
-)
-
-# We now use the visitation histories as edgelists to create networks / graphs
-visits_all$Graph10000 <- list(
-  graph_from_data_frame(visits_all$History10000[[1]], vertices = vertices10000)
-)
-visits_all$Graph5000 <- list(
-  graph_from_data_frame(visits_all$History5000[[1]], vertices = vertices5000)
-)
-visits_all$Graph2500 <- list(
-  graph_from_data_frame(visits_all$History2500[[1]], vertices = vertices2500)
-)
-
-# Make sure the networks are weighted
-is_weighted(visits_all$Graph10000[[1]])
-is_weighted(visits_all$Graph5000[[1]])
-is_weighted(visits_all$Graph2500[[1]])
-
-# Calculate network metrics
-visits_all$Metrics10000 <- list(netMet(visits_all$Graph10000[[1]], r10000))
-visits_all$Metrics5000 <- list(netMet(visits_all$Graph5000[[1]], r5000))
-visits_all$Metrics2500 <- list(netMet(visits_all$Graph2500[[1]], r2500))
-
-# Visualize them
-plot(
-    sqrt(visits_all$Metrics10000[[1]][["betweenness"]])
-  , col   = viridis(20)
-  , main  = "Betweenness"
-)
-plot(
-    visits_all$Metrics10000[[1]][["closeness"]]
-  , col   = viridis(20)
-  , main  = "Closeness"
-)
-plot(
-    visits_all$Metrics10000[[1]][["degree"]]
-  , col   = viridis(20)
-  , main  = "Degree"
-)
-
-###############################################################################
-#### Approach II: Apply to each Trajectory Individually, Then Merge Metrics
-################################################################################
-# In contrast to be approach above, we know create a network for each dispersal
-# trajectory individually.
-# backup <- visits
-# visits <- visits[sample(1:nrow(visits), 20), ]
-visits$Graph10000 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , function(x){
-    graph_from_data_frame(visits$History10000[[x]], vertices = vertices10000)
-  })
-visits$Graph5000 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , function(x){
-    graph_from_data_frame(visits$History5000[[x]], vertices = vertices5000)
-  })
-visits$Graph2500 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , function(x){
-    graph_from_data_frame(visits$History2500[[x]], vertices = vertices2500)
-  })
-
-# Calculate network metrics for each network
-visits$Metrics10000 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , function(x){
-      netMet(
-          network   = visits$Graph10000[[x]]
-        , raster    = r10000
-        , metrics   = c("betweenness")
-        , tempfile  = T
-      )
-  }
-)
-visits$Metrics5000 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , function(x){
-      netMet(
-          network   = visits$Graph5000[[x]]
-        , raster    = r5000
-        , metrics   = c("betweenness")
-        , tempfile  = T
-      )
-  }
-)
-visits$Metrics2500 <- pbmclapply(1:nrow(visits)
-  , mc.cores            = 1
-  , ignore.interactive  = T
-  , function(x){
-      netMet(
-          network   = visits$Graph2500[[x]]
-        , raster    = r2500
-        , metrics   = c("betweenness")
-        , tempfile  = T
-      )
-  }
-)
-
-# Put metrics them into single maps
-betweenness <- stackMet(
-    metrics = visits$Metrics5000
-  , metric  = "betweenness"
-  , fun     = function(x){mean(x)}
-)
-degree <- stackMet(
-    metrics = visits$Metrics5000
-  , metric  = "degree"
-  , fun     = function(x){mean(x)}
-)
-
-# Visualize
-kaza <- shapefile("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
-plot(sqrt(betweenness), col = viridis(20))
-plot(kaza, add = T, border = "white")
-plot(sqrt(degree), col = viridis(20))
-plot(kaza, add = T, border = "white")

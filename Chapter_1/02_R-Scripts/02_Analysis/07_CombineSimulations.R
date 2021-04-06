@@ -78,6 +78,9 @@ sims <- sims %>% group_by(TrackID) %>% mutate(StepNumber = (row_number()))
 # Check object size
 format(object.size(sims), units = "Gb")
 
+# Ungroup
+sims <- ungroup(sims)
+
 # Write to an rds
 write_rds(sims, "03_Data/03_Results/99_DispersalSimulation.rds")
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")

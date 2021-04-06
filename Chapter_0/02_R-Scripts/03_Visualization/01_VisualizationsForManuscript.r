@@ -231,7 +231,7 @@ p2 <- tm_shape(subset(prot, Desig == "Protected")) +
       , fontface  = 3
       , size      = 0.5
     ) +
-  tm_grid(
+  tm_graticules(
       n.y                 = 5
     , n.x                 = 5
     , labels.inside.frame = FALSE
@@ -1733,7 +1733,7 @@ core <- as(extent(c(23.25, 24, -19.8, -19.05)), "SpatialLines")
 crs(core) <- CRS("+init=epsg:4326")
 
 # Rescale between 0 and 1 (necessary to get nice names)
-permeability <- normalizeMap(permeability)
+permeability <- (permeability - min(values(permeability))) / (max(values(permeability)) - min(values(permeability)))
 
 # Add some pseudodata to the kaza shapefile
 kaza$Pseudo <- ""
@@ -1798,7 +1798,7 @@ p1 <- tm_shape(permeability) +
       , labels          = c("Low", "", "High")
       , legend.reverse  = T
     ) +
-  tm_grid(
+  tm_graticules(
       n.x = 5
     , n.y = 5
     , labels.inside.frame = FALSE
@@ -1905,7 +1905,7 @@ p2 <- tm_shape(permeability, bbox = bbox) +
     , col       = "white"
     , fontface  = 3
   ) +
-  tm_grid(
+  tm_graticules(
       n.x = 5
     , n.y = 5
     , labels.inside.frame = FALSE
@@ -2413,7 +2413,7 @@ p1 <- tm_shape(corrs2) +
       col           = "grey65"
     , border.col    = "grey65"
   ) +
-  tm_grid(
+  tm_graticules(
       n.x                 = 5
     , n.y                 = 5
     , labels.inside.frame = FALSE
@@ -2489,7 +2489,7 @@ p2 <- tm_shape(corrs2) +
       , labels          = c("Low-Frequency", "", "High-Frequency")
       , legend.reverse  = T
     ) +
-  tm_grid(
+  tm_graticules(
       n.x                 = 5
     , n.y                 = 5
     , labels.inside.frame = FALSE

@@ -79,7 +79,7 @@ heatmaps <- stack(design$Heatmap)
 
 # Store them
 writeRaster(heatmaps, "heatmaps_animation.grd")
-heatmaps <- stack("heatmaps_animation.grd")
+heatmaps <- stack("03_Data/03_Results/heatmaps_animation.grd")
 
 ################################################################################
 #### Animate
@@ -250,3 +250,34 @@ saveVideo({
 #   , height        = 600
 #   , fps           = 50
 # )
+
+################################################################################
+#### Creating Time-Kernel
+################################################################################
+library(spatialEco)
+library(adehabitatHR)
+water <- readOGR("03_Data/02_CleanData/03_LandscapeFeatures_MajorWaters_GEOFABRIK.shp")
+# Split heatmaps into packages
+test <- splitStack(heatmaps, n = 20)
+hrs <- lapply(test, function(z){
+  summed <- sum(z)
+  pts <- rasterToPoints(summed, spatial = T, fun = function(x){x > 0})
+  pts <- as(pts, "SpatialPoints")
+  ud <- kernelUD(pts)
+  hr <- getverticeshr(ud, percent = 95)
+  return(hr)
+})
+hrs <- do.call(rbind, hrs)
+plot(hrs, col = rev(viridis(20)), lwd = 0.1)
+plot(water, add = T, col = "white", border = NA)
+plot(prot, add = T, lwd = 0.2)
+plot(subset(prot, Name == "Moremi")
+  , border = "cornflowerblue"
+  , col    = colTrans("cornflowerblue", 60)
+  , add    = T
+  , lwd    = 2
+)
+text(subset(prot, Name == "Moremi"), "Name", col = "cornflowerblue", font = 3)
+
+plot(sqrt(heatmaps[[2000]]), col = viridis(100))
+plot(hrs[20, ], add = T, border = "red")
