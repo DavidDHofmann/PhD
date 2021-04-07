@@ -32,11 +32,14 @@ kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
+# Load reference raster
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+
 # Put heatmaps into a stack
 heatmaps <- stack(rasterized$heatmap)
 
 # Crop them to the extent of the main area
-heatmaps <- crop(heatmaps, extent(main))
+heatmaps <- crop(heatmaps, r)
 
 # Prepare a merged map
 merged <- heatmaps[[6]] + heatmaps[[12]]
@@ -45,25 +48,21 @@ merged <- heatmaps[[6]] + heatmaps[[12]]
 kaza_ext <- as(extent(kaza), "SpatialPolygons")
 crs(kaza_ext) <- CRS("+init=epsg:4326")
 
-# Country labels
-labels_countries <- data.frame(
-    x = c(20.39, 23.94, 20.07, 25.69, 28.22)
-  , y = c(-15.28, -19.94, -19.39, -15.22, -18.9)
-  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
-)
-coordinates(labels_countries) <- c("x", "y")
-crs(labels_countries) <- CRS("+init=epsg:4326")
-
 # Convert to sf
-kaza <- st_as_sf(kaza)
-africa <- st_as_sf(africa)
+kaza    <- st_as_sf(kaza)
+africa  <- st_as_sf(africa)
+
+# Convert heatmap to dataframe
+merged <- as.data.frame(merged, xy = T)
+
+# Also conver the reference raster to a dataframe
+r <- as.data.frame(r, xy = T)
 
 ################################################################################
 #### Plot
 ################################################################################
 # Prepare color palette
 myPalette <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
-merged <- as.data.frame(merged, xy = T)
 
 # Main Plot
 p1 <- ggplot() +
@@ -85,7 +84,7 @@ p1 <- ggplot() +
   ) +
   geom_sf(
       data        = kaza
-    , mapping     = aes(color = "KAZA-TFCA Borders")
+    , col         = "black"
     , fill        = NA
     , lty         = 1
     , lwd         = 0.5
@@ -93,37 +92,25 @@ p1 <- ggplot() +
   ) +
   geom_sf(
       data        = africa
-    , mapping     = aes(color = "Country Borders")
+    , col         = "black"
     , fill        = NA
     , lty         = 2
     , lwd         = 0.2
     , show.legend = F
   ) +
-  scale_color_manual(
-      values = c("KAZA-TFCA Borders" = "black", "Country Borders" = "black")
-    , guide  = guide_legend(
-        override.aes = list(
-          linetype = c(1, 2)
-        , shape    = c(NA, NA)
-      )
-    )
-  ) +
   coord_sf(
       crs    = 4326
-    , xlim   = c(min(merged$x), max(merged$x))
-    , ylim   = c(min(merged$y), max(merged$y))
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
     , expand = F
   ) +
   labs(
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Dispersal Heatmap (Merged)"
+    , title    = "Dispersal Heatmap"
     , subtitle = "After 2000 Steps"
-    # , caption  = "Here could be your caption"
   ) +
-  xlim(min(merged$x), max(merged$x)) +
-  ylim(min(merged$y), max(merged$y)) +
   theme(
       legend.position  = "bottom"
     , legend.box       = "vertical"
@@ -158,7 +145,7 @@ p2 <- ggplot() +
   scale_fill_gradientn(
       colours = myPalette(100)
     , guide   = guide_colorbar(
-      , title = "Number of Traversing Trajectories"
+        title          = "Number of Traversing Trajectories"
       , show.limits    = T
       , title.position = "top"
       , title.hjust    = 0.5
@@ -191,22 +178,21 @@ p2 <- ggplot() +
     , subtitle = "After 2000 Steps"
   ) +
   scale_color_manual(
-      values = c("black", "black")
+      values = c("Country Borders" = "black", "KAZA-TFCA Borders" = "black")
     , guide  = guide_legend(
         override.aes = list(
           linetype = c(2, 1)
         , shape    = c(NA, NA)
+        , lwd      = c(0.2, 0.5)
       )
     )
   ) +
   coord_sf(
       crs    = 4326
-    , xlim   = c(min(merged$x), max(merged$x))
-    , ylim   = c(min(merged$y), max(merged$y))
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
     , expand = F
   ) +
-  xlim(min(merged$x), max(merged$x)) +
-  ylim(min(merged$y), max(merged$y)) +
   theme(
       legend.position       = c(0.20, 0.90)
     , legend.box            = "vertical"
@@ -226,7 +212,7 @@ legend <- get_legend(p2)
 # Put into main plot
 p3 <- p1 + annotation_custom(
       grob = legend
-    , xmin = 18.5
+    , xmin = 18.75
     , xmax = 21
     , ymin = -13
     , ymax = -13.5
@@ -236,7 +222,7 @@ p3 <- p1 + annotation_custom(
 p3
 
 # Store it to file
-ggsave("04_Manuscript/99_HeatmapsMerged.png", plot = p3)
+ggsave("04_Manuscript/99_Heatmap.png", plot = p3)
 
 ################################################################################
 #### Function to Plot
@@ -288,13 +274,14 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
           override.aes = list(
             linetype = c(1, 2)
           , shape    = c(NA, NA)
+          , lwd     = c(0.5, 0.2)
         )
       )
     ) +
     coord_sf(
         crs    = 4326
-      , xlim   = c(min(x$x), max(x$x))
-      , ylim   = c(min(x$y), max(x$y))
+      , xlim   = c(min(r$x), max(r$x))
+      , ylim   = c(min(r$y), max(r$y))
       , expand = F
     ) +
     labs(
@@ -303,10 +290,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
       , fill     = NULL
       , title    = "Dispersal Heatmap"
       , subtitle = subtitle
-      # , caption  = "Here could be your caption"
     ) +
-    xlim(min(x$x), max(x$x)) +
-    ylim(min(x$y), max(x$y)) +
     theme(
         legend.position      = "top"
       , legend.justification = "right"
@@ -343,18 +327,6 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , mapping     = aes(x = x, y = y, fill = layer)
         , show.legend = F
       ) +
-      scale_fill_gradientn(
-          colours = myPalette(100)
-        , guide   = guide_colorbar(
-          , title = "Number of Traversing Trajectories"
-          , show.limits    = T
-          , title.position = "top"
-          , title.hjust    = 0.5
-          , ticks          = T
-          , barheight      = unit(0.6, "cm")
-          , barwidth       = unit(10.0, "cm")
-        )
-      ) +
       geom_sf(
           data        = kaza
         , mapping     = aes(color = "KAZA-TFCA Borders")
@@ -371,30 +343,22 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , lwd         = 0.2
         , show.legend = "line"
       ) +
-      labs(
-          x        = NULL
-        , y        = NULL
-        , col      = NULL
-        , title    = "Dispersal Heatmap"
-        , subtitle = "After 2000 Steps"
-      ) +
       scale_color_manual(
           values = c("black", "black")
         , guide  = guide_legend(
             override.aes = list(
               linetype = c(2, 1)
             , shape    = c(NA, NA)
+            , lwd      = c(0.2, 0.5)
           )
         )
       ) +
       coord_sf(
           crs    = 4326
-        , xlim   = c(min(x$x), max(x$x))
-        , ylim   = c(min(x$y), max(x$y))
+        , xlim   = c(min(r$x), max(r$x))
+        , ylim   = c(min(r$y), max(r$y))
         , expand = F
       ) +
-      xlim(min(x$x), max(x$x)) +
-      ylim(min(x$y), max(x$y)) +
       theme(
           legend.position       = c(0.20, 0.90)
         , legend.box            = "vertical"
@@ -414,7 +378,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     # Put into main plot
     p3 <- p1 + annotation_custom(
           grob = legend
-        , xmin = 18.5
+        , xmin = 18.75
         , xmax = 21
         , ymin = -13
         , ymax = -13.5

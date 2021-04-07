@@ -349,15 +349,15 @@ p3 <- ggplot() +
     , aes(fill = factor(Random))
   ) +
   geom_sf(
-      data = africa
-    , aes(col = "Country Borders")
-    , fill = NA
+      data        = africa
+    , mapping     = aes(col = "Country Borders")
+    , fill        = NA
     , show.legend = "line"
   ) +
   geom_sf(
-      data = kaza
-    , aes(col = "KAZA-TFCA")
-    , fill = NA
+      data        = kaza
+    , mapping     = aes(col = "KAZA-TFCA")
+    , fill        = NA
     , show.legend = "line"
   ) +
   scale_fill_manual(

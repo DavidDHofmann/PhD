@@ -1,5 +1,5 @@
 ################################################################################
-#### Plot of Heatmaps
+#### Plot of Betweenness
 ################################################################################
 # Clear R's brain
 rm(list = ls())
@@ -24,45 +24,48 @@ library(ggpubr)         # To arrange ggplots
 #### Load Required Data
 ################################################################################
 # Load betweenness maps
-betweenness <- raster("betweenness5000.tif")
-# betweenness <- focal(betweenness, w = matrix(1, 3, 3), mean)
+betweenness <- stack("03_Data/03_Results/99_Betweenness.grd")
 
-# Load shapefiles
-buffer  <- readOGR("03_Data/03_Results/99_BufferArea.shp")
-main    <- readOGR("03_Data/03_Results/99_SourceAreas.shp")
+# Apply focal filter to buffer/smooth maps
+betweenness <- lapply(1:nlayers(betweenness), function(x){
+  focal(betweenness[[x]], w = matrix(1, 3, 3), fun = mean)
+}) %>% stack()
+
+# Load shapefiles for background
 kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
-# Get the extent of the KAZA
-kaza_ext <- as(extent(kaza), "SpatialPolygons")
-crs(kaza_ext) <- CRS("+init=epsg:4326")
+# Load reference raster
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Country labels
-labels_countries <- data.frame(
-    x = c(20.39, 23.94, 20.07, 25.69, 28.22)
-  , y = c(-15.28, -19.94, -19.39, -15.22, -18.9)
-  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
-)
-coordinates(labels_countries) <- c("x", "y")
-crs(labels_countries) <- CRS("+init=epsg:4326")
+# Convert to sf for plotting with ggplot
+kaza    <- st_as_sf(kaza)
+africa  <- st_as_sf(africa)
 
-# Convert to sf
-kaza <- st_as_sf(kaza)
-africa <- st_as_sf(africa)
+# Convert maps to dataframes
+betweenness <- lapply(1:nlayers(betweenness), function(x){
+  df <- as.data.frame(betweenness[[x]], xy = T)
+  names(df) <- c("x", "y", "layer")
+  return(df)
+})
+
+# Set names
+names(betweenness) <- c("125", "500", "2000")
+
+# Also convert the reference raster
+r <- as.data.frame(r, xy = T)
 
 ################################################################################
 #### Plot
 ################################################################################
 # Prepare color palette
 myPalette <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
-betweenness <- as.data.frame(betweenness, xy = T)
-names(betweenness) <- c("x", "y", "layer")
 
 # Main Plot
 p1 <- ggplot() +
   geom_raster(
-      data    = betweenness
+      data    = betweenness[[3]]
     , mapping = aes(x = x, y = y, fill = sqrt(layer))
   ) +
   scale_fill_gradientn(
@@ -79,7 +82,7 @@ p1 <- ggplot() +
   ) +
   geom_sf(
       data        = kaza
-    , mapping     = aes(color = "KAZA-TFCA Borders")
+    , col         = "white"
     , fill        = NA
     , lty         = 1
     , lwd         = 0.5
@@ -87,25 +90,16 @@ p1 <- ggplot() +
   ) +
   geom_sf(
       data        = africa
-    , mapping     = aes(color = "Country Borders")
+    , col         = "white"
     , fill        = NA
     , lty         = 2
     , lwd         = 0.2
     , show.legend = F
   ) +
-  scale_color_manual(
-      values = c("KAZA-TFCA Borders" = "white", "Country Borders" = "white")
-    , guide  = guide_legend(
-        override.aes = list(
-          linetype = c(1, 2)
-        , shape    = c(NA, NA)
-      )
-    )
-  ) +
   coord_sf(
       crs    = 4326
-    , xlim   = c(min(betweenness$x), max(betweenness$x))
-    , ylim   = c(min(betweenness$y), max(betweenness$y))
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
     , expand = F
   ) +
   labs(
@@ -114,10 +108,7 @@ p1 <- ggplot() +
     , fill     = NULL
     , title    = "Betweenness"
     , subtitle = "After 2000 Steps"
-    , caption  = "THIS IS ONLY A TEMPORARY IMAGE"
   ) +
-  xlim(min(betweenness$x), max(betweenness$x)) +
-  ylim(min(betweenness$y), max(betweenness$y)) +
   theme(
       legend.position  = "bottom"
     , legend.box       = "vertical"
@@ -147,21 +138,9 @@ p1 <- ggplot() +
 # Plot for separate legend
 p2 <- ggplot() +
   geom_raster(
-      data        = betweenness
+      data        = betweenness[[3]]
     , mapping     = aes(x = x, y = y, fill = layer)
     , show.legend = F
-  ) +
-  scale_fill_gradientn(
-      colours = myPalette(100)
-    , guide   = guide_colorbar(
-      , title = "Number of Traversing Trajectories"
-      , show.limits    = T
-      , title.position = "top"
-      , title.hjust    = 0.5
-      , ticks          = T
-      , barheight      = unit(0.6, "cm")
-      , barwidth       = unit(10.0, "cm")
-    )
   ) +
   geom_sf(
       data        = kaza
@@ -179,37 +158,30 @@ p2 <- ggplot() +
     , lwd         = 0.2
     , show.legend = "line"
   ) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , col      = NULL
-    , title    = "Dispersal Heatmap"
-    , subtitle = "After 2000 Steps"
-  ) +
   scale_color_manual(
-      values = c("black", "black")
+      values = c("Country Borders" = "white", "KAZA-TFCA Borders" = "white")
     , guide  = guide_legend(
         override.aes = list(
           linetype = c(2, 1)
         , shape    = c(NA, NA)
+        , lwd      = c(0.2, 0.5)
       )
     )
   ) +
   coord_sf(
       crs    = 4326
-    , xlim   = c(min(betweenness$x), max(betweenness$x))
-    , ylim   = c(min(betweenness$y), max(betweenness$y))
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
     , expand = F
   ) +
-  xlim(min(betweenness$x), max(betweenness$x)) +
-  ylim(min(betweenness$y), max(betweenness$y)) +
   theme(
       legend.position       = c(0.20, 0.90)
+    , legend.title          = element_blank()
     , legend.box            = "vertical"
     , legend.background     = element_blank()
-    , legend.box.background = element_rect(fill  = "white")
+    , legend.box.background = element_rect(fill  = "black", color = "white")
     , legend.margin         = margin(0, 8, 2, 6)
-    , legend.text           = element_text(color = "black")
+    , legend.text           = element_text(color = "white")
     , legend.key            = element_blank()
     , legend.key.size       = unit(0.8, "lines")
     , legend.key.width      = unit(1.2, "lines")
@@ -222,7 +194,7 @@ legend <- get_legend(p2)
 # Put into main plot
 p3 <- p1 + annotation_custom(
       grob = legend
-    , xmin = 18.5
+    , xmin = 18.75
     , xmax = 21
     , ymin = -13
     , ymax = -13.5
@@ -235,10 +207,10 @@ p3
 ggsave("04_Manuscript/99_Betweenness.png", plot = p3)
 
 ################################################################################
-#### Function to Plot
+#### Plots over Time
 ################################################################################
 # Write a function to plot a heatmap
-plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
+plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
 
   # Prepare dataframe
   x <- as.data.frame(x, xy = T)
@@ -247,24 +219,24 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
   # Main Plot
   p1 <- ggplot() +
     geom_raster(
-        data    = x
-      , mapping = aes(x = x, y = y, fill = layer)
+        data        = x
+      , mapping     = aes(x = x, y = y, fill = sqrt(layer))
     ) +
     scale_fill_gradientn(
-        colours = myPalette(100)
+        colours = magma(100)
       , guide   = guide_colorbar(
-        , title          = "Number of Traversing Trajectories"
+        , title          = expression("Betweenness Score" ^ "0.5")
         , show.limits    = T
         , title.position = "top"
         , title.hjust    = 0.5
         , ticks          = T
         , barheight      = unit(0.6, "cm")
-        , barwidth       = unit(barwidth, "cm")
+        , barwidth       = unit(10.0, "cm")
       )
     ) +
     geom_sf(
         data        = kaza
-      , mapping     = aes(color = "KAZA-TFCA Borders")
+      , col         = "white"
       , fill        = NA
       , lty         = 1
       , lwd         = 0.5
@@ -272,37 +244,25 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     ) +
     geom_sf(
         data        = africa
-      , mapping     = aes(color = "Country Borders")
+      , col         = "white"
       , fill        = NA
       , lty         = 2
       , lwd         = 0.2
       , show.legend = F
     ) +
-    scale_color_manual(
-        values = c("KAZA-TFCA Borders" = "black", "Country Borders" = "black")
-      , guide  = guide_legend(
-          override.aes = list(
-            linetype = c(1, 2)
-          , shape    = c(NA, NA)
-        )
-      )
-    ) +
     coord_sf(
         crs    = 4326
-      , xlim   = c(min(x$x), max(x$x))
-      , ylim   = c(min(x$y), max(x$y))
+      , xlim   = c(min(r$x), max(r$x))
+      , ylim   = c(min(r$y), max(r$y))
       , expand = F
     ) +
     labs(
         x        = NULL
       , y        = NULL
       , fill     = NULL
-      , title    = "Dispersal Heatmap"
+      , title    = "Betweenness"
       , subtitle = subtitle
-      # , caption  = "Here could be your caption"
     ) +
-    xlim(min(x$x), max(x$x)) +
-    ylim(min(x$y), max(x$y)) +
     theme(
         legend.position      = "top"
       , legend.justification = "right"
@@ -315,17 +275,19 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     annotation_scale(
         location   = "bl"
       , width_hint = 0.2
-      , line_width = 0.5
+      , line_width = 1
       , height     = unit(0.15, "cm")
+      , bar_cols   = c("white", "white")
+      , text_col   = "white"
     ) +
     annotation_north_arrow(
         location = "br"
       , height   = unit(1.5, "cm"),
       , width    = unit(1.2, "cm"),
       , style    = north_arrow_fancy_orienteering(
-            fill      = c("black", "black")
+            fill      = c("white", "white")
           , line_col  = NA
-          , text_col  = "black"
+          , text_col  = "white"
           , text_size = 12
         )
     )
@@ -338,18 +300,6 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
           data        = x
         , mapping     = aes(x = x, y = y, fill = layer)
         , show.legend = F
-      ) +
-      scale_fill_gradientn(
-          colours = myPalette(100)
-        , guide   = guide_colorbar(
-          , title = "Number of Traversing Trajectories"
-          , show.limits    = T
-          , title.position = "top"
-          , title.hjust    = 0.5
-          , ticks          = T
-          , barheight      = unit(0.6, "cm")
-          , barwidth       = unit(10.0, "cm")
-        )
       ) +
       geom_sf(
           data        = kaza
@@ -367,19 +317,13 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , lwd         = 0.2
         , show.legend = "line"
       ) +
-      labs(
-          x        = NULL
-        , y        = NULL
-        , col      = NULL
-        , title    = "Dispersal Heatmap"
-        , subtitle = "After 2000 Steps"
-      ) +
       scale_color_manual(
-          values = c("black", "black")
+          values = c("white", "white")
         , guide  = guide_legend(
             override.aes = list(
               linetype = c(2, 1)
             , shape    = c(NA, NA)
+            , lwd      = c(0.2, 0.5)
           )
         )
       ) +
@@ -393,11 +337,12 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
       ylim(min(x$y), max(x$y)) +
       theme(
           legend.position       = c(0.20, 0.90)
+        , legend.title          = element_blank()
         , legend.box            = "vertical"
         , legend.background     = element_blank()
-        , legend.box.background = element_rect(fill  = "white")
+        , legend.box.background = element_rect(fill  = "black", color = "white")
         , legend.margin         = margin(0, 8, 2, 6)
-        , legend.text           = element_text(color = "black")
+        , legend.text           = element_text(color = "white")
         , legend.key            = element_blank()
         , legend.key.size       = unit(0.8, "lines")
         , legend.key.width      = unit(1.2, "lines")
@@ -410,7 +355,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     # Put into main plot
     p3 <- p1 + annotation_custom(
           grob = legend
-        , xmin = 18.5
+        , xmin = 18.75
         , xmax = 21
         , ymin = -13
         , ymax = -13.5
@@ -425,10 +370,10 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
 }
 
 # Let's apply the function to get all desired plots
-maps <- lapply(1:nlayers(heatmaps), function(x){
-  subtitle <- paste0("After ", rasterized$steps[x], " Steps")
-  map <- plotHeatmap(
-      x        = heatmaps[[x]]
+maps <- lapply(1:length(betweenness), function(x){
+  subtitle <- paste0("After ", names(betweenness)[[x]], " Steps")
+  map <- plotBetweenness(
+      x        = betweenness[[x]]
     , subtitle = subtitle
     , legend   = F
     , barwidth = 7
@@ -437,12 +382,12 @@ maps <- lapply(1:nlayers(heatmaps), function(x){
 })
 
 # Arrange plots nicely
-p <- ggarrange(maps[[2]], maps[[4]], maps[[6]], maps[[8]], maps[[10]], maps[[12]])
+p <- ggarrange(maps[[1]], maps[[2]], maps[[3]], nrow = 1)
 
 # Store the arranged plot
-ggsave("04_Manuscript/99_HeatmapsIndividual.png"
+ggsave("04_Manuscript/99_BetweennessIndividual.png"
   , plot   = p
   , scale  = 2
-  , height = 6
+  , height = 3
   , width  = 9
 )
