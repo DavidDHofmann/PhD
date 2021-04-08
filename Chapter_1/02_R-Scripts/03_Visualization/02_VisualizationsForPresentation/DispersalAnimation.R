@@ -25,7 +25,7 @@ library(tmap)
 ################################################################################
 # Load simulated dispersal data
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
-sims <- ungroup(sims)
+# sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
 
 # Load protected areas
 prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
@@ -48,34 +48,78 @@ first <- first@data[, c("TrackID", "Origin")]
 sims <- left_join(sims, first, by = "TrackID")
 sims$Origin[sims$Area == "Buffer"] <- "Buffer"
 
-# Identify tracks leaving from moremi
-sims <- subset(sims, Origin == "Moremi")
+# Remove NAs
+sims <- sims[!is.na(sims$Origin), ]
 
-# Create trajectories
-sims_tracks <- sims2tracks(sims)
-
-# Prepare reference raster
-r <- raster(
-    extent(sims_tracks) + c(-1, +1, -1, +1) * metersToDegrees(1000)
-  , res = metersToDegrees(1000)
+# Perpare deisgn
+design <- as_tibble(
+  expand.grid(
+      StepNumber       = seq(1, 2000, by = 1)
+    , Origin           = c("Moremi", "Hwange")
+    , stringsAsFactors = F
+  )
 )
 
-# Loop through the different number of steps and rasterize them
-design <- tibble(
-    StepNumber = 2:max(sims$StepNumber)
-)
-design$Heatmap <- lapply(1:nrow(design), function(x){
-  cat("Create Tracks\n")
-  sub <- sims[sims$StepNumber <= design$StepNumber[x], ]
-  sub_track <- sims2tracks(sub)
-  cat("Create Heatmap\n")
-  heatmap <- rasterizeSpatstat(sub_track, r, mc.cores = 1)
-  heatmap <- writeRaster(heatmap, tempfile())
-  return(heatmap)
+# Nest by origin
+design <- design %>% nest(Steps = -Origin)
+print(design)
+
+# Loop through the design and create desired heatmaps
+design$Heatmaps <- lapply(1:nrow(design), function(x){
+
+  # Extract the steps through which we should loop
+  steps <- as.vector(as.matrix(design$Steps[[x]]))
+
+  # Subset to correct simulations
+  sims_sub <- sims[sims$Origin == design$Origin[x], ]
+
+  # Define extent
+  ext <- extent(c(
+      min(sims_sub$x)
+    , max(sims_sub$x)
+    , min(sims_sub$y)
+    , max(sims_sub$y)
+  )) + c(-1, +1, -1, +1) * metersToDegrees(1000)
+
+  # Prepare reference raster
+  r <- raster(ext, res = metersToDegrees(1000))
+
+  # Loop through different number of steps and rasterize trajectories
+  heatmaps <- lapply(steps, function(y){
+    cat("Create Tracks\n")
+    sub <- sims_sub[sims_sub$StepNumber <= y, ]
+    sub_track <- sims2tracks(sub)
+    cat("Create Heatmap\n")
+    heatmap <- rasterizeSpatstat(sub_track, r, mc.cores = 1)
+    names(heatmap) <- y
+    heatmap <- writeRaster(heatmap, tempfile())
+    return(heatmap)
+  })
+  heatmaps <- stack(heatmaps)
+
+  # Return the heatmaps
+  return(heatmaps)
+
 })
 
-# Put all heatmaps together
-heatmaps <- stack(design$Heatmap)
+# # Identify tracks leaving from moremi or hwange
+# sims <- subset(sims, Origin == "Moremi")
+#
+# # Create trajectories
+# sims_tracks <- sims2tracks(sims)
+#
+# design$Heatmap <- lapply(1:nrow(design), function(x){
+#   cat("Create Tracks\n")
+#   sub <- sims[sims$StepNumber <= design$StepNumber[x], ]
+#   sub_track <- sims2tracks(sub)
+#   cat("Create Heatmap\n")
+#   heatmap <- rasterizeSpatstat(sub_track, r, mc.cores = 1)
+#   heatmap <- writeRaster(heatmap, tempfile())
+#   return(heatmap)
+# })
+#
+# # Put all heatmaps together
+# heatmaps <- stack(design$Heatmap)
 
 # Store them
 writeRaster(heatmaps, "heatmaps_animation.grd")
@@ -257,6 +301,9 @@ saveVideo({
 library(spatialEco)
 library(adehabitatHR)
 water <- readOGR("03_Data/02_CleanData/03_LandscapeFeatures_MajorWaters_GEOFABRIK.shp")
+heatmaps <- stack("03_Data/03_Results/heatmaps_animation.grd")
+prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
+prot <- subset(prot, Desig == "National Park")
 # Split heatmaps into packages
 test <- splitStack(heatmaps, n = 20)
 hrs <- lapply(test, function(z){
@@ -279,5 +326,26 @@ plot(subset(prot, Name == "Moremi")
 )
 text(subset(prot, Name == "Moremi"), "Name", col = "cornflowerblue", font = 3)
 
+
+
+
+
+plot(hello, col = c(rev(viridis(20)), "black"))
+
 plot(sqrt(heatmaps[[2000]]), col = viridis(100))
 plot(hrs[20, ], add = T, border = "red")
+
+test <- as.data.frame(heatmaps, xy = T)
+
+# Identify index when first inundated
+test$First <- apply(as.matrix(test[, 3:ncol(test)]), 1, function(x){
+  suppressWarnings(
+    result <- min(which(x > 0))
+  )
+  return(result)
+})
+
+# Convert to raster
+hello <- rasterFromXYZ(xyz = test[, c(1, 2, ncol(test))])
+hello <- reclassify(hello, rcl = c(2001, Inf, 2001))
+plot(hello, col = c(rev(viridis(20)), "black"))

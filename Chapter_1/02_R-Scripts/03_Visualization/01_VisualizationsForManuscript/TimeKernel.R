@@ -1,5 +1,5 @@
 ################################################################################
-#### Time Kernel of Dispersal
+#### Temporal Dispersal Kernel
 ################################################################################
 # Clear R's brain
 rm(list = ls())
@@ -9,127 +9,212 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
-library(raster)         # To handle raster data
-library(rgdal)          # To load shapefiles
-library(tidyverse)      # To wrangle data
-library(davidoff)       # Custom functions
-library(RColorBrewer)   # For colors
-library(viridis)        # For colors
-library(sf)             # To plot spatial objects with ggplot
-library(ggspatial)      # For north arrow and scale bar
-library(cowplot)        # To grab legends
-library(ggpubr)         # To arrange ggplots
+library(tidyverse)    # For data wrangling
+library(raster)       # To handle spatial data
+library(terra)        # To handle spatial data
+library(rgdal)        # To read shapefiles
+library(davidoff)     # Custom functions
+library(pbmcapply)    # For running stuff in parallel
+library(viridis)      # For nice colors
+library(adehabitatHR) # For calculating HRs
+library(sf)           # To plot spatial stuff with ggplot
+library(tmaptools)    # To download satellite imagery
+library(RStoolbox)    # To plot RGB rasters
+library(ggpubr)       # To arrange plots
+library(ggspatial)    # To plot north arrows & scale bars
 
 ################################################################################
-#### Load Required Data
+#### Prepare Data
 ################################################################################
-# Load simulations
-sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
+# Load simulated dispersal data
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+# sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
 
-# Load betweenness maps
-betweenness <- stack("03_Data/03_Results/99_Betweenness.grd")
+# Load protected areas
+prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
-# Apply focal filter to buffer/smooth maps
-betweenness <- lapply(1:nlayers(betweenness), function(x){
-  focal(betweenness[[x]], w = matrix(1, 3, 3), fun = mean)
-}) %>% stack()
+# Create SpatialPoints for first location of each trajectory
+first <- sims %>%
+  dplyr::select("x", "y", "TrackID") %>%
+  group_by(TrackID) %>%
+  slice(1) %>%
+  SpatialPointsDataFrame(
+      coords      = cbind(.[["x"]], .[["y"]])
+    , proj4string = CRS("+init=epsg:4326")
+  )
 
-# Load shapefiles for background
-kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
-africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
-prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
+# Assess from which protected area each trajectory left
+first$Origin <- as.character(over(first, prot)$Name)
+first <- first@data[, c("TrackID", "Origin")]
 
-# Load reference raster
-r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+# Join information to simulated tracks
+sims <- left_join(sims, first, by = "TrackID")
+sims$Origin[sims$Area == "Buffer"] <- "Buffer"
 
-# Convert to sf for plotting with ggplot
-kaza    <- st_as_sf(kaza)
-africa  <- st_as_sf(africa)
+# Remove tracks that leave from an unknown origin (should only be few)
+sims <- sims[!is.na(sims$Origin), ]
 
-# Convert maps to dataframes
-betweenness <- lapply(1:nlayers(betweenness), function(x){
-  df <- as.data.frame(betweenness[[x]], xy = T)
-  names(df) <- c("x", "y", "layer")
-  return(df)
+# We now rasterize trajectories leaving from desired source locations after
+# different numbers of steps. In contrast to creating heatmaps, we only want
+# binary maps indicating through which areas the dispersers have moved. This can
+# efficiently be achieved using the terra::rasterize function. Let's thus setup
+# the study design through which we will loop.
+design <- as_tibble(
+  expand.grid(
+      StepNumber       = seq(2, 2000, length.out = 20)
+    , Origin           = c("Moremi", "Hwange")
+    , stringsAsFactors = F
+  )
+)
+
+# Nest by origin (so that we don't need to duplicate data all the time)
+design <- design %>% nest(Steps = -Origin)
+
+# Loop through the design, rasterize trajectories and asses "95% home range" to
+# indicate areas visited after x number of steps
+design$Kernel <- lapply(1:nrow(design), function(x){
+
+  # For simpler indexing, extract the different number of steps
+  steps <- as.vector(as.matrix(design$Steps[[x]]))
+
+  # Subset simulations to desired source location
+  sims_sub <- sims[sims$Origin == design$Origin[x], ]
+
+  # Define extent for which we will rasterize. We don't need to consider the
+  # full extent here
+  ext <- ext(c(
+      min(sims_sub$x)
+    , max(sims_sub$x)
+    , min(sims_sub$y)
+    , max(sims_sub$y)
+  )) + c(-1, +1, -1, +1) * metersToDegrees(1000)
+
+  # Prepare reference raster with a desired resolution
+  r <- rast(ext, res = metersToDegrees(1000))
+
+  # Loop through different number of steps and rasterize them, then compute home
+  # ranges around the visited pixels
+  maps <- pbmclapply(steps, mc.cores = 1, ignore.interactive = T, function(y){
+
+    # Subset simulations to desired number of steps
+    sub <- sims_sub[sims_sub$StepNumber <= y, ]
+
+    # Create trajectories and convert to terra::vector
+    sub_track <- sims2tracks(sub, messages = F)
+    sub_track <- vect(sub_track)
+
+    # Rasterize trajectories onto reference raster
+    rasterized <- terra::rasterize(sub_track, r, background = 0, touches = T)
+
+    # Use visited pixels to create a utilization distribution and compute home
+    # ranges
+    pts <- rasterToPoints(raster(rasterized), spatial = T, fun = function(x){x > 0})
+    pts <- as(pts, "SpatialPoints")
+    suppressWarnings(ud <- kernelUD(pts))
+    suppressWarnings(hr <- getverticeshr(ud, percent = 95))
+
+    # Return the home range
+    return(hr)
+
+  }) %>% do.call(rbind, .)
+
+  # Indicate the number of steps corresponding to each homerange
+  maps$Steps <- steps
+
+  # Return the homeranges
+  return(maps)
+
 })
 
-# Set names
-names(betweenness) <- c("125", "500", "2000")
-
-# Also convert the reference raster
-r <- as.data.frame(r, xy = T)
-
 ################################################################################
-#### Plot
+#### Visualizations
 ################################################################################
-# Prepare color palette
-myPalette <- colorRampPalette(rev(brewer.pal(11, "Spectral")))
+# Load additional shapefiles
+kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
+africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 
-# Main Plot
+# Create labels for countries
+labels_countries <- data.frame(
+    x = c(20, 23, 20, 26, 26.3)
+  , y = c(-17, -21, -19, -17, -18.2)
+  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
+)
+coordinates(labels_countries) <- c("x", "y")
+crs(labels_countries) <- CRS("+init=epsg:4326")
+
+# Convert objects to sf for plotting with ggplot
+kernel_moremi <- st_as_sf(design$Kernel[[1]])
+kernel_hwange <- st_as_sf(design$Kernel[[2]])
+prot          <- st_as_sf(prot)
+kaza          <- st_as_sf(kaza)
+africa        <- st_as_sf(africa)
+labels_countries <- st_as_sf(labels_countries)
+
+# Invert order
+kernel_moremi <- kernel_moremi[rev(1:nrow(kernel_moremi)), ]
+kernel_hwange <- kernel_hwange[rev(1:nrow(kernel_hwange)), ]
+kernel_moremi$NationalPark <- "Moremi"
+kernel_hwange$NationalPark <- "Hwange"
+kernels <- rbind(kernel_moremi, kernel_hwange)
+kernels$NationalPark <- as.factor(as.character(kernels$NationalPark))
+
+# Download a satellite images for a background map
+sat1 <- read_osm(kernel_moremi, type = "bing")
+sat1 <- as(sat1, "Raster")
+sat1 <- projectRaster(sat1, crs = CRS("+init=epsg:4326"), method = "ngb")
+sat2 <- read_osm(kernel_hwange, type = "bing")
+sat2 <- as(sat2, "Raster")
+sat2 <- projectRaster(sat2, crs = CRS("+init=epsg:4326"), method = "ngb")
+
+# Crop the image
+sat <- crop(sat, extent(sat) + c(0, 0, 0, -4))
+
+# Plot background for first kernel
 p1 <- ggplot() +
-  geom_raster(
-      data    = betweenness[[3]]
-    , mapping = aes(x = x, y = y, fill = sqrt(layer))
-  ) +
-  scale_fill_gradientn(
-      colours = magma(100)
-    , guide   = guide_colorbar(
-      , title          = expression("Betweenness Score" ^ "0.5")
-      , show.limits    = T
-      , title.position = "top"
-      , title.hjust    = 0.5
-      , ticks          = T
-      , barheight      = unit(0.6, "cm")
-      , barwidth       = unit(10.0, "cm")
-    )
+  ggRGB(sat1, r = 1, g = 2, b = 3, ggLayer = T) +
+  geom_sf(
+      data = subset(prot, Name %in% c("Moremi", "Hwange"))
+    , lwd  = 0.2
+    , col  = "white"
+    , fill = colTrans("white", percent = 80)
   ) +
   geom_sf(
-      data        = kaza
-    , col         = "white"
-    , fill        = NA
-    , lty         = 1
-    , lwd         = 0.5
-    , show.legend = F
+      data = subset(prot, Name %in% c("Moremi"))
+    , lwd  = 0.2
+    , col  = "red"
+    , fill = colTrans("red", percent = 80)
   ) +
   geom_sf(
-      data        = africa
-    , col         = "white"
-    , fill        = NA
-    , lty         = 2
-    , lwd         = 0.2
-    , show.legend = F
+      data = africa
+    , lwd  = 0.5
+    , col  = "white"
+    , fill = NA
+    , lty  = 2
+  ) +
+  geom_sf_text(
+      data    = labels_countries
+    , mapping = aes(label = Label)
+    , col     = "white"
+    , size    = 4
   ) +
   coord_sf(
-      crs    = 4326
-    , xlim   = c(min(r$x), max(r$x))
-    , ylim   = c(min(r$y), max(r$y))
+      crs  = 4326
+    , xlim = extent(sat1)[1:2]
+    , ylim = extent(sat1)[3:4]
     , expand = F
   ) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , fill     = NULL
-    , title    = "Betweenness"
-    , subtitle = "After 2000 Steps"
-  ) +
-  theme(
-      legend.position  = "bottom"
-    , legend.box       = "vertical"
-    , panel.background = element_blank()
-    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-  ) +
+  theme_minimal() +
   annotation_scale(
       location   = "bl"
     , width_hint = 0.2
-    , line_width = 1
+    , line_width = 0.5
     , height     = unit(0.15, "cm")
-    , bar_cols   = c("white", "white")
     , text_col   = "white"
   ) +
   annotation_north_arrow(
       location = "br"
-    , height   = unit(1.5, "cm"),
-    , width    = unit(1.2, "cm"),
+    , height   = unit(1.2, "cm"),
+    , width    = unit(1, "cm"),
     , style    = north_arrow_fancy_orienteering(
           fill      = c("white", "white")
         , line_col  = NA
@@ -138,259 +223,224 @@ p1 <- ggplot() +
       )
   )
 
-# Plot for separate legend
+# Plot first kernel
 p2 <- ggplot() +
-  geom_raster(
-      data        = betweenness[[3]]
-    , mapping     = aes(x = x, y = y, fill = layer)
-    , show.legend = F
-  ) +
   geom_sf(
-      data        = kaza
-    , mapping     = aes(color = "KAZA-TFCA Borders")
-    , fill        = NA
-    , lty         = 1
-    , lwd         = 0.5
-    , show.legend = "line"
+      data    = kernel_moremi
+    , mapping = aes(fill = Steps)
+    , col     = "black"
+    , lwd     = 0.1
   ) +
-  geom_sf(
-      data        = africa
-    , mapping     = aes(color = "Country Borders")
-    , fill        = NA
-    , lty         = 2
-    , lwd         = 0.2
-    , show.legend = "line"
-  ) +
-  scale_color_manual(
-      values = c("Country Borders" = "white", "KAZA-TFCA Borders" = "white")
-    , guide  = guide_legend(
-        override.aes = list(
-          linetype = c(2, 1)
-        , shape    = c(NA, NA)
-        , lwd      = c(0.2, 0.5)
-      )
+  scale_fill_viridis_c(
+      direction = -1
+    , guide   = guide_colorbar(
+      , title          = "Number of Steps"
+      , show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.6, "cm")
+      , barwidth       = unit(2.0, "cm")
     )
+  ) +
+  geom_sf(
+      data = subset(prot, Name %in% c("Moremi", "Hwange"))
+    , lwd  = 0.2
+    , col  = "white"
+    , fill = colTrans("white", percent = 80)
+  ) +
+  geom_sf(
+      data = subset(prot, Name == "Moremi")
+    , col  = "red"
+    , fill = colTrans("red", 60)
+    , lwd  = 0.4
   ) +
   coord_sf(
       crs    = 4326
-    , xlim   = c(min(r$x), max(r$x))
-    , ylim   = c(min(r$y), max(r$y))
+    , xlim   = extent(sat1)[1:2]
+    , ylim   = extent(sat1)[3:4]
     , expand = F
   ) +
+  theme_minimal() +
   theme(
-      legend.position       = c(0.20, 0.90)
-    , legend.title          = element_blank()
-    , legend.box            = "vertical"
-    , legend.background     = element_blank()
-    , legend.box.background = element_rect(fill  = "black", color = "white")
-    , legend.margin         = margin(0, 8, 2, 6)
-    , legend.text           = element_text(color = "white")
-    , legend.key            = element_blank()
-    , legend.key.size       = unit(0.8, "lines")
-    , legend.key.width      = unit(1.2, "lines")
-    , panel.background      = element_blank()
-  )
-
-# Extract legend
-legend <- get_legend(p2)
-
-# Put into main plot
-p3 <- p1 + annotation_custom(
-      grob = legend
-    , xmin = 18.75
-    , xmax = 21
-    , ymin = -13
-    , ymax = -13.5
-  )
-
-# Show it
-p3
-
-# Store it to file
-ggsave("04_Manuscript/99_Betweenness.png", plot = p3)
-
-################################################################################
-#### Plots over Time
-################################################################################
-# Write a function to plot a heatmap
-plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
-
-  # Prepare dataframe
-  x <- as.data.frame(x, xy = T)
-  names(x) <- c("x", "y", "layer")
-
-  # Main Plot
-  p1 <- ggplot() +
-    geom_raster(
-        data        = x
-      , mapping     = aes(x = x, y = y, fill = sqrt(layer))
-    ) +
-    scale_fill_gradientn(
-        colours = magma(100)
-      , guide   = guide_colorbar(
-        , title          = expression("Betweenness Score" ^ "0.5")
-        , show.limits    = T
-        , title.position = "top"
-        , title.hjust    = 0.5
-        , ticks          = T
-        , barheight      = unit(0.6, "cm")
-        , barwidth       = unit(10.0, "cm")
+      legend.position  = "none"
+    , legend.box       = "vertical"
+    , panel.grid.major = element_line(color = colTrans("gray70", 80), size = 0.2)
+    , panel.grid.minor = element_blank()
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 0.5
+    , height     = unit(0.15, "cm")
+    , text_col   = "black"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(1.2, "cm"),
+    , width    = unit(1, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("black", "black")
+        , line_col  = NA
+        , text_col  = "black"
+        , text_size = 12
       )
-    ) +
-    geom_sf(
-        data        = kaza
-      , col         = "white"
-      , fill        = NA
-      , lty         = 1
-      , lwd         = 0.5
-      , show.legend = F
-    ) +
-    geom_sf(
-        data        = africa
-      , col         = "white"
-      , fill        = NA
-      , lty         = 2
-      , lwd         = 0.2
-      , show.legend = F
-    ) +
-    coord_sf(
-        crs    = 4326
-      , xlim   = c(min(r$x), max(r$x))
-      , ylim   = c(min(r$y), max(r$y))
-      , expand = F
-    ) +
-    labs(
-        x        = NULL
-      , y        = NULL
-      , fill     = NULL
-      , title    = "Betweenness"
-      , subtitle = subtitle
-    ) +
-    theme(
-        legend.position      = "top"
-      , legend.justification = "right"
-      , legend.box           = "vertical"
-      , legend.box.margin    = margin(-10, 0, -10, 0)
-      , panel.background     = element_blank()
-      , panel.border         = element_rect(colour = "black", fill = NA, size = 1)
-      , plot.subtitle        = element_text(margin = margin(t = 0, b = -30))
-    ) +
-    annotation_scale(
-        location   = "bl"
-      , width_hint = 0.2
-      , line_width = 1
-      , height     = unit(0.15, "cm")
-      , bar_cols   = c("white", "white")
-      , text_col   = "white"
-    ) +
-    annotation_north_arrow(
-        location = "br"
-      , height   = unit(1.5, "cm"),
-      , width    = unit(1.2, "cm"),
-      , style    = north_arrow_fancy_orienteering(
-            fill      = c("white", "white")
-          , line_col  = NA
-          , text_col  = "white"
-          , text_size = 12
-        )
+  )
+
+# Plot background for second kernel
+p3 <- ggplot() +
+  ggRGB(sat2, r = 1, g = 2, b = 3, ggLayer = T) +
+  geom_sf(
+      data = subset(prot, Name %in% c("Moremi", "Hwange"))
+    , lwd  = 0.2
+    , col  = "white"
+    , fill = colTrans("white", percent = 80)
+  ) +
+  geom_sf(
+      data = subset(prot, Name %in% c("Hwange"))
+    , lwd  = 0.2
+    , col  = "red"
+    , fill = colTrans("red", percent = 80)
+  ) +
+  geom_sf(
+      data = africa
+    , lwd  = 0.5
+    , col  = "white"
+    , fill = NA
+    , lty  = 2
+  ) +
+  geom_sf_text(
+      data    = labels_countries
+    , mapping = aes(label = Label)
+    , col     = "white"
+    , size    = 4
+  ) +
+
+  coord_sf(
+      crs  = 4326
+    , xlim = extent(sat2)[1:2]
+    , ylim = extent(sat2)[3:4]
+    , expand = F
+  ) +
+  theme_minimal() +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 0.5
+    , height     = unit(0.15, "cm")
+    , text_col   = "white"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(1.2, "cm"),
+    , width    = unit(1, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("white", "white")
+        , line_col  = NA
+        , text_col  = "white"
+        , text_size = 12
+      )
+  )
+
+# Plot second kernel
+p4 <- ggplot() +
+  geom_sf(
+      data    = kernel_hwange
+    , mapping = aes(fill = Steps)
+    , col     = "black"
+    , lwd     = 0.1
+  ) +
+  scale_fill_viridis_c(
+      direction = -1
+    , guide   = guide_colorbar(
+      , title          = "Number of Steps"
+      , show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.6, "cm")
+      , barwidth       = unit(2.0, "cm")
     )
-
-  if (legend){
-
-    # Plot for separate legend
-    p2 <- ggplot() +
-      geom_raster(
-          data        = x
-        , mapping     = aes(x = x, y = y, fill = layer)
-        , show.legend = F
-      ) +
-      geom_sf(
-          data        = kaza
-        , mapping     = aes(color = "KAZA-TFCA Borders")
-        , fill        = NA
-        , lty         = 1
-        , lwd         = 0.5
-        , show.legend = "line"
-      ) +
-      geom_sf(
-          data        = africa
-        , mapping     = aes(color = "Country Borders")
-        , fill        = NA
-        , lty         = 2
-        , lwd         = 0.2
-        , show.legend = "line"
-      ) +
-      scale_color_manual(
-          values = c("white", "white")
-        , guide  = guide_legend(
-            override.aes = list(
-              linetype = c(2, 1)
-            , shape    = c(NA, NA)
-            , lwd      = c(0.2, 0.5)
-          )
-        )
-      ) +
-      coord_sf(
-          crs    = 4326
-        , xlim   = c(min(x$x), max(x$x))
-        , ylim   = c(min(x$y), max(x$y))
-        , expand = F
-      ) +
-      xlim(min(x$x), max(x$x)) +
-      ylim(min(x$y), max(x$y)) +
-      theme(
-          legend.position       = c(0.20, 0.90)
-        , legend.title          = element_blank()
-        , legend.box            = "vertical"
-        , legend.background     = element_blank()
-        , legend.box.background = element_rect(fill  = "black", color = "white")
-        , legend.margin         = margin(0, 8, 2, 6)
-        , legend.text           = element_text(color = "white")
-        , legend.key            = element_blank()
-        , legend.key.size       = unit(0.8, "lines")
-        , legend.key.width      = unit(1.2, "lines")
-        , panel.background      = element_blank()
+  ) +
+  geom_sf(
+      data = subset(prot, Name %in% c("Moremi", "Hwange"))
+    , lwd  = 0.2
+    , col  = "white"
+    , fill = colTrans("white", percent = 80)
+  ) +
+  geom_sf(
+      data = subset(prot, Name == "Hwange")
+    , col  = "red"
+    , fill = colTrans("red", 60)
+    , lwd  = 0.4
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = extent(sat2)[1: 2]
+    , ylim   = extent(sat2)[3: 4]
+    , expand = F
+  ) +
+  theme_minimal() +
+  theme(
+      legend.position  = "none"
+    , legend.box       = "vertical"
+    , panel.grid.major = element_line(color = colTrans("gray70", 80), size = 0.2)
+    , panel.grid.minor = element_blank()
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 0.5
+    , height     = unit(0.15, "cm")
+    , text_col   = "black"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(1.2, "cm"),
+    , width    = unit(1, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("black", "black")
+        , line_col  = NA
+        , text_col  = "black"
+        , text_size = 12
       )
-
-    # Extract legend
-    legend <- get_legend(p2)
-
-    # Put into main plot
-    p3 <- p1 + annotation_custom(
-          grob = legend
-        , xmin = 18.75
-        , xmax = 21
-        , ymin = -13
-        , ymax = -13.5
-      )
-  } else {
-    p3 <- p1
-  }
-
-  # Return it
-  return(p3)
-
-}
-
-# Let's apply the function to get all desired plots
-maps <- lapply(1:length(betweenness), function(x){
-  subtitle <- paste0("After ", names(betweenness)[[x]], " Steps")
-  map <- plotBetweenness(
-      x        = betweenness[[x]]
-    , subtitle = subtitle
-    , legend   = F
-    , barwidth = 7
   )
-  return(map)
-})
 
-# Arrange plots nicely
-p <- ggarrange(maps[[1]], maps[[2]], maps[[3]], nrow = 1)
-
-# Store the arranged plot
-ggsave("04_Manuscript/99_BetweennessIndividual.png"
-  , plot   = p
-  , scale  = 2
-  , height = 3
-  , width  = 9
+# Put plots together
+p <- ggarrange(p1, p2, p3, p4
+  , labels = c("a1", "a2", "b1", "b2")
 )
+
+# Prepare a plot from which we can grab the legend
+legend <- ggplot() +
+  geom_sf(
+      data    = kernel_hwange
+    , mapping = aes(fill = Steps)
+    , col     = "black"
+    , lwd     = 0.1
+  ) +
+  scale_fill_viridis_c(
+      direction = -1
+    , guide   = guide_colorbar(
+      , title          = "Number of Steps"
+      , show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.6, "cm")
+      , barwidth       = unit(10.0, "cm")
+    )
+  ) +
+  theme(
+      legend.position  = "bottom"
+    , legend.box       = "vertical"
+    , panel.grid.major = element_line(color = colTrans("gray70", 80), size = 0.2)
+    , panel.grid.minor = element_blank()
+  )
+legend <- get_legend(legend)
+
+# Add legend
+p <- ggarrange(p, legend, nrow = 2, heights = c(10, 1))
+
+# Store
+ggsave("04_Manuscript/99_TimeKernel.png", plot = p, scale = 1.3)
