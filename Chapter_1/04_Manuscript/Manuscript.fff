@@ -1,18 +1,88 @@
-\begin{figure}
-  \includegraphics[width = \textwidth]{99_SourcePoints}
-  \caption{Illustration of source points from which dispersal was simulated.
-  Although in reality we simulated 1'000 per source point, we illustrate an
-  example assuming 10 dispersers from each source point. (a) Static source
-  points similar to the source points reported in ... (b) Source points that
-  were randomized within the catchment areas (dark gray).}
-  \label{SourcePoints}
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_StudyArea.png}
+    \caption{(a) The study area of our research was confined by a bounding box
+    encompassing the entire KAZA-TFCA, which comprises parts of Angola, Namibia,
+    Botswana, Zimbabwe, and Zambia. (b) The KAZA-TFCA represents the world's
+    largest terrestrial conservation area and covers a total of 520'000
+    km\textsuperscript{2}. It will connect or reconnect multiple already
+    existing national parks and protected areas (green polygons) that are
+    distributed across its extent. The African wild dog dispersal data
+    considered in this study was collected on free-ranging individuals departing
+    from the Moremi National Park in northern Botswana (since game reserves in
+    Botswana serve the same purpose as national parks, we refer to them as
+    national parks for simplicity).}
+    \label{StudyArea}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_SourceAreas.png}
+    \caption{(a) Illustration of an artificially expanded covariate layer (water
+    cover). We expanded the layer by adding a 100 km buffer (light blue) which
+    we filled with values sampled from the original layer. (b) Different source
+    areas from which we released virtual dispersers. We initiated 50'000
+    dispersers within the main study area (green) and another 30'000 dispersers
+    within a virtual buffer (blue).}
+    \label{SourcePoints}
+  \end{center}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
-  \includegraphics{99_MovementModel}
-  \caption{Most parsimonious movement model.}
-  \label{MovementModel}
+  \begin{center}
+    \includegraphics[width=\textwidth]{99_MovementModel}
+    \caption{(a) Most parsimonious movement model for dispersing wild dogs. The
+    model includes a habitat kernel, a movement kernel, as well as their
+    interactions. The orange and blue line segments delineate the 90\%, 95\%,
+    and 99\% Confidence-Intervals around the respective \(\beta\) coefficients.
+    Significance codes: * \(p < 0.10\), ** \(p < 0.05\), *** \(p < 0.01\). (b)
+    Results from the k-fold cross validation procedure. The upper plot shows
+    rank frequencies of predicted realized scores according to model predictions
+    with known preferences, whereas the lower plot shows rank frequencies when
+    assuming random preferences. The blue ribbon shows the prediction interval
+    around a loess smoothing regression that we fitted to ease the
+    interpretation of the plots.}
+    \label{MovementModel}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \includegraphics[width=\textwidth]{99_Heatmap.png}
+  \caption{}
+  \label{Heatmap}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \includegraphics[width=\textwidth]{99_Betweenness.png}
+  \caption{Betweenness scores of each raster cell in a raster with 5 x 5 km
+  resolution. Betweenness scores were determined based on simulated dispersal
+  events. A high betweenness score highlights cells that are exceptionally
+  relevant in connecting different regions in the study area. That is, the
+  higher the betweenness score, the more often a pixel lies on a shortest path
+  between adjacent areas. In this sense the metric can be used to pinpoint
+  discrete movement corridors. Note that we square-rooted betweenness scores to
+  improve visibility of corrdiors with low scores.}
+  \label{Betweenness}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \includegraphics[width=\textwidth]{99_AreasReached.png}
+  \caption{Network on simulated dispersal trajectories highlighting the
+  connections between national parks (dark green). Yellow bubbles represent the
+  center of the different national parks and are sized in relation to the number
+  of simulated dispersers originating from each park. Colored arrows between
+  national parks illustrate between which national parks the simulated
+  dispersers successfully moved and the color of each arrow shows the average
+  number of steps that were necessary to realize those connections.
+  Additionally, the line thickness indicates the relative number of dispersers
+  originating from a national park that realized those connections.}
+  \label{AreasReached}
 \end{figure}
 \efloatseparator
  

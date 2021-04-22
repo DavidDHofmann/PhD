@@ -1,10 +1,10 @@
-PWD /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2
+PWD /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.tex
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.log
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.tex
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.log
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -206,9 +206,9 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.aux
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.aux
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux
 INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
@@ -221,14 +221,14 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-OUTPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
 INPUT /usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
@@ -271,14 +271,14 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_AllMovementModels.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_AllMovementModels.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/99_AllMovementModels.pdf
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.bbl
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.bbl
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.aux
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
-INPUT /home/david/ownCloud/University/15. PhD/00_WildDogs/05_Manuscript2/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MovementModelAICs.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MovementModelAICs.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MovementModelAICs.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.bbl
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.bbl
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.out
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb
@@ -291,4 +291,3 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
-INPUT /usr/share/texmf/fonts/type1/public/tex-gyre/qhvr.pfb

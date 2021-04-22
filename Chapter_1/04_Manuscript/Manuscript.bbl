@@ -78,6 +78,12 @@ Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
 \newblock {\em {Dispersal Ecology and Evolution}}.
 \newblock Oxford University Press, Oxford, UK.
 
+\bibitem[Cozzi, 2013]{Cozzi.2013}
+Cozzi, G. (2013).
+\newblock {\em {Patterns of Habitat Use and Segregation among African Large
+  Carnivores}}.
+\newblock {PhD Thesis}, University of Zurich, Zurich.
+
 \bibitem[Cozzi et~al., 2020]{Cozzi.2020}
 Cozzi, G., Behr, D., Webster, H., Claase, M., Bryce, C., Modise, B., McNutt,
   J., and Ozgul, A. (2020).
@@ -109,6 +115,17 @@ Diniz, M.~F., Cushman, S.~A., Machado, R.~B., and De~Marco~Júnior, P. (2019).
   Dispersal}.
 \newblock {\em {Landscape Ecology}}.
 
+\bibitem[Eddelbuettel, 2013]{Eddelbuettel.2013}
+Eddelbuettel, D. (2013).
+\newblock {\em {Seamless R and C++ Integration with Rcpp}}.
+\newblock Springer, New York.
+\newblock ISBN 978-1-4614-6867-7.
+
+\bibitem[Eddelbuettel and Fran\c{c}ois, 2011]{Eddelbuettel.2011}
+Eddelbuettel, D. and Fran\c{c}ois, R. (2011).
+\newblock {Rcpp: Seamless R and C++ Integration}.
+\newblock {\em {Journal of Statistical Software}}, 40(8):1--18.
+
 \bibitem[Elliot et~al., 2014]{Elliot.2014}
 Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
 \newblock {The Devil is in the Dispersers: Predictions of Landscape
@@ -129,6 +146,13 @@ Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
 \newblock {Wolves Influence Elk Movements: Behavior Shapes a Trophic Cascade in
   Yellowstone National Park}.
 \newblock {\em Ecology}, 86(5):1320--1330.
+
+\bibitem[Fortin et~al., 2009]{Fortin.2009}
+Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
+  Dancose, K. (2009).
+\newblock {Group-Size-Mediated Habitat Selection and Group Fusion–Fission
+  Dynamics of Bison under Predation Risk}.
+\newblock {\em Ecology}, 90(9):2480--2490.
 
 \bibitem[Frankham et~al., 2002]{Frankham.2002}
 Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
@@ -187,6 +211,18 @@ Koen, E.~L., Bowman, J., Sadowski, C., and Walpole, A.~A. (2014).
 \newblock {Landscape Connectivity for Wildlife: Development and Validation of
   Multispecies Linkage Maps}.
 \newblock {\em {Methods in Ecology and Evolution}}, 5(7):626--633.
+
+\bibitem[Koen et~al., 2010]{Koen.2010}
+Koen, E.~L., Garroway, C.~J., Wilson, P.~J., and Bowman, J. (2010).
+\newblock {The Effect of Map Boundary on Estimates of Landscape Resistance to
+  Animal Movement}.
+\newblock {\em PlOS ONE}, 5(7):e11785.
+
+\bibitem[Latham et~al., 2011]{Latham.2011}
+Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
+\newblock {Movement Responses by Wolves to Industrial Linear Features and Their
+  Effect on Woodland Caribou in Northeastern Alberta}.
+\newblock {\em {Ecological Applications}}, 21(8):2854--2865.
 
 \bibitem[Leigh et~al., 2012]{Leigh.2012}
 Leigh, K.~A., Zenger, K.~R., Tammen, I., and Raadsma, H.~W. (2012).
@@ -274,6 +310,11 @@ Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
 \newblock {Ecological Predictors of African Wild Dog Ranging Patterns in
   Northern Botswana}.
 \newblock {\em {Journal of Mammalogy}}, 96(6):1214--1223.
+
+\bibitem[{R Core Team}, 2019]{R.2019}
+{R Core Team} (2019).
+\newblock {\em {R: A Language and Environment for Statistical Computing}}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
 
 \bibitem[Signer et~al., 2017]{Signer.2017}
 Signer, J., Fieberg, J., and Avgar, T. (2017).

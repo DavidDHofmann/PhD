@@ -170,6 +170,12 @@ p1 <- tm_shape(hill_africa) +
       , lty = 1
       , lwd = 1.5
     ) +
+  tm_shape(kaza_ext) +
+    tm_borders(
+        col = "black"
+      , lty = 1
+      , lwd = 1
+    ) +
   tm_shape(lines_countries) +
     tm_lines(
         col = "gray30"
@@ -184,9 +190,9 @@ p1 <- tm_shape(hill_africa) +
     ) +
   tm_layout(
       asp         = 0.8
-    , frame       = "black"
-    , frame.lwd   = 3
+    , frame       = F
     , legend.show = F
+    , bg.color    = "transparent"
   ) +
   tm_credits("a"
     , position  = c("right", "top")
@@ -254,7 +260,7 @@ p2 <- tm_shape(hill_kaza) +
   ) +
   tm_layout(
     , frame                   = "gray20"
-    , frame.lwd               = 3
+    , frame.lwd               = 1
     , asp                     = 1.2
     , legend.outside          = TRUE
     , legend.outside.position = "left"
@@ -311,7 +317,7 @@ tmap_save(
     tm        = p2
   , filename  = "04_Manuscript/99_StudyArea.png"
   , insets_tm = p1
-  , insets_vp = viewport(0.164, 0.341, width = 0.56, height = 0.56)
+  , insets_vp = viewport(0.164, 0.32, width = 0.66, height = 0.66)
   , width     = 9
   , height    = 5.25
   , scale     = 1.1

@@ -107,8 +107,10 @@ visits <- sims %>%
   arrange(TrackID, StepNumber) %>%
   group_by(From, To) %>%
   summarize(
-      MeanStepNumber = mean(StepNumber), .groups = "drop"
-    , Frequency = n()
+      MeanStepNumber = mean(StepNumber)
+    , SDStepNumber   = sd(StepNumber)
+    , Frequency      = n()
+    , .groups        = "drop"
   ) %>%
   subset(From != To)
 

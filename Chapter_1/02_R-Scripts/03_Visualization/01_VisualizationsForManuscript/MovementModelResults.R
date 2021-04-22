@@ -1,7 +1,8 @@
 ################################################################################
 #### Plot Movement Model Results
 ################################################################################
-# Description: A simple plot of the Dispersal Durations
+# Description: Plot of most parsimonious movement model and results from the
+# model validation procedure
 
 # Clear R's brain
 rm(list = ls())
@@ -22,10 +23,14 @@ library(ggdark)       # Dark ggplot theme
 library(latex2exp)    # For latex expressions
 library(msir)         # For prediction interval around loess
 library(RColorBrewer) # For nice colors
+library(xtable)       # To write model results to a .tex file
 
 # Set working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
 setwd(wd)
+
+# Suppress the scientific notion
+options(scipen = 999)
 
 ################################################################################
 #### Prepare Data
@@ -167,18 +172,18 @@ groups <- c(
 p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
   geom_point(shape = 3, size = 2.5) +
   geom_errorbarh(aes(
-      xmin = Coefficient - 1.645 * SE
-    , xmax = Coefficient + 1.645 * SE)
+      xmin = LCI_90
+    , xmax = UCI_90)
     , height = 0, size = 2, alpha = 0.5
   ) +
   geom_errorbarh(aes(
-      xmin = Coefficient - 1.96 * SE
-    , xmax = Coefficient + 1.96 * SE)
+      xmin = LCI_95
+    , xmax = UCI_95)
     , height = 0, size = 1, alpha = 0.75
   ) +
   geom_errorbarh(aes(
-      xmin = Coefficient - 2.575 * SE
-    , xmax = Coefficient + 2.575 * SE)
+      xmin = LCI_99
+    , xmax = UCI_99)
     , height = 0, size = 0.3, alpha = 1
   ) +
   geom_text(
@@ -281,6 +286,22 @@ p3 <- p2 + annotate(geom = "segment"
 # # Store the plot
 # ggsave("04_Manuscript/99_MovementModel.pdf", device = "png", width = 7, height = 7, scale = 0.75)
 # ggsave("04_Manuscript/99_MovementModel.pdf", device = "pdf", width = 7, height = 7, scale = 0.75)
+
+# Let's also prepare a table to include in the manuscript
+tex <- left_join(data.frame(Covariate = order), coeffs, by = "Covariate") %>%
+  mutate(Group = rep(c("Habitat Kernel", "Movement Kernel", "Interaction"), c(5, 6, 6))) %>%
+  select(Group, Covariate, Coefficient, SE, pvalue, Significance) %>%
+  mutate(across(c(Coefficient, SE, pvalue), round, 3))
+
+# Write it to a .tex file
+print(xtable(tex, digits = 3)
+  , floating            = FALSE
+  , latex.environments  = NULL
+  , booktabs            = TRUE
+  , include.rownames    = FALSE
+  , type                = "latex"
+  , file                = "04_Manuscript/99_MovementModel.tex"
+)
 
 ################################################################################
 #### Validation
