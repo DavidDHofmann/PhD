@@ -1,58 +1,54 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
-Repeated entry---line 2947 of file Literatur.bib
+Repeated entry---line 3001 of file Literatur.bib
  : @article{Koen.2014
  :                   ,
 I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "Fieberg.2020"
-Warning--I didn't find a database entry for "VanMoorter.2021"
-Warning--I didn't find a database entry for "Kanangaraj.2013"
 Warning--I didn't find a database entry for "Hodel.2021"
 Warning--I didn't find a database entry for "Behr.2021"
-Warning--I didn't find a database entry for "Behr.2017"
 Warning--empty journal in Cozzi.2020
-You've used 61 entries,
+You've used 64 entries,
             1935 wiz_defined-function locations,
-            899 strings with 16510 characters,
-and the built_in function-call counts, 26616 in all, are:
-= -- 2543
-> -- 1364
+            909 strings with 17120 characters,
+and the built_in function-call counts, 28209 in all, are:
+= -- 2702
+> -- 1444
 < -- 25
-+ -- 476
-- -- 476
-* -- 2480
-:= -- 4716
-add.period$ -- 186
-call.type$ -- 61
-change.case$ -- 533
-chr.to.int$ -- 61
-cite$ -- 62
-duplicate$ -- 854
-empty$ -- 1705
-format.name$ -- 557
-if$ -- 5041
++ -- 504
+- -- 504
+* -- 2611
+:= -- 4973
+add.period$ -- 195
+call.type$ -- 64
+change.case$ -- 563
+chr.to.int$ -- 64
+cite$ -- 65
+duplicate$ -- 916
+empty$ -- 1802
+format.name$ -- 588
+if$ -- 5368
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 62
-newline$ -- 311
-num.names$ -- 185
-pop$ -- 442
+missing$ -- 65
+newline$ -- 326
+num.names$ -- 194
+pop$ -- 469
 preamble$ -- 2
-purify$ -- 541
+purify$ -- 570
 quote$ -- 0
-skip$ -- 630
+skip$ -- 688
 stack$ -- 0
-substring$ -- 1870
-swap$ -- 72
-text.length$ -- 2
+substring$ -- 1984
+swap$ -- 95
+text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 354
+type$ -- 372
 warning$ -- 1
-while$ -- 204
+while$ -- 214
 width$ -- 0
-write$ -- 799
+write$ -- 837
 (There was 1 error message)

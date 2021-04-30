@@ -1,0 +1,22 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Methods}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Study Area}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}GPS Relocation Data}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Covariates}{7}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Movement Model}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Dispersal Simulation}{9}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Source Points}{10}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Heatmap}{10}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Network Analysis I: Betweenness}{10}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9}Network Analysis II: Interpatch-Connectivity}{11}{subsection.2.9}%
+\contentsline {section}{\numberline {3}Results}{11}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Movement Model}{11}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Dispersal Simulation}{12}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Heatmaps}{13}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Network Analysis I}{13}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Network Analysis II}{13}{subsection.3.5}%
+\contentsline {section}{\numberline {4}Discussion}{14}{section.4}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{16}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{17}{section.6}%
+\contentsline {section}{\numberline {7}Acknowledgements}{17}{section.7}%

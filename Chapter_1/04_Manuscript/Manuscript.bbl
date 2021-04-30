@@ -41,6 +41,12 @@ Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2020).
   Endangered Social Carnivore}.
 \newblock {\em {Journal of Animal Ecology}}, 89(10):2356--2366.
 
+\bibitem[Behr et~al., 2017]{Behr.2017}
+Behr, D.~M., Ozgul, A., and Cozzi, G. (2017).
+\newblock {Combining Human Acceptance and Habitat Suitability in a Unified
+  Socio-Ecological Suitability Model: A Case Study of the Wolf in Switzerland}.
+\newblock {\em {Journal of Applied Ecology}}, 54(6):1919--1929.
+
 \bibitem[Boyce et~al., 2002]{Boyce.2002}
 Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F. K.~A. (2002).
 \newblock {Evaluating Resource Selection Functions}.
@@ -140,6 +146,12 @@ Fieberg, J., Matthiopoulos, J., Hebblewhite, M., Boyce, M.~S., and Frair, J.~L.
 \newblock {\em {Philosophical Transactions of the Royal Society B: Biological
   Sciences}}, 365(1550):2233--2244.
 
+\bibitem[Fieberg et~al., 2020]{Fieberg.2020}
+Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2020).
+\newblock {A ‘How-to’ Guide for Interpreting Parameters in Resource- and
+  Step-Selection Analyses}.
+\newblock preprint, Ecology.
+
 \bibitem[Fortin et~al., 2005]{Fortin.2005}
 Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
   J.~S. (2005).
@@ -176,12 +188,6 @@ Hijmans, R.~J. (2020).
 \newblock {\em {raster: Geographic Data Analysis and Modeling}}.
 \newblock R package version 3.3-13.
 
-\bibitem[Hofmann, 2020]{Hofmann.2020}
-Hofmann, D.~D. (2020).
-\newblock {\em {On The Move: Dispersal Corridors of the African Wild Dog
-  (Lycaon pictus) across the Kavango-Zambezi Transfrontier Conservation Area}}.
-\newblock {Master's Thesis}, University of Zurich, Zurich.
-
 \bibitem[Hofmann et~al., 2021]{Hofmann.2021}
 Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
 \newblock {Bound within Boundaries: How Well Do Protected Areas Match Movement
@@ -200,6 +206,12 @@ Jønsson, K.~A., Tøttrup, A.~P., Borregaard, M.~K., Keith, S.~A., Rahbek, C.,
 \newblock {Tracking Animal Dispersal: From Individual Movement to Community
   Assembly and Global Range Dynamics}.
 \newblock {\em {Trends in Ecology \& Evolution}}, 31(3):204--214.
+
+\bibitem[Kanagaraj et~al., 2013]{Kanagaraj.2013}
+Kanagaraj, R., Wiegand, T., Kramer-Schadt, S., and Goyal, S.~P. (2013).
+\newblock {Using Individual-Based Movement Models to Assess Inter-Patch
+  Connectivity for Large Carnivores in Fragmented Landscapes}.
+\newblock {\em {Biological Conservation}}, 167:298 -- 309.
 
 \bibitem[Kays et~al., 2015]{Kays.2015}
 Kays, R., Crofoot, M.~C., Jetz, W., and Wikelski, M. (2015).
@@ -327,6 +339,12 @@ Turchin, P. (1998).
 \newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
   Population Redistribution in Plants and Animals}}.
 \newblock Sinauer Associates, Sunderland, MA, USA.
+
+\bibitem[Van~Moorter et~al., 2021]{VanMoorter.2021}
+Van~Moorter, B., Kivimäki, I., Panzacchi, M., and Saerens, M. (2021).
+\newblock {Defining and Quantifying Effective Connectivity of Landscapes for
+  Species' Movements}.
+\newblock {\em {Ecography}}, page ecog.05351.
 
 \bibitem[Vasudev et~al., 2015]{Vasudev.2015}
 Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).

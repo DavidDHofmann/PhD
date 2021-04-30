@@ -32,7 +32,19 @@ prot   <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 kaza   <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 r      <- raster("03_Data/02_CleanData/00_General_Raster.tif")
-water  <- raster("03_Data/02_CleanData/01_LandCover_WaterCoverAveraged_MERGED.tif")
+
+# Load simulated trajectories
+sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
+
+# Identify the first coordinate of each trajectory
+first <- sims %>%
+  dplyr::select("x", "y", "TrackID", "Area") %>%
+  group_by(TrackID) %>%
+  slice(1) %>%
+  SpatialPointsDataFrame(
+      coords      = cbind(.[["x"]], .[["y"]])
+    , proj4string = CRS("+init=epsg:4326")
+  )
 
 # Prepare country labels
 labels_countries <- data.frame(
@@ -57,8 +69,8 @@ small <- aggregate(small)
 small <- as(small, "SpatialPolygonsDataFrame")
 
 # Put buffer and main study area together
-main@data <- data.frame(ID = 1:nrow(main), Area = "Source Areas (Main)")
-buffer@data <- data.frame(ID = nrow(main) + 1, Area = "Source Areas (Buffer)")
+main@data <- data.frame(ID = 1:nrow(main), Area = "Main Source Areas")
+buffer@data <- data.frame(ID = nrow(main) + 1, Area = "Buffer Source Areas")
 areas <- rbind(main, buffer)
 
 # Add labels for main and buffer area
@@ -71,91 +83,11 @@ labels_areas <- data.frame(
 coordinates(labels_areas) <- c("x", "y")
 crs(labels_areas) <- CRS("+init=epsg:4326")
 
-# Expand water
-water_ext <- extendRaster(water, r)
+# Make areas factorial
+first$Area <- factor(first$Area, levels = c("Main", "Buffer"))
 
 # Plot
 p1 <- tm_shape(r) +
-    tm_raster(
-        palette     = "white"
-      , legend.show = F
-    ) +
-  tm_shape(water_ext) +
-    tm_raster(
-        palette = c("white", "gray30")
-      , title   = ""
-      , labels  = c("", "Water")
-      , style   = "cat"
-    ) +
-  tm_shape(buffer) +
-    tm_polygons(
-        col          = "cornflowerblue"
-      , border.col   = "cornflowerblue"
-      , alpha        = 0.6
-      , lwd          = 0
-    ) +
-  # tm_shape(labels_areas) +
-  #   tm_text("Label2"
-  #     , col             = "Label2"
-  #     , palette         = c("cornflowerblue", "black")
-  #     , fontface        = 3
-  #     , size            = 0.7
-  #     , just            = "left"
-  #     , legend.col.show = F
-  #   ) +
-  tm_shape(kaza) +
-    tm_borders(
-        col = "black"
-      , lty = 1
-      , lwd = 2
-    ) +
-  tm_shape(africa) +
-    tm_borders(
-        col = "gray20"
-      , lwd = 0.5
-    ) +
-  tm_shape(labels_countries) +
-    tm_text("Label"
-      , col       = "gray20"
-      , fontface  = 2
-      , size      = 0.6
-    ) +
-  tm_graticules(
-      n.y                 = 5
-    , n.x                 = 5
-    , labels.inside.frame = FALSE
-    , lines               = FALSE
-    , ticks               = TRUE
-  ) +
-  tm_compass(
-      color.dark  = "black"
-    , color.light = "black"
-    , text.color  = "black"
-    , position    = c(0.9, 0.08)
-  ) +
-  tm_scale_bar(
-        position  = c(0.8, 0)
-      , text.size = 0.5
-      , text.col  = "black"
-      , width     = 0.125
-  ) +
-  tm_credits("a"
-    , position = c(0.01, 0.9)
-    , size     = 1.5
-    , col      = "black"
-    , fontface = "bold"
-  ) +
-  tm_layout(
-    , frame            = "gray20"
-    , frame.lwd        = 3
-    , legend.position  = c(0.068, 0.082)
-    , legend.stack     = "vertical"
-    , legend.text.size = 0.8
-    , legend.bg.color  = "white"
-  )
-
-# Plot
-p2 <- tm_shape(r) +
     tm_raster(
         palette     = "white"
       , legend.show = F
@@ -206,10 +138,92 @@ p2 <- tm_shape(r) +
   tm_layout(
     , frame            = "gray20"
     , frame.lwd        = 3
-    , legend.position  = c(0.067, 0.082)
+    , legend.position  = c(0.067, 0.82)
     , legend.stack     = "vertical"
-    , legend.text.size = 0.8
-    , legend.bg.color  = "white"
+    , legend.text.size = 0.65
+    , legend.bg.color  = "transparent"
+  ) +
+  tm_compass(
+      color.dark  = "black"
+    , color.light = "black"
+    , text.color  = "black"
+    , position    = c(0.9, 0.08)
+  ) +
+  tm_scale_bar(
+        position  = c(0.8, 0)
+      , text.size = 0.5
+      , text.col  = "black"
+      , width     = 0.125
+  ) +
+  tm_credits("a"
+    , position = c(0.01, 0.9)
+    , size     = 1.5
+    , col      = "black"
+    , fontface = "bold"
+)
+
+# Plot
+p2 <- tm_shape(r) +
+    tm_raster(
+        palette     = "white"
+      , legend.show = F
+    ) +
+  tm_shape(first) +
+    tm_dots(
+        col         = "Area"
+      , title       = ""
+      , palette     = c("#70ab70", "cornflowerblue")
+      , legend.show = F
+      , alpha       = 0.6
+      , size        = 0.0001
+    ) +
+  tm_shape(kaza) +
+    tm_borders(
+        col = "black"
+      , lty = 1
+      , lwd = 2
+    ) +
+  tm_shape(africa) +
+    tm_borders(
+        col = "gray20"
+      , lwd = 0.5
+    ) +
+  tm_shape(labels_countries) +
+    tm_text("Label"
+      , col       = "gray20"
+      , fontface  = 2
+      , size      = 0.6
+    ) +
+  # tm_shape(labels_areas) +
+  #   tm_text("Label"
+  #     , col             = "Label"
+  #     , palette         = c("cornflowerblue", "black")
+  #     , fontface        = 3
+  #     , size            = 0.7
+  #     , just            = "left"
+  #     , legend.col.show = F
+  #   ) +
+  tm_graticules(
+      n.y                 = 5
+    , n.x                 = 5
+    , labels.inside.frame = FALSE
+    , lines               = FALSE
+    , ticks               = TRUE
+  ) +
+  tm_add_legend(
+      type   = "symbol"
+    , shape  = 16
+    , col    = c("#70ab70", "cornflowerblue")
+    , labels = c("Main Source Points", "Buffer Source Points")
+    , title  = ""
+  ) +
+  tm_layout(
+    , frame            = "gray20"
+    , frame.lwd        = 3
+    , legend.position  = c(0.067, 0.82)
+    , legend.stack     = "vertical"
+    , legend.text.size = 0.65
+    , legend.bg.color  = "transparent"
   ) +
   tm_compass(
       color.dark  = "black"
