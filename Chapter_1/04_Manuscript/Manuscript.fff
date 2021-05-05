@@ -1,15 +1,14 @@
 \begin{figure}[htbp]
   \begin{center}
     \includegraphics[width = \textwidth]{99_StudyArea.png}
-    \caption{(a) The study area of our research was confined by a bounding box
-    encompassing the entire KAZA-TFCA, which comprises parts of Angola, Namibia,
-    Botswana, Zimbabwe, and Zambia. (b) The KAZA-TFCA represents the world's
-    largest terrestrial conservation area and covers a total of 520'000
-    km\textsuperscript{2}. Its purpose is to re-establish connectivity between
-    already-existing national parks and other protected areas (green polygons).
-    The dispersal data used in this study was collected on a free-ranging
-    African wild dog population inhabiting the Moremi National Park in northern
-    Botswana.}
+    \caption{(a) The study area was confined by a bounding box encompassing the
+    entire KAZA-TFCA and spanned parts of Angola, Namibia, Botswana, Zimbabwe,
+    and Zambia. (b) The KAZA-TFCA represents the world's largest terrestrial
+    conservation area and covers a total of 520'000 km\textsuperscript{2}. Its
+    purpose is to re-establish connectivity between already-existing national
+    parks (dark green) and other protected areas (light green). The dispersal
+    data used in this study was collected on a free-ranging African wild dog
+    population inhabiting the Moremi National Park in northern Botswana.}
     \label{StudyArea}
   \end{center}
 \end{figure}
@@ -54,7 +53,12 @@
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_Heatmap.png}
-  \caption{}
+  \caption{Heatmap of all 80'000 simulated trajectories after 2'000 steps.
+  Simulations were based on an integrated step selection model, fit to the
+  movement data of dispersing African wild dogs. To generate the heatmap, we
+  rasterized and summed all simulated trajectories. Additional heatmaps
+  showcasing the traversal frequency after different numbers of steps are
+  provided in xx in Appendix S3.}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
@@ -86,3 +90,5 @@
   originating from a national park that realized those connections.}
   \label{AreasReached}
 \end{figure}
+\efloatseparator
+ 

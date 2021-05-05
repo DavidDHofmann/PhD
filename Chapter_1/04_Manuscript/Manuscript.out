@@ -1,21 +1,29 @@
-\BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [1][-]{section.2}{Methods}{}% 2
-\BOOKMARK [2][-]{subsection.2.1}{Study Area}{section.2}% 3
-\BOOKMARK [2][-]{subsection.2.2}{GPS Relocation Data}{section.2}% 4
-\BOOKMARK [2][-]{subsection.2.3}{Covariates}{section.2}% 5
-\BOOKMARK [2][-]{subsection.2.4}{Movement Model}{section.2}% 6
-\BOOKMARK [2][-]{subsection.2.5}{Dispersal Simulation}{section.2}% 7
-\BOOKMARK [2][-]{subsection.2.6}{Source Points}{section.2}% 8
-\BOOKMARK [2][-]{subsection.2.7}{Heatmap}{section.2}% 9
-\BOOKMARK [2][-]{subsection.2.8}{Network Analysis I: Betweenness}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.9}{Network Analysis II: Interpatch-Connectivity}{section.2}% 11
-\BOOKMARK [1][-]{section.3}{Results}{}% 12
-\BOOKMARK [2][-]{subsection.3.1}{Movement Model}{section.3}% 13
-\BOOKMARK [2][-]{subsection.3.2}{Dispersal Simulation}{section.3}% 14
-\BOOKMARK [2][-]{subsection.3.3}{Heatmaps}{section.3}% 15
-\BOOKMARK [2][-]{subsection.3.4}{Network Analysis I}{section.3}% 16
-\BOOKMARK [2][-]{subsection.3.5}{Network Analysis II}{section.3}% 17
-\BOOKMARK [1][-]{section.4}{Discussion}{}% 18
-\BOOKMARK [1][-]{section.5}{Authors' Contributions}{}% 19
-\BOOKMARK [1][-]{section.6}{Data Availability}{}% 20
-\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 21
+\BOOKMARK [1][-]{section.1}{Introduction \(90\045\)}{}% 1
+\BOOKMARK [2][-]{subsection.1.1}{Importance of Dispersal \046 Connectivity \(90\045\)}{section.1}% 2
+\BOOKMARK [2][-]{subsection.1.2}{Advancements in GPS Technology \046 Movement Ecology \(90\045\)}{section.1}% 3
+\BOOKMARK [2][-]{subsection.1.3}{Resource Selection \046 Connectivity \(90\045\)}{section.1}% 4
+\BOOKMARK [2][-]{subsection.1.4}{Issues with Least-Cost Paths \046 Circuit Theory \(90\045\)}{section.1}% 5
+\BOOKMARK [2][-]{subsection.1.5}{What about IBMMs? \(90\045\)}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{Step Selection Analysis \(90\045\)}{section.1}% 7
+\BOOKMARK [2][-]{subsection.1.7}{Study Species \046 Study Area \(90\045\)}{section.1}% 8
+\BOOKMARK [2][-]{subsection.1.8}{Previous Paper \(90\045\)}{section.1}% 9
+\BOOKMARK [1][-]{section.2}{Methods}{}% 10
+\BOOKMARK [2][-]{subsection.2.1}{Study Area \(90\045\)}{section.2}% 11
+\BOOKMARK [2][-]{subsection.2.2}{GPS Relocation Data \(90\045\)}{section.2}% 12
+\BOOKMARK [2][-]{subsection.2.3}{Covariates \(90\045\)}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.4}{Movement Model \(80\045\)}{section.2}% 14
+\BOOKMARK [2][-]{subsection.2.5}{Dispersal Simulation \(80\045\)}{section.2}% 15
+\BOOKMARK [2][-]{subsection.2.6}{Source Points \(90\045\)}{section.2}% 16
+\BOOKMARK [2][-]{subsection.2.7}{Heatmap \(100\045\)}{section.2}% 17
+\BOOKMARK [2][-]{subsection.2.8}{Betweenness \(80\045\)}{section.2}% 18
+\BOOKMARK [2][-]{subsection.2.9}{Interpatch-Connectivity \(80\045\)}{section.2}% 19
+\BOOKMARK [1][-]{section.3}{Results}{}% 20
+\BOOKMARK [2][-]{subsection.3.1}{Movement Model \(20\045\)}{section.3}% 21
+\BOOKMARK [2][-]{subsection.3.2}{Dispersal Simulation \(60\045\)}{section.3}% 22
+\BOOKMARK [2][-]{subsection.3.3}{Heatmap \(50\045\)}{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.4}{Betweenness \(50\045\)}{section.3}% 24
+\BOOKMARK [2][-]{subsection.3.5}{Interpatch Connectivity \(0\045\)}{section.3}% 25
+\BOOKMARK [1][-]{section.4}{Discussion \(10\045\)}{}% 26
+\BOOKMARK [1][-]{section.5}{Authors' Contributions}{}% 27
+\BOOKMARK [1][-]{section.6}{Data Availability}{}% 28
+\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 29

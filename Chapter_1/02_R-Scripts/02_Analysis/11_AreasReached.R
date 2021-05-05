@@ -20,6 +20,7 @@ library(rgeos)          # For spatial ananylsis
 library(igraph)         # For network analysis
 library(davidoff)       # Custom functions
 library(rgdal)          # To load spatial data
+library(ggnetwork)      # Package to plot networks with ggplot
 
 ################################################################################
 #### Rasterize National Parks

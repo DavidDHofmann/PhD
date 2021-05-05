@@ -33,7 +33,7 @@ library(gridExtra)      # To combine ggplots
 visits <- read_rds("03_Data/03_Results/99_AreasReached.rds")
 
 # Load protected areas
-prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
+prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
 # Keep only national parks
 prot <- subset(prot, Desig == "National Park")
@@ -86,9 +86,9 @@ crs(kaza_ext) <- CRS("+init=epsg:4326")
 kaza$Name <- "KAZA-TFCA Borders"
 
 # Convert objects to sf
-kaza                  <- st_as_sf(kaza)
-africa                <- st_as_sf(africa)
-prot                  <- st_as_sf(prot)
+kaza   <- st_as_sf(kaza)
+africa <- st_as_sf(africa)
+prot   <- st_as_sf(prot)
 
 # Convert heatmap to dataframe
 r <- as.data.frame(r, xy = T)

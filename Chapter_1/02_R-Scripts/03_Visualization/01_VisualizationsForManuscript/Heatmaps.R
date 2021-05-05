@@ -393,6 +393,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
 }
 
 # Let's apply the function to get all desired plots
+labels <- paste0(rep(c("a", "b"), each = 6), rep(1:3, each = 2))
 maps <- lapply(1:nlayers(heatmaps), function(x){
   subtitle <- paste0("After ", rasterized$steps[x], " Steps")
   map <- plotHeatmap(
@@ -401,16 +402,24 @@ maps <- lapply(1:nlayers(heatmaps), function(x){
     , legend   = F
     , barwidth = 7
   )
+  map <- map + annotate("text"
+    , x        = 18.8
+    , y        = -13.3
+    , label    = labels[x]
+    , col      = "black"
+    , fontface = 2
+    , size     = 10
+  )
   return(map)
 })
 
 # Arrange plots nicely
-p <- ggarrange(maps[[2]], maps[[4]], maps[[6]], maps[[8]], maps[[10]], maps[[12]])
+p <- ggarrange(maps[[2]], maps[[8]], maps[[4]], maps[[10]], maps[[6]], maps[[12]], ncol = 2, nrow = 3)
 
 # Store the arranged plot
 ggsave("04_Manuscript/99_HeatmapsIndividual.png"
   , plot   = p
   , scale  = 2
-  , height = 6
-  , width  = 9
+  , height = 9
+  , width  = 6
 )

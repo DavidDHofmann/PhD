@@ -11,7 +11,7 @@
     \begin{threeparttable}
       \begin{tabular}{llrrrc}
         \toprule
-        Kernel & Covariate & Coefficient & SE & pvalue & Significance \\
+        Kernel & Covariate & Coefficient & SE & p-value & Sign. \\
         \midrule
         \multirow{5}{*}{Habitat Kernel}
          & Water & -0.546 & 0.112 & \(<\) 0.001 & *** \\
@@ -45,3 +45,5 @@
     }
   \end{center}
 \end{table}
+\efloatseparator
+ 

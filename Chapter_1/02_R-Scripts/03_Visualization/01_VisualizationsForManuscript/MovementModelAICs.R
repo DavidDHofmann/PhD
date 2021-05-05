@@ -49,13 +49,12 @@ aics$Covariates <- aics$Covariates %>%
   gsub(pattern = "\\bSqrtDistanceToWater\\b", replacement = "DTW") %>%
   gsub(pattern = "\\inactive\\b", replacement = "LA") %>%
   gsub(pattern = "sl\\_", replacement = "sl") %>%
-  gsub(pattern = "log\\_sl\\_", replacement = "log(sl)") %>%
+  gsub(pattern = "log\\_sl", replacement = "log(sl)") %>%
   gsub(pattern = "cos\\_ta\\_", replacement = "cos(ta)") %>%
-  gsub(pattern = ",", replacement = " +") %>%
-  paste("cos(ta) + log(sl) +", .)
+  gsub(pattern = ",", replacement = " +")
 
-# Add new model IDs
-aics$ID <- 1:nrow(aics)
+# # Add new model IDs
+# aics$ID <- 1:nrow(aics)
 
 # Write the table to a .tex table
 print(xtable(aics, digits = 2)

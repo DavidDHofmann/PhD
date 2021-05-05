@@ -15,6 +15,18 @@ Adriaensen, F., Chardon, J., De~Blust, G., Swinnen, E., Villalba, S., Gulinck,
   Model}.
 \newblock {\em {Landscape and Urban Planning}}, 64(4):233--247.
 
+\bibitem[Allen et~al., 2016]{Allen.2016}
+Allen, C.~H., Parrott, L., and Kyle, C. (2016).
+\newblock {An Individual-Based Modelling Approach to Estimate Landscape
+  Connectivity for Bighorn Sheep (Ovis canadensis)}.
+\newblock {\em {PeerJ}}, 4:e2001.
+
+\bibitem[Avgar et~al., 2017]{Avgar.2017}
+Avgar, T., Lele, S.~R., Keim, J.~L., and Boyce, M.~S. (2017).
+\newblock {Relative Selection Strength: Quantifying Effect Size in Habitat‐
+  and Step‐Selection Inference}.
+\newblock {\em {Ecology and Evolution}}, 7(14):5322--5330.
+
 \bibitem[Avgar et~al., 2016]{Avgar.2016}
 Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
 \newblock {Integrated Step Selection Analysis: Bridging the Gap Between
@@ -79,16 +91,16 @@ Börger, L. and Fryxell, J. (2012).
   editors, {\em {Dispersal Ecology and Evolution}}. Oxford University Press,
   Oxford, UK.
 
+\bibitem[Clark et~al., 2015]{Clark.2015}
+Clark, J.~D., Laufenberg, J.~S., Davidson, M., and Murrow, J.~L. (2015).
+\newblock {Connectivity among Subpopulations of Louisiana Black Bears as
+  Estimated by a Step Selection Function}.
+\newblock {\em {The Journal of Wildlife Management}}, 79(8):1347--1360.
+
 \bibitem[Clobert et~al., 2012]{Clobert.2012}
 Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
 \newblock {\em {Dispersal Ecology and Evolution}}.
 \newblock Oxford University Press, Oxford, UK.
-
-\bibitem[Cozzi, 2013]{Cozzi.2013}
-Cozzi, G. (2013).
-\newblock {\em {Patterns of Habitat Use and Segregation among African Large
-  Carnivores}}.
-\newblock {PhD Thesis}, University of Zurich, Zurich.
 
 \bibitem[Cozzi et~al., 2020]{Cozzi.2020}
 Cozzi, G., Behr, D., Webster, H., Claase, M., Bryce, C., Modise, B., McNutt,
@@ -96,6 +108,11 @@ Cozzi, G., Behr, D., Webster, H., Claase, M., Bryce, C., Modise, B., McNutt,
 \newblock {The Walk of Life: African Wild Dog Dispersal and its Implications
   for Management and Conservation across Transfrontier Landscapes}.
 \newblock In press.
+
+\bibitem[Csardi and Nepusz, 2006]{Gabor.2006}
+Csardi, G. and Nepusz, T. (2006).
+\newblock {The igraph Software Package for Complex Network Research}.
+\newblock {\em {InterJournal}}, Complex Systems:1695.
 
 \bibitem[Cushman and Lewis, 2010]{Cushman.2010}
 Cushman, S.~A. and Lewis, J.~S. (2010).
@@ -110,16 +127,17 @@ Davies-Mostert, H.~T., Kamler, J.~F., Mills, M. G.~L., Jackson, C.~R.,
   Protected Areas in Southern Africa}.
 \newblock {\em {African Journal of Ecology}}, 50(4):500--506.
 
-\bibitem[Dijkstra, 1959]{Dijkstra.1959}
-Dijkstra, E.~W. (1959).
-\newblock {A Note on Two Problems in Connexion with Graphs}.
-\newblock {\em {Numerische Mathematik}}, 1(1):269--271.
-
-\bibitem[Diniz et~al., 2019]{Diniz.2019}
-Diniz, M.~F., Cushman, S.~A., Machado, R.~B., and De~Marco~Júnior, P. (2019).
+\bibitem[Diniz et~al., 2020]{Diniz.2020}
+Diniz, M.~F., Cushman, S.~A., Machado, R.~B., and De~Marco~Júnior, P. (2020).
 \newblock {Landscape Connectivity Modeling from the Perspective of Animal
   Dispersal}.
 \newblock {\em {Landscape Ecology}}.
+
+\bibitem[Doerr et~al., 2011]{Doerr.2011}
+Doerr, V. A.~J., Barrett, T., and Doerr, E.~D. (2011).
+\newblock {Connectivity, Dispersal Behaviour and Conservation under Climate
+  Change: A Response to Hodgson et al.: Connectivity and Dispersal Behaviour}.
+\newblock {\em {Journal of Applied Ecology}}, 48(1):143--147.
 
 \bibitem[Eddelbuettel, 2013]{Eddelbuettel.2013}
 Eddelbuettel, D. (2013).
@@ -138,13 +156,17 @@ Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
   Connectivity Change with Demography}.
 \newblock {\em {Journal of Applied Ecology}}, 51(5):1169--1178.
 
-\bibitem[Fieberg et~al., 2010]{Fieberg.2010}
-Fieberg, J., Matthiopoulos, J., Hebblewhite, M., Boyce, M.~S., and Frair, J.~L.
-  (2010).
-\newblock {Correlation and Studies of Habitat Selection: Problem, Red Herring
-  or Opportunity?}
-\newblock {\em {Philosophical Transactions of the Royal Society B: Biological
-  Sciences}}, 365(1550):2233--2244.
+\bibitem[Etherington, 2016]{Etherington.2016}
+Etherington, T.~R. (2016).
+\newblock {Least-Cost Modelling and Landscape Ecology: Concepts, Applications,
+  and Opportunities}.
+\newblock {\em {Current Landscape Ecology Reports}}, 1(1):40--53.
+
+\bibitem[Fahrig, 2003]{Fahrig.2003}
+Fahrig, L. (2003).
+\newblock {Effects of Habitat Fragmentation on Biodiversity}.
+\newblock {\em {Annual Review of Ecology, Evolution, and Systematics}},
+  34(1):487--515.
 
 \bibitem[Fieberg et~al., 2020]{Fieberg.2020}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2020).
@@ -175,6 +197,17 @@ Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
 Hanski, I. (1998).
 \newblock {Metapopulation Dynamics}.
 \newblock {\em Nature}, 396(6706):41--49.
+
+\bibitem[Hanski, 1999a]{Hanski.1999a}
+Hanski, I. (1999a).
+\newblock {Habitat Connectivity, Habitat Continuity, and Metapopulations in
+  Dynamic Landscapes}.
+\newblock {\em {Oikos}}, 87(2):209.
+
+\bibitem[Hanski, 1999b]{Hanski.1999b}
+Hanski, I. (1999b).
+\newblock {\em {Metapopulation Ecology}}.
+\newblock {Oxford University Press}.
 
 \bibitem[Hauenstein et~al., 2019]{Hauenstein.2019}
 Hauenstein, S., Fattebert, J., Grüebler, M.~U., Naef-Daenzer, B., Pe'er, G.,
@@ -230,6 +263,17 @@ Koen, E.~L., Garroway, C.~J., Wilson, P.~J., and Bowman, J. (2010).
   Animal Movement}.
 \newblock {\em PlOS ONE}, 5(7):e11785.
 
+\bibitem[Kramer-Schadt et~al., 2007]{KramerSchadt.2007}
+Kramer-Schadt, S., Revilla, E., Wiegand, T., and Grimm, V. (2007).
+\newblock {Patterns for Parameters in Simulation Models}.
+\newblock {\em {Ecological Modelling}}, 204(3-4):553--556.
+
+\bibitem[Landguth et~al., 2012]{Landguth.2012}
+Landguth, E.~L., Hand, B.~K., Glassy, J., Cushman, S.~A., and Sawaya, M.~A.
+  (2012).
+\newblock {UNICOR: A Species Connectivity and Corridor Network Simulator}.
+\newblock {\em {Ecography}}, 35(1):9--14.
+
 \bibitem[Latham et~al., 2011]{Latham.2011}
 Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
 \newblock {Movement Responses by Wolves to Industrial Linear Features and Their
@@ -282,10 +326,11 @@ Muff, S., Signer, J., and Fieberg, J. (2020).
   Frequentist Computation}.
 \newblock {\em {Journal of Animal Ecology}}, 89(1):80--92.
 
-\bibitem[Murtaugh, 2007]{Murtaugh.2007}
-Murtaugh, P.~A. (2007).
-\newblock {Simplicity and Complexity in Ecological Data Analysis}.
-\newblock {\em Ecology}, 88(1):56--62.
+\bibitem[Munden et~al., 2020]{Munden.2020}
+Munden, R., Börger, L., Wilson, R.~P., Redcliffe, J., Brown, R., Garel, M.,
+  and Potts, J.~R. (2020).
+\newblock {Why Did the Animal Turn? Time-Varying Step Selection Analysis for
+  Inference Between Observed Turning Points in High Frequency Data}.
 
 \bibitem[Osofsky et~al., 1996]{Osofsky.1996}
 Osofsky, S.~A., McNutt, J.~W., and Hirsch, K.~J. (1996).
@@ -323,16 +368,48 @@ Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
   Northern Botswana}.
 \newblock {\em {Journal of Mammalogy}}, 96(6):1214--1223.
 
+\bibitem[Prokopenko et~al., 2017]{Prokopenko.2017}
+Prokopenko, C.~M., Boyce, M.~S., and Avgar, T. (2017).
+\newblock {Characterizing Wildlife Behavioural Responses to Roads Using
+  Integrated Step Selection Analysis}.
+\newblock {\em {Journal of Applied Ecology}}, 54(2):470--479.
+
 \bibitem[{R Core Team}, 2019]{R.2019}
 {R Core Team} (2019).
 \newblock {\em {R: A Language and Environment for Statistical Computing}}.
 \newblock R Foundation for Statistical Computing, Vienna, Austria.
+
+\bibitem[Rudnick et~al., 2012]{Rudnick.2012}
+Rudnick, D., Ryan, S., Beier, P., Cushman, S., Dieffenbach, F., Epps, C.,
+  Gerber, L., Hartter, J., Jenness, J., Kintsch, J., Merenlender, A., Perkl,
+  R., Perziosi, D., and Trombulack, S. (2012).
+\newblock {The Role of Landscape Connectivity in Planning and Implementing
+  Conservation and Restoration Priorities. Issues in Ecology}.
+\newblock {\em {Issues in Ecology}}.
 
 \bibitem[Signer et~al., 2017]{Signer.2017}
 Signer, J., Fieberg, J., and Avgar, T. (2017).
 \newblock {Estimating Utilization Distributions from Fitted Step-Selection
   Functions}.
 \newblock {\em {Ecosphere}}, 8(4):e01771.
+
+\bibitem[Spear et~al., 2010]{Spear.2010}
+Spear, S.~F., Balkenhol, N., Fortin, M.-J., Mcrae, B.~H., and Scribner, K.
+  (2010).
+\newblock {Use of Resistance Surfaces for Landscape Genetic Studies:
+  Considerations for Parameterization and Analysis}.
+\newblock {\em {Molecular Ecology}}, 19(17):3576--3591.
+
+\bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
+Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
+\newblock {Applications of Step-Selection Functions in Ecology and
+  Conservation}.
+\newblock {\em {Movement Ecology}}, 2(4).
+
+\bibitem[Tischendorf and Fahrig, 2000]{Tischendorf.2000}
+Tischendorf, L. and Fahrig, L. (2000).
+\newblock {On the Usage and Measurement of Landscape Connectivity}.
+\newblock {\em {Oikos}}, 90(1):7--19.
 
 \bibitem[Turchin, 1998]{Turchin.1998}
 Turchin, P. (1998).
@@ -351,6 +428,18 @@ Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
 \newblock {From Dispersal Constraints to Landscape Connectivity: Lessons from
   Species Distribution Modeling}.
 \newblock {\em Ecography}, 38(10):967--978.
+
+\bibitem[Vasudev et~al., 2021]{Vasudev.2021}
+Vasudev, D., Goswami, V.~R., and Oli, M.~K. (2021).
+\newblock {Detecting Dispersal: A Spatial Dynamic Occupancy Model to Reliably
+  Quantify Connectivity across Heterogeneous Conservation Landscapes}.
+\newblock {\em {Biological Conservation}}, 253:108874.
+
+\bibitem[Wiegand et~al., 2003]{Wiegand.2003}
+Wiegand, T., Jeltsch, F., Hanski, I., and Grimm, V. (2003).
+\newblock {Using Pattern-Oriented Modeling for Revealing Hidden Information: A
+  Key for Reconciling Ecological Theory and Application}.
+\newblock {\em {Oikos}}, 100(2):209--222.
 
 \bibitem[Williams et~al., 2019]{Williams.2019}
 Williams, H.~J., Taylor, L.~A., Benhamou, S., Bijleveld, A.~I., Clay, T.~A.,

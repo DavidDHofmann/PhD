@@ -378,11 +378,22 @@ maps <- lapply(1:length(betweenness), function(x){
     , legend   = F
     , barwidth = 7
   )
+  map <- map + annotate("text"
+    , x        = 18.5
+    , y        = -13.3
+    , label    = letters[x]
+    , col      = "white"
+    , fontface = 2
+    , size     = 10
+  )
   return(map)
 })
 
 # Arrange plots nicely
-p <- ggarrange(maps[[1]], maps[[2]], maps[[3]], nrow = 1)
+p <- ggarrange(maps[[1]], maps[[2]], maps[[3]]
+  , nrow   = 2
+  , ncol   = 2
+)
 
 # Store the arranged plot
 ggsave("04_Manuscript/99_BetweennessIndividual.png"
@@ -390,4 +401,11 @@ ggsave("04_Manuscript/99_BetweennessIndividual.png"
   , scale  = 2
   , height = 3
   , width  = 9
+)
+
+ggsave("04_Manuscript/99_BetweennessIndividual.png"
+  , plot   = p
+  , scale  = 2
+  , height = 6
+  , width  = 6
 )

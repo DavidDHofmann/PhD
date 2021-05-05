@@ -164,7 +164,7 @@ p1a <- ggplot(dat, aes(x = ta_, y = sl_, z = prob)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   theme_classic() +
@@ -174,14 +174,14 @@ p1a <- ggplot(dat, aes(x = ta_, y = sl_, z = prob)) +
   ) +
   scale_y_continuous(
       breaks = seq(0, 35000, by = 5000)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+    , labels = function(x){format(x, big.mark = "'")}
   ) +
   scale_x_continuous(
       breaks = c(-pi, -pi/2, 0, pi/2, pi)
     , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
   ) +
   xlab("Turning Angle") +
-  ylab("Step Length") +
+  ylab("Step Length (m)") +
   theme(legend.position = "bottom")
 
 # Visualize using x-y plot
@@ -197,14 +197,14 @@ p1b <- ggplot(dat, aes(x = ta_, y = prob, group = sl_, color = sl_)) +
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = "Step Length"
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+    , name   = "Step Length (m)"
+    , labels = function(x){format(x, big.mark = "'")}
     , guide  = guide_colorbar(
         title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_y_continuous(
@@ -292,7 +292,7 @@ p2a <- ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   theme_classic() +
@@ -301,14 +301,14 @@ p2a <- ggplot(dat, aes(x = ta_, y = SqrtDistanceToWater, z = prob)) +
     , bottom = "both"
   ) +
   scale_y_continuous(
-      labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+      labels = function(x){format(x, big.mark = "'")}
   ) +
   scale_x_continuous(
       breaks = c(-pi, -pi/2, 0, pi/2, pi)
     , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
   ) +
   xlab("Turning Angle") +
-  ylab(expression(DistanceToWater^0.5)) +
+  ylab(bquote(DistanceToWater^0.5 * .(" (m)"))) +
   theme(legend.position = "bottom")
 
 # Visualize using x-y plot
@@ -324,14 +324,14 @@ p2b <- ggplot(dat, aes(x = ta_, y = prob, group = SqrtDistanceToWater, color = S
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = expression(DistanceToWater^0.5)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+    , name   = bquote(DistanceToWater^0.5 * .(" (m)"))
+    , labels = function(x){format(x, big.mark = "'")}
     , guide  = guide_colorbar(
         title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
@@ -415,7 +415,7 @@ p3a <- ggplot(dat, aes(x = ta_, y = HumansBuff5000, z = prob)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   theme_classic() +
@@ -433,7 +433,7 @@ p3a <- ggplot(dat, aes(x = ta_, y = HumansBuff5000, z = prob)) +
     , labels = c(expression(-pi, -pi/2, 0, pi/2, pi))
   ) +
   xlab("Turning Angle") +
-  ylab("Human Influence Index") +
+  ylab("Human Influence") +
   theme(legend.position = "bottom")
 
 # Visualize using x-y plot
@@ -449,13 +449,13 @@ p3b <- ggplot(dat, aes(x = ta_, y = prob, group = HumansBuff5000, color = Humans
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = "Human Influence Index"
+    , name   = "Human Influence"
     , guide  = guide_colorbar(
         title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
@@ -529,11 +529,6 @@ dat$Water <- dat$Water *
 # Visualize using x-y plot
 p4 <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
   geom_line(size = 0.2) +
-  geom_rug(data = orig, aes(x = sl_)
-    , inherit.aes = F
-    , size        = 0.3
-    , alpha       = 0.3
-  ) +
   theme_classic() +
   coord_capped_cart(
       left   = "both"
@@ -545,7 +540,7 @@ p4 <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = "Water Cover"
+    , name   = "Water Cover (%)"
     , limits = c(0, 1)
     , breaks = seq(0, 1, by = 0.2)
     , labels = seq(0, 1, by = 0.2)
@@ -554,14 +549,14 @@ p4 <- ggplot(dat, aes(x = sl_, y = prob, group = Water, color = Water)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
-      breaks = seq(0, 35000, 5000)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+      breaks = seq(0, 35000, 10000)
+    , labels = function(x){format(x, big.mark = "'")}
   ) +
-  xlab("Step Length") +
+  xlab("Step Length (m)") +
   ylab("Probability Density") +
   theme(legend.position = "bottom")
 
@@ -635,7 +630,7 @@ p5 <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = Sq
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = expression(DistanceToWater^0.5)
+    , name   = bquote(DistanceToWater^0.5 * .(" (m)"))
     , limits = c(0, 200)
     , breaks = seq(0, 200, by = 50)
     , labels = seq(0, 200, by = 50)
@@ -644,14 +639,14 @@ p5 <- ggplot(dat, aes(x = sl_, y = prob, group = SqrtDistanceToWater, color = Sq
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
-      breaks = seq(0, 35000, 5000)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+      breaks = seq(0, 35000, 10000)
+    , labels = function(x){format(x, big.mark = "'")}
   ) +
-  xlab("Step Length") +
+  xlab("Step Length (m)") +
   ylab("Probability Density") +
   theme(legend.position = "bottom")
 
@@ -725,7 +720,7 @@ p6 <- ggplot(dat, aes(x = sl_, y = prob, group = Shrubs, color = Shrubs)) +
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = "Shrubs"
+    , name   = "Shrub/Grassland Cover (%)"
     , limits = c(0, 1)
     , breaks = seq(0, 1, by = 0.2)
     , labels = seq(0, 1, by = 0.2)
@@ -734,14 +729,14 @@ p6 <- ggplot(dat, aes(x = sl_, y = prob, group = Shrubs, color = Shrubs)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
-      breaks = seq(0, 35000, 5000)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+      breaks = seq(0, 35000, 10000)
+    , labels = function(x){format(x, big.mark = "'")}
   ) +
-  xlab("Step Length") +
+  xlab("Step Length (m)") +
   ylab("Probability Density") +
   theme(legend.position = "bottom")
 
@@ -815,7 +810,7 @@ p7 <- ggplot(dat, aes(x = sl_, y = prob, group = Trees, color = Trees)) +
       begin  = 0.2
     , end    = 0.9
     , option = "magma"
-    , name   = "Tree Cover"
+    , name   = "Woodland Cover (%)"
     , limits = c(0, 0.3)
     , breaks = seq(0, 0.3, by = 0.05)
     , labels = seq(0, 0.3, by = 0.05)
@@ -824,14 +819,14 @@ p7 <- ggplot(dat, aes(x = sl_, y = prob, group = Trees, color = Trees)) +
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
-      breaks = seq(0, 35000, 5000)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+      breaks = seq(0, 35000, 10000)
+    , labels = function(x){format(x, big.mark = "'")}
   ) +
-  xlab("Step Length") +
+  xlab("Step Length (m)") +
   ylab("Probability Density") +
   theme(legend.position = "bottom")
 
@@ -899,35 +894,29 @@ p8 <- ggplot(dat, aes(x = sl_, y = prob, color = factor(Inactive))) +
       begin  = 0.2
     , end    = 0.8
     , option = "magma"
-    , name   = "Period of Inactivity"
-    , labels = c(F, T)
+    , name   = "Period of Main Activity"
+    , labels = c(T, F)
     , guide  = guide_legend(
         title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.3, "cm")
-      , barwidth       = unit(10.0, "cm")
+      , barwidth       = unit(5.0, "cm")
     )
   ) +
   scale_x_continuous(
-      breaks = seq(0, 35000, 5000)
-    , labels = function(x){paste0(format(x, big.mark = "'"), "m")}
+      breaks = seq(0, 35000, 10000)
+    , labels = function(x){format(x, big.mark = "'")}
   ) +
-  xlab("Step Length") +
+  xlab("Step Length (m)") +
   ylab("Probability Density") +
   theme(
       legend.position  = "bottom"
-    , legend.key.width = unit(2, "cm")
+    , legend.key.width = unit(1, "cm")
   )
 
 # Show plot
 p8
-
-################################################################################
-#### Show all plots
-################################################################################
-ggarrange(p1a, p2a, p3a, p4, p5, p6, p7, p8)
-ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8)
 
 ################################################################################
 #### Function to Predict the RSS
@@ -1111,7 +1100,7 @@ showRSS <- function(
     ) +
     geom_line(size = 1) +
     xlab(covariate) +
-    ylab(paste0("RSS vs ", covariate)) +
+    ylab(paste0("RSS vs. ", covariate)) +
     theme_classic()
 
 }
@@ -1139,8 +1128,56 @@ p12 <-  showRSS(model = model1, refdat = ref
 p13 <-  showRSS(model = model1, refdat = ref
   , covariate = "HumansBuff5000", values = vars$HumansBuff5000)
 
-# Arrange them
-ggarrange(p9, p10, p11, p12, p13)
+# Adjust names of y and x axis
+p9 <- p9 + xlab("Water Cover (%)") + ylab("RSS vs. Water Cover")
+p10 <- p10 + xlab(expression(DistanceToWater^0.5)) + ylab(bquote(.("RSS vs.") ~ DistanceToWater^0.5))
+p11 <- p11 + xlab("Shrub/Grassland Cover (%)") + ylab("RSS vs. Shrub/Grassland Cover")
+p12 <- p12 + xlab("Woodland Cover (%)") + ylab("RSS vs. Woodland Cover")
+p13 <- p13 + xlab("Human Influence") + ylab("RSS vs. Human Influence")
+
+################################################################################
+#### Putting Plots Together
+################################################################################
+# Put plots for movement and habitat kernel together
+p_mov <- ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8
+  , ncol   = 4
+  , nrow   = 2
+  , labels = paste0("a", 1:8)
+  , vjust  = 0
+)
+p_hab <- ggarrange(p9, p10, p11, p12, p13
+  , ncol   = 4
+  , nrow   = 2
+  , labels = paste0("b", 1:5)
+  , vjust  = 0
+)
+
+# Specify plot titles
+title_mov <- expression(atop(bold("Movement Kernel + Interactions")))
+title_hab <- expression(atop(bold("Habitat Kernel")))
+
+# Add to plots
+p_mov <- annotate_figure(p_mov, top = text_grob(title_mov, size = 15))
+p_hab <- annotate_figure(p_hab, top = text_grob(title_hab, size = 15))
+
+# Put plots together
+p <- ggarrange(p_mov, p_hab, nrow = 2)
+
+# Store them
+ggsave("04_Manuscript/99_MovementModelInterpretation.png", plot = p, scale = 1.7)
+
+# # Put plots together
+# pa <- ggarrange(p1a, p2a, p3a, p4, p5, p6, p7, p8)
+# pb <- ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8)
+#
+# # Store them
+# ggsave("test.png", plot = pb, scale = 1.5)
+#
+# # Arrange all plots
+# p <- ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13)
+
+# Store plot
+ggsave("test2.png", plot = p, scale = 1.7)
 
 # ################################################################################
 # #### Turning Angle

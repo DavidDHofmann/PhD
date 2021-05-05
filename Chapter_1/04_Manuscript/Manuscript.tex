@@ -17,7 +17,7 @@
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink]{cleveref}
-% \usepackage{lineno}
+\usepackage{lineno}
 \usepackage{multirow}
 \usepackage{arydshln}
 \usepackage[flushleft]{threeparttable}
@@ -90,7 +90,7 @@ Assess Landscape Connectivity}
 Studies, University of Zurich, Winterthurerstarsse 190, 8057 Zurich,
 Switzerland.
 
-\textsuperscript{2} Botswana Predator Conservation Trust, Private Bag 13, Maun,
+\textsuperscript{2} Botswana Predator Conservation, Private Bag 13, Maun,
 Botswana.
 
 \textsuperscript{\S} Corresponding author (david.hofmann2@uzh.ch)
@@ -102,7 +102,7 @@ Assess Landscape Connectivity
 
 \vspace{0.5cm}
 
-\textbf{Keywords:} dispersal, simulation, integrated step selection,
+\textbf{Keywords:} dispersal, simulation, movement, integrated step selection,
 Kavango-Zambezi Transfrontier Conservation Area, landscape connectivity, Lycaon
 pictus
 
@@ -113,49 +113,49 @@ pictus
 %------------------------------------------------------------------------------
 \newpage
 \begin{abstract}
-For many species, dispersal represents a crucial process that allows to avoid
-inbreeding, to colonize new habitats and to reinforce small and unviable
-subpopulations. Successful dispersal is therefore a crucial pre-requisite for
-long-term species persistence in wild animal populations. However, the ability
-to disperse is contingent a sufficient degree of landscape connectivity, which
-is why the estimation of connectivity and identification of dispersal corridors
-has become a task of extraordinary importance in ecological studies and for the
-planning of conservation initiatives.
+Dispersal is an important process that allows species to avoid inbreeding, to
+colonize new habitats and to reinforce non-viable subpopulations. Successful
+dispersal thus represents a crucial pre-requisite for long-term species
+persistence in wild animal populations. However, the ability to disperse is
+contingent a sufficient degree of landscape connectivity, which is why the
+estimation of connectivity and identification of dispersal corridors has become
+a task of extraordinary importance in ecological studies.
 
-Over the past two decades, scientists have mainly relied on analytical tools
+Over the past two decades, ecologists have primarily relied on analytical tools
 such as least-cost methods and circuit theory to investigate landscape
-connectivity. This is largely owed to their ease of use and intuitive nature,
-which have facilitated their application in the past. Despite their usefulness
-for various ecological applications, both methods make several restricting
-assumptions that can limit their applicability in reality. Least-cost analysis,
-for instance, suffers from the fact that animals are assumed to have perfect
-knowledge about the entire landscape and choose cost-minimizing routes
-accordingly. On the contrary, circuit theory assumes that animals walk according
-to a complete random walk, which is equally unlikely to hold in reality.
+connectivity. Despite their usefulness for various ecological applications, both
+methods make several restricting assumptions that limit their suitability in
+reality. To address their shortcomings, simulations from individual-based
+movement models have been proposed and applied. To overcome their shortcomings,
+simulations from individual-based movement models have been proposed. Yet, due
+to the infinite number of possibilities of coming up with an individual-based
+model, a unified and objective framework is missing.
 
-Fortunately, recent innovations in movement ecology have brought forward novel
-opportunities to study dispersal and landscape connectivity. In particular, the
-rich suite of resource selection functions has undergone substantial
-improvements in recent years. Most notably, step selection functions have been
-generalized to \textit{integrated} step selection functions, which essentially
-represent fully mechanistic movement models based on which individual animal
-movement could be predicted and simulated. While such models have been applied
-to simualte the steady state utilization distribution, similar approaches could
-be useful for investigating transient movement behavior and study landscape
-connectivity in a much more natural way.
+Recent innovations in movement ecology have brought forward novel opportunities
+to study animal dispersal and landscape connectivity. In particular, the rich
+suite of resource selection functions, including point-, step-, and
+path-selection functions have undergone substantial improvements over the past
+years. Most notably, step-selection functions have been generalized to
+\textit{integrated} step selection functions, which essentially represent fully
+mechanistic movement models based on which individual animal movement could be
+simulated. While such models have been applied to study \textit{steady-state}
+utilization distribution, a similar approach may be useful for investigating
+\textit{transient} movement behavior and thereby study landscape connectivity by
+means of simulated dispersal events.
 
 Here, we showcase the use of integrated step selection analysis to simulate
-dispersal of a top-predator across a large study area. For this, we collected
-data on 16 dispersing wild dogs and analysed it in an integrated step selection
-analysis to produce a fully mechanistic movement model rendering wild dog
-dispersal. Based on this model, we simulated 80'000 dispersers moving across the
-Kavango-Zambezi Transfrontier Conservation Area, the world's largest
-transboundary conservation area. We summarize the simulation output in a heatmap
-indicating the intensity of use across the KAZA-TFCA, and we apply network
-theory to produce a set of complementary maps that further reveal major
-dispersal hotspots and crucial bottlenecks. Finally, we discuss the benefits and
-pitfalls of dispersal simualtions and we highlight improvements to be made in
-the future.
+dispersal of the highly endangered African wild dog across the world's largest
+transboundary conservation area, the Kavango-Zambezi Transfrontier Conservation
+Area (KAZA-TFCA). For this, we utilize data collected on 16 dispersing wild dog
+coalitions departing from northern Botswana. We combine the movement data with
+relevant spatial covariate layers and used integrated step selection functions
+to parametrize a fully mechanistic movement model rendering wild dog dispersal.
+Based on this model, we simulate 80'000 dispersers, originating from protected
+areas and moving across the extent of the KAZA-TFCA. We then generate a heatmap
+and use network theory to reveal dispersal hotspots and crucial bottlenecks
+across the study area. Finally, we discuss the benefits and pitfalls of such
+dispersal simualtions and highlight potential improvements to be made in the
+future.
 \end{abstract}
 
 %------------------------------------------------------------------------------
@@ -171,216 +171,176 @@ the future.
 \newpage
 \pagenumbering{arabic}
 
-% % Create linenumbers
-% \linenumbers
+% Create linenumbers
+\linenumbers
 
-\section{Introduction}
+\section{Introduction (90\%)}
+
 % Importance of Dispersal & Connectivity
-Dispersal of individuals is an important process governing the dynamics wild
-animal populations that are distributed in space \citep{Clobert.2012}. It is
-defined as the movement of individuals from their natal location to the site of
-first reproduction \cite{Howard.1960} and allows species to avoid inbreeding
-\citep{Perrin.1999, Perrin.2000, Frankham.2002, Leigh.2012}, to rescue small and
-unviable populations \citep{Brown.1977}, and to promote the colonization of
-unoccupied habitats \citep{Hanski.1998, MacArthur.2001}. Successfull dispersal
-requires a sufficient degree of landscape connectivity, which is why the
-protection of dispersal corridors has become a major goal in conservation
-science. Information on movement behavior during dispersal and knowledge about
-the factors that limit dispersal is therefore critical for a comprehensive
-understanding of landscape connectivity and population viability
-\citep{Baguette.2013, Vasudev.2015}. In addition, reliable modelling techniques
-to identify dispersal corridors based on empirical data are necessary
-\citep{Diniz.2019}.
+\subsection{Importance of Dispersal \& Connectivity (90\%)}
+Dispersal is defined as the movement of individuals from their natal location to
+the site of first reproduction \cite{Howard.1960}. It is a vital process
+governing the dynamics wild animal populations that are distributed in space
+\citep{Hanski.1998, Clobert.2012} and may strongly affect population dynamics at
+different spatial and social scales \citep{Hanski.1999a, Clobert.2012}.
+Dispersal allows species to avoid inbreeding and maintain genetic diversity
+\citep{Perrin.1999, Perrin.2000, Frankham.2002, Leigh.2012, Baguette.2013}, to
+rescue small and non-viable populations \citep{Brown.1977}, and to promote the
+colonization of unoccupied habitats \citep{Hanski.1999b, MacArthur.2001}.
+However, successful dispersal requires a sufficient degree of functional
+connectivity \citep{Fahrig.2003, Clobert.2012}, which is why the identification
+and protection of major dispersal corridors has become an important task in
+conservation science \citep{Doerr.2011, Rudnick.2012}. To achieve this, reliable
+information on movement behavior during dispersal and knowledge about factors
+that limit dispersal and connectivity is paramount \citep{Baguette.2013,
+Vasudev.2015}.
 
-% Advancements in GPS Technology and Movement Ecology
+% Advancements in GPS Technology & Movement Ecology
+\subsection{Advancements in GPS Technology \& Movement Ecology (90\%)}
 Thanks to novel technologies developed over the past decades, particularly of
-GPS/Satellite radio-collars, the study of dispersal and connectivity using
-telemetry data has accelerated \citep{Jonsson.2016, Williams.2019}.
+GPS/Satellite radio-collars, the use of GPS data to study animal dispersal and
+connectivity has accelerated \citep{Elliot.2014, Jonsson.2016, Williams.2019}.
 Additionally, the advent of publicly accessible satellite imagery and
 sophisticated remote sensing techniques to represent the physical landscape
-through which individuals disperse have heralded the ``golden age of animal
-tracking'' \citep{Kays.2015}. Concurrently, the increased availability of large
-amounts of empirical data and an increased computational power have led to the
-development of several modelling techniques that allow studying movement
-behavior during dispersal and highlighting major movement corridors
-\citep{Boyce.2002, Fortin.2005, Cushman.2010, Zeller.2012, Diniz.2019}.
+through which individuals disperse have heralded a ``golden age of animal
+tracking'' \citep{Kays.2015}. Concurrently, the availability of large amounts of
+empirical data and an increased computational power have led to the development
+of numerous techniques to study dispersal movements and highlight critical
+corridors between subpopulations \citep{Boyce.2002, Fortin.2005, Cushman.2010,
+Zeller.2012, Diniz.2020}.
 
 % Resource Selection & Connectivity
+\subsection{Resource Selection \& Connectivity (90\%)}
 \textit{Resource selection functions} \citep{Boyce.2002} and derived methods
 such as \textit{step selection functions} \citep{Fortin.2005} and \textit{path
 selection functions} \citep{Cushman.2010} have proven particularly useful for
-studying animal movement \citep{Fieberg.2020}. These methods allow estimating
-habitat preferences of the focal species by comparing covariates at locations
-visited by the animal to the scame covariates at locations available to, but not
-visited by the animal. The so estimated preferences can then be used to predict
-a permeability surface, indicating the expected ease at which an animal can
-traverse a given area \citep{Zeller.2012}. Utimately, the permeability surface
-serves as input to a connectivity model that is used to reveal movement
-corridors. In this regard, two of the most prominent connectivity models in the
-literature are least-cost path analysis \citep{Adriaensen.2003} and circuit
-theory \citep{McRae.2006, McRae.2008}.
+studying animal movement \citep{Fieberg.2020} and modelling connectivity
+\citep{Diniz.2020}. These methods allow estimating habitat preferences of the
+focal species by comparing covariates at locations visited by the animal to the
+same covariates at locations available to, but not visited by the animal
+\citep{Boyce.2002, Fortin.2005, Cushman.2010, Thurfjell.2014}. The so estimated
+preferences can then be used to predict a permeability surface, indicating the
+expected ease at which an animal can traverse a given area \citep{Spear.2010,
+Zeller.2012, Etherington.2016}. Ultimately, the permeability surface serves as
+input to a connectivity model that is used to reveal movement corridors
+\citep{Diniz.2020}. Two of the most prominent connectivity models are least-cost
+path analysis (LCP analysis; \citealp{Adriaensen.2003}) and circuit theory (CT
+\citealp{McRae.2006, McRae.2008}), both graph-based methods that estimate
+conductance of the landscape. Despite their intuitive nature and ease of use,
+both methods make rigorous assumptions about animal movement that may or may not
+be fulfilled in reality \citep{Diniz.2020}.
 
-% Least-cost path
-In least-cost path analysis, connectivity is estimated by identifying
-least-costly routes between pre-defined start- and endpoints
-\citep{Adriaensen.2003}. For this, the permeability surface is converted into a
-network graph and permeability scores are translated into probabilities for
-moving from one cell to another. Least-costly routes between start- and
-endpoints can then be computed using Dijkstra’s algorithm \citep{Dijkstra.1959}.
-Although intuitively appealing, the method suffers from several weaknesses.
-First of all, a least-cost path always exist, even if the associated costs are
-unreasonably high. Second, it assumes that animals have a preconceived end-point
-in mind and choose a cost-minimizing route accordingly. While this assumption
-may be reasonable for migrating animals that move between a limited number of
-habitats, it is unlikely to hold for dispersers that move over long distances
-into unknown territory \citep{Koen.2014, Abrahms.2017, Cozzi.2020}. Finally, the
-method also requires that animals have an infinite perceptual range, otherwise
-they could not compute an optimal path. Some of these issues have been addressed
-using alternative least-cost approaches. For instance, instead of computing a
-least-cost path, a least cost-corridor that also considers slightly suboptimal
-routes \citep{Pinto.2009} can be calculated. The corridor relaxes the assumption
-of perfect knowledge and overcomes the single pixel width issue. Alternatively,
-the randomized least-cost path has been proposed, which allows animals to
-deviate from the least-cost route by a pre-defined factor \(\theta\)
-\citep{Panzacchi.2016, VanMoorter.2021}.
+% Issues with Least-Cost Paths & Circuit Theory
+\subsection{Issues with Least-Cost Paths \& Circuit Theory (90\%)}
+In LCP analysis, for instance, a least costly path always exists, even if
+associated movement costs are unreasonably high and will never be incurred by a
+dispersing individual. The method also presumes that animals have an infinite
+perceptual range, a preconceived end-point in mind, and choose a cost-minimizing
+route accordingly. These assumptions may be reasonable for migrating animals,
+yet they are unlikely to be true for dispersers that move over long distances
+into unknown territory \citep{Koen.2014, Abrahms.2017, Cozzi.2020}. Finally,
+LCPs are only one pixel wide, meaning that their absolute size depends on the
+resolution of chosen covariate layers \citep{Diniz.2020}. Although some of these
+issues can be alleviated using less stringent versions of the LCP algorithm
+(e.g. least-cost \textit{corridors} \citep{Pinto.2009}, \textit{thresholded}
+least-cost paths \citep{Landguth.2012}, and \textit{randomized} least-cost paths
+\citep{Panzacchi.2016, VanMoorter.2021}), a certain degree of arbitrariness in
+the assumptions remains. CT entails similar restrictions. Because CT only
+considers movements from the source cell to its 4 or 8 adjacent cells, it
+implicitly posits a perceptual range of a single pixel. It is also built on the
+assumption of a complete random walk \citep{Diniz.2020}, implying that
+directional biases cannot be rendered, albeit being very common in dispersal
+movements \citep{Cozzi.2020, Hofmann.2021}. Ultimately, both LCP analysis and CT
+omit the temporal dimension of dispersal. In result, statements about the
+expected duration required to traverse a certain corridor are impossible.
+Because movement is not modelled explicitely, neither of the methods can render
+possible interactions between movement behavior and landscape characteristics
+such that connectivity mainly arises as a result of the landscape structure.
+This is referred to as structural connectivity and stands in contrast to
+functional connectivity, which also renders the behavioral response of the
+animal with respect to prevailing habitat conditions \citep{Tischendorf.2000}.
+Even though functional connectivity is more difficult to estimate, a functional
+view is the ultimate goal in conservation science because it has direct
+consequences for gene flow \citep{Baguette.2013}.
 
-% Circuit theory
-In contrast to least-cost approaches, circuit theory makes use of electrical
-circuit theory to quantify landscape connectivity \citep{McRae.2006,
-McRae.2008}. Here, the permeability surface is converted into an electrical
-circuit containing nodes and resistor, where resistance values depend on habitat
-permeability. A source point is connected to a current source, whereas an
-endpoint is grounded. Hence, the current flowing through each node in the
-circuit can be computed and is supposed to resemble the relative frequency at
-which each location in the study area is being visited. By revealing not only a
-single path or corridor, circuit theory overcomes the single-pixel width issue
-inherent to least-cost approaches. Intrinsically, circuit theory is based on the
-assumption that animals follow a random walk and can therefore not render
-directional biases. In reality, however, dispersers often move in a very
-directional fashion as they want to cover as much ground in as little time as
-possible. Furthermore, it is assumed that individuals have a perceptual range of
-a single pixel, which rarely captures the true spatial scale of selection (cite
-someone).
+% What about IBMMs?
+\subsection{What about IBMMs? (90\%)}
+To address the issues inherent to LCPs and CT, individual-based movement models
+(IBMMs) have been proposed and applied \citep{Diniz.2020}. In these models,
+dispersal is simulated explicitly, based on movement rules that determine how
+individuals move over and interact with the prevailing landscape
+\citep{Kanagaraj.2013, Clark.2015, Allen.2016, Hauenstein.2019, Zeller.2020,
+Vasudev.2021}. Using the simulated trajectories, one can calculate a set of
+connectivity metrics, such as interpatch-connectivity and traversal frequency
+across the landscape to reveal major dispersal hotspots \citep{Kanagaraj.2013,
+BastilleRousseau.2018, Hauenstein.2019, Zeller.2020}. Even though IBMMS can be
+employed to overcome any of the shortcomings intrinsic to LCPs and CT, as well
+as to provide a more functional view on connectivity, they can be challenging to
+fit and require vast amounts of data collected during dispersal
+\citep{Diniz.2020}.
 
-% Temporal scale
-Neither least-cost analyes or circuit theory are capable of rendering the
-temporal dimension of movement. Such influences could, however, be studied using
-individual based movement models. Still, only few have explored these
-possibilities \citep{Kanagaraj.2013, Hauenstein.2019, Zeller.2020}.
-
-% Step selection analysis
-While step selection functions were initially intended to learn about habitat
-preferences of the focal species \citep{Fortin.2005}, recent improvements may
-elevate its applicability into other areas. Originally, \cite{Fortin.2005}
-proposed step selection functions to account for serial autocorrelation inherent
-to GPS relocation data. In this method, covariates along realized steps (the
-connecting lines between two consecutive relocations; ; \citealp{Turchin.1998})
-are contrasted to covariates along  ``alternative''  or  ``random steps'' that
-are generated by randomly sampling turning angles and step lengths based on
-observed movement characteristics. It is then assumed that animals assign a
-selection score \(w(x)\) of the following form to each step:
-
-\begin{equation}
-\label{EQ1}
-  w(x) = exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)
-\end{equation}
-
-The selection score \(w(x)\) of each step depends on its associated covariates
-(\(x_1, x_2, ..., x_n\)) and on the animal's relative selection strengths (i.e.
-preferences) towards these covariates (\(\beta_1, \beta_2, ..., \beta_n\)). The
-probability that a step \(i\) is realized \(P(Y_{i} = 1\)) then depends on the
-step's selection score, as well as on the selection scores of all alternative
-steps:
-
-\begin{equation}
-\label{EQ2}
-  P(Y_{i} = 1 | Y_{1} + Y_{2} + ... + Y_{i} = 1) =
-  \frac{w(x_{i})}{w(x_{1}) + w(x_{2}) + ... + w(x_{i})}
-\end{equation}
-
-\noindent Preferences of interest, i.e. the \(\beta\)'s, can be estimated by
-comparing realized (scored 1) and random (scored 0) steps in a conditional
-logistic regression model \citep{Fortin.2005}. In this model, positive
-\(\beta\)-coefficients indicate selection of a covariate, whereas negative
-\(\beta\)-coefficients indicate avoidance of a covariate. To deal with multiple
-individuals, one can either average estimates of individual models
-\citep{Murtaugh.2007, Fieberg.2010} or apply mixed effects conditional logistic
-regression analysis as recently proposed by \cite{Muff.2020}.
-
-% Integrated step selection analysis
-An animals movement trajectory can be viewed as the result of an interplay
-between habitat and movement preferences. Traditional step selection functions
-cannot account for a correlation between turning angles and step lengths, unless
-the two are sampled jointly from a copula distribution \citep{Hodel.2021}.
-Recently, however, SSFs have been generalized to \textit{integrated} SSFs
-(iSSFs), which tear apart movement and habitat preferences of the studied
-animals \citep{Avgar.2016}. The method thus allows to render an animals
-preferences with respect to prevailing habitat conditions, as well as with
-respect to movement characteristics. This reduces potential biases in estimated
-preferences and enables parametrization of a fully mechanistic movement model
-from which movement and space use can be simulated \citep{Avgar.2016,
-Signer.2017}. \cite{Signer.2017} used integrated step selection analysis to
+% Step Selection Analysis
+\subsection{Step Selection Analysis (90\%)}
+Here, we investigate the usefulness of integrated step selection functions
+(ISSFs, \citealp{Avgar.2016}), as a relatively simple but powerful IBMM based on
+which dispersal can be simulated. While regular SSFs were intended to learn
+about relative habitat preferences of the focal species \citep{Fortin.2005,
+Thurfjell.2014, Avgar.2017}, the method has been generalized and now enables to
+jointly study habitat and movement preferences, as well as potential
+interactions between movement and habitat preferences \citep{Avgar.2016,
+Signer.2017, Fieberg.2020}. ISSFs therefore provide a relatively simple method
+to model complex movement behavior where movement results from two intertwined
+behavioral kernels (e.g. \citealp{Prokopenko.2017, Munden.2020}). Importantly, a
+parametrized ISSF model can be viewed as a fully mechanistic movement model
+based on which individual movement trajectories can be simulated
+\citep{Avgar.2016, Signer.2017}. In fact, \cite{Signer.2017} used ISSF to
 simulate steady state utilization distributions of resident animals. However,
-the degree to which such simulations could be used to simulate dispersers and
-infer movement corridors is unknown.
+the degree to which such simulations are helpful in detecting movement corridors
+and modeling landscape connectivity is unknown.
 
 % Study Species & Study Area
-One of the species for which long-term species persistence relies on sufficient
+\subsection{Study Species \& Study Area (90\%)}
+One of the species for which long-term viability relies on sufficient
 landscape connectivity is the endangered African wild dog \textit{Lycon pictus}.
-This species has once been wide-spread across sub-Saharan Africa but disappeared
-from a vast majority of its historic range due to ongoing persecution by humans,
+While once present across entire sub-Saharan Africa, wild dogs have disappeared
+from a vast majority of their historic range due to persecution by humans,
 habitat destruction, and deadly diseases. As of today, only 6'000 free-ranging
-individuals remain in small and spatially scattered subpopulations. Within those
-subpopulations, wild dogs form cohesive packs comprising 8 to 12 adults and
-their offspring \cite{McNutt.1995}. After reaching sexual maturity, male and
-female offspring form same-sex coalitions and disperse from their natal pack
-\citep{McNutt.1996, Behr.2020}. New packs are formed when dispersing coalitions
-join unrelated opposite-sex dispersing coalitions \citep{McNutt.1996}.
-Dispersing wild dogs can cover several hundred kilometers across a variety of
-landscapes \citep{DaviesMostert.2012, Masenga.2016, Cozzi.2020, Hofmann.2021}.
-One of the few strongholds for this species lies near the Moremi Game Reserve in
-northern Botswana, which is part of the world's largest transboundary protected
-area, namely the Kavango-Zambezi Transfrontier Conservation Area (KAZA-TFCA).
-This area has originally been intended to facilitate migration of elephants, but
-is expected to benefit a multitude of other species \citep{Elliot.2014,
-Brennan.2020, Hofmann.2021}.
+individuals remain in small and spatially scattered subpopulations
+\citep{Woodroffe.2012}. Within those subpopulations, wild dogs form cohesive
+packs comprising 8 to 12 adults and their offspring \cite{McNutt.1995}. After
+reaching sexual maturity, male and female offspring form same-sex coalitions and
+disperse from their natal pack \citep{McNutt.1996, Behr.2020}. New packs are
+formed when dispersing coalitions join unrelated opposite-sex dispersing
+coalitions \citep{McNutt.1996}. Dispersing wild dogs can cover several hundred
+kilometers across a variety of landscapes \citep{DaviesMostert.2012,
+Masenga.2016, Cozzi.2020, Hofmann.2021}. One of the few strongholds for this
+species lies near the Moremi Game Reserve in northern Botswana, which is part of
+the world's largest transboundary protected area, namely the Kavango-Zambezi
+Transfrontier Conservation Area (KAZA-TFCA). This area has originally been
+intended to facilitate migration of elephants, but is expected to benefit a
+multitude of other species \citep{Elliot.2014, Brennan.2020, Hofmann.2021}.
 
-In a previous paper, we assessed landscape connectivity within the KAZA-TFCA for
-dispersing African wild dogs using a least-cost corridor approach. For this, we
-fitted a basic habitat selection model based on which we predicted landscape
-permeability. We now expand on this knowledge and develop a more detailed
-movement model of dispersing wild dogs. We then use this model to simulate
-thousands of dispersers moving across the KAZA-TFCA. Based on said simulations,
-we compute heatmaps and identify potential dispersal hotspots and compare them
-to the dispersal routes identified in \citep{Hofmann.2021}. We also showcase how
-simulated dispersal data can be analysed using network-analysis and how network
-metrics relevant to landscape connectivity can be computed. Our results show
-that a simulation based approach yields several major benefits over traditional
-connectivity modelling techniques. Most importantly, simulations provide a more
-generic view on how connectivity emerges and to which degree connectivity
-depends on the dispersal duration. In addtion, by generating proper dispersal
-trajectories, network theory can be applied to calculate network metrics that
-are pertinent to connectivity analysis. Finally, we put forward additional
-opportunities using simulations that go beyond the scope of this paper.
-
-Reliable identification of dispersal corridors will become increasingly
-important with the uprise of ever-growing and often transboundary conservation
-areas. One such instance is the KAZA-TFCA, a massive conservation area spanning
-five countries and over 520'000 km\textsuperscript{2}. The KAZA holds the
-potential of re-establishing dispersal routes for many of its protected species,
-including the african wild dog \textit{Lycaon pictus}.  Persecution by humans,
-habitat loss, and reduced connectivity are major causes of the decline of the
-species \citep{Woodroffe.2012}. In result, the species currently marks the
-KAZA's most endangered large carnivore and has been a assigned a very high
-conservation priority. Importantly, due to their inherent mobility and intrinsic
-need for vast undisturbed landscapes, AWDs have been proposed as surrogate
-species for landscape connectivity (see recent paper on multispecies
-connectivity). Nevertheless, the species has received little attention in the
-connectivity literature, mainly due to the difficulty in observing wild dog
-dispersal.
+% Previous Paper
+\subsection{Previous Paper (90\%)}
+In a previous study, we assessed landscape connectivity for dispersing African
+wild dogs within the KAZA-TFCA using a least-cost corridor approach
+\citep{Hofmann.2021}. For this, we fitted a basic habitat selection model based
+on which we predicted landscape permeability. We now expand on this knowledge
+and use ISSF to develop a more detailed movement model of dispersing wild dogs.
+We then use this model to simulate dispersers moving across the KAZA-TFCA. Based
+on simulations, we compute heatmaps and identify potential dispersal hotspots.
+We also showcase how network metrics relevant to landscape connectivity can be
+computed. Our results show that a simulation-based approach yields several major
+benefits over traditional connectivity modeling techniques. Most importantly,
+simulations provide a more generic view on how connectivity emerges and to which
+degree connectivity depends on the dispersal duration. In addtion, by generating
+proper dispersal trajectories, network theory can be applied to calculate
+network metrics that are pertinent to connectivity analysis. Finally, we put
+forward additional opportunities using simulations that go beyond the scope of
+this paper.
 
 \section{Methods}
-\subsection{Study Area}
+\subsection{Study Area (90\%)}
 The study area was centered at -17\degree 13'9''S, 23\degree 56'4''E
 (\Cref{StudyArea}a) and was represented by a rectangular bounding box that
 stretched over 1.3 Mio. km\textsuperscript{2}, ecompassing the entire KAZA-TFCA
@@ -389,32 +349,29 @@ conservation area and comprises parts of Angola, Botswana, Namibia, Zimbabwe,
 and Zambia, covering a total of 520'000 km\textsuperscript{2}. Its landscape
 varies regionally and ranges from savanna, to grassland and from dry to moist
 woodland habitats. A dominant hydrogeographical feature in its center is the
-flood-pulsing Okavango Delta. The delta and its surroundings are considered a
-stronghold for African wild dogs that may act as a source for the recolonization
-of surrounding habitats \citep{Cozzi.2013}. The wet season within the KAZA-TFCA
-lasts from November to March and is out of phase with the main flooding of the
-Okavango Delta which peaks between July and August \citep{McNutt.1996,
-Wolski.2017}. While large portions of land within the KAZA-TFCA are designated
-national parks or other protected areas, substantial human influence remains due
-to roads, agricultural sites and settlements and villages.
+flood-pulsing Okavango Delta. The wet season within the KAZA-TFCA lasts from
+November to March and is out of phase with the main flooding of the Okavango
+Delta which peaks between July and August \citep{McNutt.1996, Wolski.2017}.
+While large portions within the KAZA-TFCA are designated national parks or other
+protected areas, substantial human influence remains due to roads, agricultural
+sites and settlements and villages.
 
 \begin{figure}[htbp]
   \begin{center}
     \includegraphics[width = \textwidth]{99_StudyArea.png}
-    \caption{(a) The study area of our research was confined by a bounding box
-    encompassing the entire KAZA-TFCA, which comprises parts of Angola, Namibia,
-    Botswana, Zimbabwe, and Zambia. (b) The KAZA-TFCA represents the world's
-    largest terrestrial conservation area and covers a total of 520'000
-    km\textsuperscript{2}. Its purpose is to re-establish connectivity between
-    already-existing national parks and other protected areas (green polygons).
-    The dispersal data used in this study was collected on a free-ranging
-    African wild dog population inhabiting the Moremi National Park in northern
-    Botswana.}
+    \caption{(a) The study area was confined by a bounding box encompassing the
+    entire KAZA-TFCA and spanned parts of Angola, Namibia, Botswana, Zimbabwe,
+    and Zambia. (b) The KAZA-TFCA represents the world's largest terrestrial
+    conservation area and covers a total of 520'000 km\textsuperscript{2}. Its
+    purpose is to re-establish connectivity between already-existing national
+    parks (dark green) and other protected areas (light green). The dispersal
+    data used in this study was collected on a free-ranging African wild dog
+    population inhabiting the Moremi National Park in northern Botswana.}
     \label{StudyArea}
   \end{center}
 \end{figure}
 
-\subsection{GPS Relocation Data}
+\subsection{GPS Relocation Data (90\%)}
 Between 2011 and 2019, we collected GPS relocation data on dispersing wild dogs
 from a free-ranging wild dog population inhabiting the Moremi National Park in
 northern Botswana. We selected potential dispersers based on age, pack size,
@@ -422,52 +379,49 @@ number of same‐sex siblings within the pack, and presence of unrelated
 opposite-sex individuals in the pack \citep{McNutt.1996, Behr.2020}. We
 immobilized selected individuals using a cocktail of Ketamine/Xylazine/Atropine
 \citep{Osofsky.1996, Cozzi.2020} that was injected by dart, fired from a
-CO\textsubscript{2}-pressurized gun (\textit{DAN-Inject, Denmark}). Anesthesia
-protocols were approved by the Ministry of Environment, Natural Resources
-Conservation and Tourism of Botswana (permit EWT 8/36/4 XXXVI). Immobilized
+CO\textsubscript{2}-pressurized gun (\textit{DAN-Inject, Denmark}). Immobilized
 individuals were fitted with GPS/Satellite radio collars (\textit{Vertex Lite;
 Vectronic Aerospace GmbH, Berlin}) that guaranteed automated drop-off through a
 decomposable piece of cotton. Handling and collaring of all individuals was
-supervised by a Botswana-registered wildlife veterinarian and all individuals
+supervised by a Botswana-registered wildlife veterinarian. All individuals
 rejoined their pack within one hour after immobilization. 16 collared
-individuals eventually dispersed, each in a separate same-sex coalition (7
-female and 9 male coalitions).
+individuals eventually dispersed, each in a separate same-sex dispersal
+coalition (7 female and 9 male coalitions).
 
+Because behavior during dispersal is more pertinent for assessing landscape
+connectivity \citep{Elliot.2014, Abrahms.2017}, we discarded all data that was
+collected during residency and only retained GPS data recorded during dispersal.
 During dispersal, collars were programmed to record a GPS fix every 4 hours.
 Collected relocations were regularly transmitted over the Iridium satellite
 system, which allowed remote tracking of individuals, even if they left the main
-study area and crossed international borders. In some instances exact dispersal
-dates were known from field observations. In other cases, we distinguished
-between residency and dispersal using the net-squared displacement metric. This
-metric measures the squared Euclidean distance a GPS relocation to a reference
-point \citep{Borger.2012}, which in our case was set to the center of each
+study area and crossed international borders. In some instances, exact dispersal
+dates were known from field observations. Otherwise, we distinguished between
+residency and dispersal using the net-squared displacement metric. This metric
+measures the squared Euclidean distance of a GPS relocation to a reference point
+\citep{Borger.2012}, which in our case was set to the center of each
 individual's natal home range. As such, dispersal was deemed to have started
 when an individual left its natal home range and ended once individuals became
-sedentary again. Because behavior during dispersal is more pertinent for
-assessing connectivity, we discarded all data that was collected during
-residency and only retained GPS data recorded during dispersal. As previous
-research revealed similar behavior of females and males during dispersal
-\citep{Woodroffe.2019, Cozzi.2020}, we did not distinguish between sexes. After
-collection, we converted collected GPS coordinates (n = 4'169) to steps, where
-each step represented the straight-line distance traveled by and individual
-between two consecutive GPS relocations \citep{Turchin.1998}. To ensure a
-regular sampling interval, we removed fixes that were not collected on the
-4-hourly schedule.
+sedentary again. As previous research revealed similar behavior of females and
+males during dispersal \citep{Woodroffe.2019, Cozzi.2020}, we did not
+distinguish between sexes. After collection, we converted collected GPS
+coordinates (n = 4'169) to steps, where each step represented the straight-line
+distance traveled by and individual between two consecutive GPS relocations
+\citep{Turchin.1998}. To ensure a regular sampling interval, we removed fixes
+that were not successfully collected on the 4-hourly schedule.
 
-\subsection{Covariates}
+\subsection{Covariates (90\%)}
 We represented the physical landscape across the study area using a set of
-habitat covariates including water-cover, distance to water, tree-cover, and
+habitat covariates including water-cover, distance to water, woodland-cover, and
 shrub/grassland-cover. Because water cover greatly changes within and between
-years around the Okavango Delta, we applied a remote sensing technique that
-allowed us to generate frequently updated water cover layers and corresponding
-distance to water layers for the close surroundings of the Delta (see
-\citealp{Wolski.2017} and \citealp{Hofmann.2021}). Thus, those layers temporally
-aligned with our dispersal events. We also computed a proxy for human influence,
-depicting anthropogenic pressures stemming from human-density, agricultural
-sites, and roads. All obtained layers were coarsened or interpolated to a target
-resolution of 250 m by 250 m and cropped slightly beyond the extent of the
-KAZA-TFCA. Further details on the sources and preparation of each habitat
-covariate are given in \cite{Hofmann.2021}.
+years in the Okavango Delta, we applied a remote sensing algorithm and generated
+frequently updated water cover layers and corresponding distance to water layers
+(see \citealp{Wolski.2017} and \citealp{Hofmann.2021}). Resulting layers thus
+temporally aligned with our dispersal events. We furthermore computed a proxy
+for human influence, depicting anthropogenic pressures stemming from
+human-density, agricultural sites, and roads. All spatial layers were coarsened
+or interpolated to a target resolution of 250 m by 250 m. Further details on the
+sources and preparation of each habitat covariate are given in
+\cite{Hofmann.2021}.
 
 Besides habitat covariates, we also computed movement metrics that we used as
 movement covariates in our models. Movement metrics were calculated for each
@@ -476,49 +430,57 @@ step and included the step length (\textsf{sl}), its natural logarithm
 (\textsf{cos(ta)}). Because wild dogs follow a diurnal activity pattern, we also
 coded a binary variable (\textsf{LowActivity}) indicating whether a step was
 realized during periods of low wild dog activity (17:00 to 07:00 local time) or
-high wild dogactivity (09:00 to 17:00 local time). Handling and manipulation of
-all data, as well as all modelling and simulating was achieved with statistical
-software {\tt R}, version 3.6.6 \citep{R.2019}. {\tt R}-scripts to reproduce the
-analyses are provided on Github.
+high wild dog activity (09:00 to 17:00 local time). Handling and manipulation of
+all data, as well as all models and simulations were implemented with the
+statistical software {\tt R}, version 3.6.6 \citep{R.2019}. Several helper
+functions were written in {\tt C++} and imported into {\tt R} using the {\tt
+Rcpp} package \citep{Eddelbuettel.2011, Eddelbuettel.2013}
 
-\subsection{Movement Model}
-We used integrated step selection functions (iSSF) to parametrize a mechanistic
-movement model of dispersing wild dogs. In contrast to regular step selection
-functions, \textit{integrated} step selection functions allow simultaneous
-inference on movement and habitat preferences of the studied animal, as well as
-on potential interactions between the two. This results in less biased selection
-estimates and allows to treat the resulting model as a fully mechanistic
-movement model based on which movement can be simulated \citep{Avgar.2016}. To
-conduct iSSF analysis, we paired each observed step with 24 random steps.
-Together, an observed and its random steps formed a stratum that received a
-unique identifier. The 24 random steps served as pseudeo-absence and represented
-a potential alternative that the animal could have realized but decided not to.
-We generated random steps by sampling random turning angles from a uniform
-distribution (\(-\pi, +\pi\)) and step lengths from a gamma distirbution that
-was fitted to observed steps (scale = 6'308, shape = 0.37). Although a larger
-number of random steps reduces the sampling error \citep{Avgar.2016},
-preliminary analyses revealed that 24 steps were sufficient in our case. Along
-each step, we extracted and averaged spatial covariates using the {\tt velox}
-package and we calculated the movement metrics \textsf{sl}, \textsf{log(sl)},
-and \textsf{cos(ta)}. To facilitate model convergence, we standardized all
-continuous covariates to a mean of zero and a standard deviation of one. Since
-correlation among covariates was low (\(|r| > 0.6\); \citealp{Latham.2011}), we
-retained all of them for modeling.
+\subsection{Movement Model (80\%)}
+We used ISSFs to parametrize a mechanistic movement model for dispersing wild
+dogs \citep{Avgar.2016}. To conduct iSSF analysis, we paired each observed step
+with 24 random steps. An observed and its 24 random steps thus formed a stratum
+and received a unique identifier. We generated random steps by sampling random
+turning angles from a uniform distribution (\(-\pi, +\pi\)) and step lengths
+from a gamma distirbution that was fitted to observed steps (scale = 6'308,
+shape = 0.37). Along each step, we extracted and averaged spatial covariates
+using the {\tt velox}. We also calculated the movement metrics \textsf{sl},
+\textsf{log(sl)}, and \textsf{cos(ta)}. To facilitate model convergence, we
+standardized all continuous covariates to a mean of zero and a standard
+deviation of one. Since correlation among covariates was low (\(|r| > 0.6\);
+\citealp{Latham.2011}), we retained all of them for modeling.
 
-To contrast realized steps (scored 1) and random steps (scored 2) and fit a
-movement model, we assumed that animals assigned a selection score \(w(x)\) to
-each step. The score depended on the step's covariates \(X\), as well as the
-animals preferences \(\beta\) towards these covariates. The probability of a
-step being realized was then contingent on the step's selection score, as well
-as on the selection scores of all other step in the same stratum. To estimate
-the preferences of interest, we ran conditional logistic regression models in
-the r-package {\tt glmmTMB}. More specifically, we applied the method developed
-by \citep{Muff.2020}, which allows to fit random slopes. Here, we treated animal
-IDs as random effect and modelled random slopes for each covariate and we fixed
-the random intercept variance at an arbitrary high value of
-10\textsuperscript{6} to make use of the  ``poission''-trick  \citep{Muff.2020}.
+To contrast realized steps (scored 1) and random steps (scored 0), we assumed
+that animals assigned a selection score \(w(x)\) of the exponential form to each
+step. The selection score \(w(x)\) of each step depended on its associated
+covariates (\(x_1, x_2, ..., x_n\)) and on the animal's relative selection
+strengths (i.e. preferences) towards these covariates (\(\beta_1, \beta_2, ...,
+\beta_n\)):
 
-The movement model was based on a habitat selection model for dispersing wild
+\begin{equation}
+\label{EQ1}
+  w(x) = exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)
+\end{equation}
+
+The probability of a step being realized was then contingent on the step's
+selection score, as well as on the selection scores of all other step in the
+same stratum:
+
+\begin{equation}
+\label{EQ2}
+  P(Y_{i} = 1 | Y_{1} + Y_{2} + ... + Y_{i} = 1) =
+  \frac{w(x_{i})}{w(x_{1}) + w(x_{2}) + ... + w(x_{i})}
+\end{equation}
+
+To estimate the preferences of interest, we ran conditional logistic regression
+models in the r-package {\tt glmmTMB}. To handle multiple individuals, we
+applied the mixed effects method developed by \citep{Muff.2020}, which allows to
+fit random slopes in addition to random intercepts. Thus, we treated animal IDs
+as random effect and modeled random slopes for each covariate. We fixed the
+random intercept variance at an arbitrary high value of 10\textsuperscript{6} to
+make use of the  ``poission''-trick \citep{Muff.2020}.
+
+The movement model was based on the habitat selection model for dispersing wild
 dogs presented in \cite{Hofmann.2021}. In the original model, no interactions
 between the habitat and movement covariates were considered, so we slightly
 expanded this base model by proposing interactions between movement and habitat
@@ -556,50 +518,46 @@ correlation coefficient (\(r_{s, random}\)), its mean across repetitions
 proofs a significant prediction in case the confidence intervals of
 \(\bar{r}_{s, realized}\) and \(\bar{r}_{s, random}\) do not overlap.
 
-\subsection{Dispersal Simulation}
+\subsection{Dispersal Simulation (80\%)}
 We used the most parsimonious movement model to simulate 80'000 dispersing wild
 dogs moving across the KAZA-TFCA. The simulation resembled an inverted iSSF and
-worked as follows. (1) We defined a random source point and assumed a random
+was set up as follows. (1) We defined a random source point and assumed a random
 initial orientation of the animal. (2) Departing from the source point, we
 generated 25 random steps by sampling relative turning angles from a uniform
 distribution (\(-\pi, +\pi\)) and step lengths from our fitted gamma
-distribution. As such, each step corresponded to the straight line movement
-conducted within 4 hours. To prevent unreasonably large steps, we capped sampled
-values to a maximum of 35 km, which corresponds to the farthest distance ever
-traveled within 4 hours by on of our dispersers. (3) Along each random step, we
-extracted and averaged habitat covariates and calculated movement covariates.
-Extracted values were again standardized using the same transformations that
-were used on the input data. (4) We applied the parameterized movement model and
-predicted the selection score \(w(x)\) for each of the proposed steps and
-translated selection scores into probabilities by applying \Cref{EQ2}. (5) We
-randomly sampled one of the random steps based on predicted probabilities and
-used it to determine the animal's new position. We repeated steps (2) to (5)
-until a total of 2'000 steps were realized.
+distribution. Each step corresponded to the straight line movement conducted
+within 4 hours. To prevent unreasonably large steps, we capped sampled values to
+a maximum of 35 km, which corresponds to the farthest distance ever traveled
+within 4 hours by on of our dispersers. (3) Along each random step, we extracted
+and averaged habitat covariates and calculated movement covariates. Extracted
+values were again standardized using the same transformations that were used on
+the input data. (4) We applied the parameterized movement model and predicted
+the selection score \(w(x)\) for each random step and translated selection
+scores into probabilities using \Cref{EQ2}. (5) We randomly sampled one of the
+steps based on predicted probabilities and determined the animal's new position.
+We repeated steps (2) to (5) until a total of 2'000 steps were realized.
 
 To minimize the influence of edge effects and to deal with random steps leaving
 the study area, we followed \citep{Koen.2010} and artificially expanded all
 covariate layers by adding a 100 km buffer zone. Within the buffer zone, we
 randomized covariate values by resampling values from the original covariate
 layers. In result, simulated dispersers were able to leave and reenter the main
-study area through this buffer zone. In cases where a disperser approached the
-outer map boundary such that one of the proposed random steps transgressed its
-border, we resampled transgressing steps until they fully lied within the buffer
-zone. Although the algorithm for the simulation was mainly coded in {\tt R}, we
-wrote a few helper functions in {\tt C++} and imported them into {\tt R} using
-the {\tt Rcpp} package \citep{Eddelbuettel.2011, Eddelbuettel.2013}.
+study area through this buffer zone. In cases where proposed random steps
+transgressed the outer border of this buffer zone, we resampled transgressing
+steps until they fully lied within the buffer.
 
-\subsection{Source Points}
+\subsection{Source Points (90\%)}
 We initiated virtual dispersers at 50'000 randomly selected source points within
 contiguous protected areas larger \(>\) 700 km\textsuperscript{2}
-(\Cref{SourcePoints} (a)). This conforms to the average home range requirement
-of resident wild dogs \citep{Pomilia.2015} and allowed us to remove areas too
-small to host viable wild dog populations. By distributing source points
-randomly, the number of source points per km\textsuperscript{2} within protected
-areas was approximately equal across the study area. To render potential
-immigrants into the study system, we placed additional 30'000 source points
-inside the buffer zone around the main study area (\Cref{SourcePoints} (b)).
-This resulted in a total of 80'000 source points, each representing the start
-point of an individual disperser.
+(\Cref{SourcePoints}a). This conforms to the average home range requirement of
+resident wild dogs \citep{Pomilia.2015} and allowed us to remove areas too small
+to host viable wild dog populations. By distributing source points randomly, the
+number of source points per km\textsuperscript{2} within protected areas was
+approximately equal across the study area. To render potential immigrants into
+the study system, we placed additional 30'000 source points inside the buffer
+zone around the main study area (\Cref{SourcePoints}b). This resulted in a total
+of 80'000 source points, each representing the start point of an individual
+disperser.
 
 \begin{figure}[htbp]
   \begin{center}
@@ -618,85 +576,93 @@ point of an individual disperser.
   \end{center}
 \end{figure}
 
-\subsection{Heatmap}
-To identify dispersal hotspots across our study area using the simulated
-dispersal events, we rasterized all simulated trajectories and created a heatmap
+\subsection{Heatmap (100\%)}
+To identify dispersal hotspots across our study area, we created a heatmap
 indicating the absolute frequency at which each raster-cell in the study area
-was visited by our virtual dispersers. If the same trajectory crossed a
-raster-cell twice, it was only counted once, meaning that we did not consider
-revisits. This mitigated biases arising due to trapped individuals that were
-moving in circles. To achieve high performance rasterization of all simulated
-trajectories, we used the R-package {\tt terra} \citep{Hijmans.2020}.
+was visited by virtual dispersers. For this, we rasterized all simulated
+trajectories and tallied them into a single map. If the same trajectory crossed
+a raster-cell twice, it was only counted once. This way, we did not consider
+revisits and mitigated biases arising from trapped individuals that were moving
+in circles. To achieve high performance rasterization, we used the R-package
+{\tt terra} \citep{Hijmans.2020}.
 
-\subsection{Network Analysis I: Betweenness}
+\subsection{Betweenness (80\%)}
 To pinpoint areas of exceptional relevance for connecting remote regions in our
 study area, we converted simulated trajectories into a network and calculated
-betweenness scores. More specifically, we overlaid the study area (including the
-buffer) with a regular raster that was resolved at 5 x 5 km and where each
-raster-cell represented a node in the final network. We then used the simulated
-trajectories to determine all transitions occurring from one cell to another, as
-well as their frequency. This resulted in an edge-list that we translated into a
-weighted network using the r-package {\tt igraph}. Because {\tt igraph} handles
-the weights \(\omega\) as costs, we inverted the traversal frequency at each
-cell by applying \(\omega = \frac{\sum_i^n{Traversal Frequency_i}/n}{Traversal
-Frequency_i}\). Finally, we calculated the betweenness metric for each node in
-the final network. This metric indicates how often a specific raster-cell lies
-on a shortest path between two other raster-cells and is therefore a useful
-metric to detect movement corridors \citep{BastilleRousseau.2018}.
+betweenness scores. For this, we overlaid the study area (including the buffer)
+with a regular raster resolved at 5 x 5 km. We then used the simulated
+trajectories to determine all transitions occurring from one raster-cell to
+another, as well as the frequency at which those transitions occurred. This
+resulted in an edge-list that we translated into a weighted network using the
+r-package {\tt igraph} \citep{Gabor.2006}. Because {\tt igraph} handles edge
+weights (\(\omega\)) as costs, we inverted the traversal frequency in each cell
+by applying \(\omega = \frac{\sum_i^n{Traversal Frequency_i}/n}{Traversal
+Frequency_i}\). Finally, we used the weighted network to calculate betweenness
+scores for each raster-cell in the overlaid raster. The betweenness metric
+indicates how often a specific raster-cell lies on a shortest path between two
+other raster-cells and is therefore a useful metric to detect movement corridors
+\citep{BastilleRousseau.2018}.
 
-\subsection{Network Analysis II: Interpatch-Connectivity}
-We also adopted an alternative network view and assessed interpatch connectivity
-between national parks. The decision to focus on national parks was purely out
-of simplicity and could easily be expanded to any other patch of interest. To
-determine interpatch-connectivity, we identified the relative frequency at which
-dispersers originating from one national park successfully moved into an other
-national park. This allowed us to determine \textit{if} and \textit{how often}
-dispersers moved between certain national parks, as well as to estimate the
-average number of steps that was necessary for those movements.
+\subsection{Interpatch-Connectivity (80\%)}
+We also assessed inter-patch connectivity between national parks in our study
+area. The decision to focus on national parks was purely out of simplicity and
+the same logic could easily be expanded to include other protected areas as
+well. To quantify inter-patch connectivity, we computed the relative frequency
+at which dispersers originating from one national park successfully moved into
+another national park. This allowed us to determine \textit{if} and \textit{how
+often} dispersers moved between certain national parks. Moreover, because time
+was explicit in our IBMM, we were able to estimate \textit{how long} dispersers
+had to move to realize those connections.
 
 \section{Results}
-\subsection{Movement Model}
+\subsection{Movement Model (20\%)}
 Compared to the base model reported in \citep{Hofmann.2021}, our most
 parsimonious movement model included several additional interactions between
-habitat and movement covariates (\Cref{MovementModel} and
+habitat covariates and movement covariates (\Cref{MovementModel} and
 \Cref{MovementModelNumbers}). Although multiple models received an AIC weight
-above zero (T1 in Appendix S1), we only consiered results from the  ``best''
-model for further analyses. Since all models with positive AIC weight contained
-similar covariates, this decision only marginally influenced subsequent results.
-Results from the selected model are given in \Cref{MovementModelNumbers} and
-illustrated in \Cref{MovementModel} (a). Additional plots to ease with the
-interpretation of the model are provided in Appendix XX.
+above zero (Table 1 in Appendix S1), we only considered results from the most
+parsimonious model. Since all models with positive AIC weight contained similar
+covariates, this decision only marginally influenced subsequent results. Results
+from the selected model are given in \Cref{MovementModelNumbers} and illustrated
+in \Cref{MovementModel} (a). Additional plots that facilitate the interpretation
+of the model are provided in Appendix S2.
 
-When holding constant for movement behavior, we find that dispersing wild dogs
-avoid water, but prefer its proximity. Dispersers also avoid densely forested
-woodlands, yet prefer open shrublands or grasslands. Finally, dispersers avoid
-moving through landscapes that are influenced by humans.
+When looking at the habitat kernel and holding constant the movement kernel, we
+find that dispersing wild dogs avoid water but prefer its proximity. Dispersers
+also avoid densely forested woodlands, yet prefer open shrublands or grasslands.
+Finally, dispersers avoid moving through landscapes that are influenced by
+humans. These results align with our previous findings reported in
+\cite{Hofmann.2021}.
 
-When looking at the movement kernel, we observe several significant
-interactions. However, except for the interaction \textsf{sl:LowActivity},
-estimated slopes are relatively flat, suggesting that our initial distributions
-for step lengths and turning angles were only marginally biased. For instance,
-the positive effect for \textsf{cos(ta)} indicates that observed turning angles
-are slightly more directional compared to the turning angles proposed by our
-uniform distribution. On the other hand, the strongly significant and negative
-interaction \textsf{sl:LowActivity} reveals that our fitted gamma distribution
-produced steps lengths that were substantially larger that those realized by the
-dispersers during low wild dog activity.
+When looking at the movement kernel, we observe several significant estimates.
+However, except for the interaction \textsf{sl:LowActivity}, effect sizes are
+relatively small, suggesting that our proposal distributions for step lengths
+and turning angles were only marginally biased. For instance, the positive and
+significant effect for \textsf{cos(ta)} indicates that realized turning angles
+were slightly more directional than the turning angles proposed by our uniform
+distribution, implying that realized steps in fact followed a von Mises
+Distribution with positive concentration parameter. On the other hand, the
+significant and negative interaction for \textsf{sl:LowActivity} reveals that
+wild dogs moved over shorter distances during low wild dog activity compared to
+the steps suggested by our gamma distribution.
 
-However, we also find a strongly significant and negative interaction between
-the step length and main-activity indicator, showing that realized step lengths
-tended to be much shorter during periods of activity in comparison to the steps
-proposed by our fitted gamma distribution.
+Finally, we turn to the interactions between the two kernels. Here, we observe
+that movement behavior significantly differs depending on habitat covariates. In
+general, steps tend to be shorter in areas with high water cover and high
+woodland cover, yet larger in areas with open shrubs and grasslands. Similarly,
+dispersers realized shorter steps in the vicinity to water, even though the size
+of this effect is negligible. Finally, it appears that dispersers move more
+tortuous in areas influenced by humans, and more directional when far from
+water.
 
-Finally, the significant interactions \textsf{cos(ta):HumanInfluence} and
-\textsf{cos(ta):DistanceToWater\textsuperscript{2}} indicate that dispersers
-move much more tortuous in areas influenced by humans but more directed when
-distant to water.
-
-Results from the k-fold cross-validation procedure show that our model
-substantially outperforms a random guess, as the confidence intervals of r.. and
-r.. do not overlap. Additionally, we find that the rank correlation slightly
-improved in comparison to the base model reported in \citep{Hofmann.2021}.
+As can be seen in \Cref{MovementModel}b, the k-fold cross-validation procedure
+reveals that our model substantially outperforms a random guess, as indicated by
+the fact that the confidence intervals of \(\bar{r}_{s, realized}\) and
+\(\bar{r}_{s, random}\) do not overlap. Furthermore, the significant correlation
+between ranks and corresponding frequencies for realized steps indicates a good
+fit between predictions and observations (\Cref{MovementModel}b). Finally, we
+find that the rank correlation slightly improved in comparison to the base model
+(\(\bar{r}_{s, realized} = -0.55\); \citealp{Hofmann.2021}).
 
 \begin{figure}
   \begin{center}
@@ -729,7 +695,7 @@ improved in comparison to the base model reported in \citep{Hofmann.2021}.
     \begin{threeparttable}
       \begin{tabular}{llrrrc}
         \toprule
-        Kernel & Covariate & Coefficient & SE & pvalue & Significance \\
+        Kernel & Covariate & Coefficient & SE & p-value & Sign. \\
         \midrule
         \multirow{5}{*}{Habitat Kernel}
          & Water & -0.546 & 0.112 & \(<\) 0.001 & *** \\
@@ -764,65 +730,75 @@ improved in comparison to the base model reported in \citep{Hofmann.2021}.
   \end{center}
 \end{table}
 
-\subsection{Dispersal Simulation}
+\subsection{Dispersal Simulation (60\%)}
 On a machine with an AMD Ryzen 7 2700X processor with 8 x 3.6 GHz and 64 GB of
 RAM, a single batch of 1'000 simulated dispersers took roughly 90 minutes to
 compute (\(\mu = 88.90\), \(\sigma = 1.87\)). As such, the simulation of all
-80'000 dispersers terminated after 120 hours, i.e. five days. However,
-comparable computations will be substantially quicker for smaller study areas,
-as the covariate extraction from large rasters was computationally the most
-expensive task.
+80'000 dispersers terminated after 120 hours, i.e. five days. Comparable
+computations will be substantially quicker for smaller study areas or lower
+resolution covariates, as the covariate extraction from large rasters was
+computationally the most expensive task.
 
-On average, step lengths realized by the simulated dispersers (\(\mu = 2'093\)
-m, \(\sigma = 3'067\)) were slightly shorter than those by observed dispersers
-(\(\mu = 2'326\) m, \(\sigma = 3'323\)). Simultaneously, a slightly smaller
-\(cos(ta)\) indicated that simulated dispersers moved with marginally lower
-directionality (\(\mu = 0.057\), \(\sigma = 0.071\)) compared to observed
-dispersers (\(\mu = 0.078\), \(\sigma = 0.072\)). These differences in step
-lengths and turning angles can be attributed to minor disparities between
+On average, step lengths realized by the simulated dispersers (\(\mu_{sl} =
+2'093\) m, \(\sigma_{sl} = 3'067\)) were slightly shorter than those by observed
+dispersers (\(\mu_{sl} = 2'326\) m, \(\sigma_{sl} = 3'323\)). Simultaneously,
+simulated dispersers moved marginally less directional (\(\mu_{cos(ta)} =
+0.057\), \(\sigma_{cos(ta)} = 0.071\)) compared to observed dispersers
+(\(\mu_{cos(ta)} = 0.078\), \(\sigma_{cos(ta)} = 0.072\)). These differences in
+step lengths and turning angles can be attributed to minor disparities between
 habitat conditions at the area within which we collected training data and
 habitat conditions within the entire study area.
 
 Out of the 50'000 dispersers initiated in protected areas, only 4.5\% eventually
-hit a map boundary, highlighting that boundary effects should be neglectable. In
-contrast, 78\% of the 30'000 dispersers originating from the buffer zone hit a
-map boundary at least once.
+hit a map boundary, suggesting that biases due to boundary effects should be
+minimal. In contrast, 78\% of the 30'000 dispersers originating from the buffer
+zone eventually hit a map boundary.
 
-\subsection{Heatmaps}
-\Cref{Heatmap} depicts the heatmap rendering the traversal frequency at each
-pixel of the study area across all simulated individuals and steps. The map
-illustrates that large portions of land beyond the borders of the KAZA-TFCA are
-only infrequently visited by dispersers (dark blue areas). On the contrary, we
-observe that within the KAZA-TFCA extensive regions are regularly visited by
-dispersers (bright yellow and red areas). Most notably, the region in northern
-Botswana south of the Linyanti swamp glows in rich red and stands out as highly
-frequented dispersal hub. Nevertheless, massive water bodies such as the
-Okavango Delta, the Makgadikgadi Pan, and the Linyanti swamp, pose considerable
-dispersal barriers within and therefore limit realized connectivity the
-KAZA-TFCA.
+\subsection{Heatmap (50\%)}
+\Cref{Heatmap} depicts the heatmap of all 80'000 simulated trajectories rendered
+after 2'000 steps. The map highlights that large portions of land beyond the
+borders of the KAZA-TFCA are only infrequently visited by dispersers (dark blue
+areas), whereas within the KAZA-TFCA we observe several extensive regions that
+are regularly visited (bright yellow and red areas). Most notably, the region in
+northern Botswana south of the Linyanti swamp stands out as highly frequented
+dispersal hub. Still, the presence of several massive water bodies, such as the
+Okavango Delta, the Makgadikgadi Pan, and the Linyanti swamp, results in
+considerable dispersal barriers that limit realized connectivity within the
+KAZA-TFCA. Similarly, dispersal appears to be very limited in Zambia's and
+Zimbabwe's part of the KAZA-TFCA, where only few areas are traversed by
+dispersers, which can largely be attributed to a high human influence in these
+regions. Outside the KAZA-TFCA, the most frequently traversed regions include
+the areas of the Central Kalahari National Park in Botswana, the area south-west
+of the Khaudum National Park in Namibia, and the area around the Liuwa Plains
+National Park in Zambia.
 
 \begin{figure}
   \includegraphics[width=\textwidth]{99_Heatmap.png}
-  \caption{}
+  \caption{Heatmap of all 80'000 simulated trajectories after 2'000 steps.
+  Simulations were based on an integrated step selection model, fit to the
+  movement data of dispersing African wild dogs. To generate the heatmap, we
+  rasterized and summed all simulated trajectories. Additional heatmaps
+  showcasing the traversal frequency after different numbers of steps are
+  provided in xx in Appendix S3.}
   \label{Heatmap}
 \end{figure}
 
-\subsection{Network Analysis I}
-The results of our first network analyses are presented in \Cref{Betweenness}.
-In contrast to the heatmap, \Cref{Betweenness} puts much more emphasis on
-discrete dispersal corridors. Nonetheless, the dispersal hub in northern
-Botswana stands out again and is traversed by a corridor that receives a
-comparably high betweenness score. This implies that the region is particularly
-crucial for connecting other pixels in the study system and hence represents a
-proper dispersal hub. Towards east, the corridor runs through the Chobe National
-Park into the Hwange national park, where it branches out and further extends
-into the distant Matusadona National Park in Zimbabwe. Northwest of the Linyanty
-ecosystem, the same corridor expands into Angola, where it splits and finally
-traverses over a long stretch of unprotected area into the Kafue National Park
-in Zambia. Several additional corridors with slightly lower betweenness scores
-exist, yet most of them run within the boundaries of the KAZA-TFCA. In general,
-only few corridors appear to directly link the peripheral regions of the
-KAZA-TFCA. For instance, there are no viable dispesal corridors between the
+\subsection{Betweenness (50\%)}
+Betweenness scores of each raster-cell the study area are presented in
+\Cref{Betweenness}. While the heatmap emphasized frequently visited areas, the
+map of betweenness reveals rather discrete dispersal corridors. As can be seen,
+the dispersal hotspot in northern Botswana is traversed by a corridor that
+receives a comparably high betweenness score. This implies that the region is
+particularly crucial for connecting other regions in the study system and hence
+represents a proper network hub. Towards east, the corridor runs through the
+Chobe National Park into the Hwange national park, where it branches out and
+further extends into the distant Matusadona National Park in Zimbabwe. Northwest
+of the Linyanty ecosystem, the same corridor expands into Angola, where it
+splits and finally traverses over a long stretch of unprotected area into the
+Kafue National Park in Zambia. Several additional corridors with slightly lower
+betweenness scores exist, yet most of them run within the boundaries of the
+KAZA-TFCA. In general, only few corridors directly link the peripheral regions
+of the KAZA-TFCA. For instance, there are only few corridors between the
 Matusadona National Park in Zimbabwe and the Kafue National Park in Zimbabwe.
 Similarly, there are no direct links between the Zimbabwean and Angolan
 ``spikes'' of the KAZA-TFCA.
@@ -840,16 +816,15 @@ Similarly, there are no direct links between the Zimbabwean and Angolan
   \label{Betweenness}
 \end{figure}
 
-\subsection{Network Analysis II}
-The results from the second network analysis that was focused on connectivity
-between national parks are given in \Cref{AreasReached}. The map shows between
-which national parks direct links exist and how frequent they are, as well as
-the average duration a disperser had to move to realize those links. For
-instance, 6.8 \% of the simulated dispersers originating from the Moremi
-National Park successfully reached the Chobe National Park and 4.2 \% reached
-the Hwange National Park in Zimbabwe. On average, dispersers moved for 623 steps
-before arriving at Chobe (SD = 520) and for 1'413 steps before arriving at
-Hwange (SD = 371).
+\subsection{Interpatch Connectivity (0\%)}
+The results of the analysis of interpatch connectivity is given in
+\Cref{AreasReached}. The map shows between which national parks direct links
+exist and how frequent they are, as well as the average duration a disperser had
+to move to realize those links. For instance, 6.8 \% of the simulated dispersers
+originating from the Moremi National Park successfully reached the Chobe
+National Park and 4.2 \% reached the Hwange National Park in Zimbabwe. On
+average, dispersers moved for 623 steps before arriving at Chobe (SD = 520) and
+for 1'413 steps before arriving at Hwange (SD = 371).
 
 \begin{figure}
   \includegraphics[width=\textwidth]{99_AreasReached.png}
@@ -865,7 +840,7 @@ Hwange (SD = 371).
   \label{AreasReached}
 \end{figure}
 
-\section{Discussion}
+\section{Discussion (10\%)}
 Our connectivity network further suggests that dispersers from the Okavango
 Delta more likely disperse towards east than west. Indeed, only x out of our y
 observed dispersers ever reached the western part of the delta. Only when the
@@ -876,7 +851,7 @@ part.
 All of our findings are well in line with our previous work, where we have
 highlighted dispersal corridors for wild dogs using least-cost approaches. This
 suggests that qualitative results are quite insensitive to the exact
-methodological approach. Still, we believe that a simulation based approach
+methodological approach. Still, we believe that a simulation-based approach
 offers possibilities for much richer inferences compared to traditional
 approaches. This is largely due to the fact that proper movement trajectories
 are generated that can be analysed \textit{as if} they were generated by real
@@ -913,9 +888,9 @@ reserve into the south-western section of the Delta. Future studies could relax
 the assumption of a static flood and attempt to update floodlevels as the
 dispersers move. This would allow studying how connectivity within the ecosystem
 evolves over time as the flood climaxes and retracts again. In fact, one of the
-major advantages of such simulation based approaches is that a dynamic
+major advantages of such simulation-based approaches is that a dynamic
 environment can be rendered, as time is explicit in these models
-\citep{Zeller.2020}. This contrasts with traditional modelling approaches such
+\citep{Zeller.2020}. This contrasts with traditional modeling approaches such
 least-cost analysis or circuit theory, where the temporal dimension cannot be
 made explicit. An explicit view on time also directly translates in insights on
 the duration required by dispersers to move between distinct patches such as
@@ -935,7 +910,7 @@ connectivity, especially in areas that wild dogs are unfamiliar with or in areas
 with high potential for human-wildlife conflict \citep{Cozzi.2020}.
 Interestingly though, \cite{Behr.2021} have recently demonstrated that mortality
 during dispersal is lower compared to residency, suggesting the presence some
-fitness benefits to dispering individuals.
+fitness benefits to dispersing individuals.
 
 In this regard, our approach is rather similar to dispersal kernels, yet it
 enables to render directional biases, which are currently difficult to implement
@@ -947,7 +922,7 @@ is available and can be used to adjust the number of simulated individuals
 accordingly. Alternatively, instead of tweaking the number of simulated
 individuals, one could assign a weight to each trajectory that depends on the
 density of potential dispersers in the source areas. As such, trajectories from
-areas with high density would enter the heatmap with above average weigth.
+areas with high density would enter the heatmap with above average weight.
 
 The parametrized movement model could also be manipulated to investigate how
 different habitat preferences influence landscape connectivity and to test the
@@ -985,6 +960,14 @@ of such predators are known, an early warning system based on simulations could
 serve to forewarn about potential encounters and and thereby increase public
 acceptance of large predators.
 
+Future studies could also investigate the sensitivity of such simulations with
+respect to estimated habitat preferences. Here, we used point estimates and did
+not vary degree by which individuals preferred or avoided certain covariates.
+Nevertheless, the degree to which our results depend on these estimates is
+unknown. Because data are usually scarce for dispersal studies on endangered
+species, point estimates may be inaccurate \citep{Wiegand.2003,
+KramerSchadt.2007}.
+
 \section{Authors' Contributions}
 D.D.H., D.M.B., A.O. and G.C. conceived the study and designed methodology;
 D.M.B., G.C., and J.W.M. collected the data; D.D.H. and D.M.B. analysed the
@@ -994,7 +977,8 @@ several stages and gave final approval for publication.
 
 \section{Data Availability}
 GPS movement data of dispersing coalitions will be made available on dryad at
-the time of publication.
+the time of publication. Access to all R-scripts for our analyses is provided
+through Github.
 
 \section{Acknowledgements}
 We thank the Ministry of Environment and Tourism of Botswana for granting
