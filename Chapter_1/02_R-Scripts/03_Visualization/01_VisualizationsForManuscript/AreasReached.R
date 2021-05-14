@@ -35,30 +35,22 @@ visits <- read_rds("03_Data/03_Results/99_AreasReached.rds")
 # Load protected areas
 prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
-# Keep only national parks
-prot <- subset(prot, Desig == "National Park")
-
 # Assign a unique ID to each of the areas
 prot$ID <- 1:nrow(prot)
 
-# Identify the area of each protected area
-prot$Area <- gArea(spTransform(prot, CRS("+init=epsg:32734")), byid = T)
+# We'll focus on national parks
+visits <- subset(visits, FromDesig == "National Park" & ToDesig == "National Park")
+prot   <- subset(prot, Desig == "National Park")
 
-# Coerce the visitations to a graph
+# Create a network
 net <- graph_from_data_frame(
     d        = visits
   , vertices = unique(prot$ID)
   , directed = T
 )
 
-# Add area as vertex information
-V(net)$Area <- prot$Area
-
-# Prepare layout
-lay <- coordinates(gCentroid(prot, byid = T))
-
-# Prepare plot for ggplotting
-net_p <- ggnetwork(net, layout = lay, arrow.gap = 0.1, scale = F)
+# Prepare layouts
+lay <- coordinates(gCentroidWithin(prot))
 
 ################################################################################
 #### Prepare Additional Plotting Data
@@ -85,10 +77,34 @@ crs(kaza_ext) <- CRS("+init=epsg:4326")
 # Rename
 kaza$Name <- "KAZA-TFCA Borders"
 
+# Prepare country labels
+labels_countries <- data.frame(
+    x = c(20.39, 23.94, 20.07, 25.99, 28.22)
+  , y = c(-15.28, -21.80, -19.39, -14.52, -18.9)
+  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
+)
+coordinates(labels_countries) <- c("x", "y")
+crs(labels_countries) <- CRS("+init=epsg:4326")
+
+# Create labels for some national parks
+labels_nationalparks <- data.frame(
+    x = c(26.56, 28.61, 21.15, 25.87, 20.38, 23.58, 23.21, 24.51, 20.78, 22.63, 27.92, 28.54)
+  , y = c(-19.08, -17.05, -17.26, -15.25, -16.08, -21.4, -19.29, -18.65, -18.81, -14.54, -17.76, -20.53)
+  , Label = paste0(c(
+      "Hwange", "Matusadona", "Luengue-Luiana", "Kafue", "Mavinga"
+    , "Central Kalahari", "Moremi", "Chobe", "Khaudum", "Liuwa Plains"
+    , "Chizarira", "Matobo"
+  ), " NP")
+)
+coordinates(labels_nationalparks) <- c("x", "y")
+crs(labels_nationalparks) <- CRS("+init=epsg:4326")
+
 # Convert objects to sf
-kaza   <- st_as_sf(kaza)
-africa <- st_as_sf(africa)
-prot   <- st_as_sf(prot)
+kaza                 <- st_as_sf(kaza)
+africa               <- st_as_sf(africa)
+prot                 <- st_as_sf(prot)
+labels_countries     <- st_as_sf(labels_countries)
+labels_nationalparks <- st_as_sf(labels_nationalparks)
 
 # Convert heatmap to dataframe
 r <- as.data.frame(r, xy = T)
@@ -96,8 +112,14 @@ r <- as.data.frame(r, xy = T)
 ################################################################################
 #### Plot
 ################################################################################
+# Prepare networks for ggplotting with ggplot
+net_p <- ggnetwork(net, layout = lay, arrow.gap = 0.1, scale = F)
+
+# Make nice labels
+net_p$Label <- paste0(net_p$FromName, " NP")
+
 # Prepare color palette
-pal <- colorRampPalette(plasma(100, begin = 0.8, end = 0))
+pal <- colorRampPalette(plasma(100, begin = 0.9, end = 0))
 
 # Main Plot
 p1 <- ggplot() +
@@ -113,7 +135,7 @@ p1 <- ggplot() +
     , col         = "black"
     , fill        = NA
     , lty         = 1
-    , lwd         = 0.5
+    , lwd         = 1
     , show.legend = F
   ) +
   geom_sf(
@@ -121,30 +143,44 @@ p1 <- ggplot() +
     , col         = "black"
     , fill        = NA
     , lty         = 2
-    , lwd         = 0.2
+    , lwd         = 0.5
     , show.legend = F
   ) +
   geom_edges(
       data      = net_p
-    , mapping   = aes(x = x, y = y, xend = xend, yend = yend
-      , size = RelFrequency, col = MeanStepNumber)
+    , mapping   = aes(
+        x    = x
+      , y    = y
+      , xend = xend
+      , yend = yend
+      , size = RelFrequency
+      , col  = MeanStepNumber
+    )
     , curvature = 0.2
     , arrow     = arrow(length = unit(6, "pt"), type = "closed", angle = 10)
   ) +
+  geom_sf_text(
+      data     = labels_countries
+    , mapping  = aes(label = Label)
+    , col      = "black"
+    , fontface = 2
+    , size     = 5
+  ) +
   scale_size_area(
-      name     = "Visitation Frequency"
+      name     = "Relative Frequency"
     , max_size = 1
   ) +
   scale_color_gradientn(
       colors  = pal(100)
     , guide   = guide_colorbar(
-        title          = "Number of Steps"
+        title          = "Duration (Steps)"
       , show.limits    = T
       , title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.6, "cm")
       , barwidth       = unit(3.0, "cm")
+      , order = 1
     )
   ) +
   scale_fill_manual(
@@ -160,11 +196,11 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Areas Reached and Visitation Frequency"
-    , subtitle = "In Relation to Number of Steps"
+    , title    = "Interpatch Connectivity"
+    , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
-    size = guide_legend(title.position = "top")
+      size  = guide_legend(title.position = "top", order = 2)
   ) +
   theme(
       legend.position      = "bottom"
@@ -196,7 +232,7 @@ p1 <- ggplot() +
       )
   )
 
-# Plot for separate legend
+# Plot for separate legend of the national parks, kaza- and country-borders
 p2 <- ggplot() +
   geom_sf(
       data        = prot
@@ -209,14 +245,14 @@ p2 <- ggplot() +
     , mapping     = aes(col = "KAZA-TFCA Borders")
     , fill        = NA
     , show.legend = "line"
-    , lwd         = 0.5
+    , lwd         = 1
   ) +
   geom_sf(
       data        = africa
     , mapping     = aes(col = "Country Borders")
     , fill        = NA
     , show.legend = "line"
-    , lwd         = 0.2
+    , lwd         = 0.5
   ) +
   scale_fill_manual(
     values = c("National Parks" = "#70ab70", "Protected Areas" = "#d9f0d3")
@@ -232,7 +268,7 @@ p2 <- ggplot() +
     , guide = guide_legend(
         override.aes = list(
             linetype = c(2, 1)
-          , lwd      = c(0.2, 0.5)
+          , lwd      = c(0.5, 1)
         )
       )
   ) +
@@ -250,18 +286,25 @@ p2 <- ggplot() +
     , panel.background      = element_blank()
   )
 
-# Create plot with dots of different size for yet another legend
+# Plot for the separate legend of the dots
 p3 <- ggplot() +
   geom_point(
-      data    = net_p
+      data    = net_p %>% dplyr::select(x, y, FromName, Simulations) %>% distinct()
     , mapping = aes(x = x, y = y)
     , col     = "black"
     , size    = 0.1
   ) +
   geom_point(
-      data    = net_p
-    , mapping = aes(x = x, y = y, size = Simulations)
+      data    = net_p %>% dplyr::select(x, y, FromName, Simulations) %>% distinct() %>% na.omit()
+    , mapping = aes(x = x, y = y, size = Simulations, color = Simulations)
     , col     = "orange"
+  ) +
+  geom_sf_text(
+      data     = labels_nationalparks
+    , mapping  = aes(label = Label)
+    , nudge_y  = 0.3
+    , fontface = 3
+    , size     = 3
   ) +
   coord_sf(
       crs    = 4326
@@ -273,11 +316,11 @@ p3 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Areas Reached and Visitation Frequency"
-    , subtitle = "In Relation to Number of Steps"
+    , title    = "Interpatch Connectivity"
+    , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
-    size = guide_legend(title.position = "top")
+    size = guide_legend(title = "Number of Simulations", title.position = "top")
   ) +
   theme(
       legend.position      = "bottom"
@@ -304,7 +347,7 @@ p4 <- p1 + annotation_custom(
     , ymax = -14
   )
 
-# Remove the other legend from main plot
+# Remove the original legend from main plot
 p5 <- p4 + theme(legend.position = "none")
 
 # Add circles to main plot

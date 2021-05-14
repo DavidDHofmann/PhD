@@ -17,10 +17,8 @@ library(raster)         # To handle spatial data
 library(terra)          # To handle spatial data
 library(pbmcapply)      # To run on multiple cores with progress bar
 library(rgeos)          # For spatial ananylsis
-library(igraph)         # For network analysis
 library(davidoff)       # Custom functions
 library(rgdal)          # To load spatial data
-library(ggnetwork)      # Package to plot networks with ggplot
 
 ################################################################################
 #### Rasterize National Parks
@@ -31,10 +29,7 @@ prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 # Load reference raster
 r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
-# Keep only national parks
-prot <- subset(prot, Desig == "National Park")
-
-# Assign a unique ID to each of the areas
+# Assign a unique ID to each protected area
 prot$ID <- 1:nrow(prot)
 
 # Rasterize IDs
@@ -42,10 +37,10 @@ prot_r <- raster(terra::rasterize(x = vect(prot), y = rast(r), field = "ID"))
 
 # Visualize them
 plot(prot_r, main = "National Parks")
-text(prot, "Name", cex = 0.5)
+text(subset(prot, Desig == "National Park"), "Name", cex = 0.5)
 
 ################################################################################
-#### Identify Connections
+#### Identify Connections between Protected Areas
 ################################################################################
 # Load simulations
 # sims <- read_rds("03_Data/03_Results/99_DispersalSimulationSub.rds")
@@ -62,16 +57,15 @@ first <- sims %>%
   )
 
 # Assess from which protected area each trajectory leaves
-first$From <- as.numeric(over(first, prot)$ID)
-first <- first@data[, c("TrackID", "From")]
+first$From <- raster::extract(prot_r, first)
 
 # Join information to simulated tracks
-sims <- left_join(sims, first, by = "TrackID")
+sims <- left_join(sims, first@data[, c("TrackID", "From")], by = "TrackID")
 
-# We only care about simulations leaving from national parks
+# Remove potential NA's (start points outside the main study area)
 sims <- subset(sims, !is.na(From))
 
-# Identify number of trajectories leaving from each national park
+# Identify number of trajectories leaving from each area
 nsims <- sims %>%
   group_by(TrackID, From) %>%
   nest() %>%
@@ -96,7 +90,7 @@ visits <- data.frame(
 # Add this information to the simulations
 sims$To <- visits$Prot
 
-# Remove spatial data
+# Coerce to regular dataframe again
 sims <- as.data.frame(sims, xy = T)
 sims$xy <- NULL
 
@@ -121,33 +115,25 @@ visits <- left_join(visits, nsims, by = "From")
 # Calculate relative frequency
 visits$RelFrequency <- visits$Frequency / visits$Simulations
 
+# We also want to know the designation and name of the origin...
+visits <- visits %>%
+  dplyr::select(From) %>%
+  left_join(prot@data[, c("Name", "Desig", "ID")], by = c("From" = "ID")) %>%
+  dplyr::select(Name, Desig) %>%
+  setNames(c("FromName", "FromDesig")) %>%
+  cbind(visits, .)
+
+# And the designation and name of the destination
+visits <- visits %>%
+  dplyr::select(To) %>%
+  left_join(prot@data[, c("Name", "Desig", "ID")], by = c("To" = "ID")) %>%
+  dplyr::select(Name, Desig) %>%
+  setNames(c("ToName", "ToDesig")) %>%
+  cbind(visits, .)
+
+# Sort all nicely
+visits <- visits %>%
+  dplyr::select(From, To, FromName, ToName, FromDesig, ToDesig, everything())
+
 # Store areas reached to file
 write_rds(visits, "03_Data/03_Results/99_AreasReached.rds")
-
-################################################################################
-#### Network View
-################################################################################
-# Coerce the visitations to a graph
-net <- graph_from_data_frame(
-    d        = visits
-  , vertices = unique(prot$ID)
-  , directed = T
-)
-vertex_attr(net)
-edge_attr(net)
-
-# Add area as vertex information
-V(net)$Area <- prot$Area
-
-# Prepare layout
-lay <- coordinates(gCentroid(prot, byid = T))
-
-# Prepare plot for ggplotting
-net_p <- ggnetwork(net, layout = lay, arrow.gap = 0)
-
-# Plot
-ggplot(net_p, aes(x = x, y = y, xend = xend, yend = yend)) +
-  geom_edges(aes(col = MeanStepNumber, size = RelFrequency), curvature = 0.2) +
-  geom_nodes(color = "orange") +
-  scale_color_continuous() +
-  theme_blank()

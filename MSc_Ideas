@@ -1,0 +1,29 @@
+Hi guys
+
+Arpat has mentioned that there is an increasing number of MSc students looking for potential projects. I actually had some ideas that I'd like to share.
+
+- Cameratrapping: So far, I've been testing our cameras in the backyard of my GF's house. It's really interesting to see whats going on, but its also quite time consuming because the cameras produce tons of images. Managing these images comprises 3 steps:
+
+1) Sorting images according to date and location (renaming, moving files into other folders etc)
+2) Detecting images that contain animals (remove empty ones)
+3) Classifying detected animals (what species is it?)
+
+Even though I only setup 8 cameras per week, I had to go through hundreds of images every week. In case we're going to setup all 60 cameras in Botswana, I'm afraid we'll need to hire an entire team. Therefore, I was hoping to automate steps 1-3 as far as possible. For this, I've started to work on a VERY basic r-package that is able to sort images automatically (step 1). In addition, I've been toying around with Microsoft's "MegaDetector", which allows to automatically detect animals in images (step 2) -> You can read about my success here: https://daviddhofmann.github.io/post/2021-04-15-megadetector/. With respect to step 3, I'm unaware of an algorithm that automatically determines the species but is not limited to a single species.
+
+I guess a potential master student could be of help in many different ways, depending on his/her interests and abilities:
+- Run a simple pilot study and setup the camera traps in a more "natural" environment than a backyard (e.g. Wildpark, Zoo, Forest, etc.). The exact research question can be literally anything (diversity, co-occurence, occupancy, etc.)
+- Try to find or even train a neural network that detects certain species -> Validate the performance of such a network -> Something that we could consider for Botswana?
+- Write an r-package that automates steps 1-2 or even 1-3 (does not exist currently)
+- Investigate "optimal" camera trap setup -> need for "bait", angle, height, light, etc.?
+- Examine the performance of the MegaDetector (or may his own detector?) under different conditions (black/white image vs. colored image, wheather conditions etc.).
+
+Althoguh I've focused on "image management", I'm pretty sure there's plenty of additional stuff one could investigate. Genuinly, the overall goal would be to generate insights that will help us, once we set up the cameras in Botswana.
+
+
+Further Ideas:
+
+- Dispersers vs. Residents: Dispersers and residents are likely to exhibit vastly different movement behavior. Hence, the student could use our Wild Dog data to better understand potential differences in movement behavior of dispersing and resident wild dogs. More specifically, the student could compare different movement metrics (e.g. step length, turning angles, tortuosity etc.), fit an integrated step selection model, or simply compare resource selection among the two groups.
+
+- Movebank: Landscape connectivity is a crucial pre-requisite for many species to thrive and persist. However, most studies focus on a single species when developing connectivity maps. Thanks to the increased availability of movement data online, such issues may be nowadays addressed with a multispecies approach. A student could therefore showcase the utilization of movement data provided on Movebank to model multispecies landscape connectivity across a desired ecosystem. The ultimate goal of such a project (surely not within the scope of a MSc thesis) could be to develop a tool that allows to investigate connectivity at large scales for multiple species.
+
+- Time-Varying Step Selection: Time-varying step selection analysis allows to relax the assumption of regularly spaced steps when fitting step selection models. While initially developed to handle high-frequency data, the same method may serve to utilize data that contains missing entries. To better understand potential benefits or pitfalls of this approach, the student could simulate animal movement and use time-varying step selection functions to analyse the simulated data under different degrees of "missingness". In case there is time, the student could also analyse our Wild Dog data (or alternatively data from Movebank) as a case study.

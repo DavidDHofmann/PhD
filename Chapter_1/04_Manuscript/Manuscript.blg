@@ -1,5 +1,5 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
@@ -7,48 +7,51 @@ Repeated entry---line 3079 of file Literatur.bib
  : @article{Koen.2014
  :                   ,
 I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "Behr.2021"
+Warning--I didn't find a database entry for "Woodroffe.2020"
+Warning--I didn't find a database entry for "Hunziker.2017"
+Warning--I didn't find a database entry for "Loveridge.2019"
+Warning--I didn't find a database entry for "Behr.2021b"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Munden.2020
-You've used 79 entries,
+You've used 84 entries,
             1935 wiz_defined-function locations,
-            995 strings with 20293 characters,
-and the built_in function-call counts, 34735 in all, are:
-= -- 3314
-> -- 1798
-< -- 28
-+ -- 629
-- -- 628
-* -- 3228
-:= -- 6135
-add.period$ -- 239
-call.type$ -- 79
-change.case$ -- 699
-chr.to.int$ -- 78
-cite$ -- 81
-duplicate$ -- 1125
-empty$ -- 2214
-format.name$ -- 731
-if$ -- 6596
+            1033 strings with 21666 characters,
+and the built_in function-call counts, 37200 in all, are:
+= -- 3547
+> -- 1943
+< -- 29
++ -- 681
+- -- 680
+* -- 3472
+:= -- 6569
+add.period$ -- 254
+call.type$ -- 84
+change.case$ -- 750
+chr.to.int$ -- 83
+cite$ -- 86
+duplicate$ -- 1195
+empty$ -- 2362
+format.name$ -- 790
+if$ -- 7058
 int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 82
-newline$ -- 400
-num.names$ -- 239
-pop$ -- 583
+missing$ -- 87
+newline$ -- 425
+num.names$ -- 254
+pop$ -- 623
 preamble$ -- 2
-purify$ -- 707
+purify$ -- 758
 quote$ -- 0
-skip$ -- 842
+skip$ -- 893
 stack$ -- 0
-substring$ -- 2412
-swap$ -- 109
+substring$ -- 2590
+swap$ -- 114
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 460
+type$ -- 490
 warning$ -- 2
-while$ -- 264
+while$ -- 283
 width$ -- 0
-write$ -- 1026
+write$ -- 1091
 (There was 1 error message)

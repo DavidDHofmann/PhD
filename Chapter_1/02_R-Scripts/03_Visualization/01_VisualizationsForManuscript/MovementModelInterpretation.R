@@ -1176,8 +1176,8 @@ ggsave("04_Manuscript/99_MovementModelInterpretation.png", plot = p, scale = 1.7
 # # Arrange all plots
 # p <- ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13)
 
-# Store plot
-ggsave("test2.png", plot = p, scale = 1.7)
+# # Store plot
+# ggsave("test2.png", plot = p, scale = 1.7)
 
 # ################################################################################
 # #### Turning Angle

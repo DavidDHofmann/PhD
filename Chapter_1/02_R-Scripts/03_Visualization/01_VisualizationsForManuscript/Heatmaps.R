@@ -32,8 +32,33 @@ kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
+# Subset to national parks
+prot <- subset(prot, Desig == "National Park")
+
 # Load reference raster
 r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
+
+# Prepare country labels
+labels_countries <- data.frame(
+    x = c(20.39, 23.94, 20.07, 25.69, 28.22)
+  , y = c(-15.28, -19.94, -19.39, -15.22, -18.9)
+  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
+)
+coordinates(labels_countries) <- c("x", "y")
+crs(labels_countries) <- CRS("+init=epsg:4326")
+
+# Create labels for some national parks
+labels_nationalparks <- data.frame(
+    x = c(26.56, 28.61, 21.15, 25.87, 20.38, 23.58, 23.71, 24.51, 20.78, 22.63, 27.92, 28.54)
+  , y = c(-19.08, -17.05, -17.26, -14.66, -16.08, -21.4, -19.29, -18.65, -18.81, -14.54, -17.76, -20.53)
+  , Label = paste0(c(
+      "Hwange", "Matusadona", "Luengue-Luiana", "Kafue", "Mavinga"
+    , "Central Kalahari", "Moremi", "Chobe", "Khaudum", "Liuwa Plains"
+    , "Chizarira", "Matobo"
+  ), "\nNP")
+)
+coordinates(labels_nationalparks) <- c("x", "y")
+crs(labels_nationalparks) <- CRS("+init=epsg:4326")
 
 # Put heatmaps into a stack
 heatmaps <- stack(rasterized$heatmap)
@@ -48,14 +73,17 @@ merged <- heatmaps[[6]] + heatmaps[[12]]
 kaza_ext <- as(extent(kaza), "SpatialPolygons")
 crs(kaza_ext) <- CRS("+init=epsg:4326")
 
-# Convert to sf
-kaza    <- st_as_sf(kaza)
-africa  <- st_as_sf(africa)
+# Convert to sf for plotting with ggplot
+kaza                  <- st_as_sf(kaza)
+africa                <- st_as_sf(africa)
+prot                  <- st_as_sf(prot)
+labels_countries      <- st_as_sf(labels_countries)
+labels_nationalparks  <- st_as_sf(labels_nationalparks)
 
 # Convert heatmap to dataframe
 merged <- as.data.frame(merged, xy = T)
 
-# Also conver the reference raster to a dataframe
+# Also convert the reference raster to a dataframe
 r <- as.data.frame(r, xy = T)
 
 ################################################################################
@@ -69,6 +97,30 @@ p1 <- ggplot() +
   geom_raster(
       data    = merged
     , mapping = aes(x = x, y = y, fill = layer)
+  ) +
+  geom_sf(
+      data        = prot
+    , col         = "gray25"
+    , fill        = NA
+    , lty         = 1
+    , lwd         = 0.1
+    , show.legend = F
+    , alpha       = 0.6
+  ) +
+  geom_sf_text(
+      data     = labels_countries
+    , mapping  = aes(label = Label)
+    , col      = "black"
+    , fontface = 2
+    , size     = 5
+  ) +
+  geom_sf_text(
+      data     = labels_nationalparks
+    , mapping  = aes(label = Label)
+    , col      = "gray25"
+    , fontface = 3
+    , size     = 2.5
+    , alpha    = 0.8
   ) +
   scale_fill_gradientn(
       colours = myPalette(100)
@@ -87,7 +139,7 @@ p1 <- ggplot() +
     , col         = "black"
     , fill        = NA
     , lty         = 1
-    , lwd         = 0.5
+    , lwd         = 1
     , show.legend = F
   ) +
   geom_sf(
@@ -95,7 +147,7 @@ p1 <- ggplot() +
     , col         = "black"
     , fill        = NA
     , lty         = 2
-    , lwd         = 0.2
+    , lwd         = 0.5
     , show.legend = F
   ) +
   coord_sf(
@@ -108,7 +160,7 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Dispersal Heatmap"
+    , title    = "Heatmap"
     , subtitle = "After 2000 Steps"
   ) +
   theme(
@@ -159,7 +211,7 @@ p2 <- ggplot() +
     , mapping     = aes(color = "KAZA-TFCA Borders")
     , fill        = NA
     , lty         = 1
-    , lwd         = 0.5
+    , lwd         = 1
     , show.legend = "line"
   ) +
   geom_sf(
@@ -167,23 +219,24 @@ p2 <- ggplot() +
     , mapping     = aes(color = "Country Borders")
     , fill        = NA
     , lty         = 2
-    , lwd         = 0.2
+    , lwd         = 0.5
     , show.legend = "line"
   ) +
   labs(
       x        = NULL
     , y        = NULL
     , col      = NULL
-    , title    = "Dispersal Heatmap"
+    , title    = "Heatmap"
     , subtitle = "After 2000 Steps"
   ) +
   scale_color_manual(
-      values = c("Country Borders" = "black", "KAZA-TFCA Borders" = "black")
+    , breaks = c("Country Borders", "KAZA-TFCA Borders")
+    , values = c("black", "black")
     , guide  = guide_legend(
         override.aes = list(
           linetype = c(2, 1)
         , shape    = c(NA, NA)
-        , lwd      = c(0.2, 0.5)
+        , lwd      = c(0.5, 1)
       )
     )
   ) +
@@ -212,9 +265,9 @@ legend <- get_legend(p2)
 # Put into main plot
 p3 <- p1 + annotation_custom(
       grob = legend
-    , xmin = 18.75
+    , xmin = 18.35
     , xmax = 21
-    , ymin = -13
+    , ymin = -12.7
     , ymax = -13.5
   )
 
@@ -240,6 +293,30 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         data    = x
       , mapping = aes(x = x, y = y, fill = layer)
     ) +
+    geom_sf(
+        data        = prot
+      , col         = "gray25"
+      , fill        = NA
+      , lty         = 1
+      , lwd         = 0.1
+      , show.legend = F
+      , alpha       = 0.6
+    ) +
+    geom_sf_text(
+        data     = labels_countries
+      , mapping  = aes(label = Label)
+      , col      = "black"
+      , fontface = 2
+      , size     = 5
+    ) +
+    geom_sf_text(
+        data     = labels_nationalparks
+      , mapping  = aes(label = Label)
+      , col      = "gray25"
+      , fontface = 3
+      , size     = 2.5
+      , alpha    = 0.8
+    ) +
     scale_fill_gradientn(
         colours = myPalette(100)
       , guide   = guide_colorbar(
@@ -257,7 +334,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
       , mapping     = aes(color = "KAZA-TFCA Borders")
       , fill        = NA
       , lty         = 1
-      , lwd         = 0.5
+      , lwd         = 1
       , show.legend = F
     ) +
     geom_sf(
@@ -265,16 +342,17 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
       , mapping     = aes(color = "Country Borders")
       , fill        = NA
       , lty         = 2
-      , lwd         = 0.2
+      , lwd         = 0.5
       , show.legend = F
     ) +
     scale_color_manual(
-        values = c("KAZA-TFCA Borders" = "black", "Country Borders" = "black")
+      , breaks = c("National Parks", "Country Borders", "KAZA-TFCA Borders")
+      , values = c("gray25", "black", "black")
       , guide  = guide_legend(
           override.aes = list(
-            linetype = c(1, 2)
-          , shape    = c(NA, NA)
-          , lwd     = c(0.5, 0.2)
+            linetype = c(1, 1, 1)
+          , shape    = c(NA, NA, NA)
+          , lwd      = c(0.2, 0.5, 1)
         )
       )
     ) +
@@ -288,7 +366,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         x        = NULL
       , y        = NULL
       , fill     = NULL
-      , title    = "Dispersal Heatmap"
+      , title    = "Heatmap"
       , subtitle = subtitle
     ) +
     theme(
@@ -327,6 +405,18 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , mapping     = aes(x = x, y = y, fill = layer)
         , show.legend = F
       ) +
+      scale_fill_gradientn(
+          colours = myPalette(100)
+        , guide   = guide_colorbar(
+            title          = "Number of Traversing Trajectories"
+          , show.limits    = T
+          , title.position = "top"
+          , title.hjust    = 0.5
+          , ticks          = T
+          , barheight      = unit(0.6, "cm")
+          , barwidth       = unit(10.0, "cm")
+        )
+      ) +
       geom_sf(
           data        = kaza
         , mapping     = aes(color = "KAZA-TFCA Borders")
@@ -343,13 +433,29 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , lwd         = 0.2
         , show.legend = "line"
       ) +
+      geom_sf(
+          data        = prot
+        , mapping     = aes(color = "National Parks")
+        , fill        = NA
+        , lty         = 1
+        , lwd         = 0.5
+        , show.legend = "line"
+      ) +
+      labs(
+          x        = NULL
+        , y        = NULL
+        , col      = NULL
+        , title    = "Heatmap"
+        , subtitle = "After 2000 Steps"
+      ) +
       scale_color_manual(
-          values = c("black", "black")
+        , breaks = c("National Parks", "Country Borders", "KAZA-TFCA Borders")
+        , values = c("gray30", "black", "black")
         , guide  = guide_legend(
             override.aes = list(
-              linetype = c(2, 1)
-            , shape    = c(NA, NA)
-            , lwd      = c(0.2, 0.5)
+              linetype = c(1, 2, 1)
+            , shape    = c(NA, NA, NA)
+            , lwd      = c(0.2, 0.2, 0.5)
           )
         )
       ) +
@@ -378,7 +484,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     # Put into main plot
     p3 <- p1 + annotation_custom(
           grob = legend
-        , xmin = 18.75
+        , xmin = 18.35
         , xmax = 21
         , ymin = -13
         , ymax = -13.5

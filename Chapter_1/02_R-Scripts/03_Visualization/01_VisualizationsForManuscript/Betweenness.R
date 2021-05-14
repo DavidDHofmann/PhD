@@ -36,12 +36,40 @@ kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
 
+# Subset to national parks
+prot <- subset(prot, Desig == "National Park")
+
 # Load reference raster
 r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
+# Prepare country labels
+labels_countries <- data.frame(
+    x = c(20.39, 23.94, 20.07, 25.69, 28.22)
+  , y = c(-15.28, -19.94, -19.39, -15.22, -18.9)
+  , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
+)
+coordinates(labels_countries) <- c("x", "y")
+crs(labels_countries) <- CRS("+init=epsg:4326")
+
+# Create labels for some national parks
+labels_nationalparks <- data.frame(
+    x = c(26.56, 28.61, 21.15, 25.87, 20.38, 23.58, 23.71, 24.51, 20.78, 22.63, 27.92, 28.54)
+  , y = c(-19.08, -17.05, -17.26, -14.66, -16.08, -21.4, -19.29, -18.65, -18.81, -14.54, -17.76, -20.53)
+  , Label = paste0(c(
+      "Hwange", "Matusadona", "Luengue-Luiana", "Kafue", "Mavinga"
+    , "Central Kalahari", "Moremi", "Chobe", "Khaudum", "Liuwa Plains"
+    , "Chizarira", "Matobo"
+  ), "\nNP")
+)
+coordinates(labels_nationalparks) <- c("x", "y")
+crs(labels_nationalparks) <- CRS("+init=epsg:4326")
+
 # Convert to sf for plotting with ggplot
-kaza    <- st_as_sf(kaza)
-africa  <- st_as_sf(africa)
+kaza                  <- st_as_sf(kaza)
+africa                <- st_as_sf(africa)
+prot                  <- st_as_sf(prot)
+labels_countries      <- st_as_sf(labels_countries)
+labels_nationalparks  <- st_as_sf(labels_nationalparks)
 
 # Convert maps to dataframes
 betweenness <- lapply(1:nlayers(betweenness), function(x){
@@ -68,6 +96,30 @@ p1 <- ggplot() +
       data    = betweenness[[3]]
     , mapping = aes(x = x, y = y, fill = sqrt(layer))
   ) +
+  geom_sf(
+      data        = prot
+    , col         = "gray50"
+    , fill        = "gray50"
+    , lty         = 1
+    , lwd         = 0.1
+    , show.legend = F
+    , alpha       = 0.2
+  ) +
+  geom_sf_text(
+      data     = labels_countries
+    , mapping  = aes(label = Label)
+    , col      = "white"
+    , fontface = 2
+    , size     = 5
+  ) +
+  geom_sf_text(
+      data     = labels_nationalparks
+    , mapping  = aes(label = Label)
+    , col      = "white"
+    , fontface = 3
+    , size     = 2.5
+    , alpha    = 0.5
+  ) +
   scale_fill_gradientn(
       colours = magma(100)
     , guide   = guide_colorbar(
@@ -85,7 +137,7 @@ p1 <- ggplot() +
     , col         = "white"
     , fill        = NA
     , lty         = 1
-    , lwd         = 0.5
+    , lwd         = 1
     , show.legend = F
   ) +
   geom_sf(
@@ -93,7 +145,7 @@ p1 <- ggplot() +
     , col         = "white"
     , fill        = NA
     , lty         = 2
-    , lwd         = 0.2
+    , lwd         = 0.5
     , show.legend = F
   ) +
   coord_sf(
@@ -147,7 +199,7 @@ p2 <- ggplot() +
     , mapping     = aes(color = "KAZA-TFCA Borders")
     , fill        = NA
     , lty         = 1
-    , lwd         = 0.5
+    , lwd         = 1
     , show.legend = "line"
   ) +
   geom_sf(
@@ -155,16 +207,17 @@ p2 <- ggplot() +
     , mapping     = aes(color = "Country Borders")
     , fill        = NA
     , lty         = 2
-    , lwd         = 0.2
+    , lwd         = 0.5
     , show.legend = "line"
   ) +
   scale_color_manual(
-      values = c("Country Borders" = "white", "KAZA-TFCA Borders" = "white")
+      breaks = c("Country Borders", "KAZA-TFCA Borders")
+    , values = c("white", "white")
     , guide  = guide_legend(
         override.aes = list(
           linetype = c(2, 1)
         , shape    = c(NA, NA)
-        , lwd      = c(0.2, 0.5)
+        , lwd      = c(0.5, 1)
       )
     )
   ) +
@@ -194,9 +247,9 @@ legend <- get_legend(p2)
 # Put into main plot
 p3 <- p1 + annotation_custom(
       grob = legend
-    , xmin = 18.75
+    , xmin = 18.35
     , xmax = 21
-    , ymin = -13
+    , ymin = -12.7
     , ymax = -13.5
   )
 
@@ -222,75 +275,99 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         data        = x
       , mapping     = aes(x = x, y = y, fill = sqrt(layer))
     ) +
-    scale_fill_gradientn(
-        colours = magma(100)
-      , guide   = guide_colorbar(
-        , title          = expression("Betweenness Score" ^ "0.5")
-        , show.limits    = T
-        , title.position = "top"
-        , title.hjust    = 0.5
-        , ticks          = T
-        , barheight      = unit(0.6, "cm")
-        , barwidth       = unit(10.0, "cm")
-      )
-    ) +
     geom_sf(
-        data        = kaza
-      , col         = "white"
-      , fill        = NA
+        data        = prot
+      , col         = "gray25"
+      , fill        = "gray25"
       , lty         = 1
-      , lwd         = 0.5
+      , lwd         = 0.1
       , show.legend = F
+      , alpha       = 0.2
     ) +
-    geom_sf(
-        data        = africa
-      , col         = "white"
-      , fill        = NA
-      , lty         = 2
-      , lwd         = 0.2
-      , show.legend = F
+    geom_sf_text(
+        data     = labels_countries
+      , mapping  = aes(label = Label)
+      , col      = "white"
+      , fontface = 2
+      , size     = 5
     ) +
-    coord_sf(
-        crs    = 4326
-      , xlim   = c(min(r$x), max(r$x))
-      , ylim   = c(min(r$y), max(r$y))
-      , expand = F
+    geom_sf_text(
+        data     = labels_nationalparks
+      , mapping  = aes(label = Label)
+      , col      = "white"
+      , fontface = 3
+      , size     = 2.5
+      , alpha    = 0.5
     ) +
-    labs(
-        x        = NULL
-      , y        = NULL
-      , fill     = NULL
-      , title    = "Betweenness"
-      , subtitle = subtitle
-    ) +
-    theme(
-        legend.position      = "top"
-      , legend.justification = "right"
-      , legend.box           = "vertical"
-      , legend.box.margin    = margin(-10, 0, -10, 0)
-      , panel.background     = element_blank()
-      , panel.border         = element_rect(colour = "black", fill = NA, size = 1)
-      , plot.subtitle        = element_text(margin = margin(t = 0, b = -30))
-    ) +
-    annotation_scale(
-        location   = "bl"
-      , width_hint = 0.2
-      , line_width = 1
-      , height     = unit(0.15, "cm")
-      , bar_cols   = c("white", "white")
-      , text_col   = "white"
-    ) +
-    annotation_north_arrow(
-        location = "br"
-      , height   = unit(1.5, "cm"),
-      , width    = unit(1.2, "cm"),
-      , style    = north_arrow_fancy_orienteering(
-            fill      = c("white", "white")
-          , line_col  = NA
-          , text_col  = "white"
-          , text_size = 12
+      scale_fill_gradientn(
+          colours = magma(100)
+        , guide   = guide_colorbar(
+          , title          = expression("Betweenness Score" ^ "0.5")
+          , show.limits    = T
+          , title.position = "top"
+          , title.hjust    = 0.5
+          , ticks          = T
+          , barheight      = unit(0.6, "cm")
+          , barwidth       = unit(10.0, "cm")
         )
-    )
+      ) +
+      geom_sf(
+          data        = kaza
+        , col         = "white"
+        , fill        = NA
+        , lty         = 1
+        , lwd         = 1
+        , show.legend = F
+      ) +
+      geom_sf(
+          data        = africa
+        , col         = "white"
+        , fill        = NA
+        , lty         = 2
+        , lwd         = 0.5
+        , show.legend = F
+      ) +
+      coord_sf(
+          crs    = 4326
+        , xlim   = c(min(r$x), max(r$x))
+        , ylim   = c(min(r$y), max(r$y))
+        , expand = F
+      ) +
+      labs(
+          x        = NULL
+        , y        = NULL
+        , fill     = NULL
+        , title    = "Betweenness"
+        , subtitle = subtitle
+      ) +
+      theme(
+          legend.position      = "top"
+        , legend.justification = "right"
+        , legend.box           = "vertical"
+        , legend.box.margin    = margin(-10, 0, -10, 0)
+        , panel.background     = element_blank()
+        , panel.border         = element_rect(colour = "black", fill = NA, size = 1)
+        , plot.subtitle        = element_text(margin = margin(t = 0, b = -30))
+      ) +
+      annotation_scale(
+          location   = "bl"
+        , width_hint = 0.2
+        , line_width = 1
+        , height     = unit(0.15, "cm")
+        , bar_cols   = c("white", "white")
+        , text_col   = "white"
+      ) +
+      annotation_north_arrow(
+          location = "br"
+        , height   = unit(1.5, "cm"),
+        , width    = unit(1.2, "cm"),
+        , style    = north_arrow_fancy_orienteering(
+              fill      = c("white", "white")
+            , line_col  = NA
+            , text_col  = "white"
+            , text_size = 12
+          )
+      )
 
   if (legend){
 
@@ -306,7 +383,7 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , mapping     = aes(color = "KAZA-TFCA Borders")
         , fill        = NA
         , lty         = 1
-        , lwd         = 0.5
+        , lwd         = 1
         , show.legend = "line"
       ) +
       geom_sf(
@@ -314,7 +391,7 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , mapping     = aes(color = "Country Borders")
         , fill        = NA
         , lty         = 2
-        , lwd         = 0.2
+        , lwd         = 0.5
         , show.legend = "line"
       ) +
       scale_color_manual(
@@ -323,7 +400,7 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
             override.aes = list(
               linetype = c(2, 1)
             , shape    = c(NA, NA)
-            , lwd      = c(0.2, 0.5)
+            , lwd      = c(0.5, 1)
           )
         )
       ) +
@@ -355,9 +432,9 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     # Put into main plot
     p3 <- p1 + annotation_custom(
           grob = legend
-        , xmin = 18.75
+        , xmin = 18.35
         , xmax = 21
-        , ymin = -13
+        , ymin = -12.7
         , ymax = -13.5
       )
   } else {
@@ -396,13 +473,6 @@ p <- ggarrange(maps[[1]], maps[[2]], maps[[3]]
 )
 
 # Store the arranged plot
-ggsave("04_Manuscript/99_BetweennessIndividual.png"
-  , plot   = p
-  , scale  = 2
-  , height = 3
-  , width  = 9
-)
-
 ggsave("04_Manuscript/99_BetweennessIndividual.png"
   , plot   = p
   , scale  = 2

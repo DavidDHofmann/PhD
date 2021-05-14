@@ -59,6 +59,12 @@ Behr, D.~M., Ozgul, A., and Cozzi, G. (2017).
   Socio-Ecological Suitability Model: A Case Study of the Wolf in Switzerland}.
 \newblock {\em {Journal of Applied Ecology}}, 54(6):1919--1929.
 
+\bibitem[Benz et~al., 2016]{Benz.2016}
+Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
+  C.~F., and Ciuti, S. (2016).
+\newblock {Dispersal Ecology Informs Design of Large-Scale Wildlife Corridors}.
+\newblock {\em {PLOS ONE}}, 11(9):e0162989.
+
 \bibitem[Boyce et~al., 2002]{Boyce.2002}
 Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F. K.~A. (2002).
 \newblock {Evaluating Resource Selection Functions}.
@@ -332,6 +338,14 @@ Munden, R., Börger, L., Wilson, R.~P., Redcliffe, J., Brown, R., Garel, M.,
 \newblock {Why Did the Animal Turn? Time-Varying Step Selection Analysis for
   Inference Between Observed Turning Points in High Frequency Data}.
 
+\bibitem[Osipova et~al., 2019]{Osipova.2019}
+Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
+  M.~W., and Balkenhol, N. (2019).
+\newblock {Using Step‐Selection Functions to Model landscape Connectivity for
+  African Elephants: Accounting for Variability across Individuals and
+  Seasons}.
+\newblock {\em {Animal Conservation}}, 22(1):35--48.
+
 \bibitem[Osofsky et~al., 1996]{Osofsky.1996}
 Osofsky, S.~A., McNutt, J.~W., and Hirsch, K.~J. (1996).
 \newblock {Immobilization of Free-Ranging African Wild Dogs (Lycaon pictus)
@@ -400,6 +414,13 @@ Spear, S.~F., Balkenhol, N., Fortin, M.-J., Mcrae, B.~H., and Scribner, K.
   Considerations for Parameterization and Analysis}.
 \newblock {\em {Molecular Ecology}}, 19(17):3576--3591.
 
+\bibitem[Squires et~al., 2013]{Squires.2013}
+Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
+  and Parks, S.~A. (2013).
+\newblock {Combining Resource Selection and Movement Behavior to Predict
+  Corridors for Canada Lynx at their Southern Range Periphery}.
+\newblock {\em {Biological Conservation}}, 157:187--195.
+
 \bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
 Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
 \newblock {Applications of Step-Selection Functions in Ecology and
@@ -416,6 +437,12 @@ Turchin, P. (1998).
 \newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
   Population Redistribution in Plants and Animals}}.
 \newblock Sinauer Associates, Sunderland, MA, USA.
+
+\bibitem[Van~der Meer et~al., 2014]{VanDerMeer.2014}
+Van~der Meer, E., Fritz, H., Blinston, P., and Rasmussen, G.~S. (2014).
+\newblock {Ecological Trap in the Buffer Zone of a Protected Area: Effects of
+  Indirect Anthropogenic Mortality on the African Wild Dog (Lycaon pictus)}.
+\newblock {\em {Oryx}}, 48(2):285--293.
 
 \bibitem[Van~Moorter et~al., 2021]{VanMoorter.2021}
 Van~Moorter, B., Kivimäki, I., Panzacchi, M., and Saerens, M. (2021).
@@ -455,6 +482,12 @@ Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
   Wetlands Wsing MODIS SWIR Data}.
 \newblock {\em {International Journal of Applied Earth Observation and
   Geoinformation}}, 57:224--234.
+
+\bibitem[Woodroffe and Ginsberg, 1999]{Woodroffe.1999}
+Woodroffe, R. and Ginsberg, J.~R. (1999).
+\newblock {Conserving the African Wild Dog Lycaon pictus. Diagnosing and
+  Treating Causes of Decline}.
+\newblock {\em {Oryx}}, 33(2):132--142.
 
 \bibitem[Woodroffe et~al., 2019]{Woodroffe.2019}
 Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,

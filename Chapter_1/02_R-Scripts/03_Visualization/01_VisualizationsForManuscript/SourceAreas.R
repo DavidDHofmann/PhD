@@ -46,6 +46,10 @@ first <- sims %>%
     , proj4string = CRS("+init=epsg:4326")
   )
 
+# Remove the rest of the simulations
+rm(sims)
+gc()
+
 # Prepare country labels
 labels_countries <- data.frame(
     x = c(20.39, 23.94, 20.07, 25.69, 28.22)
@@ -246,6 +250,9 @@ p2 <- tm_shape(r) +
 
 # Put plots together
 p <- tmap_arrange(p1, p2, nrow = 1)
+
+# Show it
+p
 
 # Store plot
 tmap_save(p

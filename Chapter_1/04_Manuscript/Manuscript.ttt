@@ -1,11 +1,13 @@
 \begin{table}
   \begin{center}
   \caption{Most parsimonious movement model for dispersing wild dogs. The model
-  comprises of a movement and habitat kernel, where the movement kernels
-  describes preferences with regards to movement behavior, whereas the habitat
-  kernel describes preferences with respect to the habitat. Finally, the two
-  kernels can interact, such that movement preferences are contingent on habitat
-  conditions.}
+  consists of a movement kernel, a habitat kernel, and their interactions. The
+  movement kernel describes preferences with regards to movement behavior,
+  whereas the habitat kernel describes preferences with respect to habitat
+  conditions. Interactions between the two kernels indicate that movement
+  preferences are contingent on habitat conditions. Note that all covariates
+  were standardized to a mean of zero and standard deviation of 1. Plots to aid
+  with the interpretation of this model are given in Appendix S2.}
   \label{MovementModelNumbers}
   \resizebox{\textwidth}{!} {
     \begin{threeparttable}
@@ -45,5 +47,3 @@
     }
   \end{center}
 \end{table}
-\efloatseparator
- 

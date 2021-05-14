@@ -1,14 +1,35 @@
 \begin{figure}[htbp]
   \begin{center}
+    \includegraphics[width = \textwidth]{99_GraphicalAbstract.pdf}
+    \caption{Flowchart of the simulation-based connectivity analysis. First, GPS
+    data and habitat covariates have to be collected. The combined data is then
+    analyzed in an integrated step selection model, which enables the
+    parametrization of the focal species' habitat and movement kernels. The
+    parametrized model is then treated as an individual-based movement model and
+    used to simulate dispersal trajectories. Ultimately, simulated trajectories
+    serve to produce a set of maps that are pertinent to landscape connectivity.
+    This includes a heatmap, indicating the relative traversal frequency across
+    the study area, a betweenness map, highlighting movement corridors and
+    bottlenecks, and, finally, an inter-patch connectivity map, where the
+    frequency of connections and their average duration can be depicted. Photos:
+    Whom to cite? Vectronics or Photographers?}
+    \label{GraphicalAbstract}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
     \includegraphics[width = \textwidth]{99_StudyArea.png}
-    \caption{(a) The study area was confined by a bounding box encompassing the
-    entire KAZA-TFCA and spanned parts of Angola, Namibia, Botswana, Zimbabwe,
-    and Zambia. (b) The KAZA-TFCA represents the world's largest terrestrial
-    conservation area and covers a total of 520'000 km\textsuperscript{2}. Its
-    purpose is to re-establish connectivity between already-existing national
-    parks (dark green) and other protected areas (light green). The dispersal
-    data used in this study was collected on a free-ranging African wild dog
-    population inhabiting the Moremi National Park in northern Botswana.}
+    \caption{Illustration of the study area located in southern Africa. (a) The
+    study area was confined by a bounding box spanning the entire KAZA-TFCA and
+    encompassing parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia. (b)
+    The KAZA-TFCA represents the world's largest terrestrial conservation area
+    and covers a total of 520'000 km\textsuperscript{2}. Its purpose is to
+    re-establish connectivity between already-existing national parks (dark
+    green) and other protected areas (light green). The dispersal data used in
+    this study was collected on a free-ranging African wild dog population
+    inhabiting the Moremi National Park in northern Botswana.}
     \label{StudyArea}
   \end{center}
 \end{figure}
@@ -53,12 +74,14 @@
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_Heatmap.png}
-  \caption{Heatmap of all 80'000 simulated trajectories after 2'000 steps.
-  Simulations were based on an integrated step selection model, fit to the
-  movement data of dispersing African wild dogs. To generate the heatmap, we
-  rasterized and summed all simulated trajectories. Additional heatmaps
-  showcasing the traversal frequency after different numbers of steps are
-  provided in xx in Appendix S3.}
+  \caption{Heatmap showing traversal frequencies of 80'000 simulated dispersers
+  moving 2'000 steps across the KAZA-TFCA. Simulations were based on an
+  integrated step selection model that we fit to the movement data of dispersing
+  African wild dogs. To generate the heatmap, we rasterized and tallied all
+  simulated trajectories. Consequently, the map highlights areas that are
+  frequently traversed by virtual dispersers. Further heatmaps showing the
+  traversal frequency after different numbers of steps are provided in Appendix
+  S3.}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
@@ -79,16 +102,18 @@
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_AreasReached.png}
-  \caption{Network on simulated dispersal trajectories highlighting the
-  connections between national parks (dark green). Yellow bubbles represent the
-  center of the different national parks and are sized in relation to the number
-  of simulated dispersers originating from each park. Colored arrows between
-  national parks illustrate between which national parks the simulated
-  dispersers successfully moved and the color of each arrow shows the average
-  number of steps that were necessary to realize those connections.
-  Additionally, the line thickness indicates the relative number of dispersers
-  originating from a national park that realized those connections.}
+  \caption{Network on simulated dispersal trajectories highlighting connections
+  between national parks (dark green). Yellow bubbles represent the center of
+  the different national parks and are sized in relation to the number of
+  simulated dispersers originating from each park. Black dots represent national
+  parks that were smaller than 700 km\textsuperscript{2} and therefore did not
+  serve as source areas. Arrows between national parks illustrate between which
+  national parks the simulated dispersers successfully moved and the color of
+  each arrow shows the average number of steps (4-hourly movements) that were
+  necessary to realize those connections. Additionally, the line thickness
+  indicates the relative number of dispersers originating from a national park
+  that realized those connections. Note that a similar network view could be
+  adopted to investigate connectivity between other protected areas need not to
+  be restricted to national parks.}
   \label{AreasReached}
 \end{figure}
-\efloatseparator
- 

@@ -156,8 +156,8 @@ p1 <- tm_shape(hill_africa) +
   ) +
     tm_shape(dogs) +
   tm_polygons(
-      col        = "cornflowerblue"
-    , border.col = "cornflowerblue"
+      col        = "purple"
+    , border.col = "purple"
   ) +
   tm_shape(africa, is.master = T) +
     tm_borders(
@@ -291,7 +291,7 @@ p2 <- tm_shape(hill_kaza) +
 ################################################################################
 # We now prepare a legend that the two plots share. However, we have to assign
 # to one of the two plots. Let's use p2 for this
-p2 <- p2 + tm_add_legend(
+p3 <- p2 + tm_add_legend(
     type    = "fill"
   , labels  = c(
       "Wild Dog Populations"
@@ -300,7 +300,7 @@ p2 <- p2 + tm_add_legend(
     , "National Parks (NP)"
   )
   , col = c(
-      "cornflowerblue"
+      "purple"
     , "#96d0ff"
     , "#d9f0d3"
     , "#70ab70"
@@ -312,9 +312,12 @@ p2 <- p2 + tm_add_legend(
   , lwd     = c(2, 1)
 ) + tm_layout(legend.frame.lwd = 2, legend.text.size = 1.05)
 
+# Show it
+p3
+
 # Store the plot
 tmap_save(
-    tm        = p2
+    tm        = p3
   , filename  = "04_Manuscript/99_StudyArea.png"
   , insets_tm = p1
   , insets_vp = viewport(0.164, 0.32, width = 0.66, height = 0.66)
