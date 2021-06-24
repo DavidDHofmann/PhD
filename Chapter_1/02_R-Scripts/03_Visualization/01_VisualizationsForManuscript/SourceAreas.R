@@ -60,8 +60,8 @@ gc()
 
 # Prepare country labels
 labels_countries <- data.frame(
-    x = c(20.39, 23.94, 20.07, 25.69, 28.22)
-  , y = c(-15.28, -19.94, -19.39, -15.22, -18.9)
+    x     = c(20.39, 23.94, 20.07, 25.69, 28.22)
+  , y     = c(-15.28, -19.94, -19.39, -15.22, -18.9)
   , Label = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
 )
 coordinates(labels_countries) <- c("x", "y")
@@ -108,11 +108,10 @@ p1 <- tm_shape(r) +
     tm_polygons(
         col         = "Area"
       , title       = ""
-      , palette     = c("#70ab70", "cornflowerblue")
+      , palette     = c("orange", "cornflowerblue")
       , lwd         = 0
-      , border.col  = "#6ba36b"
       , legend.show = T
-      , alpha       = 0.6
+      , alpha       = 0.5
     ) +
   tm_shape(kaza) +
     tm_borders(
@@ -131,15 +130,6 @@ p1 <- tm_shape(r) +
       , fontface  = 2
       , size      = 0.6
     ) +
-  # tm_shape(labels_areas) +
-  #   tm_text("Label"
-  #     , col             = "Label"
-  #     , palette         = c("cornflowerblue", "black")
-  #     , fontface        = 3
-  #     , size            = 0.7
-  #     , just            = "left"
-  #     , legend.col.show = F
-  #   ) +
   tm_graticules(
       n.y                 = 5
     , n.x                 = 5
@@ -184,9 +174,9 @@ p2 <- tm_shape(r) +
     tm_dots(
         col         = "Area"
       , title       = ""
-      , palette     = c("#70ab70", "cornflowerblue")
+      , palette     = c("orange", "cornflowerblue")
       , legend.show = F
-      , alpha       = 0.6
+      , alpha       = 0.5
       , size        = 0.0001
     ) +
   tm_shape(kaza) +
@@ -206,15 +196,6 @@ p2 <- tm_shape(r) +
       , fontface  = 2
       , size      = 0.6
     ) +
-  # tm_shape(labels_areas) +
-  #   tm_text("Label"
-  #     , col             = "Label"
-  #     , palette         = c("cornflowerblue", "black")
-  #     , fontface        = 3
-  #     , size            = 0.7
-  #     , just            = "left"
-  #     , legend.col.show = F
-  #   ) +
   tm_graticules(
       n.y                 = 5
     , n.x                 = 5
@@ -225,7 +206,7 @@ p2 <- tm_shape(r) +
   tm_add_legend(
       type   = "symbol"
     , shape  = 16
-    , col    = c("#70ab70", "cornflowerblue")
+    , col    = c("orange", "cornflowerblue")
     , labels = c("Main Source Points", "Buffer Source Points")
     , title  = ""
   ) +

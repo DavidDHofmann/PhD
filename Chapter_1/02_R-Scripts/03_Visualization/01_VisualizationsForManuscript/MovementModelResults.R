@@ -185,7 +185,7 @@ p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Pre
       , xmax = UCI
       , size = factor(Level)
     )
-    , data = data2
+    , data = coeffs2
     , height = 0
     , alpha  = 0.5
   ) +
@@ -222,6 +222,8 @@ p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Pre
     , legend.position   = "bottom"
     , legend.margin     = margin(0, 50, 0, -20)
     , legend.box.margin = margin(-5, -10, -5, -10)
+    , legend.text       = element_text(face = 3)
+    , legend.title      = element_text(face = 3)
   ) +
   guides(
       colour = guide_legend(title.position = "top", title.hjust = 0.5)

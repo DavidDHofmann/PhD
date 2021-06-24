@@ -78,7 +78,14 @@
 \begin{figure}
   \begin{center}
     \includegraphics[width=\textwidth]{99_Convergence}
-    \caption{Convergence}
+    \caption{Relative traversal frequency across 1'000 checkpoints (5 km x 5)
+    distributed in the study area. The relative traversal frequency is plotted
+    against the number of simulated individuals to visualize how quickly the
+    metric converges to a steady state. (a) Replicated (100 times) relative
+    traversal frequencies across three randomly chosen checkpoints as well as
+    the corresponding 95\% prediction interval (PI). (b) Averaged relative
+    traversal frequency across all checkpoints and replicates including a 95\%
+    PI. (c) Width of the PI in relation to the number of simulated dispersers.}
     \label{Convergence}
   \end{center}
 \end{figure}
@@ -131,3 +138,5 @@
   be restricted to national parks.}
   \label{AreasReached}
 \end{figure}
+\efloatseparator
+ 

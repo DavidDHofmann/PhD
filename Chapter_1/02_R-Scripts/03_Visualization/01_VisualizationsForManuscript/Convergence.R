@@ -16,9 +16,24 @@ library(ggpubr)         # To arrange multiple plots
 # Load data
 convergence <- read_rds("03_Data/03_Results/99_Convergence.rds")
 
+# Give the checkpoint ID a nicer name
+convergence$CheckID <- paste0("Checkpoint ", convergence$CheckID)
+
+# Summarize
+summarized <- convergence %>%
+  group_by(NTracks, Replicate) %>%
+  summarize(
+      RelativeTraversals = mean(RelativeTraversals)
+    , .groups            = "drop"
+  ) %>%
+  subset(NTracks > 0)
+
+# Set seed
+set.seed(1234)
+
 # Look for local convergence
 p1 <- convergence %>%
-  subset(CheckID %in% sample(unique(convergence$CheckID), 8)) %>%
+  subset(CheckID %in% sample(unique(convergence$CheckID), 3)) %>%
   group_by(NTracks, CheckID) %>%
   summarize(
       MeanRelativeTraversals = mean(RelativeTraversals)
@@ -33,18 +48,19 @@ p1 <- convergence %>%
     , ymax = Upper
   ), alpha = 0.5, fill = "orange", color = "orange") +
   geom_line() +
-  # geom_point(size = 0.2) +
-  facet_wrap("CheckID", scales = "free", nrow = 4) +
+  facet_wrap("CheckID", scales = "free", nrow = 3) +
   theme_classic() +
   coord_capped_cart(
       left   = "both"
     , bottom = "both"
   ) +
   scale_x_continuous(
-    labels = function(x){format(x, big.mark = "'")}
+      labels = function(x){format(x, big.mark = "'")}
+    , breaks = c(0, 25000, 50000)
   ) +
   xlab("# Simulated Trajectories") +
-  ylab("Relative Traversal Frequency")
+  ylab("Relative Traversal Frequency") +
+  theme(plot.margin = margin(0, 10, 0, 5))
 
 # Look for global convergence
 p2 <- convergence %>%
@@ -60,14 +76,14 @@ p2 <- convergence %>%
     , Lower                  = quantile(RelativeTraversals, 0.025)
     , .groups                = "drop"
   ) %>%
-  subset(MeanRelativeTraversals > 0) %>%
+  subset(NTracks > 0) %>%
   ggplot(aes(x = NTracks, y = MeanRelativeTraversals)) +
+  # geom_point(data = summarized, aes(x = NTracks, y = RelativeTraversals), col = "orange", alpha = 0.2, size = 0.5, pch = 19) +
   geom_ribbon(aes(
       ymin = Lower
     , ymax = Upper
   ), alpha = 0.5, fill = "orange", color = "orange") +
   geom_line() +
-  # geom_point() +
   theme_classic() +
   coord_capped_cart(
       left   = "both"
@@ -90,11 +106,10 @@ p3 <- convergence %>%
     , Width                  = Upper - Lower
     , .groups                = "drop"
   ) %>%
-  # subset(MeanRelativeTraversals > 0) %>%
+  subset(NTracks > 0) %>%
   ggplot(aes(x = NTracks, y = Width)) +
   geom_hline(yintercept = 0.01, lty = 2, col = "gray40") +
   geom_line() +
-  # geom_point(col = "orange", size = 0.2) +
   facet_wrap("CheckID", nrow = 4) +
   theme_classic() +
   coord_capped_cart(
@@ -106,7 +121,7 @@ p3 <- convergence %>%
   ) +
   ylim(c(0, 0.03)) +
   xlab("# Simulated Trajectories") +
-  ylab("Width of 95% CI")
+  ylab("Width of 95%-PI")
 
 # Check global confidence interval over time
 p4 <- convergence %>%
@@ -126,7 +141,6 @@ p4 <- convergence %>%
   subset(MeanRelativeTraversals > 0) %>%
   ggplot(aes(x = NTracks, y = Width)) +
   geom_line() +
-  # geom_point() +
   theme_classic() +
   coord_capped_cart(
       left   = "both"
@@ -136,10 +150,14 @@ p4 <- convergence %>%
     labels = function(x){format(x, big.mark = "'")}
   ) +
   xlab("# Simulated Trajectories") +
-  ylab("Mean Width of 95% CI")
+  ylab("Width of 95%-PI")
 
 # Arrange plots
-p5 <- ggarrange(p2, p4, ncol = 1, labels = c("auto"))
+p5 <- ggarrange(p2, p4, ncol = 1, labels = c("b", "c"), heights = c(1, 0.4), label.x = 0.05)
+p6 <- ggarrange(p1, p5, ncol = 2, labels = c("a"), widths = c(0.5, 1))
+
+# Show the final plot
+p6
 
 # Store plot
-ggsave("04_Manuscript/99_Convergence.png", plot = p5)
+ggsave("04_Manuscript/99_Convergence.png", plot = p6, width = 10, height = 6)

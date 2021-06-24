@@ -30,7 +30,7 @@
          & cos(ta) : log(sl) & 0.076 & 0.026 & 0.003 & *** \\
          & sl : LowActivity & -0.917 & 0.113 & \(<\) 0.001 & *** \\
         \hdashline
-        \multirow{5}{*}{Interaction}
+        \multirow{5}{*}{Interactions}
          & sl : Water & -0.305 & 0.076 & \(<\) 0.001 & *** \\
          & sl : Woodland & -0.089 & 0.039 & 0.023 & ** \\
          & sl : Shrubs/Grassland & 0.124 & 0.058 & 0.032 & ** \\
@@ -47,3 +47,5 @@
     }
   \end{center}
 \end{table}
+\efloatseparator
+ 

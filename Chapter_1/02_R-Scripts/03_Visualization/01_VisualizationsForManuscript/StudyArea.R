@@ -150,19 +150,19 @@ plot(kaza, add = T, border = "gray80")
 p1 <- tm_shape(hill_africa) +
   tm_raster(
       style       = "cont"
-    , palette     = gray(60:100/100)
+    , palette     = gray(40:100/100)
     , alpha       = 0.2
     , legend.show = F
   ) +
     tm_shape(dogs) +
   tm_polygons(
-      col        = "purple"
-    , border.col = "purple"
+      col        = "orange"
+    , border.col = "orange"
   ) +
   tm_shape(africa, is.master = T) +
     tm_borders(
-        col        = "gray80"
-      , lwd        = 0.5
+        col        = "gray40"
+      , lwd        = 0.2
     ) +
   tm_shape(kaza) +
     tm_borders(
@@ -170,24 +170,24 @@ p1 <- tm_shape(hill_africa) +
       , lty = 1
       , lwd = 1.5
     ) +
-  tm_shape(kaza_ext) +
-    tm_borders(
-        col = "black"
-      , lty = 1
-      , lwd = 1
-    ) +
-  tm_shape(lines_countries) +
-    tm_lines(
-        col = "gray30"
-      , lty = 1
-      , lwd = 1
-    ) +
-  tm_shape(labels_countries) +
-    tm_text(
-        text = "Label"
-      , size = 0.6
-      , col  = "black"
-    ) +
+  # tm_shape(kaza_ext) +
+  #   tm_borders(
+  #       col = "black"
+  #     , lty = 1
+  #     , lwd = 1
+  #   ) +
+  # tm_shape(lines_countries) +
+  #   tm_lines(
+  #       col = "gray30"
+  #     , lty = 1
+  #     , lwd = 1
+  #   ) +
+  # tm_shape(labels_countries) +
+  #   tm_text(
+  #       text = "Label"
+  #     , size = 0.6
+  #     , col  = "black"
+  #   ) +
   tm_layout(
       asp         = 0.8
     , frame       = F
@@ -230,7 +230,7 @@ p2 <- tm_shape(hill_kaza) +
     ) +
   tm_shape(africa) +
     tm_borders(
-        col = "gray50"
+        col = "gray40"
       , lwd = 0.5
     ) +
   tm_shape(labels_countries2) +
@@ -300,14 +300,14 @@ p3 <- p2 + tm_add_legend(
     , "National Parks (NP)"
   )
   , col = c(
-      "purple"
+      "orange"
     , "#96d0ff"
     , "#d9f0d3"
     , "#70ab70"
   )) + tm_add_legend(
     type    = "line"
   , labels  = c("KAZA-TFCA Borders", "Country Borders")
-  , col     = c("black", "gray50")
+  , col     = c("black", "gray40")
   , lty     = c(1, 1)
   , lwd     = c(2, 1)
 ) + tm_layout(legend.frame.lwd = 2, legend.text.size = 1.05)

@@ -1,5 +1,5 @@
-This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
-Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
@@ -14,45 +14,45 @@ Warning--I didn't find a database entry for "Boyd.2005"
 Warning--I didn't find a database entry for "Wabakken.2007"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Munden.2020
-You've used 97 entries,
+You've used 98 entries,
             1935 wiz_defined-function locations,
-            1113 strings with 23912 characters,
-and the built_in function-call counts, 42432 in all, are:
-= -- 4076
-> -- 2134
+            1118 strings with 24128 characters,
+and the built_in function-call counts, 42879 in all, are:
+= -- 4121
+> -- 2152
 < -- 38
-+ -- 743
-- -- 742
-* -- 3950
-:= -- 7468
-add.period$ -- 293
-call.type$ -- 97
-change.case$ -- 845
-chr.to.int$ -- 96
-cite$ -- 99
-duplicate$ -- 1375
-empty$ -- 2740
-format.name$ -- 877
-if$ -- 8067
++ -- 749
+- -- 748
+* -- 3993
+:= -- 7544
+add.period$ -- 296
+call.type$ -- 98
+change.case$ -- 853
+chr.to.int$ -- 97
+cite$ -- 100
+duplicate$ -- 1389
+empty$ -- 2772
+format.name$ -- 884
+if$ -- 8153
 int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 99
-newline$ -- 490
-num.names$ -- 293
-pop$ -- 686
+missing$ -- 100
+newline$ -- 495
+num.names$ -- 296
+pop$ -- 692
 preamble$ -- 2
-purify$ -- 854
+purify$ -- 862
 quote$ -- 0
-skip$ -- 1033
+skip$ -- 1043
 stack$ -- 0
-substring$ -- 3042
-swap$ -- 128
+substring$ -- 3085
+swap$ -- 129
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 568
+type$ -- 574
 warning$ -- 2
-while$ -- 331
+while$ -- 335
 width$ -- 0
-write$ -- 1259
+write$ -- 1272
 (There was 1 error message)
