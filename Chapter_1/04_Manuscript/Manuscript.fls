@@ -327,6 +327,9 @@ INPUT ./99_SourceAreas.png
 INPUT 99_MovementModel.pdf
 INPUT ./99_MovementModel.pdf
 INPUT ./99_MovementModel.pdf
+INPUT 99_Convergence.png
+INPUT ./99_Convergence.png
+INPUT ./99_Convergence.png
 INPUT 99_Heatmap.png
 INPUT ./99_Heatmap.png
 INPUT ./99_Heatmap.png

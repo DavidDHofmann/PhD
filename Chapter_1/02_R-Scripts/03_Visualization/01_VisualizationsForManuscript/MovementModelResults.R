@@ -100,7 +100,7 @@ coeffs$Covariate <- gsub(coeffs$Covariate
   , replacement = "DistanceToWater '*m^0.5'"
 )
 coeffs$Preference <- ifelse(coeffs$Coefficient > 0, "Preferred", "Avoided")
-coeffs$Preference <- factor(coeffs$Preference, levels = c("Preferred", "Avoided"))
+coeffs$Preference <- factor(coeffs$Preference, levels = c("Avoided", "Preferred"))
 
 # Create a tidy dataframe for the confidence intervals
 confs <- coeffs %>%
@@ -167,24 +167,27 @@ groups <- c(
     , expression(cos(ta):DistanceToWater^0.5)
 )
 
+# Prepare dataset for plotting confidence intervals
+coeffs2 <- coeffs %>%
+  dplyr::select(Covariate, Coefficient, Preference, LCI_90:UCI_99) %>%
+  gather(key = confidence_level, value = value, LCI_90:UCI_99) %>%
+  separate(col = confidence_level, into = c("Type", "Level"), sep = "_") %>%
+  spread(key = Type, value = value) %>%
+  mutate(Level = paste0(Level, "%"))
+
 # Prepare plot with Covariates on the y-axis and the corresponding
 # coefficients on the x-axis
 p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
   geom_point(shape = 3, size = 2.5) +
-  geom_errorbarh(aes(
-      xmin = LCI_90
-    , xmax = UCI_90)
-    , height = 0, size = 2, alpha = 0.5
-  ) +
-  geom_errorbarh(aes(
-      xmin = LCI_95
-    , xmax = UCI_95)
-    , height = 0, size = 1, alpha = 0.75
-  ) +
-  geom_errorbarh(aes(
-      xmin = LCI_99
-    , xmax = UCI_99)
-    , height = 0, size = 0.3, alpha = 1
+  geom_errorbarh(
+      aes(
+        xmin = LCI
+      , xmax = UCI
+      , size = factor(Level)
+    )
+    , data = data2
+    , height = 0
+    , alpha  = 0.5
   ) +
   geom_text(
       aes(label = Significance, hjust = 0.5, vjust = 0)
@@ -207,13 +210,70 @@ p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Pre
     , bottom = "both"
   ) +
   labs(x = expression(beta*"-Coefficient")) +
-  scale_color_manual(values = c("#5B9BD5", "orange")) +
+  scale_color_manual(
+      name   = "Preference"
+    , values = c("#5B9BD5", "orange")
+  ) +
+  scale_size_manual(
+      name   = "Confidence Level"
+    , values = c(2, 1, 0.3)
+  ) +
   theme(
-      legend.title      = element_blank()
     , legend.position   = "bottom"
-    , legend.margin     = margin(0, 0, 0, 0)
-    , legend.box.margin = margin(-10, -10, -10, -10)
+    , legend.margin     = margin(0, 50, 0, -20)
+    , legend.box.margin = margin(-5, -10, -5, -10)
+  ) +
+  guides(
+      colour = guide_legend(title.position = "top", title.hjust = 0.5)
+    , size   = guide_legend(title.position = "top", title.hjust = 0.5, override.aes = list(colour = "#3CBB75FF"))
   )
+
+# # Legacy Plot
+# p1 <- ggplot(data = coeffs, aes(y = Covariate, x = Coefficient, col = factor(Preference))) +
+#   geom_point(shape = 3, size = 2.5) +
+#   geom_errorbarh(aes(
+#       xmin = LCI_90
+#     , xmax = UCI_90)
+#     , height = 0, size = 2, alpha = 0.5
+#   ) +
+#   geom_errorbarh(aes(
+#       xmin = LCI_95
+#     , xmax = UCI_95)
+#     , height = 0, size = 1, alpha = 0.75
+#   ) +
+#   geom_errorbarh(aes(
+#       xmin = LCI_99
+#     , xmax = UCI_99)
+#     , height = 0, size = 0.3, alpha = 1
+#   ) +
+#   geom_text(
+#       aes(label = Significance, hjust = 0.5, vjust = 0)
+#     , show.legend = F
+#   ) +
+#   geom_vline(
+#       xintercept = 0
+#     , color      = "darkgrey"
+#     , lty        = 2
+#     , lwd        = 0.3
+#   ) +
+#   scale_y_discrete(
+#       labels = rev(groups)
+#     , limits = rev(order)
+#   ) +
+#   theme_classic() +
+#   xlim(c(-1.3, 0.6)) +
+#   coord_capped_cart(
+#       left   = "both"
+#     , bottom = "both"
+#   ) +
+#   labs(x = expression(beta*"-Coefficient")) +
+#   scale_color_manual(values = c("#5B9BD5", "orange")) +
+#   theme(
+#       legend.title      = element_blank()
+#     , legend.position   = "bottom"
+#     , legend.margin     = margin(0, 0, 0, 0)
+#     , legend.box.margin = margin(-10, -10, -10, -10)
+#   )
 
 # Add annotations
 cols <- brewer.pal(n = 9, name = "BuPu")
@@ -283,8 +343,11 @@ p3 <- p2 + annotate(geom = "segment"
     , lwd    = 0.3
   )
 
+# Show the plot
+p3
+
 # # Store the plot
-# ggsave("04_Manuscript/99_MovementModel.pdf", device = "png", width = 7, height = 7, scale = 0.75)
+# ggsave("04_Manuscript/99_MovementModel.png", device = "png", width = 7, height = 7, scale = 0.75)
 # ggsave("04_Manuscript/99_MovementModel.pdf", device = "pdf", width = 7, height = 7, scale = 0.75)
 
 # Let's also prepare a table to include in the manuscript
@@ -369,47 +432,55 @@ loess <- dat %>%
   })) %>%
   unnest(data)
 
-# Plot the data
-p4 <- ggplot(loess, aes(x = Rank, y = Loess)) +
-  geom_jitter(aes(x = Rank, y = Frequency)
-    , data  = dat,
-    , alpha = 0.1
-    , size  = 1
-  ) +
-  geom_ribbon(aes(ymin = Lower, ymax = Upper)
-    , alpha = 0.4
-    , fill  = "steelblue"
-    , col   = "steelblue"
-  ) +
-  geom_line(
-      size = 1
-    , col  = "steelblue"
-  ) +
-  facet_wrap("Group", nrow = 2, scales = "free") +
-  theme_classic() +
-  coord_capped_cart(
-      left   = "both"
-    , bottom = "both"
-    , ylim   = c(0, 50)
-  ) +
-  geom_text(data = text
-    , mapping = aes(
-        x = -Inf
-      , y = -Inf
-      , label = TeX(Text, output = "character")
-    )
-    , hjust   = -0.05
-    , vjust   = -0.5
-    , parse   = TRUE
-    , size    = 3
-  ) +
-  ylab("Frequency")
+# Plot the data, once for realized, once for random preferences
+p4 <- lapply(unique(loess$Group), function(x){
+  sub_loess <- subset(loess, Group == x)
+  sub_text <- subset(text, Group == x)
+  sub_data <- subset(dat, Group == x)
+  ggplot(sub_loess, aes(x = Rank, y = Loess)) +
+    geom_jitter(aes(x = Rank, y = Frequency)
+      , data  = sub_data,
+      , alpha = 0.1
+      , size  = 1
+    ) +
+    geom_ribbon(aes(ymin = Lower, ymax = Upper)
+      , alpha = 0.4
+      , fill  = "steelblue"
+      , col   = "steelblue"
+    ) +
+    geom_line(
+        size = 1
+      , col  = "steelblue"
+    ) +
+    theme_classic() +
+    coord_capped_cart(
+        left   = "both"
+      , bottom = "both"
+      , ylim   = c(0, 50)
+    ) +
+    geom_text(data = sub_text
+      , mapping = aes(
+          x = -Inf
+        , y = -Inf
+        , label = TeX(Text, output = "character")
+      )
+      , hjust   = -0.05
+      , vjust   = -0.5
+      , parse   = TRUE
+      , size    = 3
+    ) +
+    ylab("Frequency")
+})
+p4 <- ggarrange(p4[[1]], p4[[2]], ncol = 1, labels = c("b1", "b2"), label.x = -0.05)
 
 ################################################################################
 #### Combine Plots
 ################################################################################
 # Arrange the two plots nicely
-p5 <- ggarrange(p3, p4, widths = c(1.5, 1), labels = "auto")
+p5 <- ggarrange(p3, p4, widths = c(1.5, 1), labels = "a")
+
+# Show it
+p5
 
 # Save all
 ggsave("04_Manuscript/99_MovementModel.pdf"

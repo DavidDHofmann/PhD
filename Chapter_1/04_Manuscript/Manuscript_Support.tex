@@ -193,7 +193,20 @@ protected areas, wildlife management
 % \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S2: Evolution of Heatmaps
+%	Appendix S2: Convergence
+%------------------------------------------------------------------------------
+\newpage
+\section{Convergence}
+\begin{figure}[hbtp]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_Convergence.png}
+    \caption{}
+    \label{Trajectories}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S3: Evolution of Heatmaps
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=5mm,footskip=0pt}
@@ -213,7 +226,7 @@ protected areas, wildlife management
 \restoregeometry
 
 %------------------------------------------------------------------------------
-%	Appendix S3: Evolution of Betweenness Maps
+%	Appendix S4: Evolution of Betweenness Maps
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=10mm,footskip=0pt}
@@ -230,6 +243,59 @@ protected areas, wildlife management
   \end{center}
 \end{figure}
 \restoregeometry
+
+\section{Step Selection Summary}
+Resource Selection Functions (RSFs) and Resource Selection Probability Functions
+(RSPFs) are routinely used to model habitat selection by animals using data from
+Very High Frequency (VHF) and Global Positioning System (GPS) locations. A
+RS(P)F is defined as any statistical model deployed to estimate the relative
+probability of selecting a resource unit versus alternative possible resource
+units \citep{Manly.2002}.
+
+Compared to a RSF, a RSPF yields the actual probability that an available
+resource unit is selected and can be estimated using weighted distribution
+theory \citep{Lele.2006}.
+
+Compared to RSFs, the key feature of SSFs is link- ing consecutive animal
+locations (most commonly taken at regular time intervals) that can be defined as
+steps \citep{Turchin.1998} (Figure 1).
+
+With step selection functions, GPS trajectories are broken down into steps, each
+representing the straight line segment between two consecutive GPS relocations.
+Each observed step is then paired with a set of random steps, having the same
+starting point but differing in length and orientation \citep{Fortin.2005}. To
+sample step lengths and orientations (i.e. turning angles), \cite{Fortin.2005}
+sampled values from observed steps. Later studies, on the other hand, rely on
+parametrized distributions, fitted to observed steps. By comparing
+characteristics at observed and random steps using conditional logistic
+regression, features influencing elk movements can be determined. The step
+selection function takes the form \citep{Fortin.2005}:
+
+\begin{equation}
+\label{EQ1}
+\hat{w}(x) = exp(\beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + ... + \beta_n x_n)
+\end{equation}
+
+Where coefficients \(\beta_1\) to \(\beta_n\) are estimated using conditional
+logistic regression and are associated with environmental covariates \(x_1\) to
+\(x_n\), respectively. Ultimately, steps with higher \(\hat{w}(x)\) have higher
+\textbf{odds} of being chosen.
+
+As the time interval between relocations increases, it can be expected that
+autocorrelation in the data decreases.
+
+How to state results:
+\begin{itemize}
+  \item  Assuming that other environmental factors remain constant, animals were
+  less likely to ...
+  \item Animals generally avoided steps in areas made up of a large proportion
+  of ...
+  \item  An increase in ... did not generally decrease the odds of animals
+  choosing these steps, as indicated by the positive association between ... and
+  the probability of animals making steps covering the two most widely available
+  vegetation cover types
+\end{itemize}
+
 
 \newpage
 \begingroup

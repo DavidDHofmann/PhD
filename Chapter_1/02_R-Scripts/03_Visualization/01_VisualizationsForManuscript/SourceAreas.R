@@ -33,6 +33,14 @@ kaza   <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 r      <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
+# Calculate the extent of the entire study area (including the buffer)
+ext1 <- as(extent(main), "SpatialPolygons")
+ext2 <- as(extent(buffer), "SpatialPolygons")
+crs(ext1) <- CRS("+init=epsg:4326")
+crs(ext2) <- CRS("+init=epsg:4326")
+gArea(spTransform(ext1, CRS("+init=epsg:32734"))) * 1e-6
+gArea(spTransform(ext2, CRS("+init=epsg:32734"))) * 1e-6
+
 # Load simulated trajectories
 sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
 

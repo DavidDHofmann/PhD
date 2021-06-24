@@ -58,16 +58,28 @@
     \includegraphics[width=\textwidth]{99_MovementModel}
     \caption{(a) Most parsimonious movement model for dispersing wild dogs. The
     model includes a habitat kernel, a movement kernel, as well as their
-    interactions. The orange and blue line segments delineate the 90\%, 95\%,
-    and 99\% Confidence-Intervals around the respective \(\beta\) coefficients.
+    interactions. The horizontal line segments delineate the 90\%, 95\%, and
+    99\% Confidence-Intervals for the respective \(\beta\)-coefficients.
     Significance codes: * \(p < 0.10\), ** \(p < 0.05\), *** \(p < 0.01\). (b)
     Results from the k-fold cross validation procedure. The upper plot shows
-    rank frequencies of predicted realized scores according to model predictions
-    with known preferences, whereas the lower plot shows rank frequencies when
-    assuming random preferences. The blue ribbon shows the prediction interval
-    around a loess smoothing regression that we fitted to ease the
-    interpretation of the plots.}
+    rank frequencies of realized steps according to model predictions with known
+    preferences, whereas the lower plot shows rank frequencies of realized steps
+    when assuming random preferences. The blue ribbon shows the prediction
+    interval around a loess smoothing regression that we fitted to ease the
+    interpretation of the plots. The significant correlation between rank and
+    associated frequency in (b1) highlights that the most parsimonious model
+    successfully outperforms a random guess (b2) and assigns comparably high
+    selection scores to realized steps.}
     \label{MovementModel}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+    \includegraphics[width=\textwidth]{99_Convergence}
+    \caption{Convergence}
+    \label{Convergence}
   \end{center}
 \end{figure}
 \efloatseparator
@@ -79,23 +91,25 @@
   integrated step selection model that we fit to the movement data of dispersing
   African wild dogs. To generate the heatmap, we rasterized and tallied all
   simulated trajectories. Consequently, the map highlights areas that are
-  frequently traversed by virtual dispersers. Further heatmaps showing the
-  traversal frequency after different numbers of steps are provided in Appendix
-  S3.}
+  frequently traversed by virtual dispersers. Additional heatmaps showing the
+  traversal frequency for different numbers of simulated steps are provided in
+  Appendix S3.}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_Betweenness.png}
-  \caption{Betweenness scores of each raster cell in a raster with 5 x 5 km
-  resolution. Betweenness scores were determined based on simulated dispersal
-  events. A high betweenness score highlights cells that are exceptionally
-  relevant in connecting different regions in the study area. That is, the
-  higher the betweenness score, the more often a pixel lies on a shortest path
-  between adjacent areas. In this sense the metric can be used to pinpoint
-  discrete movement corridors. Note that we square-rooted betweenness scores to
-  improve visibility of corrdiors with low scores.}
+  \caption{Map of betweenness scores, highlighting distinct dispersal corridors
+  and potential bottlenecks. A high betweenness score indicates that the
+  respective cells are exceptionally relevant in connecting different regions in
+  the study area. That is, the higher the betweenness score, the more often a
+  pixel lies on a shortest path between adjacent areas. In this sense the metric
+  can be used to pinpoint discrete movement corridors. Note that we
+  square-rooted betweenness scores to improve visibility of corrdiors with low
+  scores. Betweenness scores were determined by converting simulated dispersal
+  trajectories into a large network. Note that we square-rooted betweenness
+  scores to improve the visibility of corridors with low betweenness scores.}
   \label{Betweenness}
 \end{figure}
 \efloatseparator

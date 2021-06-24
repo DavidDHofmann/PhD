@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  14 MAY 2021 11:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  23 JUN 2021 15:45
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -727,10 +727,15 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 84.
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (4.37155pt too wide) in paragraph at lines 150--163
+[]\OT1/cmr/m/n/9 Here, we show-case the use of in-te-grated step se-lec-tion func-tions as a sim-ple individual-
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.168 \newpage
+l.169 \newpage
                [2] (./Manuscript.toc)
 \tf@toc=\write7
 \openout7 = `Manuscript.toc'.
@@ -738,108 +743,117 @@ l.168 \newpage
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.175 \newpage
-               [3] [1] [2] [3]
-
-Package natbib Warning: Citation `Woodroffe.2020' on page 4 undefined on input line 315.
-
-[4]
+l.176 \newpage
+               [3] [1] [2] [3] [4]
 \openout4 = `Manuscript.fff'.
 
- (Manuscript.fff) [5] [6]
-
-Package natbib Warning: Citation `Hunziker.2017' on page 7 undefined on input line 477.
-
-[7] [8] [9] [10] [11]
+ (Manuscript.fff) [5] [6] [7] [8] [9] [10] [11] [12]
 \openout5 = `Manuscript.ttt'.
 
- (Manuscript.ttt) [12] [13] [14] [15]
+ (Manuscript.ttt) [13] [14]
 
-Package natbib Warning: Citation `Loveridge.2019' on page 16 undefined on input line 1004.
+Package natbib Warning: Citation `Hodel.2021' on page 15 undefined on input line 996.
 
-[16] [17] [18]
+[15] [16] [17] [18]
 
-Package natbib Warning: Citation `Behr.2021b' on page 19 undefined on input line 1093.
+Package natbib Warning: Citation `Hodel.2021b' on page 19 undefined on input line 1171.
 
-[19] [20] [21] (./Manuscript.bbl [22] [23] [24] [25])
+[19] [20]
+
+Package natbib Warning: Citation `Behr.2021b' on page 21 undefined on input line 1224.
+
+[21]
+
+Package natbib Warning: Citation `Boyd.2005' on page 22 undefined on input line 1276.
+
+
+Package natbib Warning: Citation `Wabakken.2007' on page 22 undefined on input line 1276.
+
+[22] [23] (./Manuscript.bbl [24] [25] [26] [27] [28])
 
 Package natbib Warning: There were undefined citations.
 
-AED endfloat: Processing end Figures and Tables [26] (./Manuscript.fff
+AED endfloat: Processing end Figures and Tables [29] (./Manuscript.fff
 
 pdfTeX warning: pdflatex (file ./99_GraphicalAbstract.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
-<99_GraphicalAbstract.pdf, id=768, 963.6pt x 542.025pt>
+<99_GraphicalAbstract.pdf, id=901, 963.6pt x 542.025pt>
 File: 99_GraphicalAbstract.pdf Graphic file (type pdf)
 <use 99_GraphicalAbstract.pdf>
 Package pdftex.def Info: 99_GraphicalAbstract.pdf  used on input line 3.
 (pdftex.def)             Requested size: 398.3386pt x 224.0595pt.
-[27
+[30
 
 
  <./99_GraphicalAbstract.pdf>]
-<99_StudyArea.png, id=835, 650.43pt x 379.4175pt>
+<99_StudyArea.png, id=969, 650.43pt x 379.4175pt>
 File: 99_StudyArea.png Graphic file (type png)
 <use 99_StudyArea.png>
 Package pdftex.def Info: 99_StudyArea.png  used on input line 23.
 (pdftex.def)             Requested size: 398.3386pt x 232.37064pt.
- [28
+ [31
 
  <./99_StudyArea.png (PNG copy)>]
-<99_SourceAreas.png, id=842, 650.43pt x 271.0125pt>
+<99_SourceAreas.png, id=975, 650.43pt x 271.0125pt>
 File: 99_SourceAreas.png Graphic file (type png)
 <use 99_SourceAreas.png>
 Package pdftex.def Info: 99_SourceAreas.png  used on input line 40.
 (pdftex.def)             Requested size: 398.3386pt x 165.97902pt.
- [29
+ [32
 
  <./99_SourceAreas.png (PNG copy)>]
-<99_MovementModel.pdf, id=851, 606.265pt x 353.32pt>
+<99_MovementModel.pdf, id=984, 606.265pt x 353.32pt>
 File: 99_MovementModel.pdf Graphic file (type pdf)
 <use 99_MovementModel.pdf>
 Package pdftex.def Info: 99_MovementModel.pdf  used on input line 58.
 (pdftex.def)             Requested size: 398.3386pt x 232.14603pt.
- [30 <./99_MovementModel.pdf>]
-<99_Heatmap.png, id=874, 481.5591pt x 481.5591pt>
+ [33 <./99_MovementModel.pdf>]
+<99_Convergence.png, id=1005, 481.5591pt x 481.5591pt>
+File: 99_Convergence.png Graphic file (type png)
+<use 99_Convergence.png>
+Package pdftex.def Info: 99_Convergence.png  used on input line 80.
+(pdftex.def)             Requested size: 398.3386pt x 398.35661pt.
+ [34 <./99_Convergence.png (PNG copy)>]
+<99_Heatmap.png, id=1012, 481.5591pt x 481.5591pt>
 File: 99_Heatmap.png Graphic file (type png)
 <use 99_Heatmap.png>
-Package pdftex.def Info: 99_Heatmap.png  used on input line 76.
+Package pdftex.def Info: 99_Heatmap.png  used on input line 88.
 (pdftex.def)             Requested size: 398.3386pt x 398.35661pt.
- [31 <./99_Heatmap.png (PNG copy)>]
-<99_Betweenness.png, id=879, 481.5591pt x 481.5591pt>
+ [35 <./99_Heatmap.png (PNG copy)>]
+<99_Betweenness.png, id=1017, 481.5591pt x 481.5591pt>
 File: 99_Betweenness.png Graphic file (type png)
 <use 99_Betweenness.png>
-Package pdftex.def Info: 99_Betweenness.png  used on input line 90.
+Package pdftex.def Info: 99_Betweenness.png  used on input line 102.
 (pdftex.def)             Requested size: 398.3386pt x 398.35661pt.
- [32 <./99_Betweenness.png (PNG copy)>]
-<99_AreasReached.png, id=884, 481.5591pt x 481.5591pt>
+ [36 <./99_Betweenness.png (PNG copy)>]
+<99_AreasReached.png, id=1022, 481.5591pt x 481.5591pt>
 File: 99_AreasReached.png Graphic file (type png)
 <use 99_AreasReached.png>
-Package pdftex.def Info: 99_AreasReached.png  used on input line 104.
+Package pdftex.def Info: 99_AreasReached.png  used on input line 118.
 (pdftex.def)             Requested size: 398.3386pt x 398.35661pt.
-) [33 <./99_AreasReached.png (PNG copy)>] (./Manuscript.ttt) [34]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1182.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 1182.
+) [37 <./99_AreasReached.png (PNG copy)>] (./Manuscript.ttt) [38]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 1330.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 1330.
  (./Manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1182.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1182.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 1330.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 1330.
 Package rerunfilecheck Info: File `Manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 7312A8B4A55B540A7669D5EABC1B533B;2493.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1182.
+(rerunfilecheck)             Checksum: 5E52DD6CF3D4B0D59012FBD0AFBCF37F;2706.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 1330.
  ) 
 Here is how much of TeX's memory you used:
- 22520 strings out of 481239
- 417016 string characters out of 5920378
+ 22593 strings out of 481239
+ 418336 string characters out of 5920378
  683611 words of memory out of 5000000
- 37169 multiletter control sequences out of 15000+600000
+ 37221 multiletter control sequences out of 15000+600000
  544494 words of font info for 70 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,16n,60p,1105b,647s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,16n,60p,1144b,682s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cmextra/cmex7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.
 pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb>
-Output written on Manuscript.pdf (37 pages, 8308318 bytes).
+Output written on Manuscript.pdf (41 pages, 8502108 bytes).
 PDF statistics:
- 1010 PDF objects out of 1200 (max. 8388607)
- 882 compressed objects within 9 object streams
- 167 named destinations out of 1000 (max. 500000)
- 320 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1153 PDF objects out of 1200 (max. 8388607)
+ 1018 compressed objects within 11 object streams
+ 188 named destinations out of 1000 (max. 500000)
+ 349 words of extra memory for PDF output out of 10000 (max. 10000000)
 

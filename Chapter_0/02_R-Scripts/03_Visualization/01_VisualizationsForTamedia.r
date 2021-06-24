@@ -122,7 +122,7 @@ africa_crop <- subset(africa_crop, COUNTRY %in% c(
 )
 
 # Rename countries to german
-africa_crop$COUNTRY <- as.character(c("Angola", "Botswana", "Namibia", "Sambia", "Simbabwe"))
+# africa_crop$COUNTRY <- as.character(c("Angola", "Botswana", "Namibia", "Sambia", "Simbabwe"))
 
 # Rescale between 0 and 1
 corrs <- calc(corrs, fun = function(x){
@@ -134,9 +134,11 @@ p2 <- tm_shape(corrs) +
     tm_raster(
         palette         = "-Spectral"
       , style           = "cont"
-      , title           = "Wildhund-Korridore"
+      # , title           = "Wildhund-Korridore"
+      , title           = "Wild Dog Corridors"
       , breaks          = c(0, 0.5, 1)
-      , labels          = c("ungeeignet", "", "geeignet")
+      , labels          = c("unsuitable", "", "suitable")
+      # , labels          = c("ungeeignet", "", "geeignet")
       , legend.reverse  = T
     ) +
   tm_shape(nati) +
@@ -189,6 +191,7 @@ p2 <- tm_shape(corrs) +
 # Add common legend
 p3 <- p2 + tm_add_legend(
       type    = "line"
+    , labels  = c("Kavango-Zambezi", "Conservation Area", "Country Borders")
     , labels  = c("Kavango-Zambezi", "Schutzgebiet", "Landesgrenzen")
     , col     = c("black", "white", "black")
     , lty     = c(1, 1, 2)

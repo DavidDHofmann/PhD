@@ -8,7 +8,7 @@ rm(list = ls())
 
 # Set the working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
-wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_1"
+# wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_1"
 setwd(wd)
 
 # Load required packages
@@ -24,8 +24,8 @@ library(davidoff)   # Custom functions
 #### Data Preparation
 ################################################################################
 # Load map of africa
-africa    <- readOGR("03_Data/02_CleanData/00_General_Africa.shp")
-africa2   <- readOGR("03_Data/02_CleanData/00_General_Africa.shp")
+africa    <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
+africa2   <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 historic  <- readOGR("03_Data/01_RawData/DAVID/HistoricRange.shp")
 dogs      <- readOGR("03_Data/02_CleanData/00_General_WildDogs_IUCN.shp")
 kaza      <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")

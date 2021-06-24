@@ -3,55 +3,56 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
-Repeated entry---line 3079 of file Literatur.bib
+Repeated entry---line 3227 of file Literatur.bib
  : @article{Koen.2014
  :                   ,
 I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "Woodroffe.2020"
-Warning--I didn't find a database entry for "Hunziker.2017"
-Warning--I didn't find a database entry for "Loveridge.2019"
+Warning--I didn't find a database entry for "Hodel.2021"
+Warning--I didn't find a database entry for "Hodel.2021b"
 Warning--I didn't find a database entry for "Behr.2021b"
+Warning--I didn't find a database entry for "Boyd.2005"
+Warning--I didn't find a database entry for "Wabakken.2007"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Munden.2020
-You've used 84 entries,
+You've used 97 entries,
             1935 wiz_defined-function locations,
-            1033 strings with 21666 characters,
-and the built_in function-call counts, 37200 in all, are:
-= -- 3547
-> -- 1943
-< -- 29
-+ -- 681
-- -- 680
-* -- 3472
-:= -- 6569
-add.period$ -- 254
-call.type$ -- 84
-change.case$ -- 750
-chr.to.int$ -- 83
-cite$ -- 86
-duplicate$ -- 1195
-empty$ -- 2362
-format.name$ -- 790
-if$ -- 7058
+            1113 strings with 23912 characters,
+and the built_in function-call counts, 42432 in all, are:
+= -- 4076
+> -- 2134
+< -- 38
++ -- 743
+- -- 742
+* -- 3950
+:= -- 7468
+add.period$ -- 293
+call.type$ -- 97
+change.case$ -- 845
+chr.to.int$ -- 96
+cite$ -- 99
+duplicate$ -- 1375
+empty$ -- 2740
+format.name$ -- 877
+if$ -- 8067
 int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 87
-newline$ -- 425
-num.names$ -- 254
-pop$ -- 623
+missing$ -- 99
+newline$ -- 490
+num.names$ -- 293
+pop$ -- 686
 preamble$ -- 2
-purify$ -- 758
+purify$ -- 854
 quote$ -- 0
-skip$ -- 893
+skip$ -- 1033
 stack$ -- 0
-substring$ -- 2590
-swap$ -- 114
+substring$ -- 3042
+swap$ -- 128
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 490
+type$ -- 568
 warning$ -- 2
-while$ -- 283
+while$ -- 331
 width$ -- 0
-write$ -- 1091
+write$ -- 1259
 (There was 1 error message)

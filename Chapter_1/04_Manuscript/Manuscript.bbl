@@ -65,6 +65,11 @@ Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
 \newblock {Dispersal Ecology Informs Design of Large-Scale Wildlife Corridors}.
 \newblock {\em {PLOS ONE}}, 11(9):e0162989.
 
+\bibitem[Bovet and Benhamou, 1991]{Bovet.1991}
+Bovet, P. and Benhamou, S. (1991).
+\newblock {Optimal Sinuosity in Central Place Foraging Movements}.
+\newblock {\em {Animal Behaviour}}, 42(1):57--62.
+
 \bibitem[Boyce et~al., 2002]{Boyce.2002}
 Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F. K.~A. (2002).
 \newblock {Evaluating Resource Selection Functions}.
@@ -174,6 +179,12 @@ Fahrig, L. (2003).
 \newblock {\em {Annual Review of Ecology, Evolution, and Systematics}},
   34(1):487--515.
 
+\bibitem[Ferreras, 2001]{Ferreras.2001}
+Ferreras, P. (2001).
+\newblock {Landscape Structure and Asymmetrical Inter-Patch Connectivity in a
+  Metapopulation of the Endangered Iberian Lynx}.
+\newblock {\em {Biological Conservation}}, 100(1):125--136.
+
 \bibitem[Fieberg et~al., 2020]{Fieberg.2020}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2020).
 \newblock {A ‘How-to’ Guide for Interpreting Parameters in Resource- and
@@ -198,6 +209,24 @@ Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
 Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
 \newblock {\em {Introduction to Conservation Genetics}}.
 \newblock Cambridge University Press, Cambridge, UK.
+
+\bibitem[Gardner and Gustafson, 2004]{Gardner.2004}
+Gardner, R.~H. and Gustafson, E.~J. (2004).
+\newblock {Simulating Dispersal of Reintroduced Species within Heterogeneous
+  Landscapes}.
+\newblock {\em {Ecological Modelling}}, 171(4):339--358.
+
+\bibitem[Graf et~al., 2007]{Graf.2007}
+Graf, R.~F., Kramer-Schadt, S., Fernández, N., and Grimm, V. (2007).
+\newblock {What you see is where you go? Modeling Dispersal in Mountainous
+  Landscapes}.
+\newblock {\em {Landscape Ecology}}, 22(6):853--866.
+
+\bibitem[Gustafson and Gardner, 1996]{Gustafson.1996}
+Gustafson, E.~J. and Gardner, R.~H. (1996).
+\newblock {The Effect of Landscape Heterogeneity on the Probability of Patch
+  Colonization}.
+\newblock {\em {Ecology}}, 77(1):94--107.
 
 \bibitem[Hanski, 1998]{Hanski.1998}
 Hanski, I. (1998).
@@ -239,6 +268,11 @@ Howard, W.~E. (1960).
 \newblock {Innate and Environmental Dispersal of Individual Vertebrates}.
 \newblock {\em {American Midland Naturalist}}, 63(1):152.
 
+\bibitem[Hunziker, 2021]{Hunziker.2021}
+Hunziker, P. (2021).
+\newblock {\em {velox: Fast Raster Manipulation and Extraction}}.
+\newblock R package version 0.2.1.
+
 \bibitem[Jønsson et~al., 2016]{Jonsson.2016}
 Jønsson, K.~A., Tøttrup, A.~P., Borregaard, M.~K., Keith, S.~A., Rahbek, C.,
   and Thorup, K. (2016).
@@ -268,6 +302,12 @@ Koen, E.~L., Garroway, C.~J., Wilson, P.~J., and Bowman, J. (2010).
 \newblock {The Effect of Map Boundary on Estimates of Landscape Resistance to
   Animal Movement}.
 \newblock {\em PlOS ONE}, 5(7):e11785.
+
+\bibitem[Kramer-Schadt et~al., 2004]{KramerSchadt.2004}
+Kramer-Schadt, S., Revilla, E., Wiegand, T., and Breitenmoser, U. (2004).
+\newblock {Fragmented Landscapes, Road Mortality and Patch Connectivity:
+  Modelling Influences on the Dispersal of Eurasian lynx}.
+\newblock {\em {Journal of Applied Ecology}}, 41(4):711--723.
 
 \bibitem[Kramer-Schadt et~al., 2007]{KramerSchadt.2007}
 Kramer-Schadt, S., Revilla, E., Wiegand, T., and Grimm, V. (2007).
@@ -338,6 +378,12 @@ Munden, R., Börger, L., Wilson, R.~P., Redcliffe, J., Brown, R., Garel, M.,
 \newblock {Why Did the Animal Turn? Time-Varying Step Selection Analysis for
   Inference Between Observed Turning Points in High Frequency Data}.
 
+\bibitem[Nathan, 2008]{Nathan.2008}
+Nathan, R. (2008).
+\newblock {An Emerging Movement Ecology Paradigm}.
+\newblock {\em Proceedings of the National Academy of Sciences},
+  105(49):19050--19051.
+
 \bibitem[Osipova et~al., 2019]{Osipova.2019}
 Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
   M.~W., and Balkenhol, N. (2019).
@@ -351,6 +397,12 @@ Osofsky, S.~A., McNutt, J.~W., and Hirsch, K.~J. (1996).
 \newblock {Immobilization of Free-Ranging African Wild Dogs (Lycaon pictus)
   Using a Ketamine/Xylazine/Atropine Combination}.
 \newblock {\em {Journal of Zoo and Wildlife Medicine}}, pages 528--532.
+
+\bibitem[O’Neill et~al., 2020]{Oneill.2020}
+O’Neill, H. M.~K., Durant, S.~M., and Woodroffe, R. (2020).
+\newblock {What Wild Dogs Want: Habitat Selection Differs across Life Stages
+  and Orders of Selection in a Wide-Ranging Carnivore}.
+\newblock {\em BMC Zoology}, 5(1).
 
 \bibitem[Panzacchi et~al., 2016]{Panzacchi.2016}
 Panzacchi, M., Van~Moorter, B., Strand, O., Saerens, M., Kivimäki, I.,
@@ -369,6 +421,12 @@ Perrin, N. and Mazalov, V. (2000).
 \newblock {Local Competition, Inbreeding, and the Evolution of Sex‐Biased
   Dispersal}.
 \newblock {\em {The American Naturalist}}, 155(1):116--127.
+
+\bibitem[Pe’er and Kramer-Schadt, 2008]{Peer.2008}
+Pe’er, G. and Kramer-Schadt, S. (2008).
+\newblock {Incorporating the Perceptual Range of Animals into Connectivity
+  Models}.
+\newblock {\em {Ecological Modelling}}, 213(1):73--85.
 
 \bibitem[Pinto and Keitt, 2009]{Pinto.2009}
 Pinto, N. and Keitt, T.~H. (2009).
@@ -393,6 +451,19 @@ Prokopenko, C.~M., Boyce, M.~S., and Avgar, T. (2017).
 \newblock {\em {R: A Language and Environment for Statistical Computing}}.
 \newblock R Foundation for Statistical Computing, Vienna, Austria.
 
+\bibitem[Revilla and Wiegand, 2008]{Revilla.2008}
+Revilla, E. and Wiegand, T. (2008).
+\newblock {Individual Movement Behavior, Matrix Heterogeneity, and the Dynamics
+  of Spatially Structured Populations}.
+\newblock {\em {Proceedings of the National Academy of Sciences}},
+  105(49):19120--19125.
+
+\bibitem[Revilla et~al., 2004]{Revilla.2004}
+Revilla, E., Wiegand, T., Palomares, F., Ferreras, P., and Delibes, M. (2004).
+\newblock {Effects of Matrix Heterogeneity on Animal Dispersal: From Individual
+  Behavior to Metapopulation‐Level Parameters}.
+\newblock {\em {The American Naturalist}}, 164(5):E130--E153.
+
 \bibitem[Rudnick et~al., 2012]{Rudnick.2012}
 Rudnick, D., Ryan, S., Beier, P., Cushman, S., Dieffenbach, F., Epps, C.,
   Gerber, L., Hartter, J., Jenness, J., Kintsch, J., Merenlender, A., Perkl,
@@ -400,6 +471,11 @@ Rudnick, D., Ryan, S., Beier, P., Cushman, S., Dieffenbach, F., Epps, C.,
 \newblock {The Role of Landscape Connectivity in Planning and Implementing
   Conservation and Restoration Priorities. Issues in Ecology}.
 \newblock {\em {Issues in Ecology}}.
+
+\bibitem[Schultz and Crone, 2001]{Schultz.2001}
+Schultz, C.~B. and Crone, E.~E. (2001).
+\newblock {Edge-Mediated Dispersal Behavior in a Prairie Butterfly}.
+\newblock {\em {Ecology}}, 82(7):1879--1892.
 
 \bibitem[Signer et~al., 2017]{Signer.2017}
 Signer, J., Fieberg, J., and Avgar, T. (2017).

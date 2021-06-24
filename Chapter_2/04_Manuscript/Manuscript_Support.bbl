@@ -1,0 +1,23 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Burnham and Anderson, 2002]{Burnham.2002}
+Burnham, K.~P. and Anderson, D.~R. (2002).
+\newblock {\em {Model Selection and Multimodel Inference: A Practical
+  Information-Theoretic Approach}}.
+\newblock {Springer Science \& Business Media}, Ney York, NY, USA.
+
+\bibitem[Fortin et~al., 2005]{Fortin.2005}
+Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
+  J.~S. (2005).
+\newblock {Wolves Influence Elk Movements: Behavior Shapes a Trophic Cascade in
+  Yellowstone National Park}.
+\newblock {\em Ecology}, 86(5):1320--1330.
+
+\bibitem[Turchin, 1998]{Turchin.1998}
+Turchin, P. (1998).
+\newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
+  Population Redistribution in Plants and Animals}}.
+\newblock Sinauer Associates, Sunderland, MA, USA.
+
+\end{thebibliography}

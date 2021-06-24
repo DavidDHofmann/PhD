@@ -1,0 +1,55 @@
+This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
+Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+The top-level auxiliary file: Manuscript.aux
+The style file: apalike.bst
+Database file #1: Literatur.bib
+Repeated entry---line 3227 of file Literatur.bib
+ : @article{Koen.2014
+ :                   ,
+I'm skipping whatever remains of this entry
+Warning--I didn't find a database entry for "Hodel.2021"
+Warning--I didn't find a database entry for "Behr.2021b"
+Warning--empty journal in Cozzi.2020
+Warning--empty journal in Munden.2020
+You've used 96 entries,
+            1935 wiz_defined-function locations,
+            1101 strings with 23706 characters,
+and the built_in function-call counts, 42046 in all, are:
+= -- 4036
+> -- 2121
+< -- 37
++ -- 739
+- -- 738
+* -- 3915
+:= -- 7402
+add.period$ -- 290
+call.type$ -- 96
+change.case$ -- 838
+chr.to.int$ -- 95
+cite$ -- 98
+duplicate$ -- 1361
+empty$ -- 2712
+format.name$ -- 870
+if$ -- 7992
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 98
+newline$ -- 485
+num.names$ -- 290
+pop$ -- 682
+preamble$ -- 2
+purify$ -- 847
+quote$ -- 0
+skip$ -- 1022
+stack$ -- 0
+substring$ -- 3011
+swap$ -- 127
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 562
+warning$ -- 2
+while$ -- 327
+width$ -- 0
+write$ -- 1246
+(There was 1 error message)
