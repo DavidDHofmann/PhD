@@ -1095,13 +1095,13 @@ requires that step lengths and turning angles are modeled properly
 \citep{Kanagaraj.2013}, so that dispersal durations between habitat patches can
 be reliably approximated. Accounting for and correctly rendering this movement
 kernel is the main strength of ISSFs, which is why we believe that the framework
-is particularly well suitded for simulating animal dispersal and assessing
+is particularly well suited for simulating animal dispersal and assessing
 landscape connectivity. In principle, the ISSF framework allows to define an
 infinite amount of movement kernels, each representing movement behavior under
-different conditions \citep{Fieberg.2020}. It can therefore accomodate highly
+different conditions \citep{Fieberg.2020}. It can therefore accommodate highly
 diverse movement modes, including fast paced directional movements and slow
 paced tortuous movements. Compared to models that disregard an animal's movement
-kernel, this allows to model directional peristence, a movement characteristic
+kernel, this allows to model directional persistence, a movement characteristic
 regularly observed in dispersing animals. To date, however, we only accounted
 for 1. order autocorrelation. That is, we only considered correlations between
 two subsequent steps. Modeling higher-order autocorrelation may be desirable,
@@ -1162,7 +1162,7 @@ dispersers initiated at each location. In other cases, comparable knowledge may
 be lacking and it could be more beneficial to delineate likely source patches
 based on habitat suitability models (e.g. \citealp{Squires.2013}). Either way, a
 meaningful selection of source points is not a problem unique to IBMMs and
-applies to any connectivity modelling technique. As highlighted by
+applies to any connectivity modeling technique. As highlighted by
 \cite{Signer.2017} the influence of the exact location of source points
 decreases as the number of simulated steps is increased, yet their goal was
 assessing steady state utilization distributions and not to assess landscape
@@ -1176,7 +1176,7 @@ Instead of enforcing homogeneous dispersal durations, one could also sample
 dispersal durations from on observed dispersal events. Alternatively, after each
 step, individuals could be faced with a probability to settle, where the
 probability is contingent on the surrounding landscape and cumulative dispersal
-distance travelled. Because we only observed few dispersal events and due to the
+distance traveled. Because we only observed few dispersal events and due to the
 wild dog's ability to cover vast dispersal distance \citep{DaviesMostert.2012,
 Masenga.2016, Cozzi.2020} we decided not to apply this approach. Regardless of
 this, we think that in most cases it will be more insightful to simulate
@@ -1184,7 +1184,7 @@ relatively extensive dispersal events and only subsample afterwards.
 
 (4) Unless simulated individuals are strongly drawn towards a point of
 attraction, some simulated individuals will eventually approach a map boundary
-and the modeller needs to define a rule to handle such situations. One feasible
+and the modeler needs to define a rule to handle such situations. One feasible
 option would be to terminate the trajectory as soon as it hits a map boundary,
 implicitly assuming that the simulated animal left the study area and will not
 return. The downside to this approach is that source points located near map
@@ -1227,9 +1227,9 @@ betweenness map suggests the presence of a corridor moving from Angola into
 Zambia's Kafue NP, yet when looking at the heatmap, one realizes that the area
 is not used very often. Consequently, despite the corridor's importance for
 linking Angola's NPs to Zambia's Np, only very few simulated dispersers
-successfully traversed it. This is also reflected in the interpatch connectivity
-map, where the Kafue NP only receives very few links from the central region of
-the KAZA-TFCA.
+successfully traversed it. This is also reflected in the inter-patch
+connectivity map, where the Kafue NP only receives very few links from the
+central region of the KAZA-TFCA.
 
 Each map that we produced from simulated trajectories accentuates a different
 aspect of connectivity. The heatmap, for example, puts emphasis on areas where
@@ -1244,7 +1244,7 @@ alternative to least-cost algorithms. Finally, the inter-patch connectivity map
 illustrates the frequency at which dispersal between distinct habitat patches
 occurs, as well as the average dispersal duration that passes when individuals
 move between those patches. This knowledge serves to gauge the amount of
-geneflow between habitat patches and can be employed to determine whether two
+gene flow between habitat patches and can be employed to determine whether two
 habitats are connected or not.
 
 \subsection{General (20\%)}
@@ -1267,7 +1267,7 @@ regular step selection functions to model habitat preferences by black bears and
 simulated movement to assess connectivity. However, neither of these studies
 attempted to jointly model habitat and movement kernels, thereby precluding a
 more mechanistic understanding of movement. Moreover, both studies parametrized
-models using data of resident black bearsk, which may lead to a biased view on
+models using data of resident black bears, which may lead to a biased view on
 connectivity, as dispersers may move substantially further, thereby improving
 connectivity among habitat patches \citep{Elliot.2014}.
 
@@ -1296,7 +1296,7 @@ fact that we did not control for the presence or absence of conspecifics. We
 stick to this reasoning as our expanded model still shows a rather large
 uncertainty around the respective beta coefficients. To better gauge the
 importance and influence of this covariate, future studies will need to control
-for inter- and intra-speficic interactions that may explain why and when
+for inter- and intra-specific interactions that may explain why and when
 dispersers are attracted to or afraid of waterbodies. \cite{Fortin.2005}, for
 instance, found that elk movement was significantly impacted by the density of
 wolf in the area, such that habitat preferences strictly differed depending on
@@ -1332,7 +1332,7 @@ selection functions for investigating dispersal behavior and landscape
 connectivity. Nevertheless, we do not attempt to dismiss the application of
 traditional connectivity models such as least-cost methods or circuit theory by
 any means. Rather, we propose to use simulations from ISSF-IBMMs as a simple but
-powerful tool that complemets earlier methods in an attempt provide a more
+powerful tool that complements earlier methods in an attempt provide a more
 comprehensive understanding of landscape connectivity.
 
 \section{Authors' Contributions}
