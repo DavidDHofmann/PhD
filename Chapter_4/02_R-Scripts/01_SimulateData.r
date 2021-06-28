@@ -11,12 +11,14 @@ rm(list = ls())
 library(RandomFields)  # To simulate covariates
 library(raster)        # To handle spatial data
 library(Rcpp)          # For faster point interpolation
-library(pbmcapply)     # To simulate in parallel
+library(pbmcapply)     # For parallel computing
 library(tidyverse)     # For data wrangling
-library(survival)      # To run conditional logistic regression
 
 # Function to interpolate between spatial points
 sourceCpp("/home/david/ownCloud/Dokumente/Bibliothek/Wissen/R-Scripts/interpolatepoints.cpp")
+
+# Set working directory
+setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
 
 ################################################################################
 #### Simulate Covariates
@@ -25,7 +27,7 @@ sourceCpp("/home/david/ownCloud/Dokumente/Bibliothek/Wissen/R-Scripts/interpolat
 elev <- RMexp(var = 5, scale = 10) +
   RMnugget(var = 1) +
   RMtrend(mean = 0)
-elev <- RFsimulate(elev, x = 1:200, y = 1:200)
+elev <- RFsimulate(elev, x = 1:300, y = 1:300)
 elev <- raster(elev)
 
 # Add a point of attraction
@@ -44,7 +46,11 @@ dist <- (dist - cellStats(dist, mean)) / cellStats(dist, sd)
 covars <- stack(elev, dist)
 names(covars) <- c("elev", "dist")
 
-# Visualize all covariates
+# Let's also specify an extent on which the animals are allowed to move
+ext <- extent(c(50, 250, 50, 250))
+ext <- as(ext, "SpatialPolygons")
+
+# Visualize all covariates + extent
 rasterVis::levelplot(covars, at = seq(-5, 5, length = 50))
 
 ################################################################################
@@ -54,12 +60,19 @@ rasterVis::levelplot(covars, at = seq(-5, 5, length = 50))
 move <- function(
       xy       = NULL
     , covars   = NULL
+    , ext      = NULL
     , prefs    = NULL
     , sl_dist  = NULL
     , n_steps  = 10
     , n_rsteps = 25
     , stop     = TRUE
   ){
+
+  # If no extent is provided, use the extent of the covariates
+  if (is.null(ext)){
+    ext <- extent(covars)
+  }
+  ext <- as(ext, "SpatialPolygons")
 
   # create a new dataframe based on the source point. Note that we draw random
   # turning angles to start off
@@ -70,9 +83,6 @@ move <- function(
     , ta    = c(runif(1, min = 0, max = 2 * pi), NA)
     , sl    = NA
   )
-
-  # Get the extent of the covariates
-  extent <- as(extent(covars), "SpatialPolygons")
 
   # Simulate random steps
   for (i in 2:n_steps){
@@ -120,11 +130,11 @@ move <- function(
     # Depending on the answer in the beginning, the loop breaks if one of the
     # new coordinates is outside the map boundaries
     if (stop){
-      if (nrow(rand[extent, ]) != n_rsteps){
+      if (nrow(rand[ext, ]) != n_rsteps){
         break
       }
     } else {
-      rand <- rand[extent, ]
+      rand <- rand[ext, ]
     }
 
     # Coerce back to regular dataframe
@@ -157,7 +167,7 @@ move <- function(
     rand$cos_ta <- cos(rand$ta)
     rand$log_sl <- log(rand$sl)
 
-    # Prepare model matrix
+    # Prepare model matrix (and remove intercept)
     mat <- model.matrix(~ elev + dist + sl + log_sl + cos_ta, rand)
     mat <- mat[ , 2:ncol(mat)]
 
@@ -194,17 +204,33 @@ n_rsteps  <- 25
 n_steps   <- 200
 sl_dist   <- c(shape = 3, scale = 1)
 prefs     <- c(
-    elev   = 0.5
-  , dist   = -3
-  , sl     = 0.1
-  , log_sl = 0.1
-  , cos_ta = 1
+    elev   = 0.5    # Preference towards elevation
+  , dist   = -10.0   # Preference for distance to point of attraction
+  , sl     = 0      # Preference for step length
+  , log_sl = 0      # Preference for step length
+  , cos_ta = 0      # Preference for turning angle
 )
+
+# # Prepare a function that resamples preferences from given distributions
+# randomPrefs <- function(){
+#   prefs <- c(
+#       elev   = rnorm(n = 1, mean = 0.5, sd = 0.2)
+#     , dist   = rnorm(n = 1, mean = -0.5, sd = 0.5)
+#     , sl     = 0
+#     , log_sl = 0
+#     , cos_ta = 0
+#   )
+#   return(prefs)
+# }
+#
+# # Try it
+# randomPrefs()
 
 # Simulate a test trajectory
 sim <- move(
-    xy       = matrix(c(100, 100), ncol = 2)
+    xy       = matrix(runif(2, 50, 150), ncol = 2)
   , covars   = covars
+  , ext      = ext
   , stop     = stop
   , n_rsteps = n_rsteps
   , n_steps  = n_steps
@@ -212,13 +238,18 @@ sim <- move(
   , prefs    = prefs
 )
 
+# Add an ID for the individual and an ID for each step
+sim$ID <- 1
+sim$step_id <- 1:nrow(sim)
+
 # Visualize the simulation
 plot(covars[[1]])
+plot(ext, add = T, border = "red", lwd = 2)
 points(sim$y ~ sim$x, type = "o", pch = 16, cex = 0.5)
 plot(center, add = T, col = "red", pch = 20)
 
 ################################################################################
-#### Simulate Multiple Trajectories
+#### Multiple Trajectories
 ################################################################################
 # Number of simulated individuals
 ndisp <- 10
@@ -232,8 +263,9 @@ sims <- pbmclapply(
 
   # Simulate trajectory
   sim <- move(
-      xy       = matrix(c(100, 100), ncol = 2)
+      xy       = matrix(runif(2, 50, 150), ncol = 2)
     , covars   = covars
+    , ext      = ext
     , stop     = stop
     , n_rsteps = n_rsteps
     , n_steps  = n_steps
@@ -252,24 +284,28 @@ sims <- pbmclapply(
 sims <- do.call(rbind, sims)
 rownames(sims) <- NULL
 
-# Assign unique step ids
+# Assign unique ID to each step
 sims$step_id <- 1:nrow(sims)
 
 # Visualize them
 ids <- unique(sims$ID)
 col <- rainbow(length(ids))
 plot(covars[[1]])
+plot(ext, add = T, border = "red", lwd = 2)
 for (i in 1:length(unique(sims$ID))){
   sub <- subset(sims, ID == ids[i])
   points(sub$y ~ sub$x, col = col[i], pch = 16, cex = 0.4)
   lines(sub$y ~ sub$x, col = col[i], lwd = 0.3)
 }
 
-################################################################################
-#### Generate "Observed" Data
-################################################################################
-# Assume that we only observed xy data + ID
+# In reality, we don't observe step lengths, turning angles etc., but we derive
+# them from xy coordinates. Hence, let's that we only observed xy data + ID
 obs <- dplyr::select(sims, x, y, ID, step_number, step_id)
+
+# This is the type of data that we would observe in reality. Let's store it to
+# file. Also store the simulated spatial layers to file
+write_csv(obs, "03_Data/01_RawData/ObservedMovements.csv")
+writeRaster(covars, "03_Data/01_RawData/CovariateLayers.tif")
 
 # Function to calculate the step length
 stepLength <- function(x, y){
@@ -389,57 +425,228 @@ all <- cbind(all, t(extracted))
 all$log_sl <- log(all$sl)
 all$cos_ta <- cos(all$ta)
 
-# # Create lines from coordinates
-# begincoords <- all[, c("x", "y")]
-# endcoords <- all[, c("x_to", "y_to")]
-# l <- vector("list", nrow(begincoords))
-# for (i in seq_along(l)){
-#   l[[i]] <- Lines(list(Line(rbind(
-#       as.matrix(begincoords[i, ])
-#     , as.matrix(endcoords[i,])
-#   ))), as.character(i))
-# }
-#
-# # Make the lines spatial
-# lines <- SpatialLines(l)
-# lines <- as(lines, "SpatialLinesDataFrame")
-# lines@data <- all
-#
-# # Visualize
-# head(lines)
-# plot(lines)
-#
-# # Store to file
-# library(rgdal)
-# writeOGR(lines, ".", "test", driver = "ESRI Shapefile", overwrite = T)
-
 ################################################################################
-#### Run Model
+#### Estimate Beta: USING CLOGIT
 ################################################################################
-# Run model (here, we're not going to fit a mixed model)
+# Run model (only one variable)
 mod <- clogit(case ~
   + elev
   + dist
-  + sl
-  + log_sl
-  + cos_ta
   + strata(step_id)
   , data = all
 )
 summary(mod)
+beta_cl <- coef(mod)
+
+################################################################################
+#### Estimate Beta: MAXIMUM LIKELIHOOD BY HAND
+################################################################################
+# Function to calculate the log-likelihoood (in parallel)
+loglik <- function(beta){
+
+  # Identify number of strata
+  strata <- unique(all$step_id)
+
+  # Go through each strata and calculate log-likelihood for proposed beta (here
+  # we use parallel computing)
+  loglik <- mclapply(strata, mc.cores = detectCores() - 1, function(x){
+    sub <- all[all$step_id == x, ]
+    mat <- model.matrix(case ~ elev + dist, sub)
+    score <- exp(mat %*% c(0, beta))
+    lik <- score[1] / sum(score)
+    log(lik)
+  })
+  loglik <- do.call(rbind, loglik)
+
+  # Return the summed log-likelihood
+  sum <- sum(loglik)
+  return(sum)
+
+}
+
+# Calculate log-likelihood for different betas
+betas <- seq(0, 1, by = 0.01)
+betas <- expand.grid(beta1 = seq(0, 1, by = 0.1), beta2 = seq(-1, 0, by = 0.1))
+betas <- as.matrix(betas)
+logliks <- sapply(betas, function(x){loglik(beta = x)})
+logliks <- sapply(1:nrow(betas), function(x){loglik(beta = betas[x, ])})
+
+# Find maximum likelihood estimate
+beta_ml <- betas[which.max(logliks), ]
+
+# Compare to model
+cbind(ML_clogit = beta_cl, ML_hand = beta_ml)
 
 # Plot
-mod_plot <- broom::tidy(mod)
+plot(logliks ~ betas[, 1], type = "o", xlab = "Beta", ylab = "Log-Likelihood", axes = F, pch = 16)
+abline(v = beta_ml, lty = 2, col = "red")
+abline(v = coef(mod), lty = 2, col = "blue")
+legend("bottomright", col = c("red", "blue"), legend = c("Brute ML", "Model ML"), lty = c(2, 2))
+axis(1)
+axis(2)
 
-# Compare estimates to true values
-cbind(coef(mod), prefs)
+################################################################################
+#### Estimate Beta: MAXIMUM LIKELIHOOD USING MLE
+################################################################################
+# To use the mle function, we need to be able to calculate the negative
+# log-likelihood instead of the log-likelihood
+negloglik <- function(beta){
+  loglik <- loglik(beta)
+  negloglik <- -loglik
+  return(negloglik)
+}
+beta_mle <- coef(mle(negloglik, start = list(beta = 0), method = "BFGS"))
 
-# Visualize
-preferences <- as.data.frame(prefs)
-preferences$term <- rownames(preferences)
-ggplot(mod_plot, aes(x = estimate, y = term)) +
-  geom_vline(xintercept = 0, lty = 2, col = "gray80") +
-  geom_errorbarh(aes(xmin = estimate - 1.96 * std.error, xmax = estimate + 1.96 * std.error), height = 0.2) +
-  geom_point() +
-  geom_point(data = preferences, aes(x = prefs, y = term), col = "red", pch = 1, cex = 2) +
-  theme_classic()
+# Compare to model
+cbind(ML_clogit = beta_cl, ML_hand = beta_ml, ML_mle = beta_mle)
+
+################################################################################
+#### Estimate Beta: BAYESIAN
+################################################################################
+dat <- all[, c("step_id", "case", "elev", "dist")]
+y <- dat %>%
+  dplyr::select(step_id, case) %>%
+  group_by(step_id) %>%
+  mutate(row = row_number()) %>%
+  ungroup() %>%
+  spread(key = row, value = case) %>%
+  dplyr::select(-step_id) %>%
+  as.matrix()
+elev <- dat %>%
+  dplyr::select(step_id, elev) %>%
+  group_by(step_id) %>%
+  mutate(row = row_number()) %>%
+  ungroup() %>%
+  spread(key = row, value = elev) %>%
+  dplyr::select(-step_id) %>%
+  as.matrix()
+dist <- dat %>%
+  dplyr::select(step_id, dist) %>%
+  group_by(step_id) %>%
+  mutate(row = row_number()) %>%
+  ungroup() %>%
+  spread(key = row, value = dist) %>%
+  dplyr::select(-step_id) %>%
+  as.matrix()
+
+# Bundle data
+dat_jags <- list(
+    y           = y
+  , elev        = elev
+  , dist        = dist
+  , strata      = nrow(y)
+  , strata_size = ncol(y)
+)
+
+# Write JAGS model file
+cat(file = "model.txt", "model {
+
+  # Prior
+  beta_1 ~ dnorm(0, 0.001)
+  beta_2 ~ dnorm(0, 0.001)
+
+  # Likelihood
+  for (i in 1:strata){
+    for (j in 1:strata_size){
+      phi[i, j] <- exp(beta_1 * elev[i, j] + beta_2 * dist[i, j])
+    }
+    for (j in 1:strata_size){
+      lambda[i, j] <- phi[i, j] / sum(phi[i, 1:strata_size])
+    }
+    y[i, 1:strata_size] ~ dmulti(lambda[i, 1:strata_size], 1)
+  }
+
+}")
+
+# Function to sample initial values
+inits <- function(){
+  list(
+      beta_1 = rnorm(1)
+    , beta_2 = rnorm(1)
+  )
+}
+
+# Define parameters to be monitored (i.e. estimated)
+params <- c("beta_1", "beta_2")
+
+# MCMC settings (usually defined using trial and error)
+na <- 2000        # Number of iterations in the adaptive phase
+ni <- 2500        # Number of draws from the posterior (in each chain)
+nb <- 1000        # Number of draws to discard as burn-in
+nc <- 5           # Number of chains
+nt <- 5           # Thinning rate (nt = 1 means we do not thin)
+
+# Run the model
+mod_jags <- jags(
+    data               = dat_jags
+  , inits              = inits
+  , parameters.to.save = params
+  , model.file         = "model.txt"
+  , n.iter             = ni
+  , n.burnin           = nb
+  , n.chains           = nc
+  , n.thin             = nt
+  , n.adapt            = na
+  , parallel           = T
+)
+
+# Show traceplots
+par(mfrow = c(2, 2))
+jagsUI::traceplot(mod_jags)
+
+# Visualize distribution of beta_1
+hist(mod_jags$sims.list$beta_1
+  , breaks = 20
+  , col    = "cornflowerblue"
+  , main   = "Distribution of Beta"
+  , xlab   = expression(beta)
+  , xlim   = c(-1.5, 1.5)
+)
+abline(v = 0, lty = 2, col = "red")
+
+# Visualize distribution of beta_2
+hist(mod_jags$sims.list$beta_2
+  , breaks = 20
+  , col    = "cornflowerblue"
+  , main   = "Distribution of Beta"
+  , xlab   = expression(beta)
+  , xlim   = c(-3, 3)
+)
+abline(v = 0, lty = 2, col = "red")
+
+# Summary of output, rounded to 3 digits
+print(mod_jags, 3)
+
+# Let's look at the estimates
+beta_jags <- c(mod_jags$mean$beta_1, mod_jags$mean$beta_2)
+
+# Compare estimates to true parameters
+cbind(
+    ML_clogit = beta_cl
+  , ML_hand   = beta_ml
+  , ML_mle    = beta_mle
+  , JAGS      = beta_jags
+)
+
+################################################################################
+#### TESTING
+################################################################################
+# For testing only
+# rmultinom(n = 1, prob = c(1, 1, 5), size = 1)
+# dmultinom(x = c(0, 0, 1), prob = c(1, 1, 5))
+
+# strata <- nrow(y)
+# strata_size <- ncol(y)
+# beta <- 0.5
+# phi <- matrix(rep(NA, strata * strata_size), ncol = strata_size)
+# lambda <- matrix(rep(NA, strata * strata_size), ncol = strata_size)
+
+# for (i in 1:strata){
+#   for (j in 1:strata_size){
+#     phi[i, j] <- exp(beta * elev[i, j])
+#   }
+#   for (j in 1:strata_size){
+#     lambda[i, j] <- phi[i, j] / sum(phi[i, 1:strata_size])
+#   }
+#   y[i, 1:strata_size] ~ dmultinom(x = y[i, ], prob = lambda[i, 1:strata_size])
+# }
