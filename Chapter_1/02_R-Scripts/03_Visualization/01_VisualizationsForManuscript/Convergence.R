@@ -93,7 +93,15 @@ p2 <- convergence %>%
     labels = function(x){format(x, big.mark = "'")}
   ) +
   xlab("# Simulated Trajectories") +
-  ylab("Mean Relative Traversal Frequency")
+  ylab("Mean Relative Traversal Frequency") +
+  geom_segment(aes(x = 31000, y = 0.008, xend = 23000, yend = 0.00791)
+    , arrow = arrow(length = unit(0.02, "npc")
+    , type  = "closed"
+  )
+    , colour  = "black"
+    , size    = 0.2
+  ) +
+  annotate("text", x = 31000, y = 0.00802, label = "95% Prediction-Interval (95%-PI)", fontface = 3)
 
 # Check the width of the confidence interval over time
 p3 <- convergence %>%

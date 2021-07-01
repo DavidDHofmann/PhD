@@ -78,14 +78,15 @@
 \begin{figure}
   \begin{center}
     \includegraphics[width=\textwidth]{99_Convergence}
-    \caption{Relative traversal frequency across 1'000 checkpoints (5 km x 5)
-    distributed in the study area. The relative traversal frequency is plotted
-    against the number of simulated individuals to visualize how quickly the
-    metric converges to a steady state. (a) Replicated (100 times) relative
-    traversal frequencies across three randomly chosen checkpoints as well as
-    the corresponding 95\% prediction interval (PI). (b) Averaged relative
-    traversal frequency across all checkpoints and replicates including a 95\%
-    PI. (c) Width of the PI in relation to the number of simulated dispersers.}
+    \caption{Relative traversal frequency through 1'000 checkpoints (5 km x 5)
+    distributed randomly across the study area. The relative traversal frequency
+    is plotted against the number of simulated individuals to visualize how
+    quickly the metric converges to a steady state. (a) Replicated (100 times)
+    relative traversal frequencies across three randomly chosen checkpoints as
+    well as the corresponding 95\% prediction interval (PI). (b) Averaged
+    relative traversal frequency across all checkpoints and replicates including
+    a 95\% PI. (c) Width of the PI in relation to the number of simulated
+    dispersers.}
     \label{Convergence}
   \end{center}
 \end{figure}
@@ -137,6 +138,34 @@
   adopted to investigate connectivity between other protected areas need not to
   be restricted to national parks.}
   \label{AreasReached}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \includegraphics[width=\textwidth]{99_ModelingDecisions.png}
+  \caption{Five major modeling decisions that a researcher needs to consider
+  when simulating dispersers to assess landscape connectivity. (1) Number of
+  simulated trajectories. (2) Handling individual variation: we used point
+  estimates when simulating dispersers, assuming that there was no individual
+  variation. Alternatively, however, one could draw preferences for each
+  simulated individually based on model uncertainty. (3) Dispersal duration.
+  While one could draw the number of simulated steps based on observed dispersal
+  events, we opted for an alternative and simulated each individual for 2'000
+  steps, which was at the upper end of observed dispersal durations. This allows
+  to easily shorten the generated trajectories afterwards and to investigate the
+  sensitivity of results with regards to the dispersal duration. (4) Boundary
+  behavior. We allowed dispersers to leave and re-enter the main study area
+  through a buffer zone with randomized covariate values. Alternatively, one
+  could discard transgressing random steps, thereby forcing dispersers to remain
+  within the study area or simply terminate the simulation, assuming the
+  individual has disappeared. (5) Source point location. The location of source
+  points should optimally be biologically informed. For our simulation, we
+  placed source points within protected areas large enough to sustain viable
+  wild dog populations. Conceivable alternatives include placing source points
+  according to a habitat suitability model or based on abundance information.
+  Importantly, one must also consider potential immigrants from outside the main
+  study area.}
+  \label{ModelingDecisions}
 \end{figure}
 \efloatseparator
  

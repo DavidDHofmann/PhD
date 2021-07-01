@@ -23,6 +23,8 @@ library(viridis)   # For nice colors
 library(sf)        # To plot spatial stuff with ggplot
 library(ggpubr)    # To arrange multiple plots
 library(ggnetwork) # To plot networks with ggplot
+library(ggridges)  # For ridgeline plot
+library(lemon)     # For capped coordinate system
 
 ################################################################################
 #### Simulate Permeability Surface (could be any set of covariates)
@@ -353,12 +355,8 @@ p1 <- ggplot() +
     , y        = NULL
     , fill     = NULL
   ) +
-  theme(
-      legend.position  = "none"
-    , legend.box       = "vertical"
-    , panel.background = element_blank()
-    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-  )
+  theme_void() +
+  theme(legend.position  = "none")
 
 # Plot of betweenness
 p2 <- ggplot() +
@@ -392,12 +390,8 @@ p2 <- ggplot() +
     , y        = NULL
     , fill     = NULL
   ) +
-  theme(
-      legend.position  = "none"
-    , legend.box       = "vertical"
-    , panel.background = element_blank()
-    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-  )
+  theme_void() +
+  theme(legend.position  = "none")
 
 # Prepare a plot for interpatch connectivity (I'll do the rest in powerpoint)
 p3 <- ggplot() +
@@ -430,15 +424,102 @@ p3 <- ggplot() +
     , y        = NULL
     , fill     = NULL
   ) +
-  theme(
-      legend.position  = "none"
-    , legend.box       = "vertical"
-    , panel.background = element_blank()
-    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-  )
+  theme_void() +
+  theme(legend.position  = "none")
 
+################################################################################
+#### Plot of Arbitrary Movement Model
+################################################################################
+# Generate some arbitrary data to plot
+x <- seq(-0.2, 0.2, by = 0.001)
+y <- dnorm(x, mean = 0, sd = 0.05)
+ci_90 <- qnorm(c(0.050, 0.950), mean = 0, sd = 0.05)
+ci_95 <- qnorm(c(0.025, 0.975), mean = 0, sd = 0.05)
+ci_99 <- qnorm(c(0.005, 0.995), mean = 0, sd = 0.05)
+
+# Shift data to three different means
+dat1 <- data.frame(Covariate = "v", Mean = -0.2, x = x - 0.2, y = y)
+dat2 <- data.frame(Covariate = "w", Mean = 0.4, x = x + 0.4, y = y)
+dat3 <- data.frame(Covariate = "x", Mean = -0.3, x = x - 0.3, y = y)
+dat4 <- data.frame(Covariate = "y", Mean = -0.2, x = x - 0.2, y = y)
+dat5 <- data.frame(Covariate = "z", Mean = 0.2, x = x + 0.2, y = y)
+
+# Put all together
+dat <- rbind(dat1, dat2, dat3, dat4, dat5)
+
+# Calculate summaries
+averaged <- data.frame(
+    Covariate = c("v", "w", "x", "y", "z")
+  , Mean = c(-0.2, 0.4, -0.3, -0.2, 0.2)
+  , LCI_90 = ci_90[1] + c(-0.2, 0.4, -0.3, -0.2, 0.2)
+  , UCI_90 = ci_90[2] + c(-0.2, 0.4, -0.3, -0.2, 0.2)
+  , LCI_95 = ci_95[1] + c(-0.2, 0.4, -0.3, -0.2, 0.2)
+  , UCI_95 = ci_95[2] + c(-0.2, 0.4, -0.3, -0.2, 0.2)
+  , LCI_99 = ci_99[1] + c(-0.2, 0.4, -0.3, -0.2, 0.2)
+  , UCI_99 = ci_99[2] + c(-0.2, 0.4, -0.3, -0.2, 0.2)
+)
+
+# Generate plot
+p4 <- ggplot(dat, aes(x = x, y = Covariate, height = y, group = Covariate)) +
+  geom_errorbarh(
+      data        = averaged
+    , inherit.aes = F
+    , height      = 0
+    , size        = 0.5
+    , alpha       = 1
+    , col         = "orange"
+    , aes(y = Covariate, xmin = LCI_99, xmax = UCI_99)
+  ) +
+  geom_errorbarh(
+      data        = averaged
+    , inherit.aes = F
+    , height      = 0
+    , size        = 1
+    , alpha       = 1
+    , col         = "orange"
+    , aes(y = Covariate, xmin = LCI_95, xmax = UCI_95)
+  ) +
+  geom_errorbarh(
+      data        = averaged
+    , inherit.aes = F
+    , height      = 0
+    , size        = 2
+    , alpha       = 0.5
+    , col         = "orange"
+    , aes(y = Covariate, xmin = LCI_90, xmax = UCI_90)
+  ) +
+  geom_point(
+      data        = averaged
+    , inherit.aes = F
+    , size        = 3
+    , col         = "orange"
+    , aes(x = Mean, y = Covariate)
+  ) +
+  geom_vline(xintercept = 0, lty = 2, col = "gray50") +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+    , xlim   = c(-0.5, 0.5)
+  ) +
+  labs(x = expression(beta*"-Coefficient"))
+
+# Show plots
+p1 <- p1 +
+  labs(title = "Heatmap", subtitle = "(Traversal Frequency)") +
+  theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
+p2 <- p2 +
+  labs(title = "Betweenness", subtitle = "(Bottlenecks & Dispersal Corridors)") +
+  theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
+p3 <- p3 +
+  labs(title = "Inter-Patch Connectivity", subtitle = "(Frequency & Duration of Movements between Patches)") +
+  theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
+p4 <- p4 +
+  labs(title = "Integrated Step\nSelection Model") +
+  theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
 
 # Store the plots
 ggsave("test.png", plot = p1)
 ggsave("test2.png", plot = p2)
 ggsave("test3.png", plot = p3)
+ggsave("test4.png", plot = p4, height = 3, width = 4)

@@ -3,7 +3,7 @@ Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
-Repeated entry---line 3227 of file Literatur.bib
+Repeated entry---line 3273 of file Literatur.bib
  : @article{Koen.2014
  :                   ,
 I'm skipping whatever remains of this entry
@@ -14,45 +14,45 @@ Warning--I didn't find a database entry for "Boyd.2005"
 Warning--I didn't find a database entry for "Wabakken.2007"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Munden.2020
-You've used 98 entries,
+You've used 103 entries,
             1935 wiz_defined-function locations,
-            1118 strings with 24128 characters,
-and the built_in function-call counts, 42879 in all, are:
-= -- 4121
-> -- 2152
-< -- 38
-+ -- 749
-- -- 748
-* -- 3993
-:= -- 7544
-add.period$ -- 296
-call.type$ -- 98
-change.case$ -- 853
-chr.to.int$ -- 97
-cite$ -- 100
-duplicate$ -- 1389
-empty$ -- 2772
-format.name$ -- 884
-if$ -- 8153
+            1148 strings with 25130 characters,
+and the built_in function-call counts, 44903 in all, are:
+= -- 4321
+> -- 2241
+< -- 41
++ -- 779
+- -- 778
+* -- 4173
+:= -- 7901
+add.period$ -- 313
+call.type$ -- 103
+change.case$ -- 891
+chr.to.int$ -- 102
+cite$ -- 105
+duplicate$ -- 1459
+empty$ -- 2910
+format.name$ -- 923
+if$ -- 8544
 int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 100
-newline$ -- 495
-num.names$ -- 296
-pop$ -- 692
+missing$ -- 107
+newline$ -- 521
+num.names$ -- 311
+pop$ -- 724
 preamble$ -- 2
-purify$ -- 862
+purify$ -- 902
 quote$ -- 0
-skip$ -- 1043
+skip$ -- 1094
 stack$ -- 0
-substring$ -- 3085
-swap$ -- 129
+substring$ -- 3226
+swap$ -- 134
 text.length$ -- 3
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 574
+type$ -- 600
 warning$ -- 2
-while$ -- 335
+while$ -- 351
 width$ -- 0
-write$ -- 1272
+write$ -- 1340
 (There was 1 error message)

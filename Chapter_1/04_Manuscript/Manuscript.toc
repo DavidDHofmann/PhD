@@ -17,23 +17,23 @@
 \contentsline {subsection}{\numberline {2.4}Movement Model (80\%)}{7}{subsection.2.4}
 \contentsline {subsection}{\numberline {2.5}Dispersal Simulation (80\%)}{9}{subsection.2.5}
 \contentsline {subsection}{\numberline {2.6}Source Points (90\%)}{10}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}Convegence (80\%)}{10}{subsection.2.7}
+\contentsline {subsection}{\numberline {2.7}Convergence (80\%)}{10}{subsection.2.7}
 \contentsline {subsection}{\numberline {2.8}Heatmap (100\%)}{11}{subsection.2.8}
 \contentsline {subsection}{\numberline {2.9}Betweenness (80\%)}{11}{subsection.2.9}
 \contentsline {subsection}{\numberline {2.10}Inter-Patch Connectivity (80\%)}{11}{subsection.2.10}
 \contentsline {section}{\numberline {3}Results}{12}{section.3}
 \contentsline {subsection}{\numberline {3.1}Movement Model (80\%)}{12}{subsection.3.1}
 \contentsline {subsection}{\numberline {3.2}Dispersal Simulation (80\%)}{13}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Convergence (50\%)}{13}{subsection.3.3}
+\contentsline {subsection}{\numberline {3.3}Convergence (80\%)}{13}{subsection.3.3}
 \contentsline {subsection}{\numberline {3.4}Heatmap (80\%)}{14}{subsection.3.4}
 \contentsline {subsection}{\numberline {3.5}Betweenness (80\%)}{14}{subsection.3.5}
 \contentsline {subsection}{\numberline {3.6}Inter-Patch Connectivity (80\%)}{14}{subsection.3.6}
 \contentsline {section}{\numberline {4}Discussion}{15}{section.4}
 \contentsline {subsection}{\numberline {4.1}Short Summary (90\%)}{15}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Movement Model (80 \%)}{15}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Simulation (80\%)}{16}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Maps (10\%)}{20}{subsection.4.4}
-\contentsline {subsection}{\numberline {4.5}General (20\%)}{21}{subsection.4.5}
+\contentsline {subsection}{\numberline {4.2}Movement Model (80 \%)}{16}{subsection.4.2}
+\contentsline {subsection}{\numberline {4.3}Simulation (80\%)}{17}{subsection.4.3}
+\contentsline {subsection}{\numberline {4.4}Maps (10\%)}{21}{subsection.4.4}
+\contentsline {subsection}{\numberline {4.5}General (20\%)}{22}{subsection.4.5}
 \contentsline {section}{\numberline {5}Authors' Contributions}{23}{section.5}
-\contentsline {section}{\numberline {6}Data Availability}{23}{section.6}
-\contentsline {section}{\numberline {7}Acknowledgements}{23}{section.7}
+\contentsline {section}{\numberline {6}Data Availability}{24}{section.6}
+\contentsline {section}{\numberline {7}Acknowledgements}{24}{section.7}
