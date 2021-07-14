@@ -1,39 +1,42 @@
 \babel@toc {english}{}
-\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
-\contentsline {subsection}{\numberline {1.1}Importance of Dispersal \& Connectivity (90\%)}{1}{subsection.1.1}
-\contentsline {subsection}{\numberline {1.2}Advancements in GPS Technology \& Movement Ecology (90\%)}{1}{subsection.1.2}
-\contentsline {subsection}{\numberline {1.3}Resource Selection \& Connectivity (90\%)}{1}{subsection.1.3}
-\contentsline {subsection}{\numberline {1.4}Issues with Least-Cost Paths (90\%)}{2}{subsection.1.4}
-\contentsline {subsection}{\numberline {1.5}Issues with Circuit Theory (90\%)}{3}{subsection.1.5}
-\contentsline {subsection}{\numberline {1.6}Issues of Both Methods}{3}{subsection.1.6}
-\contentsline {subsection}{\numberline {1.7}What about IBMMs? (90\%)}{3}{subsection.1.7}
-\contentsline {subsection}{\numberline {1.8}Step Selection Analysis (90\%)}{4}{subsection.1.8}
-\contentsline {subsection}{\numberline {1.9}Study Species \& Study Area (90\%)}{4}{subsection.1.9}
-\contentsline {subsection}{\numberline {1.10}Previous Paper (90\%)}{5}{subsection.1.10}
-\contentsline {section}{\numberline {2}Methods}{5}{section.2}
-\contentsline {subsection}{\numberline {2.1}Study Area (90\%)}{5}{subsection.2.1}
-\contentsline {subsection}{\numberline {2.2}GPS Relocation Data (90\%)}{6}{subsection.2.2}
-\contentsline {subsection}{\numberline {2.3}Covariates (90\%)}{7}{subsection.2.3}
-\contentsline {subsection}{\numberline {2.4}Movement Model (80\%)}{7}{subsection.2.4}
-\contentsline {subsection}{\numberline {2.5}Dispersal Simulation (80\%)}{9}{subsection.2.5}
-\contentsline {subsection}{\numberline {2.6}Source Points (90\%)}{10}{subsection.2.6}
-\contentsline {subsection}{\numberline {2.7}Convergence (80\%)}{10}{subsection.2.7}
-\contentsline {subsection}{\numberline {2.8}Heatmap (100\%)}{11}{subsection.2.8}
-\contentsline {subsection}{\numberline {2.9}Betweenness (80\%)}{11}{subsection.2.9}
-\contentsline {subsection}{\numberline {2.10}Inter-Patch Connectivity (80\%)}{11}{subsection.2.10}
-\contentsline {section}{\numberline {3}Results}{12}{section.3}
-\contentsline {subsection}{\numberline {3.1}Movement Model (80\%)}{12}{subsection.3.1}
-\contentsline {subsection}{\numberline {3.2}Dispersal Simulation (80\%)}{13}{subsection.3.2}
-\contentsline {subsection}{\numberline {3.3}Convergence (80\%)}{13}{subsection.3.3}
-\contentsline {subsection}{\numberline {3.4}Heatmap (80\%)}{14}{subsection.3.4}
-\contentsline {subsection}{\numberline {3.5}Betweenness (80\%)}{14}{subsection.3.5}
-\contentsline {subsection}{\numberline {3.6}Inter-Patch Connectivity (80\%)}{14}{subsection.3.6}
-\contentsline {section}{\numberline {4}Discussion}{15}{section.4}
-\contentsline {subsection}{\numberline {4.1}Short Summary (90\%)}{15}{subsection.4.1}
-\contentsline {subsection}{\numberline {4.2}Movement Model (80 \%)}{16}{subsection.4.2}
-\contentsline {subsection}{\numberline {4.3}Simulation (80\%)}{17}{subsection.4.3}
-\contentsline {subsection}{\numberline {4.4}Maps (10\%)}{21}{subsection.4.4}
-\contentsline {subsection}{\numberline {4.5}General (20\%)}{22}{subsection.4.5}
-\contentsline {section}{\numberline {5}Authors' Contributions}{23}{section.5}
-\contentsline {section}{\numberline {6}Data Availability}{24}{section.6}
-\contentsline {section}{\numberline {7}Acknowledgements}{24}{section.7}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Importance of Dispersal \& Connectivity (90\%)}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Advancements in GPS Technology \& Movement Ecology (90\%)}{1}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Resource Selection \& Connectivity (90\%)}{1}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Issues with Least-Cost Paths (90\%)}{2}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Issues with Circuit Theory (90\%)}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Issues of Both Methods}{3}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}What about IBMMs? (90\%)}{3}{subsection.1.7}%
+\contentsline {subsection}{\numberline {1.8}Step Selection Analysis (90\%)}{4}{subsection.1.8}%
+\contentsline {subsection}{\numberline {1.9}Study Species \& Study Area (90\%)}{4}{subsection.1.9}%
+\contentsline {subsection}{\numberline {1.10}Previous Paper (90\%)}{5}{subsection.1.10}%
+\contentsline {section}{\numberline {2}Methods}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Study Area (90\%)}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}GPS Relocation Data (90\%)}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Covariates (90\%)}{7}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Movement Model (80\%)}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Dispersal Simulation (80\%)}{9}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Source Points (90\%)}{10}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Convergence (80\%)}{10}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Heatmap (100\%)}{11}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9}Betweenness (80\%)}{11}{subsection.2.9}%
+\contentsline {subsection}{\numberline {2.10}Inter-Patch Connectivity (80\%)}{11}{subsection.2.10}%
+\contentsline {section}{\numberline {3}Results}{12}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Movement Model (80\%)}{12}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Dispersal Simulation (80\%)}{13}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Convergence (80\%)}{13}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Heatmap (80\%)}{14}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Betweenness (80\%)}{14}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Inter-Patch Connectivity (80\%)}{14}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Discussion}{15}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Short Summary (90\%)}{15}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Movement Model (80 \%)}{16}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Simulation (80\%)}{17}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Maps (70\%)}{17}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Related Literature (80\%)}{18}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Benefits \& Modeling Decisions with ISSF Simulations (70\%)}{19}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Further Considerations (70\%)}{20}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Conclusion (80\%)}{23}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{23}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{24}{section.6}%
+\contentsline {section}{\numberline {7}Acknowledgements}{24}{section.7}%

@@ -13,6 +13,10 @@ library(davidoff)
 library(viridis)
 library(tidyverse)
 library(raster)
+library(sf)
+
+# Set seed
+set.seed(123)
 
 # Function to create random lines
 randomLine <- function(nodes = 2){
@@ -43,3 +47,15 @@ plot(lines, col = "white", add = T, lty = 1:5)
 plot(lines_r, col = magma(20), box = F, axes = F, legend = F)
 plot(lines, add = T, col = "white", lty = 1:5)
 text(lines_r)
+
+# Visualize
+png("test.png", width = 1080, height = 1080, pointsize = 30)
+plot(lines_r, col = "white", box = F, axes = F, legend = F)
+plot(lines, col = "black", add = T, lty = 1:5, lwd = 3)
+dev.off()
+
+png("test2.png", width = 1080, height = 1080, pointsize = 30)
+plot(lines_r, col = magma(20), box = F, axes = F, legend = F, lwd = 2)
+plot(lines, add = T, col = "white", lty = 1:5, lwd = 3)
+text(lines_r)
+dev.off()

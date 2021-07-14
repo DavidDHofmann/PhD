@@ -52,7 +52,7 @@ prot$Desig <- as.factor(as.character(prot$Desig))
 africa <- subset(africa, !(ID %in% c(27:41, 689, 690)))
 
 # Get the extent of the KAZA
-kaza_ext <- as(extent(kaza), "SpatialPolygons")
+kaza_ext <- as(extent(kaza) + c(-1, +1, -1, +1) * 50 / 111, "SpatialPolygons")
 crs(kaza_ext) <- CRS("+init=epsg:4326")
 
 # Create labels for countries
@@ -170,12 +170,12 @@ p1 <- tm_shape(hill_africa) +
       , lty = 1
       , lwd = 1.5
     ) +
-  # tm_shape(kaza_ext) +
-  #   tm_borders(
-  #       col = "black"
-  #     , lty = 1
-  #     , lwd = 1
-  #   ) +
+  tm_shape(kaza_ext) +
+    tm_borders(
+        col = "black"
+      , lty = 1
+      , lwd = 1
+    ) +
   # tm_shape(lines_countries) +
   #   tm_lines(
   #       col = "gray30"

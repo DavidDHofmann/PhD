@@ -53,22 +53,32 @@ Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2020).
   Endangered Social Carnivore}.
 \newblock {\em {Journal of Animal Ecology}}, 89(10):2356--2366.
 
-\bibitem[Behr et~al., 2017]{Behr.2017}
-Behr, D.~M., Ozgul, A., and Cozzi, G. (2017).
-\newblock {Combining Human Acceptance and Habitat Suitability in a Unified
-  Socio-Ecological Suitability Model: A Case Study of the Wolf in Switzerland}.
-\newblock {\em {Journal of Applied Ecology}}, 54(6):1919--1929.
-
 \bibitem[Benz et~al., 2016]{Benz.2016}
 Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
   C.~F., and Ciuti, S. (2016).
 \newblock {Dispersal Ecology Informs Design of Large-Scale Wildlife Corridors}.
 \newblock {\em {PLOS ONE}}, 11(9):e0162989.
 
+\bibitem[Bonnet et~al., 1999]{Bonnet.1999}
+Bonnet, X., Naulleau, G., and Shine, R. (1999).
+\newblock {The Dangers of Leaving Home: Dispersal and Mortality in Snakes}.
+\newblock {\em {Biological Conservation}}, 89(1):39--50.
+
 \bibitem[Bovet and Benhamou, 1991]{Bovet.1991}
 Bovet, P. and Benhamou, S. (1991).
 \newblock {Optimal Sinuosity in Central Place Foraging Movements}.
 \newblock {\em {Animal Behaviour}}, 42(1):57--62.
+
+\bibitem[Bowler and Benton, 2009]{Bowler.2009}
+Bowler, D.~E. and Benton, T.~G. (2009).
+\newblock {Variation in Dispersal Mortality and Dispersal Propensity among
+  Individuals: The Effects of Age, Sex and Resource Availability}.
+\newblock {\em {Journal of Animal Ecology}}, 78(6):1234--1241.
+
+\bibitem[Boyce, 1992]{Boyce.1992}
+Boyce, M.~S. (1992).
+\newblock {Population Viability Analysis}.
+\newblock {\em {Annual Review of Ecology and Systematics}}, 23(1):481--497.
 
 \bibitem[Boyce et~al., 2002]{Boyce.2002}
 Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F. K.~A. (2002).
@@ -126,6 +136,11 @@ Cozzi, G., Behr, D., Webster, H., Claase, M., Bryce, C., Modise, B., McNutt,
   for Management and Conservation across Transfrontier Landscapes}.
 \newblock In press.
 
+\bibitem[Cozzi et~al., 2018]{Cozzi.2018}
+Cozzi, G., Maag, N., Börger, L., Clutton-Brock, T.~H., and Ozgul, A. (2018).
+\newblock {Socially Informed Dispersal in a Territorial Cooperative Breeder}.
+\newblock {\em {Journal of Animal Ecology}}, 87(3):838--849.
+
 \bibitem[Creel and Creel, 2002]{Creel.2002}
 Creel, S. and Creel, N.~M. (2002).
 \newblock {\em {The African Wild Dog: Behavior, Ecology, and Conservation}}.
@@ -135,6 +150,14 @@ Creel, S. and Creel, N.~M. (2002).
 Csardi, G. and Nepusz, T. (2006).
 \newblock {The igraph Software Package for Complex Network Research}.
 \newblock {\em {InterJournal}}, Complex Systems:1695.
+
+\bibitem[Cushman et~al., 2018]{Cushman.2018}
+Cushman, S.~A., Elliot, N.~B., Bauer, D., Kesch, K., Bahaa-el din, L.,
+  Bothwell, H., Flyman, M., Mtare, G., Macdonald, D.~W., and Loveridge, A.~J.
+  (2018).
+\newblock {Prioritizing Core Areas, Corridors and Conflict Hotspots for Lion
+  Conservation in Southern Africa}.
+\newblock {\em {PLOS ONE}}, 13(7):e0196213.
 
 \bibitem[Cushman and Lewis, 2010]{Cushman.2010}
 Cushman, S.~A. and Lewis, J.~S. (2010).
@@ -196,11 +219,11 @@ Fahrig, L. (2003).
 \newblock {\em {Annual Review of Ecology, Evolution, and Systematics}},
   34(1):487--515.
 
-\bibitem[Ferreras, 2001]{Ferreras.2001}
-Ferreras, P. (2001).
-\newblock {Landscape Structure and Asymmetrical Inter-Patch Connectivity in a
-  Metapopulation of the Endangered Iberian Lynx}.
-\newblock {\em {Biological Conservation}}, 100(1):125--136.
+\bibitem[Fattebert et~al., 2015]{Fattebert.2015}
+Fattebert, J., Robinson, H.~S., Balme, G., Slotow, R., and Hunter, L. (2015).
+\newblock {Structural Habitat Predicts Functional Dispersal Habitat of a Large
+  Carnivore: How Leopards Change Spots}.
+\newblock {\em {Ecological Applications}}, 25(7):1911--1921.
 
 \bibitem[Fieberg et~al., 2020]{Fieberg.2020}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2020).
@@ -232,6 +255,13 @@ Gardner, R.~H. and Gustafson, E.~J. (2004).
 \newblock {Simulating Dispersal of Reintroduced Species within Heterogeneous
   Landscapes}.
 \newblock {\em {Ecological Modelling}}, 171(4):339--358.
+
+\bibitem[Gastón et~al., 2016]{Gaston.2016}
+Gastón, A., Blázquez-Cabrera, S., Garrote, G., Mateo-Sánchez, M.~C., Beier,
+  P., Simón, M.~A., and Saura, S. (2016).
+\newblock {Response to Agriculture by a Woodland Species Depends on Cover Type
+  and Behavioural State: Insights from Resident and Dispersing Iberian Lynx}.
+\newblock {\em {Journal of Applied Ecology}}, 53(3):814--824.
 
 \bibitem[Graf et~al., 2007]{Graf.2007}
 Graf, R.~F., Kramer-Schadt, S., Fernández, N., and Grimm, V. (2007).
@@ -307,6 +337,20 @@ Kanagaraj, R., Wiegand, T., Kramer-Schadt, S., and Goyal, S.~P. (2013).
 Kays, R., Crofoot, M.~C., Jetz, W., and Wikelski, M. (2015).
 \newblock {Terrestrial Animal Tracking as an Eye on Life and Planet}.
 \newblock {\em {Science}}, 348(6240):aaa2478 -- aaa2478.
+
+\bibitem[Keeley et~al., 2017]{Keeley.2017}
+Keeley, A.~T., Beier, P., Keeley, B.~W., and Fagan, M.~E. (2017).
+\newblock {Habitat Suitability is a Poor Proxy for Landscape Connectivity
+  during Dispersal and Mating Movements}.
+\newblock {\em {Landscape and Urban Planning}}, 161:90--102.
+
+\bibitem[Kleinmann and Wang, 2017]{Kleinmann.2017}
+Kleinmann, J.~U. and Wang, M. (2017).
+\newblock {Modeling Individual Movement Decisions of Brown Hare (Lepus
+  europaeus) as a Key Concept for Realistic Spatial Behavior and Exposure: A
+  Population Model for Landscape-Level Risk Assessment: Population Modeling of
+  Brown Hare}.
+\newblock {\em {Environmental Toxicology and Chemistry}}, 36(9):2299--2307.
 
 \bibitem[Koen et~al., 2014]{Koen.2014}
 Koen, E.~L., Bowman, J., Sadowski, C., and Walpole, A.~A. (2014).
@@ -534,6 +578,11 @@ Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
   Corridors for Canada Lynx at their Southern Range Periphery}.
 \newblock {\em {Biological Conservation}}, 157:187--195.
 
+\bibitem[Taylor et~al., 1993]{Taylor.1993}
+Taylor, P.~D., Fahrig, L., Henein, K., and Merriam, G. (1993).
+\newblock {Connectivity Is a Vital Element of Landscape Structure}.
+\newblock {\em {OIKOS}}, 68(3):571--573.
+
 \bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
 Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
 \newblock {Applications of Step-Selection Functions in Ecology and
@@ -574,6 +623,13 @@ Vasudev, D., Goswami, V.~R., and Oli, M.~K. (2021).
 \newblock {Detecting Dispersal: A Spatial Dynamic Occupancy Model to Reliably
   Quantify Connectivity across Heterogeneous Conservation Landscapes}.
 \newblock {\em {Biological Conservation}}, 253:108874.
+
+\bibitem[Visintin et~al., 2020]{Visintin.2020}
+Visintin, C., Briscoe, N.~J., Woolley, S. N.~C., Lentini, P.~E., Tingley, R.,
+  Wintle, B.~A., and Golding, N. (2020).
+\newblock {STEPS: Software for Spatially and Temporally Explicit Population
+  Simulations}.
+\newblock {\em {Methods in Ecology and Evolution}}, 11(4):596--603.
 
 \bibitem[Wiegand et~al., 2003]{Wiegand.2003}
 Wiegand, T., Jeltsch, F., Hanski, I., and Grimm, V. (2003).

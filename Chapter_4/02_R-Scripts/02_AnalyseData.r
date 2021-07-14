@@ -17,6 +17,9 @@ library(survival)      # To run conditional logistic regression
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
 
+# Define number of cores allowed to use
+mcores <- detectCores() - 1
+
 ################################################################################
 #### Helpful Functions
 ################################################################################
@@ -47,41 +50,61 @@ absAngle <- function(x, y, rad = T){
 }
 
 ################################################################################
-#### Prepare Data
+#### Substample Observed Data
 ################################################################################
 # Load observed movement data
 obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
 
-# Specify the different design combinations
+# Specify the different design combinations. Note that a forgiveness of 1 refers
+# to a regular step selection function
 dat <- expand_grid(
-    Missingness = seq(0, 0.5, by = 0.1)
-  , Futility    = 1:5
-  , Replicate   = 1:10
+    Missingness = seq(0, 0.8, by = 0.1)  # Fraction of the fixes that is removed
+  , Forgiveness = 1:5                    # Allowed lag of steps (in steps)
+  , Replicate   = 1:10                   # Number of replicates for each design
 )
 
 # Create datasets with rarified observations. That is, randomly remove fixes,
-# from 0% to 50%.
+# from 0% to 80%.
 dat <- mutate(dat, Observations = map(Missingness, function(x){
   obs[sort(sample(1:nrow(obs), size = nrow(obs) * (1 - x))), ]
 }))
 
-# Prepare data for regular step selection analysis
-dat <- mutate(dat, SSF = map2(Observations, Futility, function(x, y){
+# Unnest and nest again (take out the animal ID)
+dat <- dat %>%
+  unnest(Observations) %>%
+  group_by(Missingness, Forgiveness, Replicate, ID) %>%
+  nest() %>%
+  rename(Observations = data)
+
+################################################################################
+#### Convert to Steps and Calculate Step Metrics
+################################################################################
+# Prepare data for step selection analysis
+# dat <- mutate(dat, SSF = map2(Observations, Forgiveness, function(x, y){
+dat$SSF <- pbmclapply(
+    X                  = 1:nrow(dat)
+  , mc.cores           = mcores
+  , ignore.interactive = T
+  , FUN                = function(x){
+
+  # Extract important information from dataframe
+  obs <- dat$Observations[[x]]
+  forg <- dat$Forgiveness[[x]]
 
   # Calculate temporal difference between steps (in steps)
-  x$duration <- x$step_number - lag(x$step_number)
-  x$duration[1] <- 1
+  obs$duration <- lead(obs$step_number) - obs$step_number
 
   # Define bursts. A new burst starts when the temporal lag is more than the
-  # futility
-  x$irregular <- x$duration > y
-  x$burst <- cumsum(x$irregular) + 1
-  x$irregular <- NULL
+  # forgiveness
+  obs$irregular <- obs$duration > forg
+  obs$burst <- NA
+  obs$burst[1] <- 1
+  obs$burst[2:nrow(obs)] <- lag(cumsum(obs$irregular) + 1)[-1]
 
   # Calculate step length, absolute and relative turning angles for along each
   # burst
-  x <- x %>%
-    group_by(ID, burst) %>%
+  obs <- obs %>%
+    group_by(burst) %>%
     nest() %>%
     mutate(data = map(data, function(z){
       z$sl <- stepLength(z$x, z$y)
@@ -95,68 +118,44 @@ dat <- mutate(dat, SSF = map2(Observations, Futility, function(x, y){
       , ta > +pi ~ ta - 2 * pi
       , TRUE ~ ta
     )) %>%
-    dplyr::select(ID, burst, step_number, step_id, everything()) %>%
+    dplyr::select(burst, step_number, step_id, everything()) %>%
     ungroup()
 
-}))
+})
 
-# Unnest all
-test <- dat %>%
+# Check produced data
+print(dat)
+
+# Remove column containing "Observations" and unnest data
+dat <- dat %>%
   dplyr::select(-Observations) %>%
   unnest(SSF)
-nrow(test) / 1e6 * 25
 
-# Check some of the datasets
-dat %>%
-  dplyr::select(-Observations) %>%
-  subset(Missingness == 0.5 & Futility == 2 & Replicate == 1) %>%
-  unnest(SSF)
+# Assign a unique id to each step
+dat$step_id <- 1:nrow(dat)
 
 ################################################################################
-#### CONTINUE HERE
-################################################################################
-
-
-# Calculate step length, absolute and relative turning angles for along each
-# trajectory
-obs <- obs %>%
-  group_by(ID) %>%
-  nest() %>%
-  mutate(data = map(data, function(x){
-    x$sl <- stepLength(x$x, x$y)
-    x$absta <- absAngle(x$x, x$y)
-    x$ta <- x$absta - lag(x$absta)
-    return(x)
-  })) %>%
-  unnest(data) %>%
-  mutate(ta = case_when(
-      ta < -pi ~ ta + 2 * pi
-    , ta > +pi ~ ta - 2 * pi
-    , TRUE ~ ta
-  )) %>%
-  dplyr::select(ID, step_number, step_id, everything())
-
-################################################################################
-#### Step Selection Analysis
+#### Generate Alternative Steps
 ################################################################################
 # Number of random steps?
 n_rsteps <- 25
 
 # Indicate case steps
-obs$case <- 1
+dat$case <- 1
 
 # Cannot work with steps that have no turning angle
-obs <- subset(obs, !is.na(ta))
+dat <- subset(dat, !is.na(ta))
 
 # Create a new dataframe for alternative steps
-rand <- obs[rep(1:nrow(obs), each = n_rsteps), ]
+rand <- dat[rep(1:nrow(dat), each = n_rsteps), ]
 
 # Indicate that they are control steps (case = 0)
 rand$case <- 0
 
 # Sample new step lengths and turning angles
+sl_dist <- c(shape = 3, scale = 1)
 rand$sl <- rgamma(n = nrow(rand)
-  , scale = sl_dist["scale"]
+  , scale = sl_dist["scale"] * rand$duration
   , shape = sl_dist["shape"]
 )
 rand$ta_new <- runif(n = nrow(rand), min = -pi, max = +pi)
@@ -175,19 +174,27 @@ rand$ta_new <- NULL
 rand$ta_diff <- NULL
 
 # Put steps together
-all <- rbind(obs, rand)
-all <- arrange(all, ID, step_number, desc(case))
+all <- rbind(dat, rand)
+all <- arrange(all, ID, step_id, desc(case))
 
 # Calculate new endpoints
 all$x_to <- all$x + sin(all$absta) * all$sl
 all$y_to <- all$y + cos(all$absta) * all$sl
 
 # Sort
-all <- dplyr::select(all, ID, step_number, step_id, x, y, x_to, y_to, everything())
+all <- dplyr::select(all, Missingness, Forgiveness, Replicate, ID, step_number, step_id, x, y, x_to, y_to, everything())
 all <- ungroup(all)
+nrow(all) / 1e6
+
+################################################################################
+#### Extract Covariates
+################################################################################
+# Load covariate layers
+covars <- rast("03_Data/01_RawData/CovariateLayers.tif")
+names(covars) <- c("elev", "dist")
 
 # Create interpolated coordinates for each step
-extracted <- sapply(1:nrow(all), function(i){
+extracted <- pbmclapply(1:nrow(all), mc.cores = mcores, ignore.interactive = T, function(i){
   ints <- interpolatePointsC(
       x1 = all$x[i]
     , x2 = all$x_to[i]
@@ -195,17 +202,81 @@ extracted <- sapply(1:nrow(all), function(i){
     , y2 = all$y_to[i]
     , by = 1
   )
-  extr <- raster::extract(covars, ints)
+  extr <- terra::extract(covars, ints)
   extr <- colMeans(extr)
   return(extr)
 })
+extracted <- as.data.frame(do.call(rbind, extracted))
 
 # Bind with other data
-all <- cbind(all, t(extracted))
+all <- cbind(all, extracted)
 
 # Calculate movement metrics
 all$log_sl <- log(all$sl)
 all$cos_ta <- cos(all$ta)
+
+################################################################################
+#### Estiamte Coefficients
+################################################################################
+# Nest data
+all <- all %>%
+  group_by(Missingness, Forgiveness, Replicate) %>%
+  nest()
+
+# Run models
+all$Model <- lapply(all$data, function(x){
+  clogit(case ~
+    + elev
+    + dist
+    + strata(step_id)
+    , data = x
+  )
+})
+
+# Extract model coefficients
+all$Coefs <- lapply(all$Model, function(x){
+  coefs <- coef(x)
+  ci <- confint(x, level = 0.95)
+  coefs <- data.frame(
+      Coefficient = names(coefs)
+    , Estimate = coefs
+    , LCI = ci[, 1]
+    , UCI = ci[, 2]
+  )
+  rownames(coefs) <- NULL
+  return(coefs)
+})
+
+# Visualize
+all %>%
+  dplyr::select(-c(data, Model)) %>%
+  unnest(Coefs) %>%
+  ungroup() %>%
+  ggplot(aes(x = Estimate, y = Coefficient, col = factor(Missingness))) +
+    geom_errorbarh(aes(xmin = LCI, xmax = UCI), height = 0, position = position_dodge(width = 0.6)) +
+    geom_point(position = position_dodge(width = 0.6)) +
+    geom_vline(xintercept = 0, linetype = "dashed", col = "darkgray") +
+    facet_wrap(~Forgiveness) +
+    theme_classic()
+
+all %>%
+  dplyr::select(-c(data, Model)) %>%
+  unnest(Coefs) %>%
+  ungroup() %>%
+  ggplot(aes(x = Estimate, y = Coefficient, col = factor(Forgiveness))) +
+    geom_errorbarh(aes(xmin = LCI, xmax = UCI), height = 0, position = position_dodge(width = 0.6)) +
+    geom_point(position = position_dodge(width = 0.6)) +
+    geom_vline(xintercept = 0, linetype = "dashed", col = "darkgray") +
+    facet_wrap(~Missingness) +
+    theme_classic()
+
+################################################################################
+#### CAN WE USE SIMEX TO BACKTRANFORM?
+################################################################################
+################################################################################
+#### What if we fit a separate step length distribution?
+################################################################################
+
 
 ################################################################################
 #### Estimate Beta: USING CLOGIT

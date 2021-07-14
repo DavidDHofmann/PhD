@@ -172,6 +172,7 @@ p1 <- ggplot() +
   ) +
   scale_color_gradientn(
       colors  = pal(100)
+    , labels  = function(x){format(x, big.mark = "'")}
     , guide   = guide_colorbar(
         title          = "Duration (Steps)"
       , show.limits    = T
@@ -180,7 +181,7 @@ p1 <- ggplot() +
       , ticks          = T
       , barheight      = unit(0.6, "cm")
       , barwidth       = unit(3.0, "cm")
-      , order = 1
+      , order          = 1
     )
   ) +
   scale_fill_manual(
@@ -320,7 +321,10 @@ p3 <- ggplot() +
     , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
-    size = guide_legend(title = "Number of Simulations", title.position = "top")
+    size    = guide_legend(title = "Number of Simulations", title.position = "top")
+  ) +
+  scale_size_area(
+    labels  = function(x){format(x, big.mark = "'")}
   ) +
   theme(
       legend.position      = "bottom"

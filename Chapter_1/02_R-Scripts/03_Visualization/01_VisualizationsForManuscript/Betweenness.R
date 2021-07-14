@@ -122,6 +122,8 @@ p1 <- ggplot() +
   ) +
   scale_fill_gradientn(
       colours = magma(100)
+    , labels  = function(x){format(x, big.mark = "'")}
+    # , trans = "sqrt"
     , guide   = guide_colorbar(
       , title          = expression("Betweenness Score" ^ "0.5")
       , show.limits    = T
@@ -159,7 +161,7 @@ p1 <- ggplot() +
     , y        = NULL
     , fill     = NULL
     , title    = "Betweenness"
-    , subtitle = "After 2000 Steps"
+    , subtitle = "After 2'000 Steps"
   ) +
   theme(
       legend.position  = "bottom"
@@ -301,6 +303,7 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     ) +
       scale_fill_gradientn(
           colours = magma(100)
+        , labels  = function(x){format(x, big.mark = "'")}
         , guide   = guide_colorbar(
           , title          = expression("Betweenness Score" ^ "0.5")
           , show.limits    = T
@@ -448,7 +451,7 @@ plotBetweenness <- function(x, subtitle = NULL, legend = T, barwidth = 10){
 
 # Let's apply the function to get all desired plots
 maps <- lapply(1:length(betweenness), function(x){
-  subtitle <- paste0("After ", names(betweenness)[[x]], " Steps")
+  subtitle <- paste0("After ", format(as.numeric(names(betweenness)[[x]]), big.mark = "'"), " Steps")
   map <- plotBetweenness(
       x        = betweenness[[x]]
     , subtitle = subtitle

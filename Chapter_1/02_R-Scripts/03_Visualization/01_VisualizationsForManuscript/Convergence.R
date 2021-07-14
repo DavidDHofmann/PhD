@@ -16,17 +16,68 @@ library(ggpubr)         # To arrange multiple plots
 # Load data
 convergence <- read_rds("03_Data/03_Results/99_Convergence.rds")
 
+# Arrange the data a bit nicer
+convergence$CheckID <- as.numeric(convergence$CheckID)
+convergence <- arrange(convergence, NTracks, Replicate, CheckID)
+
 # Give the checkpoint ID a nicer name
 convergence$CheckID <- paste0("Checkpoint ", convergence$CheckID)
 
-# Summarize
+# Summarize across all checkpoints
 summarized <- convergence %>%
   group_by(NTracks, Replicate) %>%
-  summarize(
-      RelativeTraversals = mean(RelativeTraversals)
-    , .groups            = "drop"
-  ) %>%
+  summarize(RelativeTraversals = mean(RelativeTraversals), .groups = "drop") %>%
   subset(NTracks > 0)
+
+# Lets check the number of "converged" checkpoints over time
+converged <- convergence %>%
+  group_by(NTracks, CheckID) %>%
+  summarize(
+      MeanRelativeTraversals = mean(RelativeTraversals)
+    , Upper                  = quantile(RelativeTraversals, 0.975)
+    , Lower                  = quantile(RelativeTraversals, 0.025)
+    , .groups                = "drop"
+  ) %>%
+  subset(NTracks > 0) %>%
+  mutate(Width = Upper - Lower) %>%
+  mutate(Converged = Width < 0.01) %>%
+  group_by(NTracks) %>%
+  summarize(Converged = sum(Converged) / n())
+
+# After how many tracks do all checkpoints remain converged?
+first <- which(sapply(1:nrow(converged), function(x){
+  sum(converged$Converged[x:nrow(converged)]) == (nrow(converged) - x + 1)
+}))[1]
+first <- converged$NTracks[first]
+
+# Plot
+p0 <- ggplot(converged, aes(x = NTracks, y = Converged)) +
+  geom_line() +
+  theme_classic() +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  ) +
+  scale_x_continuous(
+    labels = function(x){format(x, big.mark = "'")}
+  ) +
+  xlab("# Simulated Trajectories") +
+  ylab("Converged Checkpoints (in %)") +
+  geom_vline(xintercept = first, lty = 2, col = "orange") +
+  annotate("text"
+    , x        = 25000
+    , y        = 0.8
+    , fontface = 3
+    , col      = "gray30"
+    , label    = "Convergence across all\ncheckpoints after 10'500\nsimulated trajectories"
+  ) +
+  geom_segment(aes(x = 17000, y = 0.8, xend = 10500, yend = 0.7)
+    , arrow = arrow(length = unit(0.06, "npc")
+    , type  = "closed"
+  )
+    , colour  = "gray30"
+    , size    = 0.2
+  )
 
 # Set seed
 set.seed(1234)
@@ -78,7 +129,6 @@ p2 <- convergence %>%
   ) %>%
   subset(NTracks > 0) %>%
   ggplot(aes(x = NTracks, y = MeanRelativeTraversals)) +
-  # geom_point(data = summarized, aes(x = NTracks, y = RelativeTraversals), col = "orange", alpha = 0.2, size = 0.5, pch = 19) +
   geom_ribbon(aes(
       ymin = Lower
     , ymax = Upper
@@ -98,10 +148,16 @@ p2 <- convergence %>%
     , arrow = arrow(length = unit(0.02, "npc")
     , type  = "closed"
   )
-    , colour  = "black"
+    , colour  = "gray30"
     , size    = 0.2
   ) +
-  annotate("text", x = 31000, y = 0.00802, label = "95% Prediction-Interval (95%-PI)", fontface = 3)
+  annotate("text"
+    , x        = 31000
+    , y        = 0.00802
+    , fontface = 3
+    , col      = "gray30"
+    , label    = "95% Prediction Interval"
+  )
 
 # Check the width of the confidence interval over time
 p3 <- convergence %>%
@@ -129,7 +185,7 @@ p3 <- convergence %>%
   ) +
   ylim(c(0, 0.03)) +
   xlab("# Simulated Trajectories") +
-  ylab("Width of 95%-PI")
+  ylab("Width of 95% Prediction Interval")
 
 # Check global confidence interval over time
 p4 <- convergence %>%
@@ -158,11 +214,21 @@ p4 <- convergence %>%
     labels = function(x){format(x, big.mark = "'")}
   ) +
   xlab("# Simulated Trajectories") +
-  ylab("Width of 95%-PI")
+  ylab("Width of 95% Prediction Interval")
 
 # Arrange plots
-p5 <- ggarrange(p2, p4, ncol = 1, labels = c("b", "c"), heights = c(1, 0.4), label.x = 0.05)
-p6 <- ggarrange(p1, p5, ncol = 2, labels = c("a"), widths = c(0.5, 1))
+p5 <- ggarrange(p2, p0
+  , ncol    = 1
+  , labels  = c("b", "c")
+  , heights = c(1, 0.4)
+  , label.x = 0.05
+  , label.y = c(1, 1.2)
+)
+p6 <- ggarrange(p1, p5
+  , ncol   = 2
+  , labels = c("a")
+  , widths = c(0.5, 1)
+)
 
 # Show the final plot
 p6

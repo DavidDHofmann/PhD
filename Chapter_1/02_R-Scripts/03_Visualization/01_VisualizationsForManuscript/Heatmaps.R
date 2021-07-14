@@ -124,6 +124,8 @@ p1 <- ggplot() +
   ) +
   scale_fill_gradientn(
       colours = myPalette(100)
+    , labels  = function(x){format(x, big.mark = "'")}
+    # , trans   = "sqrt"
     , guide   = guide_colorbar(
       , title          = "Number of Traversing Trajectories"
       , show.limits    = T
@@ -161,7 +163,7 @@ p1 <- ggplot() +
     , y        = NULL
     , fill     = NULL
     , title    = "Heatmap"
-    , subtitle = "After 2000 Steps"
+    , subtitle = "After 2'000 Steps"
   ) +
   theme(
       legend.position  = "bottom"
@@ -196,6 +198,7 @@ p2 <- ggplot() +
   ) +
   scale_fill_gradientn(
       colours = myPalette(100)
+    , labels  = function(x){format(x, big.mark = "'")}
     , guide   = guide_colorbar(
         title          = "Number of Traversing Trajectories"
       , show.limits    = T
@@ -227,7 +230,7 @@ p2 <- ggplot() +
     , y        = NULL
     , col      = NULL
     , title    = "Heatmap"
-    , subtitle = "After 2000 Steps"
+    , subtitle = "After 2'000 Steps"
   ) +
   scale_color_manual(
     , breaks = c("Country Borders", "KAZA-TFCA Borders")
@@ -319,6 +322,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
     ) +
     scale_fill_gradientn(
         colours = myPalette(100)
+      , labels  = function(x){format(x, big.mark = "'")}
       , guide   = guide_colorbar(
         , title          = "Number of Traversing Trajectories"
         , show.limits    = T
@@ -407,6 +411,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
       ) +
       scale_fill_gradientn(
           colours = myPalette(100)
+        , labels  = function(x){format(x, big.mark = "'")}
         , guide   = guide_colorbar(
             title          = "Number of Traversing Trajectories"
           , show.limits    = T
@@ -446,7 +451,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
         , y        = NULL
         , col      = NULL
         , title    = "Heatmap"
-        , subtitle = "After 2000 Steps"
+        , subtitle = "After 2'000 Steps"
       ) +
       scale_color_manual(
         , breaks = c("National Parks", "Country Borders", "KAZA-TFCA Borders")
@@ -501,7 +506,7 @@ plotHeatmap <- function(x, subtitle = NULL, legend = T, barwidth = 10){
 # Let's apply the function to get all desired plots
 labels <- paste0(rep(c("a", "b"), each = 6), rep(1:3, each = 2))
 maps <- lapply(1:nlayers(heatmaps), function(x){
-  subtitle <- paste0("After ", rasterized$steps[x], " Steps")
+  subtitle <- paste0("After ", format(rasterized$steps[x], big.mark = "'"), " Steps")
   map <- plotHeatmap(
       x        = heatmaps[[x]]
     , subtitle = subtitle

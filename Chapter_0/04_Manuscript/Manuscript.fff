@@ -5,13 +5,13 @@
         \includegraphics[width=\textwidth]{99_StudyArea.pdf}
         };
         \begin{scope}[x={(image.south east)},y={(image.north west)}]
-            % % next four lines will help you to locate the point needed by forming a grid.
-            % % comment these four lines in the final picture.
-            % \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
-            % \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
-            % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
-            % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
-            % % upto here
+            % next four lines will help you to locate the point needed by forming a grid.
+            % comment these four lines in the final picture.
+            \draw[help lines,xstep=.1,ystep=.1] (0,0) grid (1,1);
+            \draw[help lines,xstep=.05,ystep=.05] (0,0) grid (1,1);
+            \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
+            \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
+            % upto here
             \draw[black] (0.202, 0.255) -- (0.36, 0.955);
             \draw[black] (0.202, 0.205) -- (0.36, 0.070);
         \end{scope}
@@ -109,3 +109,5 @@
     \label{LeastCost}
   \end{center}
 \end{figure}
+\efloatseparator
+ 
