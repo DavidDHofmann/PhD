@@ -190,7 +190,8 @@ nrow(all) / 1e6
 #### Extract Covariates
 ################################################################################
 # Load covariate layers
-covars <- rast("03_Data/01_RawData/CovariateLayers.tif")
+covars <- stack("03_Data/01_RawData/CovariateLayers.tif")
+covars <- readAll(covars)
 names(covars) <- c("elev", "dist")
 
 # Create interpolated coordinates for each step
@@ -202,7 +203,7 @@ extracted <- pbmclapply(1:nrow(all), mc.cores = mcores, ignore.interactive = T, 
     , y2 = all$y_to[i]
     , by = 1
   )
-  extr <- terra::extract(covars, ints)
+  extr <- raster::extract(covars, ints)
   extr <- colMeans(extr)
   return(extr)
 })

@@ -12,45 +12,45 @@ Warning--I didn't find a database entry for "Behr.2021b"
 Warning--I didn't find a database entry for "Hodel.2021b"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Munden.2020
-You've used 112 entries,
+You've used 95 entries,
             1935 wiz_defined-function locations,
-            1203 strings with 27279 characters,
-and the built_in function-call counts, 49365 in all, are:
-= -- 4746
-> -- 2498
-< -- 43
-+ -- 871
-- -- 870
-* -- 4616
-:= -- 8682
-add.period$ -- 340
-call.type$ -- 112
-change.case$ -- 982
-chr.to.int$ -- 111
-cite$ -- 114
-duplicate$ -- 1585
-empty$ -- 3181
-format.name$ -- 1028
-if$ -- 9382
-int.to.chr$ -- 2
+            1100 strings with 24060 characters,
+and the built_in function-call counts, 41878 in all, are:
+= -- 4022
+> -- 2142
+< -- 31
++ -- 746
+- -- 746
+* -- 3953
+:= -- 7392
+add.period$ -- 289
+call.type$ -- 95
+change.case$ -- 838
+chr.to.int$ -- 95
+cite$ -- 97
+duplicate$ -- 1318
+empty$ -- 2694
+format.name$ -- 879
+if$ -- 7924
+int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 116
-newline$ -- 566
-num.names$ -- 338
-pop$ -- 795
+missing$ -- 96
+newline$ -- 481
+num.names$ -- 287
+pop$ -- 672
 preamble$ -- 2
-purify$ -- 993
+purify$ -- 846
 quote$ -- 0
-skip$ -- 1186
+skip$ -- 969
 stack$ -- 0
-substring$ -- 3561
-swap$ -- 143
-text.length$ -- 3
+substring$ -- 3042
+swap$ -- 95
+text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 654
+type$ -- 558
 warning$ -- 2
-while$ -- 386
+while$ -- 329
 width$ -- 0
-write$ -- 1457
+write$ -- 1237
 (There was 1 error message)

@@ -217,6 +217,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
@@ -296,6 +298,7 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT Manuscript.toc
 INPUT Manuscript.toc
 OUTPUT Manuscript.toc
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
 OUTPUT Manuscript.fff
@@ -318,9 +321,6 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmsy9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msam10.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/symbols/msbm10.tfm
-INPUT 99_SourceAreas.png
-INPUT ./99_SourceAreas.png
-INPUT ./99_SourceAreas.png
 INPUT 99_MovementModel.pdf
 INPUT ./99_MovementModel.pdf
 INPUT ./99_MovementModel.pdf
@@ -336,9 +336,6 @@ INPUT ./99_Betweenness.png
 INPUT 99_AreasReached.png
 INPUT ./99_AreasReached.png
 INPUT ./99_AreasReached.png
-INPUT 99_ModelingDecisions.png
-INPUT ./99_ModelingDecisions.png
-INPUT ./99_ModelingDecisions.png
 INPUT Manuscript.ttt
 INPUT Manuscript.ttt
 INPUT Manuscript.aux

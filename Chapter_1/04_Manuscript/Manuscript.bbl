@@ -92,12 +92,6 @@ Brennan, A., Beytell, P., Aschenborn, O., Du~Preez, P., Funston, P., Hanssen,
   Conservation Landscape}.
 \newblock {\em {Journal of Applied Ecology}}, 57:1700--1710.
 
-\bibitem[Brown and Kodric-Brown, 1977]{Brown.1977}
-Brown, J.~H. and Kodric-Brown, A. (1977).
-\newblock {Turnover Rates in Insular Biogeography: Effect of Immigration on
-  Extinction}.
-\newblock {\em Ecology}, 58(2):445--449.
-
 \bibitem[Burnham and Anderson, 2002]{Burnham.2002}
 Burnham, K.~P. and Anderson, D.~R. (2002).
 \newblock {\em {Model Selection and Multimodel Inference: A Practical
@@ -207,12 +201,6 @@ Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
   Connectivity Change with Demography}.
 \newblock {\em {Journal of Applied Ecology}}, 51(5):1169--1178.
 
-\bibitem[Etherington, 2016]{Etherington.2016}
-Etherington, T.~R. (2016).
-\newblock {Least-Cost Modelling and Landscape Ecology: Concepts, Applications,
-  and Opportunities}.
-\newblock {\em {Current Landscape Ecology Reports}}, 1(1):40--53.
-
 \bibitem[Fahrig, 2003]{Fahrig.2003}
 Fahrig, L. (2003).
 \newblock {Effects of Habitat Fragmentation on Biodiversity}.
@@ -245,11 +233,6 @@ Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
   Dynamics of Bison under Predation Risk}.
 \newblock {\em Ecology}, 90(9):2480--2490.
 
-\bibitem[Frankham et~al., 2002]{Frankham.2002}
-Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
-\newblock {\em {Introduction to Conservation Genetics}}.
-\newblock Cambridge University Press, Cambridge, UK.
-
 \bibitem[Gardner and Gustafson, 2004]{Gardner.2004}
 Gardner, R.~H. and Gustafson, E.~J. (2004).
 \newblock {Simulating Dispersal of Reintroduced Species within Heterogeneous
@@ -275,22 +258,6 @@ Gustafson, E.~J. and Gardner, R.~H. (1996).
   Colonization}.
 \newblock {\em {Ecology}}, 77(1):94--107.
 
-\bibitem[Hanski, 1998]{Hanski.1998}
-Hanski, I. (1998).
-\newblock {Metapopulation Dynamics}.
-\newblock {\em Nature}, 396(6706):41--49.
-
-\bibitem[Hanski, 1999a]{Hanski.1999a}
-Hanski, I. (1999a).
-\newblock {Habitat Connectivity, Habitat Continuity, and Metapopulations in
-  Dynamic Landscapes}.
-\newblock {\em {Oikos}}, 87(2):209.
-
-\bibitem[Hanski, 1999b]{Hanski.1999b}
-Hanski, I. (1999b).
-\newblock {\em {Metapopulation Ecology}}.
-\newblock {Oxford University Press}.
-
 \bibitem[Hauenstein et~al., 2019]{Hauenstein.2019}
 Hauenstein, S., Fattebert, J., Grüebler, M.~U., Naef-Daenzer, B., Pe'er, G.,
   and Hartig, F. (2019).
@@ -310,33 +277,16 @@ Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
 \newblock {\em {Journal of Applied Ecology}}.
 \newblock (in 2\textsuperscript{nd} review).
 
-\bibitem[Howard, 1960]{Howard.1960}
-Howard, W.~E. (1960).
-\newblock {Innate and Environmental Dispersal of Individual Vertebrates}.
-\newblock {\em {American Midland Naturalist}}, 63(1):152.
-
 \bibitem[Hunziker, 2021]{Hunziker.2021}
 Hunziker, P. (2021).
 \newblock {\em {velox: Fast Raster Manipulation and Extraction}}.
 \newblock R package version 0.2.1.
-
-\bibitem[Jønsson et~al., 2016]{Jonsson.2016}
-Jønsson, K.~A., Tøttrup, A.~P., Borregaard, M.~K., Keith, S.~A., Rahbek, C.,
-  and Thorup, K. (2016).
-\newblock {Tracking Animal Dispersal: From Individual Movement to Community
-  Assembly and Global Range Dynamics}.
-\newblock {\em {Trends in Ecology \& Evolution}}, 31(3):204--214.
 
 \bibitem[Kanagaraj et~al., 2013]{Kanagaraj.2013}
 Kanagaraj, R., Wiegand, T., Kramer-Schadt, S., and Goyal, S.~P. (2013).
 \newblock {Using Individual-Based Movement Models to Assess Inter-Patch
   Connectivity for Large Carnivores in Fragmented Landscapes}.
 \newblock {\em {Biological Conservation}}, 167:298 -- 309.
-
-\bibitem[Kays et~al., 2015]{Kays.2015}
-Kays, R., Crofoot, M.~C., Jetz, W., and Wikelski, M. (2015).
-\newblock {Terrestrial Animal Tracking as an Eye on Life and Planet}.
-\newblock {\em {Science}}, 348(6240):aaa2478 -- aaa2478.
 
 \bibitem[Keeley et~al., 2017]{Keeley.2017}
 Keeley, A.~T., Beier, P., Keeley, B.~W., and Fagan, M.~E. (2017).
@@ -386,17 +336,6 @@ Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
 \newblock {Movement Responses by Wolves to Industrial Linear Features and Their
   Effect on Woodland Caribou in Northeastern Alberta}.
 \newblock {\em {Ecological Applications}}, 21(8):2854--2865.
-
-\bibitem[Leigh et~al., 2012]{Leigh.2012}
-Leigh, K.~A., Zenger, K.~R., Tammen, I., and Raadsma, H.~W. (2012).
-\newblock {Loss of Genetic Diversity in an Outbreeding Species: Small
-  Population Effects in the African Wild Dog (Lycaon pictus)}.
-\newblock {\em {Conservation Genetics}}, 13(3):767--777.
-
-\bibitem[MacArthur and Wilson, 2001]{MacArthur.2001}
-MacArthur, R.~H. and Wilson, E.~O. (2001).
-\newblock {\em {The Theory of Island Biogeography}}, volume~1.
-\newblock Princeton University Press, Princeton, New Jersey, USA.
 
 \bibitem[Masenga et~al., 2016]{Masenga.2016}
 Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
@@ -466,12 +405,6 @@ Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
   Seasons}.
 \newblock {\em {Animal Conservation}}, 22(1):35--48.
 
-\bibitem[Osofsky et~al., 1996]{Osofsky.1996}
-Osofsky, S.~A., McNutt, J.~W., and Hirsch, K.~J. (1996).
-\newblock {Immobilization of Free-Ranging African Wild Dogs (Lycaon pictus)
-  Using a Ketamine/Xylazine/Atropine Combination}.
-\newblock {\em {Journal of Zoo and Wildlife Medicine}}, pages 528--532.
-
 \bibitem[O’Neill et~al., 2020]{Oneill.2020}
 O’Neill, H. M.~K., Durant, S.~M., and Woodroffe, R. (2020).
 \newblock {What Wild Dogs Want: Habitat Selection Differs across Life Stages
@@ -484,17 +417,6 @@ Panzacchi, M., Van~Moorter, B., Strand, O., Saerens, M., Kivimäki, I.,
 \newblock {Predicting the Continuum Between Corridors and Barriers to Animal
   Movements Using Step Selection Functions and Randomized Shortest Paths}.
 \newblock {\em Journal of Animal Ecology}, 85(1):32--42.
-
-\bibitem[Perrin and Mazalov, 1999]{Perrin.1999}
-Perrin, N. and Mazalov, V. (1999).
-\newblock {Dispersal and Inbreeding Avoidance}.
-\newblock {\em {The American Naturalist}}, 154(3):282--292.
-
-\bibitem[Perrin and Mazalov, 2000]{Perrin.2000}
-Perrin, N. and Mazalov, V. (2000).
-\newblock {Local Competition, Inbreeding, and the Evolution of Sex‐Biased
-  Dispersal}.
-\newblock {\em {The American Naturalist}}, 155(1):116--127.
 
 \bibitem[Pe’er and Kramer-Schadt, 2008]{Peer.2008}
 Pe’er, G. and Kramer-Schadt, S. (2008).
@@ -564,13 +486,6 @@ Signer, J., Fieberg, J., and Avgar, T. (2017).
   Functions}.
 \newblock {\em {Ecosphere}}, 8(4):e01771.
 
-\bibitem[Spear et~al., 2010]{Spear.2010}
-Spear, S.~F., Balkenhol, N., Fortin, M.-J., Mcrae, B.~H., and Scribner, K.
-  (2010).
-\newblock {Use of Resistance Surfaces for Landscape Genetic Studies:
-  Considerations for Parameterization and Analysis}.
-\newblock {\em {Molecular Ecology}}, 19(17):3576--3591.
-
 \bibitem[Squires et~al., 2013]{Squires.2013}
 Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
   and Parks, S.~A. (2013).
@@ -606,12 +521,6 @@ Van~der Meer, E., Fritz, H., Blinston, P., and Rasmussen, G.~S. (2014).
   Indirect Anthropogenic Mortality on the African Wild Dog (Lycaon pictus)}.
 \newblock {\em {Oryx}}, 48(2):285--293.
 
-\bibitem[Van~Moorter et~al., 2021]{VanMoorter.2021}
-Van~Moorter, B., Kivimäki, I., Panzacchi, M., and Saerens, M. (2021).
-\newblock {Defining and Quantifying Effective Connectivity of Landscapes for
-  Species' Movements}.
-\newblock {\em {Ecography}}, page ecog.05351.
-
 \bibitem[Vasudev et~al., 2015]{Vasudev.2015}
 Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
 \newblock {From Dispersal Constraints to Landscape Connectivity: Lessons from
@@ -636,14 +545,6 @@ Wiegand, T., Jeltsch, F., Hanski, I., and Grimm, V. (2003).
 \newblock {Using Pattern-Oriented Modeling for Revealing Hidden Information: A
   Key for Reconciling Ecological Theory and Application}.
 \newblock {\em {Oikos}}, 100(2):209--222.
-
-\bibitem[Williams et~al., 2019]{Williams.2019}
-Williams, H.~J., Taylor, L.~A., Benhamou, S., Bijleveld, A.~I., Clay, T.~A.,
-  Grissac, S., Demšar, U., English, H.~M., Franconi, N., Gómez‐Laich, A.,
-  Griffiths, R.~C., Kay, W.~P., Morales, J.~M., Potts, J.~R., Rogerson, K.~F.,
-  Rutz, C., Spelt, A., Trevail, A.~M., Wilson, R.~P., and Börger, L. (2019).
-\newblock {Optimizing the Use of Biologgers for Movement Ecology Research}.
-\newblock {\em {Journal of Animal Ecology}}.
 
 \bibitem[Wolski et~al., 2017]{Wolski.2017}
 Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).

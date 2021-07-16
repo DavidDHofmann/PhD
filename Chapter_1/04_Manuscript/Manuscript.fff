@@ -49,24 +49,6 @@
 \end{figure}
 \efloatseparator
  
-\begin{figure}[htbp]
-  \begin{center}
-    \includegraphics[width = \textwidth]{99_SourceAreas.png}
-    \caption{(a) Different source areas from which we released virtual
-    dispersers. We only considered contiguous protected areas (national parks,
-    game reserves, and forest reserves) that were larger than 700
-    km\textsuperscript{2} (green). This area corresponds to the average home
-    range requirement for viable wild dog populations \citep{Pomilia.2015}. To
-    render potential immigrants into the study system, we also initiated
-    dispersers within a buffer zone (blue) surrounding the main study area. (b)
-    Source points from which dipsersers were released. 50'000 dispersers were
-    released from the main study area (green dots) and another 30'000 dispersers
-    within the virtual buffer (blue dots).}
-    \label{SourcePoints}
-  \end{center}
-\end{figure}
-\efloatseparator
- 
 \begin{figure}
   \begin{center}
     \includegraphics[width=\textwidth]{99_MovementModel}
@@ -152,32 +134,4 @@
   adopted to investigate connectivity between other protected areas need not to
   be restricted to national parks.}
   \label{AreasReached}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
-  \includegraphics[width=\textwidth]{99_ModelingDecisions.png}
-  \caption{Five major modeling decisions that a researcher needs to consider
-  when simulating dispersers to assess landscape connectivity. (1) Number of
-  simulated trajectories. (2) Handling individual variation: we used point
-  estimates when simulating dispersers, assuming that there was no individual
-  variation. Alternatively, however, one could draw preferences for each
-  simulated individually based on model uncertainty. (3) Dispersal duration.
-  While one could draw the number of simulated steps based on observed dispersal
-  events, we opted for an alternative and simulated each individual for 2'000
-  steps, which was at the upper end of observed dispersal durations. This allows
-  to easily shorten the generated trajectories afterwards and to investigate the
-  sensitivity of results with regards to the dispersal duration. (4) Boundary
-  behavior. We allowed dispersers to leave and re-enter the main study area
-  through a buffer zone with randomized covariate values. Alternatively, one
-  could discard transgressing random steps, thereby forcing dispersers to remain
-  within the study area or simply terminate the simulation, assuming the
-  individual has disappeared. (5) Source point location. The location of source
-  points should optimally be biologically informed. For our simulation, we
-  placed source points within protected areas large enough to sustain viable
-  wild dog populations. Conceivable alternatives include placing source points
-  according to a habitat suitability model or based on abundance information.
-  Importantly, one must also consider potential immigrants from outside the main
-  study area.}
-  \label{ModelingDecisions}
 \end{figure}
