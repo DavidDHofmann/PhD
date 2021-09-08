@@ -22,6 +22,7 @@
 \usepackage{arydshln}
 % \usepackage[nomarkers, nolists]{endfloat}
 \usepackage[flushleft]{threeparttable}
+\usepackage{pdflscape}
 
 %------------------------------------------------------------------------------
 %	Some Styling
@@ -58,10 +59,10 @@ Analysis to Simulate Wild Dog Dispersal and Assess Landscape Connectivity}
 
 % List of Authors
 \author{
-  David D. Hofmann\textsuperscript{1,\S} \and
+  David D. Hofmann\textsuperscript{1,2,\S} \and
+  Gabriele Cozzi\textsuperscript{1,2} \and
   John W. McNutt\textsuperscript{2} \and
   Arpat Ozgul\textsuperscript{1} \and
-  Gabriele Cozzi\textsuperscript{1,2} \and
   Dominik M. Behr\textsuperscript{1,2}
 }
 
@@ -106,14 +107,14 @@ Botswana.
 
 \vspace{4cm}
 
-\textbf{Running Title:} Simulating Wild Dog Dispersal.
+\textbf{Running Title:} Release the Dogs! Simulating Wild Dog Dispersal to
+Assess Landscape Connectivity
 
 \vspace{0.5cm}
 
-\textbf{Keywords:} dispersal, habitat selection, integrated step selection
+\textbf{Keywords:} dispersal, simulation, movement, integrated step selection
 function, Kavango-Zambezi Transfrontier Conservation Area, landscape
-connectivity, least-cost corridors, Lycaon pictus, permeability surface,
-protected areas, wildlife management
+connectivity, Lycaon pictus
 
 \end{flushleft}
 
@@ -133,19 +134,45 @@ protected areas, wildlife management
 \beginappendix
 
 %------------------------------------------------------------------------------
-%	Appendix S1: All Movement Models
+%	Appendix S1: Source Points
 %------------------------------------------------------------------------------
-\section{Movement Models}
+\newpage
+\section{Source Areas \& Points}
+\begin{figure}[htbp]
+  \begin{center}
+    \includegraphics[width = \textwidth]{99_SourceAreas.png}
+    \caption{(a) Different source areas from which we released virtual
+    dispersers. We only considered contiguous protected areas (national parks,
+    game reserves, and forest reserves) that were larger than 700
+    km\textsuperscript{2}. This size corresponds to the average home range
+    requirement for viable wild dog populations \citep{Pomilia.2015}. To render
+    potential immigrants into the study system, we also initiated dispersers
+    within a buffer zone (blue) surrounding the main study area. (b) Source
+    points from which dipsersers were released. 50'000 dispersers were released
+    within the main study area (green dots) and another 30'000 dispersers within
+    the virtual buffer (blue dots).}
+    \label{SourcePoints}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S2: All Movement Models
+%------------------------------------------------------------------------------
+\newpage
+\begin{landscape}
+\thispagestyle{empty}
+\section{Model Selection Results}
 % latex table generated in R 3.6.3 by xtable 1.8-4 package
 % Thu Jul  9 09:17:26 2020
 \begin{table}[hbpt]
   \caption{Results from the forward model selection procedure based on Akaike's
-  Information Criterion (AIC; \citealp{Burnham.2002}) for the movement model.
-  The base model upon which we based our movement model is depicted in the last
-  row. We omitted all models with an AIC weight of zero.}
+  Information Criterion (AIC; \citealp{Burnham.2002}). The model in the top row
+  was the model that we used to simulate movement of dispersers. The base model
+  upon which we based our movement model is depicted in the last row. We omitted
+  all models with an AIC weight of zero from the table.}
   \label{ModelAICs}
   \begin{center}
-    \resizebox{\textwidth}{!}{
+    \resizebox{1.75\textwidth}{!}{
       \begin{threeparttable}
         \begin{tabular}{lllll}
         \toprule
@@ -183,119 +210,96 @@ protected areas, wildlife management
     }
   \end{center}
 \end{table}
-
-% \begin{figure}[htpb]
-%   \begin{center}
-%     \includegraphics[width = \textwidth]{99_MovementModelAICs.png}
-%     \caption{Coefficients of all movement models with an AIC weight above zero.}
-%     \label{AllMovementModels}
-%   \end{center}
-% \end{figure}
+\vfill
+\raisebox{-1cm}{\makebox[\linewidth]{\thepage}}
+\end{landscape}
 
 %------------------------------------------------------------------------------
-%	Appendix S2: Convergence
+%	Appendix S3: Movement Model interpretation
 %------------------------------------------------------------------------------
 \newpage
-\section{Convergence}
+% \newgeometry{left=35mm,right=35mm,top=25mm,bottom=5mm,footskip=0pt}
+\section{Movement Model Interpretation}
+To ease with the interpretation of the most parsimonious movement model, we
+followed recommendations published in \cite{Fieberg.2020} and produced a series
+of plots highlighting how the habitat and movement kernel depended on covariate
+values (\Cref{Interpretation}). To visualize the movement kernel and its
+interactions with other covariates, we used model estimates and updated our
+tentative distribution parameters for turning angles (von Mises distribution
+with concentration \(\kappa = 0\)) and step lengths (gamma distribution with
+scale \(\theta\) = 6'308 and shape \(k\) = 0.37) by applying the function
+\textsf{update\_vonmises()} from the R-package \textsf{amt} \citep{Amt.2019}.
+This allowed us to compute probability densities of turning angles and step
+lengths under varying values of the associated covariates, while holding all
+other covariates constant (\Cref{Interpretation}, a1-a8). Moreover, we
+investigated the habitat kernel by computing relative selection strengths (RSS)
+between a set of steps where values of the covariate of interest was varied to a
+reference step where the covariate value was fixed to its centered value. To
+illustrate model uncertainty, we also generated large-sample confidence
+intervals using standard errors associated with each model estimate
+(\Cref{Interpretation}, b1-b5).
+
 \begin{figure}[hbtp]
   \begin{center}
-    \includegraphics[width = \textwidth]{99_Convergence.png}
-    \caption{}
-    \label{Trajectories}
+    \includegraphics[width = \textwidth]{99_MovementModelInterpretation.png}
+    \caption{Auxiliary plots that help with the interpretation of the most
+    parsimonious movement model from Table S1. The plots were generated
+    following recommendations reported in \cite{Fieberg.2020}. Subplots
+    \textbf{a1} to \textbf{a8} highlight dispersing wild dogs' movement kernel
+    and indicate how the kernel is influenced by interactions with other
+    covariates. Subplots \textbf{b1} to \textbf{b5} depict results from
+    dispersing wild dogs' habitat kernel and highlight differences in predicted
+    relative selection scores (RSS) when varying values of the covariate of
+    interest. For each covariate, predictions were made on the range of values
+    that was observed in the real data, assuming that all other covariates were
+    centered and that steps were realized during periods of ``high'' wild dog
+    activity. Plot a1, for example, can be interpreted as follows: the
+    probability of realizing a step with a low turning angle is much higher when
+    the corresponding step is large. Moreover, b1 can be interpreted as follows:
+    relative probability of using a step decreases as the amount of water cover
+    along the step increases.}
+    \label{Interpretation}
   \end{center}
 \end{figure}
+% \restoregeometry
 
 %------------------------------------------------------------------------------
-%	Appendix S3: Evolution of Heatmaps
+%	Appendix S4: Heatmaps
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=5mm,footskip=0pt}
-\section{Evolution of Heatmaps}
+\section{Heatmaps in Relation to Number of Simulated Steps}
 \begin{figure}[hbtp]
   \begin{center}
-    \includegraphics[width = 0.88\textwidth]{99_HeatmapsIndividual.png}
-    \caption{Heatmaps produced after 125, 500, and 2000 simulated steps,
-    respectively. The left panel (a1, a2, a3) was generated based on simulations
-    initiated within the main study area, the right panel (b1, b2, b3) was
-    generated based on simulations initiated within the buffer area. To produce
-    the heatmap presented in the main text, we summed up values from maps a3 and
-    b3.}
-    \label{Trajectories}
+    \includegraphics[width = 0.86\textwidth]{99_HeatmapsIndividual.png}
+    \caption{Heatmaps produced when considering 125, 500, and 2000 simulated
+    steps, respectively. The left panel (a1, a2, a3) was generated based on
+    simulations initiated within the main study area, the right panel (b1, b2,
+    b3) was generated based on simulations initiated within the buffer area. To
+    produce the heatmap presented in the main manuscript (Figure 5), we tallied
+    the values from maps a3 and b3.}
+    \label{Heatman}
   \end{center}
 \end{figure}
 \restoregeometry
 
 %------------------------------------------------------------------------------
-%	Appendix S4: Evolution of Betweenness Maps
+%	Appendix S5: Evolution of Betweenness Maps
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=10mm,footskip=0pt}
-\section{Evolution of Betweenness}
+\section{Betweenness Maps in Relation to Number of Simulated Steps}
 \begin{figure}[hbtp]
   \begin{center}
-    \includegraphics[width = 0.88\textwidth]{99_BetweennessIndividual.png}
-    \caption{Maps of betweenness scores produced after 125 (a), 500 (b), and
-    2000 (c) simulated steps, respectively. A high betweenness score indicates
-    that the respective area is paramount for linking other regions in the study
-    area. It therefore highlights movement corridors that provide access to
-    various destinations.}
-    \label{Trajectories}
+    \includegraphics[width = 0.86\textwidth]{99_BetweennessIndividual.png}
+    \caption{Maps of betweenness scores produced when considering (a) 125, (b)
+    500, (c) and 2000 simulated steps, respectively. A high betweenness score
+    indicates that the respective area has a high importance for linking other
+    regions in the study area.}
+    \label{Betweenness}
   \end{center}
 \end{figure}
 \restoregeometry
-
-\section{Step Selection Summary}
-Resource Selection Functions (RSFs) and Resource Selection Probability Functions
-(RSPFs) are routinely used to model habitat selection by animals using data from
-Very High Frequency (VHF) and Global Positioning System (GPS) locations. A
-RS(P)F is defined as any statistical model deployed to estimate the relative
-probability of selecting a resource unit versus alternative possible resource
-units \citep{Manly.2002}.
-
-Compared to a RSF, a RSPF yields the actual probability that an available
-resource unit is selected and can be estimated using weighted distribution
-theory \citep{Lele.2006}.
-
-Compared to RSFs, the key feature of SSFs is link- ing consecutive animal
-locations (most commonly taken at regular time intervals) that can be defined as
-steps \citep{Turchin.1998} (Figure 1).
-
-With step selection functions, GPS trajectories are broken down into steps, each
-representing the straight line segment between two consecutive GPS relocations.
-Each observed step is then paired with a set of random steps, having the same
-starting point but differing in length and orientation \citep{Fortin.2005}. To
-sample step lengths and orientations (i.e. turning angles), \cite{Fortin.2005}
-sampled values from observed steps. Later studies, on the other hand, rely on
-parametrized distributions, fitted to observed steps. By comparing
-characteristics at observed and random steps using conditional logistic
-regression, features influencing elk movements can be determined. The step
-selection function takes the form \citep{Fortin.2005}:
-
-\begin{equation}
-\label{EQ1}
-\hat{w}(x) = exp(\beta_1 x_1 + \beta_2 x_2 + \beta_3 x_3 + ... + \beta_n x_n)
-\end{equation}
-
-Where coefficients \(\beta_1\) to \(\beta_n\) are estimated using conditional
-logistic regression and are associated with environmental covariates \(x_1\) to
-\(x_n\), respectively. Ultimately, steps with higher \(\hat{w}(x)\) have higher
-\textbf{odds} of being chosen.
-
-As the time interval between relocations increases, it can be expected that
-autocorrelation in the data decreases.
-
-How to state results:
-\begin{itemize}
-  \item  Assuming that other environmental factors remain constant, animals were
-  less likely to ...
-  \item Animals generally avoided steps in areas made up of a large proportion
-  of ...
-  \item  An increase in ... did not generally decrease the odds of animals
-  choosing these steps, as indicated by the positive association between ... and
-  the probability of animals making steps covering the two most widely available
-  vegetation cover types
-\end{itemize}
-
 
 \newpage
 \begingroup

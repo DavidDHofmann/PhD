@@ -1,39 +1,39 @@
 \babel@toc {english}{}
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Dispersal \& Connectivity Models (90\%)}{1}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Issues with Traditional Methods (90\%)}{1}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}What about IBMMs? (90\%)}{2}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Step Selection Functions (90\%)}{2}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Proposed Framework (90\%)}{3}{subsection.1.5}%
-\contentsline {subsection}{\numberline {1.6}Study Species \& Study Area (90\%)}{3}{subsection.1.6}%
-\contentsline {subsection}{\numberline {1.7}Previous Paper (90\%)}{4}{subsection.1.7}%
-\contentsline {section}{\numberline {2}Methods}{4}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Study Area (90\%)}{4}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}GPS Relocation Data (90\%)}{5}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Covariates (90\%)}{5}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Movement Model (80\%)}{6}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Dispersal Simulation (80\%)}{8}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Source Points (90\%)}{9}{subsection.2.6}%
-\contentsline {subsection}{\numberline {2.7}Convergence (80\%)}{9}{subsection.2.7}%
-\contentsline {subsection}{\numberline {2.8}Heatmap (100\%)}{9}{subsection.2.8}%
-\contentsline {subsection}{\numberline {2.9}Betweenness (80\%)}{9}{subsection.2.9}%
-\contentsline {subsection}{\numberline {2.10}Inter-Patch Connectivity (80\%)}{10}{subsection.2.10}%
-\contentsline {section}{\numberline {3}Results}{10}{section.3}%
-\contentsline {subsection}{\numberline {3.1}Movement Model (80\%)}{10}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Dispersal Simulation (80\%)}{12}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Convergence (80\%)}{12}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Heatmap (80\%)}{12}{subsection.3.4}%
-\contentsline {subsection}{\numberline {3.5}Betweenness (80\%)}{13}{subsection.3.5}%
-\contentsline {subsection}{\numberline {3.6}Inter-Patch Connectivity (80\%)}{13}{subsection.3.6}%
+\contentsline {subsection}{\numberline {1.1}Importance of Connectivity \& Connectivity Models}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Issues with Traditional Connectivity Models}{1}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}What about IBMMs?}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Proposed Solution: Three-Step Workflow}{2}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Some Background on SSFs}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}Some Background on Connectivity ``Metrics'' }{3}{subsection.1.6}%
+\contentsline {subsection}{\numberline {1.7}Case Study}{4}{subsection.1.7}%
+\contentsline {section}{\numberline {2}Methods}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Study Area}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}GPS Data}{5}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Covariates}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Movement Model}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Dispersal Simulation}{8}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Source Points}{9}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}Convergence}{9}{subsection.2.7}%
+\contentsline {subsection}{\numberline {2.8}Heatmap}{10}{subsection.2.8}%
+\contentsline {subsection}{\numberline {2.9}Betweenness}{10}{subsection.2.9}%
+\contentsline {subsection}{\numberline {2.10}Inter-Patch Connectivity}{10}{subsection.2.10}%
+\contentsline {section}{\numberline {3}Results}{11}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Movement Model}{11}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Dispersal Simulation}{12}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Convergence}{12}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Heatmap}{13}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Betweenness}{13}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Inter-Patch Connectivity}{14}{subsection.3.6}%
 \contentsline {section}{\numberline {4}Discussion}{14}{section.4}%
-\contentsline {subsection}{\numberline {4.1}Short Summary (90\%)}{14}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}Movement Model (80 \%)}{14}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}Simulation (80\%)}{15}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Maps (70\%)}{16}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Related Literature (80\%)}{17}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Benefits \& Modeling Decisions with ISSF Simulations (70\%)}{18}{subsection.4.6}%
-\contentsline {subsection}{\numberline {4.7}Further Considerations (70\%)}{19}{subsection.4.7}%
-\contentsline {subsection}{\numberline {4.8}Conclusion (80\%)}{22}{subsection.4.8}%
-\contentsline {section}{\numberline {5}Authors' Contributions}{22}{section.5}%
-\contentsline {section}{\numberline {6}Data Availability}{22}{section.6}%
-\contentsline {section}{\numberline {7}Acknowledgements}{22}{section.7}%
+\contentsline {subsection}{\numberline {4.1}Short Summary}{14}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Movement Model}{15}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Simulation}{15}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Maps}{16}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Related Literature}{17}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Advantages of ISSF Simulations}{17}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Disadvantages of ISSF Simulations}{18}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Conclusion}{20}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{21}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{21}{section.6}%
+\contentsline {section}{\numberline {7}Acknowledgements}{21}{section.7}%

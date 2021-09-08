@@ -50,21 +50,26 @@ absAngle <- function(x, y, rad = T){
 }
 
 ################################################################################
-#### Substample Observed Data
+#### Subsample Observed Data
 ################################################################################
 # Load observed movement data
 obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
 
 # Specify the different design combinations. Note that a forgiveness of 1 refers
 # to a regular step selection function
+# dat <- expand_grid(
+#     Missingness = seq(0, 0.5, by = 0.1)  # Fraction of the fixes that is removed
+#   , Forgiveness = 1:5                    # Allowed lag of steps (in steps)
+#   , Replicate   = 1:10                   # Number of replicates for each design
+# )
 dat <- expand_grid(
-    Missingness = seq(0, 0.8, by = 0.1)  # Fraction of the fixes that is removed
-  , Forgiveness = 1:5                    # Allowed lag of steps (in steps)
-  , Replicate   = 1:10                   # Number of replicates for each design
+    Missingness = seq(0)  # Fraction of the fixes that is removed
+  , Forgiveness = 1
+  , Replicate   = 1
 )
 
 # Create datasets with rarified observations. That is, randomly remove fixes,
-# from 0% to 80%.
+# from 0% to 50%.
 dat <- mutate(dat, Observations = map(Missingness, function(x){
   obs[sort(sample(1:nrow(obs), size = nrow(obs) * (1 - x))), ]
 }))
@@ -194,7 +199,7 @@ covars <- stack("03_Data/01_RawData/CovariateLayers.tif")
 covars <- readAll(covars)
 names(covars) <- c("elev", "dist")
 
-# Create interpolated coordinates for each step
+# Create interpolated coordinates for each step and extract covariates below
 extracted <- pbmclapply(1:nrow(all), mc.cores = mcores, ignore.interactive = T, function(i){
   ints <- interpolatePointsC(
       x1 = all$x[i]
@@ -217,7 +222,7 @@ all$log_sl <- log(all$sl)
 all$cos_ta <- cos(all$ta)
 
 ################################################################################
-#### Estiamte Coefficients
+#### Estimate Coefficients
 ################################################################################
 # Nest data
 all <- all %>%

@@ -156,7 +156,7 @@ p2 <- convergence %>%
     , y        = 0.00802
     , fontface = 3
     , col      = "gray30"
-    , label    = "95% Prediction Interval"
+    , label    = "95% Confidence-Interval"
   )
 
 # Check the width of the confidence interval over time
@@ -185,7 +185,7 @@ p3 <- convergence %>%
   ) +
   ylim(c(0, 0.03)) +
   xlab("# Simulated Trajectories") +
-  ylab("Width of 95% Prediction Interval")
+  ylab("Width of 95% Confidence-Interval")
 
 # Check global confidence interval over time
 p4 <- convergence %>%
@@ -214,7 +214,7 @@ p4 <- convergence %>%
     labels = function(x){format(x, big.mark = "'")}
   ) +
   xlab("# Simulated Trajectories") +
-  ylab("Width of 95% Prediction Interval")
+  ylab("Width of 95% Confidence-Interval")
 
 # Arrange plots
 p5 <- ggarrange(p2, p0

@@ -1,19 +1,19 @@
 \begin{figure}[htbp]
   \begin{center}
-    \includegraphics[width = \textwidth]{99_GraphicalAbstract.pdf}
+    \includegraphics[width = \textwidth]{99_GraphicalAbstract2.pdf}
     \caption{Flowchart of the simulation-based connectivity analysis as proposed
     in this article. First, GPS data and habitat covariates have to be
     collected. The combined data is then analyzed in an integrated step
     selection model, which enables the parametrization of the focal species'
-    habitat and movement kernels. The parametrized model is then treated as an
-    individual-based movement model and used to simulate dispersal trajectories.
-    Ultimately, simulated trajectories serve to produce a set of maps that are
-    pertinent to landscape connectivity. This includes a heatmap, indicating the
-    relative traversal frequency across the study area, a betweenness map,
-    highlighting movement corridors and bottlenecks, and, finally, an
-    inter-patch connectivity map, where the frequency of connections and their
-    average duration can be depicted. \textcolor{red}{Photos: Whom to cite?
-    Vectronics or Photographers?}}
+    habitat and movement kernels and results in a mechanistic movement model.
+    The parametrized model is then treated as an individual-based movement model
+    and used to simulate dispersal trajectories. Ultimately, simulated
+    trajectories serve to produce a set of maps that are pertinent to landscape
+    connectivity. This includes a heatmap, indicating the traversal frequency
+    across each spatial unit of the study area, a betweenness map, highlighting
+    movement corridors and bottlenecks, and, finally, an inter-patch
+    connectivity map, where the frequency of connections and their average
+    duration can be depicted.}
     \label{GraphicalAbstract}
   \end{center}
 \end{figure}
@@ -39,9 +39,9 @@
     \end{tikzpicture}
     \caption{Illustration of the study area located in southern Africa. (a) The
     study area was confined by a bounding box spanning the entire KAZA-TFCA and
-    encompassed parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia. (b)
+    comprised parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia. (b)
     The KAZA-TFCA represents the world's largest terrestrial conservation area
-    and covers a total of 520'000 km\textsuperscript{2}. Its purpose is to
+    and covers a total of 520'000 km\textsuperscript{2}. Its main purpose is to
     re-establish connectivity between already-existing national parks (dark
     green) and other protected areas (light green).}
     \label{StudyArea}
@@ -53,9 +53,9 @@
   \begin{center}
     \includegraphics[width=\textwidth]{99_MovementModel}
     \caption{(a) Most parsimonious movement model for dispersing wild dogs. The
-    model includes a habitat kernel, a movement kernel, as well as their
+    model comprises a habitat kernel, a movement kernel, as well as their
     interactions. The horizontal line segments delineate the 90\%, 95\%, and
-    99\% Confidence-Intervals for the respective \(\beta\)-coefficients.
+    99\% confidence-intervals for the respective \(\beta\)-coefficients.
     Significance codes: * \(p < 0.10\), ** \(p < 0.05\), *** \(p < 0.01\). (b)
     Results from the k-fold cross validation procedure. The upper plot shows
     rank frequencies of realized steps according to model predictions with known
@@ -74,15 +74,15 @@
 \begin{figure}
   \begin{center}
     \includegraphics[width=\textwidth]{99_Convergence}
-    \caption{Relative traversal frequency through 1'000 checkpoints (5 km x 5)
-    distributed randomly across the study area. The relative traversal frequency
-    is plotted against the number of simulated individuals to visualize how
-    quickly the metric converges to a steady state. (a) Replicated (100 times)
-    relative traversal frequencies across three randomly chosen checkpoints as
-    well as the corresponding 95\% prediction interval (PI). (b) Averaged
-    relative traversal frequency across all checkpoints and replicates including
-    a 95\% PI. (c) Width of the PI in relation to the number of simulated
-    dispersers.}
+    \caption{Relative traversal frequency through 1'000 checkpoints (5 km x 5
+    km) distributed randomly across the study area. The relative traversal
+    frequency is plotted against the number of simulated individuals to
+    visualize how quickly the metric converges to a steady state. (a) Replicated
+    (100 times) relative traversal frequencies across three randomly chosen
+    checkpoints as well as the corresponding 95\% prediction interval (PI). (b)
+    Averaged relative traversal frequency across all checkpoints and replicates
+    including a 95\% PI. (c) Width of the PI in relation to the number of
+    simulated dispersers.}
     \label{Convergence}
   \end{center}
 \end{figure}
@@ -92,12 +92,13 @@
   \includegraphics[width=\textwidth]{99_Heatmap.png}
   \caption{Heatmap showing traversal frequencies of 80'000 simulated dispersers
   moving 2'000 steps across the KAZA-TFCA. Simulations were based on an
-  integrated step selection model that we fit to the movement data of dispersing
-  African wild dogs. To generate the heatmap, we rasterized and tallied all
-  simulated trajectories. Consequently, the map highlights areas that are
-  frequently traversed by virtual dispersers. Additional heatmaps showing the
-  traversal frequency for different numbers of simulated steps are provided in
-  Appendix S3.}
+  integrated step selection model that we fitted to the movement data of
+  dispersing African wild dogs. To generate the heatmap, we rasterized and
+  tallied all simulated trajectories. Consequently, the map highlights areas
+  that are frequently traversed by virtual dispersers. Additional heatmaps
+  showing the traversal frequency when individuals move fewer than 2'000 steps
+  are provided in Appendix S3. For spatial reference we plotted a few selected
+  national parks (dark gray).}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
@@ -105,27 +106,24 @@
 \begin{figure}
   \includegraphics[width=\textwidth]{99_Betweenness.png}
   \caption{Map of betweenness scores, highlighting distinct dispersal corridors
-  and potential bottlenecks. A high betweenness score indicates that the
-  respective cells are exceptionally relevant in connecting different regions in
-  the study area. That is, the higher the betweenness score, the more often a
-  pixel lies on a shortest path between adjacent areas. In this sense the metric
-  can be used to pinpoint discrete movement corridors. Note that we
-  square-rooted betweenness scores to improve visibility of corrdiors with low
-  scores. Betweenness scores were determined by converting simulated dispersal
-  trajectories into a large network. Note that we square-rooted betweenness
-  scores to improve the visibility of corridors with low betweenness scores.}
+  and potential bottlenecks across the extent of the KAZA-TFCA. A high
+  betweenness score indicates that the respective area is exceptionally
+  important for connecting different regions in the study area. In this sense
+  the metric can be used to pinpoint discrete movement corridors
+  \citep{BastilleRousseau.2018}. Note that we square-rooted betweenness scores
+  to improve visibility of corridors with low scores.}
   \label{Betweenness}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_AreasReached.png}
-  \caption{Network on simulated dispersal trajectories highlighting connections
-  between national parks (dark green). Yellow bubbles represent the center of
-  the different national parks and are sized in relation to the number of
-  simulated dispersers originating from each park. Black dots represent national
-  parks that were smaller than 700 km\textsuperscript{2} and therefore did not
-  serve as source areas. Arrows between national parks illustrate between which
+  \caption{Map of inter-patch connectivity, highlighting connections between
+  national parks (dark green). Yellow bubbles represent the center of the
+  different national parks and are sized in relation to the number of simulated
+  dispersers originating from each park. Black dots represent national parks
+  that were smaller than 700 km\textsuperscript{2} and therefore did not serve
+  as source areas. Arrows between national parks illustrate between which
   national parks the simulated dispersers successfully moved and the color of
   each arrow shows the average number of steps (4-hourly movements) that were
   necessary to realize those connections. Additionally, the line thickness

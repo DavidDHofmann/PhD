@@ -208,8 +208,8 @@ p1b <- ggplot(dat, aes(x = ta_, y = prob, group = sl_, color = sl_)) +
     )
   ) +
   scale_y_continuous(
-      breaks = seq(0, 0.3, by = 0.05)
-    , labels = sprintf("%0.2f", seq(0, 0.3, by = 0.05))
+      breaks = seq(0, 0.3, by = 0.1)
+    , labels = sprintf("%0.1f", seq(0, 0.3, by = 0.1))
   ) +
   scale_x_continuous(
       breaks = c(-pi, -pi/2, 0, pi/2, pi)
@@ -880,8 +880,11 @@ dat <- lapply(seq_active_, function(x){
 # Backtransform covariates
 dat$sl_ <- dat$sl_ * 1000
 
+# Make "Active" vs. "Inactive" factor
+dat$Activity <- ifelse(dat$Inactive, "Inactive", "Active")
+
 # Visualize using x-y plot
-p8 <- ggplot(dat, aes(x = sl_, y = prob, color = factor(Inactive))) +
+p8 <- ggplot(dat, aes(x = sl_, y = prob, color = factor(Activity))) +
   geom_line(size = 1) +
   theme_classic() +
   coord_capped_cart(
@@ -894,8 +897,7 @@ p8 <- ggplot(dat, aes(x = sl_, y = prob, color = factor(Inactive))) +
       begin  = 0.2
     , end    = 0.8
     , option = "magma"
-    , name   = "Period of Main Activity"
-    , labels = c(T, F)
+    , name   = "Activity Period"
     , guide  = guide_legend(
         title.position = "top"
       , title.hjust    = 0.5
@@ -903,6 +905,10 @@ p8 <- ggplot(dat, aes(x = sl_, y = prob, color = factor(Inactive))) +
       , barheight      = unit(0.3, "cm")
       , barwidth       = unit(5.0, "cm")
     )
+  ) +
+  scale_y_continuous(
+      breaks = seq(0, 0.3, by = 0.1)
+    , labels = sprintf("%0.1f", seq(0, 0.3, by = 0.1))
   ) +
   scale_x_continuous(
       breaks = seq(0, 35000, 10000)
@@ -1135,6 +1141,31 @@ p11 <- p11 + xlab("Shrub/Grassland Cover (%)") + ylab("RSS vs. Shrub/Grassland C
 p12 <- p12 + xlab("Woodland Cover (%)") + ylab("RSS vs. Woodland Cover")
 p13 <- p13 + xlab("Human Influence") + ylab("RSS vs. Human Influence")
 
+# Prepare a separate legend
+legend <- data.frame(x = 0:100, y = 0:100)
+legend$Level <- sample(c("99%", "95%", "90%"), size = nrow(legend), replace = T)
+legend <- ggplot(legend, aes(x = x, y = y)) +
+  geom_hline(yintercept = 1, linetype = "dashed", color = "gray30") +
+  geom_ribbon(aes(ymin = y - 20, ymax = y + 20, fill = Level)
+    , linetype = "solid"
+    , color    = "orange"
+    , lwd      = 0.1
+  ) +
+  geom_line(size = 1) +
+  scale_fill_manual(name = "Confidence Level", values = c(
+      adjustcolor("orange", alpha.f = 0.33)
+    , adjustcolor("orange", alpha.f = 0.5)
+    , adjustcolor("orange", alpha.f = 0.7)
+    )
+  ) +
+  guides(fill = guide_legend(title.position = "top", title.hjust = 0.5)) +
+  theme(
+      legend.position   = "bottom"
+    , legend.text       = element_text(face = 3)
+    , legend.title      = element_text(face = 3)
+  )
+legend <- get_legend(legend)
+
 ################################################################################
 #### Putting Plots Together
 ################################################################################
@@ -1143,13 +1174,13 @@ p_mov <- ggarrange(p1b, p2b, p3b, p4, p5, p6, p7, p8
   , ncol   = 4
   , nrow   = 2
   , labels = paste0("a", 1:8)
-  , vjust  = 0
+  , vjust  = -0.4
 )
-p_hab <- ggarrange(p9, p10, p11, p12, p13
+p_hab <- ggarrange(p9, p10, p11, p12, p13, legend
   , ncol   = 4
   , nrow   = 2
   , labels = paste0("b", 1:5)
-  , vjust  = 0
+  , vjust  = -0.4
 )
 
 # Specify plot titles
@@ -1164,7 +1195,7 @@ p_hab <- annotate_figure(p_hab, top = text_grob(title_hab, size = 15))
 p <- ggarrange(p_mov, p_hab, nrow = 2)
 
 # Store them
-ggsave("04_Manuscript/99_MovementModelInterpretation.png", plot = p, scale = 1.7)
+ggsave("04_Manuscript/99_MovementModelInterpretation.png", plot = p, scale = 1.7, bg = "white")
 
 # # Put plots together
 # pa <- ggarrange(p1a, p2a, p3a, p4, p5, p6, p7, p8)
