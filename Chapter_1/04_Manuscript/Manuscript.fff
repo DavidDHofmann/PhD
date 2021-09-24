@@ -33,8 +33,8 @@
             % \foreach \x in {0,1,...,9} { \node [anchor=north] at (\x/10,0) {0.\x}; }
             % \foreach \y in {0,1,...,9} { \node [anchor=east] at (0,\y/10) {0.\y};}
             % % upto here
-            \draw[densely dotted, black] (0.169, 0.222) -- (0.364, 0.955);
-            \draw[densely dotted, black] (0.169, 0.157) -- (0.364, 0.074);
+            \draw[densely dotted, blue] (0.169, 0.222) -- (0.364, 0.955);
+            \draw[densely dotted, blue] (0.169, 0.157) -- (0.364, 0.074);
         \end{scope}
     \end{tikzpicture}
     \caption{Illustration of the study area located in southern Africa. (a) The
@@ -72,33 +72,16 @@
 \efloatseparator
  
 \begin{figure}
-  \begin{center}
-    \includegraphics[width=\textwidth]{99_Convergence}
-    \caption{Relative traversal frequency through 1'000 checkpoints (5 km x 5
-    km) distributed randomly across the study area. The relative traversal
-    frequency is plotted against the number of simulated individuals to
-    visualize how quickly the metric converges to a steady state. (a) Replicated
-    (100 times) relative traversal frequencies across three randomly chosen
-    checkpoints as well as the corresponding 95\% prediction interval (PI). (b)
-    Averaged relative traversal frequency across all checkpoints and replicates
-    including a 95\% PI. (c) Width of the PI in relation to the number of
-    simulated dispersers.}
-    \label{Convergence}
-  \end{center}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
   \includegraphics[width=\textwidth]{99_Heatmap.png}
   \caption{Heatmap showing traversal frequencies of 80'000 simulated dispersers
   moving 2'000 steps across the KAZA-TFCA. Simulations were based on an
   integrated step selection model that we fitted to the movement data of
   dispersing African wild dogs. To generate the heatmap, we rasterized and
   tallied all simulated trajectories. Consequently, the map highlights areas
-  that are frequently traversed by virtual dispersers. Additional heatmaps
-  showing the traversal frequency when individuals move fewer than 2'000 steps
-  are provided in Appendix S3. For spatial reference we plotted a few selected
-  national parks (dark gray).}
+  that are frequently traversed by virtual dispersers. For spatial reference we
+  plotted a few selected national parks (dark gray). Additional heatmaps showing
+  the traversal frequency when individuals move fewer than 2'000 steps are
+  provided in Figure S4.}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
@@ -111,7 +94,9 @@
   important for connecting different regions in the study area. In this sense
   the metric can be used to pinpoint discrete movement corridors
   \citep{BastilleRousseau.2018}. Note that we square-rooted betweenness scores
-  to improve visibility of corridors with low scores.}
+  to improve visibility of corridors with low scores. Additional betweenness
+  maps showing betweenness scores when individuals move fewer than 2'000 steps
+  are provided in Figure S4.}
   \label{Betweenness}
 \end{figure}
 \efloatseparator

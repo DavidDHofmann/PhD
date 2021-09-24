@@ -62,7 +62,7 @@ dat %>%
   )
 
 ################################################################################
-#### Areas Reached (Wester Delta)
+#### Areas Reached (Western Delta)
 ################################################################################
 # Load simulated trajectories
 sims  <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")

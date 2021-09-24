@@ -3,52 +3,47 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
-Repeated entry---line 3391 of file Literatur.bib
- : @article{Koen.2014
- :                   ,
-I'm skipping whatever remains of this entry
-Warning--I didn't find a database entry for "Hodel.2021a"
-Warning--I didn't find a database entry for "Hodel.2021b"
+Warning--I didn't find a database entry for "Hodel.2022"
 Warning--empty journal in Cozzi.2020
-You've used 93 entries,
+You've used 83 entries,
             1935 wiz_defined-function locations,
-            1084 strings with 23285 characters,
-and the built_in function-call counts, 40607 in all, are:
-= -- 3906
-> -- 2046
-< -- 32
-+ -- 710
-- -- 710
-* -- 3818
-:= -- 7166
-add.period$ -- 284
-call.type$ -- 93
-change.case$ -- 808
-chr.to.int$ -- 93
-cite$ -- 94
-duplicate$ -- 1292
-empty$ -- 2632
-format.name$ -- 841
-if$ -- 7695
-int.to.chr$ -- 1
+            1017 strings with 21408 characters,
+and the built_in function-call counts, 36857 in all, are:
+= -- 3520
+> -- 1923
+< -- 26
++ -- 673
+- -- 672
+* -- 3482
+:= -- 6510
+add.period$ -- 253
+call.type$ -- 83
+change.case$ -- 739
+chr.to.int$ -- 82
+cite$ -- 84
+duplicate$ -- 1156
+empty$ -- 2357
+format.name$ -- 785
+if$ -- 6968
+int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 96
-newline$ -- 472
-num.names$ -- 281
-pop$ -- 650
+missing$ -- 87
+newline$ -- 422
+num.names$ -- 251
+pop$ -- 607
 preamble$ -- 2
-purify$ -- 818
+purify$ -- 749
 quote$ -- 0
-skip$ -- 948
+skip$ -- 845
 stack$ -- 0
-substring$ -- 2944
-swap$ -- 95
+substring$ -- 2640
+swap$ -- 86
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 542
+type$ -- 484
 warning$ -- 1
-while$ -- 321
+while$ -- 286
 width$ -- 0
-write$ -- 1215
-(There was 1 error message)
+write$ -- 1081
+(There were 2 warnings)

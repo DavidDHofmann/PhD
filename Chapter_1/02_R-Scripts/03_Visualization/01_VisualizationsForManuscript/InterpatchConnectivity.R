@@ -30,8 +30,8 @@ library(gridExtra)      # To combine ggplots
 #### Prepare Network
 ################################################################################
 # Reload data on areas reached
+# visits <- read_rds("03_Data/03_Results/99_IndirectInterpatchConnectivity.rds")
 visits <- read_rds("03_Data/03_Results/99_DirectInterpatchConnectivity.rds")
-visits <- read_rds("03_Data/03_Results/99_IndirectInterpatchConnectivity.rds")
 
 # Load protected areas
 prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")

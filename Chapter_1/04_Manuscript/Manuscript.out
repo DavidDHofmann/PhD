@@ -3,36 +3,34 @@
 \BOOKMARK [2][-]{subsection.1.2}{Issues with Traditional Connectivity Models}{section.1}% 3
 \BOOKMARK [2][-]{subsection.1.3}{What about IBMMs?}{section.1}% 4
 \BOOKMARK [2][-]{subsection.1.4}{Proposed Solution: Three-Step Workflow}{section.1}% 5
-\BOOKMARK [2][-]{subsection.1.5}{Some Background on SSFs}{section.1}% 6
-\BOOKMARK [2][-]{subsection.1.6}{Some Background on Connectivity ``Metrics'' }{section.1}% 7
-\BOOKMARK [2][-]{subsection.1.7}{Case Study}{section.1}% 8
-\BOOKMARK [1][-]{section.2}{Methods}{}% 9
-\BOOKMARK [2][-]{subsection.2.1}{Study Area}{section.2}% 10
-\BOOKMARK [2][-]{subsection.2.2}{GPS Data}{section.2}% 11
-\BOOKMARK [2][-]{subsection.2.3}{Covariates}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.4}{Movement Model}{section.2}% 13
-\BOOKMARK [2][-]{subsection.2.5}{Dispersal Simulation}{section.2}% 14
-\BOOKMARK [2][-]{subsection.2.6}{Source Points}{section.2}% 15
-\BOOKMARK [2][-]{subsection.2.7}{Convergence}{section.2}% 16
-\BOOKMARK [2][-]{subsection.2.8}{Heatmap}{section.2}% 17
-\BOOKMARK [2][-]{subsection.2.9}{Betweenness}{section.2}% 18
-\BOOKMARK [2][-]{subsection.2.10}{Inter-Patch Connectivity}{section.2}% 19
-\BOOKMARK [1][-]{section.3}{Results}{}% 20
-\BOOKMARK [2][-]{subsection.3.1}{Movement Model}{section.3}% 21
-\BOOKMARK [2][-]{subsection.3.2}{Dispersal Simulation}{section.3}% 22
-\BOOKMARK [2][-]{subsection.3.3}{Convergence}{section.3}% 23
-\BOOKMARK [2][-]{subsection.3.4}{Heatmap}{section.3}% 24
-\BOOKMARK [2][-]{subsection.3.5}{Betweenness}{section.3}% 25
-\BOOKMARK [2][-]{subsection.3.6}{Inter-Patch Connectivity}{section.3}% 26
-\BOOKMARK [1][-]{section.4}{Discussion}{}% 27
-\BOOKMARK [2][-]{subsection.4.1}{Short Summary}{section.4}% 28
-\BOOKMARK [2][-]{subsection.4.2}{Movement Model}{section.4}% 29
-\BOOKMARK [2][-]{subsection.4.3}{Simulation}{section.4}% 30
-\BOOKMARK [2][-]{subsection.4.4}{Maps}{section.4}% 31
-\BOOKMARK [2][-]{subsection.4.5}{Related Literature}{section.4}% 32
-\BOOKMARK [2][-]{subsection.4.6}{Advantages of ISSF Simulations}{section.4}% 33
-\BOOKMARK [2][-]{subsection.4.7}{Disadvantages of ISSF Simulations}{section.4}% 34
-\BOOKMARK [2][-]{subsection.4.8}{Conclusion}{section.4}% 35
-\BOOKMARK [1][-]{section.5}{Authors' Contributions}{}% 36
-\BOOKMARK [1][-]{section.6}{Data Availability}{}% 37
-\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 38
+\BOOKMARK [2][-]{subsection.1.5}{Introduction of the Study Species}{section.1}% 6
+\BOOKMARK [2][-]{subsection.1.6}{Case Study}{section.1}% 7
+\BOOKMARK [1][-]{section.2}{Methods}{}% 8
+\BOOKMARK [2][-]{subsection.2.1}{Study Area}{section.2}% 9
+\BOOKMARK [2][-]{subsection.2.2}{Data Collection and Preparation}{section.2}% 10
+\BOOKMARK [3][-]{subsubsection.2.2.1}{GPS Data}{subsection.2.2}% 11
+\BOOKMARK [3][-]{subsubsection.2.2.2}{Habitat Covariates}{subsection.2.2}% 12
+\BOOKMARK [2][-]{subsection.2.3}{Step 1 - Movement Model}{section.2}% 13
+\BOOKMARK [2][-]{subsection.2.4}{Step 2 - Dispersal Simulation}{section.2}% 14
+\BOOKMARK [2][-]{subsection.2.5}{Step 3 - Connectivity Maps}{section.2}% 15
+\BOOKMARK [3][-]{subsubsection.2.5.1}{Heatmap}{subsection.2.5}% 16
+\BOOKMARK [3][-]{subsubsection.2.5.2}{Betweenness Map}{subsection.2.5}% 17
+\BOOKMARK [3][-]{subsubsection.2.5.3}{Inter-Patch Connectivity Map}{subsection.2.5}% 18
+\BOOKMARK [1][-]{section.3}{Results}{}% 19
+\BOOKMARK [2][-]{subsection.3.1}{Movement Model}{section.3}% 20
+\BOOKMARK [2][-]{subsection.3.2}{Dispersal Simulation}{section.3}% 21
+\BOOKMARK [2][-]{subsection.3.3}{Heatmap}{section.3}% 22
+\BOOKMARK [2][-]{subsection.3.4}{Betweenness}{section.3}% 23
+\BOOKMARK [2][-]{subsection.3.5}{Inter-Patch Connectivity}{section.3}% 24
+\BOOKMARK [1][-]{section.4}{Discussion}{}% 25
+\BOOKMARK [2][-]{subsection.4.1}{Short Summary}{section.4}% 26
+\BOOKMARK [2][-]{subsection.4.2}{Movement Model}{section.4}% 27
+\BOOKMARK [2][-]{subsection.4.3}{Simulation}{section.4}% 28
+\BOOKMARK [2][-]{subsection.4.4}{Maps}{section.4}% 29
+\BOOKMARK [2][-]{subsection.4.5}{Related Literature}{section.4}% 30
+\BOOKMARK [2][-]{subsection.4.6}{Advantages of ISSF Simulations}{section.4}% 31
+\BOOKMARK [2][-]{subsection.4.7}{Disadvantages of ISSF Simulations}{section.4}% 32
+\BOOKMARK [2][-]{subsection.4.8}{Conclusion}{section.4}% 33
+\BOOKMARK [1][-]{section.5}{Authors' Contributions}{}% 34
+\BOOKMARK [1][-]{section.6}{Data Availability}{}% 35
+\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 36

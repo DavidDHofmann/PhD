@@ -1,5 +1,10 @@
-\BOOKMARK [1][-]{appendix.A}{Source Areas \046 Points}{}% 1
-\BOOKMARK [1][-]{appendix.B}{Model Selection Results}{}% 2
-\BOOKMARK [1][-]{appendix.C}{Movement Model Interpretation}{}% 3
-\BOOKMARK [1][-]{appendix.D}{Heatmaps in Relation to Number of Simulated Steps}{}% 4
-\BOOKMARK [1][-]{appendix.E}{Betweenness Maps in Relation to Number of Simulated Steps}{}% 5
+\BOOKMARK [1][-]{appendix.A}{Candidate Interactions}{}% 1
+\BOOKMARK [1][-]{appendix.B}{K-Fold Cross Validation Procedure}{}% 2
+\BOOKMARK [1][-]{appendix.C}{Source Areas \046 Points}{}% 3
+\BOOKMARK [1][-]{appendix.D}{Model Selection Results}{}% 4
+\BOOKMARK [1][-]{appendix.E}{Movement Model}{}% 5
+\BOOKMARK [1][-]{appendix.F}{Movement Model Interpretation}{}% 6
+\BOOKMARK [1][-]{appendix.G}{Convergence}{}% 7
+\BOOKMARK [1][-]{appendix.H}{Heatmaps in Relation to Number of Simulated Steps}{}% 8
+\BOOKMARK [1][-]{appendix.I}{Betweenness Maps in Relation to Number of Simulated Steps}{}% 9
+\BOOKMARK [1][-]{appendix.J}{Comparison of Values Inside and Outside of KAZA-TFCA}{}% 10

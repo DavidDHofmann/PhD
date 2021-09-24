@@ -172,9 +172,9 @@ p1 <- tm_shape(hill_africa) +
     ) +
   tm_shape(kaza_ext) +
     tm_borders(
-        col = "black"
+        col = "blue"
       , lty = 1
-      , lwd = 1
+      , lwd = 0.5
     ) +
   # tm_shape(lines_countries) +
   #   tm_lines(
@@ -259,7 +259,8 @@ p2 <- tm_shape(hill_kaza) +
     , ticks               = TRUE
   ) +
   tm_layout(
-    , frame                   = "gray20"
+    # , frame                   = "gray20"
+    , frame                   = "blue"
     , frame.lwd               = 1
     , asp                     = 1.2
     , legend.outside          = TRUE
