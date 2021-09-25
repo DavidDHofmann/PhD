@@ -58,15 +58,15 @@ first <- sims %>%
       coords      = cbind(.[["x"]], .[["y"]])
     , proj4string = CRS("+init=epsg:4326")
   )
+plot(first, pch = ".")
 
-# Assess from which protected area each trajectory leaves
-first$SourceArea <- raster::extract(prot_r, first)
-
-# Join information to simulated tracks
+# Assess from which protected area each trajectory leaves and add this
+# information to the simulated tracks
+first$SourceArea <- unlist(over(first, prot)["ID"], use.names = F)
 sims$SourceArea <- first$SourceArea[match(sims$TrackID, first$TrackID)]
 
-# Remove NA's (start points outside national parks)
-sims <- subset(sims, !is.na(SourceArea) & !is.nan(SourceArea))
+# Remove tracks that start outside national parks
+sims <- subset(sims, !is.na(SourceArea))
 
 # Make coordinates of simulated trajectories spatial
 coordinates(sims) <- c("x", "y")
@@ -81,17 +81,126 @@ visits <- data.frame(
   , Prot       = raster::extract(prot_r, sims)
 )
 
-# Add this information to the simulations
-sims$CurrentPark <- visits$Prot
+# Calculate for each step the distance to the first coordinate. We'll use this
+# to determine how far an individual had to disperse before reaching another
+# national park.
+visits <- visits %>%
+  nest(data = -TrackID) %>%
+  mutate(data = pbmclapply(data
+    , ignore.interactive = T
+    , mc.cores           = detectCores() - 1
+    , FUN                = function(x) {
 
-# Coerce to regular dataframe again
+      # Project coordinates
+      coords <- reprojCoords(
+          xy   = x[, c("x", "y")]
+        , from = CRS("+init=epsg:4326")
+        , to   = CRS("+init=epsg:32734")
+      )
+
+      # Compute distance to first coordinate
+      first <- coords[1, ]
+      distance <- sqrt((coords[, 1] - first[1]) ** 2 + (coords[, 2] - first[2]) ** 2)
+      x$DistanceFromFirst <- distance
+
+      # Return the resulting object
+      return(x)
+  })) %>%
+  unnest(data)
+
+# Add the information on the reached parks and distance traveled to the
+# simulations
+sims$CurrentPark       <- visits$Prot
+sims$DistanceFromFirst <- visits$DistanceFromFirst
+
+# Convert simulations to regular dataframe
 sims <- as.data.frame(sims, xy = T)
 sims$xy <- NULL
 
 # Each national park belongs to a country, let's assign the repsective country
-# to the dataframe as well
+# to the simulations too
 sims$SourceAreaCountry <- as.character(prot$Country[match(sims$SourceArea, prot$ID)])
 sims$CurrentParkCountry <- as.character(prot$Country[match(sims$CurrentPark, prot$ID)])
+
+################################################################################
+#### Identify Relative Number of Trajectories Reaching another National Park
+################################################################################
+# We want to determine the relative number of trajectories that successfully
+# move into another national park. We do this by country. Moreover, we change
+# the minimal distance considered to see how the number of reached national
+# parks decreases as the minimal distance is increased.
+
+# Compute how many dispersers were intiated within the national parks of each
+# country
+
+# Compute how many dispersers were intiated within in each national parks
+number_simulated_park <- sims %>%
+  dplyr::select(TrackID, SourceArea) %>%
+  distinct() %>%
+  count(SourceArea) %>%
+  setNames(c("SourceArea", "NumberSimulations"))
+number_simulated_park$FromPark     <- prot$Name[match(number_simulated_park$SourceArea, prot$ID)]
+number_simulated_park$FromCountry  <- prot$Country[match(number_simulated_park$SourceArea, prot$ID)]
+
+# Summarize by country
+number_simulated_country <- number_simulated_park %>%
+  group_by(FromCountry) %>%
+  summarize(NumberSimulations = sum(NumberSimulations))
+
+# Function to determine how many of the simulated individuals (in percent)
+# reached another national park
+getConnections <- function(min_distance) {
+  reached <- sims %>%
+    subset(DistanceFromFirst >= min_distance & CurrentPark != SourceArea) %>%
+    dplyr::select(TrackID, SourceAreaCountry) %>%
+    distinct() %>%
+    count(Country = SourceAreaCountry) %>%
+    left_join(number_simulated_country, by = c("Country" = "FromCountry")) %>%
+    mutate(PercentReachedOtherNationalPark = n / NumberSimulations) %>%
+    dplyr::select(Country, PercentReachedOtherNationalPark)
+  return(reached)
+}
+
+# Try it
+getConnections(0)
+
+# Run the function for different distances to see how the success rate
+# deacreases if one only consideres more distant parks
+results <- tibble(MinDistance = seq(0, 600 * 1000, length.out = 25))
+results$Results <- pbmclapply(results$MinDistance
+    , ignore.interactive = T
+    , mc.cores           = detectCores() - 1
+    , FUN                = function(x) {
+      conns <- getConnections(x)
+    return(conns)
+})
+
+# Convert meters to km
+results$MinDistance <- results$MinDistance / 1000
+
+# Unnest and convert fractions to percentages
+reached <- unnest(results, Results)
+reached$PercentReachedOtherNationalPark <- reached$PercentReachedOtherNationalPark * 100
+
+# Plot the share of trajectories reaching other national parks in relation to
+# the distance considered
+p <- ggplot(reached, aes(x = MinDistance, y = PercentReachedOtherNationalPark, col = Country)) +
+  geom_line() +
+  geom_point() +
+  scale_color_viridis_d(name = "Country of Origin") +
+  theme_classic() +
+  scale_x_continuous(breaks = seq(0, 600, by = 100)) +
+  scale_y_continuous(breaks = seq(0, 100, by = 10)) +
+  xlab("Minimum Distance Considered (km)") +
+  ylab("% Trajectories Reaching\nanother National Park") +
+  theme(
+      panel.grid.major = element_line(colour = "gray90", size = 0.1)
+    , panel.grid.minor = element_line(colour = "gray90", size = 0.1)
+    , legend.position = c(0.85, 0.7)
+  )
+
+# Store the plot
+ggsave("04_Manuscript/99_AreasReached.png", plot = p, width = 5, height = 3)
 
 ################################################################################
 #### Identify Direct Connections between National Parks
@@ -100,20 +209,7 @@ sims$CurrentParkCountry <- as.character(prot$Country[match(sims$CurrentPark, pro
 # parks. That is, if a trajectory moves from A through B to C, we generate an
 # edge between A and B and between A and C, but not between B and C.
 
-# Identify number of trajectories leaving from each area
-nsims <- sims %>%
-  group_by(TrackID, SourceArea) %>%
-  nest() %>%
-  ungroup() %>%
-  count(SourceArea) %>%
-  arrange(SourceArea) %>%
-  setNames(c("From", "Simulations"))
-
-# Add the park and country from which they left
-nsims$FromPark    <- prot$Name[match(nsims$From, prot$ID)]
-nsims$FromCountry <- prot$Country[match(nsims$From, prot$ID)]
-
-# Identify how long it takes on average to reach different areas
+# Identify how long it takes on average to reach the different areas
 visits <- sims %>%
   rename(From = SourceArea, To = CurrentPark) %>%
   group_by(TrackID, From, To) %>%
@@ -121,18 +217,16 @@ visits <- sims %>%
   subset(!is.na(From) & !is.nan(To) & !is.na(To)) %>%
   arrange(TrackID, StepNumber)
 
-# Get the source park name, destination park name, source country, destination
-# country
-visits$FromPark    <- prot$Name[match(visits$From, prot$ID)]
-visits$ToPark      <- prot$Name[match(visits$To, prot$ID)]
-visits$FromCountry <- prot$Country[match(visits$From, prot$ID)]
-visits$ToCountry   <- prot$Country[match(visits$To, prot$ID)]
-
-# Remove factors
-visits$FromPark    <- as.character(visits$FromPark)
-visits$ToPark      <- as.character(visits$ToPark)
-visits$FromCountry <- as.character(visits$FromCountry)
-visits$ToCountry   <- as.character(visits$ToCountry)
+# Replace national park IDs with proper park names. Also identify the country
+# for each of the national parks.
+visits$FromPark    <- as.character(prot$Name[match(visits$From, prot$ID)])
+visits$ToPark      <- as.character(prot$Name[match(visits$To, prot$ID)])
+visits$FromCountry <- as.character(prot$Country[match(visits$From, prot$ID)])
+visits$ToCountry   <- as.character(prot$Country[match(visits$To, prot$ID)])
 
 # Store visits to file
 write_rds(visits, "03_Data/03_Results/99_InterpatchConnectivity.rds")
+
+# Also store the number of simulated individuals
+write_rds(number_simulated_country, "03_Data/03_Results/99_NumberSimulatedCountry.rds")
+write_rds(number_simulated_park, "03_Data/03_Results/99_NumberSimulatedpark.rds")

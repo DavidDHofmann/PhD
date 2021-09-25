@@ -30,23 +30,15 @@ library(ggpubr)         # To arrange multiple plots
 ################################################################################
 #### Prepare Data
 ################################################################################
-# Reload data on interpatch connectivity
+# Load data on interpatch connectivity (essentially the from-to connections that
+# each trajectory makes)
 visits <- read_rds("03_Data/03_Results/99_InterpatchConnectivity.rds")
+nsims_count <- read_rds("03_Data/03_Results/99_NumberSimulatedCountry.rds")
+nsims_parks <- read_rds("03_Data/03_Results/99_NumberSimulatedpark.rds")
 
-# Check how many individuals were initialized from each park and from each
-# country
-nsims_parks <- visits %>%
-  group_by(TrackID, From) %>%
-  nest() %>%
-  ungroup() %>%
-  count(From)
-nsims_count <- visits %>%
-  group_by(TrackID, FromCountry) %>%
-  nest() %>%
-  ungroup() %>%
-  count(FromCountry)
-
-# Summarize data by park
+# Summarize connections by park. Compute average number of steps required to
+# make connection, it's standard deviation, as well as how often the connection
+# has been made.
 visits_parks <- visits %>%
   group_by(From, To) %>%
   summarize(
@@ -56,28 +48,30 @@ visits_parks <- visits %>%
     , .groups        = "drop"
   )
 
+# Summarize connections by country. Compute average number of steps required to
+# make connection, it's standard deviation, as well as how often the connection
+# has been made.
+visits_count <- visits %>%
+  group_by(FromCountry, ToCountry) %>%
+  summarize(
+      MeanStepNumber = mean(StepNumber)
+    , SDStepNumber   = sd(StepNumber)
+    , Frequency      = length(unique(TrackID))
+    , .groups        = "drop"
+  )
+
 # How many tracks leaving from each country reached another country?
 reached_countries <- subset(visits, FromCountry != ToCountry) %>%
   dplyr::select(TrackID, FromCountry) %>%
   unique() %>%
   group_by(FromCountry) %>%
-  summarize(Number = n())
-cbind(test, test$Number / nsims_count$n)
-
-# Summarize data by country (note that we can't compute the mean step number
-# meaningfully here)
-visits_count <- visits %>%
-  dplyr::select(TrackID, FromCountry, ToCountry) %>%
-  unique() %>%
-  group_by(FromCountry, ToCountry) %>%
-  summarize(
-      Frequency      = n()
-    , .groups        = "drop"
-  )
+  summarize(SuccessfullSimulations = n()) %>%
+  left_join(nsims_count, by = c("FromCountry")) %>%
+  mutate(RelativeSuccess = SuccessfullSimulations / NumberSimulations)
 
 # Use the number of initiated individuals to calculate the relative frequency
-visits_parks$Simulations <- nsims_parks$n[match(visits_parks$From, nsims_parks$From)]
-visits_count$Simulations <- nsims_count$n[match(visits_count$FromCountry, nsims_count$FromCountry)]
+visits_parks$Simulations <- nsims_parks$NumberSimulations[match(visits_parks$From, nsims_parks$SourceArea)]
+visits_count$Simulations <- nsims_count$NumberSimulations[match(visits_count$FromCountry, nsims_count$FromCountry)]
 visits_parks$RelFrequency <- visits_parks$Frequency / visits_parks$Simulations
 visits_count$RelFrequency <- visits_count$Frequency / visits_count$Simulations
 
@@ -130,29 +124,19 @@ p2 <- ggplot(visits_count, aes(x = ToCountry, y = FromCountry)) +
   scale_x_discrete(position = "top") +
   scale_y_discrete(limits = rev) +
   theme_minimal()
-ggarrange(p1, p2)
+p3 <- ggplot(visits_count, aes(x = ToCountry, y = FromCountry)) +
+  geom_tile(aes(fill = MeanStepNumber), col = "gray20", lwd = 0.2) +
+  geom_text(aes(label = round(MeanStepNumber, 2))) +
+  coord_fixed() +
+  scale_fill_distiller(palette = 5, na.value = "black") +
+  scale_x_discrete(position = "top") +
+  scale_y_discrete(limits = rev) +
+  theme_minimal()
+ggarrange(p1, p2, p3)
 
 ################################################################################
 #### Prepare Additional Data for Network Plots
 ################################################################################
-# Load protected areas
-prot <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
-prot <- subset(prot, Desig == "National Park")
-prot$ID <- 1:nrow(prot)
-
-# Remove self-loops and zero-links
-visits <- subset(visits_parks, From != To & Frequency != 0)
-
-# Create a network
-net <- graph_from_data_frame(
-    d        = visits
-  , vertices = unique(prot$ID)
-  , directed = T
-)
-
-# Prepare layouts
-lay <- coordinates(gCentroidWithin(prot))
-
 # Load additional shapefiles and raster for the background
 kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
@@ -208,8 +192,26 @@ labels_nationalparks <- st_as_sf(labels_nationalparks)
 r <- as.data.frame(r, xy = T)
 
 ################################################################################
-#### Network Plots
+#### Network Plot for National Parks
 ################################################################################
+# Load protected areas
+np <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
+np <- subset(np, Desig == "National Park")
+np$ID <- 1:nrow(np)
+
+# Remove self-loops and zero-links
+visits <- subset(visits_parks, From != To & Frequency != 0)
+
+# Create a network
+net <- graph_from_data_frame(
+    d        = visits
+  , vertices = unique(np$ID)
+  , directed = T
+)
+
+# Prepare layouts
+lay <- coordinates(gCentroidWithin(np))
+
 # Prepare networks for ggplotting with ggplot
 net_p <- ggnetwork(net, layout = lay, arrow.gap = 0.1, scale = F)
 
@@ -387,13 +389,13 @@ p2 <- ggplot() +
 # Plot for the separate legend of the dots
 p3 <- ggplot() +
   geom_point(
-      data    = net_p %>% dplyr::select(x, y, FromName, Simulations) %>% distinct()
+      data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct()
     , mapping = aes(x = x, y = y)
     , col     = "black"
     , size    = 0.1
   ) +
   geom_point(
-      data    = net_p %>% dplyr::select(x, y, FromName, Simulations) %>% distinct() %>% na.omit()
+      data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct() %>% na.omit()
     , mapping = aes(x = x, y = y, size = Simulations, color = Simulations)
     , col     = "orange"
   ) +
@@ -469,3 +471,255 @@ p6
 
 # Store
 ggsave("04_Manuscript/99_InterpatchConnectivity.png", plot = p6)
+
+################################################################################
+#### Network Plot for Countries
+################################################################################
+# Prepare points for the countries
+count <- data.frame(
+    x       = c(20.39, 23.94, 20.07, 25.99, 28.22)
+  , y       = c(-15.28, -21.80, -19.39, -14.52, -18.9)
+  , Country = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
+  , ID      = 1:5
+)
+
+# Replace country names with IDs
+visits_count$From <- count$ID[match(visits_count$FromCountry, count$Country)]
+visits_count$To <- count$ID[match(visits_count$ToCountry, count$Country)]
+
+# Remove self-loops and zero-links
+visits <- subset(visits_count, From != To & Frequency != 0)
+visits <- dplyr::select(visits, -c(FromCountry, ToCountry))
+visits <- dplyr::select(visits, From, To, everything())
+
+# Create a network
+net <- graph_from_data_frame(
+    d        = visits
+  , vertices = unique(count$ID)
+  , directed = T
+)
+
+# Prepare layouts
+lay <- cbind(count$x, count$y)
+
+# Prepare networks for ggplotting with ggplot
+net_p <- ggnetwork(net, layout = lay, arrow.gap = 0.1, scale = F)
+
+# Prepare color palette
+pal <- colorRampPalette(plasma(100, begin = 0.9, end = 0))
+
+# Main Plot
+p1 <- ggplot() +
+  geom_sf(
+      data        = prot
+    # , mapping     = aes(fill = Desig)
+    # , col         = "#6ba36b"
+    , fill = "gray95"
+    , lwd         = 0
+    , show.legend = F
+  ) +
+  geom_sf(
+      data        = africa
+    , col         = "black"
+    , fill        = NA
+    , lty         = 2
+    , lwd         = 0.5
+    , show.legend = F
+  ) +
+  geom_edges(
+      data      = net_p
+    , mapping   = aes(
+        x    = x
+      , y    = y
+      , xend = xend
+      , yend = yend
+      , size = RelFrequency
+      , col  = MeanStepNumber
+    )
+    , curvature = 0.2
+    , arrow     = arrow(length = unit(6, "pt"), type = "closed", angle = 10)
+  ) +
+  geom_sf_text(
+      data     = labels_countries
+    , mapping  = aes(label = Label)
+    , col      = "black"
+    , fontface = 2
+    , size     = 5
+    , nudge_y  = 0.5
+  ) +
+  scale_size_area(
+      name     = "Relative Frequency"
+    , max_size = 1
+  ) +
+  scale_color_gradientn(
+      colors  = pal(100)
+    , guide   = guide_colorbar(
+        title          = "Duration (Steps)"
+      , show.limits    = T
+      , title.position = "top"
+      , title.hjust    = 0.5
+      , ticks          = T
+      , barheight      = unit(0.6, "cm")
+      , barwidth       = unit(3.0, "cm")
+      , order = 1
+    )
+  ) +
+  scale_fill_manual(
+    values = c("#70ab70", "#d9f0d3")
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
+    , expand = F
+  ) +
+  labs(
+      x        = NULL
+    , y        = NULL
+    , fill     = NULL
+    , title    = "Interpatch Connectivity"
+    , subtitle = "In Relation to Dispersal Duration"
+  ) +
+  guides(
+      size  = guide_legend(title.position = "top", order = 2)
+  ) +
+  theme(
+      legend.position      = "bottom"
+    , legend.box           = "horizontal"
+    , legend.title.align   = 0.5
+    , panel.background     = element_blank()
+    , panel.border         = element_rect(colour = "black", fill = NA, size = 1)
+    , legend.title         = element_text(size = 10),
+    , legend.text          = element_text(size = 8)
+    , legend.margin        = margin(c(0, 0, 0, 0))
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 1
+    , height     = unit(0.15, "cm")
+    , bar_cols   = c("black", "white")
+    , text_col   = "black"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(1.5, "cm"),
+    , width    = unit(1.2, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("black", "black")
+        , line_col  = NA
+        , text_col  = "black"
+        , text_size = 12
+      )
+  )
+
+# Plot for separate legend of the national parks, kaza- and country-borders
+p2 <- ggplot() +
+  geom_sf(
+      data        = africa
+    , mapping     = aes(col = "Country Borders")
+    , fill        = NA
+    , show.legend = "line"
+    , lwd         = 0.5
+  ) +
+  scale_color_manual(
+      values = c("Country Borders" = "black")
+    , guide = guide_legend(
+        override.aes = list(
+            linetype = c(2)
+          , lwd      = c(0.5)
+        )
+      )
+  ) +
+  theme(
+      legend.title          = element_blank()
+    , legend.spacing.y      = unit(0, "cm")
+    , legend.box            = "vertical"
+    , legend.background     = element_blank()
+    , legend.box.background = element_rect(fill  = "white")
+    , legend.margin         = margin(2, 8, 2, 6)
+    , legend.text           = element_text(color = "black")
+    , legend.key            = element_blank()
+    , legend.key.size       = unit(0.8, "lines")
+    , legend.key.width      = unit(1.2, "lines")
+    , panel.background      = element_blank()
+  )
+
+# Plot for the separate legend of the dots
+p3 <- ggplot() +
+  geom_point(
+      data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct()
+    , mapping = aes(x = x, y = y)
+    , col     = "black"
+    , size    = 0.1
+  ) +
+  geom_point(
+      data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct() %>% na.omit()
+    , mapping = aes(x = x, y = y, size = Simulations, color = Simulations)
+    , col     = "orange"
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
+    , expand = F
+  ) +
+  labs(
+      x        = NULL
+    , y        = NULL
+    , fill     = NULL
+    , title    = "Interpatch Connectivity"
+    , subtitle = "In Relation to Dispersal Duration"
+  ) +
+  guides(
+    size = guide_legend(title = "Number of Simulations", title.position = "top")
+  ) +
+  theme(
+      legend.position      = "bottom"
+    , legend.box           = "horizontal"
+    , legend.title.align   = 0.5
+    , panel.background     = element_rect(fill = "transparent", colour = NA)
+    , panel.grid           = element_blank()
+    , legend.margin        = margin(c(0, 0, 13, 0))
+    , legend.title         = element_text(size = 10),
+    , legend.text          = element_text(size = 8)
+  )
+
+# Extract legends from all plots
+legend1 <- get_legend(p1)
+legend2 <- get_legend(p2)
+legend3 <- get_legend(p3)
+
+# Put legend with protected areas into main plot
+p4 <- p1 + annotation_custom(
+      grob = legend2
+    , xmin = 18.75
+    , xmax = 21
+    , ymin = -13
+    , ymax = -14
+  )
+
+# Remove the original legend from main plot
+p5 <- p4 + theme(legend.position = "none")
+
+# Add circles to main plot
+g1 <- ggplotGrob(p5)
+g2 <- ggplotGrob(p3)
+g2 <- gtable_filter(g2, "panel")
+pos <- c(subset(g1$layout, grepl("panel", g1$layout$name), select = t:r))
+p5 <- gtable_add_grob(g1, g2, t = pos$t, l = pos$l)
+p5 <- ggplotify::as.ggplot(p5)
+
+# Put legends together
+legends <- grid.arrange(legend1, legend3, nrow = 1, widths = c(2, 1))
+legends <- gtable_add_padding(legends, unit(c(0, 1, 0, 0.3), "cm"))
+
+# Put them below the first plot
+p6 <- arrangeGrob(p5, legends, heights = c(10, 1))
+p6 <- ggplotify::as.ggplot(p6)
+
+# Visualize
+p6
+
+# Store
+ggsave("04_Manuscript/99_InterpatchConnectivityCountries.png", plot = p6)

@@ -97,10 +97,10 @@ p1 <- ggplot(subset(dat, Type == "Heatmap"), aes(x = Value, y = as.factor(Steps)
   theme_classic() +
   theme(
       panel.grid.major = element_line(colour = "gray90", size = 0.2)
-    , legend.position  = c(0.8, 0.2)
+    , legend.position  = c(0.9, 0.25)
   ) +
-  xlab("Number of Traversing Trajectories") +
-  ylab("Number of Simulated Steps") +
+  xlab("# Traversing Trajectories") +
+  ylab("# Simulated Steps") +
   ggtitle("Heatmap")
 
 # Plot the comparison of the betweenness map
@@ -112,15 +112,16 @@ p2 <- ggplot(subset(dat, Type == "Betweenness"), aes(x = Value, y = as.factor(St
   theme_classic() +
   theme(
       panel.grid.major = element_line(colour = "gray90", size = 0.2)
-    , legend.position  = c(0.8, 0.2)
+    , legend.position  = c(0.9, 0.26)
   ) +
   xlab(expression("Betweenness" ^ "0.5")) +
-  ylab("Number of Simulated Steps") +
+  ylab("# Simulated Steps") +
   ggtitle("Betweenness Map")
 
 # Arrange the plots
 p <- ggarrange(p1, p2, nrow = 2, labels = c("a", "b"))
-ggsave("04_Manuscript/99_MapComparison.png", plot = p, width = 8, height = 7)
+# ggsave("04_Manuscript/99_MapComparison.png", plot = p, width = 8, height = 7)
+ggsave("04_Manuscript/99_MapComparison.png", plot = p, width = 7, height = 5)
 
 ################################################################################
 #### Mean Traversal Frequency South of Linyanti

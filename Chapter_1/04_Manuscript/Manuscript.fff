@@ -102,7 +102,7 @@
 \efloatseparator
  
 \begin{figure}
-  \includegraphics[width=\textwidth]{99_AreasReached.png}
+  \includegraphics[width=\textwidth]{99_InterpatchConnectivity.png}
   \caption{Map of inter-patch connectivity, highlighting connections between
   national parks (dark green). Yellow bubbles represent the center of the
   different national parks and are sized in relation to the number of simulated
@@ -116,5 +116,7 @@
   that realized those connections. Note that a similar network view could be
   adopted to investigate connectivity between other protected areas need not to
   be restricted to national parks.}
-  \label{AreasReached}
+  \label{InterpatchConnectivity}
 \end{figure}
+\efloatseparator
+ 
