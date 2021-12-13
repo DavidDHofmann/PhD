@@ -118,11 +118,6 @@ Cozzi, G., Broekhuis, F., McNutt, J.~W., Turnbull, L.~A., Macdonald, D.~W., and
   Partitioning among Africa's Large Carnivores}.
 \newblock {\em Ecology}, 93(12):2590--2599.
 
-\bibitem[Cozzi et~al., 2018]{Cozzi.2018}
-Cozzi, G., Maag, N., Börger, L., Clutton-Brock, T.~H., and Ozgul, A. (2018).
-\newblock {Socially Informed Dispersal in a Territorial Cooperative Breeder}.
-\newblock {\em {Journal of Animal Ecology}}, 87(3):838--849.
-
 \bibitem[Creel et~al., 2020]{Creel.2020}
 Creel, S., Merkle, J., Mweetwa, T., Becker, M.~S., Mwape, H., Simpamba, T., and
   Simukonda, C. (2020).
@@ -161,6 +156,12 @@ Doerr, V. A.~J., Barrett, T., and Doerr, E.~D. (2011).
 \newblock {Connectivity, Dispersal Behaviour and Conservation under Climate
   Change: A Response to Hodgson et al.: Connectivity and Dispersal Behaviour}.
 \newblock {\em {Journal of Applied Ecology}}, 48(1):143--147.
+
+\bibitem[Dray et~al., 2010]{Dray.2010}
+Dray, S., Royer-Carenzi, M., and Calenge, C. (2010).
+\newblock {The Exploratory Analysis of Autocorrelation in Animal-Movement
+  Studies}.
+\newblock {\em {Ecological Research}}, 25(3):673--681.
 
 \bibitem[Dwernychuk and Boag, 1972]{Dwernychuk.1972}
 Dwernychuk, L.~W. and Boag, D.~A. (1972).
@@ -216,12 +217,17 @@ Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
 \newblock {\em {Introduction to Conservation Genetics}}.
 \newblock Cambridge University Press, Cambridge, UK.
 
-\bibitem[Gastón et~al., 2016]{Gaston.2016}
-Gastón, A., Blázquez-Cabrera, S., Garrote, G., Mateo-Sánchez, M.~C., Beier,
-  P., Simón, M.~A., and Saura, S. (2016).
-\newblock {Response to Agriculture by a Woodland Species Depends on Cover Type
-  and Behavioural State: Insights from Resident and Dispersing Iberian Lynx}.
-\newblock {\em {Journal of Applied Ecology}}, 53(3):814--824.
+\bibitem[Graves and Waller, 2006]{Graves.2006}
+Graves, T.~A. and Waller, J.~S. (2006).
+\newblock {Understanding the Causes of Missed Global Positioning System
+  Telemetry Fixes}.
+\newblock {\em {Journal of Wildlife Management}}, 70(3):844--851.
+
+\bibitem[Gustafson and Gardner, 1996]{Gustafson.1996}
+Gustafson, E.~J. and Gardner, R.~H. (1996).
+\newblock {The Effect of Landscape Heterogeneity on the Probability of Patch
+  Colonization}.
+\newblock {\em {Ecology}}, 77(1):94--107.
 
 \bibitem[Hanski, 1999]{Hanski.1999b}
 Hanski, I. (1999).
@@ -251,12 +257,18 @@ Hodel, F.~H. and Fieberg, J.~R. (2021b).
   symmetry.
 \newblock {\em bioRxiv}.
 
-\bibitem[Hofmann et~al., 2021]{Hofmann.2021}
-Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
-\newblock {Bound within Boundaries: How Well Do Protected Areas Match Movement
-  Corridors of their Most Mobile Protected Species?}
-\newblock {\em {Journal of Applied Ecology}}.
-\newblock (in 2\textsuperscript{nd} review).
+\bibitem[Hofmann et~al., 2021a]{Hofmann.2021}
+Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021a).
+\newblock Bound within boundaries: Do protected areas cover movement corridors
+  of their most mobile, protected species?
+\newblock {\em {Journal of Applied Ecology}}, 58(6):1133--1144.
+\newblock Publisher: Wiley Online Library.
+
+\bibitem[Hofmann et~al., 2021b]{Hofmann.2021b}
+Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021b).
+\newblock {Data from: Bound within Boundaries: Do Protected Areas Cover
+  Movement Corridors of their Most Mobile, Protected Species?}
+\newblock Dryad Digital Repository. \url{https: //doi:10.5061/dryad.dncjsxkzn}.
 
 \bibitem[Hunziker, 2021]{Hunziker.2021}
 Hunziker, P. (2021).
@@ -269,12 +281,6 @@ Kanagaraj, R., Wiegand, T., Kramer-Schadt, S., and Goyal, S.~P. (2013).
   Connectivity for Large Carnivores in Fragmented Landscapes}.
 \newblock {\em {Biological Conservation}}, 167:298 -- 309.
 
-\bibitem[Keeley et~al., 2017]{Keeley.2017}
-Keeley, A.~T., Beier, P., Keeley, B.~W., and Fagan, M.~E. (2017).
-\newblock {Habitat Suitability is a Poor Proxy for Landscape Connectivity
-  during Dispersal and Mating Movements}.
-\newblock {\em {Landscape and Urban Planning}}, 161:90--102.
-
 \bibitem[Koen et~al., 2014]{Koen.2014}
 Koen, E.~L., Bowman, J., Sadowski, C., and Walpole, A.~A. (2014).
 \newblock {Landscape Connectivity for Wildlife: Development and Validation of
@@ -286,11 +292,6 @@ Koen, E.~L., Garroway, C.~J., Wilson, P.~J., and Bowman, J. (2010).
 \newblock {The Effect of Map Boundary on Estimates of Landscape Resistance to
   Animal Movement}.
 \newblock {\em PlOS ONE}, 5(7):e11785.
-
-\bibitem[Kramer-Schadt et~al., 2007]{KramerSchadt.2007}
-Kramer-Schadt, S., Revilla, E., Wiegand, T., and Grimm, V. (2007).
-\newblock {Patterns for Parameters in Simulation Models}.
-\newblock {\em {Ecological Modelling}}, 204(3-4):553--556.
 
 \bibitem[Latham et~al., 2011]{Latham.2011}
 Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
@@ -322,6 +323,13 @@ Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
   Africa}.
 \newblock {\em {African Journal of Ecology}}, 54(1):95--98.
 
+\bibitem[McClintock et~al., 2012]{McClintock.2012}
+McClintock, B.~T., King, R., Thomas, L., Matthiopoulos, J., McConnell, B.~J.,
+  and Morales, J.~M. (2012).
+\newblock {A General Discrete-Time Modeling Framework for Animal Movement Using
+  Multistate Random Walks}.
+\newblock {\em {Ecological Monographs}}, 82(3):335--349.
+
 \bibitem[McClure et~al., 2016]{McClure.2016}
 McClure, M.~L., Hansen, A.~J., and Inman, R.~M. (2016).
 \newblock {Connecting Models to Movements: Testing Connectivity Model
@@ -343,13 +351,6 @@ McRae, B.~H., Dickson, B.~G., Keitt, T.~H., and Shah, V.~B. (2008).
 \newblock {Using Circuit Theory to Model Connectivity in Ecology, Evolution,
   and Conservation}.
 \newblock {\em {Ecology}}, 89(10):2712--2724.
-
-\bibitem[Morales et~al., 2004]{Morales.2004}
-Morales, J.~M., Haydon, D.~T., Frair, J., Holsinger, K.~E., and Fryxell, J.~M.
-  (2004).
-\newblock {Extracting More out of Relocation Data: Building Movement Models as
-  Mixtures of Random Walks}.
-\newblock {\em {Ecology}}, 85(9):2436--2445.
 
 \bibitem[Muff et~al., 2020]{Muff.2020}
 Muff, S., Signer, J., and Fieberg, J. (2020).
@@ -408,12 +409,6 @@ Potts, J.~R., Bastille‐Rousseau, G., Murray, D.~L., Schaefer, J.~A., and
   space use using a mechanistic step selection model}.
 \newblock {\em {Methods in Ecology and Evolution}}, 5(3):253--262.
 
-\bibitem[Prokopenko et~al., 2017]{Prokopenko.2017}
-Prokopenko, C.~M., Boyce, M.~S., and Avgar, T. (2017).
-\newblock {Characterizing Wildlife Behavioural Responses to Roads Using
-  Integrated Step Selection Analysis}.
-\newblock {\em {Journal of Applied Ecology}}, 54(2):470--479.
-
 \bibitem[{R Core Team}, 2020]{R.2020}
 {R Core Team} (2020).
 \newblock {\em {R: A Language and Environment for Statistical Computing}}.
@@ -468,12 +463,6 @@ Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
 \newblock {From Dispersal Constraints to Landscape Connectivity: Lessons from
   Species Distribution Modeling}.
 \newblock {\em Ecography}, 38(10):967--978.
-
-\bibitem[Wiegand et~al., 2003]{Wiegand.2003}
-Wiegand, T., Jeltsch, F., Hanski, I., and Grimm, V. (2003).
-\newblock {Using Pattern-Oriented Modeling for Revealing Hidden Information: A
-  Key for Reconciling Ecological Theory and Application}.
-\newblock {\em {Oikos}}, 100(2):209--222.
 
 \bibitem[Wolski et~al., 2017]{Wolski.2017}
 Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).

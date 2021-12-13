@@ -17,7 +17,7 @@
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink]{cleveref}
-\usepackage{lineno}
+% \usepackage{lineno}
 \usepackage{multirow}
 \usepackage{arydshln}
 % \usepackage[nomarkers, nolists]{endfloat}
@@ -127,7 +127,7 @@ Analysis to Simulate Wild Dog Dispersal and Assess Landscape Connectivity}
 \pagenumbering{arabic}
 
 % Create linenumbers
-\linenumbers
+% \linenumbers
 
 % Change to appendix counters
 \appendix
@@ -343,21 +343,20 @@ intervals using standard errors associated with each model estimate
  \begin{center}
   \includegraphics[width = \textwidth]{99_MovementModelInterpretation.png}
   \caption{Auxiliary plots that help with the interpretation of the most
-   parsimonious movement model from Table S1. The plots were generated
-   following recommendations reported in \cite{Fieberg.2021}. Subplots
-   \textbf{a1} to \textbf{a8} highlight dispersing wild dogs' movement kernel
-   and indicate how the kernel is influenced by interactions with other
-   covariates. Subplots \textbf{b1} to \textbf{b5} depict results from
-   dispersing wild dogs' habitat kernel and highlight differences in predicted
-   relative selection scores (RSS) when varying values of the covariate of
-   interest. For each covariate, predictions were made on the range of values
-   that was observed in the real data, assuming that all other covariates were
-   centered and that steps were realized during periods of ``high'' wild dog
-   activity. Plot a1, for example, can be interpreted as follows: the
-   probability of realizing a step with a low turning angle is much higher when
-   the corresponding step is large. Moreover, b1 can be interpreted as follows:
-   relative probability of using a step decreases as the amount of water cover
-   along the step increases.}
+  parsimonious movement model from Table S1. The plots were generated following
+  recommendations reported in \cite{Fieberg.2021}. Subplots a1 to a8 highlight
+  dispersing wild dogs' movement kernel and indicate how the kernel is
+  influenced by interactions with other covariates. Subplots b1 to b5 depict
+  results from dispersing wild dogs' habitat kernel and highlight differences in
+  predicted relative selection scores (RSS) when varying values of the covariate
+  of interest. For each covariate, predictions were made on the range of values
+  that was observed in the real data, assuming that all other covariates were
+  centered and that steps were realized during periods of ``high'' wild dog
+  activity. Plot a1, for example, can be interpreted as follows: the probability
+  of realizing a step with a low turning angle is much higher when the
+  corresponding step is large. Moreover, b1 can be interpreted as follows:
+  relative probability of using a step decreases as the amount of water cover
+  along the step increases.}
   \label{Interpretation}
  \end{center}
 \end{figure}

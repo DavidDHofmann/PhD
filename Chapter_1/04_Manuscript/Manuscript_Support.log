@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  25 SEP 2021 16:23
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  1 OCT 2021 08:05
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -837,58 +837,40 @@ LaTeX Info: Redefining \labelcref on input line 2301.
 LaTeX Info: Redefining \labelcpageref on input line 2301.
 Package cleveref Info: include cross-reference names in hyperlinks on input line 7767.
 Package cleveref Info: include cross-reference names in hyperlinks on input line 7783.
-) (/usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
-Package: lineno 2005/11/02 line numbers on paragraphs v4.41
-\linenopenalty=\count142
-\output=\toks39
-\linenoprevgraf=\count143
-\linenumbersep=\dimen196
-\linenumberwidth=\dimen197
-\c@linenumber=\count144
-\c@pagewiselinenumber=\count145
-\c@LN@truepage=\count146
-\c@internallinenumber=\count147
-\c@internallinenumbers=\count148
-\quotelinenumbersep=\dimen198
-\bframerule=\dimen199
-\bframesep=\dimen256
-\bframebox=\box40
-LaTeX Info: Redefining \\ on input line 3056.
 ) (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
 \multirow@colwidth=\skip53
-\multirow@cntb=\count149
+\multirow@cntb=\count142
 \multirow@dima=\skip54
-\bigstrutjot=\dimen257
+\bigstrutjot=\dimen196
 ) (/usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
 Package: arydshln 2016/04/28 v1.73 
-\dashlinedash=\dimen258
-\dashlinegap=\dimen259
-\adl@box=\box41
-\adl@height=\dimen260
-\adl@heightsave=\dimen261
-\adl@depth=\dimen262
-\adl@depthsave=\dimen263
-\adl@finaldepth=\dimen264
-\adl@columns=\count150
-\adl@ncol=\count151
-\adl@currentcolumn=\count152
-\adl@currentcolumnsave=\count153
-\adl@totalheight=\count154
-\adl@totalheightsave=\count155
-\adl@dash=\count156
-\adl@gap=\count157
-\adl@cla=\count158
-\adl@clb=\count159
-\adl@everyvbox=\toks40
-\adl@LTpagetotal=\dimen265
+\dashlinedash=\dimen197
+\dashlinegap=\dimen198
+\adl@box=\box40
+\adl@height=\dimen199
+\adl@heightsave=\dimen256
+\adl@depth=\dimen257
+\adl@depthsave=\dimen258
+\adl@finaldepth=\dimen259
+\adl@columns=\count143
+\adl@ncol=\count144
+\adl@currentcolumn=\count145
+\adl@currentcolumnsave=\count146
+\adl@totalheight=\count147
+\adl@totalheightsave=\count148
+\adl@dash=\count149
+\adl@gap=\count150
+\adl@cla=\count151
+\adl@clb=\count152
+\adl@everyvbox=\toks39
+\adl@LTpagetotal=\dimen260
 ) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box42
+\@tempboxb=\box41
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/pdflscape.sty
 Package: pdflscape 2016/05/14 v0.11 Display of landscape pages in PDF (HO)
-
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
 Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
 )
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
@@ -951,17 +933,17 @@ LaTeX Font Info:    ... okay on input line 81.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count160
-\scratchdimen=\dimen266
-\scratchbox=\box43
-\nofMPsegments=\count161
-\nofMParguments=\count162
-\everyMPshowfont=\toks41
-\MPscratchCnt=\count163
-\MPscratchDim=\dimen267
-\MPnumerator=\count164
-\makeMPintoPDFobject=\count165
-\everyMPtoPDFconversion=\toks42
+\scratchcounter=\count153
+\scratchdimen=\dimen261
+\scratchbox=\box42
+\nofMPsegments=\count154
+\nofMParguments=\count155
+\everyMPshowfont=\toks40
+\MPscratchCnt=\count156
+\MPscratchDim=\dimen262
+\MPnumerator=\count157
+\makeMPintoPDFobject=\count158
+\everyMPtoPDFconversion=\toks41
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
  (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -990,14 +972,14 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box44
+\AtBeginShipoutBox=\box43
 Package hyperref Info: Link coloring OFF on input line 81.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count166
+\c@section@level=\count159
 )
 LaTeX Info: Redefining \ref on input line 81.
 LaTeX Info: Redefining \pageref on input line 81.
@@ -1025,7 +1007,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [1] [2]
-<99_SourceAreas.png, id=84, 650.43pt x 271.0125pt>
+<99_SourceAreas.png, id=82, 650.43pt x 271.0125pt>
 File: 99_SourceAreas.png Graphic file (type png)
 <use 99_SourceAreas.png>
 Package pdftex.def Info: 99_SourceAreas.png  used on input line 186.
@@ -1045,13 +1027,13 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 257--258
 ] [5
 
 ]
-<99_MovementModelInterpretation.png, id=123, 818.8191pt x 818.8191pt>
+<99_MovementModelInterpretation.png, id=121, 818.8191pt x 818.8191pt>
 File: 99_MovementModelInterpretation.png Graphic file (type png)
 <use 99_MovementModelInterpretation.png>
 Package pdftex.def Info: 99_MovementModelInterpretation.png  used on input line 344.
 (pdftex.def)             Requested size: 398.3386pt x 398.33873pt.
  [6] [7 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MovementModelInterpretation.png (PNG copy)>]
-<99_Convergence.png, id=141, 722.7pt x 433.62pt>
+<99_Convergence.png, id=139, 722.7pt x 433.62pt>
 File: 99_Convergence.png Graphic file (type png)
 <use 99_Convergence.png>
 Package pdftex.def Info: 99_Convergence.png  used on input line 373.
@@ -1094,7 +1076,7 @@ Overfull \hbox (6.46599pt too wide) in paragraph at lines 392--392
 []\OT1/cmr/bx/n/14.4 Heatmaps in Re-la-tion to Num-ber of Sim-u-lated Steps 
  []
 
-<99_HeatmapsIndividual.png, id=147, 867.24pt x 1300.86pt>
+<99_HeatmapsIndividual.png, id=145, 867.24pt x 1300.86pt>
 File: 99_HeatmapsIndividual.png Graphic file (type png)
 <use 99_HeatmapsIndividual.png>
 Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 395.
@@ -1134,7 +1116,7 @@ Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 395.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<99_BetweennessIndividual.png, id=153, 867.24pt x 867.24pt>
+<99_BetweennessIndividual.png, id=151, 867.24pt x 867.24pt>
 File: 99_BetweennessIndividual.png Graphic file (type png)
 <use 99_BetweennessIndividual.png>
 Package pdftex.def Info: 99_BetweennessIndividual.png  used on input line 415.
@@ -1143,11 +1125,11 @@ Package pdftex.def Info: 99_BetweennessIndividual.png  used on input line 415.
 
 
  </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_BetweennessIndividual.png (PNG copy)>]
-<99_AreasReached.png, id=159, 361.35pt x 216.81pt>
+<99_AreasReached.png, id=157, 578.16pt x 433.62pt>
 File: 99_AreasReached.png Graphic file (type png)
 <use 99_AreasReached.png>
 Package pdftex.def Info: 99_AreasReached.png  used on input line 431.
-(pdftex.def)             Requested size: 398.3386pt x 239.0045pt.
+(pdftex.def)             Requested size: 398.3386pt x 298.75482pt.
  [11
 
  </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_AreasReached.png (PNG copy)>]
@@ -1155,7 +1137,7 @@ Overfull \hbox (4.7893pt too wide) in paragraph at lines 448--448
 []\OT1/cmr/bx/n/14.4 Comparison of Traver-sal Fre-quen-cies and Be-tween-
  []
 
-<99_MapComparison.png, id=165, 505.89pt x 361.35pt>
+<99_MapComparison.png, id=163, 505.89pt x 361.35pt>
 File: 99_MapComparison.png Graphic file (type png)
 <use 99_MapComparison.png>
 Package pdftex.def Info: 99_MapComparison.png  used on input line 451.
@@ -1171,19 +1153,19 @@ Package rerunfilecheck Info: File `Manuscript_Support.out' has not changed.
 Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 464.
  ) 
 Here is how much of TeX's memory you used:
- 21211 strings out of 492982
- 391382 string characters out of 6134896
- 488969 words of memory out of 5000000
- 24346 multiletter control sequences out of 15000+600000
- 14307 words of font info for 55 fonts, out of 8000000 for 9000
+ 21008 strings out of 492982
+ 388327 string characters out of 6134896
+ 488968 words of memory out of 5000000
+ 24148 multiletter control sequences out of 15000+600000
+ 14007 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 55i,16n,54p,1264b,509s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 55i,16n,54p,1264b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
-cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf" (14 pages, 14921831 bytes).
+cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf" (14 pages, 15125609 bytes).
 PDF statistics:
- 245 PDF objects out of 1000 (max. 8388607)
- 197 compressed objects within 2 object streams
+ 240 PDF objects out of 1000 (max. 8388607)
+ 193 compressed objects within 2 object streams
  43 named destinations out of 1000 (max. 500000)
  136 words of extra memory for PDF output out of 10000 (max. 10000000)
 

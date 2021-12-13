@@ -1,49 +1,52 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
+Warning--I'm ignoring Hofmann.2021's extra "year" field
+--line 3129 of file Literatur.bib
 Warning--I didn't find a database entry for "Hodel.2022"
 Warning--empty journal in Cozzi.2020
-You've used 83 entries,
+Warning--empty journal in Hofmann.2021b
+You've used 81 entries,
             1935 wiz_defined-function locations,
-            1017 strings with 21408 characters,
-and the built_in function-call counts, 36857 in all, are:
-= -- 3520
-> -- 1923
-< -- 26
-+ -- 673
-- -- 672
-* -- 3482
-:= -- 6510
-add.period$ -- 253
-call.type$ -- 83
-change.case$ -- 739
-chr.to.int$ -- 82
-cite$ -- 84
-duplicate$ -- 1156
-empty$ -- 2357
-format.name$ -- 785
-if$ -- 6968
-int.to.chr$ -- 2
+            1003 strings with 20903 characters,
+and the built_in function-call counts, 35761 in all, are:
+= -- 3417
+> -- 1847
+< -- 28
++ -- 646
+- -- 644
+* -- 3371
+:= -- 6313
+add.period$ -- 247
+call.type$ -- 81
+change.case$ -- 715
+chr.to.int$ -- 79
+cite$ -- 83
+duplicate$ -- 1128
+empty$ -- 2298
+format.name$ -- 759
+if$ -- 6769
+int.to.chr$ -- 3
 int.to.str$ -- 0
-missing$ -- 87
-newline$ -- 422
-num.names$ -- 251
-pop$ -- 607
+missing$ -- 85
+newline$ -- 412
+num.names$ -- 245
+pop$ -- 586
 preamble$ -- 2
-purify$ -- 749
+purify$ -- 725
 quote$ -- 0
-skip$ -- 845
+skip$ -- 826
 stack$ -- 0
-substring$ -- 2640
-swap$ -- 86
+substring$ -- 2562
+swap$ -- 83
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 484
-warning$ -- 1
-while$ -- 286
+type$ -- 472
+warning$ -- 2
+while$ -- 277
 width$ -- 0
-write$ -- 1081
-(There were 2 warnings)
+write$ -- 1055
+(There were 4 warnings)

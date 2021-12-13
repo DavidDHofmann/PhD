@@ -38,12 +38,13 @@
         \end{scope}
     \end{tikzpicture}
     \caption{Illustration of the study area located in southern Africa. (a) The
-    study area was confined by a bounding box spanning the entire KAZA-TFCA and
-    comprised parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia. (b)
-    The KAZA-TFCA represents the world's largest terrestrial conservation area
-    and covers a total of 520'000 km\textsuperscript{2}. Its main purpose is to
-    re-establish connectivity between already-existing national parks (dark
-    green) and other protected areas (light green).}
+    study area was confined by a bounding box spanning the entire KAZA-TFCA
+    which comprises parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia.
+    (b) The KAZA-TFCA currently represents the world's largest terrestrial
+    transfrontier conservation area, covering a total area of 520'000
+    km\textsuperscript{2}. Its main purpose is to re-establish connectivity
+    between already-existing NPs (dark green) and other protected areas (light
+    green).}
     \label{StudyArea}
   \end{center}
 \end{figure}
@@ -79,9 +80,9 @@
   dispersing African wild dogs. To generate the heatmap, we rasterized and
   tallied all simulated trajectories. Consequently, the map highlights areas
   that are frequently traversed by virtual dispersers. For spatial reference we
-  plotted a few selected national parks (dark gray). Additional heatmaps showing
-  the traversal frequency when individuals move fewer than 2'000 steps are
-  provided in Figure S4.}
+  plotted a few selected NPs (dark gray). Additional heatmaps showing the
+  traversal frequency when individuals move fewer than 2'000 steps are provided
+  in Figure S4.}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
@@ -89,34 +90,32 @@
 \begin{figure}
   \includegraphics[width=\textwidth]{99_Betweenness.png}
   \caption{Map of betweenness scores, highlighting distinct dispersal corridors
-  and potential bottlenecks across the extent of the KAZA-TFCA. A high
-  betweenness score indicates that the respective area is exceptionally
-  important for connecting different regions in the study area. In this sense
-  the metric can be used to pinpoint discrete movement corridors
+  and potential bottlenecks across the extent of the KAZA-TFCA. Betweenness
+  measures the number of shortest paths traversing through each node
+  (raster-cell). Hence, a high betweenness score indicates that the respective
+  area is exceptionally important for connecting different regions in the study
+  area. The metric is therefore useful to pinpoint discrete movement corridors
   \citep{BastilleRousseau.2018}. Note that we square-rooted betweenness scores
-  to improve visibility of corridors with low scores. Additional betweenness
-  maps showing betweenness scores when individuals move fewer than 2'000 steps
-  are provided in Figure S4.}
+  to improve visibility of corridors with comparably low scores. Additional
+  betweenness maps showing betweenness scores when individuals move fewer than
+  2'000 steps are provided in Figure S4.}
   \label{Betweenness}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_InterpatchConnectivity.png}
-  \caption{Map of inter-patch connectivity, highlighting connections between
-  national parks (dark green). Yellow bubbles represent the center of the
-  different national parks and are sized in relation to the number of simulated
-  dispersers originating from each park. Black dots represent national parks
-  that were smaller than 700 km\textsuperscript{2} and therefore did not serve
-  as source areas. Arrows between national parks illustrate between which
-  national parks the simulated dispersers successfully moved and the color of
-  each arrow shows the average number of steps (4-hourly movements) that were
-  necessary to realize those connections. Additionally, the line thickness
-  indicates the relative number of dispersers originating from a national park
-  that realized those connections. Note that a similar network view could be
+  \caption{Map of inter-patch connectivity, highlighting connections between NPs
+  (dark green). Yellow bubbles represent the center of the different NPs and are
+  sized in relation to the number of simulated dispersers originating from each
+  park. Black dots represent NPs that were smaller than 700
+  km\textsuperscript{2} and therefore did not serve as source areas. Arrows
+  between NPs illustrate between which NPs the simulated dispersers successfully
+  moved and the color of each arrow shows the average number of steps (4-hourly
+  movements) that were necessary to realize those connections. Additionally, the
+  line thickness indicates the relative number of dispersers originating from a
+  NP that realized those connections. Note that a similar network view could be
   adopted to investigate connectivity between other protected areas need not to
-  be restricted to national parks.}
+  be restricted to NPs.}
   \label{InterpatchConnectivity}
 \end{figure}
-\efloatseparator
- 

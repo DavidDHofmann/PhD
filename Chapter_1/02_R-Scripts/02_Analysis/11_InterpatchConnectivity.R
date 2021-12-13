@@ -21,6 +21,7 @@ library(davidoff)       # Custom functions
 library(rgdal)          # To load spatial data
 library(sf)             # To plot spatial stuff
 library(igraph)         # To plot networks
+library(ggpubr)         # To put multiple plots together
 
 ################################################################################
 #### Rasterize National Parks
@@ -130,9 +131,6 @@ sims$CurrentParkCountry <- as.character(prot$Country[match(sims$CurrentPark, pro
 # the minimal distance considered to see how the number of reached national
 # parks decreases as the minimal distance is increased.
 
-# Compute how many dispersers were intiated within the national parks of each
-# country
-
 # Compute how many dispersers were intiated within in each national parks
 number_simulated_park <- sims %>%
   dplyr::select(TrackID, SourceArea) %>%
@@ -148,16 +146,26 @@ number_simulated_country <- number_simulated_park %>%
   summarize(NumberSimulations = sum(NumberSimulations))
 
 # Function to determine how many of the simulated individuals (in percent)
-# reached another national park
+# reached another national park, as well as the average dispersal duration
+# required for this
 getConnections <- function(min_distance) {
   reached <- sims %>%
-    subset(DistanceFromFirst >= min_distance & CurrentPark != SourceArea) %>%
-    dplyr::select(TrackID, SourceAreaCountry) %>%
-    distinct() %>%
-    count(Country = SourceAreaCountry) %>%
-    left_join(number_simulated_country, by = c("Country" = "FromCountry")) %>%
-    mutate(PercentReachedOtherNationalPark = n / NumberSimulations) %>%
-    dplyr::select(Country, PercentReachedOtherNationalPark)
+      subset(DistanceFromFirst >= min_distance & CurrentPark != SourceArea) %>%
+      group_by(TrackID, SourceAreaCountry, CurrentPark) %>%
+      summarize(
+          StepNumber = min(StepNumber)
+        , .groups    = "drop"
+      ) %>%
+      group_by(SourceAreaCountry) %>%
+      summarize(
+          MeanStepNumber = mean(StepNumber)
+        , SDStepNumber   = sd(StepNumber)
+        , Frequency      = length(unique(TrackID))
+        , .groups        = "drop"
+      ) %>%
+      left_join(number_simulated_country, by = c("SourceAreaCountry" = "FromCountry")) %>%
+      mutate(PercentReachedOtherNationalPark = Frequency / NumberSimulations) %>%
+      dplyr::select(Country = SourceAreaCountry, PercentReachedOtherNationalPark, MeanStepNumber, SDStepNumber)
   return(reached)
 }
 
@@ -184,7 +192,7 @@ reached$PercentReachedOtherNationalPark <- reached$PercentReachedOtherNationalPa
 
 # Plot the share of trajectories reaching other national parks in relation to
 # the distance considered
-p <- ggplot(reached, aes(x = MinDistance, y = PercentReachedOtherNationalPark, col = Country)) +
+p1 <- ggplot(reached, aes(x = MinDistance, y = PercentReachedOtherNationalPark, col = Country)) +
   geom_line() +
   geom_point() +
   scale_color_viridis_d(name = "Country of Origin") +
@@ -199,8 +207,28 @@ p <- ggplot(reached, aes(x = MinDistance, y = PercentReachedOtherNationalPark, c
     , legend.position = c(0.85, 0.7)
   )
 
+# Also plot the average duration required to make those connections
+p2 <- ggplot(reached, aes(x = MinDistance, y = MeanStepNumber, col = Country)) +
+  geom_line() +
+  geom_point() +
+  scale_color_viridis_d(name = "Country of Origin") +
+  theme_classic() +
+  scale_x_continuous(breaks = seq(0, 600, by = 100)) +
+  scale_y_continuous(breaks = seq(0, 2000, by = 250), labels = function(x){format(x, big.mark = "'")}) +
+  xlab("Minimum Distance Considered (km)") +
+  ylab("Mean Dispersal Duration (Steps)\nbeforeReaching another National Park") +
+  theme(
+      panel.grid.major = element_line(colour = "gray90", size = 0.1)
+    , panel.grid.minor = element_line(colour = "gray90", size = 0.1)
+    , legend.position = "none"
+  )
+
+# Put the plots together
+p <- ggarrange(p1, p2, nrow = 2, labels = c("a", "b"), label.y = 1.02)
+p
+
 # Store the plot
-ggsave("04_Manuscript/99_AreasReached.png", plot = p, width = 5, height = 3)
+ggsave("04_Manuscript/99_AreasReached.png", plot = p, width = 8, height = 6)
 
 ################################################################################
 #### Identify Direct Connections between National Parks
@@ -213,7 +241,11 @@ ggsave("04_Manuscript/99_AreasReached.png", plot = p, width = 5, height = 3)
 visits <- sims %>%
   rename(From = SourceArea, To = CurrentPark) %>%
   group_by(TrackID, From, To) %>%
-  summarize(StepNumber = min(StepNumber), .groups = "drop") %>%
+  summarize(
+      StepNumber        = min(StepNumber)
+    , DistanceFromFirst = min(DistanceFromFirst)
+    , .groups           = "drop"
+  ) %>%
   subset(!is.na(From) & !is.nan(To) & !is.na(To)) %>%
   arrange(TrackID, StepNumber)
 
@@ -229,4 +261,4 @@ write_rds(visits, "03_Data/03_Results/99_InterpatchConnectivity.rds")
 
 # Also store the number of simulated individuals
 write_rds(number_simulated_country, "03_Data/03_Results/99_NumberSimulatedCountry.rds")
-write_rds(number_simulated_park, "03_Data/03_Results/99_NumberSimulatedpark.rds")
+write_rds(number_simulated_park, "03_Data/03_Results/99_NumberSimulatedPark.rds")

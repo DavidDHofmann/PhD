@@ -1,8 +1,8 @@
 ################################################################################
 #### Define Main Study Area
 ################################################################################
-# Description: Define main stuy area of the project. Create shapefile for it and
-# visualize all.
+# Description: Define main stuy area of the project and create a shapefile for
+# it.
 
 # Clean environment
 rm(list = ls())
@@ -22,11 +22,11 @@ setwd(wd)
 #### Prepare Data
 ################################################################################
 # Prepare polygon for study area
-ext <- extent(22, 27, -21, -18)
+ext <- extent(21, 27, -21, -17)
 ext <- as(ext, "SpatialPolygons")
 crs(ext) <- CRS("+init=epsg:4326")
 
-# Let's load one of the floodmaps and extend it to the desired extent
+# Let's load the original reference raster and crop it to the new extent
 r <- raster("03_Data/01_RawData/DAVID/ReferenceRaster.tif")
 r <- crop(r, ext, snap = "out")
 
@@ -44,7 +44,7 @@ s$Name <- "StudyArea"
 # Let's load and clean the shapefile of africa
 africa <- readOGR("03_Data/01_RawData/ESRI/Africa.shp")
 
-# Remove the small islands (only keep africa + madagascar)
+# Remove the small islands (only keep africa + madagascar), ignore warnings
 keep <- aggregate(africa, dissolve = T)
 keep <- gBuffer(keep, width = 0.1)
 keep <- disaggregate(keep)
@@ -63,6 +63,7 @@ object4 <- water[grepl(water@data$name, pattern = "Lake.*Ngami"), ]
 
 # Put all objects together
 water <- rbind(object1, object2, object3, object4)
+plot(water)
 
 # Crop data to the study area
 water <- crop(water, s)
@@ -116,17 +117,18 @@ values <- data.frame(
 prot@data <- left_join(prot@data, values, by = "Desig")
 prot$Desig <- factor(prot$Desig, levels = c("National Park", "Protected", "Forest Reserve"))
 
-# Finally, we can load some data on the distribution of wild dogs
+# Finally, we can load some data on the distribution of wild dogs for
+# visualization
 dogs <- readOGR("03_Data/01_RawData/IUCN/data_0.shp")
 
 # Visualize
 ggplot() +
-  geom_sf(data = st_as_sf(africa), fill = "gray", lwd = 0) +
-  geom_sf(data = st_as_sf(dogs), fill = "gray30", col = NA) +
-  geom_sf(data = st_as_sf(s), fill = "red", col = "red", lwd = 0.5, alpha = 0.3, lty = 2) +
+  geom_sf(data = st_as_sf(africa), fill = "gray90", col = "white", lwd = 0.1) +
+  geom_sf(data = st_as_sf(dogs), fill = "gray80", col = NA) +
+  geom_sf(data = st_as_sf(s), fill = "cornflowerblue", col = "cornflowerblue", lwd = 0.5, alpha = 0.5, lty = 2) +
   theme_minimal()
 ggplot() +
-  geom_sf(data = st_as_sf(s)) +
+  geom_sf(data = st_as_sf(s), fill = "white") +
   geom_sf(data = st_as_sf(prot), aes(fill = Desig), col = NA, alpha = 0.7) +
   geom_sf(data = st_as_sf(water), fill = "cornflowerblue", col = NA) +
   scale_fill_brewer(palette = "Greens", direction = -1, name = "Protection Status") +
@@ -153,19 +155,26 @@ writeOGR(s
 )
 writeOGR(water
   , dsn       = "03_Data/02_CleanData"
-  , layer     = "03_LandscapeFeatures_MajorWaters_GEOFABRIK.shp"
+  , layer     = "03_LandscapeFeatures_MajorWaters"
   , driver    = "ESRI Shapefile"
   , overwrite = T
 )
 writeOGR(prot
   , dsn       = "03_Data/02_CleanData"
-  , layer     = "02_LandUse_ProtectedAreas_PEACEPARKS.shp"
+  , layer     = "02_LandUse_ProtectedAreas"
   , driver    = "ESRI Shapefile"
   , overwrite = T
 )
 writeOGR(dogs
   , dsn       = "03_Data/02_CleanData"
-  , layer     = "00_General_WildDogs_IUCN"
+  , layer     = "00_General_WildDogs"
   , driver    = "ESRI Shapefile"
   , overwrite = T
 )
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/00_StudyArea_SessionInfo.rds")

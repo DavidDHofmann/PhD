@@ -34,7 +34,7 @@ library(ggpubr)         # To arrange multiple plots
 # each trajectory makes)
 visits <- read_rds("03_Data/03_Results/99_InterpatchConnectivity.rds")
 nsims_count <- read_rds("03_Data/03_Results/99_NumberSimulatedCountry.rds")
-nsims_parks <- read_rds("03_Data/03_Results/99_NumberSimulatedpark.rds")
+nsims_parks <- read_rds("03_Data/03_Results/99_NumberSimulatedPark.rds")
 
 # Summarize connections by park. Compute average number of steps required to
 # make connection, it's standard deviation, as well as how often the connection
@@ -104,6 +104,13 @@ visits_count[, 3:ncol(visits_count)][visits_count$FromCountry == visits_count$To
 # Standard deviation of 0 does not make sense here. Replace it
 visits_parks$SDStepNumber[visits_parks$SDStepNumber == 0] <- NA
 
+# Show difference in successfull dispersers for some parks
+visits_parks$FromPark <- visits$FromPark[match(visits_parks$From, visits$From)]
+visits_parks$ToPark <- visits$ToPark[match(visits_parks$To, visits$To)]
+subset(visits_parks, FromPark %in% c("Moremi", "Chobe") & ToPark %in% c("Moremi", "Chobe"))
+visits_parks$FromPark <- NULL
+visits_parks$ToPark <- NULL
+
 ################################################################################
 #### Matrix Plots
 ################################################################################
@@ -141,7 +148,6 @@ ggarrange(p1, p2, p3)
 kaza    <- readOGR("03_Data/02_CleanData/00_General_KAZA_KAZA.shp")
 africa  <- readOGR("03_Data/02_CleanData/00_General_Africa_ESRI.shp")
 prot    <- readOGR("03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp")
-r       <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Simplify Protection zones
 prot$Desig <- as.character(prot$Desig)
