@@ -15,7 +15,7 @@
 \contentsline {subsection}{\numberline {2.5}Step 3 - Connectivity Maps}{8}{subsection.2.5}%
 \contentsline {subsubsection}{\numberline {2.5.1}Heatmap}{8}{subsubsection.2.5.1}%
 \contentsline {subsubsection}{\numberline {2.5.2}Betweenness Map}{8}{subsubsection.2.5.2}%
-\contentsline {subsubsection}{\numberline {2.5.3}Inter-Patch Connectivity Map}{8}{subsubsection.2.5.3}%
+\contentsline {subsubsection}{\numberline {2.5.3}Inter-Patch Connectivity Map}{9}{subsubsection.2.5.3}%
 \contentsline {section}{\numberline {3}Results}{9}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Movement Model}{9}{subsection.3.1}%
 \contentsline {subsection}{\numberline {3.2}Dispersal Simulation}{10}{subsection.3.2}%
@@ -26,9 +26,9 @@
 \contentsline {subsection}{\numberline {4.1}Short Summary}{12}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Movement Model}{12}{subsection.4.2}%
 \contentsline {subsection}{\numberline {4.3}Simulation}{13}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}Maps}{14}{subsection.4.4}%
-\contentsline {subsection}{\numberline {4.5}Disadvantages of ISSF Simulations}{15}{subsection.4.5}%
-\contentsline {subsection}{\numberline {4.6}Conclusion}{17}{subsection.4.6}%
-\contentsline {section}{\numberline {5}Authors' Contributions}{17}{section.5}%
-\contentsline {section}{\numberline {6}Data Availability}{17}{section.6}%
-\contentsline {section}{\numberline {7}Acknowledgements}{18}{section.7}%
+\contentsline {subsection}{\numberline {4.4}Maps}{13}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Disadvantages of ISSF Simulations}{14}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Conclusion}{16}{subsection.4.6}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{16}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{16}{section.6}%
+\contentsline {section}{\numberline {7}Acknowledgements}{17}{section.7}%

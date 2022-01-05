@@ -14,58 +14,104 @@ setwd(wd)
 # load packages
 library(tidyverse)  # For data wrangling
 library(terra)      # To handle spatial data
+library(lubridate)  # To handle dates
 
+################################################################################
+#### Merge Layers
+################################################################################
 # Load the layers we want to merge
-flood <- "03_Data/02_CleanData/00_Floodmaps" %>%
-  dir(path = ., pattern = ".tif$", full.names = T) %>%
-  rast()
-water <- rast("03_Data/02_CleanData/01_LandCover_WaterCover.tif")
+water <- rast("03_Data/02_CleanData/01_LandCover_LandCover.tif") == 1
 river <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
 
+# Extract dates
+flood_dates <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
+  dir(path = ., pattern = ".tif$", full.names = T) %>%
+  basename() %>%
+  ymd()
+
+# From the floodmaps, we only want to keep those that are closest to some
+# dispersal date. So identify unique dates of dispersal
+disp_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+  read_csv() %>%
+  subset(State == "Disperser") %>%
+  pull(Timestamp) %>%
+  as.Date() %>%
+  unique()
+
+# Find closest floodmap for each dispersal date
+closest <- lapply(disp_dates, function(x) {
+  closest1 <- flood_dates[which(abs(x - flood_dates) == min(abs(x - flood_dates)))][1]
+  closest2 <- flood_dates[which(abs(x - flood_dates) == min(abs(x - flood_dates)))][2]
+  close <- c(closest1, closest2)
+  return(close)
+}) %>% do.call(c, .) %>% unique() %>% na.omit()
+
+# Subset to only those floodmaps
+flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
+  dir(pattern = ".tif$", full.names  = T) %>%
+  data.frame(Filename = ., Date = ymd(basename(.)), stringsAsFactors = F) %>%
+  subset(Date %in% closest) %>%
+  pull(Filename) %>%
+  rast()
+
 # Remove cloud cover (value = 2) from the floodmaps and call it dryland
-rcl <- data.frame(old = c(0, 1, 2), new = c(0, 1, 0))
-flood <- classify(flood, rcl)
+flood <- classify(flood, rcl <- data.frame(old = c(0, 1, 2), new = c(0, 1, 0)))
+
+# Expand maps to match the extent of the study area
+flood <- extend(flood, water)
 
 # From the globeland land cover dataset, remove any water within the extent for
 # which we have dynamic floodmaps
-p <- as.polygons(ext(flood[[1]]))
-water <- mask(water, p, inverse = T, updatevalue = 0)
+p <- as.polygons(ext(trim(flood[[1]])))
+water <- mask(water, p, inverse = T, updatevalue = 0, touches = F)
 
 # Combine the layer with the with river data
-water <- max(water, river)
+dynamic <- max(water, river)
 
-test <- extend(flood[[1]], water)
-filled <- mask(water, test, maskvalue = 1, updatevalue = 1)
+# Add dynamic floodmaps
+dynamic <- mask(dynamic, flood, maskvalue = 1, updatevalue = 1)
 
-# Coerce to raster
-water <- raster(water)
-flood <- stack(flood)
-
-# "Expand" floodmaps and fill values with values from static watermap
-water <- suppressMessages(
-  pbmclapply(
-      X                  = 1:nlayers(flood)
-    , mc.cores           = detectCores() - 1
-    , ignore.interactive = T
-    , FUN                = function(x){
-      extended <- extend(flood[[x]], water, value = NA)
-      filled <- mask(water, extended, maskvalue = 1, updatevalue = 1)
-      filled <- writeRaster(filled, tempfile())
-      return(filled)
-  }) %>% stack()
-)
-
-# Let's also transfer the layernames
-names(water) <- names(flood)
-
-# Visualize some maps
-plot(water[[1:4]], col = c("white", "blue"))
+# Assign map dates again
+names(dynamic) <- flood_dates
 
 # Save the result to file. We'll store them uncompressed which allows faster
 # reading times
 writeRaster(
-    x         = water
-  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd"
+    x         = dynamic
+  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd"
   , overwrite = TRUE
-  , options   = c("COMPRESSION=NONE")
+  , gdal      = c("COMPRESSION=NONE")
 )
+
+################################################################################
+#### Create Averaged Watermap
+################################################################################
+# Load all floodmaps that are to our disposal
+flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
+  dir(pattern = ".tif$", full.names  = T) %>%
+  rast()
+
+# Sum them
+summed <- app(flood[[1:20]], sum)
+
+# Keep everything that is inundated most of the time
+summed <- summed > nlyr(flood) / 10
+
+# Merge with the other layers
+static <- max(water, river)
+static <- mask(static, summed, maskvalue = 1, updatevalue = 1)
+
+# Store the file
+writeRaster(
+    x         = static
+  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif"
+  , overwrite = TRUE
+  , gdal      = c("COMPRESSION=NONE")
+)
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/06_MergeWater.rds")

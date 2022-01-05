@@ -101,14 +101,6 @@ writeRaster(
   , overwrite = TRUE
 )
 
-# Also store the water-cover layer seperately
-water <- glob == 1
-writeRaster(
-    x         = water
-  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCover.tif"
-  , overwrite = TRUE
-)
-
 # Store the information table
 info %>%
   dplyr::select(Class = ClassNew, Code = CodeNew, Color) %>%
@@ -120,4 +112,4 @@ info %>%
 ################################################################################
 # Store session information
 session <- devtools::session_info()
-write_rds(session, file = "02_R-Scripts/99_SessionInformation/02_LandCover_SessionInfo.rds")
+write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/02_LandCover_SessionInfo.rds")

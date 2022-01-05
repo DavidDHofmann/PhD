@@ -45,6 +45,7 @@ s$Name <- "StudyArea"
 africa <- readOGR("03_Data/01_RawData/ESRI/Africa.shp")
 
 # Remove the small islands (only keep africa + madagascar), ignore warnings
+africa <- gBuffer(africa, byid = T, width = 0)
 keep <- aggregate(africa, dissolve = T)
 keep <- gBuffer(keep, width = 0.1)
 keep <- disaggregate(keep)
@@ -153,6 +154,12 @@ writeOGR(s
   , driver    = "ESRI Shapefile"
   , overwrite = T
 )
+writeOGR(africa
+  , dsn       = "03_Data/02_CleanData"
+  , layer     = "00_General_Africa"
+  , driver    = "ESRI Shapefile"
+  , overwrite = T
+)
 writeOGR(water
   , dsn       = "03_Data/02_CleanData"
   , layer     = "03_LandscapeFeatures_MajorWaters"
@@ -175,6 +182,10 @@ writeOGR(dogs
 ################################################################################
 #### Session Information
 ################################################################################
+# Create directory for session info
+dir.create("02_R-Scripts/99_SessionInformation/01_DataCleaning", showWarnings = F)
+
 # Store session information
 session <- devtools::session_info()
-readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/00_StudyArea_SessionInfo.rds")
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/00_StudyArea_SessionInfo.rds")
+cat("Done :)\n")

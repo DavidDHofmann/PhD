@@ -5,48 +5,48 @@ The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--I'm ignoring Hofmann.2021's extra "year" field
 --line 3129 of file Literatur.bib
-Warning--I didn't find a database entry for "Hodel.2022"
+Warning--I didn't find a database entry for "Signer.2021"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Hofmann.2021b
-You've used 81 entries,
+You've used 79 entries,
             1935 wiz_defined-function locations,
-            1003 strings with 20903 characters,
-and the built_in function-call counts, 35761 in all, are:
-= -- 3417
-> -- 1847
+            991 strings with 20471 characters,
+and the built_in function-call counts, 34815 in all, are:
+= -- 3325
+> -- 1796
 < -- 28
-+ -- 646
-- -- 644
-* -- 3371
-:= -- 6313
-add.period$ -- 247
-call.type$ -- 81
-change.case$ -- 715
-chr.to.int$ -- 79
-cite$ -- 83
-duplicate$ -- 1128
-empty$ -- 2298
-format.name$ -- 759
-if$ -- 6769
++ -- 628
+- -- 626
+* -- 3280
+:= -- 6147
+add.period$ -- 241
+call.type$ -- 79
+change.case$ -- 696
+chr.to.int$ -- 77
+cite$ -- 81
+duplicate$ -- 1100
+empty$ -- 2239
+format.name$ -- 739
+if$ -- 6591
 int.to.chr$ -- 3
 int.to.str$ -- 0
-missing$ -- 85
-newline$ -- 412
-num.names$ -- 245
-pop$ -- 586
+missing$ -- 83
+newline$ -- 402
+num.names$ -- 239
+pop$ -- 571
 preamble$ -- 2
-purify$ -- 725
+purify$ -- 706
 quote$ -- 0
-skip$ -- 826
+skip$ -- 806
 stack$ -- 0
-substring$ -- 2562
-swap$ -- 83
+substring$ -- 2488
+swap$ -- 81
 text.length$ -- 1
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 472
+type$ -- 460
 warning$ -- 2
-while$ -- 277
+while$ -- 269
 width$ -- 0
-write$ -- 1055
+write$ -- 1029
 (There were 4 warnings)

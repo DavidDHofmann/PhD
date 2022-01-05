@@ -85,4 +85,4 @@ write_csv(dat, "03_Data/02_CleanData/00_General_Dispersers.csv")
 ################################################################################
 # Store session information
 session <- devtools::session_info()
-readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_GPSData_SessionInfo.rds")
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/01_GPSData_SessionInfo.rds")

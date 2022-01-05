@@ -54,8 +54,9 @@
 %------------------------------------------------------------------------------
 %	Titlepage: Header
 %------------------------------------------------------------------------------
-\title{\textbf{Appendix}\\ Step by Step: Using Integrated Step Selection
-Analysis to Simulate Wild Dog Dispersal and Assess Landscape Connectivity}
+\title{\textbf{Appendix}\\ A Three Steps Workflow for Simulating Dispersal
+Trajectories and Assessing Landscape Connectivity: A Case Study on the
+Endangered African Wild Dog}
 
 % List of Authors
 \author{
@@ -75,7 +76,7 @@ Analysis to Simulate Wild Dog Dispersal and Assess Landscape Connectivity}
 \makeatother
 
 % Current Date
-\date{\today}
+% \date{\today}
 
 % And here the masterpiece begins
 \begin{document}
@@ -100,21 +101,21 @@ Analysis to Simulate Wild Dog Dispersal and Assess Landscape Connectivity}
  Studies, University of Zurich, Winterthurerstarsse 190, 8057 Zurich,
  Switzerland.
 
- \textsuperscript{2} Botswana Predator Conservation, Private Bag 13, Maun,
- Botswana.
+ \textsuperscript{2} Botswana Predator Conservation Program, Private Bag 13,
+ Maun, Botswana.
 
  \textsuperscript{\S} Corresponding author (david.hofmann2@uzh.ch)
 
  \vspace{4cm}
 
- \textbf{Running Title:} Release the Dogs! Simulating Wild Dog Dispersal to
- Assess Landscape Connectivity
+\textbf{Running Title:} Simulating Wild Dog Dispersal Trajectories to Assess
+Landscape Connectivity
 
- \vspace{0.5cm}
+\vspace{0.5cm}
 
- \textbf{Keywords:} dispersal, simulation, movement, integrated step selection
- function, Kavango-Zambezi Transfrontier Conservation Area, landscape
- connectivity, Lycaon pictus
+\textbf{Keywords:} dispersal, simulation, movement, integrated step selection
+function, Kavango-Zambezi Transfrontier Conservation Area, landscape
+connectivity, Lycaon pictus
 
 \end{flushleft}
 
@@ -388,7 +389,7 @@ intervals using standard errors associated with each model estimate
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=5mm,footskip=0pt}
-\section{Heatmaps in Relation to Number of Simulated Steps}
+\section{Heatmaps in Relation to the Number of Simulated Steps}
 \begin{figure}[hbtp]
  \begin{center}
   \includegraphics[width = 0.86\textwidth]{99_HeatmapsIndividual.png}
@@ -408,7 +409,7 @@ intervals using standard errors associated with each model estimate
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=10mm,footskip=0pt}
-\section{Betweenness Maps in Relation to Number of Simulated Steps}
+\section{Betweenness Maps in Relation to the Number of Simulated Steps}
 \begin{figure}[hbtp]
  \begin{center}
   \includegraphics[width = 0.86\textwidth]{99_BetweennessIndividual.png}
@@ -420,8 +421,23 @@ intervals using standard errors associated with each model estimate
  \end{center}
 \end{figure}
 \restoregeometry
+
 %------------------------------------------------------------------------------
-%	Appendix S11: Areas Reached
+%	Appendix S11: Map Comparison
+%------------------------------------------------------------------------------
+\newpage
+\section{Comparison of Traversal Frequencies and Betweenness Scores Inside and Outside KAZA-TFCA}
+\begin{figure}[hbtp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_MapComparison.png}
+  \caption{Comparison of values from the heatmap and betweenness map inside
+  (blue) and outside (orange) the KAZA-TFCA borders.}
+  \label{MapComparison}
+ \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S12: Areas Reached
 %------------------------------------------------------------------------------
 \newpage
 \section{Dispersal into other National Parks}
@@ -437,20 +453,6 @@ intervals using standard errors associated with each model estimate
   percentage gradually decreases as only national parks at higher euclidean
   distances are considered.}
   \label{AreasReached}
- \end{center}
-\end{figure}
-
-%------------------------------------------------------------------------------
-%	Appendix S11: Map Comparison
-%------------------------------------------------------------------------------
-\newpage
-\section{Comparison of Traversal Frequencies and Betweenness Scores Inside and Outside KAZA-TFCA}
-\begin{figure}[hbtp]
- \begin{center}
-  \includegraphics[width = \textwidth]{99_MapComparison.png}
-  \caption{Comparison of values from the heatmap and betweenness map inside
-  (blue) and outside (orange) the KAZA-TFCA borders.}
-  \label{MapComparison}
  \end{center}
 \end{figure}
 

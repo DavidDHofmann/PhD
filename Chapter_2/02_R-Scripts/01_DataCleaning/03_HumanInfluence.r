@@ -60,4 +60,4 @@ writeVector(
 ################################################################################
 # Store session information
 session <- devtools::session_info()
-readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/03_HumanInfluence_SessionInfo.rds")
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/03_HumanInfluence_SessionInfo.rds")

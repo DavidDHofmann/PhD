@@ -2,7 +2,7 @@
   \begin{center}
     \includegraphics[width = \textwidth]{99_GraphicalAbstract2.pdf}
     \caption{Flowchart of the simulation-based connectivity analysis as proposed
-    in this article. First, GPS data and habitat covariates have to be
+    in this article. First, GPS data and habitat covariates must be
     collected. The combined data is then analyzed in an integrated step
     selection model, which enables the parametrization of the focal species'
     habitat and movement kernels and results in a mechanistic movement model.

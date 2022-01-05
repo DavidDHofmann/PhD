@@ -1,7 +1,7 @@
 ################################################################################
 #### Preparation of River Data
 ################################################################################
-# Description: Prepare the Merit river dataset
+# Description: Prepare the Merit river dataset (stitch, reproject, etc.)
 
 # Clear R's brain
 rm(list = ls())
@@ -54,4 +54,4 @@ writeRaster(
 ################################################################################
 # Store session information
 session <- devtools::session_info()
-readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/05_Rivers_SessionInfo.rds")
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/05_Rivers_SessionInfo.rds")

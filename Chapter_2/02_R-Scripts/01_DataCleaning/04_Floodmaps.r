@@ -18,46 +18,50 @@ library(tidyverse)    # For data wrangling
 library(terra)        # For fast raster manipulation
 library(lubridate)    # To handle dates
 library(floodmapr)    # For floodmapping
+library(pbmcapply)    # For multicore use
 
-# ################################################################################
-# #### Reclassify and Resample ORI Floodmaps
-# ################################################################################
-# # Reclassify and resample ORI floodmaps
-# files <- dir(
-#     path        = "03_Data/01_RawData/ORI/01_Maps"
-#   , pattern     = "*.tif$"
-#   , full.names  = T
-# )
-#
-# # Define filenames for resampled files
-# dir.create("03_Data/02_CleanData/00_Floodmaps", showWarnings = F)
-# dir.create("03_Data/02_CleanData/00_Floodmaps/01_Original", showWarnings = F)
-# newfiles <- paste0("03_Data/02_CleanData/00_Floodmaps/01_Original", basename(files))
-#
-# # Prepare reclassification table
-# rcl <- data.frame(old = c(0, 127, 255), new = c(1, 2, 0))
-#
-# # Load reference floodmap
-# r <- rast("03_Data/01_RawData/ORI/FloodmapReference.tif")
-#
-# # Loop through the files, resample them to the reference raster, reclassify
-# # values, and store them. Note that I will trim the raster to save space.
-# for (i in 1:length(files)) {
-#   ori <- rast(files[i])[[1]]
-#   ori <- resample(ori, r, "near")
-#   ori <- classify(ori, rcl)
-#   writeRaster(ori, newfiles[i], overwrite = T)
-#   cat(i, "out of", length(files), "done...\n")
-# }
-#
-# # Remove the "aux.xml" files that were created
-# cat("Removing .aux.xml files \n")
-# file.remove(dir(
-#     path        = "03_Data/02_CleanData/00_Floodmaps"
-#   , pattern     = ".aux.xml$"
-#   , full.names  = T
-# ))
-#
+################################################################################
+#### Reclassify and Resample ORI Floodmaps
+################################################################################
+# Reclassify and resample ORI floodmaps
+files <- dir(
+    path        = "03_Data/01_RawData/ORI/01_Maps"
+  , pattern     = "*.tif$"
+  , full.names  = T
+)
+
+# Define filenames for resampled files
+dir.create("03_Data/02_CleanData/00_Floodmaps", showWarnings = F)
+dir.create("03_Data/02_CleanData/00_Floodmaps/01_Original", showWarnings = F)
+newfiles <- paste0("03_Data/02_CleanData/00_Floodmaps/01_Original/", basename(files))
+
+# Prepare reclassification table
+rcl <- data.frame(old = c(0, 127, 255), new = c(1, 2, 0))
+
+# Load reference floodmap
+r <- rast("03_Data/01_RawData/ORI/FloodmapReference.tif")
+
+# Loop through the files, resample them to the reference raster, reclassify
+# values, and store them. Note that I will trim the raster to save space.
+files <- files[!file.exists(newfiles)]
+if (length(files) > 0)  {
+  for (i in 1:length(files)) {
+    ori <- rast(files[i])[[1]]
+    ori <- resample(ori, r, "near")
+    ori <- classify(ori, rcl)
+    writeRaster(ori, newfiles[i], overwrite = T)
+    cat(i, "out of", length(files), "done...\n")
+  }
+}
+
+# Remove the "aux.xml" files that were created
+cat("Removing .aux.xml files \n")
+file.remove(dir(
+    path        = "03_Data/02_CleanData/00_Floodmaps"
+  , pattern     = ".aux.xml$"
+  , full.names  = T
+))
+
 # ################################################################################
 # #### Determine Missing Floodmaps
 # ################################################################################
@@ -109,7 +113,7 @@ library(floodmapr)    # For floodmapping
 #   as.Date() %>%
 #   range()
 #
-# # Subset to those dates
+# # Subset to those dates (and expand the range slightly)
 # todownload <- subset(pot_dates
 #   , Date >= dis_dates[1] - days(8)
 #   & Date <= dis_dates[2] + days(8)
@@ -153,6 +157,9 @@ library(floodmapr)    # For floodmapping
 # Specify if watermask should be dynamic or not
 dynamic <- T
 
+# Should bimodality be ignored?
+ignore <- T
+
 # Load reference raster (this time we'll use another floodmap as reference)
 r <- rast("03_Data/01_RawData/ORI/FloodmapReference.tif")
 
@@ -163,11 +170,6 @@ downloaded <- dir(
   , full.names  = T
 )
 
-# Retrieve dates from filenames
-dates <- downloaded %>%
-  basename() %>%
-  ymd()
-
 # Also check all already classified maps
 files <- dir(
     path        = "03_Data/02_CleanData/00_Floodmaps/01_Original"
@@ -177,6 +179,11 @@ files <- dir(
 
 # Subset to files that have not been classified yet
 downloaded <- downloaded[!basename(downloaded) %in% basename(files)]
+
+# Retrieve dates from filenames
+dates <- downloaded %>%
+  basename() %>%
+  ymd()
 
 # Loop through each of the downloaded images and classify them
 for (i in 1:length(downloaded)) {
@@ -203,48 +210,50 @@ for (i in 1:length(downloaded)) {
       , filenames = filenames
       , filedates = filedates
       , years     = 5
-      , threshold = 0.99
+      , threshold = 0.95
     )
   }
 
   # Check for bimodality in the modis image
-  if (dynamic) {
-    is_bimodal <- modis_bimodal(
-        x         = loaded
-      , watermask = watermask
-      , drymask   = NULL
-    )
-  } else {
-    is_bimodal <- modis_bimodal(
-        x         = loaded
-      , watermask = NULL
-      , drymask   = NULL
-    )
-  }
+  if (!ignore) {
+    if (dynamic) {
+      is_bimodal <- modis_bimodal(
+          x         = loaded
+        , watermask = watermask
+        , drymask   = NULL
+      )
+    } else {
+      is_bimodal <- modis_bimodal(
+          x         = loaded
+        , watermask = NULL
+        , drymask   = NULL
+      )
+    }
 
-  # In case the file is not bimodal, we can't classify it and need to skip
-  if (!is_bimodal){
-    cat("Image is not bimodal. Can't classify watermap. Skipping to next image...\n")
-    next
-  } else {
-    cat("Image is bimodal. Will be classified now...\n")
+    # In case the file is not bimodal, we can't classify it and need to skip
+    if (!is_bimodal){
+      cat(paste0("Image", dates[i], "is not bimodal. Can't classify watermap. Skipping to next image...\n"))
+      next
+    } else {
+      cat("Image is bimodal. Will be classified now...\n")
+    }
   }
 
   # Classify modis image. We provide a dynamic watermask here
   if (dynamic) {
-    classified <- modis_classify(
-        x                 = loaded
-      , watermask         = watermask
-      , drymask           = NULL
-      , ignore.bimodality = T
-    )
-  } else {
-    classified <- modis_classify(
-        x                 = loaded
-      , watermask         = NULL
-      , drymask           = NULL
-      , ignore.bimodality = T
-    )
+      classified <- modis_classify(
+          x                 = loaded
+        , watermask         = watermask
+        , drymask           = NULL
+        , ignore.bimodality = T
+      )
+    } else {
+      classified <- modis_classify(
+          x                 = loaded
+        , watermask         = NULL
+        , drymask           = NULL
+        , ignore.bimodality = T
+      )
   }
 
   # Print update
@@ -252,6 +261,7 @@ for (i in 1:length(downloaded)) {
 
   # We also want to resample the classified image, so that it matches the
   # reference raster. We'll use the nearest neighbor method here
+  plot(classified)
   classified <- terra::resample(
       x       = classified
     , y       = r
@@ -260,13 +270,13 @@ for (i in 1:length(downloaded)) {
 
   # Specify final filename
   name <- dates[i]
-  name <- paste0("03_Data/02_CleanData/00_Floodmaps/01_Original", name, ".tif")
+  name <- paste0("03_Data/02_CleanData/00_Floodmaps/01_Original/", name, ".tif")
 
   # Store raster
   writeRaster(classified, name, overwrite = T)
 
   # Print update
-  cat("Image", i, "out of", length(dates), "finished...\n")
+  cat("Image", i, "out of", length(downloaded), "finished...\n")
 }
 
 # Remove any .aux.xml files
@@ -278,24 +288,69 @@ file.remove(
   )
 )
 
-# ################################################################################
-# #### Resample to Study Area
-# ################################################################################
-# We only need floodmaps close to dispersal dates
+################################################################################
+#### Resample Maps to Study Area
+################################################################################
+# # Identify dates of all floodmaps
+# flood_dates <- "03_Data/02_CleanData/00_Floodmaps/01_Original" %>%
+#   dir(pattern = ".tif$", full.names  = T) %>%
+#   basename() %>%
+#   ymd()
 #
+# # Identify unique dates of dispersal
+# disp_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+#   read_csv() %>%
+#   subset(State == "Disperser") %>%
+#   pull(Timestamp) %>%
+#   as.Date() %>%
+#   unique()
+#
+# # Find closest floodmap for each dispersal date
+# closest <- lapply(disp_dates, function(x) {
+#   closest1 <- flood_dates[which(abs(x - flood_dates) == min(abs(x - flood_dates)))][1]
+#   closest2 <- flood_dates[which(abs(x - flood_dates) == min(abs(x - flood_dates)))][2]
+#   close <- c(closest1, closest2)
+#   return(close)
+# }) %>% do.call(c, .) %>% unique() %>% na.omit()
+#
+# # Subset to only those floodmaps
+# files <- "03_Data/02_CleanData/00_Floodmaps/01_Original" %>%
+#   dir(pattern = ".tif$", full.names  = T) %>%
+#   data.frame(Filename = ., Date = ymd(basename(.))) %>%
+#   subset(Date %in% closest) %>%
+#   pull(Filename)
+#
+
+# Identify all floodmaps
+files <- "03_Data/02_CleanData/00_Floodmaps/01_Original" %>%
+  dir(pattern = ".tif$", full.names  = T)
+
+# How many are there?
+length(files)
+
+# Prepare new filenames
+newnames <- paste0("03_Data/02_CleanData/00_Floodmaps/02_Resampled/", basename(files))
+
+# Only keep the ones that are not resampled yet
+files <- files[!basename(files) %in% dir(path = "03_Data/02_CleanData/00_Floodmaps/02_Resampled")]
+
+# Resample floodmaps
+dir.create("03_Data/02_CleanData/00_Floodmaps/02_Resampled", showWarnings = F)
+r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+pbmclapply(files, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+  flood <- rast(x)
+  flood <- resample(flood, r, method = "near")
+  flood <- trim(flood)
+  writeRaster(flood, filename = newname)
+})
+
 # ################################################################################
 # #### Visualizations
 # ################################################################################
 # # Let's visualize a random subset of the classified floodmaps
-# files <- dir(
-#     path        = "03_Data/02_CleanData/00_Floodmaps/01_Original"
-#   , pattern     = ".tif$"
-#   , full.names  = T
-#   ) %>%
-#   sample(6)  %>%
-#   data.frame(Filename = ., Date = ymd(basename(.)), stringsAsFactors = F)
-# flood <- rast(files$Filename)
-# names(flood) <- files$Date
+# sample <- sample(newnames, 6)
+# flood <- rast(sample)
+# names(flood) <- ymd(basename(sample))
 #
 # # Plot
 # flood %>%
@@ -308,11 +363,11 @@ file.remove(
 #     facet_wrap("Date", labeller = labeller(Date = function(x){ymd(substr(x, 2, 11))})) +
 #     theme_minimal() +
 #     coord_sf() +
-#     scale_fill_manual(values = c("white", "cornflowerblue", "grey"), name = "Category")
-#
-# ################################################################################
-# #### Session Information
-# ################################################################################
-# # Store session information
-# session <- devtools::session_info()
-# readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/04_Floodmaps_SessionInfo.rds")
+#     scale_fill_manual(values = c("white", "cornflowerblue", "gray"), name = "Category")
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/04_Floodmaps_SessionInfo.rds")
