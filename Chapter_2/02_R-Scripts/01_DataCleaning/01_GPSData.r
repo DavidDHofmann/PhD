@@ -12,6 +12,7 @@ library(wilddogr)   # To download GPS data from dropbox
 library(raster)     # For handling spatial data
 library(rgdal)      # For loading and storing spatial data
 library(sf)         # For plotting spatial data
+library(ggpubr)     # To arrange multiple plots
 
 # Set working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
@@ -21,20 +22,26 @@ setwd(wd)
 #### Download Data From Dropbox and Combine with Data From Briana
 ################################################################################
 # Identify files on dropbox (ignore warning about expected 3 pieces)
+cat("Checking for GPS data on dropbox...\n")
 files <- dog_files(rvc = F)
 
 # Let's take a look at the downloadable data
 head(files)
 
 # Download the data
-# downloaded <- dog_download(
-#     x         = files
-#   , clean     = T
-#   , overwrite = T
-#   , outdir    = "03_Data/01_RawData/POPECOL"
-# )
+if (!file.exists("03_Data/01_RawData/POPECOL/Cleaned_GPSData.csv")) {
+    downloaded <- dog_download(
+        x         = files
+      , clean     = T
+      , overwrite = T
+      , outdir    = "03_Data/01_RawData/POPECOL"
+    )
+  } else {
+    cat("GPS data has already been downloaded and will not be downloaded again...\n")
+}
 
 # Load the downloaded data
+cat("Merging POPECOL's GPS data with Abrahm's GPS data...\n")
 dat1 <- read_csv("03_Data/01_RawData/POPECOL/Cleaned_GPSData.csv")
 
 # Find all dogs that eventually dispersed
@@ -66,16 +73,22 @@ rm(dat1, dat2, dispersers)
 dat <- subset(dat, !is.na(x) & !is.na(y))
 
 # Some visualizations
-ggplot(dat, aes(x = x, y = y)) +
+p1 <- ggplot(dat, aes(x = x, y = y)) +
   geom_point(size = 0.1) +
   theme_minimal() +
   coord_sf()
-ggplot(subset(dat, State == "Disperser"), aes(x = x, y = y, col = as.factor(DogName))) +
+p2 <- ggplot(subset(dat, State == "Disperser"), aes(x = x, y = y, col = as.factor(DogName))) +
   geom_point(size = 0.1, alpha = 0.5) +
   geom_path(size = 0.2, alpha = 0.5) +
   theme_minimal() +
   theme(legend.position = "none") +
   coord_sf()
+
+# Arrange plots
+ggarrange(p1, p2, ncol = 1)
+
+# Clear graphs
+graphics.off()
 
 # Store the data to file
 write_csv(dat, "03_Data/02_CleanData/00_General_Dispersers.csv")
@@ -86,3 +99,4 @@ write_csv(dat, "03_Data/02_CleanData/00_General_Dispersers.csv")
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/01_GPSData_SessionInfo.rds")
+cat("Done :)\n")

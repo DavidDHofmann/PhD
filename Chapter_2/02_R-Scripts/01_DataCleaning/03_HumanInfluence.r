@@ -19,6 +19,7 @@ human <- rast("03_Data/01_RawData/DAVID/HumanInfluence.grd")
 r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 
 # Crop humans to reference raster
+cat("Preparing human influence layer...\n")
 human <- crop(human, r)
 
 # We will only work with the 5km buffered data
@@ -61,3 +62,4 @@ writeVector(
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/03_HumanInfluence_SessionInfo.rds")
+cat("Done :)\n")

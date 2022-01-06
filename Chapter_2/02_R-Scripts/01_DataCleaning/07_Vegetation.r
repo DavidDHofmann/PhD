@@ -274,3 +274,4 @@ file.remove(files)
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/07_Vegetation.rds")
+cat("Done :)\n")

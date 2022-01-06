@@ -25,6 +25,7 @@ r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 glob <- crop(glob, s)
 
 # Aggregate to coarser resolution
+cat("Aggregating land cover to coarser resolution...\n")
 fact <- res(r)[1] / res(glob)[1]
 glob <- terra::aggregate(glob, fact = round(fact), fun = "modal")
 
@@ -76,6 +77,7 @@ info$Color[info$CodeNew == 6] <- "#85cc7a"
 info$Color[info$CodeNew == 7] <- "#cccccc"
 
 # Reclassify raster
+cat("Reclassifying and resampling land cover layer...\n")
 rcl <- dplyr::select(info, c(Code, CodeNew))
 glob <- classify(glob, rcl)
 
@@ -95,6 +97,7 @@ ggplot(as.data.frame(glob, xy = T), aes(x = x, y = y, fill = as.factor(Globeland
   theme_minimal()
 
 # Store the raster
+cat("Storing data...\n")
 writeRaster(
     x         = glob
   , filename  = "03_Data/02_CleanData/01_LandCover_LandCover.tif"
@@ -113,3 +116,4 @@ info %>%
 # Store session information
 session <- devtools::session_info()
 write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/02_LandCover_SessionInfo.rds")
+cat("Done :)\n")

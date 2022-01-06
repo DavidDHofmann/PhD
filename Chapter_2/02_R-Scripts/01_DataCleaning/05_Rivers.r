@@ -24,6 +24,7 @@ files <- dir(
 dat <- lapply(files, rast)
 
 # Mosaic them.
+cat("Mosaicing MERIT river data...\n")
 riv <- terra::mosaic(dat[[1]], dat[[2]], dat[[3]], dat[[4]], dat[[5]]
   , dat[[6]], dat[[7]], dat[[8]], dat[[9]], fun = "max")
 
@@ -55,3 +56,4 @@ writeRaster(
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/05_Rivers_SessionInfo.rds")
+cat("Done :)\n")

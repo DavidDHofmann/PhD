@@ -39,6 +39,7 @@ disp_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
   unique()
 
 # Find closest floodmap for each dispersal date
+cat("Identifying floodmaps closest to dispersal data... \n")
 closest <- lapply(disp_dates, function(x) {
   closest1 <- flood_dates[which(abs(x - flood_dates) == min(abs(x - flood_dates)))][1]
   closest2 <- flood_dates[which(abs(x - flood_dates) == min(abs(x - flood_dates)))][2]
@@ -69,6 +70,7 @@ water <- mask(water, p, inverse = T, updatevalue = 0, touches = F)
 dynamic <- max(water, river)
 
 # Add dynamic floodmaps
+cat("Creating dynamic water masks data... \n")
 dynamic <- mask(dynamic, flood, maskvalue = 1, updatevalue = 1)
 
 # Assign map dates again
@@ -92,7 +94,7 @@ flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   rast()
 
 # Sum them
-summed <- app(flood[[1:20]], sum)
+summed <- sum(flood)
 
 # Keep everything that is inundated most of the time
 summed <- summed > nlyr(flood) / 10
@@ -115,3 +117,4 @@ writeRaster(
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/06_MergeWater.rds")
+cat("Done :)\n")

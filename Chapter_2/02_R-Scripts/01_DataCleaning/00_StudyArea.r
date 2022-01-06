@@ -13,6 +13,7 @@ library(rgdal)             # For loading and storing spatial data
 library(rgeos)             # For manipulating spatial data
 library(tidyverse)         # For data wrangling
 library(sf)                # For plotting spatial data
+library(ggpubr)            # To arrange multiple plots
 
 # Set working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
@@ -45,6 +46,7 @@ s$Name <- "StudyArea"
 africa <- readOGR("03_Data/01_RawData/ESRI/Africa.shp")
 
 # Remove the small islands (only keep africa + madagascar), ignore warnings
+cat("Preparing shapefile of africa...\n")
 africa <- gBuffer(africa, byid = T, width = 0)
 keep <- aggregate(africa, dissolve = T)
 keep <- gBuffer(keep, width = 0.1)
@@ -54,6 +56,7 @@ keep <- keep[keep$Area %in% sort(keep$Area, decreasing = T)[1:2], ]
 africa <- africa[keep, ]
 
 # Let's also load some water areas (these are only for plotting)
+cat("Preparing shapefiles of major water areas...\n")
 water <- readOGR("03_Data/01_RawData/GEOFABRIK/Water.shp")
 
 # Specify the areas that we want to keep for plotting later
@@ -64,7 +67,10 @@ object4 <- water[grepl(water@data$name, pattern = "Lake.*Ngami"), ]
 
 # Put all objects together
 water <- rbind(object1, object2, object3, object4)
-plot(water)
+plot(water, col = "cornflowerblue", border = NA)
+plot(africa, add = T)
+axis(1)
+axis(2)
 
 # Crop data to the study area
 water <- crop(water, s)
@@ -85,6 +91,7 @@ prot@data <- dplyr::select(prot@data
 
 # We now want to simplify the protection categories. We created a
 # reclassification table for this, so let's use it
+cat("Preparing shapefile of protected areas...\n")
 desigs <- read_csv("03_Data/01_RawData/PEACEPARKS/Reclassification.csv")
 names(desigs) <- c("Nr", "Old", "New", "Comment")
 
@@ -122,13 +129,13 @@ prot$Desig <- factor(prot$Desig, levels = c("National Park", "Protected", "Fores
 # visualization
 dogs <- readOGR("03_Data/01_RawData/IUCN/data_0.shp")
 
-# Visualize
-ggplot() +
+# Prepare some plots
+p1 <- ggplot() +
   geom_sf(data = st_as_sf(africa), fill = "gray90", col = "white", lwd = 0.1) +
   geom_sf(data = st_as_sf(dogs), fill = "gray80", col = NA) +
   geom_sf(data = st_as_sf(s), fill = "cornflowerblue", col = "cornflowerblue", lwd = 0.5, alpha = 0.5, lty = 2) +
   theme_minimal()
-ggplot() +
+p2 <- ggplot() +
   geom_sf(data = st_as_sf(s), fill = "white") +
   geom_sf(data = st_as_sf(prot), aes(fill = Desig), col = NA, alpha = 0.7) +
   geom_sf(data = st_as_sf(water), fill = "cornflowerblue", col = NA) +
@@ -136,14 +143,17 @@ ggplot() +
   coord_sf(xlim = c(22, 27), ylim = c(-21, -18)) +
   theme_minimal()
 
+# Arrange plots
+ggarrange(p1, p2, nrow = 2)
+
+# Close plot windows again
+graphics.off()
+
 ################################################################################
 #### Store Cleaned Data
 ################################################################################
-# Let's make sure the crs of all data is the same
-all <- list(r, s, water, prot, dogs)
-lapply(all, crs)
-
 # Store the data to file
+cat("Storing all data to file...\n")
 writeRaster(r
   , filename  = "03_Data/02_CleanData/00_General_Raster.tif"
   , overwrite = T
@@ -183,6 +193,7 @@ writeOGR(dogs
 #### Session Information
 ################################################################################
 # Create directory for session info
+dir.create("02_R-Scripts/99_SessionInformation", showWarnings = F)
 dir.create("02_R-Scripts/99_SessionInformation/01_DataCleaning", showWarnings = F)
 
 # Store session information
