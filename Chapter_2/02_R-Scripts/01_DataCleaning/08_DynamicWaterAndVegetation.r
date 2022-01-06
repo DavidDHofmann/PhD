@@ -1,5 +1,5 @@
 ################################################################################
-####
+#### Dynamic Vegetation Maps
 ################################################################################
 # Description: Use floodmaps to mask out anything that is covered by water in
 # the vegetation maps. Specifically, we will for each floodmap create a
@@ -28,57 +28,57 @@ library(terra)       # To handle raster data
 library(lubridate)   # To handle dates
 library(tidyverse)   # To wrangle data
 
-# Let's prepare tibbles for the floodmaps and the vegetation maps so that we can
-# more easily subset the data. First for the flood data
-flood_dates <- dir(
-      path       = "03_Data/02_CleanData/00_Floodmaps/02_Resampled"
-    , pattern    = ".tif$"
-  ) %>% ymd()
+# Load the layers we want to merge
+flood <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd")
+shrub <- rast("03_Data/02_CleanData/00_Vegmaps/ShrubCover.grd")
+trees <- rast("03_Data/02_CleanData/00_Vegmaps/TreeCover.grd")
 
-# Now for the shrubs/grassland cover
-grass_dates <- "03_Data/02_CleanData/00_Vegmaps/ShrubCover.grd" %>%
-  rast() %>%
-  names() %>%
+# Extract dates from layernames (again, not that vegetation layers correspond to
+# a period)
+flood_dates <- ymd(names(flood))
+veg_dates <- names(shrub) %>%
   tibble(
       Year     = .
     , FromDate = as.Date(64, origin = paste0(., "-01-01"))
-    , ToDate = as.Date(63, origin = paste0(., "-01-01")) + years(1)
-  )
+    , ToDate   = as.Date(63, origin = paste0(., "-01-01")) + years(1)
+  ) %>% mutate(Period = map2(FromDate, ToDate, function(x, y) {
+    seq(x, y, by = "day")
+  }))
 
-# Same for tree cover
-tree_dates <- "03_Data/02_CleanData/00_Vegmaps/TreeCover.grd" %>%
-  rast() %>%
-  names() %>%
-  tibble(
-      Year     = .
-    , FromDate = as.Date(64, origin = paste0(., "-01-01"))
-    , ToDate = as.Date(63, origin = paste0(., "-01-01")) + years(1)
-  )
+# Let's assess for each floodmap into which period of the vegation they fall
+merge <- sapply(flood_dates, function(x) {
 
-# Get dispersal dates too
-disp_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
-  read_csv() %>%
-  pull(Timestamp) %>%
-  as.Date() %>%
-  unique()
+  # Check if the floodmap is in one of those periods
+  period <- sapply(veg_dates$Period, function(y) {
+    x %in% y
+  }) %>% which() %>% first()
 
-# Find closest floodmap for each dispersal date
-closest1 <- as.Date(NA)
-closest2 <- as.Date(NA)
-for (i in 1:length(disp_dates)){
-  closest1[i] <- flood_dates[which(abs(disp_dates[i] - flood_dates) ==
-    min(abs(disp_dates[i] - flood_dates)))][1]
-  closest2[i] <- flood_dates[which(abs(disp_dates[i] - flood_dates) ==
-    min(abs(disp_dates[i] - flood_dates)))][2]
-}
+  # Might fall into a date that is not covered by those periods, so let's
+  # subtract days until the date falls into one of the periods
+  i <- 1
+  while (is.na(period)) {
+    period <- sapply(veg_dates$Period, function(y) {
+      (x - days(i)) %in% y
+    }) %>% which() %>% first()
+    i <- i + 1
+  }
 
-# Put the dates together
-dates <- data.frame(
-    Dispersal   = disp_dates
-  , Closest1    = closest1
-  , Closest2    = closest2
-  , Difference  = abs(disp_dates - closest1)
-)
-arrange(dates, -Difference)
+  # Return the year of the respective period
+  return(veg_dates$Year[period])
+}) %>% tibble(FloodDate = flood_dates, VegDate = .)
 
-# Use floodmaps to mask water in the vegetation maps of that year
+# Loop through the dates and merge the corresponding layers
+lapply(1:nrow(merge), function(x) {
+
+  # Get the floodmap and the vegetation layer of that date
+  flood_map <- flood[[which(flood_dates == merge$FloodDate[x])]]
+  shrub_map <- shrub[[which(veg_dates$Year == merge$VegDate[[x]])]]
+  trees_map <- trees[[which(veg_dates$Year == merge$VegDate[[x]])]]
+
+  # Change anything that is covered by water to 0% vegetation
+  trees_map <- mask(trees_map, flood_map, maskvalues = 1, updatevalue = 0)
+  shrub_map <- mask(shrub_map, flood_map, maskvalues = 1, updatevalue = 0)
+  plot(trees_map)
+  plot(shrub_map)
+
+})

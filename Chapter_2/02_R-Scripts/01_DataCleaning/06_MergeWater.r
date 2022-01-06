@@ -22,11 +22,11 @@ library(lubridate)  # To handle dates
 # Load the layers we want to merge
 water <- rast("03_Data/02_CleanData/01_LandCover_LandCover.tif") == 1
 river <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
+plot(water, col = c("white", "cornflowerblue"))
 
 # Extract dates
 flood_dates <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
-  dir(path = ., pattern = ".tif$", full.names = T) %>%
-  basename() %>%
+  dir(path = ., pattern = ".tif$") %>%
   ymd()
 
 # From the floodmaps, we only want to keep those that are closest to some
@@ -55,10 +55,16 @@ flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   pull(Filename) %>%
   rast()
 
+# Get their dates
+flood_dates <- ymd(names(flood))
+
 # Remove cloud cover (value = 2) from the floodmaps and call it dryland
-flood <- classify(flood, rcl <- data.frame(old = c(0, 1, 2), new = c(0, 1, 0)))
+# This is not too much of an issue since we only require data around the actualy
+# dispersal location
+flood <- subst(flood, 2, 0)
 
 # Expand maps to match the extent of the study area
+cat("Extending floodmaps to the extent of the study area... \n")
 flood <- extend(flood, water)
 
 # From the globeland land cover dataset, remove any water within the extent for
@@ -76,39 +82,52 @@ dynamic <- mask(dynamic, flood, maskvalue = 1, updatevalue = 1)
 # Assign map dates again
 names(dynamic) <- flood_dates
 
+# Plot some of the maps
+plot(dynamic[[sample(nlyr(dynamic), size = 4)]], col = c("white", "blue"))
+
 # Save the result to file. We'll store them uncompressed which allows faster
 # reading times
 writeRaster(
     x         = dynamic
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd"
   , overwrite = TRUE
-  , gdal      = c("COMPRESSION=NONE")
 )
 
 ################################################################################
 #### Create Averaged Watermap
 ################################################################################
-# Load all floodmaps that are to our disposal
+# We also want to create a static watermap. This map basically resembles the
+# type of data most people would consider for their analysis. For this, we'll
+# create an "average representation of the flood" across the Okavango delta.
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   dir(pattern = ".tif$", full.names  = T) %>%
   rast()
+
+# Reclassify all floodmaps (remove cloud cover in them)
+cat("Reclassifying all floodmaps...\n")
+flood <- subst(flood, 2, 0)
 
 # Sum them
 summed <- sum(flood)
 
 # Keep everything that is inundated most of the time
-summed <- summed > nlyr(flood) / 10
+summed <- summed > nlyr(flood) * 0.1
+
+# Extend to the main study area
+summed <- extend(summed, water)
 
 # Merge with the other layers
 static <- max(water, river)
 static <- mask(static, summed, maskvalue = 1, updatevalue = 1)
+
+# Visualize the map
+plot(static, col = c("white", "cornflowerblue"))
 
 # Store the file
 writeRaster(
     x         = static
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif"
   , overwrite = TRUE
-  , gdal      = c("COMPRESSION=NONE")
 )
 
 ################################################################################

@@ -20,6 +20,10 @@ library(lubridate)    # To handle dates
 library(floodmapr)    # For floodmapping
 library(pbmcapply)    # For multicore use
 
+# Specify username and password to Earth Data account
+username <- "DoDx9"
+password <- "EarthData99"
+
 ################################################################################
 #### Reclassify and Resample ORI Floodmaps
 ################################################################################
@@ -152,8 +156,8 @@ if (length(todownload) > 0) {
           dates     = todownload[i]
         , outdir    = "03_Data/01_RawData/MODIS/MCD43A4"
         , tmpdir    = tempdir()
-        , username  = "DoDx9"
-        , password  = "EarthData99"
+        , username  = username
+        , password  = password
         , overwrite = F
       ), error = function(e) {cat("There was an error with", i, "\n")})
 
@@ -290,6 +294,7 @@ for (i in 1:2) {
         # Specify final filename
         name <- dates[i]
         name <- paste0("03_Data/02_CleanData/00_Floodmaps/01_Original/", name, ".tif")
+        names(classified) <- dates[i]
 
         # Store raster
         writeRaster(classified, name, overwrite = T)
