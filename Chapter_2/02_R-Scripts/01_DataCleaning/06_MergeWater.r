@@ -113,6 +113,13 @@ summed <- sum(flood)
 # Keep everything that is inundated most of the time
 summed <- summed > nlyr(flood) * 0.1
 
+# Store the static floodmap to file
+writeRaster(
+    x         = summed
+  , filename  = "03_Data/02_CleanData/00_Floodmaps/FloodMapStatic.tif"
+  , overwrite = T
+)
+
 # Extend to the main study area
 summed <- extend(summed, water)
 

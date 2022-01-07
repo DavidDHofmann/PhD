@@ -212,117 +212,153 @@ if (nrow(todownload) > 0) {
   }
 }
 
-# ################################################################################
-# #### Aggregate Precipitation Data
-# ################################################################################
-# # Prepare a tibble for easier subsetting of the data
-# precip <- "03_Data/02_CleanData/00_Rainmaps" %>%
-#   dir(pattern = ".grd$", full.names = T) %>%
-#   rast() %>%
-#   as.list() %>%
-#   tibble(Raster = .)
-#
-# # Extract date and hour from layernames
-# precip <- mutate(precip
-#   , Name = sapply(Raster, names)
-#   , Date = substr(Name, start = 1, stop = 10)
-#   , Hour = substr(Name, start = 12, stop = 13) %>% as.numeric()
-#   , Timestamp = make_datetime(year(Date), month(Date), day(Date), Hour, 0, 0)
-# )
-#
-# # Remove undesired columns
-# precip <- dplyr::select(precip, Timestamp, Date, Hour, Name, Raster)
-#
-# # We don't need four hourly data. Hence, we'll aggregate the temperature data to
-# # four hours (except for 11 o clock for which we'll use 8 hours instead),
-# # corresponding to the GPS fixes. Let's create a help table for this.
-# help <- seq(min(precip$Timestamp) + hours(8), max(precip$Timestamp) - hours(8), by = "hour")
-# help <- help[hour(help) %in% c(3, 7, 15, 19, 23)]
-# help <- tibble(Timestamp = help)
-#
-# # For each timestamp in the help table we can now identify the temperature maps
-# # that we need to average
-# averaged <- mutate(help, Average = map(Timestamp, function(x) {
-#   if (hour(x) != 15) {
-#     sub <- subset(precip, Timestamp <= x & Timestamp >= (x - hours(4)))
-#   } else {
-#     sub <- subset(precip, Timestamp <= x & Timestamp >= (x - hours(8)))
-#   }
-#   return(sub$Raster)
-# }))
-#
-# # Check it
-# print(averaged)
-#
-# # Let's average the respective rasters
-# averaged$Averaged <- lapply(1:nrow(averaged), function(x) {
-#   average <- rast(averaged$Average[[x]])
-#   average <- mean(average)
-#   names(average) <- averaged$Timestamp[[x]]
-#   return(average)
-# })
-#
-# # Create a single stack of rasters
-# averaged <- rast(averaged$Averaged)
-#
-# # Store the final maps to file
-# writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Precipitation.grd")
-#
-# ################################################################################
-# #### Aggregate Temperature Data
-# ################################################################################
-# # Prepare a tibble for easier subsetting of the data
-# temp <- "03_Data/02_CleanData/00_Tempmaps" %>%
-#   dir(pattern = ".grd$", full.names = T) %>%
-#   rast() %>%
-#   as.list() %>%
-#   tibble(Raster = .)
-#
-# # Extract date and hour from layernames
-# temp <- mutate(temp
-#   , Name = sapply(Raster, names)
-#   , Date = substr(Name, start = 1, stop = 10)
-#   , Hour = substr(Name, start = 12, stop = 13) %>% as.numeric()
-#   , Timestamp = make_datetime(year(Date), month(Date), day(Date), Hour, 0, 0)
-# )
-#
-# # Remove undesired columns
-# temp <- dplyr::select(temp, Timestamp, Date, Hour, Name, Raster)
-#
-# # We don't need four hourly data. Hence, we'll aggregate the temperature data to
-# # four hours (except for 11 o clock for which we'll use 8 hours instead),
-# # corresponding to the GPS fixes. Let's create a help table for this.
-# help <- seq(min(temp$Timestamp) + hours(8), max(temp$Timestamp) - hours(8), by = "hour")
-# help <- help[hour(help) %in% c(3, 7, 15, 19, 23)]
-# help <- tibble(Timestamp = help)
-#
-# # For each timestamp in the help table we can now identify the temperature maps
-# # that we need to average
-# averaged <- mutate(help, Average = map(Timestamp, function(x) {
-#   if (hour(x) != 15) {
-#     sub <- subset(temp, Timestamp <= x & Timestamp >= (x - hours(4)))
-#   } else {
-#     sub <- subset(temp, Timestamp <= x & Timestamp >= (x - hours(8)))
-#   }
-#   return(sub$Raster)
-# }))
-#
-# # Check it
-# print(averaged)
-#
-# # Let's average the respective rasters
-# averaged$Averaged <- lapply(1:nrow(averaged), function(x) {
-#   average <- rast(averaged$Average[[x]])
-#   average <- mean(average)
-#   names(average) <- averaged$Timestamp[[x]]
-#   return(average)
-# })
-#
-# # Create a single stack of rasters
-# averaged <- rast(averaged$Averaged)
-#
-# # Store the final maps to file
-# writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Temperature.grd")
+################################################################################
+#### Aggregate Precipitation Data
+################################################################################
+# Prepare a tibble for easier subsetting of the data
+cat("Loading precipitation data and generating aggregation table...\n")
+precip <- "03_Data/02_CleanData/00_Rainmaps" %>%
+  dir(pattern = ".grd$", full.names = T) %>%
+  rast() %>%
+  as.list() %>%
+  tibble(Raster = .)
+
+# Extract date and hour from layernames
+precip <- mutate(precip
+  , Name = sapply(Raster, names)
+  , Date = substr(Name, start = 1, stop = 10)
+  , Hour = substr(Name, start = 12, stop = 13) %>% as.numeric()
+  , Timestamp = make_datetime(year(Date), month(Date), day(Date), Hour, 0, 0)
+)
+
+# Reorder columns
+precip <- dplyr::select(precip, Timestamp, Date, Hour, Name, Raster)
+
+# We don't need four hourly data. Hence, we'll aggregate the temperature data to
+# four hours (except for 11 o clock for which we'll use 8 hours instead),
+# corresponding to the GPS fixes. Let's create a help table for this.
+help <- seq(min(precip$Timestamp) + hours(8), max(precip$Timestamp) - hours(8), by = "hour")
+help <- help[hour(help) %in% c(3, 7, 15, 19, 23)]
+help <- tibble(Timestamp = help)
+
+# For each timestamp in the help table we can now identify the temperature maps
+# that we need to average
+averaged <- mutate(help, Average = map(Timestamp, function(x) {
+  if (hour(x) != 15) {
+    sub <- subset(precip, Timestamp <= x & Timestamp >= (x - hours(4)))
+  } else {
+    sub <- subset(precip, Timestamp <= x & Timestamp >= (x - hours(8)))
+  }
+  return(sub$Raster)
+}))
+
+# Check it
+print(averaged)
+
+# Each entry should either contain 5 or 9 maps. Let's check this
+table(sapply(averaged$Average, length))
+
+# For some reason we are missing the 00:00 data for one entry. I tried multiple
+# time to access this data but it's not possible. Anyways, it shouldn't
+# influence our results at all.
+
+# Let's average the respective rasters
+cat("Aggregating precipitation data...\n")
+n <- nrow(averaged)
+pb <- txtProgressBar(min = 0, max = n, style = 3)
+averaged$Averaged <- lapply(1:nrow(averaged), function(x) {
+  average <- rast(averaged$Average[[x]])
+  average <- mean(average)
+  names(average) <- averaged$Timestamp[[x]]
+  setTxtProgressBar(pb, x)
+  return(average)
+})
+
+# Create a single stack of rasters
+averaged <- rast(averaged$Averaged)
+names(averaged)
+
+# Visualize some of the maps
+plot(averaged[[sample(nlyr(averaged), 4)]])
+
+# Store the final maps to file
+writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Precipitation.grd")
+
+################################################################################
+#### Aggregate Temperature Data
+################################################################################
+# Prepare a tibble for easier subsetting of the data
+cat("Loading temperature data and generating aggregation table...\n")
+temp <- "03_Data/02_CleanData/00_Tempmaps" %>%
+  dir(pattern = ".grd$", full.names = T) %>%
+  rast() %>%
+  as.list() %>%
+  tibble(Raster = .)
+
+# Extract date and hour from layernames
+temp <- mutate(temp
+  , Name = sapply(Raster, names)
+  , Date = substr(Name, start = 1, stop = 10)
+  , Hour = substr(Name, start = 12, stop = 13) %>% as.numeric()
+  , Timestamp = make_datetime(year(Date), month(Date), day(Date), Hour, 0, 0)
+)
+
+# Reorder columns
+temp <- dplyr::select(temp, Timestamp, Date, Hour, Name, Raster)
+
+# We don't need four hourly data. Hence, we'll aggregate the temperature data to
+# four hours (except for 11 o clock for which we'll use 8 hours instead),
+# corresponding to the GPS fixes. Let's create a help table for this.
+help <- seq(min(temp$Timestamp) + hours(8), max(temp$Timestamp), by = "hour")
+help <- help[hour(help) %in% c(3, 7, 15, 19, 23)]
+help <- tibble(Timestamp = help)
+
+# For each timestamp in the help table we can now identify the temperature maps
+# that we need to average
+averaged <- mutate(help, Average = map(Timestamp, function(x) {
+  if (hour(x) != 15) {
+    sub <- subset(temp, Timestamp <= x & Timestamp >= (x - hours(4)))
+  } else {
+    sub <- subset(temp, Timestamp <= x & Timestamp >= (x - hours(8)))
+  }
+  return(sub$Raster)
+}))
+
+# Check it
+print(averaged)
+
+# Each entry should either contain 5 or 9 maps. Let's check this
+check <- sapply(averaged$Average, length)
+table(check)
+
+# Again there appear to be a couple of days were data is missing (all in
+# September 2021). We'll have to skip those dates.
+averaged$Timestamp[check < 5]
+
+# Subset accordingly
+averaged <- subset(averaged, check > 0)
+
+# Let's average the respective rasters
+cat("Aggregating temperature data...\n")
+n <- nrow(averaged)
+pb <- txtProgressBar(min = 0, max = n, style = 3)
+averaged$Averaged <- lapply(1:nrow(averaged), function(x) {
+  average <- rast(averaged$Average[[x]])
+  average <- mean(average)
+  names(average) <- averaged$Timestamp[[x]]
+  setTxtProgressBar(pb, x)
+  return(average)
+})
+
+# Create a single stack of rasters
+averaged <- rast(averaged$Averaged)
+names(averaged)
+
+# Visualize some of the maps
+plot(averaged[[sample(nlyr(averaged), 4)]])
+
+# Store the final maps to file
+writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Temperature.grd")
 
 ################################################################################
 #### Session Information
@@ -331,75 +367,3 @@ if (nrow(todownload) > 0) {
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/09_ClimateData.rds")
 cat("Done :)\n")
-
-################################################################################
-#### Legacy
-################################################################################
-
-# # Once all the files are downloaded, we can merge them into a single rasterstack
-# # Let's first make sure that there are no duplicates
-# if (!file.exists("03_Data/02_CleanData/05_Climate_Precipitation.grd")) {
-#
-#   # Get all files to merge
-#   precip <- "03_Data/02_CleanData/00_Rainmaps" %>%
-#     dir(pattern = ".grd$", full.names = T) %>%
-#     tibble(Filepath = .) %>%
-#     mutate(Date = ym(basename(Filepath))) %>%
-#     mutate(Raster = map(Filepath, rast)) %>%
-#     mutate(Layernames = map(Raster, names))
-#
-#   # Look at the dataframe
-#   print(precip)
-#
-#   # Check for duplicates
-#   unlist(precip$Layernames) %>%
-#     duplicated() %>%
-#     sum()
-#
-#   # Put all files together
-#   precip <- rast(precip$Raster)
-#
-#   # Crop them to the reference raster
-#   precip <- crop(precip, r, snap = "out")
-#
-#   # Store to file
-#   writeRaster(precip, "03_Data/02_CleanData/05_Climate_Precipitation.grd", overwrite = T)
-#
-# }
-
-
-
-# # Store the tibble to file
-# write_rds(temp, "03_Data/02_CleanData/05_Climate_Temperature.rds")
-# test <- read_rds("03_Data/02_CleanData/05_Climate_Temperature.rds")
-#
-# # Once all the files are downloaded, we can merge them into a single rasterstack
-# # Let's first make sure that there are no duplicates
-# if (!file.exists("03_Data/02_CleanData/05_Climate_Temperature.grd")) {
-#
-#   # Get all files to merge
-#   temp <- "03_Data/02_CleanData/00_Tempmaps" %>%
-#     dir(pattern = ".grd$", full.names = T) %>%
-#     tibble(Filepath = .) %>%
-#     mutate(Date = ym(basename(Filepath))) %>%
-#     mutate(Raster = map(Filepath, rast)) %>%
-#     mutate(Layernames = map(Raster, names))
-#
-#   # Look at the dataframe
-#   print(temp)
-#
-#   # Check for duplicates
-#   unlist(temp$Layernames) %>%
-#     duplicated() %>%
-#     sum()
-#
-#   # Put all files together
-#   temp <- rast(temp$Raster)
-#
-#   # Crop them to the reference raster
-#   temp <- crop(temp, r, snap = "out")
-#
-#   # Store to file
-#   writeRaster(temp, "03_Data/02_CleanData/05_Climate_Temperature.grd", overwrite = T)
-#
-# }
