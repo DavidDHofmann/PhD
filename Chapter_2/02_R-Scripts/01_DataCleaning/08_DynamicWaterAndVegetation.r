@@ -27,7 +27,6 @@ setwd(wd)
 library(terra)       # To handle raster data
 library(lubridate)   # To handle dates
 library(tidyverse)   # To wrangle data
-library(pbmcapply)   # For multicore abilities with progress bar
 
 # Load the layers we want to merge
 flood <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd")
