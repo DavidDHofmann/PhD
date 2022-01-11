@@ -14,7 +14,10 @@ setwd(wd)
 # load packages
 library(tidyverse)  # For data wrangling
 library(terra)      # To handle spatial data
+library(raster)     # To handle spatial data
 library(lubridate)  # To handle dates
+library(pbmcapply)  # For multicore use with progress bar
+library(davidoff)   # Access to custom functions
 
 ################################################################################
 #### Merge Layers
@@ -22,7 +25,6 @@ library(lubridate)  # To handle dates
 # Load the layers we want to merge
 water <- rast("03_Data/02_CleanData/01_LandCover_LandCover.tif") == 1
 river <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
-plot(water, col = c("white", "cornflowerblue"))
 
 # Extract dates
 flood_dates <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
@@ -94,17 +96,40 @@ writeRaster(
 )
 
 ################################################################################
+#### Distance To Water
+################################################################################
+# Reload dynamic watermaps
+water <- stack("03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd")
+
+# Compute distance to water for each watermap
+cat("Comptuing distance to dynamic water layers...\n")
+distances <- pbmclapply(1:nlayers(water), ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+  dist <- distanceTo(water[[x]], value = 1)
+  dist <- writeRaster(dist, tempfile(fileext = ".tif"))
+  names(dist) <- names(water[[x]])
+  return(dist)
+})
+
+# Convert back to a terra raster
+distances <- rast(stack(distances))
+
+# Store them
+writeRaster(distances, "03_Data/02_CleanData/01_LandCover_DistanceToWaterDynamic.grd", overwrite = T)
+
+################################################################################
 #### Create Averaged Watermap
 ################################################################################
 # We also want to create a static watermap. This map basically resembles the
 # type of data most people would consider for their analysis. For this, we'll
 # create an "average representation of the flood" across the Okavango delta.
+water <- rast("03_Data/02_CleanData/01_LandCover_LandCover.tif") == 1
+river <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   dir(pattern = ".tif$", full.names  = T) %>%
   rast()
 
 # Reclassify all floodmaps (remove cloud cover in them)
-cat("Reclassifying all floodmaps...\n")
+cat("Reclassifying all floodmaps so we can create an averaged watermap...\n")
 flood <- subst(flood, 2, 0)
 
 # Sum them
@@ -127,13 +152,24 @@ summed <- extend(summed, water)
 static <- max(water, river)
 static <- mask(static, summed, maskvalue = 1, updatevalue = 1)
 
+# Compute distance to water
+cat("Comptuing distance to static water...\n")
+distance <- distanceTo(raster(static), value = 1)
+distance <- rast(distance)
+
 # Visualize the map
 plot(static, col = c("white", "cornflowerblue"))
+plot(distance)
 
 # Store the file
 writeRaster(
     x         = static
   , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif"
+  , overwrite = TRUE
+)
+writeRaster(
+    x         = distance
+  , filename  = "03_Data/02_CleanData/01_LandCover_DistanceToWaterStatic.tif"
   , overwrite = TRUE
 )
 

@@ -14,6 +14,7 @@ library(viridis)
 library(tidyverse)
 library(raster)
 library(sf)
+library(velox)
 
 # Set seed
 set.seed(123)

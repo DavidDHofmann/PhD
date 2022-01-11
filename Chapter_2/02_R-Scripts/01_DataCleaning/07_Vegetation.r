@@ -83,60 +83,62 @@ files <- subset(files, !file.exists(FilenameGroup))
 print(files)
 
 # Loop through the groups and download the respective data
-for (i in 1:nrow(files)) {
+if (nrow(files) > 0) {
+  for (i in 1:nrow(files)) {
 
-  # Subset to the specific group
-  cat(paste0("Downloading data for ", files$AcquisitionDate[i], "\n"))
-  todownload <- files$Group[[i]]
+    # Subset to the specific group
+    cat(paste0("Downloading data for ", files$AcquisitionDate[i], "\n"))
+    todownload <- files$Group[[i]]
 
-  # Download the tiles of that specific group
-  for (j in 1:nrow(todownload)) {
-    file <- httr::GET(
-        todownload$URL[j]
-      , httr::authenticate(username, password)
-      , httr::progress()
-      , httr::write_disk(todownload$Filename[j], overwrite = T)
-    )
-    cat("Tile", j, "out of", nrow(todownload), "downloaded\n")
+    # Download the tiles of that specific group
+    for (j in 1:nrow(todownload)) {
+      file <- httr::GET(
+          todownload$URL[j]
+        , httr::authenticate(username, password)
+        , httr::progress()
+        , httr::write_disk(todownload$Filename[j], overwrite = T)
+      )
+      cat("Tile", j, "out of", nrow(todownload), "downloaded\n")
+    }
+
+    # Load the downloaded rasters and extract the layers of interest
+    downloaded <- lapply(todownload$Filename, function(x) {
+      maps <- rast(x)[[1:2]]
+      names(maps) <- paste0(c("TreeCover_", "ShrubCover_"), files$AcquisitionDate[i])
+      return(maps)
+    })
+
+    # Separate shrubs from trees
+    trees <- lapply(downloaded, function(x){
+      x[[1]]
+    })
+    shrub <- lapply(downloaded, function(x){
+      x[[2]]
+    })
+
+    # Moasic them
+    cat("Mosaicing vegetation layers...\n")
+    trees <- mosaic(trees[[1]], trees[[2]], trees[[3]], trees[[4]])
+    shrub <- mosaic(shrub[[1]], shrub[[2]], shrub[[3]], shrub[[4]])
+
+    # Reproject to study area
+    cat("Reprojecting vegetation layers...\n")
+    trees <- project(trees, r, method = "near")
+    shrub <- project(shrub, r, method = "near")
+
+    # Put layers together again
+    veg <- c(trees, shrub)
+
+    # Set water to 0
+    veg <- subst(veg, 200, 0)
+
+    # Rescale to a maximum of 1
+    veg <- veg / 100
+
+    # Write to file
+    writeRaster(veg, files$FilenameGroup[[i]], overwrite = T)
+
   }
-
-  # Load the downloaded rasters and extract the layers of interest
-  downloaded <- lapply(todownload$Filename, function(x) {
-    maps <- rast(x)[[1:2]]
-    names(maps) <- paste0(c("TreeCover_", "ShrubCover_"), files$AcquisitionDate[i])
-    return(maps)
-  })
-
-  # Separate shrubs from trees
-  trees <- lapply(downloaded, function(x){
-    x[[1]]
-  })
-  shrub <- lapply(downloaded, function(x){
-    x[[2]]
-  })
-
-  # Moasic them
-  cat("Mosaicing vegetation layers...\n")
-  trees <- mosaic(trees[[1]], trees[[2]], trees[[3]], trees[[4]])
-  shrub <- mosaic(shrub[[1]], shrub[[2]], shrub[[3]], shrub[[4]])
-
-  # Reproject to study area
-  cat("Reprojecting vegetation layers...\n")
-  trees <- project(trees, r, method = "near")
-  shrub <- project(shrub, r, method = "near")
-
-  # Put layers together again
-  veg <- c(trees, shrub)
-
-  # Set water to 0
-  veg <- subst(veg, 200, 0)
-
-  # Rescale to a maximum of 1
-  veg <- veg / 100
-
-  # Write to file
-  writeRaster(veg, files$FilenameGroup[[i]], overwrite = T)
-
 }
 
 # ################################################################################

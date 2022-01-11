@@ -1,8 +1,11 @@
 ################################################################################
-#### Step Selection Function - Generation of Random Steps
+#### Covariate Extraction
 ################################################################################
-# Description: In this script we coerce our gps data to steps and generate
-# random steps for the (time varying) integrated step selection analysis.
+# Description: Use the step selection data generated in the previous script and
+# extract covariate values below each observed and random step. To speed up
+# extraction speeds, we might extract covariate values along interpolated points
+# instead of along lines. For dynamic covariates, we'll extract data from the
+# map that is closest in date to the actual step.
 
 # Clear R's brain
 rm(list = ls())
@@ -12,18 +15,14 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
 
 # Load packages
-library(tidyverse)    # For data wrangling
-library(lubridate)    # To handle dates
-library(pbmcapply)    # For multicore abilities
-library(davidoff)     # Custom functions
-library(terra)        # For handling spatial data
-library(raster)       # For handling spatial data
-library(sp)           # For handling spatial data
-library(fitdistrplus) # To fit distributions
-library(ggpubr)       # To put multiple plots together
+library(tidyverse)
 
-# Set seed for reproducability (need to change random sampler for parallel)
-set.seed(1234)
+# Load step selection data
+ssf <- read_csv("03_Data/02_CleanData/00_General_Dispersers_SSF.csv")
+
+################################################################################
+####
+################################################################################
 
 ################################################################################
 #### Data Cleaning
