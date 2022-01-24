@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  5 JAN 2022 17:13
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  21 JAN 2022 16:47
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -590,22 +590,22 @@ LaTeX Warning: Unused global option(s):
 (./Manuscript_Support.aux)
 \openout1 = `Manuscript_Support.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 82.
-LaTeX Font Info:    ... okay on input line 82.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 81.
+LaTeX Font Info:    ... okay on input line 81.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -660,14 +660,14 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Info: Redefining \celsius on input line 82.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 82.
+LaTeX Info: Redefining \celsius on input line 81.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 81.
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 82.
-Package gensymb Info: Using \Omega for \ohm on input line 82.
+LaTeX Info: Redefining \ohm on input line 81.
+Package gensymb Info: Using \Omega for \ohm on input line 81.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -677,7 +677,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box65
-Package hyperref Info: Link coloring OFF on input line 82.
+Package hyperref Info: Link coloring OFF on input line 81.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -687,18 +687,18 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count319
 )
-LaTeX Info: Redefining \ref on input line 82.
-LaTeX Info: Redefining \pageref on input line 82.
-LaTeX Info: Redefining \nameref on input line 82.
+LaTeX Info: Redefining \ref on input line 81.
+LaTeX Info: Redefining \pageref on input line 81.
+LaTeX Info: Redefining \nameref on input line 81.
  (./Manuscript_Support.out) (./Manuscript_Support.out)
 \@outlinefile=\write4
 \openout4 = `Manuscript_Support.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 92.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 92.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
@@ -707,15 +707,15 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 <99_SourceAreas.png, id=82, 650.43pt x 271.0125pt>
 File: 99_SourceAreas.png Graphic file (type png)
 <use 99_SourceAreas.png>
-Package pdftex.def Info: 99_SourceAreas.png  used on input line 187.
+Package pdftex.def Info: 99_SourceAreas.png  used on input line 186.
 (pdftex.def)             Requested size: 398.3386pt x 165.97902pt.
  [3 <./99_SourceAreas.png (PNG copy)>]
-Overfull \hbox (8.56094pt too wide) in paragraph at lines 219--255
+Overfull \hbox (8.56094pt too wide) in paragraph at lines 218--254
  [] 
  []
 
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 258--259
+Overfull \hbox (15.0pt too wide) in paragraph at lines 257--258
 [][] 
  []
 
@@ -727,13 +727,13 @@ Overfull \hbox (15.0pt too wide) in paragraph at lines 258--259
 <99_MovementModelInterpretation.png, id=121, 818.8191pt x 818.8191pt>
 File: 99_MovementModelInterpretation.png Graphic file (type png)
 <use 99_MovementModelInterpretation.png>
-Package pdftex.def Info: 99_MovementModelInterpretation.png  used on input line 345.
+Package pdftex.def Info: 99_MovementModelInterpretation.png  used on input line 344.
 (pdftex.def)             Requested size: 398.3386pt x 398.33873pt.
  [6] [7 <./99_MovementModelInterpretation.png (PNG copy)>]
 <99_Convergence.png, id=139, 722.7pt x 433.62pt>
 File: 99_Convergence.png Graphic file (type png)
 <use 99_Convergence.png>
-Package pdftex.def Info: 99_Convergence.png  used on input line 373.
+Package pdftex.def Info: 99_Convergence.png  used on input line 372.
 (pdftex.def)             Requested size: 398.3386pt x 239.0012pt.
  [8 <./99_Convergence.png (PNG copy)>]
 *geometry* verbose mode - [ newgeometry ] result:
@@ -771,11 +771,11 @@ Package pdftex.def Info: 99_Convergence.png  used on input line 373.
 <99_HeatmapsIndividual.png, id=145, 867.24pt x 1300.86pt>
 File: 99_HeatmapsIndividual.png Graphic file (type png)
 <use 99_HeatmapsIndividual.png>
-Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 395.
+Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 394.
 (pdftex.def)             Requested size: 342.57143pt x 513.86385pt.
  [9
 
- <./99_HeatmapsIndividual.png (PNG copy)>]
+ <./99_HeatmapsIndividual.png>]
 *geometry* verbose mode - [ newgeometry ] result:
 * driver: pdftex
 * paper: a4paper
@@ -808,41 +808,41 @@ Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 395.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<99_BetweennessIndividual.png, id=151, 867.24pt x 867.24pt>
+<99_BetweennessIndividual.png, id=153, 867.24pt x 867.24pt>
 File: 99_BetweennessIndividual.png Graphic file (type png)
 <use 99_BetweennessIndividual.png>
-Package pdftex.def Info: 99_BetweennessIndividual.png  used on input line 415.
+Package pdftex.def Info: 99_BetweennessIndividual.png  used on input line 414.
 (pdftex.def)             Requested size: 342.57143pt x 342.5759pt.
  [10
 
 
- <./99_BetweennessIndividual.png (PNG copy)>]
-Overfull \hbox (4.7893pt too wide) in paragraph at lines 429--429
+ <./99_BetweennessIndividual.png>]
+Overfull \hbox (4.7893pt too wide) in paragraph at lines 428--428
 []\OT1/cmr/bx/n/14.4 Comparison of Traver-sal Fre-quen-cies and Be-tween-
  []
 
-<99_MapComparison.png, id=157, 505.89pt x 361.35pt>
+<99_MapComparison.png, id=160, 505.89pt x 361.35pt>
 File: 99_MapComparison.png Graphic file (type png)
 <use 99_MapComparison.png>
-Package pdftex.def Info: 99_MapComparison.png  used on input line 432.
+Package pdftex.def Info: 99_MapComparison.png  used on input line 431.
 (pdftex.def)             Requested size: 398.3386pt x 284.53156pt.
 [11
 
  <./99_MapComparison.png (PNG copy)>]
-<99_AreasReached.png, id=163, 578.16pt x 433.62pt>
+<99_AreasReached.png, id=166, 578.16pt x 433.62pt>
 File: 99_AreasReached.png Graphic file (type png)
 <use 99_AreasReached.png>
-Package pdftex.def Info: 99_AreasReached.png  used on input line 446.
+Package pdftex.def Info: 99_AreasReached.png  used on input line 445.
 (pdftex.def)             Requested size: 398.3386pt x 298.75482pt.
  [12 <./99_AreasReached.png (PNG copy)>] (./Manuscript_Support.bbl) [13]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 465.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 465.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 464.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 464.
  (./Manuscript_Support.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 465.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 465.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 464.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 464.
 Package rerunfilecheck Info: File `Manuscript_Support.out' has not changed.
 (rerunfilecheck)             Checksum: 01E1F2142E82E7AAA242DF60AC6BCB51;790.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 465.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 464.
  ) 
 Here is how much of TeX's memory you used:
  21717 strings out of 481239
@@ -854,10 +854,10 @@ Here is how much of TeX's memory you used:
  60i,16n,60p,1244b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></
 usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb>
-Output written on Manuscript_Support.pdf (14 pages, 15116406 bytes).
+Output written on Manuscript_Support.pdf (14 pages, 14464988 bytes).
 PDF statistics:
- 241 PDF objects out of 1000 (max. 8388607)
- 194 compressed objects within 2 object streams
+ 244 PDF objects out of 1000 (max. 8388607)
+ 195 compressed objects within 2 object streams
  43 named destinations out of 1000 (max. 500000)
  136 words of extra memory for PDF output out of 10000 (max. 10000000)
 

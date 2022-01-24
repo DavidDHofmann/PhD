@@ -160,8 +160,8 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Betweenness"
-    , subtitle = "After 2'000 Steps"
+    # , title    = "Betweenness"
+    # , subtitle = "After 2'000 Steps"
   ) +
   theme(
       legend.position  = "bottom"

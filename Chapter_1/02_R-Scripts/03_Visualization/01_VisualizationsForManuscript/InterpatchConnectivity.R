@@ -195,8 +195,8 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Interpatch Connectivity"
-    , subtitle = "In Relation to Dispersal Duration"
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
       size  = guide_legend(title.position = "top", order = 2)
@@ -315,8 +315,8 @@ p3 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Interpatch Connectivity"
-    , subtitle = "In Relation to Dispersal Duration"
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
     size = guide_legend(title = "Number of Simulations", title.position = "top")

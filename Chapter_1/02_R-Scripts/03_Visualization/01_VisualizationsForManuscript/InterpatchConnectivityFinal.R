@@ -194,7 +194,8 @@ prot                 <- st_as_sf(prot)
 labels_countries     <- st_as_sf(labels_countries)
 labels_nationalparks <- st_as_sf(labels_nationalparks)
 
-# Convert heatmap to dataframe
+# Convert reference raster to dataframe
+r <- raster("03_Data/02_CleanData/00_General_Raster.tif")
 r <- as.data.frame(r, xy = T)
 
 ################################################################################
@@ -302,8 +303,8 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Interpatch Connectivity"
-    , subtitle = "In Relation to Dispersal Duration"
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
       size  = guide_legend(title.position = "top", order = 2)
@@ -422,8 +423,8 @@ p3 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Interpatch Connectivity"
-    , subtitle = "In Relation to Dispersal Duration"
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
     size = guide_legend(title = "Number of Simulations", title.position = "top")
@@ -583,8 +584,8 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Interpatch Connectivity"
-    , subtitle = "In Relation to Dispersal Duration"
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
       size  = guide_legend(title.position = "top", order = 2)
@@ -674,8 +675,8 @@ p3 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Interpatch Connectivity"
-    , subtitle = "In Relation to Dispersal Duration"
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
   ) +
   guides(
     size = guide_legend(title = "Number of Simulations", title.position = "top")

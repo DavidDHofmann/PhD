@@ -5,12 +5,11 @@ The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--I'm ignoring Hofmann.2021's extra "year" field
 --line 3129 of file Literatur.bib
-Warning--I didn't find a database entry for "Signer.2021"
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Hofmann.2021b
 You've used 79 entries,
             1935 wiz_defined-function locations,
-            991 strings with 20471 characters,
+            989 strings with 20449 characters,
 and the built_in function-call counts, 34815 in all, are:
 = -- 3325
 > -- 1796
@@ -49,4 +48,4 @@ warning$ -- 2
 while$ -- 269
 width$ -- 0
 write$ -- 1029
-(There were 4 warnings)
+(There were 3 warnings)

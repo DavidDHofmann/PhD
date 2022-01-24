@@ -105,17 +105,17 @@
  
 \begin{figure}
   \includegraphics[width=\textwidth]{99_InterpatchConnectivity.png}
-  \caption{Map of inter-patch connectivity, highlighting connections between NPs
-  (dark green). Yellow bubbles represent the center of the different NPs and are
-  sized in relation to the number of simulated dispersers originating from each
-  park. Black dots represent NPs that were smaller than 700
-  km\textsuperscript{2} and therefore did not serve as source areas. Arrows
-  between NPs illustrate between which NPs the simulated dispersers successfully
-  moved and the color of each arrow shows the average number of steps (4-hourly
-  movements) that were necessary to realize those connections. Additionally, the
-  line thickness indicates the relative number of dispersers originating from a
-  NP that realized those connections. Note that a similar network view could be
-  adopted to investigate connectivity between other protected areas need not to
-  be restricted to NPs.}
+  \caption{Map of inter-patch connectivity in relation to dispersal duration,
+  highlighting connections between NPs (dark green). Yellow bubbles represent
+  the center of the different NPs and are sized in relation to the number of
+  simulated dispersers originating from each park. Black dots represent NPs that
+  were smaller than 700 km\textsuperscript{2} and therefore did not serve as
+  source areas. Arrows between NPs illustrate between which NPs the simulated
+  dispersers successfully moved and the color of each arrow shows the average
+  number of steps (4-hourly movements) that were necessary to realize those
+  connections. Additionally, the line thickness indicates the relative number of
+  dispersers originating from a NP that realized those connections. Note that a
+  similar network view could be adopted to investigate connectivity between
+  other protected areas need not to be restricted to NPs.}
   \label{InterpatchConnectivity}
 \end{figure}

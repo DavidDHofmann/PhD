@@ -162,8 +162,8 @@ p1 <- ggplot() +
       x        = NULL
     , y        = NULL
     , fill     = NULL
-    , title    = "Heatmap"
-    , subtitle = "After 2'000 Steps"
+    # , title    = "Heatmap"
+    # , subtitle = "After 2'000 Steps"
   ) +
   theme(
       legend.position  = "bottom"
@@ -229,8 +229,8 @@ p2 <- ggplot() +
       x        = NULL
     , y        = NULL
     , col      = NULL
-    , title    = "Heatmap"
-    , subtitle = "After 2'000 Steps"
+    # , title    = "Heatmap"
+    # , subtitle = "After 2'000 Steps"
   ) +
   scale_color_manual(
     , breaks = c("Country Borders", "KAZA-TFCA Borders")
