@@ -10,6 +10,8 @@ library(raster)
 library(tidyverse)
 library(viridis)
 library(davidoff)
+library(sf)
+library(animation)
 
 # Create a grid
 r <- raster(ncol = 10, nrow = 10, vals = 1:100, xmn = 0, xmx = 10, ymn = 0, ymx = 10)
@@ -196,13 +198,14 @@ createPath <- function(){
   points3 <- spsample(circle2, 20, type = "random")
   return(spLines(rbind(points1, points2, points3)))
 }
-path <- createPath()
+path <- lapply(1:5, function(x){createPath()})
+path <- do.call(rbind, path)
 
 # Extract visitation history
 rx <- aggregate(r, fact = 2)
 values(rx) <- 1:ncell(rx)
 plot(rx)
-hist <- visitHist(path, rx)
+hist <- davidoff::visitHist(path, rx)
 
 # Generate graph
 graph <- graph_from_data_frame(hist, vertices = 1:ncell(rx))
@@ -232,3 +235,87 @@ dev.off()
 test <- metrics[["betweenness"]]
 test <- disaggregate(test, fact = 4, method = "bilinear")
 plot(test, col = magma(20))
+
+# Just the heatmap
+heat <- rasterize(path, r, fun = "count")
+values(heat)[is.na(values(heat))] <- 0
+plot(heat, col = magma(20))
+
+# Plot track
+p1 <- ggplot() +
+  geom_sf(data = st_as_sf(circle1), fill = "white", col = "white", alpha = 0.2) +
+  geom_sf(data = st_as_sf(circle2), fill = "white", col = "white", alpha = 0.2) +
+  geom_sf(data = st_as_sf(path), col = "orange") +
+  theme_void()
+p2 <- ggplot() +
+  geom_raster(data = as.data.frame(betw, xy = T), aes(x = x, y = y, fill = betweenness)) +
+  scale_fill_viridis_c(option = "magma") +
+  geom_sf(data = st_as_sf(circle1), fill = "white", col = "white", alpha = 0.1) +
+  geom_sf(data = st_as_sf(circle2), fill = "white", col = "white", alpha = 0.1) +
+  theme_void() +
+  theme(legend.position = "none")
+p3 <- ggplot() +
+  geom_raster(data = as.data.frame(heat, xy = T), aes(x = x, y = y, fill = layer)) +
+  scale_fill_viridis_c(option = "magma", na.value = "black") +
+  geom_sf(data = st_as_sf(circle1), fill = "white", col = "white", alpha = 0.2) +
+  geom_sf(data = st_as_sf(circle2), fill = "white", col = "white", alpha = 0.2) +
+  theme_void() +
+  theme(legend.position = "none")
+
+# Store plots
+ggsave(plot = p1, "test1.png")
+ggsave(plot = p2, "test2.png")
+ggsave(plot = p3, "test3.png")
+
+################################################################################
+#### Simple Animation
+################################################################################
+# Let's create a simple animation of one of the trajectories
+traj <- path[1, ]
+traj <- as.data.frame(coordinates(traj)[[1]][[1]])
+
+# Split data for different frames
+frames <- tibble(Frame = 1:nrow(traj))
+frames$data <- lapply(1:nrow(frames), function(x) {
+  traj[1:x, ]
+})
+
+# Unnest
+frames <- unnest(frames, data)
+
+# Generate animation
+range_x <- range(traj$x)
+range_y <- range(traj$y)
+ani.options(interval = 0.1, ani.height = 500, ani.width = 500)
+saveGIF({
+  for (i in 1:nrow(traj)) {
+    par(bg = "transparent", mar = c(0, 0, 0, 0))
+    plot(y ~ x
+      , data = traj[1:i, ]
+      , type = "o"
+      , pch  = 20
+      , cex  = 2
+      , lwd  = 2
+      , col  = "orange"
+      , axes = F
+      , xlab = ""
+      , ylab = " "
+      , xlim = c(0, 100)
+      , ylim = c(0, 100)
+    )
+  }
+  for (i in 1:60)
+    plot(y ~ x
+      , data = traj
+      , type = "o"
+      , pch  = 20
+      , cex  = 2
+      , lwd  = 2
+      , col  = "orange"
+      , axes = F
+      , xlab = ""
+      , ylab = " "
+      , xlim = c(0, 100)
+      , ylim = c(0, 100)
+    )
+}, movie.name = "test.gif")

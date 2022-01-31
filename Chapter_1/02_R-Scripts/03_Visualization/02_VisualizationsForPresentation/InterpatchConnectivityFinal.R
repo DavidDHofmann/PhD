@@ -26,6 +26,7 @@ library(gtable)         # To combine ggplots
 library(grid)           # To combine ggplots
 library(gridExtra)      # To combine ggplots
 library(ggpubr)         # To arrange multiple plots
+library(ggdark)         # For dark ggplot themes
 
 ################################################################################
 #### Prepare Data
@@ -226,20 +227,13 @@ net_p <- ggnetwork(net, layout = lay, arrow.gap = 0.1, scale = F)
 net_p$Label <- paste0(net_p$FromName, " NP")
 
 # Prepare color palette
-pal <- colorRampPalette(plasma(100, begin = 0.9, end = 0))
+pal <- colorRampPalette(plasma(100, begin = 1, end = 0.4))
 
-# Main Plot
-p1 <- ggplot() +
-  geom_sf(
-      data        = prot
-    , mapping     = aes(fill = Desig)
-    , col         = "#6ba36b"
-    , lwd         = 0
-    , show.legend = F
-  ) +
+# Plot of kaza
+p1a <- ggplot() +
   geom_sf(
       data        = kaza
-    , col         = "black"
+    , col         = "gray80"
     , fill        = NA
     , lty         = 1
     , lwd         = 1
@@ -247,7 +241,186 @@ p1 <- ggplot() +
   ) +
   geom_sf(
       data        = africa
+    , col         = "gray80"
+    , fill        = NA
+    , lty         = 2
+    , lwd         = 0.5
+    , show.legend = F
+  ) +
+  geom_sf_text(
+      data     = labels_countries
+    , mapping  = aes(label = Label)
+    , col      = "white"
+    , fontface = 2
+    , size     = 5
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
+    , expand = F
+  ) +
+  labs(
+      x        = NULL
+    , y        = NULL
+    , fill     = NULL
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
+  ) +
+  guides(
+      size  = guide_legend(title.position = "top", order = 2)
+  ) +
+  dark_theme_classic() +
+  scale_fill_manual(values = c("gray30", "gray10")) +
+  theme(
+      legend.position       = "bottom"
+    , legend.box            = "horizontal"
+    , legend.title.align    = 0.5
+    , panel.border          = element_rect(colour = "white", fill        = "transparent", size = 0.7)
+    , axis.line             = element_blank()
+    , legend.title          = element_text(size   = 10)
+    , legend.text           = element_text(size   = 8)
+    , legend.margin         = margin(c(0, 0, 0, 0))
+    , legend.key            = element_blank()
+    , plot.background       = element_rect(fill   = "transparent", color = NA)
+    , panel.grid.major      = element_blank()
+    , panel.grid.minor      = element_blank()
+    , legend.background     = element_rect(fill   = "transparent")
+    , legend.box.background = element_rect(fill   = "transparent", color = "transparent")
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 1
+    , height     = unit(0.15, "cm")
+    , bar_cols   = c("white", "white")
+    , text_col   = "white"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(1.5, "cm"),
+    , width    = unit(1.2, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("white", "white")
+        , line_col  = NA
+        , text_col  = "white"
+        , text_size = 12
+      )
+  )
+
+# Plot of kaza and national parks
+p1b <- ggplot() +
+  geom_sf(
+      data        = prot
+    , mapping     = aes(fill = Desig)
     , col         = "black"
+    , lwd         = 0.1
+    , show.legend = F
+  ) +
+  geom_sf(
+      data        = kaza
+    , col         = "gray80"
+    , fill        = NA
+    , lty         = 1
+    , lwd         = 1
+    , show.legend = F
+  ) +
+  geom_sf(
+      data        = africa
+    , col         = "gray80"
+    , fill        = NA
+    , lty         = 2
+    , lwd         = 0.5
+    , show.legend = F
+  ) +
+  geom_sf_text(
+      data     = labels_countries
+    , mapping  = aes(label = Label)
+    , col      = "white"
+    , fontface = 2
+    , size     = 5
+  ) +
+  geom_sf_text(
+      data     = labels_nationalparks
+    , mapping  = aes(label = Label)
+    , nudge_y  = 0.3
+    , fontface = 3
+    , size     = 3
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
+    , expand = F
+  ) +
+  labs(
+      x        = NULL
+    , y        = NULL
+    , fill     = NULL
+    # , title    = "Interpatch Connectivity"
+    # , subtitle = "In Relation to Dispersal Duration"
+  ) +
+  guides(
+      size  = guide_legend(title.position = "top", order = 2)
+  ) +
+  dark_theme_classic() +
+  scale_fill_manual(values = c("gray30", "gray10")) +
+  theme(
+      legend.position       = "bottom"
+    , legend.box            = "horizontal"
+    , legend.title.align    = 0.5
+    , panel.border          = element_rect(colour = "white", fill        = "transparent", size = 0.7)
+    , axis.line             = element_blank()
+    , legend.title          = element_text(size   = 10)
+    , legend.text           = element_text(size   = 8)
+    , legend.margin         = margin(c(0, 0, 0, 0))
+    , legend.key            = element_blank()
+    , plot.background       = element_rect(fill   = "transparent", color = NA)
+    , panel.grid.major      = element_blank()
+    , panel.grid.minor      = element_blank()
+    , legend.background     = element_rect(fill   = "transparent")
+    , legend.box.background = element_rect(fill   = "transparent", color = "transparent")
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 1
+    , height     = unit(0.15, "cm")
+    , bar_cols   = c("white", "white")
+    , text_col   = "white"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(1.5, "cm"),
+    , width    = unit(1.2, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("white", "white")
+        , line_col  = NA
+        , text_col  = "white"
+        , text_size = 12
+      )
+  )
+
+# Main Plot
+p1 <- ggplot() +
+  geom_sf(
+      data        = prot
+    , mapping     = aes(fill = Desig)
+    , col         = "black"
+    , lwd         = 0.1
+    , show.legend = F
+  ) +
+  geom_sf(
+      data        = kaza
+    , col         = "gray80"
+    , fill        = NA
+    , lty         = 1
+    , lwd         = 1
+    , show.legend = F
+  ) +
+  geom_sf(
+      data        = africa
+    , col         = "gray80"
     , fill        = NA
     , lty         = 2
     , lwd         = 0.5
@@ -269,7 +442,7 @@ p1 <- ggplot() +
   geom_sf_text(
       data     = labels_countries
     , mapping  = aes(label = Label)
-    , col      = "black"
+    , col      = "white"
     , fontface = 2
     , size     = 5
   ) +
@@ -290,9 +463,6 @@ p1 <- ggplot() +
       , order = 1
     )
   ) +
-  scale_fill_manual(
-    values = c("#70ab70", "#d9f0d3")
-  ) +
   coord_sf(
       crs    = 4326
     , xlim   = c(min(r$x), max(r$x))
@@ -309,93 +479,46 @@ p1 <- ggplot() +
   guides(
       size  = guide_legend(title.position = "top", order = 2)
   ) +
+  dark_theme_classic() +
+  scale_fill_manual(values = c("gray30", "gray10")) +
   theme(
-      legend.position      = "bottom"
-    , legend.box           = "horizontal"
-    , legend.title.align   = 0.5
-    , panel.background     = element_blank()
-    , panel.border         = element_rect(colour = "black", fill = NA, size = 1)
-    , legend.title         = element_text(size = 10),
-    , legend.text          = element_text(size = 8)
-    , legend.margin        = margin(c(0, 0, 0, 0))
-    , legend.key           = element_blank()
+      legend.position       = "bottom"
+    , legend.box            = "horizontal"
+    , legend.title.align    = 0.5
+    , panel.border          = element_rect(colour = "white", fill        = "transparent", size = 0.7)
+    , axis.line             = element_blank()
+    , legend.title          = element_text(size   = 10)
+    , legend.text           = element_text(size   = 8)
+    , legend.margin         = margin(c(0, 0, 0, 0))
+    , legend.key            = element_blank()
+    , plot.background       = element_rect(fill   = "transparent", color = NA)
+    , panel.grid.major      = element_blank()
+    , panel.grid.minor      = element_blank()
+    , legend.background     = element_rect(fill   = "transparent")
+    , legend.box.background = element_rect(fill   = "transparent", color = "transparent")
   ) +
   annotation_scale(
       location   = "bl"
     , width_hint = 0.2
     , line_width = 1
     , height     = unit(0.15, "cm")
-    , bar_cols   = c("black", "white")
-    , text_col   = "black"
+    , bar_cols   = c("white", "white")
+    , text_col   = "white"
   ) +
   annotation_north_arrow(
       location = "br"
     , height   = unit(1.5, "cm"),
     , width    = unit(1.2, "cm"),
     , style    = north_arrow_fancy_orienteering(
-          fill      = c("black", "black")
+          fill      = c("white", "white")
         , line_col  = NA
-        , text_col  = "black"
+        , text_col  = "white"
         , text_size = 12
       )
   )
 
-# Plot for separate legend of the national parks, kaza- and country-borders
-p2 <- ggplot() +
-  geom_sf(
-      data        = prot
-    , mapping     = aes(fill = Desig)
-    , col         = "#6ba36b"
-    , lwd         = 0
-  ) +
-  geom_sf(
-      data        = kaza
-    , mapping     = aes(col = "KAZA-TFCA Borders")
-    , fill        = NA
-    , show.legend = "line"
-    , lwd         = 1
-  ) +
-  geom_sf(
-      data        = africa
-    , mapping     = aes(col = "Country Borders")
-    , fill        = NA
-    , show.legend = "line"
-    , lwd         = 0.5
-  ) +
-  scale_fill_manual(
-    values = c("National Parks" = "#70ab70", "Protected Areas" = "#d9f0d3")
-    , guide = guide_legend(
-      override.aes = list(
-          linetype = c("blank", "blank")
-        , shape    = c(NA, NA)
-      )
-    )
-  ) +
-  scale_color_manual(
-      values = c("Country Borders" = "black", "KAZA-TFCA Borders" = "black")
-    , guide = guide_legend(
-        override.aes = list(
-            linetype = c(2, 1)
-          , lwd      = c(0.5, 1)
-        )
-      )
-  ) +
-  theme(
-      legend.title          = element_blank()
-    , legend.spacing.y      = unit(0, "cm")
-    , legend.box            = "vertical"
-    , legend.background     = element_blank()
-    , legend.box.background = element_rect(fill  = "white")
-    , legend.margin         = margin(2, 8, 2, 6)
-    , legend.text           = element_text(color = "black")
-    , legend.key            = element_blank()
-    , legend.key.size       = unit(0.8, "lines")
-    , legend.key.width      = unit(1.2, "lines")
-    , panel.background      = element_blank()
-  )
-
 # Plot for the separate legend of the dots
-p3 <- ggplot() +
+p2 <- ggplot() +
   geom_point(
       data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct()
     , mapping = aes(x = x, y = y)
@@ -430,307 +553,60 @@ p3 <- ggplot() +
   guides(
     size = guide_legend(title = "Number of Simulations", title.position = "top")
   ) +
+  dark_theme_classic() +
   theme(
-      legend.position      = "bottom"
-    , legend.box           = "horizontal"
-    , legend.title.align   = 0.5
-    , panel.background     = element_rect(fill = "transparent", colour = NA)
-    , panel.grid           = element_blank()
-    , legend.margin        = margin(c(0, 0, 13, 0))
-    , legend.title         = element_text(size = 10),
-    , legend.text          = element_text(size = 8)
-    , legend.key           = element_blank()
-  )
-
-# Extract legends from all plots
-legend1 <- get_legend(p1)
-legend2 <- get_legend(p2)
-legend3 <- get_legend(p3)
-
-# Put legend with protected areas into main plot
-p4 <- p1 + annotation_custom(
-      grob = legend2
-    , xmin = 18.75
-    , xmax = 21
-    , ymin = -13
-    , ymax = -14
-  )
-
-# Remove the original legend from main plot
-p5 <- p4 + theme(legend.position = "none")
-
-# Add circles to main plot
-g1 <- ggplotGrob(p5)
-g2 <- ggplotGrob(p3)
-g2 <- gtable_filter(g2, "panel")
-pos <- c(subset(g1$layout, grepl("panel", g1$layout$name), select = t:r))
-p5 <- gtable_add_grob(g1, g2, t = pos$t, l = pos$l)
-p5 <- ggplotify::as.ggplot(p5)
-
-# Put legends together
-legends <- grid.arrange(legend1, legend3, nrow = 1, widths = c(2, 1))
-legends <- gtable_add_padding(legends, unit(c(0, 1, 0, 0.3), "cm"))
-
-# Put them below the first plot
-p6 <- arrangeGrob(p5, legends, heights = c(10, 1))
-p6 <- ggplotify::as.ggplot(p6)
-
-# Visualize
-p6
-
-# Store
-ggsave("04_Manuscript/99_InterpatchConnectivity.png", plot = p6)
-
-################################################################################
-#### Network Plot for Countries
-################################################################################
-# Prepare points for the countries
-count <- data.frame(
-    x       = c(20.39, 23.94, 20.07, 25.99, 28.22)
-  , y       = c(-15.28, -21.80, -19.39, -14.52, -18.9)
-  , Country = c("Angola", "Botswana", "Namibia", "Zambia", "Zimbabwe")
-  , ID      = 1:5
-)
-
-# Replace country names with IDs
-visits_count$From <- count$ID[match(visits_count$FromCountry, count$Country)]
-visits_count$To <- count$ID[match(visits_count$ToCountry, count$Country)]
-
-# Remove self-loops and zero-links
-visits <- subset(visits_count, From != To & Frequency != 0)
-visits <- dplyr::select(visits, -c(FromCountry, ToCountry))
-visits <- dplyr::select(visits, From, To, everything())
-
-# Create a network
-net <- graph_from_data_frame(
-    d        = visits
-  , vertices = unique(count$ID)
-  , directed = T
-)
-
-# Prepare layouts
-lay <- cbind(count$x, count$y)
-
-# Prepare networks for ggplotting with ggplot
-net_p <- ggnetwork(net, layout = lay, arrow.gap = 0.1, scale = F)
-
-# Prepare color palette
-pal <- colorRampPalette(plasma(100, begin = 0.9, end = 0))
-
-# Main Plot
-p1 <- ggplot() +
-  geom_sf(
-      data        = prot
-    # , mapping     = aes(fill = Desig)
-    # , col         = "#6ba36b"
-    , fill = "gray95"
-    , lwd         = 0
-    , show.legend = F
-  ) +
-  geom_sf(
-      data        = africa
-    , col         = "black"
-    , fill        = NA
-    , lty         = 2
-    , lwd         = 0.5
-    , show.legend = F
-  ) +
-  geom_edges(
-      data      = net_p
-    , mapping   = aes(
-        x    = x
-      , y    = y
-      , xend = xend
-      , yend = yend
-      , size = RelFrequency
-      , col  = MeanStepNumber
-    )
-    , curvature = 0.2
-    , arrow     = arrow(length = unit(6, "pt"), type = "closed", angle = 10)
-  ) +
-  geom_sf_text(
-      data     = labels_countries
-    , mapping  = aes(label = Label)
-    , col      = "black"
-    , fontface = 2
-    , size     = 5
-    , nudge_y  = 0.5
-  ) +
-  scale_size_area(
-      name     = "Relative Frequency"
-    , max_size = 1
-  ) +
-  scale_color_gradientn(
-      colors  = pal(100)
-    , guide   = guide_colorbar(
-        title          = "Duration (Steps)"
-      , show.limits    = T
-      , title.position = "top"
-      , title.hjust    = 0.5
-      , ticks          = T
-      , barheight      = unit(0.6, "cm")
-      , barwidth       = unit(3.0, "cm")
-      , order = 1
-    )
-  ) +
-  scale_fill_manual(
-    values = c("#70ab70", "#d9f0d3")
-  ) +
-  coord_sf(
-      crs    = 4326
-    , xlim   = c(min(r$x), max(r$x))
-    , ylim   = c(min(r$y), max(r$y))
-    , expand = F
-  ) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , fill     = NULL
-    # , title    = "Interpatch Connectivity"
-    # , subtitle = "In Relation to Dispersal Duration"
-  ) +
-  guides(
-      size  = guide_legend(title.position = "top", order = 2)
-  ) +
-  theme(
-      legend.position      = "bottom"
-    , legend.box           = "horizontal"
-    , legend.title.align   = 0.5
-    , panel.background     = element_blank()
-    , panel.border         = element_rect(colour = "black", fill = NA, size = 1)
-    , legend.title         = element_text(size = 10),
-    , legend.text          = element_text(size = 8)
-    , legend.margin        = margin(c(0, 0, 0, 0))
-    , legend.key          = element_blank()
-  ) +
-  annotation_scale(
-      location   = "bl"
-    , width_hint = 0.2
-    , line_width = 1
-    , height     = unit(0.15, "cm")
-    , bar_cols   = c("black", "white")
-    , text_col   = "black"
-  ) +
-  annotation_north_arrow(
-      location = "br"
-    , height   = unit(1.5, "cm"),
-    , width    = unit(1.2, "cm"),
-    , style    = north_arrow_fancy_orienteering(
-          fill      = c("black", "black")
-        , line_col  = NA
-        , text_col  = "black"
-        , text_size = 12
-      )
-  )
-
-# Plot for separate legend of the national parks, kaza- and country-borders
-p2 <- ggplot() +
-  geom_sf(
-      data        = africa
-    , mapping     = aes(col = "Country Borders")
-    , fill        = NA
-    , show.legend = "line"
-    , lwd         = 0.5
-  ) +
-  scale_color_manual(
-      values = c("Country Borders" = "black")
-    , guide = guide_legend(
-        override.aes = list(
-            linetype = c(2)
-          , lwd      = c(0.5)
-        )
-      )
-  ) +
-  theme(
-      legend.title          = element_blank()
-    , legend.spacing.y      = unit(0, "cm")
-    , legend.box            = "vertical"
-    , legend.background     = element_blank()
-    , legend.box.background = element_rect(fill  = "white")
-    , legend.margin         = margin(2, 8, 2, 6)
-    , legend.text           = element_text(color = "black")
+      legend.position       = "bottom"
+    , legend.box            = "horizontal"
+    , legend.title.align    = 0.5
+    , legend.margin         = margin(c(0, 0, 13, 0))
+    , legend.title          = element_text(size = 10),
+    , legend.text           = element_text(size = 8)
     , legend.key            = element_blank()
-    , legend.key.size       = unit(0.8, "lines")
-    , legend.key.width      = unit(1.2, "lines")
-    , panel.background      = element_blank()
-  )
-
-# Plot for the separate legend of the dots
-p3 <- ggplot() +
-  geom_point(
-      data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct()
-    , mapping = aes(x = x, y = y)
-    , col     = "black"
-    , size    = 0.1
-  ) +
-  geom_point(
-      data    = net_p %>% dplyr::select(x, y, name, Simulations) %>% distinct() %>% na.omit()
-    , mapping = aes(x = x, y = y, size = Simulations, color = Simulations)
-    , col     = "orange"
-  ) +
-  coord_sf(
-      crs    = 4326
-    , xlim   = c(min(r$x), max(r$x))
-    , ylim   = c(min(r$y), max(r$y))
-    , expand = F
-  ) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , fill     = NULL
-    # , title    = "Interpatch Connectivity"
-    # , subtitle = "In Relation to Dispersal Duration"
-  ) +
-  guides(
-    size = guide_legend(title = "Number of Simulations", title.position = "top")
-  ) +
-  theme(
-      legend.position      = "bottom"
-    , legend.box           = "horizontal"
-    , legend.title.align   = 0.5
-    , panel.background     = element_rect(fill = "transparent", colour = NA)
-    , panel.grid           = element_blank()
-    , legend.margin        = margin(c(0, 0, 13, 0))
-    , legend.title         = element_text(size = 10),
-    , legend.text          = element_text(size = 8)
-    , legend.key           = element_blank()
+    , panel.background      = element_rect(fill = "transparent")
+    , plot.background       = element_rect(fill = "transparent", color = NA)
+    , panel.grid.major      = element_blank()
+    , panel.grid.minor      = element_blank()
+    , legend.background     = element_rect(fill = "transparent")
+    , legend.box.background = element_rect(fill = "transparent", color = "transparent")
+    , panel.border          = element_rect(colour = "white", fill        = "transparent", size = 0.7)
+    , axis.line             = element_blank()
   )
 
 # Extract legends from all plots
 legend1 <- get_legend(p1)
 legend2 <- get_legend(p2)
-legend3 <- get_legend(p3)
 
-# Put legend with protected areas into main plot
-p4 <- p1 + annotation_custom(
-      grob = legend2
-    , xmin = 18.75
-    , xmax = 21
-    , ymin = -13
-    , ymax = -14
-  )
-
-# Remove the original legend from main plot
-p5 <- p4 + theme(legend.position = "none")
+# Remove the original legend from main plot(s)
+p1a <- p1a + theme(legend.position = "none")
+p1b <- p1b + theme(legend.position = "none")
+p3 <- p1 + theme(legend.position = "none")
 
 # Add circles to main plot
-g1 <- ggplotGrob(p5)
-g2 <- ggplotGrob(p3)
+g1 <- ggplotGrob(p3)
+g2 <- ggplotGrob(p2)
 g2 <- gtable_filter(g2, "panel")
 pos <- c(subset(g1$layout, grepl("panel", g1$layout$name), select = t:r))
-p5 <- gtable_add_grob(g1, g2, t = pos$t, l = pos$l)
-p5 <- ggplotify::as.ggplot(p5)
+p4 <- gtable_add_grob(g1, g2, t = pos$t, l = pos$l)
+p4 <- ggplotify::as.ggplot(p4)
 
 # Put legends together
-legends <- grid.arrange(legend1, legend3, nrow = 1, widths = c(2, 1))
+legends <- grid.arrange(legend1, legend2, nrow = 1, widths = c(2, 1))
 legends <- gtable_add_padding(legends, unit(c(0, 1, 0, 0.3), "cm"))
 
 # Put them below the first plot
-p6 <- arrangeGrob(p5, legends, heights = c(10, 1))
-p6 <- ggplotify::as.ggplot(p6)
+p1a <- arrangeGrob(p1a, legends, heights = c(10, 1))
+p1b <- arrangeGrob(p1b, legends, heights = c(10, 1))
+p5 <- arrangeGrob(p4, legends, heights = c(10, 1))
+p1a <- ggplotify::as.ggplot(p1a)
+p1b <- ggplotify::as.ggplot(p1b)
+p5 <- ggplotify::as.ggplot(p5)
 
 # Visualize
-p6
+p1a
+p1b
+p5
 
 # Store
-ggsave("04_Manuscript/99_InterpatchConnectivityCountries.png", plot = p6)
+ggsave("InterpatchConnectivity1.png", plot = p1a)
+ggsave("InterpatchConnectivity2.png", plot = p1b)
+ggsave("InterpatchConnectivity3.png", plot = p5)

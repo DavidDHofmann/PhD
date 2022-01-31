@@ -44,7 +44,7 @@ todownload$JobID <- 1:nrow(todownload)
 # in groups. Thus, let's create groups with around 20 members in each group
 n <- 20
 ngroups <- round(nrow(todownload) / n, -1)
-todownload$GroupID <- sort(rep(1:260, length.out = nrow(todownload)))
+todownload$GroupID <- sort(rep(1:ngroups, length.out = nrow(todownload)))
 print(todownload)
 
 # Depending on the group we will use different login credentials
@@ -60,7 +60,7 @@ todownload <- subset(todownload, !exists)
 
 # Order jobs so that the newest dates are coming first -> not yet archvied in
 # the long-term archive
-# todownload <- arrange(todownload, desc(sensing_datetime))
+todownload <- arrange(todownload, desc(sensing_datetime))
 
 # Nest the data by its group
 todownload <- todownload %>%
@@ -68,7 +68,7 @@ todownload <- todownload %>%
   nest()
 
 # Remove the first couple of entries as there appears to be an issue
-todownload <- todownload[-(1:6), ]
+todownload <- todownload[-(1:14), ]
 
 # Check out what we need to download
 print(todownload)
