@@ -167,7 +167,7 @@ if (nrow(todownload) > 0) {
     date_from <- todownload$FirstDate[i] %>% as.character()
     date_to   <- (todownload$LastDate[i] + days(1)) %>% as.character()
 
-    # If the date is before the "2014-03-01", we have to use a different link
+    # Link to the dataset
     link <- "ECMWF/ERA5_LAND/HOURLY"
 
     # Query rainfall data for our study area during dispersal dates

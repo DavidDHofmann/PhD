@@ -138,16 +138,16 @@ connectivity, Lycaon pictus
 %------------------------------------------------------------------------------
 \newpage
 \section{Candidate Interactions}
-We started with the base model and incrementally increased model complexity by
-adding all possible two-way interactions between habitat covariates and movement
-covariates. For instance, for the covariate \textsf{Water}, we proposed the
-interactions \textsf{Water:sl}, \textsf{Water:log(sl)}, and
-\textsf{Water:cos(ta)}. Besides these interactions, we also allowed for
-correlations between turning angles and step lengths by proposing the
-interactions \textsf{sl:cos(ta)} and \textsf{log(sl):cos(ta)}. Furthermore, we
-formed the interactions \textsf{sl:LowActivity} and \textsf{log(sl):LowActivity}
-to render that step lengths are likely to be shorter during periods of
-inactivity.
+We started with the base model developed by \cite{Hofmann.2021} and
+incrementally increased model complexity by adding all possible two-way
+interactions between habitat covariates and movement covariates. For instance,
+for the covariate \textsf{Water}, we proposed the interactions
+\textsf{Water:sl}, \textsf{Water:log(sl)}, and \textsf{Water:cos(ta)}. Besides
+these interactions, we also allowed for correlations between turning angles and
+step lengths by proposing the interactions \textsf{sl:cos(ta)} and
+\textsf{log(sl):cos(ta)}. Furthermore, we formed the interactions
+\textsf{sl:LowActivity} and \textsf{log(sl):LowActivity} to render that step
+lengths are likely to be shorter during periods of inactivity.
 
 %------------------------------------------------------------------------------
 %	Appendix S2: K-Fold Cross Validation Procedure
@@ -209,10 +209,11 @@ not overlap \citep{Fortin.2009}.
  % Thu Jul  9 09:17:26 2020
  \begin{table}[hbpt]
   \caption{Results from the forward model selection procedure based on Akaike's
-   Information Criterion (AIC; \citealp{Burnham.2002}). The model in the top row
-   was the model that we used to simulate movement of dispersers. The base model
-   upon which we based our movement model is depicted in the last row. We omitted
-   all models with an AIC weight of zero from the table.}
+  Information Criterion (AIC; \citealp{Burnham.2002}). The model in the top row
+  was the model that we used to simulate movement of dispersers. The base model
+  upon which we based our movement model is depicted in the last row and was
+  originally presented in \cite{Hofmann.2021}. We omitted all models with an AIC
+  weight of zero from the table.}
   \label{ModelAICs}
   \begin{center}
    \resizebox{1.75\textwidth}{!}{

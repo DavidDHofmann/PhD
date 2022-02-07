@@ -450,7 +450,7 @@ legend3 <- get_legend(p3)
 # Put legend with protected areas into main plot
 p4 <- p1 + annotation_custom(
       grob = legend2
-    , xmin = 18.75
+    , xmin = 18.35
     , xmax = 21
     , ymin = -13
     , ymax = -14
@@ -479,7 +479,7 @@ p6 <- ggplotify::as.ggplot(p6)
 p6
 
 # Store
-ggsave("04_Manuscript/99_InterpatchConnectivity.png", plot = p6)
+ggsave("04_Manuscript/99_InterpatchConnectivity.png", plot = p6, bg = "white")
 
 ################################################################################
 #### Network Plot for Countries
@@ -704,7 +704,7 @@ legend3 <- get_legend(p3)
 # Put legend with protected areas into main plot
 p4 <- p1 + annotation_custom(
       grob = legend2
-    , xmin = 18.75
+    , xmin = 18.35
     , xmax = 21
     , ymin = -13
     , ymax = -14
@@ -733,4 +733,4 @@ p6 <- ggplotify::as.ggplot(p6)
 p6
 
 # Store
-ggsave("04_Manuscript/99_InterpatchConnectivityCountries.png", plot = p6)
+ggsave("04_Manuscript/99_InterpatchConnectivityCountries.png", plot = p6, bg = "white")

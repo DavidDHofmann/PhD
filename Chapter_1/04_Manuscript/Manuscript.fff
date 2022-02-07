@@ -76,7 +76,7 @@
   \includegraphics[width=\textwidth]{99_Heatmap.png}
   \caption{Heatmap showing traversal frequencies of 80'000 simulated dispersers
   moving 2'000 steps across the KAZA-TFCA. Simulations were based on an
-  integrated step selection model that we fitted to the movement data of
+  integrated step-selection model that we fitted to the movement data of
   dispersing African wild dogs. To generate the heatmap, we rasterized and
   tallied all simulated trajectories. Consequently, the map highlights areas
   that are frequently traversed by virtual dispersers. For spatial reference we
@@ -119,3 +119,5 @@
   other protected areas need not to be restricted to NPs.}
   \label{InterpatchConnectivity}
 \end{figure}
+\efloatseparator
+ 

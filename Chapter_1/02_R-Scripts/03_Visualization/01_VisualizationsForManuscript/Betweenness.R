@@ -249,7 +249,7 @@ legend <- get_legend(p2)
 # Put into main plot
 p3 <- p1 + annotation_custom(
       grob = legend
-    , xmin = 18.35
+    , xmin = 18.25
     , xmax = 21
     , ymin = -12.7
     , ymax = -13.5
@@ -259,7 +259,7 @@ p3 <- p1 + annotation_custom(
 p3
 
 # Store it to file
-ggsave("04_Manuscript/99_Betweenness.png", plot = p3)
+ggsave("04_Manuscript/99_Betweenness.png", plot = p3, bg = "white")
 
 ################################################################################
 #### Plots over Time
@@ -481,4 +481,5 @@ ggsave("04_Manuscript/99_BetweennessIndividual.png"
   , scale  = 2
   , height = 6
   , width  = 6
+  , bg     = "white"
 )

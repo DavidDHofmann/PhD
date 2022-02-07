@@ -68,7 +68,8 @@ todownload <- todownload %>%
   nest()
 
 # Remove the first couple of entries as there appears to be an issue
-todownload <- todownload[-(1:14), ]
+# todownload <- todownload[-(1:20), ]
+todownload <- todownload[-2, ]
 
 # Check out what we need to download
 print(todownload)
