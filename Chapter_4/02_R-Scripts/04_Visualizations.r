@@ -36,7 +36,9 @@ p1 <- as.data.frame(covars, xy = T) %>%
     coord_sf() +
     theme_minimal() +
     facet_wrap("covariate") +
-    theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+    theme(axis.title.y = element_text(angle = 0, vjust = 0.5)) +
+    scale_x_continuous(breaks = seq(0, 300, by = 100)) +
+    scale_y_continuous(breaks = seq(0, 300, by = 100))
 
 # Plot of trajectories
 p2 <- ggplot(obs, aes(x = x, y = y, col = as.factor(ID))) +
@@ -47,9 +49,6 @@ p2 <- ggplot(obs, aes(x = x, y = y, col = as.factor(ID))) +
   theme_minimal() +
   theme(legend.position = "none") +
   scale_color_viridis_d()
-
-# Put plots together
-ggarrange(p1, p2, nrow = 2, heights = c(1, 2))
 
 # Store to file
 ggsave(plot = p1, "04_Manuscript/99_Covariates.png", width = 6, height = 2.5, bg = "white")

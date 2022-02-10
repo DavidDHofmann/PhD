@@ -81,10 +81,10 @@ obs$y <- coordinates(coords)[, c("y")]
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness = seq(0, 0.8, by = 0.1)  # Fraction of the fixes that is removed
-  , Forgiveness = 1:5                    # Allowed lag of steps (in steps)
-  , Replicate   = 1:100                  # Number of replicates for each combination
-  , AdjustDists = c(T, F)                # Whether to use a dynamic distribution for step lengths
+    Missingness    = seq(0, 0.8, by = 0.1)                  # Fraction of the fixes that is removed
+  , Forgiveness    = 1:5                                    # Allowed lag of steps (in steps)
+  , Replicate      = 1:100                                  # Number of replicates for each combination
+  , Distributions  = c("uncorrected", "naive", "dynamic")   # Which distributions to use
 )
 
 # Adjust column names slightly
@@ -160,7 +160,7 @@ computeMetrics <- function(data) {
 }
 
 # Function to generate random steps
-computeSSF <- function(data, n_rsteps, adjust_dists) {
+computeSSF <- function(data, n_rsteps, distributions) {
 
   # Indicate case steps
   data$case <- 1
@@ -174,40 +174,49 @@ computeSSF <- function(data, n_rsteps, adjust_dists) {
   # Indicate that they are control steps (case = 0)
   rand$case <- 0
 
-  # Sample new step lengths and turning angles
-  if (adjust_dists) {
-    rand$sl <- sapply(1:nrow(rand), function(z) {
-      rgamma(n = 1
-        , scale = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Scale"]
-        , shape = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Shape"]
-      )
-    })
+  # Sample new step lengths and turning angles according to the specified
+  # distributions
+  if (distributions == "uncorrected") {
+    rand$sl <- rgamma(n = nrow(rand)
+      , scale = dists$uncorrected$sl$scale
+      , shape = dists$uncorrected$sl$shape
+    )
+    rand$relta_new <- rvonmises(n = nrow(rand)
+      , kappa = dists$uncorrected$ta$kappa
+      , mu    = dists$uncorrected$ta$mu
+      , by    = 0.01
+    )
+  } else if (distributions == "naive") {
+    rand$sl <- rgamma(n = nrow(rand)
+      , scale = dists$uncorrected$sl$scale * rand$duration
+      , shape = dists$uncorrected$sl$shape
+    )
+    rand$relta_new <- rvonmises(n = nrow(rand)
+      , kappa = dists$uncorrected$ta$kappa
+      , mu    = dists$uncorrected$ta$mu
+      , by    = 0.01
+    )
+  } else if (distributions == "dynamic") {
+    rand$sl <- rgamma(n = nrow(rand)
+      , scale = dists$dynamic$sl$scale[match(rand$duration, dists$dynamic$sl$duration)]
+      , shape = dists$dynamic$sl$shape[match(rand$duration, dists$dynamic$sl$duration)]
+    )
     rand$relta_new <- sapply(1:nrow(rand), function(z) {
       rvonmises(n = 1
-        , kappa = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Kappa"]
-        , mu    = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Mu"]
+        , kappa = dists$dynamic$ta$kappa[dists$dynamic$ta$duration == rand$duration[z]]
+        , mu    = dists$dynamic$ta$mu[dists$dynamic$ta$duration == rand$duration[z]]
         , by    = 0.01
       )
     })
   } else {
-    rand$sl <- rgamma(n = nrow(rand)
-      , scale = sl_dist["scale"] * rand$duration
-      , shape = sl_dist["shape"]
-    )
-    rand$relta_new <- rvonmises(n = nrow(rand)
-      , kappa = ta_dist["kappa"]
-      , mu    = ta_dist["mu"]
-      , by    = 0.01
-    )
+    stop("Provide valid input for the desired distributions")
   }
 
   # Calculate new "absolute" turning angle
   rand$relta_diff <- rand$relta - rand$relta_new
   rand$absta <- rand$absta - rand$relta_diff
-  rand$absta[rand$absta > 2 * pi] <-
-    rand$absta[rand$absta > 2 * pi] - 2 * pi
-  rand$absta[rand$absta < 0] <-
-    rand$absta[rand$absta < 0] + 2 * pi
+  rand$absta[rand$absta > 2 * pi] <- rand$absta[rand$absta > 2 * pi] - 2 * pi
+  rand$absta[rand$absta < 0 * pi] <- rand$absta[rand$absta < 0 * pi] + 2 * pi
   rand$relta <- rand$relta_new
 
   # Remove undesired stuff
@@ -319,7 +328,7 @@ runModel <- function(data) {
 testing <- rarifyData(obs, missingness = 0.5)
 testing <- computeBursts(testing, forgiveness = 2)
 testing <- computeMetrics(testing)
-testing <- computeSSF(testing, n_rsteps = 10, adjust_dists = F)
+testing <- computeSSF(testing, n_rsteps = 10, distributions = "uncorrected")
 testing <- computeCovars(testing, covars, multicore = T)
 testing <- runModel(testing)
 testing

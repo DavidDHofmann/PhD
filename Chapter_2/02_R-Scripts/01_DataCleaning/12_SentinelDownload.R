@@ -23,10 +23,6 @@ outdir_l2a <- "/media/david/Elements/L2A"
 dir.create(outdir_l1c, showWarnings = F)
 dir.create(outdir_l2a, showWarnings = F)
 
-# Make sure the directories exist
-dir.exists(outdir_l1c)
-dir.exists(outdir_l2a)
-
 # Login to scihub
 write_scihub_login("dodx9", "Scihubbuster69_")
 
@@ -36,6 +32,10 @@ todownload <- read_rds("/media/david/Elements/Todownload.rds")
 # Depending on the availability of L1C or L2A products, we put the downloaded
 # data into two different directories
 todownload$outdir <- ifelse(todownload$level == "1C", outdir_l1c, outdir_l2a)
+
+# Let's generate the L2A product names, so that we also know the final names of
+# the converted L1C products
+todownload$L2A_name <- gsub(todownload$name, pattern = "MSIL1C", replacement = "MSIL2A")
 
 # Give each job a unique ID
 todownload$JobID <- 1:nrow(todownload)
@@ -52,24 +52,28 @@ todownload$Username <- ifelse(todownload$GroupID %% 2 == 1, "dodx9", "dodx92")
 todownload$Password <- "Scihubbuster69_"
 
 # We only need to download files that haven't been downloaded yet. Thus, let's
-# check which files are already present
+# check which files are already present. Note that we're also checking for files
+# that we might have already translated from L1C to L2A. The reason for this is
+# as follows: Once we downloaded the L2C product and translated it to L1A, I
+# will remove the L2C folder to preserve memory. Hence, we will need to check
+# for the finalized product as well.
 exists <-
   dir.exists(paste0(todownload$outdir, "/", todownload$name)) |
-  dir.exists(paste0(todownload$outdir, "/", todownload$name))
+  dir.exists(paste0(todownload$outdir, "/", todownload$L2A_name))
 todownload <- subset(todownload, !exists)
 
 # Order jobs so that the newest dates are coming first -> not yet archvied in
 # the long-term archive
-todownload <- arrange(todownload, desc(sensing_datetime))
+# todownload <- arrange(todownload, desc(sensing_datetime))
 
 # Nest the data by its group
 todownload <- todownload %>%
-  group_by(GroupID, Username, Password) %>%
+  # group_by(GroupID, Username, Password) %>%
+  group_by(Username, Password) %>%
   nest()
 
 # Remove the first couple of entries as there appears to be an issue
 # todownload <- todownload[-(1:20), ]
-todownload <- todownload[-2, ]
 
 # Check out what we need to download
 print(todownload)
@@ -82,14 +86,18 @@ for (i in 1:nrow(todownload)) {
 
   # Extract the files we want to download in that group
   getit <- todownload$data[[i]]
-  getitnext <- todownload$data[[i + 1]]
+  if (nrow(todownload) > 1) {
+    getitnext <- todownload$data[[i + 1]]
+  }
 
   # Check if the files are already available
   cat("Checking if files are online...\n")
   write_scihub_login(todownload$Username[i], todownload$Password[i])
   online <- safe_is_online(getit$todownload)
-  write_scihub_login(todownload$Username[i + 1], todownload$Password[i + 1])
-  onlinenext <- safe_is_online(getitnext$todownload)
+  if (nrow(todownload) > 1) {
+    write_scihub_login(todownload$Username[i + 1], todownload$Password[i + 1])
+    onlinenext <- safe_is_online(getitnext$todownload)
+  }
 
   if (!all(online)) {
     ordered <- tryCatch({
@@ -109,10 +117,12 @@ for (i in 1:nrow(todownload)) {
   }
 
   # Order files from the next group if necessary
-  if (!all(onlinenext)) {
-    tryCatch({
-      s2_order(getitnext$todownload[!onlinenext])
-    }, error = function(e) {return(NA)})
+  if (nrow(todownload) > 1) {
+    if (!all(onlinenext)) {
+      tryCatch({
+        s2_order(getitnext$todownload[!onlinenext])
+      }, error = function(e) {return(NA)})
+    }
   }
 
   # Login with correct account

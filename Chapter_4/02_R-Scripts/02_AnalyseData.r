@@ -26,9 +26,10 @@ options(scipen = 999)
 # Load observed movement data
 obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
 
-# Define original distributions
-sl_dist <- c(shape = 3, scale = 1)
-ta_dist <- c(kappa = 0.5, mu = 0)
+# Define the original distributions
+sl_dist <- list(shape = 3, scale = 1)
+ta_dist <- list(kappa = 0.5, mu = 0)
+dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
 
 # Load covariate layers
 covars <- stack("03_Data/01_RawData/CovariateLayers.grd")
@@ -37,10 +38,10 @@ covars <- readAll(covars)
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness = seq(0, 0.8, by = 0.1)  # Fraction of the fixes that is removed
-  , Forgiveness = 1:5                    # Allowed lag of steps (in steps)
-  , Replicate   = 1:100                  # Number of replicates for each combination
-  , AdjustDists = c(T, F)                # Whether to use a dynamic distribution for step lengths
+    Missingness    = seq(0, 0.8, by = 0.1)                  # Fraction of the fixes that is removed
+  , Forgiveness    = 1:5                                    # Allowed lag of steps (in steps)
+  , Replicate      = 1:100                                  # Number of replicates for each combination
+  , Distributions  = c("uncorrected", "naive", "dynamic")   # Which distributions to use
 )
 
 ################################################################################
@@ -102,7 +103,7 @@ computeMetrics <- function(data) {
 }
 
 # Function to generate random steps
-computeSSF <- function(data, n_rsteps, adjust_dists) {
+computeSSF <- function(data, n_rsteps, distributions) {
 
   # Indicate case steps
   data$case <- 1
@@ -116,40 +117,49 @@ computeSSF <- function(data, n_rsteps, adjust_dists) {
   # Indicate that they are control steps (case = 0)
   rand$case <- 0
 
-  # Sample new step lengths and turning angles
-  if (adjust_dists) {
-    rand$sl <- sapply(1:nrow(rand), function(z) {
-      rgamma(n = 1
-        , scale = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Scale"]
-        , shape = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Shape"]
-      )
-    })
+  # Sample new step lengths and turning angles according to the specified
+  # distributions
+  if (distributions == "uncorrected") {
+    rand$sl <- rgamma(n = nrow(rand)
+      , scale = dists$uncorrected$sl$scale
+      , shape = dists$uncorrected$sl$shape
+    )
+    rand$relta_new <- rvonmises(n = nrow(rand)
+      , kappa = dists$uncorrected$ta$kappa
+      , mu    = dists$uncorrected$ta$mu
+      , by    = 0.01
+    )
+  } else if (distributions == "naive") {
+    rand$sl <- rgamma(n = nrow(rand)
+      , scale = dists$uncorrected$sl$scale * rand$duration
+      , shape = dists$uncorrected$sl$shape
+    )
+    rand$relta_new <- rvonmises(n = nrow(rand)
+      , kappa = dists$uncorrected$ta$kappa
+      , mu    = dists$uncorrected$ta$mu
+      , by    = 0.01
+    )
+  } else if (distributions == "dynamic") {
+    rand$sl <- rgamma(n = nrow(rand)
+      , scale = dists$dynamic$sl$scale[match(rand$duration, dists$dynamic$sl$duration)]
+      , shape = dists$dynamic$sl$shape[match(rand$duration, dists$dynamic$sl$duration)]
+    )
     rand$relta_new <- sapply(1:nrow(rand), function(z) {
       rvonmises(n = 1
-        , kappa = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Kappa"]
-        , mu    = dists_means$mean[dists_means$duration == rand$duration[z] & dists_means$Parameter == "Mu"]
+        , kappa = dists$dynamic$ta$kappa[dists$dynamic$ta$duration == rand$duration[z]]
+        , mu    = dists$dynamic$ta$mu[dists$dynamic$ta$duration == rand$duration[z]]
         , by    = 0.01
       )
     })
   } else {
-    rand$sl <- rgamma(n = nrow(rand)
-      , scale = sl_dist["scale"] * rand$duration
-      , shape = sl_dist["shape"]
-    )
-    rand$relta_new <- rvonmises(n = nrow(rand)
-      , kappa = ta_dist["kappa"]
-      , mu    = ta_dist["mu"]
-      , by    = 0.01
-    )
+    stop("Provide valid input for the desired distributions")
   }
 
   # Calculate new "absolute" turning angle
   rand$relta_diff <- rand$relta - rand$relta_new
   rand$absta <- rand$absta - rand$relta_diff
-  rand$absta[rand$absta > 2 * pi] <-
-    rand$absta[rand$absta > 2 * pi] - 2 * pi
-  rand$absta[rand$absta < 0] <-
-    rand$absta[rand$absta < 0] + 2 * pi
+  rand$absta[rand$absta > 2 * pi] <- rand$absta[rand$absta > 2 * pi] - 2 * pi
+  rand$absta[rand$absta < 0 * pi] <- rand$absta[rand$absta < 0 * pi] + 2 * pi
   rand$relta <- rand$relta_new
 
   # Remove undesired stuff
@@ -233,7 +243,7 @@ runModel <- function(data) {
     + sl
     + log_sl
     + cos_ta
-    + water
+    + forest
     + elev
     + dist
     + strata(step_id)
@@ -261,7 +271,7 @@ runModel <- function(data) {
 testing <- rarifyData(obs, missingness = 0.5)
 testing <- computeBursts(testing, forgiveness = 2)
 testing <- computeMetrics(testing)
-testing <- computeSSF(testing, n_rsteps = 10, adjust_dists = F)
+testing <- computeSSF(testing, n_rsteps = 10, distributions = "uncorrected")
 testing <- computeCovars(testing, covars, multicore = T)
 testing <- runModel(testing)
 testing
@@ -271,7 +281,7 @@ testing
 ################################################################################
 # Parametrize separate step length distributions and turning angle distributions
 # for the different accepted step durations. Replicate 1000 times.
-dists <- pbmclapply(
+dists_dynamic <- pbmclapply(
     X                  = 1:1000
   , ignore.interactive = T
   , mc.cores           = detectCores() - 1
@@ -288,10 +298,10 @@ dists <- pbmclapply(
         fit_sl <- fit_distr(y$sl, "gamma")
         fit_ta <- fit_distr(y$relta, "vonmises")
         fit <- data.frame(
-            Shape = fit_sl$params$shape
-          , Scale = fit_sl$params$scale
-          , Kappa = fit_ta$params$kappa
-          , Mu    = fit_ta$params$mu
+            shape = fit_sl$params$shape
+          , scale = fit_sl$params$scale
+          , kappa = fit_ta$params$kappa
+          , mu    = fit_ta$params$mu
         )
         return(fit)
       })) %>%
@@ -302,14 +312,23 @@ dists <- pbmclapply(
 }) %>% do.call(rbind, .)
 
 # Summarize values
-dists_means <- dists %>%
-  pivot_longer(Shape:Mu, names_to = "Parameter", values_to = "Value") %>%
+dists_means <- dists_dynamic %>%
+  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
   group_by(duration, Parameter) %>%
   summarize(mean = mean(Value), sd = sd(Value), .groups = "drop")
 
+# Put values together with the uncorrected distributions
+dists$dynamic <- dists_means %>%
+  dplyr::select(duration, Parameter, mean) %>%
+  pivot_wider(names_from = Parameter, values_from = mean) %>%
+  list(
+      sl = select(., duration, shape, scale)
+    , ta = select(., duration, kappa, mu)
+  )
+
 # Visualize everything
-dists %>%
-  pivot_longer(Shape:Mu, names_to = "Parameter", values_to = "Value") %>%
+dists_dynamic %>%
+  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
   ggplot(aes(x = duration, y = Value)) +
     geom_jitter(width = 0.1, alpha = 0.2, size = 0.5) +
     geom_point(data = dists_means, aes(x = duration, y = mean), col = "orange", size = 5) +
@@ -337,14 +356,14 @@ dat$Coefs <- pbmclapply(
   # Extract important information from dataframe
   miss <- dat$Missingness[[x]]
   forg <- dat$Forgiveness[[x]]
-  dyna <- dat$AdjustDists[[x]]
+  dist <- dat$Distributions[[x]]
 
   # Prepare data for ssf
   data <- obs %>%
     rarifyData(missingness = miss) %>%
     computeBursts(forgiveness = forg) %>%
     computeMetrics() %>%
-    computeSSF(n_rsteps = n_rsteps, adjust_dists = dyna) %>%
+    computeSSF(n_rsteps = n_rsteps, distributions = dist) %>%
     computeCovars(covars, multicore = F)
 
   # Run conditional logistic regression
@@ -356,6 +375,7 @@ dat$Coefs <- pbmclapply(
 
 # Store results to file
 write_rds(dat, "03_Data/03_Results/Models.rds")
+dat <- read_rds("03_Data/03_Results/Models.rds")
 
 # Visualize Results
 unnest(dat, Coefs) %>%

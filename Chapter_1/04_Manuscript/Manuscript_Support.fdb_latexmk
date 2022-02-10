@@ -1,15 +1,15 @@
 # Fdb version 3
-["bibtex Manuscript_Support"] 1643618854 "Manuscript_Support.aux" "Manuscript_Support.bbl" "Manuscript_Support" 1643618854
+["bibtex Manuscript_Support"] 1644243057 "Manuscript_Support.aux" "Manuscript_Support.bbl" "Manuscript_Support" 1644243057
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/apalike.bst" 1480098433 24635 604dafcc79f521a11ea73e506e1fbd98 ""
   "Literatur.bib" 1632819077 98924 e1a288316d1ba5a82aef184595105222 ""
-  "Manuscript_Support.aux" 1643618854 14034 127be313791bd8eb0bbfc9ff7708a64e ""
+  "Manuscript_Support.aux" 1644243057 14578 8aa1f0930e2fb1b96aa9d227ad1b7ab4 ""
   "Manuscript_Support.bcf" 0 -1 0 ""
   (generated)
   "Manuscript_Support.blg"
   "Manuscript_Support.bbl"
-["pdflatex"] 1643618854 "Manuscript_Support.tex" "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf" "Manuscript_Support" 1643618854
+["pdflatex"] 1644243057 "Manuscript_Support.tex" "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf" "Manuscript_Support" 1644243057
   "/etc/texmf/web2c/texmf.cnf" 1582562568 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux" 1643618854 14034 127be313791bd8eb0bbfc9ff7708a64e ""
+  "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux" 1644243057 14578 8aa1f0930e2fb1b96aa9d227ad1b7ab4 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1511824771 3332 103109f5612ad95229751940c61aada0 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1480098698 1004 54797486969f23fa377b128694d548df ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/amsfonts/cmextra/cmex8.tfm" 1480098698 988 bdf658c3bfc2d96d3c8b02cfc1c94c20 ""
@@ -193,16 +193,17 @@
   "99_Convergence.png" 1625240298 377233 31ed08578443271448a225064fca43a2 ""
   "99_HeatmapsIndividual.png" 1643613502 9487813 578e0b1044db9fe7fc6abadb816e3616 ""
   "99_MapComparison.png" 1632579029 194698 ce6d12aaf01aecf12d596242cddabee2 ""
+  "99_MapComparisonCountries.png" 1644242999 405609 f53ac56ae2e69a2510cea5a9767f2aff ""
   "99_MovementModelInterpretation.png" 1627806127 846904 4b96b4e3cbed0da680f94db48ad8dbdc ""
   "99_SourceAreas.png" 1624520170 1377110 38508bfe9d422a46b978a50380afdb6e ""
-  "Manuscript_Support.aux" 1643618854 14034 127be313791bd8eb0bbfc9ff7708a64e ""
-  "Manuscript_Support.bbl" 1643618854 1775 05d57cbbe241a098053ee77c2a15651e "bibtex Manuscript_Support"
-  "Manuscript_Support.out" 1643618854 790 01e1f2142e82e7aaa242df60ac6bcb51 ""
-  "Manuscript_Support.tex" 1643618852 22708 6555260af942b5778f56e62019a802f3 ""
+  "Manuscript_Support.aux" 1644243057 14578 8aa1f0930e2fb1b96aa9d227ad1b7ab4 ""
+  "Manuscript_Support.bbl" 1644243057 1775 05d57cbbe241a098053ee77c2a15651e "bibtex Manuscript_Support"
+  "Manuscript_Support.out" 1644243057 790 01e1f2142e82e7aaa242df60ac6bcb51 ""
+  "Manuscript_Support.tex" 1644243056 23033 ad471e34282b596d6e9287c75737f084 ""
   (generated)
-  "Manuscript_Support.log"
-  "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.log"
+  "Manuscript_Support.out"
   "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf"
   "Manuscript_Support.pdf"
+  "Manuscript_Support.log"
   "Manuscript_Support.aux"
-  "Manuscript_Support.out"
+  "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.log"

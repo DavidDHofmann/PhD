@@ -40,11 +40,12 @@
     \caption{Illustration of the study area located in southern Africa. (a) The
     study area was confined by a bounding box spanning the entire KAZA-TFCA
     which comprises parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia.
-    (b) The KAZA-TFCA currently represents the world's largest terrestrial
-    transfrontier conservation area, covering a total area of 520'000
-    km\textsuperscript{2}. Its main purpose is to re-establish connectivity
-    between already-existing NPs (dark green) and other protected areas (light
-    green).}
+    Data on remaining wild dog populations has been sourced from
+    \cite{Woodroffe.2012}. (b) The KAZA-TFCA currently represents the world's
+    largest terrestrial transfrontier conservation area, covering a total area
+    of 520'000 km\textsuperscript{2}. Its main purpose is to re-establish
+    connectivity between already-existing NPs (dark green) and other protected
+    areas (light green).}
     \label{StudyArea}
   \end{center}
 \end{figure}

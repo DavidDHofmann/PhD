@@ -25,18 +25,21 @@ library(ggridges)      # For ridgelines in ggplot
 library(rpart)         # To train a classifier
 library(randomForest)  # To train a classifier
 library(rpart.plot)    # To visualize classifier
+library(caret)         # To assess variable importance
+library(ggpubr)        # To arrange multiple ggplots
+library(ggstance)      # To plot pointranges
 
 # Set the working directory
-wd <- "/home/david/Schreibtisch/PanMapping2"
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
 
 # Create necessary directories
-dir.create("Landsat", showWarnings = F)
-dir.create("Sentinel", showWarnings = F)
-dir.create("Sentinel/L1C", showWarnings = F)
-dir.create("Sentinel/L2A", showWarnings = F)
-outdir_l1c <- "Sentinel/L1C"
-outdir_l2a <- "Sentinel/L2A"
+dir.create("03_Data/01_RawData/LANDSAT", showWarnings = F)
+dir.create("03_Data/01_RawData/SENTINEL", showWarnings = F)
+dir.create("03_Data/01_RawData/SENTINEL/L1C", showWarnings = F)
+dir.create("03_Data/01_RawData/SENTINEL/L2A", showWarnings = F)
+outdir_l1c <- "03_Data/01_RawData/SENTINEL/L1C"
+outdir_l2a <- "03_Data/01_RawData/SENTINEL/L2A"
 
 # Function to compute the normalized difference (nd) index of two bands
 nd <- function(img, band_x, band_y) {
@@ -51,7 +54,7 @@ nd <- function(img, band_x, band_y) {
 ################################################################################
 # Identify ground truth data
 files <- dir(
-    path       = "TrainingClasses"
+    path       = "03_Data/01_RawData/GABRIELE"
   , pattern    = ".kml$"
   , full.names = T
 )
@@ -85,6 +88,9 @@ classes$Class[classes$Class == "Dry_Pans"] <- "Drypan"
 classes$Class[classes$Class == "Wet_Pans"] <- "Wetpan"
 classes$Class[classes$Class == "Pools"]    <- "Water"
 
+# Drypans are also dryland
+classes$Class[classes$Class == "Drypan"] <- "Dryland"
+
 # Check out the resulting dataframe
 as.data.frame(classes)
 table(classes$Class)
@@ -92,7 +98,6 @@ table(classes$Class)
 # Visualize the data
 ggplot(st_as_sf(classes), aes(col = Class, fill = Class)) +
   geom_sf(alpha = 0.5) +
-  coord_sf(xlim = c(23.4, 23.8)) +
   facet_wrap("Date") +
   theme_minimal()
 
@@ -112,16 +117,6 @@ ee_install_set_pyenv(
 # Make sure we have all installed for rgee
 ee_Initialize()
 
-# Define the area of interest
-aoi <- ee$Geometry$Polygon(
-  list(
-      c(extent(classes)[1], extent(classes)[3])
-    , c(extent(classes)[1], extent(classes)[4])
-    , c(extent(classes)[2], extent(classes)[4])
-    , c(extent(classes)[2], extent(classes)[3])
-  )
-)
-
 # Function to mask cloudy pixels (check out the pixel descriptions here:
 # https://developers.google.com/earth-engine/datasets/catalog/LANDSAT_LC08_C01_T1_SR)
 # Code for the mask is based on this example:
@@ -140,8 +135,21 @@ maskLandsat <- function(image) {
 # Loop through the dates and download landsat data
 for (i in 1:length(dates)) {
 
+  # Subset to the classes of interest
+  classes_sub <- subset(classes, Date == dates[i])
+
+  # Define the area of interest
+  aoi <- ee$Geometry$Polygon(
+    list(
+        c(extent(classes_sub)[1], extent(classes_sub)[3])
+      , c(extent(classes_sub)[1], extent(classes_sub)[4])
+      , c(extent(classes_sub)[2], extent(classes_sub)[4])
+      , c(extent(classes_sub)[2], extent(classes_sub)[3])
+    )
+  )
+
   # Specify filename
-  filename <- paste0(wd, "/Landsat/", dates[i], ".tif")
+  filename <- paste0("03_Data/01_RawData/LANDSAT/", dates[i], ".tif")
 
   # If the file doesn't exist, download it
   if (!file.exists(filename)) {
@@ -155,7 +163,7 @@ for (i in 1:length(dates)) {
       clip(aoi)
 
     # Check it
-    ee_print(collection)
+    # ee_print(collection)
 
     # Download
     tempfile <- tempfile(fileext = ".tif")
@@ -186,70 +194,144 @@ for (i in 1:length(dates)) {
 # Login to scihub
 write_scihub_login("dodx9", "Scihubbuster69_")
 
-# Define a polygon that indicates the are for which we need to download sentinel
-# 2 data
-aoi <- extent(classes)
-aoi <- as(aoi, "SpatialPolygons")
-crs(aoi) <- "+init=epsg:4326"
+# Identify the files that we need to download
+todownload <- lapply(dates, function(x) {
 
-# Check the overlap with sentinel 2 tiles
-tile <- tiles_intersects(st_as_sf(aoi), out_format = "sf")
-tile <- as(tile, "Spatial")
+  # Subset to the classes of interest
+  classes_sub <- subset(classes, Date == x)
 
-# Visualize it
-plot(tile)
-plot(aoi, add = T, border = "red", lty = 2)
-plot(classes, add = T)
+  # Define a polygon that indicates the area for which we need to download sentinel
+  # 2 data
+  aoi <- extent(classes_sub)
+  aoi <- as(aoi, "SpatialPolygons")
+  crs(aoi) <- "+init=epsg:4326"
 
-# Go through the dates and download the sentinel data
-for (i in 1:length(dates)) {
+  # Find products for the range of dates
+  todownload <- s2_list(
+      spatial_extent = st_as_sf(aoi)
+    , time_interval  = c(x - days(10), x + days(10))
+    , level          = "auto"
+    , server         = c("scihub", "gcloud")
+  )
 
-  # Specify the final filename
-  filename <- paste0(wd, "/Sentinel/", dates[i], ".tif")
+  # Check the metadata and create a regular date column
+  meta <- as.data.frame(todownload)
+  meta <- mutate(meta, Date = as.Date(sensing_datetime))
 
-  # If the file does not exist yet, download and process it
+  # Remove data with high cloud cover
+  index <- which(meta$clouds < 5)
+  todownload <- todownload[index]
+  meta <- meta[index, ]
+
+  # Find the image(s) that is/are closest in date to the input date
+  index <- which(abs(meta$Date - x) == min(abs(meta$Date - x)))
+  todownload <- todownload[index]
+  meta <- meta[index, ]
+
+  # Put everything into a tibble
+  todownload  <- tibble(todownload, meta)
+  todownload $footprint <- NULL
+
+  # Assign the date from the training data
+  todownload $Date <- x
+
+  # Return the respective files
+  return(todownload )
+
+}) %>% do.call(rbind, .)
+
+# Specify output directory depending on the product level
+todownload$outdir <- ifelse(todownload$level == "1C", outdir_l1c, outdir_l2a)
+
+# Store the download table to file
+write_rds(todownload, "03_Data/01_RawData/SENTINEL/Todownload.rds")
+todownload <- read_rds("03_Data/01_RawData/SENTINEL/Todownload.rds")
+
+# Subset to the files that we haven't downloaded yet
+exists <- dir.exists(paste0(todownload$outdir, "/", todownload$name))
+todownload_sub <- subset(todownload, !exists)
+
+# Download the files
+if (nrow(todownload_sub) > 0) {
+
+  # Order the products if necessary (need to wait after this)
+  s2_order(todownload_sub$todownload)
+
+  # Keep only the ones available
+  online <- safe_is_online(todownload_sub$todownload)
+  todownload_sub <- todownload_sub[online, ]
+
+  # Download the products
+  lapply(1:nrow(todownload_sub), function(x) {
+    tryCatch({
+      s2_download(todownload_sub$todownload[x], outdir = todownload_sub$outdir[x])
+    }, error = function(e) {return(e)})
+  })
+}
+
+# Run correction on the L1C products
+files <- dir(path = outdir_l1c, include.dirs = T, full.names = T)
+sen2cor(files
+  , outdir    = outdir_l2a
+  , parallel  = T
+  , overwrite = F
+  , use_dem   = F
+)
+
+# Determine final output directory and filenames
+todownload$outdir_final <- outdir_l2a
+todownload$name_final <- gsub(todownload$name
+  , pattern     = "MSIL1C"
+  , replacement = "MSIL2A"
+)
+
+# Loop through the dates and process the respective images
+maps <- lapply(dates, function(x) {
+
+  # Prepare filename for final image
+  filename <- paste0("03_Data/01_RawData/SENTINEL/", x, ".tif")
+
+  # Only need to do this if the file doesn't exist yet
   if (!file.exists(filename)) {
 
-    # Find products for the range of dates
-    available <- s2_list(
-        spatial_extent = st_as_sf(aoi)
-      , time_interval  = c(dates[i] - days(10), dates[i] + days(10))
-      , level          = "auto"
-    )
+    # Specify area of interest
+    aoi <- extent(subset(classes, Date == x))
+    aoi <- as(aoi, "SpatialPolygons")
+    crs(aoi) <- "+init=epsg:4326"
 
-    # Check the metadata and create a regular date column
-    meta <- as.data.frame(available)
-    meta$Date <- as.Date(meta$sensing_datetime)
+    # Create filepath to the respective files
+    stitch <- subset(todownload, Date == x)
+    stitch <- file.path(wd, stitch$outdir_final, stitch$name_final)
 
-    # Find the image(s) that is/are closest in date to the input date
-    index <- which(abs(meta$Date - dates[i]) == min(abs(meta$Date - dates[i])))
+    # Loop through them and prepare masked image
+    stitch <- lapply(stitch, function(y) {
+      vrt <- s2_translate(y, format = "VRT", outdir = tempdir())
+      mask <- s2_translate(y, prod_type = "SCL", outdir = tempdir())
 
-    # Order the product(s)
-    s2_order(available[index])
+      # Load them
+      rf <- rast(vrt)
+      rm <- rast(mask)
+      if (nrow(rf) != nrow(rm)) {
+        rm <- disagg(rm, fact = 2)
+      }
 
-    # Depending on the product level, specify the correct output directory
-    outdir <- ifelse(meta$level[index] == "1C", outdir_l1c, outdir_l2a)
+      # Assign classes to mask
+      cat <- c("NoData", "Saturated or Defective", "Dark Area Pixels", "Cloud Shadows", "Vegetation", "Bare Soils", "Water", "Clouds Low Probability / Unclassified", "Clouds Medium Probability", "Clouds High Probability", "Cirrus", "Snow / Ice")
+      levels(rm) <- cat
 
-    # Download the specific product
-    success <- tryCatch({
-      s2_download(available[index], outdir = outdir)
-    }, error = function(e) {return(e)})
+      # Mask pixels (no-data, cloud shadows, clouds medium, clouds high, cirrus)
+      rf <- mask(rf, rm, maskvalue = c(0, 3, 8, 9, 10), updatevalue = NA)
 
-    # Process the downloaded products and prepare L2C
-    files <- dir(path = outdir_l1c, include.dirs = T, full.names = T)
-    sen2cor(files
-      , outdir    = outdir_l2a
-      , parallel  = detectCores() - 1
-      , overwrite = F
-    )
+      # Clip to our areas of interest
+      dat <- crop(rf, project(vect(aoi), crs(rf)), snap = "out")
 
-    # Create a VRT
-    files <- dir(path = outdir_l2a, include.dirs = T, full.names = T)
-    vrt <- s2_translate(files, format = "VRT", outdir = tempdir())
+      # Return the file
+      return(dat)
+    })
 
-    # Load it and clip it to our area of interest
-    dat <- rast(vrt)
-    dat <- crop(dat, project(vect(aoi), crs(dat)), snap = "out")
+    # Stitch them together
+    stitch <- sprc(stitch)
+    dat <- mosaic(stitch, fun = "median")
 
     # Rename the bands (check here:
     # https://sen2r.ranghetti.info/articles/outstructure#:~:text=Band%201%20%E2%80%93%20Aerosol%20(443%20nm,4%20%E2%80%93%20Red%20(665%20nm))
@@ -267,61 +349,84 @@ for (i in 1:length(dates)) {
     names(all) <- c(names(dat), "ndvi", "ndwi", "ndmi", "ndsi", "best")
 
     # Store the resulting raster to file
-    writeRaster(all, paste0("Sentinel/", dates, ".tif"), overwrite = T)
+    writeRaster(all, filename, overwrite = T)
   }
-}
+})
 
+# Once all files have been curated, remove the big folders
+unlink(outdir_l1c, recursive = T)
+unlink(outdir_l2a, recursive = T)
 
 ################################################################################
 #### Training the Classifier
 ################################################################################
-# Load landsat 8 data
-# land <- rast("/home/david/Schreibtisch/PanMapping2/Landsat/2018-08-18.tif")
-land <- rast("/home/david/Schreibtisch/PanMapping2/Sentinel/2018-08-182.tif")
-sent <- rast("/home/david/Schreibtisch/PanMapping2/Sentinel/2018-08-18.tif")
-
 # Convert training classes to terra vect
 class <- vect(classes)
 class$ID <- 1:nrow(class)
 
-# Extract reflectances below the random points
-extracted_land <- terra::extract(land, project(class, crs(land)))
-extracted_sent <- terra::extract(sent, project(class, crs(sent)))
+# Design matrix that we want to go through
+design <- expand_grid(
+    Dates     = unique(class$Date)
+  , Satellite = c("LANDSAT", "SENTINEL")
+)
 
-# Check for NAs
-apply(extracted_land[, 2:15], 2, function(x) {
-  sum(is.na(x))
+# Go through the design and extract reflectances
+design$extracted <- lapply(1:nrow(design), function(x) {
+
+  # Extract information of the specific iteration
+  date <- design$Dates[x]
+  sate <- design$Satellite[x]
+
+  # Subset to training data of that specific date
+  class_sub <- class[class$Date == date]
+
+  # We need to assign new IDs because during the extraction, only the index of
+  # the class will be returned.
+  class_sub$ID <- 1:nrow(class_sub)
+
+  # Load the satellite image that matches the date of the training data
+  img <- rast(paste0("03_Data/01_RawData/", sate, "/", date, ".tif"))
+
+  # Extract reflectances below the training classes
+  extracted <- terra::extract(img, project(class_sub, crs(img)))
+
+  # Remove any NAs
+  extracted <- na.omit(extracted)
+
+  # Join by id to add back the information about the date and land cover class
+  # Order columns a bit nicer and return the result
+  extracted <- left_join(extracted, values(class_sub), by = "ID")
+  extracted <- dplyr::select(extracted, ID, Date, Class, everything())
+  return(extracted)
+
 })
-apply(extracted_sent[, 2:17], 2, function(x) {
-  sum(is.na(x))
+
+# Keep 1000 sample points per category
+design$Samples <- lapply(design$extracted, function(x) {
+  samples <- x %>%
+    group_by(Date, Class) %>%
+    sample_n(size = 1000, replace = T) %>%
+    ungroup()
+  return(samples)
 })
 
-# Remove them
-extracted_sent <- na.omit(extracted_sent)
-extracted_land <- na.omit(extracted_land)
+# Split dataset by satellite
+samp_land <- design %>%
+  subset(Satellite == "LANDSAT") %>%
+  dplyr::select(c(Samples)) %>%
+  unnest(Samples)
+samp_sent <- design %>%
+  subset(Satellite == "SENTINEL") %>%
+  dplyr::select(c(Samples)) %>%
+  unnest(Samples)
 
-# Join by id to add back the information about the date and land cover class
-extracted_land <- left_join(extracted_land, values(class), by = "ID")
-extracted_sent <- left_join(extracted_sent, values(class), by = "ID")
-
-# Order columns a bit nicer
-extracted_land <- dplyr::select(extracted_land, ID, Date, Class, everything())
-extracted_sent <- dplyr::select(extracted_sent, ID, Date, Class, everything())
-
-# For each class, keep only 1000 points
-samp_land <- extracted_land %>% group_by(Date, Class) %>% sample_n(size = 1000, replace = T)
-samp_sent <- extracted_sent %>% group_by(Date, Class) %>% sample_n(size = 1000, replace = T)
-
-# class$Class <- ifelse(class$Class == "Wet_Pans", "Wet_Pans", "Dry_Land")
-samp_land$Class <- ifelse(samp_land$Class %in% c("Wetpan", "Water"), "Water", "DryLand")
-samp_sent$Class <- ifelse(samp_sent$Class %in% c("Wetpan", "Water"), "Water", "DryLand")
-table(samp_land$Class)
-table(samp_sent$Class)
+# Remove ID and Date, we won't need them anymore
+samp_land <- select(ungroup(samp_land), -c(ID, Date))
+samp_sent <- select(ungroup(samp_sent), -c(ID, Date))
 
 # Create histograms of reflectances
 samp_land %>%
-  # pivot_longer(B1:best, names_to = "Band", values_to = "Reflectance") %>%
-  pivot_longer(S2B_1:S2B_12, names_to = "Band", values_to = "Reflectance") %>%
+  pivot_longer(B1:best, names_to = "Band", values_to = "Reflectance") %>%
   ggplot(aes(x = Reflectance, y = Class, col = Class, fill = Class)) +
     geom_density_ridges() +
     facet_wrap("Band", scales = "free") +
@@ -347,10 +452,6 @@ samp_sent %>%
     scale_color_viridis_d() +
     ggtitle("Sentinel Reflectance Profiles")
 
-# Remove ID and Date
-samp_land <- select(ungroup(samp_land), -c(ID, Date))
-samp_sent <- select(ungroup(samp_sent), -c(ID, Date))
-
 # Train cart classifiers
 mod_cart_land <- rpart(as.factor(Class) ~ ., data = samp_land, method = "class")
 mod_cart_sent <- rpart(as.factor(Class) ~ ., data = samp_sent, method = "class")
@@ -364,6 +465,10 @@ prp(mod_cart_sent, main = "Sentinel Classification Tree")
 mod_rand_land <- randomForest(as.factor(Class) ~ ., data = samp_land)
 mod_rand_sent <- randomForest(as.factor(Class) ~ ., data = samp_sent)
 
+# Check out the results
+print(mod_rand_land)
+print(mod_rand_sent)
+
 ################################################################################
 #### Valiation
 ################################################################################
@@ -372,7 +477,16 @@ validation <- tibble(
     Satellite = c("Landsat", "Landsat", "Sentinel", "Sentinel")
   , Data      = list(samp_land, samp_land, samp_sent, samp_sent)
   , Model     = c("Cart", "RandomForest", "Cart", "RandomForest")
+  , ModelObject = list(mod_cart_land, mod_rand_land, mod_cart_sent, mod_rand_sent)
 )
+
+# Compute variable importance
+validation$Varimp <- lapply(validation$ModelObject, function(x) {
+  importance <- varImp(x)
+  importance <- as.data.frame(importance)
+  importance$Band <- rownames(importance)
+  return(importance)
+})
 
 # Go through the different configurations and run the validation
 validation$Validation <- lapply(1:nrow(validation), function(x) {
@@ -439,12 +553,26 @@ validation <- mutate(validation
   , Sensitivity = sapply(Confmat, function(x) {x$Sensitivity})
   , Accuracy    = sapply(Confmat, function(x) {x$Accuracy})
 )
+validation$Confmat <- NULL
 
-
-validation <- validation %>% select(-c(Data, Confmat))
-print(validation)
+# Check out the confusion matrices
 validation$Confusion
 
+# Convert them to dataframes
+validation$Confusion <- lapply(validation$Confusion, as.data.frame)
+
+# Store the validation object to file
+write_rds(validation, "03_Data/03_Results/99_PanMapping.rds")
+
+# Also store the pan mapping classes to file
+writeVector(vect(classes)
+  , "03_Data/02_CleanData/00_General_TrainingClasses.shp"
+  , overwrite = T
+)
+
+################################################################################
+#### CONTINUE HERE!!!
+################################################################################
 # Make a prediction
 pred_land <- predict(land, mod_rand_land, na.rm = T)
 pred_sent <- predict(sent, mod_rand_sent, na.rm = T)
@@ -461,90 +589,6 @@ pred_sent <- subst(pred_sent, 1, NA)
 writeRaster(pred_land, "Prediction_Landsat.tif", overwrite = T)
 writeRaster(pred_sent, "Prediction_Sentinel.tif", overwrite = T)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# The models almost perform identically. Because random forest is much slower
-# for prediction, we will therefore go with the cart classifier
-
-# Make prediction using the random forest model
-pred <- predict(ras, mod_cart, na.rm = T)
-pred <- which.max(pred)
-pred <- subst(pred, 1, NA)
-
-# Store prediction to file
-writeRaster(pred, "Sentinel/Prediction_2021-04-05.tif", overwrite = T)
-
-# Also predict on the second image
-ras <- rast("Sentinel/2021-10-12.tif")
-
-# Make prediction
-pred <- predict(ras, cartmodel, na.rm = T)
-pred <- which.max(pred)
-pred <- subst(pred, 1, NA)
-
-# Store prediction to file
-writeRaster(pred, "Sentinel/Prediction_2021-10-12.tif", overwrite = T)
-
-
 ################################################################################
 #### Visualizations
-################################################################################
-# Get satellite image of study area
-sat <- read_osm(st_as_sf(study), type = "bin", zoom = 11)
-sat <- as(sat, "Raster")
-sat <- rast(sat)
-sat <- project(sat, crs(class))
-study <- project(study, crs(class))
-
-# Prepare colors for plot
-cols <- c("orange", "cornflowerblue")
-cols <- cols[as.factor(class$Class)]
-
-# Plot of study area
-plotRGB(sat)
-plot(study, add = T, border = "black", lwd = 4, col = NA)
-plot(class, add = T, col = cols, border = cols)
-text(class, "Class", pos = 3, halo = F, cex = 0.9, col = "white")
-
-# Show reflectances below different polygons
-dat %>%
-  pivot_longer(2:ncol(.), names_to = "Band", values_to = "Reflectance") %>%
-  group_by(Class, Band) %>%
-  ggplot(aes(x = Class, y = Reflectance, col = Class)) +
-    geom_point(alpha = 0.4) +
-    scale_color_manual(values = c("orange", "cornflowerblue")) +
-    facet_wrap("Band", scales = "free") +
-    theme_minimal()
-
-# Show classification tree
-prp(cartmodel, box.palette = c("orange", "cornflowerblue"))
-
-# Load predictions
-pred1 <- rast("Sentinel/Prediction_2021-04-05.tif")
-pred2 <- rast("Sentinel/Prediction_2021-10-12.tif")
-
-# Visualize predictions
-plotRGB(sat, main = "Prediction for 2021-04-05", mar = c(1, 1, 1, 1))
-plot(pred1, col = "white", frame = F, axes = F, add = T)
-plotRGB(sat, main = "Prediction for 2021-10-12", mar = c(1, 1, 1, 1))
-plot(pred2, col = "white", frame = F, axes = F, add = T)
-
-
-################################################################################
-#### Validation
 ################################################################################

@@ -17,10 +17,8 @@ setwd(wd)
 # Specify the directories to the sentinel files
 dir_l1c <- "/media/david/Elements/L1C"
 dir_l2a <- "/media/david/Elements/L2A"
-dir_l1c <- "/home/david/Schreibtisch/Sentinel/L1C"
-dir_l2a <- "/home/david/Schreibtisch/Sentinel/L2A"
 
-# Check out all data that needs to be adjusted
+# Check out all data that needs to be adjusted (all from L1C)
 files <- dir(
     path         = dir_l1c
   , include.dirs = T
@@ -28,13 +26,40 @@ files <- dir(
   , pattern      = ".SAFE$"
 )
 
-# Run the correction
-sen2cor(files
-  , outdir    = dir_l2a
-  , parallel  = detectCores() - 1
-  , overwrite = F
-  , use_dem   = F
-)
+# Put files into groups of 15
+group <- rep(1:ceiling(length(files) / 15), length.out = length(files))
+
+# Function to determine the name of the corrected product
+correctedName <- function(x) {
+  corr <- gsub(basename(x), pattern = "MSIL1C", replacement = "MSIL2A")
+  return(corr)
+}
+
+# Go through the groups, move the files to the computer and run the correction
+lapply(group, function(x) {
+
+  # Copy the files
+  files_sub <- files[group == x]
+  files_new <- file.path(tempdir(), basename(files_sub))
+  file.copy(files_sub, tempdir(), recursive = T)
+
+  # Run the correction
+  sen2cor(files_new
+    , outdir    = dir_l2a
+    , parallel  = T
+    , overwrite = F
+    , use_dem   = F
+  )
+
+  # Make sure that all files have been correctly converted
+  success <- all(file.exists(file.path(dir_l2a, correctedName(files_sub))))
+
+  # If all files have been correctly converted, remove the originals as well as
+  # the copies in the tempdir
+  unlink(files_new, recursive = T)
+  unlink(files_sub, recursive = T)
+
+})
 
 ################################################################################
 #### Testing
@@ -51,15 +76,15 @@ plotSCL <- function(x) {
 
 setwd("/home/david/Schreibtisch/Sentinel")
 
-file <- "/home/david/Schreibtisch/Sentinel/L2A/S2B_MSIL2A_20210929T080719_N0301_R078_T34KGC_20210929T105251.SAFE"
-file <- s2_translate(file)
-mask <- "/home/david/Schreibtisch/Sentinel/L2A/S2B_MSIL2A_20210929T080719_N0301_R078_T34KGC_20210929T105251.SAFE"
+files <- sample(dir(path = "L2A", include.dirs = T, full.names = T), size = 1)
+file <- s2_translate(files)
+mask <- files
 mask <- s2_translate(mask, prod_type = "SCL")
 
-
-
+library(terra)
 rf <- rast(file)
 rm <- rast(mask)
+freq(rm)
 
 # Need to disaggregate the mask to match the other file
 rm <- disagg(rm, fact = 2)
@@ -70,90 +95,5 @@ classes <- c("NoData", "Saturated or Defective", "Dark Area Pixels", "Cloud Shad
 length(classes)
 levels(rm) <- classes
 plot(rm)
-
-
-final <- s2_mask(file, mask, mask_type = "scl_0_3_8_9")
-
-
-r <- rast(ncols = 10, nrows = 10)
-values(r) <- sample(3, ncell(r), replace = T)
-cls <- c("Bare", "Water", "Pan", "Vegetation")
-r <- r - 1
-levels(r) <- cls
-plot(r)
-
-set.seed(0)
-r <- rast(nrows=10, ncols=10)
-values(r) <- sample(3, ncell(r), replace=TRUE)
-is.factor(r)
-cls <- c("forest", "water", "urban")
-plot(r)
-# make the raster start at zero
-x <- r - 1
-levels(x) <- cls
-names(x) <- "land cover"
-is.factor(x)
-x
-plot(x, col=c("green", "blue", "light gray"))
-text(x, digits=3, cex=.75, halo=TRUE)
-# raster starts at 3
-x <- r + 2
-is.factor(x)
-# approach 1
-levels(x) <- c("", "", "", "forest", "water", "urban")
-# approach 2, also showing the use of two categories
-d <- data.frame(id=3:5, cover=cls, letters=letters[1:3], value=10:12)
-levels(x) <- d
-x
-## switch categories
-cats(x, 1)
-# get current index
-activeCat(x)
-# set index
-activeCat(x) <- 3
-plot(x, col=c("green", "blue", "light gray"))
-text(x, digits=3, cex=.75, halo=TRUE)
-r <- as.numeric(x)
-r
-activeCat(x) <- 2
-p <- as.polygons(x)
-plot(p, "letters", col=c("green", "blue", "light gray"))
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Check out all downloaded files
-files <- dir(path = "L1C", include.dirs = T, full.names = T)
-
-# Read metadata of the files
-meta <- safe_getMetadata(files)
-
-# Run sen2cor
-sen2cor(files, outdir = "L2A", use_dem = T, parallel = detectCores() - 1, overwrite = F)
-
-# Detect L2A files
-files <- dir(path = "L2A", include.dirs = T, full.names = T, pattern = "SAFE")
-print(files)
-
-# Translate
-lapply(files, s2_translate)
-
-# Apply cloud mask to scl classes (check here
-# https://developers.google.com/earth-engine/datasets/catalog/COPERNICUS_S2_SR)
-files_vrt <- dir(path = "L2A", pattern = ".vrt", full.names = T)
-s2_mask(infiles = files_vrt[1], maskfiles = files_vrt[1], mask_type = "scl_0_3_8_9")
-
-library(sf)
-foot <- st_as_sfc(meta$footprint)
-foot <- st_as_sf(foot)
-plot(foot)
+freq(rm)
+test <- mask(rf, rm, maskvalue = c(0, 3, 8, 9, 10), updatevalue = NA)

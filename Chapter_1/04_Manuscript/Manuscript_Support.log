@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  31 JAN 2022 09:47
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  7 FEB 2022 15:10
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1129,38 +1129,43 @@ File: 99_MapComparison.png Graphic file (type png)
 <use 99_MapComparison.png>
 Package pdftex.def Info: 99_MapComparison.png  used on input line 432.
 (pdftex.def)             Requested size: 398.3386pt x 284.53156pt.
+<99_MapComparisonCountries.png, id=165, 607.068pt x 780.2751pt>
+File: 99_MapComparisonCountries.png Graphic file (type png)
+<use 99_MapComparisonCountries.png>
+Package pdftex.def Info: 99_MapComparisonCountries.png  used on input line 441.
+(pdftex.def)             Requested size: 398.3386pt x 511.99475pt.
 [11
 
- </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MapComparison.png (PNG copy)>]
-<99_AreasReached.png, id=171, 578.16pt x 433.62pt>
+ </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MapComparison.png (PNG copy)>] [12 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_MapComparisonCountries.png (PNG copy)>]
+<99_AreasReached.png, id=178, 578.16pt x 433.62pt>
 File: 99_AreasReached.png Graphic file (type png)
 <use 99_AreasReached.png>
-Package pdftex.def Info: 99_AreasReached.png  used on input line 446.
+Package pdftex.def Info: 99_AreasReached.png  used on input line 455.
 (pdftex.def)             Requested size: 398.3386pt x 298.75482pt.
- [12 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_AreasReached.png (PNG copy)>] (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.bbl) [13]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 465.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 465.
+ [13 </home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/99_AreasReached.png (PNG copy)>] (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.bbl) [14]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 474.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 474.
  (/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 465.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 465.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 474.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 474.
 Package rerunfilecheck Info: File `Manuscript_Support.out' has not changed.
 (rerunfilecheck)             Checksum: 01E1F2142E82E7AAA242DF60AC6BCB51;790.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 465.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 474.
  ) 
 Here is how much of TeX's memory you used:
- 21012 strings out of 492982
- 388404 string characters out of 6134896
+ 21021 strings out of 492982
+ 388645 string characters out of 6134896
  488969 words of memory out of 5000000
- 24151 multiletter control sequences out of 15000+600000
+ 24157 multiletter control sequences out of 15000+600000
  14007 words of font info for 54 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,16n,54p,1220b,503s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/
 cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf" (14 pages, 15128028 bytes).
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript_Support.pdf" (15 pages, 15534057 bytes).
 PDF statistics:
- 247 PDF objects out of 1000 (max. 8388607)
- 198 compressed objects within 2 object streams
- 44 named destinations out of 1000 (max. 500000)
- 136 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 254 PDF objects out of 1000 (max. 8388607)
+ 202 compressed objects within 3 object streams
+ 46 named destinations out of 1000 (max. 500000)
+ 141 words of extra memory for PDF output out of 10000 (max. 10000000)
 

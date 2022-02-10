@@ -29,14 +29,14 @@ set.seed(12345)
 # Specify resolution of covariates
 n <- 300
 
-# Simulate water cover
-water <- nlm_randomcluster(
+# Simulate forest cover
+forest <- nlm_randomcluster(
     ncol = n
   , nrow = n
   , p    = 0.5
   , ai   = c(0.8, 0.2)
 )
-plot(water)
+plot(forest)
 
 # Simulate elevation
 elev <- nlm_gaussianfield(
@@ -56,13 +56,13 @@ center <- SpatialPoints(t(center))
 # Calculate distance to center
 dist <- distanceFromPoints(elev, center)
 
-# Normalize covariates to range betwee 0 and 1 (water already is 0 to 1)
+# Normalize covariates to range betwee 0 and 1 (forest already is 0 to 1)
 elev <- (elev - cellStats(elev, min)) / (cellStats(elev, max) - cellStats(elev, min))
 dist <- (dist - cellStats(dist, min)) / (cellStats(dist, max) - cellStats(dist, min))
 
 # Put covariate layers into a stack
-covars <- stack(water, elev, dist)
-names(covars) <- c("water", "elev", "dist")
+covars <- stack(forest, elev, dist)
+names(covars) <- c("forest", "elev", "dist")
 
 # Let's specify the extent on which animals are allowed to move
 ext <- extent(covars)
@@ -88,7 +88,7 @@ as.data.frame(covars, xy = T) %>%
 #### Simulate Trajectory
 ################################################################################
 # Simulation Parameters
-formula <- ~ water + elev + dist
+formula <- ~ forest + elev + dist
 prefs     <- c(-1, 0.5, -15)
 sl_dist   <- list(name = "gamma", params = list(shape = 3, scale = 1))
 ta_dist   <- list(name = "vonmises", params = list(kappa = 0.5, mu = 0))
