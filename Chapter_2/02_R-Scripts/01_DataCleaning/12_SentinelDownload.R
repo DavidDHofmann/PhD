@@ -59,7 +59,7 @@ todownload$Password <- "Scihubbuster69_"
 # for the finalized product as well.
 exists <-
   dir.exists(paste0(todownload$outdir, "/", todownload$name)) |
-  dir.exists(paste0(todownload$outdir, "/", todownload$L2A_name))
+  dir.exists(paste0(outdir_l2a, "/", todownload$L2A_name))
 todownload <- subset(todownload, !exists)
 
 # Order jobs so that the newest dates are coming first -> not yet archvied in

@@ -277,7 +277,7 @@ testing <- runModel(testing)
 testing
 
 ################################################################################
-#### Fit Step Length Distributions to Step Durations
+#### Fit Step Length Distributions to Different Step Durations
 ################################################################################
 # Parametrize separate step length distributions and turning angle distributions
 # for the different accepted step durations. Replicate 1000 times.

@@ -14,6 +14,7 @@ library(survival)      # To run conditional logistic regression
 library(sf)            # For plotting
 library(davidoff)      # Custom functions
 library(lubridate)     # To handle dates
+library(amt)           # To fit distributions
 
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
@@ -77,11 +78,10 @@ obs$y <- coordinates(coords)[, c("y")]
 # different schedule or because there was actually no collar on the animal
 # during that time.
 
-
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness    = seq(0, 0.8, by = 0.1)                  # Fraction of the fixes that is removed
+    Missingness    = seq(0, 0.5, by = 0.1)                  # Fraction of the fixes that is removed
   , Forgiveness    = 1:5                                    # Allowed lag of steps (in steps)
   , Replicate      = 1:100                                  # Number of replicates for each combination
   , Distributions  = c("uncorrected", "naive", "dynamic")   # Which distributions to use
@@ -89,6 +89,42 @@ dat <- expand_grid(
 
 # Adjust column names slightly
 obs <- rename(obs, ID = DogName)
+
+# Load all covariate layers
+water <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")
+trees <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.grd")
+shrub <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.grd")
+human <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.grd")
+human <- human[["Buffer_5000"]]
+
+# Extract dates from layernames
+dates_water <- ymd(substr(names(water), start = 2, stop = 12))
+dates_trees <- ymd(substr(names(trees), start = 2, stop = 12))
+dates_shrub <- ymd(substr(names(shrub), start = 2, stop = 12))
+
+# All dates should be the same, so we can safely keep only one of the objects
+# to reduce redundancy
+if (all.equal(dates_water, dates_trees) & all.equal(dates_trees, dates_shrub)) {
+    dates <- dates_water
+    rm(dates_water, dates_trees, dates_shrub)
+  } else {
+    stop("Dates don't match")
+}
+
+# Prepare a list that stores a ppp layer for water (Code 1) for each floodmap
+water_ppp <- suppressMessages(
+  pbmclapply(
+      X                   = 1:nlayers(water)
+    , mc.cores            = detectCores() / 2
+    , ignore.interactive  = T
+    , FUN                 = function(x) {
+      points <- rasterToPoints(water[[x]], fun = function(z) {z == 1}, spatial = T)
+      points <- spTransform(points, CRS("+init=epsg:32734"))
+      points <- as(points, "ppp")
+      return(points)
+      gc()
+  })
+)
 
 ################################################################################
 #### Functions
@@ -253,29 +289,75 @@ computeCovars <- function(data, covariates, multicore = F) {
   # Run the covariate extraction
   if (multicore) {
     extracted <- pbmclapply(1:nrow(data), ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+
+      # Interpolate between points
       ints <- interpolatePoints(
           x1 = data$x[x]
         , x2 = data$x_to[x]
         , y1 = data$y[x]
         , y2 = data$y_to[x]
-        , by = 1
+        , by = 250
       )
-      extr <- raster::extract(covariates, ints)
-      extr <- colMeans(extr)
+
+      # Generate spatial points
+      ints <- SpatialPoints(ints)
+      crs(ints) <- "+init=epsg:32734"
+
+      # Prepare interpolated points as ppp object for later
+      ppp <- as(ints, "ppp")
+
+      # Reproject interpolated points to lonlat
+      ints <- spTransform(ints, "+init=epsg:4326")
+      ints <- coordinates(ints)
+
+      # Determine the index of the layer closest in date
+      index <- which.min(abs(as.Date(data$Timestamp[x]) - dates))[1]
+
+      # Run the extraction on the respective covariate layers
+      extr <- data.frame(
+          Water           = mean(raster::extract(water[[index]], ints))
+        , Trees           = mean(raster::extract(trees[[index]], ints))
+        , Shrubs          = mean(raster::extract(shrub[[index]], ints))
+        , HumanInfluence  = mean(raster::extract(human, ints))
+        , DistanceToWater = mean(nncross(ppp, water_ppp[[index]])$dist)
+      )
       return(extr)
     })
 
   } else {
     extracted <- lapply(1:nrow(data), function(x) {
+
+      # Interpolate between points
       ints <- interpolatePoints(
           x1 = data$x[x]
         , x2 = data$x_to[x]
         , y1 = data$y[x]
         , y2 = data$y_to[x]
-        , by = 1
+        , by = 250
       )
-      extr <- raster::extract(covariates, ints)
-      extr <- colMeans(extr)
+
+      # Generate spatial points
+      ints <- SpatialPoints(ints)
+      crs(ints) <- "+init=epsg:32734"
+
+      # Prepare interpolated points as ppp object for later
+      ppp <- as(ints, "ppp")
+
+      # Reproject interpolated points to lonlat
+      ints <- spTransform(ints, "+init=epsg:4326")
+      ints <- coordinates(ints)
+
+      # Determine the index of the layer closest in date
+      index <- which.min(abs(as.Date(data$Timestamp[x]) - dates))[1]
+
+      # Run the extraction on the respective covariate layers
+      extr <- data.frame(
+          Water           = mean(raster::extract(water[[index]], ints))
+        , Trees           = mean(raster::extract(trees[[index]], ints))
+        , Shrubs          = mean(raster::extract(shrub[[index]], ints))
+        , HumanInfluence  = mean(raster::extract(human, ints))
+        , DistanceToWater = mean(nncross(ppp, water_ppp[[index]])$dist)
+      )
       return(extr)
     })
   }
@@ -324,8 +406,22 @@ runModel <- function(data) {
   return(coefs)
 }
 
+# Fit a "base" step length distribution that we can use for the uncorrected case
+fitted <- obs %>%
+  rarifyData(missingness = 0) %>%
+  computeBursts(forgiveness = 1) %>%
+  computeMetrics() %>%
+  mutate(sl = ifelse(sl == 0, 1, sl)) %>%
+  pull(sl) %>%
+  fit_distr(dist_name = "gamma")
+
+# Put the parameters into a specialized list
+sl_dist <- list(shape = fitted$params$shape, scale = fitted$params$scale)   # According to Avgar et al. 2016
+ta_dist <- list(kappa = 0, mu = 0)                                          # According to Avgar et al. 2016
+dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
+
 # Try out the functions to see how they work
-testing <- rarifyData(obs, missingness = 0.5)
+testing <- rarifyData(obs[1:1000, ], missingness = 0.5)
 testing <- computeBursts(testing, forgiveness = 2)
 testing <- computeMetrics(testing)
 testing <- computeSSF(testing, n_rsteps = 10, distributions = "uncorrected")
@@ -334,5 +430,64 @@ testing <- runModel(testing)
 testing
 
 ################################################################################
-#### Fit Step Length Distributions to Step Durations
+#### Fit Step Length Distributions to Different Step Durations
 ################################################################################
+# Parametrize separate step length distributions and turning angle distributions
+# for the different accepted step durations. Replicate 1000 times.
+dists_dynamic <- pbmclapply(
+    X                  = 1:1000
+  , ignore.interactive = T
+  , mc.cores           = detectCores() - 1
+  , FUN                = function(x) {
+    params <- obs %>%
+      rarifyData(missingness = 0.5) %>%
+      computeBursts(forgiveness = max(dat$Forgiveness)) %>%
+      computeMetrics() %>%
+      mutate(sl = ifelse(sl == 0, 1, sl)) %>%
+      dplyr::select(duration, sl, relta) %>%
+      subset(duration <= max(dat$Forgiveness * 4)) %>%
+      group_by(duration) %>%
+      nest() %>%
+      mutate(DistParams = map(data, function(y) {
+        fit_sl <- fit_distr(y$sl, "gamma")
+        fit_ta <- fit_distr(y$relta, "vonmises")
+        fit <- data.frame(
+            shape = fit_sl$params$shape
+          , scale = fit_sl$params$scale
+          , kappa = fit_ta$params$kappa
+          , mu    = fit_ta$params$mu
+        )
+        return(fit)
+      })) %>%
+      dplyr::select(duration, DistParams) %>%
+      unnest(DistParams) %>%
+      arrange(duration)
+  return(params)
+}) %>% do.call(rbind, .)
+
+# Summarize values
+dists_means <- dists_dynamic %>%
+  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
+  group_by(duration, Parameter) %>%
+  summarize(mean = mean(Value), sd = sd(Value), .groups = "drop")
+
+# Put values together with the uncorrected distributions
+dists$dynamic <- dists_means %>%
+  dplyr::select(duration, Parameter, mean) %>%
+  pivot_wider(names_from = Parameter, values_from = mean) %>%
+  list(
+      sl = select(., duration, shape, scale)
+    , ta = select(., duration, kappa, mu)
+  )
+
+# Visualize everything
+dists_dynamic %>%
+  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
+  ggplot(aes(x = duration, y = Value)) +
+    geom_jitter(width = 0.1, alpha = 0.2, size = 0.5) +
+    geom_point(data = dists_means, aes(x = duration, y = mean), col = "orange", size = 5) +
+    geom_line(data = dists_means, aes(x = duration, y = mean), col = "orange") +
+    facet_wrap(~ Parameter, nrow = 2, scales = "free") +
+    theme_minimal() +
+    xlab("Step Duration") +
+    ylab("Parameter Estimate")
