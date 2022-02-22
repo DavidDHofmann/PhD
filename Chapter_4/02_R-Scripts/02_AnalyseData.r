@@ -26,11 +26,6 @@ options(scipen = 999)
 # Load observed movement data
 obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
 
-# Define the original distributions
-sl_dist <- list(shape = 3, scale = 1)
-ta_dist <- list(kappa = 0.5, mu = 0)
-dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
-
 # Load covariate layers
 covars <- stack("03_Data/01_RawData/CovariateLayers.grd")
 covars <- readAll(covars)
@@ -38,18 +33,21 @@ covars <- readAll(covars)
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness    = seq(0, 0.8, by = 0.1)                  # Fraction of the fixes that is removed
-  , Forgiveness    = 1:5                                    # Allowed lag of steps (in steps)
-  , Replicate      = 1:100                                  # Number of replicates for each combination
-  , Distributions  = c("uncorrected", "naive", "dynamic")   # Which distributions to use
+    Missingness    = seq(0, 0.8, by = 0.1)                                         # Fraction of the fixes that is removed
+  , Forgiveness    = 1:5                                                           # Allowed lag of steps (in steps)
+  , Replicate      = 1:1                                                         # Number of replicates for each combination
+  , Approach       = c("uncorrected", "naive", "dynamic", "multistep", "model")    # Which approach to use to generate random steps
 )
 
 ################################################################################
 #### Functions
 ################################################################################
-# Function to create a dataset with rarified observations
-rarifyData <- function(data, missingness) {
-  rarified <- data[sort(sample(1:nrow(data), size = nrow(data) * (1 - missingness))), ]
+# Function to create a dataset with rarified observations (also used to
+# subsample from all individuals)
+rarifyData <- function(data, missingness, n_id = 100) {
+  keep <- sample(unique(data$ID), n_id)
+  data_sub <- subset(data, ID %in% keep)
+  rarified <- data_sub[sort(sample(1:nrow(data_sub), size = nrow(data_sub) * (1 - missingness))), ]
   return(rarified)
 }
 
@@ -103,7 +101,12 @@ computeMetrics <- function(data) {
 }
 
 # Function to generate random steps
-computeSSF <- function(data, n_rsteps, distributions) {
+computeSSF <- function(data, n_rsteps, approach) {
+
+  # Debugging
+  data     <- testing
+  n_rsteps <- 2
+  approach <- "multistep"
 
   # Indicate case steps
   data$case <- 1
@@ -117,9 +120,8 @@ computeSSF <- function(data, n_rsteps, distributions) {
   # Indicate that they are control steps (case = 0)
   rand$case <- 0
 
-  # Sample new step lengths and turning angles according to the specified
-  # distributions
-  if (distributions == "uncorrected") {
+  # Step lengths sampled from "minimal" step-duration distributions
+  if (approach == "uncorrected") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$uncorrected$sl$scale
       , shape = dists$uncorrected$sl$shape
@@ -129,7 +131,9 @@ computeSSF <- function(data, n_rsteps, distributions) {
       , mu    = dists$uncorrected$ta$mu
       , by    = 0.01
     )
-  } else if (distributions == "naive") {
+
+  # Step lengths adjusted merely by multiplying with the step duration
+  } else if (approach == "naive") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$uncorrected$sl$scale * rand$duration
       , shape = dists$uncorrected$sl$shape
@@ -139,7 +143,10 @@ computeSSF <- function(data, n_rsteps, distributions) {
       , mu    = dists$uncorrected$ta$mu
       , by    = 0.01
     )
-  } else if (distributions == "dynamic") {
+
+  # Step lengths and turning angles sampled from distributions fitted to
+  # different step-durations
+  } else if (approach == "dynamic" | approach == "model") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$dynamic$sl$scale[match(rand$duration, dists$dynamic$sl$duration)]
       , shape = dists$dynamic$sl$shape[match(rand$duration, dists$dynamic$sl$duration)]
@@ -151,15 +158,77 @@ computeSSF <- function(data, n_rsteps, distributions) {
         , by    = 0.01
       )
     })
+
+  # Step lengths and turning angles resulting from multiple random steps, where
+  # the number of steps matches the step duration of the observed step
+  } else if (approach == "multistep") {
+    rand <- rand %>% group_by(duration) %>% nest()
+    rand$data <- lapply(1:nrow(rand), function(z) {
+
+      # Extract important info
+      duration <- rand$duration[z]
+      x        <- rand$data[[z]]$x
+      y        <- rand$data[[z]]$y
+      relta    <- rand$data[[z]]$relta
+      absta    <- rand$data[[z]]$absta
+
+      # Generate sequence of random steps
+      for (i in 1:duration) {
+        sl <- rgamma(n = nrow(rand$data[[z]])
+          , scale = dists$uncorrected$sl$scale
+          , shape = dists$uncorrected$sl$shape
+        )
+        relta_new <- rvonmises(n = nrow(rand$data[[z]])
+          , kappa = dists$uncorrected$ta$kappa
+          , mu    = dists$uncorrected$ta$mu
+          , by    = 0.01
+        )
+
+        # For the first step, need to compute the difference of the relative
+        # turning angles
+        if (i == 1) {
+          relta_diff <- relta_new - relta
+          absta <- absta + relta_diff
+        } else {
+          absta <- absta + relta_new
+        }
+
+        # Compute new endpoints
+        absta <- ifelse(absta < 0, 2 * pi + absta, absta)
+        absta <- ifelse(absta > 2 * pi, absta - 2 * pi, absta)
+        x <- x + sin(absta) * sl
+        y <- y + cos(absta) * sl
+        relta <- relta_new
+      }
+
+      # Compute step length and relative turning angle from origin to the end of
+      # the last steps
+      dx <- x - rand$data[[z]]$x
+      dy <- y - rand$data[[z]]$y
+      sl <- sqrt(dx ** 2 + dy ** 2)
+      absta <- atan2(dy, dx)
+      absta <- (absta - pi / 2) * (-1)
+      absta <- ifelse(absta < 0, 2 * pi + absta, absta)
+      absta <- ifelse(absta > 2 * pi, absta - 2 * pi, absta)
+      relta <- absta - rand$data[[z]]$absta
+      relta <- ifelse(relta > +pi, relta - 2 * pi, relta)
+      relta <- ifelse(relta < -pi, 2 * pi + relta, relta)
+      rand$data[[z]]$sl <- sl
+      rand$data[[z]]$relta_new <- relta
+      return(rand$data[[z]])
+    })
+    rand <- unnest(rand, data)
+    rand <- ungroup(rand)
+    rand <- arrange(rand, ID, step_id, desc(case))
   } else {
-    stop("Provide valid input for the desired distributions")
+    stop("Provide valid input for the desired approach")
   }
 
   # Calculate new "absolute" turning angle
-  rand$relta_diff <- rand$relta - rand$relta_new
-  rand$absta <- rand$absta - rand$relta_diff
-  rand$absta[rand$absta > 2 * pi] <- rand$absta[rand$absta > 2 * pi] - 2 * pi
-  rand$absta[rand$absta < 0 * pi] <- rand$absta[rand$absta < 0 * pi] + 2 * pi
+  rand$relta_diff <- rand$relta_new - rand$relta
+  rand$absta <- rand$absta + rand$relta_diff
+  rand$absta <- ifelse(rand$absta < 0, 2 * pi + rand$absta, rand$absta)
+  rand$absta <- ifelse(rand$absta > 2 * pi, rand$absta - 2 * pi, rand$absta)
   rand$relta <- rand$relta_new
 
   # Remove undesired stuff
@@ -236,19 +305,33 @@ computeCovars <- function(data, covariates, multicore = F) {
 }
 
 # Function to run the step selection model
-runModel <- function(data) {
+runModel <- function(data, approach) {
 
   # Run the step selection model
-  mod <- clogit(case ~
-    + sl
-    + log_sl
-    + cos_ta
-    + forest
-    + elev
-    + dist
-    + strata(step_id)
-    , data = data
-  )
+  if (approach == "model" & length(unique(data$duration)) > 1) {
+    data$duration <- as.factor(data$duration)
+    mod <- clogit(case ~
+      + sl:duration
+      + log_sl:duration
+      + cos_ta:duration
+      + forest
+      + elev
+      + dist
+      + strata(step_id)
+      , data = data
+    )
+  } else {
+    mod <- clogit(case ~
+      + sl
+      + log_sl
+      + cos_ta
+      + forest
+      + elev
+      + dist
+      + strata(step_id)
+      , data = data
+    )
+  }
 
   # Extract model coefficients
   ci <- confint(mod, level = 0.95)
@@ -267,13 +350,27 @@ runModel <- function(data) {
   return(coefs)
 }
 
+# Before we can test the functions, we need some distributions from which we can
+# sample step lengths and turning angles. Thus, let's fit step-length and
+# turning angle distributions to the minimum step duration
+metrics <- obs %>%
+  rarifyData(missingness = 0, n_id = 100) %>%
+  computeBursts(forgiveness = 1) %>%
+  computeMetrics() %>%
+  mutate(sl = ifelse(sl == 0, 1, sl)) %>%
+  select(sl, relta) %>%
+  tibble()
+sl_dist <- fit_distr(metrics$sl, dist_name = "gamma")$params
+ta_dist <- fit_distr(metrics$relta, dist_name = "vonmises")$params
+dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
+
 # Try out the functions to see how they work
-testing <- rarifyData(obs, missingness = 0.5)
+testing <- rarifyData(obs, missingness = 0.5, n_id = 50)
 testing <- computeBursts(testing, forgiveness = 2)
 testing <- computeMetrics(testing)
-testing <- computeSSF(testing, n_rsteps = 10, distributions = "uncorrected")
+testing <- computeSSF(testing, n_rsteps = 10, approach = "uncorrected")
 testing <- computeCovars(testing, covars, multicore = T)
-testing <- runModel(testing)
+testing <- runModel(testing, approach = "uncorrected")
 testing
 
 ################################################################################
@@ -287,7 +384,7 @@ dists_dynamic <- pbmclapply(
   , mc.cores           = detectCores() - 1
   , FUN                = function(x) {
    params <- obs %>%
-      rarifyData(missingness = 0.5) %>%
+      rarifyData(missingness = 0.5, n_id = 100) %>%
       computeBursts(forgiveness = max(dat$Forgiveness)) %>%
       computeMetrics() %>%
       dplyr::select(duration, sl, relta) %>%
@@ -356,18 +453,18 @@ dat$Coefs <- pbmclapply(
   # Extract important information from dataframe
   miss <- dat$Missingness[[x]]
   forg <- dat$Forgiveness[[x]]
-  dist <- dat$Distributions[[x]]
+  appr <- dat$Approach[[x]]
 
   # Prepare data for ssf
   data <- obs %>%
-    rarifyData(missingness = miss) %>%
+    rarifyData(missingness = miss, n_id = 100) %>%
     computeBursts(forgiveness = forg) %>%
     computeMetrics() %>%
-    computeSSF(n_rsteps = n_rsteps, distributions = dist) %>%
+    computeSSF(n_rsteps = n_rsteps, approach = appr) %>%
     computeCovars(covars, multicore = F)
 
   # Run conditional logistic regression
-  coefs <- runModel(data)
+  coefs <- runModel(data, approach = appr)
 
   # Return the coefficients
   return(coefs)
@@ -379,7 +476,7 @@ dat <- read_rds("03_Data/03_Results/Models.rds")
 
 # Visualize Results
 unnest(dat, Coefs) %>%
-  group_by(Missingness, Forgiveness, AdjustDists, Coefficient) %>%
+  group_by(Missingness, Forgiveness, Approach, Coefficient) %>%
   summarize(
     , SD           = sd(Estimate)
     , Estimate     = mean(Estimate)
@@ -392,7 +489,7 @@ unnest(dat, Coefs) %>%
     # geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0.05, alpha = 0.5) +
     # geom_point() +
     # geom_line() +
-    facet_wrap(~ AdjustDists + Coefficient, scales = "free", nrow = 2) +
+    facet_wrap(~ Approach + Coefficient, scales = "free", nrow = 3) +
     theme_minimal() +
     theme(legend.position = "bottom") +
     scale_fill_viridis_d() +

@@ -167,7 +167,9 @@ thanks to the inclusion of movement descriptors in the respective model. More
 recently, the method has been further refined by \citep{Munden.2021}, who coined
 the term \textit{time-varying integrated} SSA. This method was developed for
 high frequency data which has been rarified using a change-point detection
-algorithm, thus also resulting in irregular step-durations.
+algorithm, thus also resulting in irregular step-durations. In case of missing
+steps, in contrast, steps durations are not entirely random but usually
+clustered.
 
 Here, we questioned the practice of removing any irregular data in SSA and
 investigated whether such data could be used to inform step selection models.
@@ -227,14 +229,14 @@ generated a random starting location. To prevent starting points in the vicinity
 of map borders, we restricted sampled locations to x- and y-coordinates between
 50 and 250 (white dotted rectangle in \Cref{Covariates}). Second, we generated a
 set of 10 random steps originating from the sampled starting point. We then
-generated random steps by sampling turing angles from a von Mises distribution
+generated random steps by sampling turning angles from a von Mises distribution
 with concentration parameter \(\kappa = 0.5\) and location parameter \( \mu = 0
 \), and step lengths from a gamma distribution with shape parameter \(k = 3 \)
 and scale parameter \(\theta = 1\). Third, we extracted covariate values along
-each random step from the underlying covariate layers and compute the average of
-each covariate along every step. Fourth, we predicted the probability of being
-chosen for each step by applying \Cref{EQ1}. The vector of relative habitat
-preferences used to make predictions was set to \(\beta_{water} = -1\),
+each random step from the underlying covariate layers and computed the average
+of each covariate along every step. Fourth, we predicted for each step the
+probability of being chosen by applying \Cref{EQ1}. The vector of relative
+habitat preferences used to make predictions was set to \(\beta_{water} = -1\),
 \(\beta_{elev} = 0.5\), and \(\beta_{dist} = -15\). Fifth, we sampled one of the
 random steps based on predicted probabilities and computed the new position of
 the simulated individual. We the repated these steps until a total of 100 steps
@@ -247,8 +249,8 @@ independent habitat and movement kernels \citep{Avgar.2016}.
   \begin{center}
   \includegraphics[width = 0.5\textwidth]{99_Simulations.png}
   \caption{100 Simulated movement trajectories, each comprising of 100 steps.
-  Simulated individual were initiated within the blue rectangle to mitigate edge
-  effects.}
+  Simulated individuals were initiated within the blue rectangle to mitigate
+  edge effects.}
   \label{Simulations}
   \end{center}
 \end{figure}
@@ -271,8 +273,8 @@ with a step-duration of one (i.e. fixes that are regularly spaced). In contrast,
 a modeler with forgiveness of two would also accept steps with a step-duration
 of two, thus pardoning a single missing fix.
 
-\paragraph{Data Rarification}
-We rarified the simulated GPS data by randomly removing a fixed fraction of GPS
+\paragraph{Data Rarefication}
+We rarefied the simulated GPS data by randomly removing a fixed fraction of GPS
 fixes. To assess the impact of different degrees of  ``missingness'', we
 incrementally increased the fraction of missing fixes from 0.0 (complete
 dataset) to 0.8 (80\% missing) with 10\% increments. The removal of GPS fixes
@@ -309,14 +311,24 @@ dynamic distributions (cfr. Section ...). Along observed and random steps, we
 extracted underlying covariates and computed their averages along steps.
 
 \paragraph{Step Length and Turning Angle Distributions}
-To generate random steps, we employed two competing approaches. In the first
-approach, we sampled step-lengths and turning-angles from the same distributions
-that were used to simulate GPS data (cfr. Section ...). To adjust sampled step
-lengths to the different step durations of observed steps, we multiplied sampled
-step lengths with the step-duration of the respective observed step. However, in
-a pre-analysis we found that step-lengths do not linearly scale with step
-duration, hence we also tested an alternative approach. Specifically, we fitted
-separate step-length and turning angle distributions for each step duration.
+To generate random steps, we employed three competing approaches, coined
+\textit{uncorrected}, \textit{na\"ive}, and \textit{dynamic} approach,
+respectively. In the uncorrected approach, we sampled step-lengths and
+turning-angles from parametric gamma and von Mises distributions that were
+fitted to observed steps with step-duration of one. In the \textit{na\"ive}
+approach, we sampled step lengths and turning angles from the same
+distributions, yet we linearly scaled sampled step lengths to the actual
+step-duration. For instance, for any step with a step-duration of two, we
+doubled the sampled step length. This approach is representative of the
+time-varying SSF approach proposed by \cite{Munden.2021}. Finally, in the
+\textit{dynamic} approach, we sampled step lengths and turning angles from
+distributions that were fit to different step-durations. That is, we fitted
+separate step length and turning angles distributions to every possible step
+duration. To achieve this, we subsampled the observed data to 50\% of the fixes,
+which resulted in varying step-durations. We then and fitted step length and
+turning angle distributions to the steps from different step-durations. We
+repeated this procedure 1000 times and averaged the parameter estimates across
+replicates.
 
 \paragraph{Regression Model}
 We estimated ... using conditional logistic regression, implemented using the

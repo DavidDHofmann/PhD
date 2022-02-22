@@ -151,44 +151,47 @@ connectivity, Lycaon pictus
 %------------------------------------------------------------------------------
 %  LONG VERSION
 %------------------------------------------------------------------------------
-Dispersal of individuals contributes to long-term population persistence, yet
-requires a sufficient degree of landscape connectivity. To date, connectivity
-has mainly been investigated using least-cost analysis and circuit theory, two
-methods that make assumptions that are hardly applicable to dispersal.
-Least-cost analysis assumes that animals move towards a known endpoint and are
-knowledgeable about the most favorable route. Circuit theory presumes a complete
-random walk and fails to incorporate directional persistence. While these
-assumptions can be relaxed by explicitly simulating dispersal trajectories
-across the landscape, a unified approach for such simulations is lacking.
+\noindent 1. Dispersal of individuals contributes to long-term population
+persistence, yet requires a sufficient degree of landscape connectivity. To
+date, connectivity has mainly been investigated using least-cost analysis and
+circuit theory, two methods that make assumptions that are hardly applicable to
+dispersal. Least-cost analysis assumes that animals move towards a known
+endpoint and are knowledgeable about the most favorable route. Circuit theory
+presumes a complete random walk and fails to incorporate directional
+persistence. While these assumptions can be relaxed by explicitly simulating
+dispersal trajectories across the landscape, a unified approach for such
+simulations is lacking.
 
-Here, we present a simple three-step approach to simulate dispersal and to
-assess connectivity using empirical GPS movement data and a set of habitat
-covariates. In step one, we use integrated step-selection functions to fit a
-mechanistic movement model describing habitat and movement preferences of
+\noindent 2. Here, we present a simple three-step approach to simulate dispersal
+and to assess connectivity using empirical GPS movement data and a set of
+habitat covariates. In step one, we use integrated step-selection functions to
+fit a mechanistic movement model describing habitat and movement preferences of
 dispersing individuals. In step two, we apply the parameterized model to
 simulate dispersal across the study area. In step three, we derive a set of
 three complementary connectivity maps; a heatmap highlighting frequently
 traversed areas, a betweenness map pinpointing dispersal corridors, and a map of
 inter-patch connectivity indicating the presence and intensity of functional
-links between habitat patches. As a case study, we apply the three-step
-approach to GPS data collected on dispersing African wild dogs (\textit{Lycaon
-pictus}) inhabiting the Kavango-Zambezi Transfrontier Conservation Area
-(KAZA-TFCA) in southern Africa.
+links between habitat patches. We demonstrate the applicability of the proposed
+three-step approach in a case study in which we use GPS data collected on
+dispersing African wild dogs (\textit{Lycaon pictus}) inhabiting the
+Kavango-Zambezi Transfrontier Conservation Area (KAZA-TFCA) in southern Africa.
 
-Using step-selection functions we successfully parametrized a detailed dispersal
-model that described dispersing individuals habitat and movement preferences, as
-well as potential interactions among the two. The model substantially
-outperformed a model that omitted such interactions and enabled us to simulate
-80,000 dispersal trajectories across the study area. By explicitly simulating
-individuals, this approach not only requires fewer unrealistic assumptions about
-dispersal, but also permits the calculation of a rich suite of connectivity
-metrics that together provide a comprehensive view on landscape connectivity.
-The three derived connectivity maps revealed several dispersal hotspots and
+\noindent 3. Using step-selection functions we successfully parametrized a
+detailed dispersal model that described dispersing individuals habitat and
+movement preferences, as well as potential interactions among the two. The model
+substantially outperformed a model that omitted such interactions and enabled us
+to simulate 80,000 dispersal trajectories across the study area.
+
+\noindent 4. By explicitly simulating individuals, our approach not only
+requires fewer unrealistic assumptions about dispersal, but also permits the
+calculation of a variety of connectivity metrics that together provide a
+comprehensive view of landscape connectivity. In our case study, the three
+derived connectivity maps revealed several wild dog dispersal hotspots and
 corridors across the extent of our study area, yet each map highlighted a
 different aspect of landscape connectivity, thus emphasizing their complementary
 nature. Overall, our case study demonstrates that a simulation-based approach
 offers a simple yet powerful alternative to traditional connectivity modeling
-techniques. The approach is therefore useful for a variety of applications in
+techniques. Our approach is therefore useful for a variety of applications in
 ecological, evolutionary, and conservation research.
 
 \end{abstract}
@@ -231,8 +234,7 @@ unsuitable for dispersers, thus calling for the development of alternative
 approaches. One promising alternative is to assess landscape connectivity via
 simulated dispersal trajectories generated from individual-based movement models
 (IBMMs, \citealp{Diniz.2019}). However, IBMMs require a large number of
-subjective modeling decisions, thus rendering among-system comparisons
-difficult.
+subjective modeling decisions, thus making among-system comparisons difficult.
 
 % Issues with Both Methods
 \subsection{Issues with Traditional Connectivity Models}
@@ -684,8 +686,8 @@ or water, resulting in more tortuous movements in such areas
 \subsection{Dispersal Simulation}
 Dispersal simulations based on the most parsimonious movement model proved
 useful for assessing landscape connectivity. Of the 50,000 simulated dispersal
-trajectories with starting point within the main study area, only 4.5\% reached
-a map boundary, suggesting that we successfully mitigated biases from boundary
+trajectories that originated from the main study area, only 4.5\% reached a map
+boundary, suggesting that we successfully mitigated biases from boundary
 effects. Moreover, our examination of the relative traversal frequency across
 all checkpoints showed that the relative traversal frequency reached a steady
 state after 10,500 simulated dispersal trajectories (Figure S3). Although

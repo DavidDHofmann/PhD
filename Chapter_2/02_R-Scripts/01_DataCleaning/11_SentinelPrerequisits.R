@@ -171,13 +171,8 @@ text(disp$Tiles[[i]], "Overlap", cex = 0.8)
 axis(1)
 axis(2)
 
-# How many tiles would we need to access (note that we might need to download
-# multiple dates for each tile)?
-disp %>%
-  arrange(Year, Month) %>%
-  subset(Year >= 2015 & Year <= 2019) %>%
-  pull(Tiles) %>%
-  do.call(rbind, .)
+# Store the object to file
+write_rds(disp, "/media/david/Elements/Windows.rds")
 
 ################################################################################
 #### Prepare Monthly Download Dates
@@ -243,8 +238,8 @@ dat$Files <- lapply(1:nrow(dat), function(x) {
 dat$FilesMetaData <- lapply(dat$Files, as.data.frame)
 
 # Store the results to file
-write_rds(dat, "SentinelResults.rds")
-dat <- read_rds("SentinelResults.rds")
+write_rds(dat, "03_Data/03_Results/99_SentinelResults.rds")
+dat <- read_rds("03_Data/03_Results/99_SentinelResults.rds")
 
 # Check how many available files there are
 dat$NumberFiles <- sapply(dat$Files, length)

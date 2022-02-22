@@ -69,7 +69,7 @@ ext <- extent(covars)
 ext <- as(ext, "SpatialPolygons")
 
 # Let's also specify an extent within which individuals will be released
-ext2 <- extent(c(50, 250, 50, 250))
+ext2 <- extent(c(100, 200, 100, 200))
 ext2 <- as(ext2, "SpatialPolygons")
 
 # Plot the covariates
@@ -89,7 +89,7 @@ as.data.frame(covars, xy = T) %>%
 ################################################################################
 # Simulation Parameters
 formula <- ~ forest + elev + dist
-prefs     <- c(-1, 0.5, -15)
+prefs     <- c(-1, 0.5, -20)
 sl_dist   <- list(name = "gamma", params = list(shape = 3, scale = 1))
 ta_dist   <- list(name = "vonmises", params = list(kappa = 0.5, mu = 0))
 n_rsteps  <- 10
@@ -130,7 +130,7 @@ ggplot() +
 #### Multiple Trajectories
 ################################################################################
 # Number of simulated individuals
-ndisp <- 100
+ndisp <- 10000
 
 # Simulate track for each individual
 sims <- pbmclapply(
@@ -141,7 +141,7 @@ sims <- pbmclapply(
 
   # Simulate trajectory
   sim <- move(
-      xy       = matrix(runif(2, 50, 250), ncol = 2)
+      xy       = matrix(runif(2, xmin(ext2), xmax(ext2)), ncol = 2)
     , covars   = covars
     , formula  = formula
     , prefs    = prefs

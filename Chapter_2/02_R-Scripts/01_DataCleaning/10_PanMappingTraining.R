@@ -570,9 +570,6 @@ writeVector(vect(classes)
   , overwrite = T
 )
 
-################################################################################
-#### CONTINUE HERE!!!
-################################################################################
 # Make a prediction
 pred_land <- predict(land, mod_rand_land, na.rm = T)
 pred_sent <- predict(sent, mod_rand_sent, na.rm = T)
@@ -590,5 +587,17 @@ writeRaster(pred_land, "Prediction_Landsat.tif", overwrite = T)
 writeRaster(pred_sent, "Prediction_Sentinel.tif", overwrite = T)
 
 ################################################################################
+#### CONTINUE HERE
+################################################################################
+################################################################################
 #### Visualizations
 ################################################################################
+# Make a prediction using the best classifier
+design_sub <- subset(design, Satellite == "SENTINEL")
+imgs <- paste0("03_Data/01_RawData/", design_sub$Satellite, "/", design_sub$Dates, ".tif")
+predictions <- lapply(imgs, function(x) {
+  r <- stack(x)
+  rp <- predict(r, mod_rand_sent, na.rm = T)
+  return(rp)
+})
+plot(predictions)

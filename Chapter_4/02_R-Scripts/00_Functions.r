@@ -1,43 +1,51 @@
 ################################################################################
 #### Functions to Compute Step Metrics
 ################################################################################
-# Function to calculate the step length
-stepLength <- function(x, y) {
-  length <- sqrt((x - lead(x)) ** 2 + (y - lead(y)) ** 2)
-  return(length)
+# Function to compute the absolute turning angle
+absTA <- function(dx, dy) {
+  absta <- atan2(dy, dx)
+  absta <- (absta - pi / 2) * (-1)
+  absta <- ifelse(absta < 0, 2 * pi + absta, absta)
+  return(absta)
 }
 
-# Function to calculate the absolute turning angle
-absAngle <- function(x, y, rad = T) {
-  xx <- lead(x) - x
-  yy <- lead(y) - y
-  xx <- na.omit(xx)
-  yy <- na.omit(yy)
-  b <- sign(xx)
-  b[b == 0] <- 1
-  tempangle <- b * (yy < 0) * pi + atan(xx / yy)
-  tempangle[tempangle < 0 & !is.na(tempangle)] <- tempangle[tempangle < 0 & !is.na(tempangle)] + 2 * pi
-  if (!rad){
-    tempangle <- tempangle * 180 / pi
-  }
-  tempangle <- c(tempangle, NA)
-  return(tempangle)
-}
-
-# Function to compute relative turning angles
-relAngle <- function(absta) {
-  relta <- absta - lag(absta)
-  relta <- ifelse(relta < -pi, relta + 2 * pi, relta)
+# Function to compute the relative turning angle
+relTA <- function(absta) {
+  relta <- (absta[-1] - absta[-length(absta)])
+  relta <- c(NA, relta)
   relta <- ifelse(relta > +pi, relta - 2 * pi, relta)
+  relta <- ifelse(relta < -pi, 2 * pi + relta, relta)
+  return(relta)
 }
 
 # Function to compute step metrics
 stepMet <- function(x, y) {
-  sl <- stepLength(x, y)
-  absta <- absAngle(x, y)
-  relta <- relAngle(absta)
-  mets <- data.frame(sl = sl, absta = absta, relta = relta)
-  return(mets)
+
+    # Compute distances moved in x and y direction
+    dx <- c(x[-1], NA) - x
+    dy <- c(y[-1], NA) - y
+
+    # Calculate step length
+    sl <- sqrt(dx ** 2 + dy ** 2)
+
+    # Compute absolute turn angle
+    # absta <- atan2(dy, dx)
+    # absta <- (absta - pi / 2) * (-1)
+    # absta <- ifelse(absta < 0, 2 * pi + absta, absta)
+    absta <- absTA(dx, dy)
+
+    # Compute relative turn angle
+    # relta <- (absta[-1] - absta[-length(absta)])
+    # relta <- c(NA, relta)
+    # relta <- ifelse(relta > +pi, relta - 2 * pi, relta)
+    # relta <- ifelse(relta < -pi, 2 * pi + relta, relta)
+    relta <- relTA(absta)
+
+    # Put metrics into data.frame
+    metrics <- data.frame(sl = sl, absta = absta, relta = relta)
+
+    # Return the metrics
+    return(metrics)
 }
 
 ################################################################################

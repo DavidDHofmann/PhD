@@ -67,19 +67,10 @@ lapply(group, function(x) {
 ################################################################################
 #### WRITE CUSTOM FUNCTIONS!
 ################################################################################
-plotSCL <- function(x) {
-
-
-}
-
-
-
 setwd("/home/david/Schreibtisch/Sentinel")
-
 files <- sample(dir(path = "L2A", include.dirs = T, full.names = T), size = 1)
-file <- s2_translate(files)
-mask <- files
-mask <- s2_translate(mask, prod_type = "SCL")
+file <- s2_translate(files, outdir = tempdir())
+mask <- s2_translate(files, prod_type = "SCL", outdir = tempdir())
 
 library(terra)
 rf <- rast(file)

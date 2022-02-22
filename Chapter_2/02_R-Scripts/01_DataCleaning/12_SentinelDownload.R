@@ -68,12 +68,12 @@ todownload <- subset(todownload, !exists)
 
 # Nest the data by its group
 todownload <- todownload %>%
-  # group_by(GroupID, Username, Password) %>%
-  group_by(Username, Password) %>%
+  group_by(GroupID, Username, Password) %>%
+  # group_by(Username, Password) %>%
   nest()
 
 # Remove the first couple of entries as there appears to be an issue
-# todownload <- todownload[-(1:20), ]
+todownload <- todownload[-(1:3), ]
 
 # Check out what we need to download
 print(todownload)

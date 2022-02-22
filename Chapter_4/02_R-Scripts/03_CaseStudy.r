@@ -97,6 +97,12 @@ shrub <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_Cle
 human <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.grd")
 human <- human[["Buffer_5000"]]
 
+# Read all data into memory if possible
+water <- readAll(water)
+trees <- readAll(trees)
+shrub <- readAll(shrub)
+human <- readAll(human)
+
 # Extract dates from layernames
 dates_water <- ymd(substr(names(water), start = 2, stop = 12))
 dates_trees <- ymd(substr(names(trees), start = 2, stop = 12))
@@ -382,8 +388,9 @@ runModel <- function(data) {
     + sl
     + log_sl
     + cos_ta
-    + water
-    + elev
+    + Water
+    + Trees
+    + Shrubs
     + dist
     + strata(step_id)
     , data = data
@@ -406,22 +413,20 @@ runModel <- function(data) {
   return(coefs)
 }
 
-# Fit a "base" step length distribution that we can use for the uncorrected case
-fitted <- obs %>%
+# Define the uncorrected distributions for step lengths and turning angles
+metrics <- obs %>%
   rarifyData(missingness = 0) %>%
   computeBursts(forgiveness = 1) %>%
   computeMetrics() %>%
   mutate(sl = ifelse(sl == 0, 1, sl)) %>%
-  pull(sl) %>%
-  fit_distr(dist_name = "gamma")
-
-# Put the parameters into a specialized list
-sl_dist <- list(shape = fitted$params$shape, scale = fitted$params$scale)   # According to Avgar et al. 2016
-ta_dist <- list(kappa = 0, mu = 0)                                          # According to Avgar et al. 2016
+  select(sl, relta) %>%
+  tibble()
+sl_dist <- fit_distr(metrics$sl, dist_name = "gamma")$params
+ta_dist <- fit_distr(metrics$relta, dist_name = "vonmises")$params
 dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
 
 # Try out the functions to see how they work
-testing <- rarifyData(obs[1:1000, ], missingness = 0.5)
+testing <- rarifyData(obs, missingness = 0.5)
 testing <- computeBursts(testing, forgiveness = 2)
 testing <- computeMetrics(testing)
 testing <- computeSSF(testing, n_rsteps = 10, distributions = "uncorrected")
