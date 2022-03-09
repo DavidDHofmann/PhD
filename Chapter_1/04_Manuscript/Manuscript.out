@@ -1,32 +1,22 @@
 \BOOKMARK [1][-]{section.1}{Introduction}{}% 1
-\BOOKMARK [2][-]{subsection.1.1}{Importance of Connectivity \046 Connectivity Models}{section.1}% 2
-\BOOKMARK [2][-]{subsection.1.2}{Issues with Traditional Connectivity Models}{section.1}% 3
-\BOOKMARK [2][-]{subsection.1.3}{What about IBMMs?}{section.1}% 4
-\BOOKMARK [2][-]{subsection.1.4}{Proposed Solution: Three-Step Approach}{section.1}% 5
-\BOOKMARK [2][-]{subsection.1.5}{Case Study}{section.1}% 6
-\BOOKMARK [1][-]{section.2}{Methods}{}% 7
-\BOOKMARK [2][-]{subsection.2.1}{Case Study}{section.2}% 8
-\BOOKMARK [3][-]{subsubsection.2.1.1}{GPS Data}{subsection.2.1}% 9
-\BOOKMARK [3][-]{subsubsection.2.1.2}{Study Area}{subsection.2.1}% 10
-\BOOKMARK [3][-]{subsubsection.2.1.3}{Habitat Covariates}{subsection.2.1}% 11
-\BOOKMARK [2][-]{subsection.2.2}{Step 1 - Movement Model}{section.2}% 12
-\BOOKMARK [2][-]{subsection.2.3}{Step 2 - Dispersal Simulation}{section.2}% 13
-\BOOKMARK [2][-]{subsection.2.4}{Step 3 - Connectivity Maps}{section.2}% 14
-\BOOKMARK [3][-]{subsubsection.2.4.1}{Heatmap}{subsection.2.4}% 15
-\BOOKMARK [3][-]{subsubsection.2.4.2}{Betweenness Map}{subsection.2.4}% 16
-\BOOKMARK [3][-]{subsubsection.2.4.3}{Inter-Patch Connectivity Map}{subsection.2.4}% 17
-\BOOKMARK [1][-]{section.3}{Results}{}% 18
-\BOOKMARK [2][-]{subsection.3.1}{Movement Model}{section.3}% 19
-\BOOKMARK [2][-]{subsection.3.2}{Dispersal Simulation}{section.3}% 20
-\BOOKMARK [2][-]{subsection.3.3}{Heatmap}{section.3}% 21
-\BOOKMARK [2][-]{subsection.3.4}{Betweenness}{section.3}% 22
-\BOOKMARK [2][-]{subsection.3.5}{Inter-Patch Connectivity}{section.3}% 23
-\BOOKMARK [1][-]{section.4}{Discussion}{}% 24
-\BOOKMARK [2][-]{subsection.4.1}{Short Summary}{section.4}% 25
-\BOOKMARK [2][-]{subsection.4.2}{Movement Model}{section.4}% 26
-\BOOKMARK [2][-]{subsection.4.3}{Maps}{section.4}% 27
-\BOOKMARK [2][-]{subsection.4.4}{Disadvantages of ISSF Simulations}{section.4}% 28
-\BOOKMARK [2][-]{subsection.4.5}{Conclusion}{section.4}% 29
-\BOOKMARK [1][-]{section.5}{Authors' Contributions}{}% 30
-\BOOKMARK [1][-]{section.6}{Data Availability}{}% 31
-\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 32
+\BOOKMARK [1][-]{section.2}{Methods}{}% 2
+\BOOKMARK [2][-]{subsection.2.1}{Case Study}{section.2}% 3
+\BOOKMARK [3][-]{subsubsection.2.1.1}{GPS Data}{subsection.2.1}% 4
+\BOOKMARK [3][-]{subsubsection.2.1.2}{Study Area}{subsection.2.1}% 5
+\BOOKMARK [3][-]{subsubsection.2.1.3}{Habitat Covariates}{subsection.2.1}% 6
+\BOOKMARK [2][-]{subsection.2.2}{Step 1 - Movement Model}{section.2}% 7
+\BOOKMARK [2][-]{subsection.2.3}{Step 2 - Dispersal Simulation}{section.2}% 8
+\BOOKMARK [2][-]{subsection.2.4}{Step 3 - Connectivity Maps}{section.2}% 9
+\BOOKMARK [3][-]{subsubsection.2.4.1}{Heatmap}{subsection.2.4}% 10
+\BOOKMARK [3][-]{subsubsection.2.4.2}{Betweenness Map}{subsection.2.4}% 11
+\BOOKMARK [3][-]{subsubsection.2.4.3}{Inter-Patch Connectivity Map}{subsection.2.4}% 12
+\BOOKMARK [1][-]{section.3}{Results}{}% 13
+\BOOKMARK [2][-]{subsection.3.1}{Dispersal Simulation}{section.3}% 14
+\BOOKMARK [2][-]{subsection.3.2}{Heatmap}{section.3}% 15
+\BOOKMARK [2][-]{subsection.3.3}{Betweenness}{section.3}% 16
+\BOOKMARK [2][-]{subsection.3.4}{Inter-Patch Connectivity}{section.3}% 17
+\BOOKMARK [1][-]{section.4}{Discussion}{}% 18
+\BOOKMARK [1][-]{section.5}{Authors' Contributions}{}% 19
+\BOOKMARK [1][-]{section.6}{Data Availability}{}% 20
+\BOOKMARK [1][-]{section.7}{Acknowledgements}{}% 21
+\BOOKMARK [1][-]{section.8}{Conflict of Interest}{}% 22

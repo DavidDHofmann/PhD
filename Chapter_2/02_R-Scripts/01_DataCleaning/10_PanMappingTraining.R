@@ -563,6 +563,7 @@ validation$Confusion <- lapply(validation$Confusion, as.data.frame)
 
 # Store the validation object to file
 write_rds(validation, "03_Data/03_Results/99_PanMapping.rds")
+validation <- read_rds("03_Data/03_Results/99_PanMapping.rds")
 
 # Also store the pan mapping classes to file
 writeVector(vect(classes)
@@ -570,7 +571,15 @@ writeVector(vect(classes)
   , overwrite = T
 )
 
+################################################################################
+#### CONTINUE HERE
+################################################################################
+
 # Make a prediction
+land <- paste0("03_Data/01_RawData/LANDSAT", "/", dates, ".tif")
+land <- rast(land[1])
+sent <- paste0("03_Data/01_RawData/SENTINEL", "/", dates, ".tif")
+sent <- rast(sent[1])
 pred_land <- predict(land, mod_rand_land, na.rm = T)
 pred_sent <- predict(sent, mod_rand_sent, na.rm = T)
 
@@ -579,16 +588,13 @@ pred_sent <- predict(sent, mod_rand_sent, na.rm = T)
 # pred_sent <- which.max(pred_sent)
 
 # Remove dryland
-pred_land <- subst(pred_land, 1, NA)
-pred_sent <- subst(pred_sent, 1, NA)
+# pred_land <- subst(pred_land, 1, NA)
+# pred_sent <- subst(pred_sent, 1, NA)
 
 # Store the predictions
 writeRaster(pred_land, "Prediction_Landsat.tif", overwrite = T)
 writeRaster(pred_sent, "Prediction_Sentinel.tif", overwrite = T)
 
-################################################################################
-#### CONTINUE HERE
-################################################################################
 ################################################################################
 #### Visualizations
 ################################################################################

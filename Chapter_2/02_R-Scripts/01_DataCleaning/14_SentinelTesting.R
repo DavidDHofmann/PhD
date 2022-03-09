@@ -1,16 +1,17 @@
 ################################################################################
-#### Making a Few Predictions
+#### A Few Pan Predictions
 ################################################################################
 # Clear R's brain
 rm(list = ls())
 
 # Load required packages
-library(tidyverse)
-library(sen2r)
-library(raster)
-library(lubridate)
-library(sf)
-library(terra)
+library(tidyverse)    # To wrangle data
+library(sen2r)        # To handle sentinel data
+library(raster)       # To handle spatial data
+library(sf)           # To handle spatial data
+library(terra)        # To handle spatial data
+library(lubridate)    # To handle dates
+library(randomForest) # To handle random forest models
 
 # Function to compute the normalized difference (nd) index of two bands
 nd <- function(img, band_x, band_y) {
@@ -39,27 +40,29 @@ tiles <- c(tile1, tile2)
 dir_l2a <- "/media/david/Elements/L2A"
 
 # Identify all processed sentinel 2 tiles
-files <- dir(path = dir_l2a, include.dirs = T, full.names = T)
+files <- list.dirs(path = dir_l2a, full.names = T, recursive = F)
 
 # Read metadata from filenames
-meta <- safe_getMetadata(files, info = "fileinfo")
-meta$Year <- year(meta$sensing_datetime)
-meta$Month <- month(meta$sensing_datetime)
+meta <- safe_getMetadata(files, info = "nameinfo")
+meta$filepath <- files
 
-# Keep only September and October 2021 for the desired tile
-index1 <- meta$Year == 2021
-index2 <- meta$Month %in% c(9, 10)
-index3 <- meta$id_tile %in% tiles
-index <- index1 & index2 & index3
-files_sub <- meta[index, ]
+# Create proper timestamps
+meta <- meta %>%
+  mutate(
+      Timestamp = ymd_hms(sensing_datetime)
+    , Year      = year(Timestamp)
+    , Month     = month(Timestamp)
+  )
+
+# Keep only September and October 2021 files
+files_sub <- subset(meta, Year == 2021 & Month %in% c(9, 10) & id_tile %in% tiles)
 
 # Let's just keep one of the files
-files_sub <- files_sub[1, ]
+files_sub <- files_sub$filepath[1]
 
 # Translate it
-file <- file.path(dir_l2a, files_sub$name)
-imag <- s2_translate(file, outdir = tempfile())
-mask <- s2_translate(file, prod_type = "SCL", outdir = tempfile())
+imag <- s2_translate(files_sub, outdir = tempfile())
+mask <- s2_translate(files_sub, prod_type = "SCL", outdir = tempfile())
 
 # Mask cloud cover
 rf <- rast(imag)
@@ -87,14 +90,12 @@ all <- c(final, ndvi, ndwi, ndmi, ndsi, best)
 names(all) <- c(names(final), "ndvi", "ndwi", "ndmi", "ndsi", "best")
 
 # Crop to the two areas of interest
-plot(gomoti)
 gomoti <- crop(all, project(vect(aoi_gomoti), crs(all)), snap = "out")
 davids <- crop(all, project(vect(aoi_davids), crs(all)), snap = "out")
 
 # Load the random forest model
-library(randomForest)
-model <- read_rds("03_Data/03_Results/99_PanMapping.rds")$ModelObject[[4]]
-print(model)
+model <- read_rds("03_Data/03_Results/99_PanMapping.rds")
+model <- model$ModelObject[[4]]
 
 # Make prediction
 pred_gomoti <- predict(gomoti, model)

@@ -17,7 +17,7 @@
 \usepackage{booktabs}
 \usepackage[hidelinks]{hyperref}
 \usepackage[nameinlink]{cleveref}
-% \usepackage{lineno}
+\usepackage{lineno}
 \usepackage{multirow}
 \usepackage{arydshln}
 \usepackage[flushleft]{threeparttable}
@@ -155,10 +155,7 @@ connectivity, Lycaon pictus
 persistence, yet requires a sufficient degree of landscape connectivity. To
 date, connectivity has mainly been investigated using least-cost analysis and
 circuit theory, two methods that make assumptions that are hardly applicable to
-dispersal. Least-cost analysis assumes that animals move towards a known
-endpoint and are knowledgeable about the most favorable route. Circuit theory
-presumes a complete random walk and fails to incorporate directional
-persistence. While these assumptions can be relaxed by explicitly simulating
+dispersal. While these assumptions can be relaxed by explicitly simulating
 dispersal trajectories across the landscape, a unified approach for such
 simulations is lacking.
 
@@ -167,14 +164,14 @@ and to assess connectivity using empirical GPS movement data and a set of
 habitat covariates. In step one, we use integrated step-selection functions to
 fit a mechanistic movement model describing habitat and movement preferences of
 dispersing individuals. In step two, we apply the parameterized model to
-simulate dispersal across the study area. In step three, we derive a set of
-three complementary connectivity maps; a heatmap highlighting frequently
-traversed areas, a betweenness map pinpointing dispersal corridors, and a map of
+simulate dispersal across the study area. In step three, we derive three
+complementary connectivity maps; a heatmap highlighting frequently traversed
+areas, a betweenness map pinpointing dispersal corridors, and a map of
 inter-patch connectivity indicating the presence and intensity of functional
 links between habitat patches. We demonstrate the applicability of the proposed
 three-step approach in a case study in which we use GPS data collected on
-dispersing African wild dogs (\textit{Lycaon pictus}) inhabiting the
-Kavango-Zambezi Transfrontier Conservation Area (KAZA-TFCA) in southern Africa.
+dispersing African wild dogs (\textit{Lycaon pictus}) inhabiting northern
+Botswana.
 
 \noindent 3. Using step-selection functions we successfully parametrized a
 detailed dispersal model that described dispersing individuals habitat and
@@ -184,15 +181,15 @@ to simulate 80,000 dispersal trajectories across the study area.
 
 \noindent 4. By explicitly simulating individuals, our approach not only
 requires fewer unrealistic assumptions about dispersal, but also permits the
-calculation of a variety of connectivity metrics that together provide a
+calculation of multiple connectivity metrics that together provide a
 comprehensive view of landscape connectivity. In our case study, the three
 derived connectivity maps revealed several wild dog dispersal hotspots and
-corridors across the extent of our study area, yet each map highlighted a
-different aspect of landscape connectivity, thus emphasizing their complementary
-nature. Overall, our case study demonstrates that a simulation-based approach
-offers a simple yet powerful alternative to traditional connectivity modeling
-techniques. Our approach is therefore useful for a variety of applications in
-ecological, evolutionary, and conservation research.
+corridors across the extent of our study area. Each map highlighted a different
+aspect of landscape connectivity, thus emphasizing their complementary nature.
+Overall, our case study demonstrates that a simulation-based approach offers a
+simple yet powerful alternative to traditional connectivity modeling techniques.
+It is therefore useful for a variety of applications in ecological,
+evolutionary, and conservation research.
 
 \end{abstract}
 
@@ -201,8 +198,8 @@ ecological, evolutionary, and conservation research.
 %------------------------------------------------------------------------------
 \newpage
 
-\onehalfspacing
-\tableofcontents
+% \onehalfspacing
+% \tableofcontents
 \doublespacing
 
 % Change page numbering
@@ -210,34 +207,34 @@ ecological, evolutionary, and conservation research.
 \pagenumbering{arabic}
 
 % Create linenumbers
-% \linenumbers
+\linenumbers
 
 \section{Introduction}
 
 % Importance of Dispersal & Connectivity
-\subsection{Importance of Connectivity \& Connectivity Models}
+% \subsection{Importance of Connectivity \& Connectivity Models}
 Dispersal of individuals is a vital process that allows species to maintain
-genetic diversity \citep{Perrin.1999, Perrin.2000, Frankham.2002, Leigh.2012,
-Baguette.2013}, rescue non-viable populations \citep{Brown.1977}, and to
-colonize unoccupied habitats \citep{Hanski.1999b, MacArthur.2001}. However, the
-ability to disperse depends on a sufficient degree of landscape connectivity
-\citep{Fahrig.2003, Clobert.2012}, making the identification and protection of
-dispersal corridors that promote connectivity a task of fundamental importance
-\citep{Nathan.2008, Doerr.2011, Rudnick.2012}. Identifying dispersal corridors
-not only necessitates a comprehensive understanding of the factors that limit
-dispersal, but also an appropriate model to estimate connectivity
-\citep{Baguette.2013, Vasudev.2015, Hofmann.2021}. To date, the most commonly
-used connectivity models are least-cost path analysis (LCPA;
-\citealp{Adriaensen.2003}) and circuit theory (CT; \citealp{McRae.2006,
-McRae.2008}). Unfortunately, both models rest on assumptions that appear
-unsuitable for dispersers, thus calling for the development of alternative
-approaches. One promising alternative is to assess landscape connectivity via
-simulated dispersal trajectories generated from individual-based movement models
-(IBMMs, \citealp{Diniz.2019}). However, IBMMs require a large number of
-subjective modeling decisions, thus making among-system comparisons difficult.
+genetic diversity \citep{Perrin.2000, Frankham.2002, Leigh.2012, Baguette.2013},
+rescue non-viable populations \citep{Brown.1977}, and to colonize unoccupied
+habitats \citep{Hanski.1999b, MacArthur.2001}. However, the ability to disperse
+depends on a sufficient degree of landscape connectivity \citep{Fahrig.2003,
+Clobert.2012}, making the identification and protection of dispersal corridors
+that promote connectivity a task of fundamental importance \citep{Doerr.2011,
+Rudnick.2012}. Identifying dispersal corridors not only necessitates a
+comprehensive understanding of the factors that limit dispersal, but also an
+appropriate model to estimate connectivity \citep{Baguette.2013, Vasudev.2015,
+Hofmann.2021}. To date, the most commonly used connectivity models are
+least-cost path analysis (LCPA; \citealp{Adriaensen.2003}) and circuit theory
+(CT; \citealp{McRae.2006, McRae.2008}). Unfortunately, both models rest on
+assumptions that appear unsuitable for dispersers, thus calling for the
+development of alternative approaches. One promising alternative is to assess
+landscape connectivity via simulated dispersal trajectories generated from
+individual-based movement models (IBMMs, \citealp{Diniz.2019}). However, IBMMs
+require a large number of subjective modeling decisions, thus making
+among-system comparisons difficult.
 
 % Issues with Both Methods
-\subsection{Issues with Traditional Connectivity Models}
+% \subsection{Issues with Traditional Connectivity Models}
 Traditional connectivity models make assumptions that are rarely met for
 dispersers. LCPA, for instance, assumes that individuals move towards a
 preconceived endpoint and choose a cost-minimizing route accordingly
@@ -255,7 +252,7 @@ of dispersal and therefore fail to allow statements about the expected duration
 for moving between habitat patches \citep{Martensen.2017, Diniz.2019}.
 
 % What about IBMMs?
-\subsection{What about IBMMs?}
+% \subsection{What about IBMMs?}
 The shortcomings inherent to LCPA and CT can be overcome by simulating dispersal
 using IBMMs and by converting simulated trajectories into meaningful measures of
 connectivity \citep{Diniz.2019}. In contrast to LCPA and CT, IBMMs allow to
@@ -264,21 +261,21 @@ encountered landscape \citep{Kanagaraj.2013, Clark.2015, Allen.2016,
 Hauenstein.2019, Zeller.2020}, as well as to render potential interactions
 between movement behavior and habitat conditions \citep{Avgar.2016}. This
 strictly shifts the focus from a structural to a more functional view on
-connectivity \citep{Tischendorf.2000, Kanagaraj.2013, Hauenstein.2019}.
-Furthermore, IBMMs generate movement sequentially, i.e. they generate a series
-of steps, so that the temporal dimension of dispersal becomes explicit and
-allows modeling autocorrelation between successive steps \citep{Diniz.2019}.
-Finally, simulations from IBMMs do not enforce movement or connections towards
-preconceived endpoints but allow individuals to adjust their route  ``on the
-go'', thereby preventing biases arising from misplaced endpoints. Despite these
-advantages, a unifying approach to simulate dispersal and assess connectivity
-using IBMMs is lacking. Considering the large number of subjective decisions
-entailed by IBMMs, an approach that streamlines and standardizes the application
-of dispersal simulations to assess connectivity will, however, be critical to
-safeguard comparability among studies.
+connectivity \citep{Tischendorf.2000}. Furthermore, IBMMs generate movement
+sequentially, i.e. they generate a series of steps, so that the temporal
+dimension of dispersal becomes explicit and allows modeling autocorrelation
+between successive steps \citep{Diniz.2019}. Finally, simulations from IBMMs do
+not enforce movement or connections towards preconceived endpoints but allow
+individuals to adjust their route  ``on the go'', thereby preventing biases
+arising from misplaced endpoints. Despite these advantages, a unifying approach
+to simulate dispersal and assess connectivity using IBMMs is lacking.
+Considering the large number of subjective decisions entailed by IBMMs, an
+approach that streamlines and standardizes the application of dispersal
+simulations to assess connectivity will, however, be critical to safeguard
+comparability among studies.
 
 % Proposed Solution: Three-Step approach
-\subsection{Proposed Solution: Three-Step Approach}
+% \subsection{Proposed Solution: Three-Step Approach}
 Here, we propose and exemplify a simple three-step approach for simulating
 dispersal and assessing landscape connectivity (\Cref{GraphicalAbstract}). In
 step one, we combine GPS movement data of dispersing individuals with habitat
@@ -310,7 +307,7 @@ Kanagaraj.2013}).
 % (KAZA-TFCA).
 
 % Introduction of the study species
-\subsection{Case Study}
+% \subsection{Case Study}
 We showcase the application of the proposed approach using GPS movement data
 collected on dispersing African wild dogs (\textit{Lycaon pictus}). The African
 wild dog is a highly mobile species whose population persistence heavily relies
@@ -335,20 +332,17 @@ during dispersal its implications for landscape connectivity.
 
 \begin{figure}[htbp]
   \begin{center}
-    \includegraphics[width = \textwidth]{99_GraphicalAbstract2.pdf}
-    \caption{Flowchart of the simulation-based connectivity analysis as proposed
-    in this article. First, GPS data and habitat covariates must be
-    collected. The combined data is then analyzed in an integrated step
-    selection model, which enables the parametrization of the focal species'
-    habitat and movement kernels and results in a mechanistic movement model.
-    The parametrized model is then treated as an individual-based movement model
-    and used to simulate dispersal trajectories. Ultimately, simulated
-    trajectories serve to produce a set of maps that are pertinent to landscape
-    connectivity. This includes a heatmap, indicating the traversal frequency
-    across each spatial unit of the study area, a betweenness map, highlighting
-    movement corridors and bottlenecks, and, finally, an inter-patch
-    connectivity map, where the frequency of connections and their average
-    duration can be depicted.}
+    \includegraphics[width = \textwidth]{99_GraphicalAbstract.pdf}
+    \caption{Flowchart of the simulation-based connectivity analysis. First, GPS
+    data and habitat covariates must be collected. The combined data is then
+    analyzed using an integrated step selection model. The parametrized model is
+    then treated as an individual-based movement model and used to simulate
+    dispersal trajectories. Ultimately, simulated trajectories are translated
+    into a set of maps that are pertinent to landscape connectivity. This
+    includes a heatmap, indicating the traversal frequency across each spatial
+    unit of the study area, a betweenness map, highlighting movement corridors
+    and bottlenecks, and, finally, an inter-patch connectivity map, where the
+    frequency of connections and their average duration can be depicted.}
     \label{GraphicalAbstract}
   \end{center}
 \end{figure}
@@ -414,13 +408,13 @@ agricultural sites, and settlements).
             \draw[densely dotted, blue] (0.169, 0.157) -- (0.364, 0.074);
         \end{scope}
     \end{tikzpicture}
-    \caption{Illustration of the study area located in southern Africa. (a) The
-    study area was confined by a bounding box spanning the entire KAZA-TFCA
-    which comprises parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia.
-    Data on remaining wild dog populations has been sourced from
-    \cite{Woodroffe.2012}. (b) The KAZA-TFCA currently represents the world's
-    largest terrestrial transfrontier conservation area, covering a total area
-    of 520'000 km\textsuperscript{2}. Its main purpose is to re-establish
+    \caption{Illustration of the study area in southern Africa. (a) The study
+    area was confined by a bounding box spanning the entire KAZA-TFCA which
+    comprises parts of Angola, Namibia, Botswana, Zimbabwe, and Zambia. Data on
+    remaining wild dog populations (orange) has been sourced from
+    \cite{Woodroffe.2012}. (b) The KAZA-TFCA represents the world's largest
+    terrestrial transfrontier conservation area and covers a total area of
+    520'000 km\textsuperscript{2}. Its main purpose is to re-establish
     connectivity between already-existing NPs (dark green) and other protected
     areas (light green).}
     \label{StudyArea}
@@ -443,7 +437,7 @@ of how we prepared each habitat covariate is provided in \cite{Hofmann.2021}.
 We performed all data preparations, spatial computations, and statistical
 analysis in {\tt R}, version 3.6.6 \citep{R.2020}. Some helper functions were
 written in {\tt C++} and imported into {\tt R} using the {\tt Rcpp} package
-\citep{Eddelbuettel.2011, Eddelbuettel.2013}.
+\citep{Eddelbuettel.2011, Eddelbuettel.2013, Eddelbuettel.2018}.
 
 \subsection{Step 1 - Movement Model}
 We combined the collected GPS data with habitat covariates and used ISSFs
@@ -459,13 +453,12 @@ does not imply that we assume uniform turning angles, as we will account for
 directionality later in the model \citep{Avgar.2016, Fieberg.2021}.
 
 Along each realized and random step, we extracted values from underlying habitat
-covariate layers using the {\tt velox} package \citep{Hunziker.2021} and we
-computed averages of each covariate along the steps. Besides extracting
-\textit{habitat covariates}, we also computed movement metrics that we used as
-\textit{movement covariates} in the ISSF models \citep{Avgar.2016,
-Fieberg.2021}. Specifically, we computed the step length (\textsf{sl}), its
-natural logarithm (\textsf{log(sl)}), and the cosine of the relative turning
-angle (\textsf{cos(ta)}), which is a measure of directionality
+covariate layers and we computed averages of each covariate along the steps.
+Besides extracting \textit{habitat covariates}, we also computed movement
+metrics that we used as \textit{movement covariates} in the ISSF models
+\citep{Avgar.2016, Fieberg.2021}. Specifically, we computed the step length
+(\textsf{sl}), its natural logarithm (\textsf{log(sl)}), and the cosine of the
+relative turning angle (\textsf{cos(ta)}), which is a measure of directionality
 \citep{Turchin.1998}, for each step. Because wild dog activity is low during the
 hot midday hours \citep{Cozzi.2012}, we additionally created the variable
 \textsf{LowActivity}, indicating whether a step was realized during periods of
@@ -577,12 +570,12 @@ value of 0.01 for all checkpoints.
 \subsubsection{Heatmap}
 To identify dispersal hotspots within the study area, we created a heatmap
 indicating the absolute frequency at which different areas were traversed by
-simulated dispersal trajectories (e.g. \citealp{Peer.2008, Hauenstein.2019,
-Zeller.2020}). Specifically, we rasterized all simulated trajectories onto a
-raster with 1 km x 1 km resolution and tallied resulting layers into a single
-map. This procedure ensured that every trajectory was only counted once, even if
-it traversed the same raster-cell multiple times, thus reducing potential biases
-caused by individuals that were surrounded by unfavorable habitat and ``moved in
+simulated dispersal trajectories (e.g. \citealp{Hauenstein.2019, Zeller.2020}).
+Specifically, we rasterized all simulated trajectories onto a raster with 1 km x
+1 km resolution and tallied resulting layers into a single map. This procedure
+ensured that every trajectory was only counted once, even if it traversed the
+same raster-cell multiple times, thus reducing potential biases caused by
+individuals that were surrounded by unfavorable habitat and ``moved in
 circles''. To achieve high performance rasterization, we used the R-package {\tt
 terra} \citep{Hijmans.2021b}.
 
@@ -627,7 +620,7 @@ NPs was purely out of simplicity and should not imply that dispersal between
 other areas is impossible.
 
 \section{Results}
-\subsection{Movement Model}
+% \subsection{Movement Model}
 The most parsimonious movement model consisted of movement covariates, habitat
 covariates, as well as several of their interactions, thus suggesting that
 movement behavior during dispersal depended on habitat conditions
@@ -677,8 +670,8 @@ or water, resulting in more tortuous movements in such areas
     interval around a loess smoothing regression that we fitted to ease the
     interpretation of the plots. The significant correlation between rank and
     associated frequency in (b1) highlights that the most parsimonious model
-    successfully outperforms a random guess (b2) and assigns comparably high
-    selection scores to realized steps.}
+    successfully outperformed a random guess (b2) and assigned high selection
+    scores to realized steps.}
     \label{MovementModel}
   \end{center}
 \end{figure}
@@ -723,10 +716,9 @@ simulated dispersers, it seemed impractical to pinpoint dispersal corridors.
   integrated step-selection model that we fitted to the movement data of
   dispersing African wild dogs. To generate the heatmap, we rasterized and
   tallied all simulated trajectories. Consequently, the map highlights areas
-  that are frequently traversed by virtual dispersers. For spatial reference we
-  plotted a few selected NPs (dark gray). Additional heatmaps showing the
-  traversal frequency when individuals move fewer than 2'000 steps are provided
-  in Figure S4.}
+  that are frequently traversed. For spatial reference we plotted a few selected
+  NPs (dark gray). Additional heatmaps showing the traversal frequency when
+  individuals move fewer than 2'000 steps are provided in Figure S4.}
   \label{Heatmap}
 \end{figure}
 
@@ -796,21 +788,19 @@ NP in Zambia is only rarely realized.
   highlighting connections between NPs (dark green). Yellow bubbles represent
   the center of the different NPs and are sized in relation to the number of
   simulated dispersers originating from each park. Black dots represent NPs that
-  were smaller than 700 km\textsuperscript{2} and therefore did not serve as
+  were smaller than 700 km\textsuperscript{2} and therefore were not used as
   source areas. Arrows between NPs illustrate between which NPs the simulated
   dispersers successfully moved and the color of each arrow shows the average
-  number of steps (4-hourly movements) that were necessary to realize those
+  number of steps (i.e. 4-hourly movements) that were necessary to realize those
   connections. Additionally, the line thickness indicates the relative number of
-  dispersers originating from a NP that realized those connections. Note that a
-  similar network view could be adopted to investigate connectivity between
-  other protected areas need not to be restricted to NPs.}
+  dispersers originating from a NP that realized those connections.}
   \label{InterpatchConnectivity}
 \end{figure}
 
 \section{Discussion}
 
 % Short Summary
-\subsection{Short Summary}
+% \subsection{Short Summary}
 Here, we presented a simple three-step approach to assess landscape connectivity
 via simulated dispersal trajectories and we demonstrated its application using
 empirical data from a free-ranging population of African wild dogs. In step one,
@@ -828,7 +818,7 @@ traversed areas, critical dispersal corridors and bottlenecks, and the presence
 and intensity of functional links between suitable patches).
 
 % Movement Model
-\subsection{Movement Model}
+% \subsection{Movement Model}
 Results on the habitat kernel from our model showed that dispersers avoided
 areas dominated by humans and covered by water, but selected for regions with
 open grassland in the vicinity to water bodies. This largely complied with
@@ -842,10 +832,10 @@ accommodate that dispersers exhibit turning angles that are correlated with step
 lengths, meaning that turning angles tend to be smaller when individuals move
 fast. Although similar autocorrelations could be incorporated by sampling step
 lengths and turning angles from copula probability distributions
-\citep{Hodel.2021a, Hodel.2021b}, the ISSF framework allowed us to conveniently
-model such peculiarities directly in the movement model. While we only
-considered first order autocorrelation, i.e. correlation between two consecutive
-steps, higher order autocorrelation is conceivable and may be desirable to model
+\citep{Hodel.2022}, the ISSF framework allowed us to conveniently model such
+peculiarities directly in the movement model. While we only considered first
+order autocorrelation, i.e. correlation between two consecutive steps, higher
+order autocorrelation is conceivable and may be desirable to model
 \citep{Dray.2010, McClintock.2012}. However, this will require vast amounts of
 GPS data that are not interrupted by missing fixes; something that is rarely
 achieved in reality \citep{Graves.2006}. The power and flexibility of ISSFs to
@@ -865,7 +855,7 @@ interactions \citep{Hofmann.2021}.
 % estimate was large, demonstrating the necessity to consider different phases of
 % activities of the focal species.
 
-\subsection{Maps}
+% \subsection{Maps}
 Each of the three connectivity maps derived from simulated dispersal
 trajectories highlighted a different aspect of landscape connectivity. The
 heatmap was most suitable for pinpointing frequently traversed areas and showed
@@ -884,8 +874,8 @@ reinforces our notion that the area is of exceptional importance to dispersing
 wild dogs. Because simulated individuals are not forced to move towards certain
 endpoints, a simulation-based approach not only lends itself to study landscape
 connectivity, but also to uncover potential dispersal traps
-\citep{Dwernychuk.1972, VanDerMeer.2014} or areas with a high susceptibility for
-human wildlife conflicts \citep{Cushman.2018}.
+\citep{VanDerMeer.2014} or areas with a high susceptibility for human wildlife
+conflicts \citep{Cushman.2018}.
 
 In contrast to the heatmap, the betweenness map emphasized relatively narrow and
 linear movement routes. It thus facilitated the identification of discrete
@@ -915,12 +905,12 @@ opportunities to incorporate seasonality and to investigate whether dispersal
 corridors exist seasonally or all-year round (\textit{dynamic connectivity};
 \citealp{Zeller.2020}). With LCPA or CT, seasonality can currently only be
 incorporated through the preparation of multiple permeability surfaces on which
-the same connectivity model is repeatedly applied (e.g. \citealp{Benz.2016,
-Osipova.2019}). With simulations from ISSFs, in contrast, the environment could
-change ``as the dispersers move'', so that simulated trajectories would
-dynamically respond to seasonal fluctuations in the environment.
+the same connectivity model is repeatedly applied (e.g. \citealp{Osipova.2019}).
+With simulations from ISSFs, in contrast, the environment could change ``as the
+dispersers move'', so that simulated trajectories would dynamically respond to
+seasonal fluctuations in the environment.
 
-\subsection{Disadvantages of ISSF Simulations}
+% \subsection{Disadvantages of ISSF Simulations}
 Despite the many benefits and great flexibility offered by simulations from
 ISSFs, one must also be aware of the associated limitations. For example, while
 our approach of simulating dispersal proved usedful to assess landscape
@@ -968,15 +958,14 @@ different connectivity maps, need to be developed in the future.
 which the virtual dispersers are released. We placed source points within
 protected areas large enough to sustain viable wild dog populations, implicitly
 assuming that wild dogs primarily survive in large, formally protected areas
-\citep{Woodroffe.1999, DaviesMostert.2012, Woodroffe.2012, VanDerMeer.2014}.
-Moreover, we lacked precise knowledge about the distribution and abundance of
-wild dogs across protected areas, so we placed source points randomly within
-them. In cases where more detailed data distribution and abundance are
-available, source points could be distributed accordingly. Alternatively, source
-points could be distributed homogeneously but later be weighted when computing
-connectivity metrics. In any case, the challenge of selecting meaningful source
-points is not unique to individual-based simulations but also applies to LCPA
-and CT.
+\citep{DaviesMostert.2012, Woodroffe.2012, VanDerMeer.2014}. Moreover, we lacked
+precise knowledge about the distribution and abundance of wild dogs across
+protected areas, so we placed source points randomly within them. In cases where
+more detailed data distribution and abundance are available, source points could
+be distributed accordingly. Alternatively, source points could be distributed
+homogeneously but later be weighted when computing connectivity metrics. In any
+case, the challenge of selecting meaningful source points is not unique to
+individual-based simulations but also applies to LCPA and CT.
 
 (3) The use of ISSFs to simulate dispersers requires deciding on the number of
 simulated steps (i.e. the simulated dispersal durations). If sufficient
@@ -1006,7 +995,7 @@ borders. Rather than breaking the simulation, we created a buffer zone
 study area. This proved to be an effective solution to overcome problems with
 boundary effects.
 
-\subsection{Conclusion}
+% \subsection{Conclusion}
 In summary, we proposed and applied a simple three-step approach that relies on
 ISSF-analysis and enables the simulation of dispersal trajectories and the
 assessment of landscape connectivity. The proposed approach overcomes several of
@@ -1045,9 +1034,12 @@ for sharing her data of three dispersing wild dogs. Furthermore, we would like
 to thank Johannes Signer for assisting with the simulation algorithm. This study
 was funded by Albert-Heim Foundation, Basler Stiftung für Biologische Forschung,
 Claraz Foundation, Idea Wild, Jacot Foundation, National Geographic Society,
-Parrotia Stiftung, Stiftung Temperatio, Wilderness Wildlife Trust Foundation,
-Forschungkredit der Universität Zürich, and a Swiss National Science Foundation
-Grant (31003A\_182286) to A. Ozgul.
+Parrotia Stiftung, Stiftung Temperatio, Wilderness Wildlife Trust,
+Forschungskredit of the University of Zürich (grant no. FK-21-091), and a Swiss
+National Science Foundation grant (no. 31003A\_182286) to A. Ozgul.
+
+\section{Conflict of Interest}
+All authors declare that they have no conflicts of interest.
 
 \newpage
 \begingroup

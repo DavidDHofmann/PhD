@@ -8,13 +8,15 @@ rm(list = ls())
 
 # Load required packages
 library(raster)        # To handle spatial data
+library(terra)         # To handle spatial data
 library(pbmcapply)     # For parallel computing
 library(tidyverse)     # For data wrangling
 library(survival)      # To run conditional logistic regression
-library(sf)            # For plotting
-library(davidoff)      # Custom functions
 library(lubridate)     # To handle dates
 library(amt)           # To fit distributions
+library(maptools)      # Access to spatstat functions
+library(spatstat)      # Access to spatstat functions
+library(glmmTMB)       # To fit mixed effects clogit
 
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
@@ -25,15 +27,19 @@ source("02_R-Scripts/00_Functions.r")
 # Suppress scientific notation
 options(scipen = 999)
 
-# Load observed movement data of dispersing wild dogs
+################################################################################
+#### GPS Data Cleaning
+################################################################################
+# Load observed movement data of dispersing wild dogs and nest data by ID
 obs <- "03_Data/01_RawData/WildDogs.csv" %>%
   read_csv() %>%
   subset(State == "Disperser") %>%
   mutate(TimestampRounded = round_date(Timestamp, "1 hour")) %>%
   group_by(DogName) %>%
+  rename(ID = DogName) %>%
   nest()
 
-# Resample data to 1 hour
+# Resample the GPS data to 1 hour
 obs$data <- suppressMessages(
   pbmclapply(1:nrow(obs)
     , ignore.interactive = T
@@ -47,55 +53,59 @@ obs$data <- suppressMessages(
 # Unnest and keep only fixes on the attempted schedule
 obs <- obs %>%
   unnest(data) %>%
-  subset(hour(TimestampRounded) %in% c(3, 7, 15, 19, 23))
+  subset(hour(TimestampRounded) %in% c(3, 7, 15, 19, 23)) %>%
+  ungroup()
 
 # Determine "step_number" and "step_ids"
-obs$step_id <- 1:nrow(obs)
-obs <- obs %>% mutate(step_number = row_number())
+obs <- obs %>%
+  mutate(step_id = row_number()) %>%
+  group_by(ID) %>%
+  mutate(step_number = row_number()) %>%
+  ungroup()
+
+# Let's define an extent from the GPS locations
+ext <- extent(c(min(obs$x), max(obs$x), min(obs$y), max(obs$y))) + 1
+ext <- as(ext, "SpatialPolygons")
+crs(ext) <- "+init=epsg:4326"
 
 # Reproject data to utm
-coords <- obs[, c("x", "y")]
-coordinates(coords) <- c("x", "y")
-crs(coords) <- "+init=epsg:4326"
-coords <- spTransform(coords, "+init=epsg:32734")
-obs$x <- coordinates(coords)[, c("x")]
-obs$y <- coordinates(coords)[, c("y")]
-
-# # Check for missing fixes
-# test <- data %>%
-#   group_by(DogName) %>%
-#   nest() %>%
-#   mutate(Schedule = map(data, function(x) {
-#     range <- range(x$TimestampRounded)
-#     attempted <- tibble(Attempted = seq(range[1], range[2], by = "4 hour"))
-#     attempted <- left_join(attempted, x, by = c("Attempted" = "TimestampRounded"))
-#     attempted <- subset(attempted, hour(Attempted) != 11)  # At 11 we neve expect a fix
-#     return(attempted)
-#   }))
-# testi <- dplyr::select(test, Schedule) %>% unnest(Schedule)
-
-# In some individuals the missingness is not unplanned but due to either a
-# different schedule or because there was actually no collar on the animal
-# during that time.
+obs[, c("x", "y")] <- reprojCoords(xy = obs[, c("x", "y")]
+  , from = "+init=epsg:4326"
+  , to   = "+init=epsg:32734"
+)
 
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness    = seq(0, 0.5, by = 0.1)                  # Fraction of the fixes that is removed
-  , Forgiveness    = 1:5                                    # Allowed lag of steps (in steps)
-  , Replicate      = 1:100                                  # Number of replicates for each combination
-  , Distributions  = c("uncorrected", "naive", "dynamic")   # Which distributions to use
+    Missingness    = seq(0, 0.5, by = 0.1)                                        # Fraction of the fixes that is removed
+  , Forgiveness    = 1:5                                                          # Allowed lag of steps (in steps)
+  , Replicate      = 1:1                                                          # Number of replicates for each combination
+  , Distributions  = c("uncorrected", "naive", "dynamic", "multistep", "model")   # Which distributions to use
 )
 
-# Adjust column names slightly
-obs <- rename(obs, ID = DogName)
-
+################################################################################
+#### Covariate Layers
+################################################################################
 # Load all covariate layers
 water <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/01_LandCover_WaterCover_MERGED.grd")
 trees <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/01_LandCover_TreeCover_MODIS.grd")
 shrub <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/01_LandCover_NonTreeVegetation_MODIS.grd")
 human <- stack("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.grd")
 human <- human[["Buffer_5000"]]
+
+# # Subset for now
+# water <- water[[1:2]]
+# trees <- trees[[1:2]]
+# shrub <- shrub[[1:2]]
+
+# We can crop them to a smaller extent
+water <- crop(water, ext)
+trees <- crop(trees, ext)
+shrub <- crop(shrub, ext)
+human <- crop(human, ext)
+
+# Normalize the human influence layer to values between 0 and 1
+human <- human / maxValue(human)
 
 # Read all data into memory if possible
 water <- readAll(water)
@@ -158,8 +168,8 @@ computeBursts <- function(data, forgiveness) {
     # forgiveness
     mutate(data = map(data, function(x) {
       x$duration <- difftime(lead(x$TimestampRounded), x$TimestampRounded, units = "hours")
-      x$duration[hour(x$TimestampRounded) == 7] <- x$duration[hour(x$TimestampRounded) == 7] - 4
-      x$irregular <- x$duration > forgiveness * 4 # To account for the fact that we have four-hourly steps
+      x$duration[hour(x$TimestampRounded) == 7] <- x$duration[hour(x$TimestampRounded) == 7] - 4    # Steps that start at 7 are allowed to be 4 hours longer
+      x$irregular <- x$duration > forgiveness * 4                                                   # To account for the fact that we have four-hourly steps
       x$burst <- NA
       x$burst[1] <- 1
       x$burst[2:nrow(x)] <- lag(cumsum(x$irregular) + 1)[-1]
@@ -201,24 +211,27 @@ computeMetrics <- function(data) {
   return(data_metrics)
 }
 
-# Function to generate random steps
-computeSSF <- function(data, n_rsteps, distributions) {
+# Function to generate random steps. The approach parameter is used to specify
+# the approach that should be used to generate random steps
+computeSSF <- function(data, n_rsteps, approach) {
 
-  # Indicate case steps
+  # Generate a new column that indicates that the steps are "observed" steps
   data$case <- 1
 
-  # Cannot work with steps that have no turning angle
+  # Cannot work with steps that have no turning angle, so remove them
   data <- subset(data, !is.na(relta))
 
-  # Create a new dataframe for alternative steps
+  # Create a new dataframe into which we can put alternative/random steps
   rand <- data[rep(1:nrow(data), each = n_rsteps), ]
 
-  # Indicate that they are control steps (case = 0)
+  # Indicate that these steps are random steps (case = 0)
   rand$case <- 0
 
-  # Sample new step lengths and turning angles according to the specified
-  # distributions
-  if (distributions == "uncorrected") {
+  ##############################################################################
+  #### Approach 1 - Uncorrected
+  ##############################################################################
+  # Step lengths sampled from "minimal" step-duration distributions
+  if (approach == "uncorrected") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$uncorrected$sl$scale
       , shape = dists$uncorrected$sl$shape
@@ -228,7 +241,12 @@ computeSSF <- function(data, n_rsteps, distributions) {
       , mu    = dists$uncorrected$ta$mu
       , by    = 0.01
     )
-  } else if (distributions == "naive") {
+
+  ##############################################################################
+  #### Approach 2 - Naive
+  ##############################################################################
+  # Step lengths adjusted merely by multiplying with the step duration
+  } else if (approach == "naive") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$uncorrected$sl$scale * rand$duration
       , shape = dists$uncorrected$sl$shape
@@ -238,7 +256,13 @@ computeSSF <- function(data, n_rsteps, distributions) {
       , mu    = dists$uncorrected$ta$mu
       , by    = 0.01
     )
-  } else if (distributions == "dynamic") {
+
+  ##############################################################################
+  #### Approach 3 - Dynamic
+  ##############################################################################
+  # Step lengths and turning angles sampled from distributions fitted to
+  # different step-durations
+  } else if (approach == "dynamic" | approach == "model") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$dynamic$sl$scale[match(rand$duration, dists$dynamic$sl$duration)]
       , shape = dists$dynamic$sl$shape[match(rand$duration, dists$dynamic$sl$duration)]
@@ -250,15 +274,81 @@ computeSSF <- function(data, n_rsteps, distributions) {
         , by    = 0.01
       )
     })
+
+  ##############################################################################
+  #### Approach 4 - Multistep
+  ##############################################################################
+  # Step lengths and turning angles resulting from multiple random steps, where
+  # the number of steps matches the step duration of the observed step
+  } else if (approach == "multistep") {
+    rand <- rand %>% group_by(duration) %>% nest()
+    rand$data <- lapply(1:nrow(rand), function(z) {
+
+      # Extract important info of the current iteration (i.e. the "z")
+      duration <- rand$duration[z]
+      x        <- rand$data[[z]]$x
+      y        <- rand$data[[z]]$y
+      relta    <- rand$data[[z]]$relta
+      absta    <- rand$data[[z]]$absta
+
+      # Generate sequence of random steps
+      for (i in 1:duration) {
+        sl <- rgamma(n = nrow(rand$data[[z]])
+          , scale = dists$uncorrected$sl$scale
+          , shape = dists$uncorrected$sl$shape
+        )
+        relta_new <- rvonmises(n = nrow(rand$data[[z]])
+          , kappa = dists$uncorrected$ta$kappa
+          , mu    = dists$uncorrected$ta$mu
+          , by    = 0.01
+        )
+
+        # In case we are looking at the first step, we can only calculate the
+        # new absolute turning angle by first deriving the difference in
+        # relative turning angles
+        if (i == 1) {
+          relta_diff <- relta_new - relta
+          absta <- absta + relta_diff
+        } else {
+          absta <- absta + relta_new
+        }
+
+        # Compute new endpoints
+        absta <- ifelse(absta < 0, 2 * pi + absta, absta)
+        absta <- ifelse(absta > 2 * pi, absta - 2 * pi, absta)
+        x <- x + sin(absta) * sl
+        y <- y + cos(absta) * sl
+        relta <- relta_new
+      }
+
+      # Compute step length and relative turning angle from the origins to the
+      # end coordinate of the last multi-random-steps
+      dx <- x - rand$data[[z]]$x
+      dy <- y - rand$data[[z]]$y
+      sl <- sqrt(dx ** 2 + dy ** 2)
+      absta <- atan2(dy, dx)
+      absta <- (absta - pi / 2) * (-1)
+      absta <- ifelse(absta < 0, 2 * pi + absta, absta)
+      absta <- ifelse(absta > 2 * pi, absta - 2 * pi, absta)
+      relta <- absta - rand$data[[z]]$absta
+      relta <- ifelse(relta > +pi, relta - 2 * pi, relta)
+      relta <- ifelse(relta < -pi, 2 * pi + relta, relta)
+      rand$data[[z]]$sl <- sl
+      rand$data[[z]]$relta_new <- relta
+      return(rand$data[[z]])
+    })
+    rand <- unnest(rand, data)
+    rand <- ungroup(rand)
+    rand <- arrange(rand, ID, step_id, desc(case))
   } else {
-    stop("Provide valid input for the desired distributions")
+    stop("Provide valid input for the desired approach")
   }
 
   # Calculate new "absolute" turning angle
-  rand$relta_diff <- rand$relta - rand$relta_new
-  rand$absta <- rand$absta - rand$relta_diff
-  rand$absta[rand$absta > 2 * pi] <- rand$absta[rand$absta > 2 * pi] - 2 * pi
-  rand$absta[rand$absta < 0 * pi] <- rand$absta[rand$absta < 0 * pi] + 2 * pi
+  rand$relta_diff <- rand$relta_new - rand$relta
+  rand$absta <- rand$absta + rand$relta_diff
+  rand$absta <- ifelse(rand$absta < 0, 2 * pi + rand$absta, rand$absta)
+  rand$absta <- ifelse(rand$absta > 2 * pi, rand$absta - 2 * pi, rand$absta)
   rand$relta <- rand$relta_new
 
   # Remove undesired stuff
@@ -290,7 +380,7 @@ computeSSF <- function(data, n_rsteps, distributions) {
 }
 
 # Function to extract covariates along steps and compute step covariates
-computeCovars <- function(data, covariates, multicore = F) {
+computeCovars <- function(data, multicore = F) {
 
   # Run the covariate extraction
   if (multicore) {
@@ -367,14 +457,24 @@ computeCovars <- function(data, covariates, multicore = F) {
       return(extr)
     })
   }
-  extracted <- as.data.frame(do.call(rbind, extracted))
 
-  # Bind with other data
+  # Put extracted covariates into a dataframe and bind them to the original data
+  extracted <- as.data.frame(do.call(rbind, extracted))
   data <- cbind(data, extracted)
+
+  # Ensure that step lengths cover a minimal distance
+  data$sl[data$sl == 0] <- min(data$sl[data$sl != 0])
+
+  # Specify phases of activity
+  data$Activity <- ifelse(hour(data$TimestampRounded) == 7, "Inactive", "Active")
 
   # Calculate movement metrics
   data$log_sl <- log(data$sl)
   data$cos_ta <- cos(data$relta)
+
+  # Compute step length in kilometers
+  data$sl_km <- data$sl / 1000
+  data$log_sl_km <- log(data$sl_km)
 
   # Return the results
   return(data)
@@ -383,42 +483,65 @@ computeCovars <- function(data, covariates, multicore = F) {
 # Function to run the step selection model
 runModel <- function(data) {
 
-  # Run the step selection model
-  mod <- clogit(case ~
-    + sl
-    + log_sl
+  # Calculate distance to water in kilometers
+  data$DistanceToWater <- data$DistanceToWater / 1000
+
+  # Compute square rooted distance
+  data$SqrtDistanceToWater <- sqrt(data$DistanceToWater)
+
+  # Prepare model formula
+  form <- (case ~
     + cos_ta
+    + sl_km
+    + log_sl_km
     + Water
-    + Trees
-    + Shrubs
-    + dist
-    + strata(step_id)
-    , data = data
+    + SqrtDistanceToWater
+    # + HumanInfluence
+    # + Trees
+    # + Shrubs
+    # + Activity:sl_km
+    # + Activity:log_sl_km
+    + Water:sl_km
+    # + Water:log_sl_km
+    + cos_ta:sl_km
+    # + cos_ta:log_sl_km
+    + (1|step_id)
+    + (0 + cos_ta|ID)
+    + (0 + sl_km|ID)
+    + (0 + log_sl_km|ID)
+    + (0 + Water|ID)
+    + (0 + SqrtDistanceToWater|ID)
+    # + (0 + Trees|ID)
+    # + (0 + HumanInfluence|ID)
+    # + (0 + Shrubs|ID)
   )
 
-  # Extract model coefficients
-  ci <- confint(mod, level = 0.95)
-  coefs <- summary(mod)$coefficients
-  coefs <- data.frame(
-      Coefficient = rownames(coefs)
-    , Estimate    = coefs[, "coef"]
-    , SE          = coefs[, "se(coef)"]
-    , Z           = coefs[, "z"]
-    , LCI         = ci[, 1]
-    , UCI         = ci[, 2]
+  # The model might not converge well, thus, we need to write an error handling
+  # function
+  result <- tryCatch(
+      expr    = {
+        mod <- glmm_clogit(form, data)
+        res <- list("Success", mod)
+        return(res)
+      }
+    , error   = function(e) {return(list(e, mod))}
+    , warning = function(w) {return(list(w, mod))}
   )
-  rownames(coefs) <- NULL
 
-  # Return them
-  return(coefs)
+  # Run model
+  return(result)
+
 }
 
-# Define the uncorrected distributions for step lengths and turning angles
+# Before we can test the functions above, we need some distributions from which
+# we can sample step lengths and turning angles to generate random steps. Thus,
+# let's fit step-length and turning angle distributions to the minimum step
+# duration
 metrics <- obs %>%
   rarifyData(missingness = 0) %>%
   computeBursts(forgiveness = 1) %>%
   computeMetrics() %>%
-  mutate(sl = ifelse(sl == 0, 1, sl)) %>%
+  subset(duration == 1 * 4) %>%
   select(sl, relta) %>%
   tibble()
 sl_dist <- fit_distr(metrics$sl, dist_name = "gamma")$params
@@ -427,12 +550,12 @@ dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
 
 # Try out the functions to see how they work
 testing <- rarifyData(obs, missingness = 0.5)
-testing <- computeBursts(testing, forgiveness = 2)
+testing <- computeBursts(testing, forgiveness = 1)
 testing <- computeMetrics(testing)
-testing <- computeSSF(testing, n_rsteps = 10, distributions = "uncorrected")
-testing <- computeCovars(testing, covars, multicore = T)
+testing <- computeSSF(testing, n_rsteps = 10, approach = "naive")
+testing <- computeCovars(testing, multicore = T)
 testing <- runModel(testing)
-testing
+summary(testing)
 
 ################################################################################
 #### Fit Step Length Distributions to Different Step Durations

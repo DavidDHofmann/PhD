@@ -15,15 +15,12 @@ setwd(wd)
 library(tidyverse)    # For data wrangling
 library(lubridate)    # To handle dates
 library(pbmcapply)    # For multicore abilities
-library(davidoff)     # Custom functions
-library(terra)        # For handling spatial data
-library(raster)       # For handling spatial data
-library(sp)           # For handling spatial data
 library(fitdistrplus) # To fit distributions
-library(ggpubr)       # To put multiple plots together
 
-# Set seed for reproducability (need to change random sampler for parallel)
-set.seed(1234)
+
+computeBurst()
+computeMetrics()
+computeSSF()
 
 ################################################################################
 #### Data Cleaning

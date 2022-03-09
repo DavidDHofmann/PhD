@@ -25,36 +25,47 @@ options(scipen = 999)
 
 # Load observed movement data
 obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
+glimpse(obs)
 
 # Load covariate layers
 covars <- stack("03_Data/01_RawData/CovariateLayers.grd")
 covars <- readAll(covars)
+glimpse(covars)
+
+# Extend covariate layers slightly
+covars <- extendRaster(covars, extent(c(-50, 350, -50, 350)))
+plot(covars)
 
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness    = seq(0, 0.8, by = 0.1)                                         # Fraction of the fixes that is removed
+    Missingness    = seq(0, 0.5, by = 0.1)                                         # Fraction of the fixes that is removed
   , Forgiveness    = 1:5                                                           # Allowed lag of steps (in steps)
-  , Replicate      = 1:1                                                         # Number of replicates for each combination
+  , Replicate      = 1:100                                                         # Number of replicates for each combination
   , Approach       = c("uncorrected", "naive", "dynamic", "multistep", "model")    # Which approach to use to generate random steps
 )
 
 ################################################################################
 #### Functions
 ################################################################################
-# Function to create a dataset with rarified observations (also used to
-# subsample from all individuals)
-rarifyData <- function(data, missingness, n_id = 100) {
-  keep <- sample(unique(data$ID), n_id)
+# Function to create a dataset with rarified observations (the same function is
+# also used to subsample x individuals from all individuals)
+rarifyData <- function(data, missingness, n_id = NULL) {
+  if (is.null(n_id)) {
+    keep <- unique(data$ID)
+  } else {
+    keep <- sample(unique(data$ID), n_id, replace = F)
+  }
   data_sub <- subset(data, ID %in% keep)
   rarified <- data_sub[sort(sample(1:nrow(data_sub), size = nrow(data_sub) * (1 - missingness))), ]
   return(rarified)
 }
 
-# Function to compute bursts (per ID, depending on the fogriveness)
+# Function to compute bursts (per ID, depending on the fogriveness). A new burst
+# always starts if the step-duration exceeds the forgiveness.
 computeBursts <- function(data, forgiveness) {
 
-  # Nest data by id
+  # Nest data by id (a burst cannot expand across multiple ids)
   data_bursted <- data %>%
     group_by(ID) %>%
     nest() %>%
@@ -76,7 +87,8 @@ computeBursts <- function(data, forgiveness) {
   return(data_bursted)
 }
 
-# Function to compute step metrics per burst
+# Function to compute step metrics (step length, relative turning angle,
+# absolute turning angle). Step metrics are calculated on bursts.
 computeMetrics <- function(data) {
 
   # Nest by ID and burst
@@ -100,26 +112,25 @@ computeMetrics <- function(data) {
   return(data_metrics)
 }
 
-# Function to generate random steps
+# Function to generate random steps. The approach parameter is used to specify
+# the approach that should be used to generate random steps
 computeSSF <- function(data, n_rsteps, approach) {
 
-  # Debugging
-  data     <- testing
-  n_rsteps <- 2
-  approach <- "multistep"
-
-  # Indicate case steps
+  # Generate a new column that indicates that the steps are "observed" steps
   data$case <- 1
 
-  # Cannot work with steps that have no turning angle
+  # Cannot work with steps that have no turning angle, so remove them
   data <- subset(data, !is.na(relta))
 
-  # Create a new dataframe for alternative steps
+  # Create a new dataframe into which we can put alternative/random steps
   rand <- data[rep(1:nrow(data), each = n_rsteps), ]
 
-  # Indicate that they are control steps (case = 0)
+  # Indicate that these steps are random steps (case = 0)
   rand$case <- 0
 
+  ##############################################################################
+  #### Approach 1 - Uncorrected
+  ##############################################################################
   # Step lengths sampled from "minimal" step-duration distributions
   if (approach == "uncorrected") {
     rand$sl <- rgamma(n = nrow(rand)
@@ -132,6 +143,9 @@ computeSSF <- function(data, n_rsteps, approach) {
       , by    = 0.01
     )
 
+  ##############################################################################
+  #### Approach 2 - Naive
+  ##############################################################################
   # Step lengths adjusted merely by multiplying with the step duration
   } else if (approach == "naive") {
     rand$sl <- rgamma(n = nrow(rand)
@@ -144,6 +158,9 @@ computeSSF <- function(data, n_rsteps, approach) {
       , by    = 0.01
     )
 
+  ##############################################################################
+  #### Approach 3 - Dynamic
+  ##############################################################################
   # Step lengths and turning angles sampled from distributions fitted to
   # different step-durations
   } else if (approach == "dynamic" | approach == "model") {
@@ -159,13 +176,16 @@ computeSSF <- function(data, n_rsteps, approach) {
       )
     })
 
+  ##############################################################################
+  #### Approach 4 - Multistep
+  ##############################################################################
   # Step lengths and turning angles resulting from multiple random steps, where
   # the number of steps matches the step duration of the observed step
   } else if (approach == "multistep") {
     rand <- rand %>% group_by(duration) %>% nest()
     rand$data <- lapply(1:nrow(rand), function(z) {
 
-      # Extract important info
+      # Extract important info of the current iteration (i.e. the "z")
       duration <- rand$duration[z]
       x        <- rand$data[[z]]$x
       y        <- rand$data[[z]]$y
@@ -184,8 +204,9 @@ computeSSF <- function(data, n_rsteps, approach) {
           , by    = 0.01
         )
 
-        # For the first step, need to compute the difference of the relative
-        # turning angles
+        # In case we are looking at the first step, we can only calculate the
+        # new absolute turning angle by first deriving the difference in
+        # relative turning angles
         if (i == 1) {
           relta_diff <- relta_new - relta
           absta <- absta + relta_diff
@@ -201,8 +222,8 @@ computeSSF <- function(data, n_rsteps, approach) {
         relta <- relta_new
       }
 
-      # Compute step length and relative turning angle from origin to the end of
-      # the last steps
+      # Compute step length and relative turning angle from the origins to the
+      # end coordinate of the last multi-random-steps
       dx <- x - rand$data[[z]]$x
       dy <- y - rand$data[[z]]$y
       sl <- sqrt(dx ** 2 + dy ** 2)
@@ -262,7 +283,7 @@ computeSSF <- function(data, n_rsteps, approach) {
 # Function to extract covariates along steps and compute step covariates
 computeCovars <- function(data, covariates, multicore = F) {
 
-  # Run the covariate extraction
+  # Run the covariate extraction on multiple cores
   if (multicore) {
     extracted <- pbmclapply(1:nrow(data), ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
       ints <- interpolatePoints(
@@ -277,6 +298,7 @@ computeCovars <- function(data, covariates, multicore = F) {
       return(extr)
     })
 
+  # Run the covariate extraction on a single core
   } else {
     extracted <- lapply(1:nrow(data), function(x) {
       ints <- interpolatePoints(
@@ -291,12 +313,15 @@ computeCovars <- function(data, covariates, multicore = F) {
       return(extr)
     })
   }
-  extracted <- as.data.frame(do.call(rbind, extracted))
 
-  # Bind with other data
+  # Put extracted covariates into a dataframe and bind them to the original data
+  extracted <- as.data.frame(do.call(rbind, extracted))
   data <- cbind(data, extracted)
 
-  # Calculate movement metrics
+  # Ensure that step lengths cover a minimal distance
+  data$sl[data$sl == 0] <- min(data$sl[data$sl != 0])
+
+  # Calculate derived movement metrics
   data$log_sl <- log(data$sl)
   data$cos_ta <- cos(data$relta)
 
@@ -304,7 +329,7 @@ computeCovars <- function(data, covariates, multicore = F) {
   return(data)
 }
 
-# Function to run the step selection model
+# Function to run the step selection model using two different approaches
 runModel <- function(data, approach) {
 
   # Run the step selection model
@@ -333,7 +358,8 @@ runModel <- function(data, approach) {
     )
   }
 
-  # Extract model coefficients
+  # Extract model coefficients and put them into a dataframe. Also, compute
+  # confidence intervals.
   ci <- confint(mod, level = 0.95)
   coefs <- summary(mod)$coefficients
   coefs <- data.frame(
@@ -350,14 +376,15 @@ runModel <- function(data, approach) {
   return(coefs)
 }
 
-# Before we can test the functions, we need some distributions from which we can
-# sample step lengths and turning angles. Thus, let's fit step-length and
-# turning angle distributions to the minimum step duration
+# Before we can test the functions above, we need some distributions from which
+# we can sample step lengths and turning angles to generate random steps. Thus,
+# let's fit step-length and turning angle distributions to the minimum step
+# duration
 metrics <- obs %>%
   rarifyData(missingness = 0, n_id = 100) %>%
   computeBursts(forgiveness = 1) %>%
   computeMetrics() %>%
-  mutate(sl = ifelse(sl == 0, 1, sl)) %>%
+  subset(duration == 1) %>%
   select(sl, relta) %>%
   tibble()
 sl_dist <- fit_distr(metrics$sl, dist_name = "gamma")$params
@@ -441,9 +468,30 @@ dists_dynamic %>%
 # Define the number of random steps
 n_rsteps <- 10
 
+# So that we can independently store the results from different iterations,
+# let's prepare a filename for each row of the design table
+dat$Filename <- paste0(
+    "03_Data/03_Results/ModelResults/Simulation/"
+  , "M", sprintf("%02d", as.integer(dat$Missingness * 100)), "_"
+  , "F", sprintf("%02d", dat$Forgiveness), "_"
+  , "R", sprintf("%03d", dat$Replicate), "_"
+  , dat$Approach
+  , ".rds"
+)
+
+# Create the respective folder
+dir.create("03_Data/03_Results/ModelResults", showWarnings = F)
+dir.create("03_Data/03_Results/ModelResults/Simulation", showWarnings = F)
+
+# Let's randomize the design matrix
+dat <- dat[sample(nrow(dat)), ]
+
+# Subset to rows that haven't been run yet
+dat <- subset(dat, !file.exists(Filename))
+
 # Go through the design and run step selection analysis with the specified
 # parameters
-dat$Coefs <- pbmclapply(
+pbmclapply(
   # dat$Coefs <- lapply(
     X                  = 1:nrow(dat)
   , ignore.interactive = T
@@ -454,6 +502,7 @@ dat$Coefs <- pbmclapply(
   miss <- dat$Missingness[[x]]
   forg <- dat$Forgiveness[[x]]
   appr <- dat$Approach[[x]]
+  file <- dat$Filename[[x]]
 
   # Prepare data for ssf
   data <- obs %>%
@@ -466,26 +515,39 @@ dat$Coefs <- pbmclapply(
   # Run conditional logistic regression
   coefs <- runModel(data, approach = appr)
 
-  # Return the coefficients
-  return(coefs)
+  # Store results to file
+  write_rds(coefs, file)
+  return(NULL)
 })
+
+################################################################################
+#### CONTINUE HERE
+################################################################################
 
 # Store results to file
 write_rds(dat, "03_Data/03_Results/Models.rds")
 dat <- read_rds("03_Data/03_Results/Models.rds")
 
+# Let's also prepare a dataframe containing the "truth"
+truth <- data.frame(
+    Coefficient = c("sl", "log_sl", "cos_ta", "forest", "elev", "dist")
+  , Estimate    = c(0, 0, 0, -1, 0.5, -20)
+)
+
 # Visualize Results
 unnest(dat, Coefs) %>%
+  mutate(Approach = Distributions) %>%
   group_by(Missingness, Forgiveness, Approach, Coefficient) %>%
   summarize(
-    , SD           = sd(Estimate)
-    , Estimate     = mean(Estimate)
-    , LCI = Estimate - 2 * SD
-    , UCI = Estimate + 2 * SD
-    , .groups      = "drop"
+    , SD       = sd(Estimate)
+    , Estimate = mean(Estimate)
+    , LCI      = Estimate - 2 * SD
+    , UCI      = Estimate + 2 * SD
+    , .groups  = "drop"
   ) %>%
   ggplot(aes(x = Missingness, y = Estimate, col = as.factor(Forgiveness), fill = as.factor(Forgiveness))) +
     geom_ribbon(aes(ymin = LCI, ymax = UCI), alpha = 0.5, lwd = 0.5) +
+    geom_hline(data = truth, aes(yintercept = Estimate), lty = 2, lwd = 0.5) +
     # geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0.05, alpha = 0.5) +
     # geom_point() +
     # geom_line() +
@@ -496,10 +558,3 @@ unnest(dat, Coefs) %>%
     scale_color_viridis_d()
     # scale_fill_manual(values = c("orange", "cornflowerblue")) +
     # scale_color_manual(values = c("orange", "cornflowerblue"))
-
-################################################################################
-#### CAN WE USE SIMEX TO BACKTRANFORM?
-################################################################################
-################################################################################
-#### What if we fit a separate step length distribution?
-################################################################################

@@ -1,51 +1,51 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--I'm ignoring Hofmann.2021's extra "year" field
---line 3129 of file Literatur.bib
+--line 3135 of file Literatur.bib
 Warning--empty journal in Cozzi.2020
 Warning--empty journal in Hofmann.2021b
-You've used 78 entries,
+You've used 71 entries,
             1935 wiz_defined-function locations,
-            985 strings with 20316 characters,
-and the built_in function-call counts, 34385 in all, are:
-= -- 3288
-> -- 1769
-< -- 27
-+ -- 620
-- -- 618
-* -- 3244
-:= -- 6068
-add.period$ -- 237
-call.type$ -- 78
-change.case$ -- 689
-chr.to.int$ -- 76
-cite$ -- 80
-duplicate$ -- 1082
-empty$ -- 2207
-format.name$ -- 728
-if$ -- 6504
-int.to.chr$ -- 3
+            945 strings with 19373 characters,
+and the built_in function-call counts, 31908 in all, are:
+= -- 3047
+> -- 1665
+< -- 22
++ -- 585
+- -- 584
+* -- 3019
+:= -- 5615
+add.period$ -- 215
+call.type$ -- 71
+change.case$ -- 638
+chr.to.int$ -- 70
+cite$ -- 73
+duplicate$ -- 998
+empty$ -- 2036
+format.name$ -- 679
+if$ -- 6047
+int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 82
-newline$ -- 397
-num.names$ -- 234
-pop$ -- 562
+missing$ -- 76
+newline$ -- 361
+num.names$ -- 213
+pop$ -- 527
 preamble$ -- 2
-purify$ -- 699
+purify$ -- 647
 quote$ -- 0
-skip$ -- 797
+skip$ -- 737
 stack$ -- 0
-substring$ -- 2476
-swap$ -- 80
-text.length$ -- 1
+substring$ -- 2310
+swap$ -- 83
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 454
+type$ -- 412
 warning$ -- 2
-while$ -- 266
+while$ -- 245
 width$ -- 0
-write$ -- 1015
+write$ -- 925
 (There were 3 warnings)

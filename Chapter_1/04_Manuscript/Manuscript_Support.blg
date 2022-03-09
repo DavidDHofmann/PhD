@@ -1,10 +1,10 @@
-This is BibTeX, Version 0.99d (TeX Live 2017/Debian)
-Capacity: max_strings=100000, hash_size=100000, hash_prime=85009
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript_Support.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--I'm ignoring Hofmann.2021's extra "year" field
---line 3129 of file Literatur.bib
+--line 3135 of file Literatur.bib
 You've used 6 entries,
             1935 wiz_defined-function locations,
             520 strings with 5126 characters,

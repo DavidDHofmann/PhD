@@ -53,12 +53,6 @@ Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2020).
   Endangered Social Carnivore}.
 \newblock {\em {Journal of Animal Ecology}}, 89(10):2356--2366.
 
-\bibitem[Benz et~al., 2016]{Benz.2016}
-Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
-  C.~F., and Ciuti, S. (2016).
-\newblock {Dispersal Ecology Informs Design of Large-Scale Wildlife Corridors}.
-\newblock {\em {PLOS ONE}}, 11(9):e0162989.
-
 \bibitem[Brennan et~al., 2020]{Brennan.2020}
 Brennan, A., Beytell, P., Aschenborn, O., Du~Preez, P., Funston, P., Hanssen,
   L., Kilian, J., Stuart‐Hill, G., Taylor, R., and Naidoo, R. (2020).
@@ -155,17 +149,17 @@ Dray, S., Royer-Carenzi, M., and Calenge, C. (2010).
   Studies}.
 \newblock {\em {Ecological Research}}, 25(3):673--681.
 
-\bibitem[Dwernychuk and Boag, 1972]{Dwernychuk.1972}
-Dwernychuk, L.~W. and Boag, D.~A. (1972).
-\newblock {Ducks Nesting in Association with Gulls - An Ecological Trap?}
-\newblock {\em {Canadian Journal of Zoology}}, 50(5):559--563.
-\newblock Publisher: NRC Research Press.
-
 \bibitem[Eddelbuettel, 2013]{Eddelbuettel.2013}
 Eddelbuettel, D. (2013).
 \newblock {\em {Seamless R and C++ Integration with Rcpp}}.
 \newblock Springer, New York.
 \newblock ISBN 978-1-4614-6867-7.
+
+\bibitem[Eddelbuettel and Balamuta, 2018]{Eddelbuettel.2018}
+Eddelbuettel, D. and Balamuta, J.~J. (2018).
+\newblock {Extending extit{R} with extit{C++}: A Brief Introduction to
+  extit{Rcpp}}.
+\newblock {\em {The American Statistician}}, 72(1):28--36.
 
 \bibitem[Eddelbuettel and Fran\c{c}ois, 2011]{Eddelbuettel.2011}
 Eddelbuettel, D. and Fran\c{c}ois, R. (2011).
@@ -238,16 +232,10 @@ Hijmans, R.~J. (2021).
 \newblock {\em terra: Spatial Data Analysis}.
 \newblock R package version 1.2-10.
 
-\bibitem[Hodel and Fieberg, 2021a]{Hodel.2021a}
-Hodel, F.~H. and Fieberg, J.~R. (2021a).
-\newblock Circular-linear copulae for animal movement data.
-\newblock {\em bioRxiv}.
-
-\bibitem[Hodel and Fieberg, 2021b]{Hodel.2021b}
-Hodel, F.~H. and Fieberg, J.~R. (2021b).
-\newblock Cylcop: An r package for circular-linear copulae with angular
-  symmetry.
-\newblock {\em bioRxiv}.
+\bibitem[Hodel and Fieberg, 2022]{Hodel.2022}
+Hodel, F.~H. and Fieberg, J.~R. (2022).
+\newblock Circular‐{Linear} {Copulae} for {Animal} {Movement} {Data}.
+\newblock {\em Methods in Ecology and Evolution}, pages 2041--210X.13821.
 
 \bibitem[Hofmann et~al., 2021a]{Hofmann.2021}
 Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021a).
@@ -261,11 +249,6 @@ Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021b).
 \newblock {Data from: Bound within Boundaries: Do Protected Areas Cover
   Movement Corridors of their Most Mobile, Protected Species?}
 \newblock Dryad Digital Repository. \url{https: //doi:10.5061/dryad.dncjsxkzn}.
-
-\bibitem[Hunziker, 2021]{Hunziker.2021}
-Hunziker, P. (2021).
-\newblock {\em {velox: Fast Raster Manipulation and Extraction}}.
-\newblock R package version 0.2.1.
 
 \bibitem[Kanagaraj et~al., 2013]{Kanagaraj.2013}
 Kanagaraj, R., Wiegand, T., Kramer-Schadt, S., and Goyal, S.~P. (2013).
@@ -351,12 +334,6 @@ Muff, S., Signer, J., and Fieberg, J. (2020).
   Frequentist Computation}.
 \newblock {\em {Journal of Animal Ecology}}, 89(1):80--92.
 
-\bibitem[Nathan, 2008]{Nathan.2008}
-Nathan, R. (2008).
-\newblock {An Emerging Movement Ecology Paradigm}.
-\newblock {\em Proceedings of the National Academy of Sciences},
-  105(49):19050--19051.
-
 \bibitem[Osipova et~al., 2019]{Osipova.2019}
 Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
   M.~W., and Balkenhol, N. (2019).
@@ -371,22 +348,11 @@ O’Neill, H. M.~K., Durant, S.~M., and Woodroffe, R. (2020).
   and Orders of Selection in a Wide-Ranging Carnivore}.
 \newblock {\em BMC Zoology}, 5(1).
 
-\bibitem[Perrin and Mazalov, 1999]{Perrin.1999}
-Perrin, N. and Mazalov, V. (1999).
-\newblock {Dispersal and Inbreeding Avoidance}.
-\newblock {\em {The American Naturalist}}, 154(3):282--292.
-
 \bibitem[Perrin and Mazalov, 2000]{Perrin.2000}
 Perrin, N. and Mazalov, V. (2000).
 \newblock {Local Competition, Inbreeding, and the Evolution of Sex‐Biased
   Dispersal}.
 \newblock {\em {The American Naturalist}}, 155(1):116--127.
-
-\bibitem[Pe’er and Kramer-Schadt, 2008]{Peer.2008}
-Pe’er, G. and Kramer-Schadt, S. (2008).
-\newblock {Incorporating the Perceptual Range of Animals into Connectivity
-  Models}.
-\newblock {\em {Ecological Modelling}}, 213(1):73--85.
 
 \bibitem[Pomilia et~al., 2015]{Pomilia.2015}
 Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
@@ -455,12 +421,6 @@ Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).
   Wetlands Wsing MODIS SWIR Data}.
 \newblock {\em {International Journal of Applied Earth Observation and
   Geoinformation}}, 57:224--234.
-
-\bibitem[Woodroffe and Ginsberg, 1999]{Woodroffe.1999}
-Woodroffe, R. and Ginsberg, J.~R. (1999).
-\newblock {Conserving the African Wild Dog Lycaon pictus. Diagnosing and
-  Treating Causes of Decline}.
-\newblock {\em {Oryx}}, 33(2):132--142.
 
 \bibitem[Woodroffe et~al., 2019]{Woodroffe.2019}
 Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,

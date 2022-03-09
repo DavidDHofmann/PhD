@@ -335,20 +335,67 @@ extendRaster <- function(x, y){
 }
 
 ################################################################################
-#### Function to Quickly Rasterize Spatial Lines
+#### Function to Resample Fixes
 ################################################################################
-# To rasterize and count the lines, you could use rasterize(tracks, heatmap, fun
-# = "count"). However, this takes ages. Let's write a better function that uses
-# the "spatstat" library
-rasterizeSpatstat <- function(l, r){
-  values(r) <- 0
-  im <- as.im.RasterLayer(r)
-  summed <- im
-  for (y in 1:length(l)){
-    line    <- as.psp(l[y, ], window = im)
-    line    <- as.mask.psp(line)
-    line_r  <- as.im.owin(line, na.replace = 0)
-    summed  <- Reduce("+", list(summed, line_r))
-  }
-  return(raster(summed))
+# Function that takes gps data and resamples fixes to a desired duration
+resFix <- function(data, hours, start, tol = 0.5){
+  first <- range(data$Timestamp)[1] %>%
+    update(., hour = start, min = 0, sec = 0)
+  last <- range(data$Timestamp)[2] %>%
+    update(., hour = 24, min = 0, sec = 0)
+  dates <- seq(first, last, by = paste0(hours, " hours")) %>%
+    as.data.frame() %>%
+    set_names("Timestamp")
+  closest <- sapply(1:nrow(dates), function(x){
+    index <- which.min(abs(dates$Timestamp[x] - data$Timestamp))[1]
+    close <- as.numeric(abs(dates$Timestamp[x] - data$Timestamp[index]), units = "hours") <= tol
+    if (close){
+      return(index)
+    } else {
+      return(NA)
+    }
+  })
+  closest <- na.omit(closest)
+  return(data[closest, ])
+}
+
+################################################################################
+#### Function to Reproject Coordinates
+################################################################################
+# Function that takes coordiantes and reprojects them
+reprojCoords <- function(xy, from = NULL, to = NULL) {
+  xy <- as.matrix(xy)
+  xy <- terra::vect(xy, crs = from, type = "points")
+  xy <- terra::project(xy, to)
+  xy <- terra::crds(xy)
+  return(xy)
+}
+
+################################################################################
+#### Function to Mixed Fit CLogit Model
+################################################################################
+# Function to fit mixed clogit model as proposed by Muff et al. 2020
+glmm_clogit <- function(formula, data) {
+
+  # Prepare Model call but do not fit
+  model <- glmmTMB(formula
+    , family  = poisson()
+    , data    = data
+    , doFit   = FALSE
+  )
+
+  # Set the variance of the intercept artificially high
+  model$parameters$theta[1] <- log(1e6)
+
+  # Tell glmmTMB not to change the first entry of the vector of variances and
+  # give all other variances another indicator to make sure they can be freely
+  # estimated
+  nvarparm <- length(model$parameters$theta)
+  model$mapArg <- list(theta = factor(c(NA, 1:(nvarparm - 1))))
+
+  # Fit the model
+  model <- glmmTMB:::fitTMB(model)
+
+  # Return the model
+  return(model)
 }
