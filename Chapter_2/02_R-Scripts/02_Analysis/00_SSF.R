@@ -2,7 +2,7 @@
 #### Step Selection Function - Generation of Random Steps
 ################################################################################
 # Description: In this script we coerce our gps data to steps and generate
-# random steps for the (time varying) integrated step selection analysis.
+# random steps for the step selection analysis.
 
 # Clear R's brain
 rm(list = ls())
@@ -16,40 +16,33 @@ library(tidyverse)    # For data wrangling
 library(lubridate)    # To handle dates
 library(pbmcapply)    # For multicore abilities
 library(fitdistrplus) # To fit distributions
+library(terra)        # To handle spatial data
+library(ggpubr)
 
-
-computeBurst()
-computeMetrics()
-computeSSF()
+# Load custom functions
+source(file.path(wd, "02_R-Scripts", "00_Functions.R"))
 
 ################################################################################
-#### Data Cleaning
+#### Resample GPS Fixes
 ################################################################################
-# Load the gps data of dispersers and create rounded timestamps, then nest data
-# by each dog
+# Load the gps data of dispersers and create rounded timestamps.
 data <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
   read_csv() %>%
   subset(State == "Disperser") %>%
-  mutate(TimestampRounded = round_date(Timestamp, "1 hour")) %>%
-  nest(data = -DogName)
+  mutate(TimestampRounded = round_date(Timestamp, "1 hour"))
 
-# Resample GPS data to two (minimally) 2 hours
-cat("Resampling GPS data to 2 hours...\n")
-data$data <- suppressMessages(
-  pbmclapply(1:nrow(data)
-    , ignore.interactive = T
-    , mc.cores           = detectCores() - 1
-    , FUN                = function(x) {
-      resFix(data$data[[x]], hours = 2, start = 1, tol = 0.5)
-    }
-  )
+# Resample fixes to a desired target resolution
+cat("Resampling GPS fixes to 2 hours...\n")
+data <- resampleFixes(data
+  , ID    = "DogName"
+  , hours = 2
+  , start = 1
+  , tol   = 0.5
+  , cores = detectCores() - 1
 )
 
 # Check out the resampled data. Note that for Ripley there are only three fixes
-print(data, n = 30)
-
-# Unnest the data again
-data <- data %>% unnest(data)
+data %>% nest(data = -DogName) %>% print(n = 30)
 
 # Keep only fixes on our regular scheme
 data <- subset(data, hour(TimestampRounded) %in% c(3, 7, 15, 19, 23))
@@ -57,9 +50,13 @@ data <- subset(data, hour(TimestampRounded) %in% c(3, 7, 15, 19, 23))
 # Check for duplicates (there should be none)
 table(duplicated(data[, c("DogName", "TimestampRounded")]))
 
+################################################################################
+#### Compute Bursts
+################################################################################
 # We're going to convert the fixes to steps, yet we want to indicate a new
 # burst if a step takes longer than 4.25 hours (or longer than 8.25 hours
 # between 07:00 and 15:00). Let's thus calculate the timelags.
+cat("Computing bursts...\n")
 data <- data %>%
   group_by(DogName) %>%
   mutate(dt_ = Timestamp - lag(Timestamp)) %>%
@@ -102,17 +99,17 @@ tracks <- data %>%
     coords <- vect(coords, crs = "+init=epsg:4326")
     coords <- project(coords, "+init=epsg:32734")
     coords <- as.data.frame(crds(coords))
-    metrics <- step_met(coords$x, coords$y, x$Timestamp, degree = F)
+    metrics <- stepMet(coords$x, coords$y, x$Timestamp)
     return(cbind(x, metrics))
   })) %>% unnest(data)
 
 # Remove steps with missing turning angles
-tracks <- subset(tracks, !is.na(relta_))
+tracks <- subset(tracks, !is.na(relta))
 
 # Generate unique step id and indicate that steps are observed (case_) steps
 tracks <- tracks %>% mutate(
-    step_id_ = 1:nrow(.)
-  , case_    = T
+    step_id = 1:nrow(.)
+  , case    = T
 )
 
 # Indicate if a fix was taken during time of activity or inactivity (we define
@@ -131,57 +128,69 @@ ggplot(tracks, aes(x = x, y = y, group = BurstID)) +
   theme(legend.position = "none")
 
 # Visualize step lengths and turning angles during activity and inactivity
-p1 <- ggplot(tracks, aes(x = sl_, col = inactive, fill = inactive)) +
+p1 <- ggplot(tracks, aes(x = sl, col = inactive, fill = inactive)) +
   geom_density(alpha = 0.2) +
   theme_minimal() +
   ggtitle("Step Lengths") +
   xlab("Step Length (m)") +
-  ylab("Density")
-p2 <- ggplot(tracks, aes(x = relta_, col = inactive, fill = inactive)) +
+  ylab("Density") +
+  scale_fill_manual(values = c("orange", "cornflowerblue")) +
+  scale_color_manual(values = c("orange", "cornflowerblue"))
+p2 <- ggplot(tracks, aes(x = relta, col = inactive, fill = inactive)) +
   geom_density(alpha = 0.2) +
   theme_minimal() +
   ggtitle("Turning Angles") +
   xlab("Turning Angle (rad)") +
-  ylab("Density")
+  ylab("Density") +
+  scale_fill_manual(values = c("orange", "cornflowerblue")) +
+  scale_color_manual(values = c("orange", "cornflowerblue"))
 
 # Visualize step lengths and turning angles for different sexes
-p3 <- ggplot(tracks, aes(x = sl_, col = Sex, fill = Sex)) +
+p3 <- ggplot(tracks, aes(x = sl, col = Sex, fill = Sex)) +
   geom_density(alpha = 0.2) +
   theme_minimal() +
   ggtitle("Step Lengths") +
   xlab("Step Length (m)") +
-  ylab("Density")
-p4 <- ggplot(tracks, aes(x = relta_, col = Sex, fill = Sex)) +
+  ylab("Density") +
+  scale_fill_manual(values = c("orange", "cornflowerblue")) +
+  scale_color_manual(values = c("orange", "cornflowerblue"))
+p4 <- ggplot(tracks, aes(x = relta, col = Sex, fill = Sex)) +
   geom_density(alpha = 0.2) +
   theme_minimal() +
   ggtitle("Turning Angles") +
   xlab("Turning Angle (rad)") +
-  ylab("Density")
+  ylab("Density") +
+  scale_fill_manual(values = c("orange", "cornflowerblue")) +
+  scale_color_manual(values = c("orange", "cornflowerblue"))
 
 # Put plots together
 ggarrange(p1, p2, p3, p4)
 
 ################################################################################
+#### CONTINUE HERE!!!
+################################################################################
+
+################################################################################
 #### Generation of Random Steps
 ################################################################################
 # We can't work with 0 step lengths so we'll force each step to at least 1m
-tracks$sl_[tracks$sl_ == 0] <- 1
+tracks$sl <- ifelse(tracks$sl == 0, 1, tracks$sl)
 
 # Fit a Gamma distribution to the step speed (again, fitting a gamma to step
 # speeds or fitting a gamma to (normalized) step lengths yields the same under
 # iSSF) -> almost at least
 # sl <- fit_distr(tracks$sl_, "gamma")
-sl <- fitdist(tracks$sl_, "gamma", method = "mle", lower = 0)
+sl <- fitdist(tracks$sl, "gamma", method = "mle", lower = 0)
 sl <- list(
     scale = 1 / sl$estimate[["rate"]]
   , shape = sl$estimate[["shape"]]
 )
 
 # Let's visualize the fit
-x <- seq(0, max(tracks$sl_), 1)
+x <- seq(0, max(tracks$sl), length.out = 1000)
 y <- dgamma(x, scale = sl$scale, shape = sl$shape)
-hist(tracks$sl_, freq = F, breaks = 100)
-lines(y ~ x, col = "red")
+hist(tracks$sl, freq = F, breaks = 100, col = "cornflowerblue", border = "white", lwd = 0.5)
+lines(y ~ x, col = "orange", lwd = 2)
 
 # Write the distribution to file
 dir.create("03_Data/03_Results", showWarnings = F)
@@ -210,12 +219,12 @@ randomSteps <- lapply(1:nrow(tracks), function(i) {
   # steps (i.e. 0)
   steps <- tracks[rep(i, nsteps), ] %>%
     mutate(.
-      , absta_  = absta_ + (relta_new - relta_)
-      , relta_  = relta_new
-      , sl_     = sl_new
-      , case_   = 0
-      , x2_     = x1_ + sin(absta_) * sl_
-      , y2_     = y1_ + cos(absta_) * sl_
+      , absta  = absta + (relta_new - relta)
+      , relta  = relta_new
+      , sl     = sl_new
+      , case   = 0
+      , x2     = x1 + sin(absta_) * sl
+      , y2     = y1 + cos(absta_) * sl
     )
 
   # Return the steps

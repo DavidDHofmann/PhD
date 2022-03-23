@@ -90,23 +90,10 @@ disp$Window <- pbmclapply(
   crs(pts) <- "+init=epsg:4326"
 
   # Buffer the points
-  buff <- buffer(pts, width = 100 * 1000)
+  buff <- buffer(pts, width = 50 * 1000)
   buff <- aggregate(buff)
-  buff <- disagg(buff)
+  ext <- disagg(buff)
 
-  # Create extents around buffered points
-  ext <- lapply(buff, function(y) {
-    ex <- as.polygons(ext(y))
-    crs(ex) <- "+init=epsg:4326"
-    return(ex)
-  })
-
-  # Return result as SpatialPolygonsDataFrame
-  if (length(ext) > 1) {
-      ext <- do.call(rbind, ext)
-    } else {
-      ext <- ext[[1]]
-  }
   ext <- as(ext, "Spatial")
   ext <- as(ext, "SpatialPolygonsDataFrame")
   return(ext)
@@ -122,7 +109,7 @@ tiles <- as(tiles, "Spatial")
 # Visualize
 plot(tiles, lwd = 0.2, main = "Sentinel Tiles")
 text(tiles, "tile_id", cex = 0.6)
-plot(wind, add = T, border = "blue")
+plot(wind, add = T, border = "blue", lwd = 0.2)
 
 # Some windows only overlap very minimally with the sentinel tiles. Hence, let's
 # identify the overlap of the moving windows with each tile
@@ -159,7 +146,7 @@ disp$Tiles <- pbmclapply(
 
 # Let's remove tiles that are not overlapping more than 5 percent
 disp$Tiles <- lapply(disp$Tiles, function(x) {
-  subset(x, Overlap > 0.05)
+  subset(x, Overlap > 0.10)
 })
 
 # Visualize them
@@ -222,8 +209,9 @@ dat$Files <- lapply(1:nrow(dat), function(x) {
   # List available files
   suppressMessages(
     files <- s2_list(
-        spatial_extent = st_as_sf(dat$Window[[x]])
-      , time_interval  = c(dat$From[x], dat$To[x])
+        # spatial_extent = st_as_sf(dat$Window[[x]])
+        time_interval  = c(dat$From[x], dat$To[x])
+      , tile           = dat$Tiles[[x]]$TileID
       , level          = "auto"
     )
   )
