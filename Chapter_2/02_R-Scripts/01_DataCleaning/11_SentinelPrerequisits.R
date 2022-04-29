@@ -248,3 +248,11 @@ print(todownload)
 
 # Store all to file
 write_rds(todownload, "/media/david/Elements/Todownload.rds")
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/11_SentinelPrerequisits.rds")
+cat("Done :)\n")

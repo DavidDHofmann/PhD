@@ -13,17 +13,12 @@ library(terra)        # To handle spatial data
 library(lubridate)    # To handle dates
 library(randomForest) # To handle random forest models
 
-# Function to compute the normalized difference (nd) index of two bands
-nd <- function(img, band_x, band_y) {
-  x <- img[[band_x]]
-  y <- img[[band_y]]
-  nd <- (x - y) / (x + y)
-  return(nd)
-}
-
 # Set the working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
+
+# Custom functions
+source("02_R-Scripts/00_Functions.R")
 
 # Generate two areas of interest (one for the GOMOTI, one for DAVID'S KINGFOM)
 aoi_gomoti <- as(extent(c(23.497701, 23.579514, -19.544147, -19.501840)), "SpatialPolygons")
@@ -108,3 +103,11 @@ plot(pred_davids)
 # Write to file
 writeRaster(pred_gomoti, "03_Data/03_Results/99_GomotiPred.tif")
 writeRaster(pred_davids, "03_Data/03_Results/99_MbomaPred.tif")
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/15_SentinelTesting.rds")
+cat("Done :)\n")

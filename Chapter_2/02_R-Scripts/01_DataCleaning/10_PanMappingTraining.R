@@ -33,6 +33,9 @@ library(ggstance)      # To plot pointranges
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
 
+# Custom functions
+source("02_R-Scripts/00_Functions.R")
+
 # Create necessary directories
 dir.create("03_Data/01_RawData/LANDSAT", showWarnings = F)
 dir.create("03_Data/01_RawData/SENTINEL", showWarnings = F)
@@ -40,14 +43,6 @@ dir.create("03_Data/01_RawData/SENTINEL/L1C", showWarnings = F)
 dir.create("03_Data/01_RawData/SENTINEL/L2A", showWarnings = F)
 outdir_l1c <- "03_Data/01_RawData/SENTINEL/L1C"
 outdir_l2a <- "03_Data/01_RawData/SENTINEL/L2A"
-
-# Function to compute the normalized difference (nd) index of two bands
-nd <- function(img, band_x, band_y) {
-  x <- img[[band_x]]
-  y <- img[[band_y]]
-  nd <- (x - y) / (x + y)
-  return(nd)
-}
 
 ################################################################################
 #### Prepare Training Data
@@ -572,38 +567,9 @@ writeVector(vect(classes)
 )
 
 ################################################################################
-#### CONTINUE HERE
+#### Session Information
 ################################################################################
-
-# Make a prediction
-land <- paste0("03_Data/01_RawData/LANDSAT", "/", dates, ".tif")
-land <- rast(land[1])
-sent <- paste0("03_Data/01_RawData/SENTINEL", "/", dates, ".tif")
-sent <- rast(sent[1])
-pred_land <- predict(land, mod_rand_land, na.rm = T)
-pred_sent <- predict(sent, mod_rand_sent, na.rm = T)
-
-# # Keep only best classes
-# pred_land <- which.max(pred_land)
-# pred_sent <- which.max(pred_sent)
-
-# Remove dryland
-# pred_land <- subst(pred_land, 1, NA)
-# pred_sent <- subst(pred_sent, 1, NA)
-
-# Store the predictions
-writeRaster(pred_land, "Prediction_Landsat.tif", overwrite = T)
-writeRaster(pred_sent, "Prediction_Sentinel.tif", overwrite = T)
-
-################################################################################
-#### Visualizations
-################################################################################
-# Make a prediction using the best classifier
-design_sub <- subset(design, Satellite == "SENTINEL")
-imgs <- paste0("03_Data/01_RawData/", design_sub$Satellite, "/", design_sub$Dates, ".tif")
-predictions <- lapply(imgs, function(x) {
-  r <- stack(x)
-  rp <- predict(r, mod_rand_sent, na.rm = T)
-  return(rp)
-})
-plot(predictions)
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/10_PanMappingTraining.rds")
+cat("Done :)\n")

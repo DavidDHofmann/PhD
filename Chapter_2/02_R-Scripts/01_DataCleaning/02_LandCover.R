@@ -6,13 +6,13 @@
 # Clear R's brain
 rm(list = ls())
 
-# Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
-setwd(wd)
-
 # Load packages
 library(terra)       # To handle raster data
 library(tidyverse)   # For data wrangling
+
+# Set working directory
+wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
+setwd(wd)
 
 # Load the globeland land cover map
 glob <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")

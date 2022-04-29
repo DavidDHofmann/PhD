@@ -192,7 +192,7 @@ p2 <- tm_shape(corrs) +
 p3 <- p2 + tm_add_legend(
       type    = "line"
     , labels  = c("Kavango-Zambezi", "Conservation Area", "Country Borders")
-    , labels  = c("Kavango-Zambezi", "Schutzgebiet", "Landesgrenzen")
+    # , labels  = c("Kavango-Zambezi", "Schutzgebiet", "Landesgrenzen")
     , col     = c("black", "white", "black")
     , lty     = c(1, 1, 2)
     , lwd     = c(2, 2, 1.5)

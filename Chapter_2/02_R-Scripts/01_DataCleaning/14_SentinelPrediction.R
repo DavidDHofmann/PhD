@@ -22,6 +22,9 @@ library(gdalUtils)     # To handle spatial data
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
 
+# Custom functions
+source("02_R-Scripts/00_Functions.R")
+
 # Load all information on the Sentinel tiles
 sent <- read_rds("03_Data/03_Results/99_SentinelJoined.rds")
 print(sent)
@@ -29,14 +32,6 @@ print(sent)
 # Create a temporary directory
 tempi <- "/media/david/Elements/Temporary"
 dir.create(tempi, showWarnings = F)
-
-# Function to compute the normalized difference (nd) index of two bands
-nd <- function(img, band_x, band_y) {
-  x <- img[[band_x]]
-  y <- img[[band_y]]
-  nd <- (x - y) / (x + y)
-  return(nd)
-}
 
 # Function to split a raster
 splitRas <- function(file, outdir = tempdir(), s = 2, cores = 1) {
@@ -89,16 +84,29 @@ splitRas <- function(file, outdir = tempdir(), s = 2, cores = 1) {
 # Note that we'll use the "Random Forest" classifier for the "Sentinel" data
 model <- read_rds("03_Data/03_Results/99_PanMapping.rds")
 model <- model$ModelObject[[4]]
-#
+
 # Specify scl values -> Quality control -> Some of these we want to mask
 scl <- data.frame(
     Value    = c(0:11)
-  , Category = c("NoData", "Saturated or Defective", "Dark Area Pixels", "Cloud Shadows", "Vegetation", "Bare Soils", "Water", "Clouds Low Probability / Unclassified", "Clouds Medium Probability", "Clouds High Probability", "Cirrus", "Snow / Ice")
+  , Category = c(
+      "NoData"
+    , "Saturated or Defective"
+    , "Dark Area Pixels"
+    , "Cloud Shadows"
+    , "Vegetation"
+    , "Bare Soils"
+    , "Water"
+    , "Clouds Low Probability / Unclassified"
+    , "Clouds Medium Probability"
+    , "Clouds High Probability"
+    , "Cirrus"
+    , "Snow / Ice"
+  )
 )
 
 # Specify the values that we want to mask
-scl$ValueNew <- ifelse(
-    scl$Category %in% c("NoData", "Cloud Shadows", "Clouds Medium Probability", "Clouds High Probability", "Cirrus")
+scl$ValueNew <- ifelse(scl$Category %in%
+    c("NoData", "Cloud Shadows", "Clouds Medium Probability", "Clouds High Probability", "Cirrus")
   , yes = 1
   , no  = NA
 )
@@ -133,6 +141,7 @@ sent <- subset(sent, !exists)
 # window, and make predictions
 prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
   # file <- "/media/david/Elements/L2A/S2A_MSIL2A_20151218T082342_N0201_R121_T34KGD_20151218T084413.SAFE"
+  # file <- files_sub$Filename[1]
   # outname <- "/home/david/Schreibtisch"
   # ext <- vect(sent$Window[[1]])
   # n <- 5
@@ -152,31 +161,24 @@ prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
   # Check if the resolution of the two files is the same. If it's not, we need
   # to disaggregate the mask
   if (!all(res(rb) == res(rm))) {
-    rm <- disagg(rm, fact = 2)
+    rm <- disagg(rm, fact = 2, filename = tempfile(fileext = ".tif"))
   }
 
   # Unless the file lies fully within the moving window, crop it
   ext_proj <- project(ext, rb)
-  within <- as.vector(relate(ext(rb), ext_proj, "within"))
-  if (!within) {
-    rb <- crop(rb, ext_proj, snap = "out", filename = tempfile(fileext = ".tif"))
-    rm <- crop(rm, ext_proj, snap = "out", filename = tempfile(fileext = ".tif"))
-  }
-
-  # # Mask values outside the moving window
-  # rb <- mask(rb, ext_proj)
-  # rm <- mask(rm, ext_proj)
-
-  # # Generate a grid according to which we can split the tiles
-  # tl <- rast(nrows = n, ncols = n, extent = ext(rb), crs = crs(rb))
-
-  # Split all rasters accordingly and store them under said filenames
+  # within <- as.vector(relate(ext(rb), ext_proj, "within"))
+  # if (!within) {
+  #   rb <- crop(rb, ext_proj, snap = "out", filename = tempfile(fileext = ".tif"))
+  #   rm <- crop(rm, ext_proj, snap = "out", filename = tempfile(fileext = ".tif"))
+  # }
+  #
+  # Split all rasters (bands + mask) into multiple tiles
   rb_tiled <- splitRas(sources(rb), outdir = tempi, s = n, cores = detectCores() - 1)
   rm_tiled <- splitRas(sources(rm), outdir = tempi, s = n, cores = detectCores() - 1)
-  # rb_tiled <- makeTiles(rb, tl, tempfile(fileext = ".tif"), overwrite = T)
-  # rm_tiled <- makeTiles(rm, tl, tempfile(fileext = ".tif"), overwrite = T)
 
-  # Remove originals
+  # This process generates many xml files which I want to remove. Also remove
+  # the temporary files we created earlier.
+  file.remove(dir(tempi, ".aux.xml", full.names = T))
   file.remove(sources(rb))
   file.remove(sources(rm))
   rm(rm, rb)
@@ -189,12 +191,14 @@ prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
     band_tiled <- rast(rb_tiled[z])
     mask_tiled <- rast(rm_tiled[z])
 
-    # Buffer the mask
+    # Buffer the mask and apply it
     mask_tiled <- as.polygons(mask_tiled)
-    mask_tiled <- buffer(mask_tiled, width = 250)
-
-    # Apply it
-    masked <- mask(band_tiled, mask_tiled, updatevalue = NA, inverse = T)
+    if (length(mask_tiled) > 0) {
+        mask_tiled <- buffer(mask_tiled, width = 250)
+        masked <- mask(band_tiled, mask_tiled, updatevalue = NA, inverse = T)
+      } else {
+        masked <- band_tiled
+    }
 
     # Give the bands proper names
     names(masked) <- c("B1", "B2", "B3", "B4", "B5", "B6", "B7", "B8", "B9", "B11", "B12")
@@ -218,6 +222,9 @@ prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
     # Reclassify to water & dryland
     prd <- classify(prd, rbind(c(1, 0), c(2, 1), c(3, 1)))
 
+    # Mask everything outside the moving window
+    # prd <- mask(prd, ext_proj)
+
     # Store to file
     filename <- substr(outname, start = 1, stop = nchar(outname) - 4)
     filename <- paste0(filename, "_", sprintf("%02d", z), ".tif")
@@ -236,10 +243,19 @@ prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
 
   # Remove temporary files
   file.remove(unlist(predictions))
-  file.remove(vrt_band)
-  file.remove(vrt_mask)
+  if (file.exists(vrt_band)) {
+    file.remove(vrt_band)
+  }
+  if (file.exists(vrt_mask)) {
+    file.remove(vrt_mask)
+  }
   file.remove(rb_tiled)
   file.remove(rm_tiled)
+
+  # Remove ".vrt" folder
+  if (dir.exists(file.path(tempi, ".vrt"))) {
+    unlink(file.path(tempi, ".vrt"), recursive = T)
+  }
 
   # Store the file
   writeRaster(pred, outname, overwrite = T)
@@ -250,15 +266,17 @@ prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
   return(outname)
 }
 
+# Check files
+print(sent, n = 100)
+
 # Run it on all files
-final <- lapply(1:nrow(sent), function(x) {
+final <- lapply(27:nrow(sent), function(x) {
 
   # Print some info on the iteration
   cat("Merging files from month", x, "out of", nrow(sent), "...\n")
 
   # Get the window/extent of the current month
   ext <- suppressWarnings(vect(st_as_sf(sent$Window[[x]])))
-  til <- suppressMessages(tiles_intersects(st_as_sf(ext)))
 
   # Get the filenames of the current month and prepare filenames for the cleaned
   # and predicted files
@@ -268,7 +286,6 @@ final <- lapply(1:nrow(sent), function(x) {
       , Month    = sent$Month[x]
       , Tile     = sent$data[[x]]$id_tile
     ) %>%
-    subset(Tile %in% til) %>%
     mutate(
         FileNo        = sprintf("%02d", 1:n())
       , Month         = sprintf("%02d", Month)
@@ -300,12 +317,27 @@ final <- lapply(1:nrow(sent), function(x) {
     return(predictions)
   }
 
-  # Generate composite from all files
-  preds <- lapply(files$FilenameFinal, rast)
-  preds <- sprc(preds)
-  preds <- terra::mosaic(preds, fun = "min")
-
-  # Store it to file
-  writeRaster(preds, sent$ [x])
+  # # Generate a reference raster
+  # r <- rast(ext, resolution = 10 / 111000)
+  # r[] <- NA
+  #
+  # # Loop through the files and put values onto the reference raster
+  # for (i in files$FilenameFinal) {
+  #   b <- rast(i)
+  #   b <- mask(b, project(ext, crs(b)), updatevalue = NA)
+  #   b <- resample(b, r, method = "near")
+  #   r <- min(b, r, na.rm = T)
+  # }
+  #
+  # # Store it to file
+  # writeRaster(r, sent$Filename[x])
 
 })
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/14_SentinelPrediction.rds")
+cat("Done :)\n")

@@ -42,7 +42,7 @@ if (!file.exists("03_Data/01_RawData/POPECOL/Cleaned_GPSData.csv")) {
 
 # Load the downloaded data
 cat("Merging POPECOL's GPS data with Abrahm's GPS data...\n")
-dat1 <- read_csv("03_Data/01_RawData/POPECOL/Cleaned_GPSData.csv")
+dat1 <- read_csv("03_Data/01_RawData/POPECOL/Cleaned_GPSData.csv", show_col_types = F)
 
 # Find all dogs that eventually dispersed
 dispersers <- dat1 %>%
@@ -55,7 +55,7 @@ dat1 <- subset(dat1, DogName %in% dispersers) %>%
   mutate(Source = "Popecol")
 
 # Let's also add the individuals that were observed by Briana
-dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv") %>%
+dat2 <- read_csv("03_Data/01_RawData/ABRAHMS/DispersalPaths.csv", show_col_types = F) %>%
   filter(., !is.na(`Longitude..deg.`)) %>%
   dplyr::select(.,
       DogName   = `id`

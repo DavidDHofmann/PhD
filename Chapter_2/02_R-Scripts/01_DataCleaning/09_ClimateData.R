@@ -54,7 +54,7 @@ r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 # process better and to save files in between. Let's first identify the dates
 # for which we want to download data.
 dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
-  read_csv() %>%
+  read_csv(show_col_types = F) %>%
   pull(Timestamp) %>%
   range() %>%
   as.Date() %>%
@@ -137,7 +137,7 @@ if (nrow(todownload) > 0) {
 # process better and to save files in between. Let's first identify the dates
 # for which we want to download data.
 dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
-  read_csv() %>%
+  read_csv(show_col_types = F) %>%
   pull(Timestamp) %>%
   range() %>%
   as.Date() %>%
@@ -215,6 +215,10 @@ if (nrow(todownload) > 0) {
 ################################################################################
 #### Aggregate Precipitation Data
 ################################################################################
+# Note: Precipitation data from JAXA refers to aggregates. That is, the values
+# reported for a map indicating 15:00 o'clock refers to the amount of rainfall
+# between 15:00 and 16:00
+
 # Prepare a tibble for easier subsetting of the data
 cat("Loading precipitation data and generating aggregation table...\n")
 precip <- "03_Data/02_CleanData/00_Rainmaps" %>%
@@ -234,9 +238,9 @@ precip <- mutate(precip
 # Reorder columns
 precip <- dplyr::select(precip, Timestamp, Date, Hour, Name, Raster)
 
-# We don't need four hourly data. Hence, we'll aggregate the temperature data to
-# four hours (except for 11 o clock for which we'll use 8 hours instead),
-# corresponding to the GPS fixes. Let's create a help table for this.
+# We don't need hourly data. Hence, we'll aggregate the temperature data to four
+# hours (except for data between 7 and 15 o clock for which we'll use 8 hours
+# because we skip the 11 oclock fix). Let's create a help table for this.
 help <- seq(min(precip$Timestamp) + hours(8), max(precip$Timestamp) - hours(8), by = "hour")
 help <- help[hour(help) %in% c(3, 7, 15, 19, 23)]
 help <- tibble(Timestamp = help)
@@ -244,10 +248,10 @@ help <- tibble(Timestamp = help)
 # For each timestamp in the help table we can now identify the temperature maps
 # that we need to average
 averaged <- mutate(help, Average = map(Timestamp, function(x) {
-  if (hour(x) != 15) {
-    sub <- subset(precip, Timestamp <= x & Timestamp >= (x - hours(4)))
+  if (hour(x) != 7) {
+    sub <- subset(precip, Timestamp >= x & Timestamp < (x + hours(4))) # Smaller than the last hour!
   } else {
-    sub <- subset(precip, Timestamp <= x & Timestamp >= (x - hours(8)))
+    sub <- subset(precip, Timestamp >= x & Timestamp < (x + hours(8))) # Smaller than the last hour!
   }
   return(sub$Raster)
 }))
@@ -255,7 +259,7 @@ averaged <- mutate(help, Average = map(Timestamp, function(x) {
 # Check it
 print(averaged)
 
-# Each entry should either contain 5 or 9 maps. Let's check this
+# Each entry should either contain 4 or 8 maps. Let's check this
 table(sapply(averaged$Average, length))
 
 # For some reason we are missing the 00:00 data for one entry. I tried multiple
@@ -282,7 +286,7 @@ names(averaged)
 plot(averaged[[sample(nlyr(averaged), 4)]])
 
 # Store the final maps to file
-writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Precipitation.grd")
+writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Precipitation.grd", overwrite = T)
 
 ################################################################################
 #### Aggregate Temperature Data
@@ -306,9 +310,9 @@ temp <- mutate(temp
 # Reorder columns
 temp <- dplyr::select(temp, Timestamp, Date, Hour, Name, Raster)
 
-# We don't need four hourly data. Hence, we'll aggregate the temperature data to
-# four hours (except for 11 o clock for which we'll use 8 hours instead),
-# corresponding to the GPS fixes. Let's create a help table for this.
+# We don't need hourly data. Hence, we'll aggregate the temperature data to four
+# hours (except for data between 7 and 15 o clock for which we'll use 8 hours
+# because we skip the 11 oclock fix). Let's create a help table for this.
 help <- seq(min(temp$Timestamp) + hours(8), max(temp$Timestamp), by = "hour")
 help <- help[hour(help) %in% c(3, 7, 15, 19, 23)]
 help <- tibble(Timestamp = help)
@@ -316,10 +320,10 @@ help <- tibble(Timestamp = help)
 # For each timestamp in the help table we can now identify the temperature maps
 # that we need to average
 averaged <- mutate(help, Average = map(Timestamp, function(x) {
-  if (hour(x) != 15) {
-    sub <- subset(temp, Timestamp <= x & Timestamp >= (x - hours(4)))
+  if (hour(x) != 7) {
+    sub <- subset(precip, Timestamp >= x & Timestamp <= (x + hours(4))) # Smaller or equal to the last hour!
   } else {
-    sub <- subset(temp, Timestamp <= x & Timestamp >= (x - hours(8)))
+    sub <- subset(precip, Timestamp >= x & Timestamp <= (x + hours(8))) # Smaller or equal to the last hour!
   }
   return(sub$Raster)
 }))
@@ -331,8 +335,7 @@ print(averaged)
 check <- sapply(averaged$Average, length)
 table(check)
 
-# Again there appear to be a couple of days were data is missing (all in
-# September 2021). We'll have to skip those dates.
+# Again there appear to be a couple of days were data is missing
 averaged$Timestamp[check < 5]
 
 # Subset accordingly
@@ -358,7 +361,7 @@ names(averaged)
 plot(averaged[[sample(nlyr(averaged), 4)]])
 
 # Store the final maps to file
-writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Temperature.grd")
+writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Temperature.grd", overwrite = T)
 
 ################################################################################
 #### Session Information

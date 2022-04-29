@@ -23,6 +23,9 @@
 \usepackage[flushleft]{threeparttable}
 \usepackage[nomarkers, nolists]{endfloat}
 \usepackage[colorinlistoftodos]{todonotes}
+\usepackage{scalerel}
+\usepackage{tikz}
+\usetikzlibrary{svg.path}
 
 %------------------------------------------------------------------------------
 %	Some Styling
@@ -42,19 +45,35 @@
 % Change how equations are referenced
 \renewcommand{\theequation}{Equation \arabic{equation}}%
 
+% To be able to put an ORCID
+\definecolor{orcidlogocol}{HTML}{A6CE39}
+\tikzset{
+  orcidlogo/.pic={
+    \fill[orcidlogocol] svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3,0,128,0C198.7,0,256,57.3,256,128z};
+    \fill[white] svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+                 svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+                 svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+  }
+}
+\newcommand\orcid[1]{\href{https://orcid.org/#1}{\mbox{\scalerel*{
+\begin{tikzpicture}[yscale=-1,transform shape]
+  \pic{orcidlogo};
+\end{tikzpicture}
+}{|}}}}
+
 %------------------------------------------------------------------------------
 %	Titlepage: Header
 %------------------------------------------------------------------------------
-\title{A Thee-Step Approach for Assessing Landscape Connectivity via Simulated
+\title{A Three-Step Approach for Assessing Landscape Connectivity via Simulated
 Dispersal: African Wild Dog Case Study}
 
 % List of Authors
 \author{
-  David D. Hofmann\textsuperscript{1,2,\S} \and
-  Gabriele Cozzi\textsuperscript{1,2} \and
+  David D. Hofmann\textsuperscript{1,2,\S} \orcid{0000-0003-3477-4365} \and
+  Gabriele Cozzi\textsuperscript{1,2} \orcid{0000-0002-1744-1940} \and
   John W. McNutt\textsuperscript{2} \and
-  Arpat Ozgul\textsuperscript{1} \and
-  Dominik M. Behr\textsuperscript{1,2}
+  Arpat Ozgul\textsuperscript{1} \orcid{0000-0001-7477-2642} \and
+  Dominik M. Behr\textsuperscript{1,2} \orcid{0000-0001-7378-8538}
 }
 
 % Reduce spacing between authors
@@ -151,45 +170,47 @@ connectivity, Lycaon pictus
 %------------------------------------------------------------------------------
 %  LONG VERSION
 %------------------------------------------------------------------------------
-\noindent 1. Dispersal of individuals contributes to long-term population
-persistence, yet requires a sufficient degree of landscape connectivity. To
-date, connectivity has mainly been investigated using least-cost analysis and
-circuit theory, two methods that make assumptions that are hardly applicable to
-dispersal. While these assumptions can be relaxed by explicitly simulating
-dispersal trajectories across the landscape, a unified approach for such
-simulations is lacking.
+\noindent \textbf{Context} \quad Dispersal of individuals contributes to
+long-term population persistence, yet requires a sufficient degree of landscape
+connectivity. To date, connectivity has mainly been investigated using
+least-cost analysis and circuit theory, two methods that make assumptions that
+are hardly applicable to dispersal. While these assumptions can be relaxed by
+explicitly simulating dispersal trajectories across the landscape, a unified
+approach for such simulations is lacking.
 
-\noindent 2. Here, we present a simple three-step approach to simulate dispersal
-and to assess connectivity using empirical GPS movement data and a set of
-habitat covariates. In step one, we use integrated step-selection functions to
-fit a mechanistic movement model describing habitat and movement preferences of
-dispersing individuals. In step two, we apply the parameterized model to
-simulate dispersal across the study area. In step three, we derive three
-complementary connectivity maps; a heatmap highlighting frequently traversed
-areas, a betweenness map pinpointing dispersal corridors, and a map of
-inter-patch connectivity indicating the presence and intensity of functional
-links between habitat patches. We demonstrate the applicability of the proposed
-three-step approach in a case study in which we use GPS data collected on
-dispersing African wild dogs (\textit{Lycaon pictus}) inhabiting northern
-Botswana.
+\noindent \textbf{Objectives} \quad Here, we propose and apply a simple
+three-step approach to simulate dispersal and to assess connectivity using
+empirical GPS movement data and a set of habitat covariates.
 
-\noindent 3. Using step-selection functions we successfully parametrized a
-detailed dispersal model that described dispersing individuals habitat and
-movement preferences, as well as potential interactions among the two. The model
-substantially outperformed a model that omitted such interactions and enabled us
-to simulate 80,000 dispersal trajectories across the study area.
+\noindent \textbf{Methods} \quad In step one of the proposed approach, we use
+integrated step-selection functions to fit a mechanistic movement model
+describing habitat and movement preferences of dispersing individuals. In step
+two, we apply the parameterized model to simulate dispersal across the study
+area. In step three, we derive three complementary connectivity maps; a heatmap
+highlighting frequently traversed areas, a betweenness map pinpointing dispersal
+corridors, and a map of inter-patch connectivity indicating the presence and
+intensity of functional links between habitat patches. We demonstrate the
+applicability of the proposed three-step approach in a case study in which we
+use GPS data collected on dispersing African wild dogs (\textit{Lycaon pictus})
+inhabiting northern Botswana.
 
-\noindent 4. By explicitly simulating individuals, our approach not only
-requires fewer unrealistic assumptions about dispersal, but also permits the
-calculation of multiple connectivity metrics that together provide a
-comprehensive view of landscape connectivity. In our case study, the three
-derived connectivity maps revealed several wild dog dispersal hotspots and
-corridors across the extent of our study area. Each map highlighted a different
-aspect of landscape connectivity, thus emphasizing their complementary nature.
-Overall, our case study demonstrates that a simulation-based approach offers a
-simple yet powerful alternative to traditional connectivity modeling techniques.
-It is therefore useful for a variety of applications in ecological,
-evolutionary, and conservation research.
+\noindent \textbf{Results} \quad Using step-selection functions we successfully
+parametrized a detailed dispersal model that described dispersing individuals'
+habitat and movement preferences, as well as potential interactions among the
+two. The model substantially outperformed a model that omitted such interactions
+and enabled us to simulate 80,000 dispersal trajectories across the study area.
+
+\noindent \textbf{Conclusion} \quad By explicitly simulating dispersal
+trajectories, our approach not only requires fewer unrealistic assumptions about
+dispersal, but also permits the calculation of multiple connectivity metrics
+that together provide a comprehensive view of landscape connectivity. In our
+case study, the three derived connectivity maps revealed several wild dog
+dispersal hotspots and corridors across the extent of our study area. Each map
+highlighted a different aspect of landscape connectivity, thus emphasizing their
+complementary nature. Overall, our case study demonstrates that a
+simulation-based approach offers a simple yet powerful alternative to
+traditional connectivity modeling techniques. It is therefore useful for a
+variety of applications in ecological, evolutionary, and conservation research.
 
 \end{abstract}
 

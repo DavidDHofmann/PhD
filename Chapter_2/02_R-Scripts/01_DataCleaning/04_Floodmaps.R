@@ -120,7 +120,7 @@ pot_dates %>% mutate(Month = month(Date)) %>% count(Month, Floodmap) %>% subset(
 # Load dispersal data and identify first and last date. We can use those to
 # determine for timerange we should try to download additional floodmaps
 dis_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
-  read_csv() %>%
+  read_csv(show_col_types = F) %>%
   subset(State == "Disperser") %>%
   pull(Timestamp) %>%
   as.Date() %>%

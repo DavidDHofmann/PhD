@@ -162,3 +162,11 @@ sent <- left_join(sent, meta, by = c("Year", "Month"))
 
 # Store this to file
 write_rds(sent, "03_Data/03_Results/99_SentinelJoined.rds")
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/13_SentinelProcessing.rds")
+cat("Done :)\n")

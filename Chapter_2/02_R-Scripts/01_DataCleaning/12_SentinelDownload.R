@@ -221,3 +221,11 @@ if (nrow(todownload) > 0) {
 #       }, error = function(e) {return(e)})
 #   }
 # }
+
+################################################################################
+#### Session Information
+################################################################################
+# Store session information
+session <- devtools::session_info()
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_DataCleaning/12_SentinelDownload.rds")
+cat("Done :)\n")

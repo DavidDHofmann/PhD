@@ -8,6 +8,17 @@ correctedName <- function(x) {
 }
 
 ################################################################################
+#### Function to Compute Normalized Difference Index
+################################################################################
+# Function to compute the normalized difference (nd) index of two bands
+nd <- function(img, band_x, band_y) {
+  x <- img[[band_x]]
+  y <- img[[band_y]]
+  nd <- (x - y) / (x + y)
+  return(nd)
+}
+
+################################################################################
 #### Function to calculate Distances on a Raster Efficiently
 ################################################################################
 # Compute distance to a certain value on a raster
@@ -46,7 +57,7 @@ distanceTo <- function(x, value = 1) {
 #### Function to Resample GPS Data to a Desired Resolution
 ################################################################################
 # Function to resample fixes to a desired resolution
-.resFix <- function(data, hours, start, tol = 0.5) {
+resampleFixes <- function(data, hours, start, tol = 0.5) {
 
   # Identify the first date at which a fix was taken and set the time to the
   # desired start time
@@ -81,18 +92,23 @@ distanceTo <- function(x, value = 1) {
   return(data[closest, ])
 }
 
-# Wrapper to run the function on multiple individuals and multiple cores
-resampleFixes <- function(data, ID = NULL, hours, start, tol = 0.5, cores = 1) {
-  if (is.null(ID)) {
-    data_resampled <- .resFix(data, hours, start, tol)
-  } else {
-    data_resampled <- data %>% nest(data = -ID)
-    data_resampled$data <- pbmclapply(1:nrow(data_resampled), ignore.interactive = T, mc.cores = cores, function(x) {
-      .resFix(data_resampled$data[[x]], hours = hours, start = start, tol = tol)
-    })
-    data_resampled <- unnest(data_resampled, data)
-  }
-  return(data_resampled)
+################################################################################
+#### Function to Compute Bursts
+################################################################################
+# Function to compute bursts
+computeBursts <- function(data) {
+  bursted <- data %>%
+    mutate(dt_ = Timestamp - lag(Timestamp)) %>%
+    mutate(dt_ = as.numeric(dt_, units = "hours")) %>%
+    ungroup() %>%
+    mutate(NewBurst = ifelse(
+      dt_ > 8.25 |
+      (dt_ > 4.25 & hour(TimestampRounded) != 15) |
+      is.na(dt_), yes = 1, no = 0)
+    ) %>%
+    mutate(burst_id = cumsum(NewBurst)) %>%
+    dplyr::select(-c(NewBurst, dt_))
+  return(bursted)
 }
 
 ################################################################################
@@ -115,8 +131,13 @@ relTA <- function(absta) {
   return(relta)
 }
 
-# Function to compute step metrics
-stepMet <- function(x, y, timestamp = NULL) {
+# Function to compute step metrics (data needs to be projected)
+stepMetrics <- function(data) {
+
+    # Get relevant data
+    x <- data$x
+    y <- data$y
+    timestamp <- data$Timestamp
 
     # Compute distances moved in x and y direction
     dx <- c(x[-1], NA) - x
@@ -137,11 +158,106 @@ stepMet <- function(x, y, timestamp = NULL) {
     }
 
     # Put metrics into data.frame
-    metrics <- data.frame(sl = sl, absta = absta, relta = relta)
+    metrics <- data.frame(x_to = lead(x), y_to = lead(y), sl = sl, absta = absta, relta = relta)
     if (!is.null(timestamp)) {
       metrics$dt <- dt
     }
 
+    # Combine with original data
+    data <- cbind(data, metrics)
+    data <- data[-nrow(data), ]
+
     # Return the metrics
-    return(metrics)
+    return(data)
+}
+
+################################################################################
+#### Function to Generate Random Steps
+################################################################################
+# Function to generate random steps
+randomSteps <- function(data, n_rsteps, scale, shape, slmax = NULL) {
+
+  # Generate a new column that indicates that the steps are "observed" steps
+  data$case <- 1
+
+  # Generate step ids
+  data$step_id <- 1:nrow(data)
+
+  # Cannot work with steps that have no turning angle, so remove them
+  data <- subset(data, !is.na(relta))
+
+  # Create a new dataframe into which we can put alternative/random steps
+  rand <- data[rep(1:nrow(data), each = n_rsteps), ]
+
+  # Indicate that these steps are random steps (case = 0)
+  rand$case <- 0
+
+  # Sample random turning angles
+  rand$sl <- rgamma(n = nrow(rand)
+    , scale = scale
+    , shape = shape
+  )
+
+  # If a maximum step length is provided, truncate the sampled step length if
+  # necessary
+  if (!is.null(slmax)) {
+    rand$sl <- ifelse(rand$sl > slmax, slmax, rand$sl)
+  }
+
+  # Sample random step lengths
+  rand$relta_new <- runif(n = nrow(rand)
+    , min = -pi
+    , max = +pi
+  )
+
+  # Calculate new "absolute" turning angle
+  rand$relta_diff <- rand$relta_new - rand$relta
+  rand$absta <- rand$absta + rand$relta_diff
+  rand$absta <- ifelse(rand$absta < 0, 2 * pi + rand$absta, rand$absta)
+  rand$absta <- ifelse(rand$absta > 2 * pi, rand$absta - 2 * pi, rand$absta)
+  rand$relta <- rand$relta_new
+
+  # Remove undesired stuff
+  rand$relta_new <- NULL
+  rand$relta_diff <- NULL
+
+  # Put steps together
+  all <- rbind(data, rand)
+  all <- arrange(all, ID, step_id, desc(case))
+
+  # Calculate new endpoints
+  all$x_to <- all$x + sin(all$absta) * all$sl
+  all$y_to <- all$y + cos(all$absta) * all$sl
+
+  # Return the final dataframe
+  return(all)
+
+}
+
+################################################################################
+#### Function to Reproject Coordinates
+################################################################################
+# Reproject coordinates to another projection
+reprojectCoords <- function(xy, from = NULL, to = NULL) {
+  xy <- vect(xy, crs = from)
+  xy <- terra::project(xy, to)
+  return(crds(xy))
+}
+
+################################################################################
+#### Function to Interpolate Between Points
+################################################################################
+# Function to interpolate coordinates between two points
+interpolatePoints <- function(x1, x2, y1, y2, by = 1){
+
+  # Calculate length of line between points
+  length <- sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2)
+
+  # Calculate how many segments we need
+  nsegs <- max(ceiling(length / by), 1)
+
+  # Interpolate between points
+  x <- seq(x1, x2, length.out = nsegs + 1)
+  y <- seq(y1, y2, length.out = nsegs + 1)
+  return(cbind(x, y))
 }

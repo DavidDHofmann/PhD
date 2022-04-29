@@ -7,12 +7,12 @@
 # Clear R's brain
 rm(list = ls())
 
+# Load required packages
+library(terra)     # To handle spatial data
+
 # Set the working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
-
-# Load required packages
-library(terra)     # To handle spatial data
 
 # Import the human influence layer and the reference raster
 human <- rast("03_Data/01_RawData/DAVID/HumanInfluence.grd")

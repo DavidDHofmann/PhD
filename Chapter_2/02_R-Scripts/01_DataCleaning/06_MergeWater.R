@@ -17,7 +17,9 @@ library(terra)      # To handle spatial data
 library(raster)     # To handle spatial data
 library(lubridate)  # To handle dates
 library(pbmcapply)  # For multicore use with progress bar
-library(davidoff)   # Access to custom functions
+
+# Load custom functions
+source("02_R-Scripts/00_Functions.R")
 
 ################################################################################
 #### Merge Layers
