@@ -68,7 +68,7 @@ newnames <- paste0("03_Data/01_RawData/MODIS/MOD44B/Stitched/", newnames)
 dir.create("03_Data/01_RawData/MODIS/MOD44B/Stitched", showWarnings = F)
 
 # Then loop through the three layers
-for (i in 1:length(patterns)){
+for (i in 1:length(patterns)) {
 
   # Load the tiles that correspond to the same layer type
   files <- dir(
@@ -93,7 +93,7 @@ for (i in 1:length(patterns)){
 
   # Reproject, resample and store the merged files
   merged <- rast(newnames[i]) %>%
-    project(., r) %>%
+    project(., r, method = "near") %>%
     resample(., r, "near")
   writeRaster(raster(merged), newnames[i], overwrite = TRUE)
 

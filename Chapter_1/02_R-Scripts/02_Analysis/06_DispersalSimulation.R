@@ -691,7 +691,7 @@ dir.create("03_Data/03_Results/99_Simulations", showWarnings = F)
 dir.create("03_Data/03_Results/99_Simulations/Main", showWarnings = F)
 dir.create("03_Data/03_Results/99_Simulations/Buffer", showWarnings = F)
 
-Initiate a file to keep track of simulation progress
+# Initiate a file to keep track of simulation progress
 report <- data.frame(
     iteration    = NA
   , source_areas = NA

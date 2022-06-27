@@ -270,7 +270,7 @@ prepareFile <- function(file, outname, ext, n = 5, ncores = 1) {
 print(sent, n = 100)
 
 # Run it on all files
-final <- lapply(27:nrow(sent), function(x) {
+final <- lapply(29:nrow(sent), function(x) {
 
   # Print some info on the iteration
   cat("Merging files from month", x, "out of", nrow(sent), "...\n")
