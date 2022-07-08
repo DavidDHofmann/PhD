@@ -41,6 +41,12 @@ mod <- read_rds(file.path(old_chap, "03_Data/03_Results/99_MovementModel.rds"))
 mod <- mod$Model[[1]]
 write_rds(mod, file.path(new_chap, "03_Data/02_CleanData/MovementModel.rds"))
 
+# We also need to copy the scaling parameters used in that model
+file.copy(
+    from = file.path(old_chap, "03_Data/03_Results/99_Scaling.rds")
+  , to   = file.path(new_chap, "03_Data/02_CleanData/Scaling.rds")
+)
+
 # Copy the step-length distribution
 file.copy(
     from = file.path(old_chap, "03_Data/03_Results/99_GammaDistribution.rds")

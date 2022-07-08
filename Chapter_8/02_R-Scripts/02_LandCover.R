@@ -165,6 +165,7 @@ dist_water_max <- distanceTo(stack(water)[[3]], value = 1)
 # Put them back into a stack
 dist_water <- stack(dist_water_min, dist_water_mean, dist_water_max)
 dist_water <- rast(dist_water)
+names(dist_water) <- c("min", "mean", "max")
 
 ################################################################################
 #### Store Layers
