@@ -25,6 +25,9 @@ prote <- vect("03_Data/02_CleanData/Protected.shp")
 water <- water[["max"]]
 shrub <- shrub[["max"]]
 
+# Print to terminal
+cat("Computing source areas... \n")
+
 # Subset to protected areas of interest (we will use them as source areas)
 area1 <- prote[prote$Desig == "National Park" & prote$Name == "Moremi" | prote$Name %in% c("NG/33", "NG/34"), ]
 area2 <- prote[prote$Desig == "National Park" & prote$Name == "Chobe", ]
@@ -39,6 +42,7 @@ area4 <- aggregate(area4, dissolve = T)
 mask <- water == 1
 mask <- subst(mask, 0, NA)
 mask <- as.polygons(mask)
+mask <- makeValid(mask)
 area1 <- erase(area1, mask)
 area1 <- disagg(area1)
 area1$Area <- expanse(area1)
@@ -57,7 +61,8 @@ area4 <- buffer(area4, width = -1500)
 area4 <- disagg(area4)
 
 # Make sure area 1 does not overlap with area 2
-area1 <- area1 - area2
+area1 <- erase(area1, area2)
+area1 <- buffer(area1, width = -200)
 
 # Put everything back together
 areas <- rbind(area1, area2, area3, area4)
@@ -80,3 +85,6 @@ writeVector(areas, "03_Data/02_CleanData/SourceAreas.shp", overwrite = T)
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/03_SourceAreas.rds")
+
+# Print to terminal
+cat("Done :) \n")

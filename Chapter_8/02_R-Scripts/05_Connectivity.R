@@ -28,6 +28,7 @@ sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area", "FloodLevel")]
 
 # Subsample
+sims <- subset(sims, FloodLevel == "Max")
 sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), size = 1000))
 
 # Reproject coordinates to utm (required for spatstat)

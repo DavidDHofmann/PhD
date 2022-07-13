@@ -36,6 +36,9 @@ dir.create("03_Data/03_Results", showWarnings = F)
 ################################################################################
 #### Copy Data from Chapter 1
 ################################################################################
+# Print to terminal
+cat("Copying files to project directory...\n")
+
 # Copy the most parsimonious movement model from chapter one
 mod <- read_rds(file.path(old_chap, "03_Data/03_Results/99_MovementModel.rds"))
 mod <- mod$Model[[1]]
@@ -119,6 +122,9 @@ writeRaster(gra, file.path(new_chap, "03_Data/01_RawData/MODIS/Shrubs.tif"), ove
 ################################################################################
 #### Reference Layers
 ################################################################################
+# Print to terminal
+cat("Generating reference raster and shapefile...\n")
+
 # Let's store the extent as a reference shapefile
 s <- as.polygons(ext)
 crs(s) <- "+init=epsg:4326"
@@ -140,3 +146,6 @@ dir.create("02_R-Scripts/99_SessionInformation", showWarnings = F)
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/01_Setup.rds")
+
+# Print to terminal
+cat("Done :)\n")

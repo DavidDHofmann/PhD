@@ -21,6 +21,9 @@ source("02_R-Scripts/00_Functions.R")
 ################################################################################
 #### Water
 ################################################################################
+# Print to terminal
+cat("Computing flood summaries... \n")
+
 # Find all floodmaps and their associated date
 files <- tibble(
     File  = dir(path = "03_Data/01_RawData/FLOODMAPS", pattern = ".tif$", full.names = T)
@@ -64,15 +67,15 @@ rm(flood_summary, ref)
 # Keep only floodmaps with cloud cover below 5%
 files <- subset(files, Cloud < 0.05)
 
-# Visualize
-ggplot(files, aes(x = Day, y = Flood, col = Year, group = Year)) +
-  geom_line() +
-  theme_minimal() +
-  scale_color_viridis_c() +
-  ggtitle("Flood Extent")
-
-# How many files do we have for each month?
-plot(table(month(files$Date)))
+# # Visualize
+# ggplot(files, aes(x = Day, y = Flood, col = Year, group = Year)) +
+#   geom_line() +
+#   theme_minimal() +
+#   scale_color_viridis_c() +
+#   ggtitle("Flood Extent")
+#
+# # How many files do we have for each month?
+# plot(table(month(files$Date)))
 
 # Let's pull the 50 maps with the lowest flood extent and the 50 maps with the
 # highest flood extent
@@ -107,8 +110,8 @@ avg <- avg > 0.5
 flood <- c(min, avg, max)
 names(flood) <- c("min", "mean", "max")
 
-# Visualize
-plot(flood, col = c("white", "cornflowerblue"))
+# # Visualize
+# plot(flood, col = c("white", "cornflowerblue"))
 
 # Combine the maps with the globeland dataset
 globe <- rast("03_Data/01_RawData/GLOBELAND/Water.tif")
@@ -129,12 +132,15 @@ flood <- resample(flood, globe, method = "near")
 water <- mask(globe, flood, maskvalue = 1, updatevalue = 1)
 names(water) <- c("min", "mean", "max")
 
-# Visualize
-plot(water, col = c("white", "cornflowerblue"))
+# # Visualize
+# plot(water, col = c("white", "cornflowerblue"))
 
 ################################################################################
 #### Vegetation
 ################################################################################
+# Print to terminal
+cat("Preparing vegetation layers... \n")
+
 # Load vegetation data
 trees <- rast("03_Data/01_RawData/MODIS/Trees.tif")
 shrub <- rast("03_Data/01_RawData/MODIS/Shrubs.tif")
@@ -152,6 +158,9 @@ names(shrub) <- names(water)
 ################################################################################
 #### Distance To Water
 ################################################################################
+# Print to terminal
+cat("Computing distance to water... \n")
+
 # To finalize our water layer, we will add the rivers from the MERIT river
 # dataset
 merit <- rast("03_Data/01_RawData/MERIT/Rivers.tif")
@@ -182,3 +191,6 @@ writeRaster(dist_water, "03_Data/02_CleanData/DistanceToWater.tif", overwrite = 
 # Store session information
 session <- devtools::session_info()
 readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/02_LandCover.rds")
+
+# Print to terminal
+cat("Done :) \n")
