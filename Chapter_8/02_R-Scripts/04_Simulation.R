@@ -396,3 +396,51 @@ for (i in 1:nrow(design)) {
   cat("Run", i, "out of", nrow(design), "done...\n")
 
 }
+
+################################################################################
+#### Combine Simulations
+################################################################################
+# Once the simulations are done, let's combine them into a single big dataframe
+sims <- lapply(1:nrow(design), function(x) {
+  dat <- read_rds(design$Filename[x])
+  dat$SimID <- x
+  dat$FloodLevel <- design$FloodLevel[x]
+  return(dat)
+}) %>% do.call(rbind, .)
+
+# Because in each simulation we start off with new IDs for trajectories, they
+# are not unique across simulations. We thus combine ID and SimID to create an
+# ID that is unqiue to each simulated path, across all simulations
+sims <- sims %>% mutate(TrackID = group_indices(., SimID, TrackID))
+
+# Make sure it worked
+table(table(sims$TrackID))
+
+# Collect garbage
+gc()
+
+# Let's also create a step counter, indicating the number of the step in its
+# respective trajectory
+sims <- sims %>% group_by(TrackID) %>% mutate(StepNumber = row_number())
+
+# Check object size
+format(object.size(sims), units = "Gb")
+
+# Ungroup
+sims <- ungroup(sims)
+
+# Assess the source area of each simulation
+first      <- subset(sims, StepNumber == 1)
+first      <- vect(as.matrix(first[, c("x", "y")]), atts = first)
+first$Area <- relate(first, areas, "within") %>% apply(., 1, which) %>% do.call(c, .)
+first      <- as.data.frame(first)
+first      <- first[, c("TrackID", "Area")]
+
+# Join
+sims <- left_join(sims, first, by = "TrackID")
+
+# Write to an rds
+write_rds(sims, "03_Data/03_Results/DispersalSimulation.rds")
+
+# Remove separate files to free some space
+# file.remove(design$Filename)

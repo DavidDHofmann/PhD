@@ -29,16 +29,9 @@ stepMet <- function(x, y) {
     sl <- sqrt(dx ** 2 + dy ** 2)
 
     # Compute absolute turn angle
-    # absta <- atan2(dy, dx)
-    # absta <- (absta - pi / 2) * (-1)
-    # absta <- ifelse(absta < 0, 2 * pi + absta, absta)
     absta <- absTA(dx, dy)
 
     # Compute relative turn angle
-    # relta <- (absta[-1] - absta[-length(absta)])
-    # relta <- c(NA, relta)
-    # relta <- ifelse(relta > +pi, relta - 2 * pi, relta)
-    # relta <- ifelse(relta < -pi, 2 * pi + relta, relta)
     relta <- relTA(absta)
 
     # Put metrics into data.frame

@@ -112,7 +112,20 @@ pictus, irregular data
 %------------------------------------------------------------------------------
 \newpage
 \begin{abstract}
-This is an abstract
+Animal movement data collected in the field is often noisy and incomplete, thus
+confronting movement ecologists with temporal irregularities in their data. Step
+selection functions have become a popular tool to analyse movement data and to
+infer a species movement or preferences, yet they are based on the assumption of
+equal temporal gaps between consecutive datapoints. To adhere to this
+requirement, researchers typically only consider bursts of consecutive
+relocations with equal step-durations, thus discarding large portions of their
+data. Here, we use simulated data to question this practice and we examine
+whether including temporally irregular can improve estimates from step-selection
+models. In addition, we explore the usefulness of multiple methods to account
+for temporal irregularity in movement data. Our results show that including
+irregular data improves model estimates substantially. By applying methods that
+account for the irregularity in the data, the precision of model estimates can
+further be improved, albeit only marginally.
 \end{abstract}
 
 %------------------------------------------------------------------------------
@@ -134,14 +147,15 @@ This is an abstract
 \section{Introduction}
 GPS data is usually collected on fixed temporal intervals (could do a quick and
 dirty analysis on MoveBank) ranging from a few minutes, to multiple hours or
-even days between subsequent reolocations. Nevertheless, GPS regularly fail to
-adhere to the anticipated fixrate schedule due to cloud cover or other
+even days between subsequent reolocations. Nevertheless, GPS devices regularly
+fail to adhere to the anticipated fixrate schedule due to cloud cover or other
 unfavorable conditions, thus resulting in irregular data. In other cases, the
 GPS schedule is not strictly fixed but may be subject to change. For example,
-\cite{Cozzi.2020} increase the fixrate of their GPS collars once per week from 4
-to 8 fixes per day. We chose to coin this type of data irregular, because it is
-not collected on the anticipated fixrate schedule and therefore not directly
-comparable to the vast majority of collected data.
+\cite{Cozzi.2020} increased the fixrate of their GPS collars once per week from
+4 to 8 fixes per day, aiming to collect more fine scaled data for a limited
+time. We chose to coin this type of data \textit{irregular}, because it is not
+collected on the anticipated fixrate schedule and therefore not directly
+comparable to the vast majority of the collected data.
 
 Step selection analysis is a powerful framework that enables researchers to
 study habitat and movement preferences of their focal species. The method works
@@ -157,8 +171,8 @@ collected using GPS collars and is therefore one of the preferred methods for
 analysing such data. However, it is considered good practice to only consider
 steps with similar step durations in step-selection models. Depending on the
 amount of available data and depending on the number of missing GPS fixes, this
-might entail little sacrifice. In some situations, however, removing irregular
-data implies a substantial loss of information. Additionally, recent
+practice might entail little sacrifice. In some situations, however, removing
+irregular data implies a substantial loss of information. Additionally, recent
 developments in the SSA realm have brought forward several improvements to SSA
 that might allow to relax the assumption of regular step-durations. This
 includes the \textit{integrated} SSA approach presented by \citep{Avgar.2016},
@@ -183,6 +197,14 @@ parametric step-length and turning distributions to different step-durations.
 Besides the simulation study, we also analysed a dataset collected on dispersing
 African wild dogs and examined the implications considering or discarding
 irregular data.
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_NumberOfSteps.png}
+  \caption{}
+  \label{Covariates}
+  \end{center}
+\end{figure}
 
 We hypothesized that the precision of model estimates would decrease as we
 increased the missigngess in the data. We also expected that the inclusion of
@@ -243,7 +265,10 @@ the simulated individual. We the repated these steps until a total of 100 steps
 were realized and we replicated the simulation 100 times, thus resulting in 100
 independent movement trajectories (\Cref{Simulations}). Note that by excluding
 interactions among habitat covariates and step metrics we implicitly assume
-independent habitat and movement kernels \citep{Avgar.2016}.
+independent habitat and movement kernels \citep{Avgar.2016}. Although
+measurement error would have been straight forward to implement, this was not
+the main focus of our analysis and so we assumed GPS locations to be 100 percent
+accurate.
 
 \begin{figure}
   \begin{center}
@@ -272,6 +297,8 @@ accept. A modeler with forgiveness of one, for instance, only considers steps
 with a step-duration of one (i.e. fixes that are regularly spaced). In contrast,
 a modeler with forgiveness of two would also accept steps with a step-duration
 of two, thus pardoning a single missing fix.
+
+The idea of the multiple imputation approach is as follows...
 
 \paragraph{Data Rarefication}
 We rarefied the simulated GPS data by randomly removing a fixed fraction of GPS

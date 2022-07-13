@@ -236,3 +236,281 @@ scaleCovars <- function (covars, scaling) {
   names(scaled) <- names(covars)
   return(scaled)
 }
+
+################################################################################
+#### Function to Reproject Coordinates
+################################################################################
+#' Reproject coordinates to another projection
+#'
+#' Function to transform coordinates into coordinates of another projection
+#' @export
+#' @param xy \code{data.frame} or matrix of coordinates that need to be
+#' transformed.
+#' @param from CRS of the coordinates
+#' @param to CRS to which the coordinates should be reprojected
+#' @return numeric value or vector
+#' @examples
+#' degreesToMeters(0.01)
+reprojCoords <- function(xy, from = NULL, to = NULL) {
+  xy <- as.matrix(xy)
+  xy <- suppressWarnings(vect(xy, crs = from))
+  xy <- terra::project(xy, to)
+  return(crds(xy))
+}
+
+################################################################################
+#### Function to Coerce Single Simulated Trajectories to Proper Lines
+################################################################################
+#' Coerce multiple Simulated Trajectories to SpatialLines
+#'
+#' Function to coerce simulated coordinates to lines after a desired number of
+#' steps. Basically a wrapper around \code{sim2tracks()}
+#' @export
+#' @param simulation \code{data.frame} resulting from the function
+#' \code{disperse()}
+#' @param keep.data logical Should the input dataframe be conserved?
+#' @return \code{SpatialLinesDataFrame}
+sim2tracks <- function(simulation = NULL, crs = NULL, keep.data = F) {
+
+  # Unless keep.data is desired, remove all unnecessary columns
+  if (!keep.data){
+    simulation <- simulation[, c("x", "y")]
+  }
+
+  # Calculate number of steps
+  steps <- nrow(simulation) - 1
+
+  # If data does not need to be kept
+  if (!keep.data){
+    coordinates(simulation) <- c("x", "y")
+    lines <- spLines(simulation)
+    if (!is.null(crs)){
+      crs(lines) <- crs
+    }
+    return(lines)
+
+  # If data needs to be kept
+  } else {
+    pts <- simulation
+    coordinates(pts) <- c("x", "y")
+    line <- spLines(pts)
+    lines <- createSegments(line)
+    lines <- as(lines, "SpatialLinesDataFrame")
+    lines@data <- simulation[1:steps, ]
+    if (!is.null(crs)){
+      crs(lines) <- crs
+    }
+    return(lines)
+  }
+}
+
+################################################################################
+#### Function to Coerce Multiple Simulated Trajectories to Proper Lines
+################################################################################
+#' Coerce multiple Simulated Trajectories to SpatialLines
+#'
+#' Function to coerce simulated coordinates to lines after a desired number of
+#' steps. Basically a wrapper around \code{sim2tracks()}
+#' @export
+#' @param simulations \code{data.frame} resulting from the function
+#' \code{disperse}
+#' @param id character column name of the column containing the track id
+#' @param keep.data logical Should the input dataframe be conserved?
+#' @param mc.cores integer Number of cores used for the coercion. Set to
+#' 1 by default.
+#' @param messages logical Should a progress bar and messages be printed?
+#' @return \code{SpatialLinesDataFrame}
+sims2tracks <- function(
+    simulations = NULL
+  , id          = "TrackID"
+  , crs         = NULL
+  , keep.data   = F
+  , mc.cores    = 1
+  , messages    = T
+  ) {
+
+  # Keep only relevant data
+  if (!keep.data){
+    simulations <- simulations[, c("x", "y", "TrackID")]
+  }
+
+  # Nest data by id
+  simulations <- nest(simulations, data = -all_of(id))
+
+  # Coerce each trajectory to a spatial lines object
+  if (messages){
+    lines <- pbmclapply(1:nrow(simulations)
+    , mc.cores           = mc.cores
+    , ignore.interactive = T
+    , FUN                = function(x){
+      l <- sim2tracks(
+          simulation = simulations$data[[x]]
+        , crs        = crs
+        , keep.data  = keep.data
+      )
+      l$TrackID <- simulations$TrackID[x]
+      return(l)
+    })
+  } else {
+    lines <- mclapply(1:nrow(simulations)
+    , mc.cores           = mc.cores
+    , FUN                = function(x){
+      l <- sim2tracks(
+          simulation = simulations$data[[x]]
+        , keep.data  = keep.data
+      )
+      l$TrackID <- simulations$TrackID[x]
+      return(l)
+    })
+  }
+
+  # Bind them
+  lines <- do.call(rbind, lines)
+
+  # Return the lines
+  return(lines)
+
+}
+
+################################################################################
+#### Function to Rasterize Using SpatStat
+################################################################################
+#' Rasterize Shapes Using spatstat
+#'
+#' Function to rasterize using spatstat
+#' @export
+#' @param l \code{SpatialPoints}, \code{SpatialLines}, or \code{SpatialPolygons}
+#' to be rasterized
+#' @param r \code{RasterLayer} onto which the objects should be rasterized
+#' @param mc.cores numeric How many cores should be used?
+#' @return \code{RasterLayer}
+rasterizeSpatstat <- function(l, r, mc.cores = 1){
+
+  # In case we run the rasterization on a single core, run a loop
+  if (mc.cores == 1){
+
+    # Create im layer
+    values(r) <- 0
+    im <- as.im.RasterLayer(r)
+    summed <- im
+
+    # Prepare progress bar
+    pb <- txtProgressBar(
+        min     = 0
+      , max     = length(l)
+      , initial = 0
+      , style   = 3
+      , width   = 55
+    )
+
+    # Go through all lines and rasterize them
+    for (y in 1:length(l)){
+      line    <- as.psp(l[y, ], window = im)
+      line    <- as.mask.psp(line)
+      line_r  <- as.im.owin(line, na.replace = 0)
+      summed  <- Reduce("+", list(summed, line_r))
+      setTxtProgressBar(pb, y)
+    }
+
+    # Return heatmap as a raster
+    return(raster(summed))
+
+  # If multicore is desired
+  } else {
+
+    # Split lines into a package for each core
+    lines <- splitShape(l, n = mc.cores)
+
+    # Run in parallel
+    heatmap <- mclapply(lines, mc.cores = mc.cores, function(x){
+
+      # Create im layer
+      im <- as.im.RasterLayer(r)
+      summed <- im
+
+      # Rasterize each line
+      for (y in 1:length(x)){
+        line    <- as.psp(x[y, ], window = im)
+        line    <- as.mask.psp(line)
+        line_r  <- as.im.owin(line, na.replace = 0)
+        summed  <- Reduce("+", list(summed, line_r))
+      }
+
+      # Return the sum
+      return(summed)
+
+    })
+
+    # Combine heatmaps
+    heatmap <- Reduce("+", heatmap)
+
+    # Return as raster
+    return(raster(heatmap))
+
+  }
+}
+
+################################################################################
+#### Function to Rasterize Simulations
+################################################################################
+#' Rasterize Simulations
+#'
+#' Function to rasterize using spatstat
+#' @export
+#' @param simulations \code{data.frame} containing the simulated data
+#' @param raster \code{RasterLayer} onto which the objects should be rasterized
+#' @param steps numeric, how many steps should be rasterized
+#' @param area numeric, ID of the source areas that should be considered
+#' @param flood character, one of "Min", "Mean", "Max"
+#' @param messages boolean, should messages be printed during the rasterization
+#' @param mc.cores numeric How many cores should be used?
+#' @return \code{RasterLayer}
+rasterizeSims <- function(
+      simulations = NULL      # Simulated trajectories
+    , raster      = NULL      # Raster onto which we rasterize
+    , steps       = 500       # How many steps should be considered
+    , area        = NULL      # Simulations from which areas?
+    , flood       = "Min"     # Which flood level?
+    , messages    = T         # Print update messages?
+    , mc.cores    = detectCores() - 1
+  ) {
+
+  # Subset to corresponding data
+  sub <- simulations[simulations$StepNumber <= steps, ]
+  sub <- simulations[simulations$FloodLevel == flood, ]
+  if (!is.null(area)) {
+    sub <- simulations[simulations$Area %in% area, ]
+  }
+
+  # Make sure raster values are all 0
+  values(raster) <- 0
+
+  # Create spatial lines
+  sub_traj <- sims2tracks(
+      simulations = sub
+    , id          = "TrackID"
+    , messages    = messages
+    , mc.cores    = mc.cores
+  )
+
+  # Convert into spatial lines
+  sub_traj <- as(sub_traj, "SpatialLines")
+  crs(sub_traj) <- CRS("+init=epsg:32734")
+
+  # Rasterize lines onto the cropped raster
+  if (messages) {
+    cat("Rasterizing spatial lines...\n")
+  }
+  heatmap <- rasterizeSpatstat(
+      l        = sub_traj
+    , r        = raster
+    , mc.cores = 1
+  )
+
+  # Store heatmap to temporary file
+  heatmap <- writeRaster(heatmap, tempfile())
+  crs(heatmap) <- CRS("+init=epsg:32734")
+
+  # Return the resulting heatmap
+  return(heatmap)
+}

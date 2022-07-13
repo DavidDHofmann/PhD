@@ -1,5 +1,14 @@
 \begin{figure}
   \begin{center}
+  \includegraphics[width = \textwidth]{99_NumberOfSteps.png}
+  \caption{}
+  \label{Covariates}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
   \includegraphics[width = \textwidth]{99_Covariates.png}
   \caption{Virtual landscape across which we simulated movement trajectories.
   All layers have a resolution of 300 x 300 pixels and were generated randomly.
@@ -14,10 +23,8 @@
   \begin{center}
   \includegraphics[width = 0.5\textwidth]{99_Simulations.png}
   \caption{100 Simulated movement trajectories, each comprising of 100 steps.
-  Simulated individual were initiated within the blue rectangle to mitigate edge
-  effects.}
+  Simulated individuals were initiated within the blue rectangle to mitigate
+  edge effects.}
   \label{Simulations}
   \end{center}
 \end{figure}
-\efloatseparator
- 

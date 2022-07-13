@@ -1,5 +1,5 @@
 ################################################################################
-#### 
+####
 ################################################################################
 # Determination of moonlight intensity
 
@@ -8,11 +8,12 @@ rm(list = ls())
 
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_7")
-setwd("C:/Users/david/Switchdrive/University/15. PhD/Chapter_7")
+# setwd("C:/Users/david/Switchdrive/University/15. PhD/Chapter_7")
 
 # Load required packages
 library(tidyverse)   # For data wrangling
 library(lubridate)   # To handle dates
+library(hms)         # To handle times
 library(pbmcapply)   # To run stuff in parallel
 library(moonlit)     # For moonlight statistics
 
@@ -20,10 +21,10 @@ library(moonlit)     # For moonlight statistics
 dat <- read_csv("03_Data/02_CleanData/ActivityData.csv")
 head(dat)
 
-# Compute some useful time-measures
+# Derive some time metrics
 dat <- mutate(dat
   , Date = as_date(Timestamp)
-  , Time = hms::as_hms(Timestamp)
+  , Time = as_hms(Timestamp)
   , Hour = hour(Timestamp)
 )
 
@@ -45,51 +46,55 @@ ggplot(means, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) +
   theme_minimal() +
   scale_x_time(breaks = scales::breaks_width("2 hours")) +
   geom_hline(yintercept = 20, col = "gray30") +
-  geom_vline(xintercept = hms::as_hms("10:00:00"), col = "gray30") +
-  geom_vline(xintercept = hms::as_hms("12:00:00"), col = "gray30") +
-  geom_vline(xintercept = hms::as_hms("14:00:00"), col = "gray30")
+  geom_vline(xintercept = as_hms("10:00:00"), col = "gray30") +
+  geom_vline(xintercept = as_hms("12:00:00"), col = "gray30") +
+  geom_vline(xintercept = as_hms("14:00:00"), col = "gray30") +
+  geom_text(aes(x = as_hms("10:00:00"), label = "10:00:00", y = 150), angle = 90, size = 3, fontface = 3, nudge_x = -1000) +
+  geom_text(aes(x = as_hms("12:00:00"), label = "12:00:00", y = 150), angle = 90, size = 3, fontface = 3, nudge_x = -1000) +
+  geom_text(aes(x = as_hms("14:00:00"), label = "14:00:00", y = 150), angle = 90, size = 3, fontface = 3, nudge_x = -1000) +
+  theme(axis.text.x = element_text(angle = 45))
 
 # Visualize activity by hour and day
 dat %>%
   group_by(Hour, Date) %>%
   summarize(ActX = mean(ActX)) %>%
   ggplot(aes(x = Hour, y = ActX, col = Date, group = Date)) +
-    geom_line(lwd = 0.5, alpha = 0.5)
+    geom_line(lwd = 0.5, alpha = 0.5) +
+    scale_color_viridis_c() +
+    theme_minimal()
 
-# For now, focus on a couple of dogs
-dat <- subset(dat, DogID %in% sample(unique(dat$DogID), size = 5))
+# # For now, focus on a couple of dogs
+# dat <- subset(dat, DogID %in% sample(unique(dat$DogID), size = 5))
 
 # Nest by dog
 dat <- nest(dat, Data = -DogID)
 
-# Keep only a couple of entries per dog
-dat$Data <- lapply(dat$Data, function(x) {x[1:20000, ]})
+# # Keep only a couple of entries per dog
+# dat$Data <- lapply(dat$Data, function(x) {x[1:20000, ]})
 
 # Check the time-lag between measurements
-dat <- mutate(dat, Data = map(Data, function(x) {
-  x$Lag <- difftime(x$Timestamp, lag(x$Timestamp), "mins")
+dat$Data <- pbmclapply(dat$Data, mc.cores = detectCores() - 1, ignore.interactive = T, function(x) {
+  x$Lag <- difftime(x$Timestamp, lag(x$Timestamp), units = "mins")
   return(x)
-}))
+})
+
+# Unnest data
+dat <- unnest(dat, Data)
 
 # There should not be many datapoints with a time lag beyond 5 mins
 dat %>%
-  unnest(Data) %>%
   pull(Lag) %>%
   as.numeric() %>%
   summary()
 
-# Determine moonlight intensity of the night that follows
+# For each activity record, compute the moonlight intensity of the nearest night
 pb <- txtProgressBar(min = 0, max = nrow(dat), style = 3)
-moonstats <- lapply(1:nrow(dat), function(x) {
-
-  # To make sure the package computes illumination of the following night,
-  # update the timestamp
-  timestamp <- update(dat$Timestamp[x], hour = 20)
+moonstats <- pbmclapply(1:nrow(dat), mc.cores = detectCores() - 1, ignore.interactive = T, function(x) {
 
   # Now calculate moonlight intensity of the following night
   pdf(file = NULL)
   moon <- calculateMoonlightStatistics(
-      date     = timestamp
+      date     = dat$Timestamp[x]
     , lon      = dat$x[x]
     , lat      = dat$y[x]
     , e        = 0.21
@@ -109,19 +114,23 @@ moonstats <- lapply(1:nrow(dat), function(x) {
 
 }) %>% do.call(rbind, .)
 
-
 # Bind with original data
 dat <- cbind(dat, moonstats)
 
-ggplot(dat, aes(x = Time, y = maxMoonlightIntensity, col = ActX)) +
-  geom_point()
+# Write to file
+write_csv(dat, "03_Data/02_CleanData/ActivityDataMoonphase.csv")
 
+# Plot activity against moonlight intensity
 ggplot(dat, aes(x = Time, y = maxMoonlightIntensity, z = ActX)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(option = "magma") +
   theme_minimal()
 
-
+# Plot activity against date
+ggplot(dat, aes(x = Time, y = Date, z = ActX)) +
+  stat_summary_2d(fun = "mean", bins = 100) +
+  scale_fill_viridis_c(option = "magma") +
+  theme_minimal()
 
 # We deem an animal active whenever its activity is above 20
 dat <- mutate(dat, Data = map(Data, function(x) {
@@ -152,7 +161,7 @@ dat <- mutate(dat, Data = map(Data, function(x) {
 
 # Find the time of first movement for every day
 dat <- mutate(dat, FirstMovement = map(Data, function(x) {
-  
+
   # Find all days through which we need to loop
   days <- unique(x$Date)
   firstmoves <- lapply(days, function(y) {
@@ -160,7 +169,7 @@ dat <- mutate(dat, FirstMovement = map(Data, function(x) {
     first <- first[1, ]
     return(first)
   }) %>% do.call(rbind, .)
-  
+
   # Return the first moves
   firstmoves <- tibble(Day = days, FirstMovement = firstmoves$Timestamp)
   return(firstmoves)

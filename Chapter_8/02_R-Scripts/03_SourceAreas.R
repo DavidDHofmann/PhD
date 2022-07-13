@@ -44,7 +44,7 @@ area1 <- disagg(area1)
 area1$Area <- expanse(area1)
 area1 <- area1[area1$Area %in% tail(sort(area1$Area), 2), ]
 area1 <- buffer(area1, width = +2000)
-area1 <- buffer(area1, width = -1000)
+area1 <- buffer(area1, width = -1500)
 area1 <- disagg(area1)
 
 # Same for NG/26 NG/29
@@ -53,8 +53,11 @@ area4 <- disagg(area4)
 area4$Area <- expanse(area4)
 area4 <- area4[area4$Area == max(area4$Area), ]
 area4 <- buffer(area4, width = +3000)
-area4 <- buffer(area4, width = -2000)
+area4 <- buffer(area4, width = -1500)
 area4 <- disagg(area4)
+
+# Make sure area 1 does not overlap with area 2
+area1 <- area1 - area2
 
 # Put everything back together
 areas <- rbind(area1, area2, area3, area4)

@@ -13,6 +13,7 @@ library(tidyverse)     # For data wrangling
 library(survival)      # To run conditional logistic regression
 library(sf)            # For plotting
 library(amt)           # To fit distributions
+library(crawl)         # To imputate missing fixes
 
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
@@ -27,6 +28,15 @@ options(scipen = 999)
 obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
 glimpse(obs)
 
+# Add an artifical timestamp
+obs <- obs %>%
+  nest(Data = -ID) %>%
+  mutate(Data = pbmclapply(Data, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+    x$timestamp <- lubridate::ymd_hms("2000-01-01 00:00:00") + hours(1:nrow(x))
+    return(x)
+  })) %>%
+  unnest(Data)
+
 # Load covariate layers
 covars <- stack("03_Data/01_RawData/CovariateLayers.grd")
 covars <- readAll(covars)
@@ -39,10 +49,10 @@ plot(covars)
 # Specify the different design combinations through which we want to run. Note
 # that a forgiveness of 1 refers to a regular step selection function
 dat <- expand_grid(
-    Missingness    = seq(0, 0.5, by = 0.1)                                         # Fraction of the fixes that is removed
-  , Forgiveness    = 1:5                                                           # Allowed lag of steps (in steps)
-  , Replicate      = 1:100                                                         # Number of replicates for each combination
-  , Approach       = c("uncorrected", "naive", "dynamic", "multistep", "model")    # Which approach to use to generate random steps
+    Missingness    = seq(0, 0.5, by = 0.1)                                                 # Fraction of the fixes that is removed
+  , Forgiveness    = 1:5                                                                   # Allowed lag of steps (in steps)
+  , Replicate      = 1:100                                                                 # Number of replicates for each combination
+  , Approach       = c("uncorrected", "naive", "dynamic", "multistep", "model", "imputed") # Which approach to use to generate random steps
 )
 
 ################################################################################
@@ -59,6 +69,57 @@ rarifyData <- function(data, missingness, n_id = NULL) {
   data_sub <- subset(data, ID %in% keep)
   rarified <- data_sub[sort(sample(1:nrow(data_sub), size = nrow(data_sub) * (1 - missingness))), ]
   return(rarified)
+}
+
+# Function to impute missing fixes to get a regularized dataframe. For
+# simplicity, only conduct a single imputation.
+imputeFixes <- function(data) {
+  inds <- unique(data$ID)
+  pred <- lapply(inds, function(x) {
+
+    # Fit model but suppress the unneccessary messages
+    sink(tempfile())
+    mod <- suppressMessages(suppressWarnings(crwMLE(
+        mov.model   = ~ 1
+      , data        = data[data$ID == x, ]
+      , Time.name   = "timestamp"
+      , coord       = c("x", "y")
+      , timeStep    = "hour"
+      # , method      = "L-BFGS-B"
+      , control     = list(maxit = 50, trace = 0, REPORT = 1)
+      , initialSANN = list(maxit = 100, trace = 1, REPORT = 1, temp = 0.5, tmax = 10)
+      , attemps     = 200
+    )))
+    sink()
+
+    # Make prediction
+    pre <- suppressMessages(suppressWarnings(crwPredict(
+        object.crwFit = mod
+      , predTime      = "1 hour"
+      , flat          = TRUE
+    )))
+
+    # Clean the output
+    pre <- data.frame(
+        ID          = pre$ID
+      , x           = pre$mu.x
+      , y           = pre$mu.y
+      , step_number = 1:nrow(pre)
+      , step_id     = NA
+      , timestamp   = pre$timestamp
+    )
+
+    # Indicate if a fix was imputed or not
+    pre$imputed <- !(pre$timestamp %in% data$timestamp[data$ID == x])
+
+    # Return the imputed dataframe
+    return(pre)
+  })
+
+  # Bind all individuals together, assign unique step id, return all
+  pred <- do.call(rbind, pred)
+  pred$step_id <- 1:nrow(pred)
+  return(pred)
 }
 
 # Function to compute bursts (per ID, depending on the fogriveness). A new burst
@@ -132,7 +193,7 @@ computeSSF <- function(data, n_rsteps, approach) {
   #### Approach 1 - Uncorrected
   ##############################################################################
   # Step lengths sampled from "minimal" step-duration distributions
-  if (approach == "uncorrected") {
+  if (approach == "uncorrected" | approach == "imputed") {
     rand$sl <- rgamma(n = nrow(rand)
       , scale = dists$uncorrected$sl$scale
       , shape = dists$uncorrected$sl$shape
@@ -159,7 +220,7 @@ computeSSF <- function(data, n_rsteps, approach) {
     )
 
   ##############################################################################
-  #### Approach 3 - Dynamic
+  #### Approach 3 - Dynamic or Modelled
   ##############################################################################
   # Step lengths and turning angles sampled from distributions fitted to
   # different step-durations
@@ -241,6 +302,7 @@ computeSSF <- function(data, n_rsteps, approach) {
     rand <- unnest(rand, data)
     rand <- ungroup(rand)
     rand <- arrange(rand, ID, step_id, desc(case))
+
   } else {
     stop("Provide valid input for the desired approach")
   }
@@ -400,6 +462,10 @@ testing <- computeCovars(testing, covars, multicore = T)
 testing <- runModel(testing, approach = "uncorrected")
 testing
 
+# Try to impute missing fixes
+testing <- imputeFixes(rarifyData(obs, missingness = 0.5, n_id = 10))
+head(testing)
+
 ################################################################################
 #### Fit Step Length Distributions to Different Step Durations
 ################################################################################
@@ -450,17 +516,27 @@ dists$dynamic <- dists_means %>%
     , ta = select(., duration, kappa, mu)
   )
 
+# Store the parameters to file
+write_rds(dists_dynamic, "03_Data/03_Results/StepLengthDynamic.rds")
+write_rds(dists_means, "03_Data/03_Results/StepLengthMeans.rds")
+
 # Visualize everything
+clean_label <- function(l) {
+  rl <- round(l, 3)
+  l <- ifelse(rl == 0 & l != 0, format(l, scientific = T), l)
+}
 dists_dynamic %>%
   pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
   ggplot(aes(x = duration, y = Value)) +
     geom_jitter(width = 0.1, alpha = 0.2, size = 0.5) +
     geom_point(data = dists_means, aes(x = duration, y = mean), col = "orange", size = 5) +
     geom_line(data = dists_means, aes(x = duration, y = mean), col = "orange") +
+    scale_y_continuous(labels = clean_label) +
     facet_wrap(~ Parameter, nrow = 2, scales = "free") +
     theme_minimal() +
     xlab("Step Duration") +
     ylab("Parameter Estimate")
+
 
 ################################################################################
 #### Fit Models
@@ -507,6 +583,7 @@ pbmclapply(
   # Prepare data for ssf
   data <- obs %>%
     rarifyData(missingness = miss, n_id = 100) %>%
+    {if(appr == "imputed") {imputeFixes(.)} else .} %>%
     computeBursts(forgiveness = forg) %>%
     computeMetrics() %>%
     computeSSF(n_rsteps = n_rsteps, approach = appr) %>%
