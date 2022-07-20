@@ -327,6 +327,15 @@ INPUT ./99_Covariates.png
 INPUT 99_Simulations.png
 INPUT ./99_Simulations.png
 INPUT ./99_Simulations.png
+INPUT 99_DistributionParameters.png
+INPUT ./99_DistributionParameters.png
+INPUT ./99_DistributionParameters.png
+INPUT 99_ResultsHabitatKernel.png
+INPUT ./99_ResultsHabitatKernel.png
+INPUT ./99_ResultsHabitatKernel.png
+INPUT 99_ResultsMovementKernel.png
+INPUT ./99_ResultsMovementKernel.png
+INPUT ./99_ResultsMovementKernel.png
 INPUT Manuscript.aux
 INPUT ./Manuscript.out
 INPUT ./Manuscript.out

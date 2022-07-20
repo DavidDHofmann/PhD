@@ -1,7 +1,7 @@
 ################################################################################
-#### Connectivity
+#### Heatmaps
 ################################################################################
-# Description: Connectivity Analysis based on simulated dispersal paths
+# Description: Computing heatmaps from simulated dispersal paths
 
 # Clear R's brain
 rm(list = ls())
@@ -24,12 +24,12 @@ source("02_R-Scripts/00_Functions.R")
 # Load dispersal simulations
 sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 
-# Remove undesired columns
+# Keep only columns
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area", "FloodLevel")]
 
-# Subsample
-sims <- subset(sims, FloodLevel == "Max")
-sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), size = 1000))
+# # Subsample
+# sims <- subset(sims, FloodLevel == "Max")
+# sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), size = 1000))
 
 # Reproject coordinates to utm (required for spatstat)
 sims[, c("x", "y")] <- reprojCoords(
@@ -38,12 +38,15 @@ sims[, c("x", "y")] <- reprojCoords(
   , to   = CRS("+init=epsg:32734")
 )
 
+# Load the reference raster
+r <- rast("03_Data/02_CleanData/ReferenceRaster.tif")
+
 # Prepare extent that encompassess all coordinates + some buffer
 ext <- extent(min(sims$x), max(sims$x), min(sims$y), max(sims$y)) +
   c(-1000, +1000, -1000, +1000)
 
 # Span a raster with desired resolution
-r <- raster(ext, res = 5000)
+r <- raster(ext, res = 1000)
 values(r) <- runif(ncell(r))
 crs(r) <- CRS("+init=epsg:32734")
 
@@ -85,7 +88,7 @@ for (i in 1:nrow(rasterized)) {
     , steps       = rasterized$Steps[i]
     , area        = rasterized$Area[i]
     , flood       = rasterized$Flood[i]
-    , messages    = T
+    , messages    = F
     , mc.cores    = detectCores() - 1
   )
 
@@ -105,12 +108,12 @@ combined <- rast(combined)
 combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
 combined <- stack(combined)
 
-# Crop them to the buffer
-buffer <- readOGR("03_Data/03_Results/99_BufferArea.shp")
-combined <- crop(combined, buffer)
+# Crop them to our reference raster
+r <- raster("03_Data/02_CleanData/ReferenceRaster.tif")
+combined <- crop(combined, r)
 
 # Store to file
-writeRaster(combined, "03_Data/03_Results/99_Heatmaps.grd", overwrite = T)
+writeRaster(combined, "03_Data/03_Results/Heatmaps.tif", overwrite = T)
 
 # Add maps to the tibble
 rasterized <- mutate(rasterized, heatmap = lapply(1:nlayers(combined), function(x){
@@ -118,5 +121,4 @@ rasterized <- mutate(rasterized, heatmap = lapply(1:nlayers(combined), function(
 }))
 
 # Store to file
-write_rds(rasterized, "03_Data/03_Results/99_Heatmaps.rds")
-ra
+write_rds(rasterized, "03_Data/03_Results/Heatmaps.rds")

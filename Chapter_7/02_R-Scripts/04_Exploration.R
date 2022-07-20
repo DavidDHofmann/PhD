@@ -1,7 +1,7 @@
 ################################################################################
-####
+#### Testing
 ################################################################################
-# Determination of moonlight intensity
+# Testing
 
 # Clear R's brain
 rm(list = ls())
@@ -14,111 +14,221 @@ setwd("/home/david/ownCloud/University/15. PhD/Chapter_7")
 library(tidyverse)   # For data wrangling
 library(lubridate)   # To handle dates
 library(hms)         # To handle times
-library(pbmcapply)   # To run stuff in parallel
-library(moonlit)     # For moonlight statistics
+library(pracma)      # To identify peaks
 
 # Reload cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityData.csv")
-head(dat)
+dat <- read_csv("03_Data/02_CleanData/ActivityDataMoonphase.csv")
 
-# Derive some time metrics
-dat <- mutate(dat
-  , Date = as_date(Timestamp)
-  , Time = as_hms(Timestamp)
-  , Hour = hour(Timestamp)
-)
+################################################################################
+#### NEED TO APPLY SOME FILTERS
+################################################################################
+# Look at residents only?
+# What to do with individuals that were together?
+dat <- subset(dat, State != "Disperser")
+gc()
 
-# We only want to work with the x-axis and remove the rest
-dat$ActY <- dat$ActZ <- NULL
+# Let's get an idea of the temporal resolution of the data
+dat %>%
+  count(Month, Year) %>%
+  ggplot(aes(x = Year, y = Month, fill = n)) +
+    geom_raster() +
+    scale_fill_viridis_c(option = "magma") +
+    theme_minimal()
 
-# Compute average 5 minute activity
-means <- dat %>%
+# Let's get an idea of the usual activity patterns by computing average activity
+# for the different times.
+means_hour <- dat %>%
   group_by(Time) %>%
   summarize(
-      Mean = mean(ActX)
-    , SD   = sd(ActX)
-  )
+      Mean    = mean(ActX)
+    , SD      = sd(ActX)
+    , .groups = "drop"
+  ) %>%
+  ungroup()
 
-# Visualize them
-ggplot(means, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) +
+# Visualize it
+ggplot(means_hour, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) +
   geom_ribbon(alpha = 0.2) +
   geom_line() +
   theme_minimal() +
   scale_x_time(breaks = scales::breaks_width("2 hours")) +
-  geom_hline(yintercept = 20, col = "gray30") +
-  geom_vline(xintercept = as_hms("10:00:00"), col = "gray30") +
-  geom_vline(xintercept = as_hms("12:00:00"), col = "gray30") +
-  geom_vline(xintercept = as_hms("14:00:00"), col = "gray30") +
-  geom_text(aes(x = as_hms("10:00:00"), label = "10:00:00", y = 150), angle = 90, size = 3, fontface = 3, nudge_x = -1000) +
-  geom_text(aes(x = as_hms("12:00:00"), label = "12:00:00", y = 150), angle = 90, size = 3, fontface = 3, nudge_x = -1000) +
-  geom_text(aes(x = as_hms("14:00:00"), label = "14:00:00", y = 150), angle = 90, size = 3, fontface = 3, nudge_x = -1000) +
-  theme(axis.text.x = element_text(angle = 45))
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5))
 
-# Visualize activity by hour and day
+# We can try to identify the peaks and valleys in this plot
+peaks <- findpeaks(means_hour$Mean, minpeakdistance = 50, npeaks = 2)
+peaks <- subset(means_hour, Mean %in% peaks[, 1])
+valls <- findpeaks(-means_hour$Mean, minpeakdistance = 50, npeaks = 4)
+valls <- subset(means_hour, -Mean %in% valls[, 1])
+valls <- valls[-nrow(valls), ]
+
+# Let's use them to distinguish morning and evening activity (i'll make the
+# endtime for the morning burst a bit earlier to have a gap between morning and
+# evening burst)
+phase <- tibble(
+    Burst     = factor(c("Morning", "Evening"), levels = c("Morning", "Evening"))
+  , Starttime = c(valls$Time[1], valls$Time[2])
+  , Endtime   = c(valls$Time[2] - duration(2, units = "hours"), valls$Time[3])
+)
+
+# Visualize again
+ggplot(means_hour, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) +
+  geom_rect(data = phase, inherit.aes = F, aes(xmin = Starttime, xmax = Endtime, ymin = -Inf, ymax = Inf, fill = Burst), alpha = 0.15) +
+  geom_ribbon(alpha = 0.2) +
+  geom_line() +
+  geom_vline(data = peaks, aes(xintercept = Time), col = "gray20", lty = 2) +
+  theme_minimal() +
+  scale_x_time(breaks = scales::breaks_width("2 hours")) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = "bottom") +
+  scale_fill_manual(values = c("cornflowerblue", "orange"))
+
+# How does the activity pattern change depending on the month?
+means_month <- dat %>%
+  group_by(Month, Time) %>%
+  summarize(
+      Mean    = mean(ActX)
+    , SD      = sd(ActX)
+    , .groups = "drop"
+  ) %>%
+  ungroup()
+
+# Find peaks each month
+peaks <- means_month %>%
+  nest(Data = -c(Month)) %>%
+  mutate(Data = map(Data, function(x) {
+    peaks <- findpeaks(x$Mean, minpeakdistance = 50, npeaks = 2)
+    peaks <- subset(x, Mean %in% peaks[, 1])
+    return(peaks)
+  })) %>%
+  unnest(Data)
+
+# Visualize
+ggplot(means_month, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) +
+  geom_rect(data = phase, inherit.aes = F, aes(xmin = Starttime, xmax = Endtime, ymin = -Inf, ymax = Inf, fill = Burst), alpha = 0.15) +
+  geom_ribbon(alpha = 0.2) +
+  geom_line() +
+  geom_vline(data = peaks, aes(xintercept = Time), col = "gray20", lty = 2) +
+  theme_minimal() +
+  scale_x_time(breaks = scales::breaks_width("2 hours")) +
+  facet_wrap(~ Month, ncol = 2, dir = "v") +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = "bottom") +
+  scale_fill_manual(values = c("cornflowerblue", "orange"))
+
+# How does the activity pattern change depending on the year?
+means_year <- dat %>%
+  group_by(Year, Time) %>%
+  summarize(
+      Mean    = mean(ActX)
+    , SD      = sd(ActX)
+    , .groups = "drop"
+  ) %>%
+  ungroup()
+
+# Find peaks each month
+peaks <- means_year %>%
+  nest(Data = -c(Year)) %>%
+  mutate(Data = map(Data, function(x) {
+    peaks <- findpeaks(x$Mean, minpeakdistance = 50, npeaks = 2)
+    peaks <- subset(x, Mean %in% peaks[, 1])
+    return(peaks)
+  })) %>%
+  unnest(Data)
+
+# Visualize
+ggplot(means_year, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) +
+  geom_rect(data = phase, inherit.aes = F, aes(xmin = Starttime, xmax = Endtime, ymin = -Inf, ymax = Inf, fill = Burst), alpha = 0.15) +
+  geom_ribbon(alpha = 0.2) +
+  geom_line() +
+  geom_vline(data = peaks, aes(xintercept = Time), col = "gray20", lty = 2) +
+  theme_minimal() +
+  scale_x_time(breaks = scales::breaks_width("2 hours")) +
+  facet_wrap(~ Year, ncol = 1) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 0.5), legend.position = "bottom") +
+  scale_fill_manual(values = c("cornflowerblue", "orange"))
+
+# Use the cutoff times to assign to each activity fix "morning", "evening", or
+# NA
+dat <- dat %>% mutate(ActivityPhase = case_when(
+    Time >= phase$Starttime[1] & Time <= phase$Endtime[1] ~ "Morning"
+  , Time >= phase$Starttime[2] & Time <= phase$Endtime[2] ~ "Evening"
+  , TRUE ~ "Ignore"
+))
+
+# Make sure it worked
+sort(unique(dat[dat$ActivityPhase == "Morning", ]$Hour))
+sort(unique(dat[dat$ActivityPhase == "Evening", ]$Hour))
+sort(unique(dat[dat$ActivityPhase == "Ignore", ]$Hour))
+
+################################################################################
+#### CONTINUE HERE!!!
+################################################################################
+# Let's compute the average activity during the morning and evening bursts for
+# each day and individual
+dat_summarized <- dat %>%
+  group_by(DogID, ActivityPhase, Date) %>%
+  summarize(
+      Mean                  = mean(ActX)
+    , SD                    = sd(ActX)
+    , maxMoonlightIntensity = max(maxMoonlightIntensity)
+    , .groups               = "drop"
+  ) %>%
+  ungroup()
+hist(dat_summarized$Mean)
+summary(lm(Mean ~ maxMoonlightIntensity, data = subset(test, ActivityPhase == "Evening")))
+ggplot(test, aes(x = maxMoonlightIntensity, y = Mean)) +
+  geom_point() +
+  geom_smooth()
+
+# Now let's try to figure out if this pattern changes depending on the moon
+# illumination. For this, split the data into dark / illuminated nights based on
+# the quantiles
 dat %>%
-  group_by(Hour, Date) %>%
-  summarize(ActX = mean(ActX)) %>%
-  ggplot(aes(x = Hour, y = ActX, col = Date, group = Date)) +
-    geom_line(lwd = 0.5, alpha = 0.5) +
-    scale_color_viridis_c() +
-    theme_minimal()
-
-# # For now, focus on a couple of dogs
-# dat <- subset(dat, DogID %in% sample(unique(dat$DogID), size = 5))
-
-# Nest by dog
-dat <- nest(dat, Data = -DogID)
-
-# # Keep only a couple of entries per dog
-# dat$Data <- lapply(dat$Data, function(x) {x[1:20000, ]})
-
-# Check the time-lag between measurements
-dat$Data <- pbmclapply(dat$Data, mc.cores = detectCores() - 1, ignore.interactive = T, function(x) {
-  x$Lag <- difftime(x$Timestamp, lag(x$Timestamp), units = "mins")
-  return(x)
-})
-
-# Unnest data
-dat <- unnest(dat, Data)
-
-# There should not be many datapoints with a time lag beyond 5 mins
+  select(minMoonlightIntensity, meanMoonlightIntensity, maxMoonlightIntensity) %>%
+  apply(2, summary) %>%
+  round(6)
 dat %>%
-  pull(Lag) %>%
-  as.numeric() %>%
-  summary()
+  sample_n(size = 1e6, replace = F) %>%
+  select(minMoonlightIntensity, meanMoonlightIntensity, maxMoonlightIntensity) %>%
+  pivot_longer(cols = 1:3, names_to = "Variable", values_to = "Value") %>%
+  ggplot(aes(x = Variable, y = Value)) +
+    geom_boxplot()
 
-# For each activity record, compute the moonlight intensity of the nearest night
-pb <- txtProgressBar(min = 0, max = nrow(dat), style = 3)
-moonstats <- pbmclapply(1:nrow(dat), mc.cores = detectCores() - 1, ignore.interactive = T, function(x) {
+# Let's split the data into "dark" and "illuminated" nights
+quantiles <- quantile(dat$maxMoonlightIntensity, c(0.10, 0.90))
+dat <- mutate(dat, NightIllumination = case_when(
+    maxMoonlightIntensity < quantiles[1] ~ "Dark"
+  , maxMoonlightIntensity > quantiles[2] ~ "Illuminated"
+  , TRUE ~ "Ignore"
+))
 
-  # Now calculate moonlight intensity of the following night
-  pdf(file = NULL)
-  moon <- calculateMoonlightStatistics(
-      date     = dat$Timestamp[x]
-    , lon      = dat$x[x]
-    , lat      = dat$y[x]
-    , e        = 0.21
-    , t        = "15 mins"
-    , timezone = "UTC"
-  )
-  dev.off()
+# Compute averages again
+means <- dat %>%
+  subset(NightIllumination != "Ignore") %>%
+  group_by(Time, NightIllumination) %>%
+  summarize(
+      Mean    = mean(ActX)
+    , SD      = sd(ActX)
+    , .groups = "drop"
+  ) %>%
+  ungroup()
 
-  # Remove undesired data
-  moon <- select(moon, -c(sunset, sunrise, date))
+# Visualize them above each other
+ggplot(means, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD, col = NightIllumination, fill = NightIllumination)) +
+  geom_ribbon(alpha = 0.1, lwd = 0.2) +
+  geom_line() +
+  theme_minimal() +
+  scale_x_time(breaks = scales::breaks_width("2 hours")) +
+  theme(axis.text.x = element_text(angle = 45)) +
+  facet_wrap(~ NightIllumination, nrow = 2) +
+  theme(legend.position = "bottom")
 
-  # Return the data
-  return(moon)
-
-  # Update progress bar
-  setTxtProgressBar(pb, value = x)
-
-}) %>% do.call(rbind, .)
-
-# Bind with original data
-dat <- cbind(dat, moonstats)
-
-# Write to file
-write_csv(dat, "03_Data/02_CleanData/ActivityDataMoonphase.csv")
+  # Visualize them on top of each other
+ggplot(means, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD, col = NightIllumination, fill = NightIllumination)) +
+  geom_ribbon(alpha = 0.1, lwd = 0.2) +
+  geom_line() +
+  theme_minimal() +
+  scale_x_time(breaks = scales::breaks_width("2 hours")) +
+  theme(axis.text.x = element_text(angle = 45)) +
+  theme(legend.position = "bottom")
 
 # Plot activity against moonlight intensity
 ggplot(dat, aes(x = Time, y = maxMoonlightIntensity, z = ActX)) +

@@ -537,7 +537,6 @@ dists_dynamic %>%
     xlab("Step Duration") +
     ylab("Parameter Estimate")
 
-
 ################################################################################
 #### Fit Models
 ################################################################################
@@ -559,26 +558,29 @@ dat$Filename <- paste0(
 dir.create("03_Data/03_Results/ModelResults", showWarnings = F)
 dir.create("03_Data/03_Results/ModelResults/Simulation", showWarnings = F)
 
+# Write the design to file
+write_rds(dat, "03_Data/03_Results/SimulationDesign.rds")
+
 # Let's randomize the design matrix
-dat <- dat[sample(nrow(dat)), ]
+dat_sub <- dat_sub[sample(nrow(dat_sub)), ]
 
 # Subset to rows that haven't been run yet
-dat <- subset(dat, !file.exists(Filename))
+dat_sub <- subset(dat_sub, !file.exists(Filename))
 
 # Go through the design and run step selection analysis with the specified
 # parameters
 pbmclapply(
   # dat$Coefs <- lapply(
-    X                  = 1:nrow(dat)
+    X                  = 1:nrow(dat_sub)
   , ignore.interactive = T
   , mc.cores           = detectCores() - 1
   , FUN                = function(x) {
 
   # Extract important information from dataframe
-  miss <- dat$Missingness[[x]]
-  forg <- dat$Forgiveness[[x]]
-  appr <- dat$Approach[[x]]
-  file <- dat$Filename[[x]]
+  miss <- dat_sub$Missingness[[x]]
+  forg <- dat_sub$Forgiveness[[x]]
+  appr <- dat_sub$Approach[[x]]
+  file <- dat_sub$Filename[[x]]
 
   # Prepare data for ssf
   data <- obs %>%
@@ -600,9 +602,8 @@ pbmclapply(
 ################################################################################
 #### CONTINUE HERE
 ################################################################################
-# Store results to file
-write_rds(dat, "03_Data/03_Results/Models.rds")
-dat <- read_rds("03_Data/03_Results/Models.rds")
+# Laod all data
+dat$Coefs <- lapply(dat$Filename, read_rds)
 
 # Let's also prepare a dataframe containing the "truth"
 truth <- data.frame(
@@ -611,8 +612,8 @@ truth <- data.frame(
 )
 
 # Visualize Results
+unique(dat$Approach)
 unnest(dat, Coefs) %>%
-  mutate(Approach = Distributions) %>%
   group_by(Missingness, Forgiveness, Approach, Coefficient) %>%
   summarize(
     , SD       = sd(Estimate)

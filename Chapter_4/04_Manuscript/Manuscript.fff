@@ -28,3 +28,30 @@
   \label{Simulations}
   \end{center}
 \end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_DistributionParameters.png}
+  \caption{}
+  \label{DistributionParameters}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ResultsHabitatKernel.png}
+  \caption{}
+  \label{ResultsHabitat}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ResultsMovementKernel.png}
+  \caption{}
+  \label{ResultsMovement}
+  \end{center}
+\end{figure}

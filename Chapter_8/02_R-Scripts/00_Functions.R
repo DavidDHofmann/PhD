@@ -476,10 +476,12 @@ rasterizeSims <- function(
   ) {
 
   # Subset to corresponding data
-  sub <- simulations[simulations$StepNumber <= steps, ]
-  sub <- simulations[simulations$FloodLevel == flood, ]
+  sub <- simulations[
+    simulations$StepNumber <= steps &
+    simulations$FloodLevel == flood,
+  ]
   if (!is.null(area)) {
-    sub <- simulations[simulations$Area %in% area, ]
+    sub <- sub[sub$Area %in% area, ]
   }
 
   # Make sure raster values are all 0
@@ -513,4 +515,110 @@ rasterizeSims <- function(
 
   # Return the resulting heatmap
   return(heatmap)
+}
+
+################################################################################
+#### Function to Create Centroids that lie WITHIN Polygons
+################################################################################
+#' Create centroid within a polygon
+#'
+#' Function to create centroid within a polygon
+#' @export
+#' @param pol \code{SpatialPolygons} or \code{SpatialPolygonsDataFrame} in which
+#' the centroids should be identified
+#' @return \code{SpatialPointsDataFrame}
+gCentroidWithin <- function(pol){
+
+  # Load required packages
+  require(rgeos)
+
+  # Identify the number of polygons
+  pol$.tmpID <- 1:length(pol)
+
+  # Calculate centroids
+  initialCents <- gCentroid(pol, byid = T)
+
+  # Put data from the polygons to the centroids
+  centsDF <- SpatialPointsDataFrame(initialCents, pol@data)
+
+  # Indicate that these are true centroids
+  centsDF$isCentroid <- TRUE
+
+  # Check if the centroids are within the polygons
+  centsInOwnPoly <- sapply(1:length(pol), function(x){
+    gIntersects(pol[x,], centsDF[x, ])
+  })
+
+  # In case all centroids are within the polygons. We're done
+  if(all(centsInOwnPoly) == TRUE){
+        return(centsDF)
+  } else {
+
+    # We substitue outside centroids with points inside the polygon
+    newPoints <- SpatialPointsDataFrame(
+        gPointOnSurface(
+            pol[!centsInOwnPoly, ]
+          , byid = T
+        )
+      , pol@data[!centsInOwnPoly,]
+    )
+
+    # Indicate that these are not true centroids
+    newPoints$isCentroid <- FALSE
+
+    # Replace outside entrouds
+    centsDF <- rbind(centsDF[centsInOwnPoly, ], newPoints)
+
+    # Order points according to their polygon counterparts
+    centsDF <- centsDF[order(centsDF$.tmpID), ]
+
+    # Remove temporary ID column
+    centsDF@data <- centsDF@data[, - which(names(centsDF@data) == ".tmpID")]
+
+    # Return points
+    return(centsDF)
+  }
+}
+
+################################################################################
+#### Function to darken a color
+################################################################################
+#' Darken a color
+#'
+#' Function to darken a color
+#' @param color A character string naming a color
+#' @param factor Factor by which the color should be darkened. 1.4 by default
+#' @return Hexadecimal code of the darkened color
+#' @examples
+#' darken("blue")
+#' plot(1:2, 1:2, cex = 70, pch = 20, col = c("blue", darken("blue", 3)))
+#' @export
+darken <- function(color, factor = 1.4){
+    col <- col2rgb(color)
+    col <- col / factor
+    col <- rgb(t(col), maxColorValue = 255)
+    col
+}
+
+################################################################################
+#### Function to lighten a color
+################################################################################
+#' Lighten a color
+#'
+#' Function to lighten a color
+#' @param color A character string naming a color
+#' @param factor Factor by which the color should be lightened. 1.4 by default
+#' @return Hexadecimal code of the lightened color
+#' @examples
+#' lighten("blue")
+#' plot(1:2, 1:2, cex = 70, pch = 20, col = c("blue", lighten("blue", 3)))
+#' @export
+lighten <- function(color, factor = 1.4){
+    col <- col2rgb(color)
+    col <- col * factor
+    col <- rgb(
+        t(as.matrix(apply(col, 1, function(x) if (x > 255) 255 else x)))
+      , maxColorValue = 255
+    )
+    col
 }

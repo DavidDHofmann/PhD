@@ -102,8 +102,8 @@ Maun, Botswana.
 
 \vspace{0.5cm}
 
-\textbf{Keywords:} step selection functions, gps data, animal movement, Lycaon
-pictus, irregular data
+\textbf{Keywords:} step selection analysis, gps data, animal movement, irregular
+data
 
 \end{flushleft}
 
@@ -112,20 +112,20 @@ pictus, irregular data
 %------------------------------------------------------------------------------
 \newpage
 \begin{abstract}
-Animal movement data collected in the field is often noisy and incomplete, thus
-confronting movement ecologists with temporal irregularities in their data. Step
-selection functions have become a popular tool to analyse movement data and to
-infer a species movement or preferences, yet they are based on the assumption of
-equal temporal gaps between consecutive datapoints. To adhere to this
-requirement, researchers typically only consider bursts of consecutive
-relocations with equal step-durations, thus discarding large portions of their
-data. Here, we use simulated data to question this practice and we examine
-whether including temporally irregular can improve estimates from step-selection
-models. In addition, we explore the usefulness of multiple methods to account
-for temporal irregularity in movement data. Our results show that including
-irregular data improves model estimates substantially. By applying methods that
-account for the irregularity in the data, the precision of model estimates can
-further be improved, albeit only marginally.
+Animal movement data collected using GPS collars is often noisy and incomplete,
+thus confronting movement ecologists with data that is not always uniformly
+distributed in time. Step selection analysis has become a popular tool to
+analyse such data and to infer a species movement and habitat preferences, yet
+it requires that consecutive GPS relocations are collected at regular temporal
+intervals. To adhere to this requirement, researchers typically discard large
+portions of their data and only consider GPS bursts that were collected at
+comparable intervals. Here, we assess the appropriateness of this practice and
+use simulated data to examine if including temporally irregular data could, in
+fact, improve estimates from step-selection analyses. Moreover, we explore the
+usefulness of several methods to account for the temporal irregularity. Our
+results suggest that utilizing a full dataset, despite potential temporal
+irregularities, is beneficial, especially when an appropriate method is chosen
+to account for such irregularities.
 \end{abstract}
 
 %------------------------------------------------------------------------------
@@ -147,14 +147,14 @@ further be improved, albeit only marginally.
 \section{Introduction}
 GPS data is usually collected on fixed temporal intervals (could do a quick and
 dirty analysis on MoveBank) ranging from a few minutes, to multiple hours or
-even days between subsequent reolocations. Nevertheless, GPS devices regularly
-fail to adhere to the anticipated fixrate schedule due to cloud cover or other
-unfavorable conditions, thus resulting in irregular data. In other cases, the
-GPS schedule is not strictly fixed but may be subject to change. For example,
-\cite{Cozzi.2020} increased the fixrate of their GPS collars once per week from
-4 to 8 fixes per day, aiming to collect more fine scaled data for a limited
-time. We chose to coin this type of data \textit{irregular}, because it is not
-collected on the anticipated fixrate schedule and therefore not directly
+even days between subsequent reolocations. Nevertheless, GPS devices frequently
+fail to adhere to the anticipated schedule, for instance due to cloud cover or
+other unfavorable conditions, thus resulting in irregular data. In other cases,
+the GPS schedule is not strictly fixed but may be subject to change. For
+example, \cite{Cozzi.2020} increased the fixrate of their GPS collars once per
+week from 4 to 8 fixes per day, aiming to collect more fine scaled data for a
+limited time. We chose to coin this type of data \textit{irregular}, because it
+is not collected on the anticipated fixrate schedule and therefore not directly
 comparable to the vast majority of the collected data.
 
 Step selection analysis is a powerful framework that enables researchers to
@@ -197,6 +197,9 @@ parametric step-length and turning distributions to different step-durations.
 Besides the simulation study, we also analysed a dataset collected on dispersing
 African wild dogs and examined the implications considering or discarding
 irregular data.
+
+Specifically, we employed six competing approaches to handle temporal
+irregularity in the data.
 
 \begin{figure}
   \begin{center}
@@ -377,6 +380,32 @@ a 4-hour period.
 
 
 \section{Results}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_DistributionParameters.png}
+  \caption{}
+  \label{DistributionParameters}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ResultsHabitatKernel.png}
+  \caption{}
+  \label{ResultsHabitat}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ResultsMovementKernel.png}
+  \caption{}
+  \label{ResultsMovement}
+  \end{center}
+\end{figure}
+
+
 \section{Discussion}
 Results from our simulation study demonstrate that the inclusion of GPS fixes
 can be used to gain information on relative habitat preferences of the focal
