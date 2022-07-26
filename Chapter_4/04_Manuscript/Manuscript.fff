@@ -1,8 +1,33 @@
 \begin{figure}
   \begin{center}
+  \includegraphics[width = \textwidth]{99_Overview.png}
+  \caption{Figure demonstrating how a missing fix affects the number of valid
+  steps that can be used for step selection analysis. In subfigure (a), a
+  complete trajectory without any missing fixes is given. This trajectory
+  results in a total of four valid steps that can be analysed (the first step is
+  lacking a relative turning angle and thus invalid). Each of the steps in (a)
+  has a step-duration of one, which is indicated in. In subfigure (b), the
+  fourth fix was removed. If the modeler does excludes steps with step-durations
+  above one (i.e. has a forgiveness of one), this results in only a single valid
+  step for analysis. Finally, subfigure (c) depicts the same situation, yet with
+  a modeler that has a forgiveness of two, and is thus willing to accept steps
+  with a step-duration of two. Here, we end up with three valid steps.}
+  \label{Overview}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
   \includegraphics[width = \textwidth]{99_NumberOfSteps.png}
-  \caption{}
-  \label{Covariates}
+  \caption{Illustration of how missingness in GPS data reduces the number of
+  steps that can be used in step selection analysis. At a missingness of 0, all
+  1'000 theoretical GPS points could be used to compute steps, thus resulting in
+  998 steps. However, if the missingness increases, data gaps will prevent the
+  computation of some steps. However, the higher the forgiveness of a modeler,
+  the more missing fixes a modeler will accept to still be able to compute a
+  step.}
+  \label{ValidSteps}
   \end{center}
 \end{figure}
 \efloatseparator
@@ -22,7 +47,7 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = 0.5\textwidth]{99_Simulations.png}
-  \caption{100 Simulated movement trajectories, each comprising of 100 steps.
+  \caption{10'000 Simulated movement trajectories, each comprising of 100 steps.
   Simulated individuals were initiated within the blue rectangle to mitigate
   edge effects.}
   \label{Simulations}
@@ -33,7 +58,17 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_DistributionParameters.png}
-  \caption{}
+  \caption{Parameter estimates for the von Mises distribution (top row) and
+  gamma distribution (bottom row) fitted to steps with different durations. The
+  von Mises distribution requires two parameters, namely a concentration
+  parameter and a location parameter. Here, the conentration parameter
+  diminishes as the step-duration increases, indicating that steps with higher
+  step duration tend to be less directional. The location parameter, on the
+  other hand, remains unchanged at 0, indicating that movement tends to be
+  forward directed and is not biased towards left or right turns. The gamma
+  distribution requires a shape and a scale parameter. Here, the shape parameter
+  linearly increases with increasing step-duration, yet the shape parameter
+  levels off at a step-duration of two.}
   \label{DistributionParameters}
   \end{center}
 \end{figure}
@@ -42,7 +77,13 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_ResultsHabitatKernel.png}
-  \caption{}
+  \caption{Parameter estimates from the step-selection models with regards to
+  the movement covariates \textsf{dist}, \textsf{elev}, and \textsf{forest}.
+  Dots indicate the mean across 100 replicates, whereas the vertical line
+  delineate $\pm 2SD$ from the mean. For clarity, we only show results for
+  data with missingness of 0.5. The black dotted lines indicate the ``true''
+  values that were used to simulate movement. Colors separate different
+  approaches to account for varying step-durations in the data.}
   \label{ResultsHabitat}
   \end{center}
 \end{figure}

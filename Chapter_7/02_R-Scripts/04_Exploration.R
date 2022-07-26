@@ -158,6 +158,27 @@ sort(unique(dat[dat$ActivityPhase == "Morning", ]$Hour))
 sort(unique(dat[dat$ActivityPhase == "Evening", ]$Hour))
 sort(unique(dat[dat$ActivityPhase == "Ignore", ]$Hour))
 
+# Let's compute average activity during those
+sub <- subset(dat, ActivityPhase != "Ignore") %>%
+  group_by(DogID, CollarID, Date, ActivityPhase) %>%
+  summarize(
+      meanActivity           = mean(ActX)
+    , totalActivity          = sum(ActX)
+    , minMoonlightIntensity  = min(minMoonlightIntensity)
+    , meanMoonlightIntensity = mean(meanMoonlightIntensity)
+    , maxMoonlightIntensity  = max(maxMoonlightIntensity)
+    , .groups                = "drop"
+  )
+
+# Visualize
+ggplot(sub, aes(x = maxMoonlightIntensity, y = meanActivity)) +
+  geom_point(alpha = 0.2) +
+  theme_minimal() +
+  facet_wrap(~ ActivityPhase) +
+  stat_smooth(method = "lm")
+summary(lm(meanActivity ~ maxMoonlightIntensity, data = subset(sub, ActivityPhase == "Morning")))
+summary(lm(meanActivity ~ maxMoonlightIntensity, data = subset(sub, ActivityPhase == "Evening")))
+
 ################################################################################
 #### CONTINUE HERE!!!
 ################################################################################

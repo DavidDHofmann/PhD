@@ -11,8 +11,11 @@ setwd("/home/david/ownCloud/University/15. PhD/Chapter_8")
 
 # Load required packages
 library(terra)          # To handle spatial data
+library(raster)         # To handle spatial data
+library(sf)             # To handle spatial data
 library(glmmTMB)        # To handle glmmTMB models
 library(tidyverse)      # To wrangle data
+library(osmdata)        # To download data from open streetmap
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -136,6 +139,26 @@ values(r) <- rbinom(ncell(r), size = 1, prob = 0.5)
 # Store both to file
 writeVector(s, "03_Data/02_CleanData/ReferenceShape.shp", overwrite = T)
 writeRaster(r, "03_Data/02_CleanData/ReferenceRaster.tif", overwrite = T)
+
+################################################################################
+#### Village Data
+################################################################################
+# Download villages/cities for our extent
+vills <- opq(bbox = st_bbox(st_as_sf(s))) %>%
+  add_osm_feature(key = "place", value = c("village", "town", "city")) %>%
+  osmdata_sf()
+
+# Extract points
+vills <- vills$osm_points
+
+# Remove NA values and simplify categories
+vills <- subset(vills, !is.na(place)) %>%
+  mutate(place = factor(place, levels = c("village", "town", "city"))) %>%
+  dplyr::select(name, place, geometry) %>%
+  mutate(place = ifelse(place == "city", "City", "Village"))
+
+# Make a regular shapefile
+st_write(vills, "03_Data/02_CleanData/Villages.shp")
 
 ################################################################################
 #### Session Information

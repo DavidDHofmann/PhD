@@ -11,24 +11,52 @@ setwd("/home/david/ownCloud/University/15. PhD/Chapter_8")
 
 # Load required packages
 library(terra)          # To handle spatial data
+library(raster)         # To handle spatial data
 library(tidyverse)      # To wrangle data
 library(lubridate)      # To handle dates
 library(ggspatial)      # For scale bar and north arrow
 library(rgdal)          # To handle spatial data
 library(sf)             # To handle spatial data
+library(scales)         # To squish oob values
+library(latex2exp)      # For easy latex code
+
+# Load custom functions
+source("02_R-Scripts/00_Functions.R")
 
 # Load the betwenness maps
 maps <- read_rds("03_Data/03_Results/Betweenness.rds")
 maps <- subset(maps, Flood != "Mean" & Steps %in% c(500, 1000, 2000))
 
-# Load shapefile of source areas
-area <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
+# Load shapefiles that we want to plot
+area  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
+roads <- read_sf("03_Data/02_CleanData/Roads.shp")
+afric <- read_sf("03_Data/02_CleanData/Africa.shp")
 
 # Reference raster
 r <- rast("03_Data/02_CleanData/ReferenceRaster.tif")
 # r <- crop(r, extent(22, 25, -20.5, -18.5))
 
-# Merge heatmaps of the same number of steps and flood extent
+# Create labels for some geographical landmarks
+labels_waters <- data.frame(
+    x     = c(22.6, 23.7, 27.1, 25.6)
+  , y     = c(-19, -18.2, -17.5, -20.7)
+  , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
+)
+
+# Compute difference maps
+diffs <- lapply(unique(maps$Steps), function(x) {
+    submaps <- subset(maps, Steps == x)
+    submaps <- stack(submaps$betweenness)
+    diff <- submaps[[2]] - submaps[[1]]
+    names(diff) <- x
+    return(diff)
+  }) %>%
+  stack() %>%
+  as.data.frame(xy = T) %>%
+  pivot_longer(X500:X2000, names_to = "Steps", values_to = "Difference") %>%
+  mutate(Steps = as.numeric(substr(Steps, start = 2, stop = nchar(Steps))))
+
+# Convert maps to dataframes
 maps <- maps %>%
   mutate(betweenness = map(betweenness, function(x) {
     result <- as.data.frame(x, xy = T)
@@ -39,12 +67,13 @@ maps <- maps %>%
 # Convert the reference raster to a dataframe
 r <- as.data.frame(r, xy = T)
 
-# Visualize the maps
-ggplot() +
+# Visualize the betweenness
+p1 <- ggplot() +
   geom_raster(
       data    = maps
     , mapping = aes(x = x, y = y, fill = Betweenness)
   ) +
+  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
   geom_sf(
       data        = area
     , col         = "white"
@@ -54,17 +83,26 @@ ggplot() +
     , show.legend = F
     , alpha       = 0.6
   ) +
+  geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = Name)
-    , size          = 1.4
+    , size          = 1.5
     , check_overlap = T
     , col           = "white"
+    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
+  ) +
+  geom_text(
+      data     = labels_waters
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "gray50"
+    , fontface = 3
+    , size     = 1.3
   ) +
   scale_fill_gradientn(
       colours = viridis::magma(100)
     , labels  = function(x){format(x, big.mark = "'")}
-    # , trans   = "sqrt"
+    , trans   = "sqrt"
     , guide   = guide_colorbar(
       , title          = "Betweenness"
       , show.limits    = T
@@ -91,7 +129,6 @@ ggplot() +
     , legend.box       = "vertical"
     , panel.background = element_blank()
     , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-    , axis.text.x      = element_text(angle = 45, hjust = 1)
   ) +
   annotation_scale(
       location   = "bl"
@@ -105,7 +142,7 @@ ggplot() +
   annotation_north_arrow(
       location = "br"
     , height   = unit(0.7, "cm"),
-    , width    = unit(0.4, "cm"),
+    , width    = unit(0.6, "cm"),
     , style    = north_arrow_fancy_orienteering(
           fill      = c("white", "white")
         , line_col  = NA
@@ -114,3 +151,15 @@ ggplot() +
       )
   ) +
   facet_grid(Flood ~ Steps)
+
+################################################################################
+#### Store Plot
+################################################################################
+# Store the plot
+ggsave("04_Manuscript/99_Betweenness.png"
+  , plot   = p1
+  , bg     = "white"
+  , width  = 8
+  , height = 5
+  , scale  = 1
+)

@@ -28,6 +28,7 @@ sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area", "FloodLevel")]
 
 # # Subsample
+sims <- subset(sims, Area != 2)
 # sims <- subset(sims, FloodLevel == "Max")
 # sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), size = 1000))
 
@@ -59,7 +60,7 @@ nrow(sims) / 1e6
 # Create a dataframe with all source points and points in time at which we want
 # to rasterize trajectories
 rasterized <- expand_grid(
-    Steps = c(68, 125, 250, 500, 1000, 2000)
+    Steps = c(500, 1000, 2000)
   , Area  = unique(sims$Area)
   , Flood = unique(sims$FloodLevel)
 )

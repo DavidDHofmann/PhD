@@ -1,0 +1,19 @@
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_StudyArea.png}
+  \caption{Study area across which we simulated dispersal events. Virtual
+  dispersers were released at random locations within the orange source areas.}
+  \label{StudyArea}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_FloodExtent.png}
+  \caption{}
+  \label{FloodExtent}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 

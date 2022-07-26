@@ -16,6 +16,10 @@ setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
 dists_dynamic <- read_rds("03_Data/03_Results/StepLengthDynamic.rds")
 dists_means <- read_rds("03_Data/03_Results/StepLengthMeans.rds")
 
+names(dists_dynamic)[c(4, 5)] <- c("concentration", "location")
+dists_means$Parameter[dists_means$Parameter == "kappa"] <- "concentration"
+dists_means$Parameter[dists_means$Parameter == "mu"] <- "location"
+
 # Function to make nice facet labels
 labelfun <- function(l) {
   rl <- round(l, 3)
@@ -24,7 +28,7 @@ labelfun <- function(l) {
 
 # Visualize everything
 p <- dists_dynamic %>%
-  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
+  pivot_longer(shape:location, names_to = "Parameter", values_to = "Value") %>%
   ggplot(aes(x = duration, y = Value)) +
     geom_jitter(width = 0.1, alpha = 0.2, size = 0.5) +
     geom_point(data = dists_means, aes(x = duration, y = mean), col = "orange", size = 5) +

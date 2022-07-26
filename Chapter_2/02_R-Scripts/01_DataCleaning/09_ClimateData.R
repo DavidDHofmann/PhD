@@ -170,7 +170,7 @@ if (nrow(todownload) > 0) {
     # Link to the dataset
     link <- "ECMWF/ERA5_LAND/HOURLY"
 
-    # Query rainfall data for our study area during dispersal dates
+    # Query temperature data for our study area during dispersal dates
     query_temp <- ee$
       ImageCollection(link)$
       filterDate(date_from, date_to)$

@@ -14,7 +14,7 @@ library(ggpubr)      # To combine multiple plots
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
 
 # Load custom functions
-source("02_R-Scripts/00_Functions.r")
+source("02_R-Scripts/00_Functions.R")
 
 # Laod all data
 dat <- "03_Data/03_Results/SimulationDesign.rds" %>%
@@ -64,7 +64,8 @@ p1 <- dat %>%
         legend.position  = "bottom"
       , strip.background = element_rect(fill = "gray95", color = NA)
     ) +
-    theme()
+    theme() +
+    ylab(expression(beta * "-Estimate"))
 
 # Coefficients for a missingness of 0.5
 p2 <- dat %>%
@@ -90,7 +91,8 @@ p2 <- dat %>%
         legend.position  = "bottom"
       , strip.background = element_rect(fill = "gray95", color = NA)
     ) +
-    theme()
+    theme() +
+    ylab(expression(beta * "-Estimate"))
 
 # Store plots to file
 ggsave("04_Manuscript/99_ResultsHabitatKernel.png"

@@ -1,7 +1,7 @@
 ################################################################################
-#### Lost Fixes
+#### Valid Steps
 ################################################################################
-# Description: Plot of fixes lost due to irregularity
+# Description: Plot of number of valid steps
 
 # Clear R's brain
 rm(list = ls())
@@ -56,17 +56,18 @@ numberSteps <- function(data, forgiveness) {
 design <- expand_grid(
     Missingness    = seq(0, 0.9, by = 0.01)  # Fraction of the fixes that is removed
   , Forgiveness    = 1:5                     # Allowed lag of steps (in steps)
-  , Replicate      = 1:100                   # Number of replicates for each combination
+  , Replicate      = 1:1000                  # Number of replicates for each combination
 )
 
-# Run through the design
+# Simulate rarified datasets for the above design matrix and compute number of
+# usable steps for different levels of missingness
 design$NumberSteps <- pbmclapply(1:nrow(design), ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
   sub <- rarifyData(dat, missingness = design$Missingness[x])
   res <- numberSteps(sub, forgiveness = design$Forgiveness[x])
   return(res)
 }) %>% do.call(c, .)
 
-# Compute summary stats
+# Compute summary stats from the simulations
 summaries <- design %>%
   group_by(Missingness, Forgiveness) %>%
   summarize(
@@ -83,7 +84,7 @@ p <- ggplot(summaries, aes(x = Missingness, y = NumberSteps, col = as.factor(For
   scale_fill_viridis_d(name = "Forgiveness") +
   scale_color_viridis_d(name = "Forgiveness") +
   theme_minimal() +
-  ylab("Number of Steps") +
+  ylab("Number of Valid Steps") +
   theme(legend.position = "bottom")
   # geom_point() +
   # geom_line() +

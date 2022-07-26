@@ -23,11 +23,10 @@ source("02_R-Scripts/00_Functions.R")
 # Load dispersal simulations
 sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 sims <- subset(sims, FloodLevel != "Mean")
+sims <- subset(sims, Area != 2)
 
-# Keep only columns
+# Keep only certain columns
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area", "FloodLevel")]
-
-sims <- subset(sims, TrackID %in% sample(sims$TrackID, 1000))
 
 # Function to retrieve the visitation history from a sequence of values
 visitHist <- function(x, singlecount = F) {
@@ -158,7 +157,7 @@ combined <- stack(maps)
 writeRaster(combined, "03_Data/03_Results/BetweennessMaps.tif", overwrite = T)
 
 # Add maps to the tibble
-design <- mutate(design, betweenness = lapply(1:nlayers(combined), function(x){
+design <- mutate(design, betweenness = lapply(1:nlayers(combined), function(x) {
   combined[[x]]
 }))
 
