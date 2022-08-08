@@ -16,68 +16,55 @@ library(terra)          # To handle spatial data
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
 
-# Load required data
-water <- rast("03_Data/02_CleanData/WaterCover.tif")
-shrub <- rast("03_Data/02_CleanData/ShrubCover.tif")
-prote <- vect("03_Data/02_CleanData/Protected.shp")
+# We'll use geographical, in particular hydrological features to separate source
+# areas
+river <- vect("03_Data/02_CleanData/MajorRivers.shp")
+river <- river[-2, ]
+water <- vect("03_Data/02_CleanData/MajorWaters.shp")
+water <- water[c(1, 2, 4), ]
 
-# We only want to keep the maximum extent scenario for now
-water <- water[["max"]]
-shrub <- shrub[["max"]]
+# Buffer polygons slightly
+river_buff <- buffer(river, width = 2000)
+water_buff <- buffer(water, width = 500)
 
-# Print to terminal
-cat("Computing source areas... \n")
+# Put them together
+river_buff <- aggregate(river_buff)
+water_buff <- aggregate(water_buff)
 
-# Subset to protected areas of interest (we will use them as source areas)
-area1 <- prote[prote$Desig == "National Park" & prote$Name == "Moremi" | prote$Name %in% c("NG/33", "NG/34"), ]
-area2 <- prote[prote$Desig == "National Park" & prote$Name == "Chobe", ]
-area3 <- prote[prote$Desig == "National Park" & prote$Name == "Hwange", ]
-area4 <- prote[prote$Name %in% c("NG/26", "NG/29"), ]
+# We may also want to remove the close vicinity of Maun
+maun <- rast("03_Data/02_CleanData/HumanInfluence.tif")
+maun <- crop(maun, ext(23.3, 23.7, -20.5, -19.6))
+maun <- classify(maun, rbind(c(0, 7, 0), c(7, Inf, 1)))
+maun <- subst(maun, 0, NA)
+maun <- as.polygons(maun)
+maun <- buffer(maun, width = 7500)
 
-# Dissolve
-area1 <- aggregate(area1, dissolve = T)
-area4 <- aggregate(area4, dissolve = T)
+# Drawn an ellipse over the okavango delta
+ell <- ellipse(22.8, -19.3, 1.4, 1.25, phi = 45, spatial = T)
+crs(ell) <- crs(water)
 
-# Split up Moremi into multiple polygons (based on the water)
-mask <- water == 1
-mask <- subst(mask, 0, NA)
-mask <- as.polygons(mask)
-mask <- makeValid(mask)
-area1 <- erase(area1, mask)
-area1 <- disagg(area1)
-area1$Area <- expanse(area1)
-area1 <- area1[area1$Area %in% tail(sort(area1$Area), 2), ]
-area1 <- buffer(area1, width = +2000)
-area1 <- buffer(area1, width = -1500)
-area1 <- disagg(area1)
+# Visualize it
+plot(ell, col = adjustcolor("darkgreen", alpha.f = 0.2), border = NA)
+plot(water, add = T, col = "cornflowerblue", border = NA)
+plot(river, add = T, col = "cornflowerblue")
+plot(maun, add = T, col = "red")
 
-# Same for NG/26 NG/29
-area4 <- erase(area4, mask)
-area4 <- disagg(area4)
-area4$Area <- expanse(area4)
-area4 <- area4[area4$Area == max(area4$Area), ]
-area4 <- buffer(area4, width = +3000)
-area4 <- buffer(area4, width = -1500)
-area4 <- disagg(area4)
+# This looks good. Let's buffer the rivers and generate some potential source
+# areas
+ell <- ell - water_buff - river_buff - maun
+ell <- disagg(ell)
 
-# Make sure area 1 does not overlap with area 2
-area1 <- erase(area1, area2)
-area1 <- buffer(area1, width = -200)
+# We only want to keep the biggest 5 source areas!
+ell$Area <- expanse(ell)
+ell <- ell[ell$Area %in% sort(ell$Area, decreasing = T)[1:5], ]
+ell$ID <- 1:length(ell)
 
-# Put everything back together
-areas <- rbind(area1, area2, area3, area4)
-values(areas) <- data.frame(ID = 1:length(areas))
+# Let's visualize the remaining areas
+plot(ell, col = adjustcolor(sample(rainbow(length(ell))), alpha.f = 0.2))
+text(ell, "ID")
 
-# Give them names
-areas$Name <- c("Moremi East", "Moremi West", "Chobe", "Hwange", "West-Delta")
-
-# Let's visualize
-plot(shrub)
-plot(areas, add = T)
-text(areas, label = areas$Name, cex = 0.5)
-
-# Storre the polygons to file
-writeVector(areas, "03_Data/02_CleanData/SourceAreas.shp", overwrite = T)
+# Store them
+writeVector(ell, "03_Data/02_CleanData/SourceAreas.shp", overwrite = T)
 
 ################################################################################
 #### Session Information

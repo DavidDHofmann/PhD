@@ -17,3 +17,19 @@
 \end{figure}
 \efloatseparator
  
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Heatmaps2000.png}
+  \caption{}
+  \label{Heatmaps}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_DifferenceHeatmaps.png}
+  \caption{}
+  \label{DifferenceHeatmaps}
+  \end{center}
+\end{figure}

@@ -7,7 +7,7 @@
 #' containing a certain value
 #' @export
 #' @param x \code{RasterLayer} on which distances should be calculated
-#' @param value value to which the distance should be calculated
+#' @param value numeric to which the distance should be calculated
 #' @return \code{RasterLayer}
 distanceTo <- function(x, value = 1) {
 
@@ -586,13 +586,13 @@ gCentroidWithin <- function(pol){
 #' Darken a color
 #'
 #' Function to darken a color
+#' @export
 #' @param color A character string naming a color
 #' @param factor Factor by which the color should be darkened. 1.4 by default
 #' @return Hexadecimal code of the darkened color
 #' @examples
 #' darken("blue")
 #' plot(1:2, 1:2, cex = 70, pch = 20, col = c("blue", darken("blue", 3)))
-#' @export
 darken <- function(color, factor = 1.4){
     col <- col2rgb(color)
     col <- col / factor
@@ -606,13 +606,13 @@ darken <- function(color, factor = 1.4){
 #' Lighten a color
 #'
 #' Function to lighten a color
+#' @export
 #' @param color A character string naming a color
 #' @param factor Factor by which the color should be lightened. 1.4 by default
 #' @return Hexadecimal code of the lightened color
 #' @examples
 #' lighten("blue")
 #' plot(1:2, 1:2, cex = 70, pch = 20, col = c("blue", lighten("blue", 3)))
-#' @export
 lighten <- function(color, factor = 1.4){
     col <- col2rgb(color)
     col <- col * factor
@@ -621,4 +621,61 @@ lighten <- function(color, factor = 1.4){
       , maxColorValue = 255
     )
     col
+}
+
+################################################################################
+#### Function to Rotate Coordinates
+################################################################################
+#' Rotate coordinates
+#'
+#' Function to rotate coordinates
+#' @export
+#' @param coords, matrix of coordinates to be rotated
+#' @param degrees, degrees by which the coordinates should be rotated
+#' @return matrix of rotated coordinates
+#' @examples
+#' rotate_coords(cbind(1, 1))
+rotate_coords <- function(coords, degrees) {
+  rad <- -1 * degrees * pi / 180
+  x <- coords[, 1]
+  y <- coords[, 2]
+  x_new <- x * cos(rad) - y * sin(rad)
+  y_new <- x * sin(rad) + y * cos(rad)
+  coords_new <- cbind(x = x_new, y = y_new)
+  return(coords_new)
+}
+
+################################################################################
+#### Function to Generate an Ellipse
+################################################################################
+#' Generate an Ellipse
+#'
+#' Function to generate an ellipse
+#' @export
+#' @param xc numeric, x-coordiante of the centerpoint
+#' @param yc numeric, y-coordinate of the centerpoint
+#' @param a numeric, width
+#' @param b numeric, height
+#' @param phi numeric, rotation
+#' @param spatial boolean, should a spatial object be returned?
+#' @return either a matrix of ellipse coordiantes or an object of type \code{SpatVector}
+#' @examples
+#' elli <- ellipse(0, 0, 3, 2, 90)
+#' plot(elli)
+ellipse <- function(xc = 0, yc = 0, a = 2, b = 1, phi = 0, spatial = F) {
+  x <- a * sin(seq(pi / 2, 5 * pi / 2, 0.1))
+  y <- b * cos(seq(pi / 2, 5 * pi / 2, 0.1))
+  x[length(x) + 1] <- x[1]
+  y[length(y) + 1] <- y[1]
+  # scale <- 1 / max(abs(c(x, y)))
+  # x <- x * scale
+  # y <- y * scale
+  xy <- cbind(x = x, y = y)
+  xy <- rotate_coords(xy, degrees = phi)
+  xy[, 1] <- xy[, 1] + xc
+  xy[, 2] <- xy[, 2] + yc
+  if (spatial) {
+    xy <- vect(xy, type = "polygons")
+  }
+  return(xy)
 }

@@ -259,36 +259,3 @@ p1 <- ggplot() +
 
 # Store the plot
 ggsave("04_Manuscript/Interpatch.png", plot = p, width = 8, height = 6)
-
-# ################################################################################
-# #### Identify Direct Connections between National Parks
-# ################################################################################
-# # Note: Here we are going to look at all direct connections between national
-# # parks. That is, if a trajectory moves from A through B to C, we generate an
-# # edge between A and B and between A and C, but not between B and C.
-#
-# # Identify how long it takes on average to reach the different areas
-# visits <- sims %>%
-#   rename(From = SourceArea, To = CurrentPark) %>%
-#   group_by(TrackID, From, To) %>%
-#   summarize(
-#       StepNumber        = min(StepNumber)
-#     , DistanceFromFirst = min(DistanceFromFirst)
-#     , .groups           = "drop"
-#   ) %>%
-#   subset(!is.na(From) & !is.nan(To) & !is.na(To)) %>%
-#   arrange(TrackID, StepNumber)
-#
-# # Replace national park IDs with proper park names. Also identify the country
-# # for each of the national parks.
-# visits$FromPark    <- as.character(prot$Name[match(visits$From, prot$ID)])
-# visits$ToPark      <- as.character(prot$Name[match(visits$To, prot$ID)])
-# visits$FromCountry <- as.character(prot$Country[match(visits$From, prot$ID)])
-# visits$ToCountry   <- as.character(prot$Country[match(visits$To, prot$ID)])
-#
-# # Store visits to file
-# write_rds(visits, "03_Data/03_Results/99_InterpatchConnectivity.rds")
-#
-# # Also store the number of simulated individuals
-# write_rds(number_simulated_country, "03_Data/03_Results/99_NumberSimulatedCountry.rds")
-# write_rds(number_simulated_park, "03_Data/03_Results/99_NumberSimulatedPark.rds")

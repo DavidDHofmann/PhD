@@ -161,10 +161,19 @@ names(shrub) <- names(water)
 # Print to terminal
 cat("Computing distance to water... \n")
 
-# To finalize our water layer, we will add the rivers from the MERIT river
-# dataset
-merit <- rast("03_Data/01_RawData/MERIT/Rivers.tif")
-water <- max(water, merit)
+# To finalize our water layer, we will add some rivers when the flood is at its
+# mean or maximum extent. We'll not add them when the flood is at a minimum
+# level
+rivers1 <- rast("03_Data/01_RawData/MERIT/Rivers.tif")
+rivers2 <- vect("03_Data/02_CleanData/MajorRivers.shp")
+rivers2 <- rasterize(rivers2, rivers1)
+rivers2 <- subst(rivers2, NA, 0)
+rivers <- max(rivers1, rivers2)
+water_min <- water[["min"]]
+water_mean <- max(water[["mean"]], rivers)
+water_max <- max(water[["max"]], rivers)
+water <- c(water_min, water_mean, water_max)
+names(water) <- c("min", "mean", "max")
 
 # We will also calculate the distance to water
 dist_water_min <- distanceTo(stack(water)[[1]], value = 1)

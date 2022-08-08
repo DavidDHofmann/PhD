@@ -278,7 +278,7 @@ n_steps <- 2000
 n_points <- 100
 
 # How many iterations (per flood level) do you want to run?
-iterations <- 10
+iterations <- 20
 
 # How many random steps do you want to simulate per realized step?
 n_rsteps <- 25
@@ -361,6 +361,7 @@ for (i in 1:nrow(design)) {
 
         # Assign some more information
         sim$TrackID <- x
+        sim$Area <- source_points$ID[x]
 
         # Return the simulation
         return(sim)
@@ -398,10 +399,6 @@ for (i in 1:nrow(design)) {
 }
 
 ################################################################################
-#### CONTINUE HERE!
-################################################################################
-
-################################################################################
 #### Combine Simulations
 ################################################################################
 # Once the simulations are done, let's combine them into a single big dataframe
@@ -436,17 +433,6 @@ format(object.size(sims), units = "Gb")
 
 # Ungroup
 sims <- ungroup(sims)
-
-# Assess the source area of each simulation
-first      <- subset(sims, StepNumber == 1)
-first      <- vect(as.matrix(first[, c("x", "y")]), atts = first)
-first$Area <- relate(first, areas, "within") %>% apply(., 1, which)
-first      <- as.data.frame(first)
-first      <- first[, c("TrackID", "Area")]
-table(first$Area)
-
-# Join
-sims <- left_join(sims, first, by = "TrackID")
 
 # Write to an rds
 write_rds(sims, "03_Data/03_Results/DispersalSimulation.rds")

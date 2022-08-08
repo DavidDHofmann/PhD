@@ -22,7 +22,8 @@ source("02_R-Scripts/00_Functions.R")
 
 # Generate an extent that represents our study area so that we can crop the data
 # accordingly
-ext <- ext(21.5, 27.5, -21, -17)
+# ext <- ext(21.5, 27.5, -21, -17)
+ext <- ext(20.5, 26.5, -21.5, -17.5)
 
 # Copy all files that are needed from the first PhD Chapter
 old_chap <- "/home/david/ownCloud/University/15. PhD/Chapter_1"
@@ -76,6 +77,13 @@ writeVector(roa, file.path(new_chap, "03_Data/02_CleanData/Roads.shp"), overwrit
 maj <- vect(file.path(old_chap, "03_Data/02_CleanData/03_LandscapeFeatures_MajorWaters_GEOFABRIK.shp"))
 maj <- crop(maj, ext)
 writeVector(maj, file.path(new_chap, "03_Data/02_CleanData/MajorWaters.shp"), overwrite = T)
+
+# Copy rivers (those that Gabs provided)
+riv <- vect(file.path(old_chap, "03_Data/01_RawData/GABRIELE/Rivers.shp"))
+values(riv) <- data.frame(Name = values(riv)[, c("Name")])
+riv <- riv[riv$Name %in% c("Tamalakane", "Mababe-Dombo", "Boteti", "Selinda", "Selinda2", "Savuti")]
+riv <- crop(riv, ext)
+writeVector(riv, file.path(new_chap, "03_Data/02_CleanData/MajorRivers.shp"), overwrite = T)
 
 # Copy protected areas
 pro <- vect(file.path(old_chap, "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp"))
@@ -144,6 +152,7 @@ writeRaster(r, "03_Data/02_CleanData/ReferenceRaster.tif", overwrite = T)
 #### Village Data
 ################################################################################
 # Download villages/cities for our extent
+cat("Downloading information on villages from Open Street Map...\n")
 vills <- opq(bbox = st_bbox(st_as_sf(s))) %>%
   add_osm_feature(key = "place", value = c("village", "town", "city")) %>%
   osmdata_sf()
@@ -158,7 +167,7 @@ vills <- subset(vills, !is.na(place)) %>%
   mutate(place = ifelse(place == "city", "City", "Village"))
 
 # Make a regular shapefile
-st_write(vills, "03_Data/02_CleanData/Villages.shp")
+st_write(vills, "03_Data/02_CleanData/Villages.shp", delete_layer = T)
 
 ################################################################################
 #### Session Information

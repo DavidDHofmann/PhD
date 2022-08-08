@@ -131,10 +131,10 @@ for African Wild Dog Connectivity
 %------------------------------------------------------------------------------
 \newpage
 \begin{abstract}
-Many ecosystems experience drastic changes in environmental conditions due to
-seasonality. While such seasonal changes may drastically alter connectivity for
-endangered species, most studies represent the environment by a static set of
-spatial layers, thus ignoring seasonal changes. Here, we address this
+Many ecosystems experience substantial changes in environmental conditions due
+to seasonality. While such seasonal changes may drastically alter connectivity
+for endangered species, most studies represent the environment by a static set
+of spatial layers, thus ignoring seasonal variation. Here, we address this
 shortcoming and employ individual-based simulations to investigate how seasonal
 flooding of the Okavango delta influences connectivity for dispersing African
 wild dogs (\textit{Lycaon pictus}). Our results show that the Okavango delta
@@ -142,7 +142,7 @@ poses a substantial dispersal barrier when the flood is at maximum extent, yet
 that viable dispersal corridors exist when the flood is at a minimum level.
 Despite a better understanding of the conservation needs for African wild dogs,
 our study also provides evidence that incorporating seasonality in studies of
-connectivity is imperative to more accurately predict dispersal ability of
+connectivity is imperative to more accurately predict the dispersal ability of
 endangered species.
 \end{abstract}
 
@@ -165,6 +165,8 @@ endangered species.
 \section{Introduction}
 Hello, I'm an introduction.
 
+However, \cite{Hofmann.2021} and \cite{Hofmann.2022} used a single floodmap...
+
 \section{Methods}
 
 \subsection{Study Area}
@@ -179,7 +181,7 @@ As depicted in \Cref{StudyArea}, the study area encomassed ...
   \end{center}
 \end{figure}
 
-\subsection{Flood}
+\subsection{Spatial Habitat Layers}
 In order to generate spatial layers that depict the flood extent at different
 points in time, we ... \Cref{FloodExtent}.
 
@@ -190,6 +192,61 @@ points in time, we ... \Cref{FloodExtent}.
   \label{FloodExtent}
   \end{center}
 \end{figure}
+
+\subsection{Dispersal Simulation}
+We used a previously parametrized movement model to simulate dispersal of
+African wild dogs. To simulate dispersing wild dogs, we employed the simulation
+framework presented in \cite{Hofmann.2022}. In this framework, a movement model
+that renders habitat and movement preferences of dispersing individuals is
+parametrized using step-selection functions. Once parametrized, the model can be
+employed to simulate virtual dispersers moving across the landscape.
+
+We released virtual dispersers at random locations within the four distinct
+source areas depicted in \Cref{StudyArea}. From each source area we simulated xx
+individuals moving across the landscape at minimum flood and another xx
+individuals at maximum flood. For comparison, we also ran the simulations for a
+medium flood extent, yet the results for this will be presented in the appendix.
+
+\subsection{Connectivity}
+To gain insights into landscape connectivity from the simulated dispersal
+events, we prepared three complementary connectivity maps (see again
+\citep{Hofmann.2022}); a heatmap, indicating the absolute frequency at which
+each pixel in the study area was traversed by a virtual disperser, a betweenness
+map, highlighting pixels of particular importance to facilitate movement from
+one area to another, and a map of interpatch connectivity, depicting the
+presence and intensity of functional links between source areas. To compute the
+heatmap, we counted how many times each pixel in the study area was traversed by
+a virtual disperser. To calculate betweenness, we overlayed the study area with
+a regular grid and used the simulated trajectories to determine movements from
+one grid-cell to another. Specifically, we counted how often transitions from
+one grid-cell to any other occured. The centerpoint of each grid-cell then
+served as network node, and the number of transitions from one cell to another
+as weights between the respective nodes. Based on the so generated network, we
+then computed betweenness scores for all network nodes (i.e. for all grid-cells
+across the study area). Lastly, to compute interpatch connectivity, we
+determined the frequency at which virtual dispersers originating from one source
+area reached any of the other source areas. We also calculated the average
+dispersal duration needed until individuals reached the respective area.
+
+\section{Results}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Heatmaps2000.png}
+  \caption{}
+  \label{Heatmaps}
+  \end{center}
+\end{figure}
+
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_DifferenceHeatmaps.png}
+  \caption{}
+  \label{DifferenceHeatmaps}
+  \end{center}
+\end{figure}
+
+\section{Discussion}
 
 
 \section{Authors' Contributions}
