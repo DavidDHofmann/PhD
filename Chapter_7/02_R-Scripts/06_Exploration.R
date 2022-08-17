@@ -1,5 +1,5 @@
 ################################################################################
-#### Testing
+#### Exploratory Analysis
 ################################################################################
 # Testing
 
@@ -18,9 +18,56 @@ library(hms)         # To handle times
 library(pracma)      # To identify peaks
 library(broom)       # To clean model summary
 library(jagsUI)      # To run models in bayesian framework
+library(runner)      # To apply moving windows
 
 # Reload cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataMoonphase.csv")
+dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
+print(names(dat))
+
+################################################################################
+#### TESTING
+################################################################################
+# Subset to one of the individuals
+unique(dat$DogID)
+sub <- subset(dat, DogID == "Calvin")
+table(sub$CollarID)
+
+# Let's compute average activity for different moving windows
+windows <- c("60 minutes", "120 minutes")
+for (i in windows) {
+  ran <- runner(sub
+    , k   = duration(i)
+    , idx = sub$Timestamp
+    , f   = function(x) {mean(x$ActX)}
+  )
+  sub <- cbind(sub, ran)
+  names(sub)[ncol(sub)] <- paste0("ActX_", gsub(i, pattern = " ", replacement = ""))
+}
+
+# Active or inactive
+# Transition probabilities
+x<-read.table("http://www.rolandlangrock.com//OF.dat")
+
+
+
+
+
+# Pivot and visualize
+sub %>%
+  pivot_longer(ActX_60minutes:ActX_120minutes, names_to = "Window", values_to = "ActXWindow") %>%
+  drop_na() %>%
+  subset(Date == min(Date) + days(6)) %>%
+  ggplot(aes(x = hms::as_hms(Timestamp), y = ActXWindow)) +
+    geom_line(lwd = 1) +
+    geom_line(aes(y = ActX)) +
+    facet_wrap(~ Window, ncol = 1)
+
+sub %>%
+  drop_na() %>%
+  subset(Date == min(Date) + days(28)) %>%
+  ggplot(aes(x = hms::as_hms(Timestamp), y = Running)) +
+    geom_line(lwd = 2) +
+    geom_line(aes(y = ActX))
 
 ################################################################################
 #### NEED TO APPLY SOME FILTERS
@@ -36,8 +83,40 @@ nrow(dat) / 1e6
 str(dat)
 glimpse(dat)
 
-# We deem an animal active whenever its activity is above 20
+# How many individuals?
+length(unique(dat$DogID))
+
+# How many datapoints per individual?
+dat %>%
+  count(DogID) %>%
+  ggplot(aes(x = DogID, y = n)) +
+  geom_col(fill = "cornflowerblue", col = "white") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45))
+
+# Remove undesired columns
+dat <- select(dat, -c(DOP, minMoonPhase, meanMoonPhase, maxMoonPhase))
+
+# Look at the distributions of the different numerical variables (I'll not use
+# ggplot as it takes way too long)
+par(mfrow = c(3, 3), mar = c(5, 5, 1, 1))
+with(dat, expr = {
+  hist(ActX, col = "cornflowerblue", border = "white", main = "")
+  hist(minMoonlightIntensity, col = "cornflowerblue", border = "white", main = "")
+  hist(meanMoonlightIntensity, col = "cornflowerblue", border = "white", main = "")
+  hist(maxMoonlightIntensity, col = "cornflowerblue", border = "white", main = "")
+  hist(Precipitation, col = "cornflowerblue", border = "white", main = "")
+  hist(Temperature, col = "cornflowerblue", border = "white", main = "")
+  hist(CloudCover, col = "cornflowerblue", border = "white", main = "")
+})
+
+# We will clearly have to aggregate data at some point! Otherwise the
+# distributions will be very nasty to work with. Anyways, let's continue. We
+# deem an animal active whenever its activity is above 20
 dat$Active <- dat$ActX > 20
+
+# How many points during activity and inactivity?
+table(dat$Active) / 1e6
 
 # Make sure the data is arranged properly
 dat <- arrange(dat, DogID, CollarID, Timestamp)
@@ -62,13 +141,13 @@ dat <- dat %>%
     , Start    = lapply(Data, function(x) {min(x$Timestamp)}) %>% do.call(c, .)
     , End      = lapply(Data, function(x) {max(x$Timestamp)}) %>% do.call(c, .)
   )
-  
+
 # Let's take a look at the data
 print(dat)
 
 # Make sure that each burst has a decent amount of recordings/fixes
 summary(dat$NRecords)
-hist(dat$NRecords)
+hist(dat$NRecords, col = "cornflowerblue", border = "white")
 
 # We only want to keep bursts were we have at least one day of data!
 NRowOld <- sum(dat$NRecords)
@@ -108,6 +187,16 @@ dat %>%
   summarize(MeanActX = mean(ActX), MedianActX = median(ActX)) %>%
   pivot_longer(MeanActX:MedianActX, names_to = "Metric", values_to = "Value") %>%
   ggplot(aes(x = ToD, y = Value, fill = as.factor(Metric))) +
+    geom_col(position = position_dodge()) +
+    theme_minimal() +
+    scale_fill_manual(values = c("cornflowerblue", "orange"), name = "Metric")
+
+# How does activity change during different times of the day depending on the
+# season?
+dat %>%
+  group_by(ToD, Season) %>%
+  summarize(MeanActX = mean(ActX)) %>%
+  ggplot(aes(x = ToD, y = MeanActX, fill = as.factor(Season))) +
     geom_col(position = position_dodge()) +
     theme_minimal() +
     scale_fill_manual(values = c("cornflowerblue", "orange"), name = "Metric")
@@ -279,7 +368,7 @@ sort(unique(dat[dat$ActivityPhase == "Ignore", ]$Hour))
 # ggplot(subset(dat, ActX > 0), aes(x = ActivityPhase, y = ActX)) +
 #   geom_boxplot()
 
-# Let's compute summary statistics during those phases by dog and day
+# Let's compute summary statistics during those phases by dog, collar and day
 dat_byphase <- subset(dat, ActivityPhase != "Ignore") %>%
   group_by(DogID, CollarID, Date, ActivityPhase) %>%
   summarize(
@@ -291,6 +380,9 @@ dat_byphase <- subset(dat, ActivityPhase != "Ignore") %>%
     , minMoonlightIntensity  = min(minMoonlightIntensity)
     , meanMoonlightIntensity = mean(meanMoonlightIntensity)
     , maxMoonlightIntensity  = max(maxMoonlightIntensity)
+    , Temperature            = mean(Temperature)
+    , Precipitation          = mean(Precipitation)
+    , CloudCover             = mean(CloudCover)
     , .groups                = "drop"
   ) %>%
   mutate(ActivityPhase = factor(ActivityPhase, levels = c("Morning", "Evening", "Night")))
@@ -316,19 +408,21 @@ dat_byphase %>%
     theme_minimal() +
     scale_fill_manual(values = c("cornflowerblue", "orange", "gray"))
 
-# Let's bin the nights by moon illumination
-dat_byphase <- mutate(dat_byphase, MoonBin = cut(maxMoonlightIntensity, breaks = 5))
-dat_byphase$MoonBinNumeric <- as.numeric(dat_byphase$MoonBin)
-dat_byphase$ActivityPhase <- ifelse(dat_byphase$ActivityPhase != "Night"
-  , as.character(dat_byphase$ActivityPhase)
-  , paste0("Night", dat_byphase$MoonBinNumeric)
-)
-
 # How well is the correlation between mean and total activity?
 cor(dat_byphase$meanActivity, dat_byphase$totalActivity)
 
+# Let's bin the nights by moon illumination
+dat_byphase <- mutate(dat_byphase, MoonBin = cut(maxMoonlightIntensity, breaks = 5))
+dat_byphase$MoonBinNumeric <- as.numeric(dat_byphase$MoonBin)
+
 # Visualize how the mean activity depends on moonlight intensity
-ggplot(dat_byphase, aes(x = maxMoonlightIntensity, y = meanActivity, fill = ActivityPhase)) +
+ggplot(dat_byphase, aes(x = as.factor(MoonBinNumeric), y = meanActivity)) +
+  geom_boxplot(alpha = 0.2) +
+  theme_minimal() +
+  facet_wrap(~ ActivityPhase)
+
+# Visualize how the mean activity depends on moonlight intensity
+ggplot(dat_byphase, aes(x = maxMoonlightIntensity, y = meanActivity, fill = ActivityPhase, col = ActivityPhase)) +
   geom_point(alpha = 0.2) +
   theme_minimal() +
   facet_wrap(~ ActivityPhase) +

@@ -36,11 +36,16 @@ r <- as.data.frame(r, xy = T)
 africa <- read_sf("03_Data/02_CleanData/Africa.shp")
 prot   <- read_sf("03_Data/02_CleanData/Protected.shp")
 water  <- read_sf("03_Data/02_CleanData/MajorWaters.shp")
+river  <- read_sf("03_Data/02_CleanData/MajorRivers.shp")
 areas  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads  <- read_sf("03_Data/02_CleanData/Roads.shp")
+fault  <- read_sf("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/01_RawData/DAVID/Faults.shp")
 vills  <- read_sf("03_Data/02_CleanData/Villages.shp")
 vills  <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
   rename(x = X, y = Y)
+
+# Keep only faults of interest
+fault <- fault[1:2, ]
 
 # Reorder the levels of national parks
 prot$Desig <- factor(prot$Desig, levels = c("National Park", "Forest Reserve", "Protected"))
@@ -82,9 +87,11 @@ p1 <- ggplot() +
 p2 <- ggplot() +
   geom_sf(data = prot, aes(fill = Desig), col = NA, alpha = 0.7) +
   geom_sf(data = water, fill = "cornflowerblue", col = NA) +
+  geom_sf(data = river, col = "cornflowerblue") +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
   geom_sf(data = areas, col = "orange", fill = "orange", alpha = 0.2) +
+  geom_sf(data = fault, col = "red", lty = 2) +
   geom_point(
       data        = vills
     , mapping     = aes(x = x, y = y, size = place)

@@ -8,8 +8,8 @@
 rm(list = ls())
 
 # Set working directory
-setwd("/home/david/ownCloud/University/15. PhD/Chapter_7")
-# setwd("C:/Users/david/Switchdrive/University/15. PhD/Chapter_7")
+# setwd("/home/david/ownCloud/University/15. PhD/Chapter_7")
+setwd("C:/Users/david/Switchdrive/University/15. PhD/Chapter_7")
 
 # Load required packages
 library(tidyverse)   # For data wrangling

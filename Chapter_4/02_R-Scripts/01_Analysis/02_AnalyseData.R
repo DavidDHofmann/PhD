@@ -13,46 +13,56 @@ library(tidyverse)     # For data wrangling
 library(survival)      # To run conditional logistic regression
 library(sf)            # For plotting
 library(amt)           # To fit distributions
-library(crawl)         # To imputate missing fixes
+library(crawl)         # To impute missing fixes
 
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
+# setwd("C:/Users/david/switchdrive/University/15. PhD/Chapter_4")
 
 # Load custom functions
-source("02_R-Scripts/00_Functions.r")
+source("02_R-Scripts/00_Functions.R")
 
 # Suppress scientific notation
 options(scipen = 999)
 
-# Load observed movement data
-obs <- read_csv("03_Data/01_RawData/ObservedMovements.csv")
-glimpse(obs)
+# Load simulated data
+obs <- read_rds("03_Data/01_RawData/SimulatedMovement.rds")
+cov <- read_rds("03_Data/01_RawData/SimulatedCovariates.rds")
 
-# Add an artifical timestamp
+# Generate unique step_ids
 obs <- obs %>%
-  nest(Data = -ID) %>%
-  mutate(Data = pbmclapply(Data, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
-    x$timestamp <- lubridate::ymd_hms("2000-01-01 00:00:00") + hours(1:nrow(x))
-    return(x)
-  })) %>%
-  unnest(Data)
+  unnest(Simulations) %>%
+  mutate(step_id = 1:n()) %>%
+  nest(Simulations = -c(AutocorrRange, ID))
 
-# Load covariate layers
-covars <- stack("03_Data/01_RawData/CovariateLayers.grd")
-covars <- readAll(covars)
-glimpse(covars)
+# Add an artifical timestamp to the simulated GPS data
+obs <- obs %>%
+  mutate(Simulations = pbmclapply(Simulations
+    , ignore.interactive = T
+    , mc.cores           = detectCores() - 1
+    , FUN                = function(x) {
+      x$timestamp <- lubridate::ymd_hms("2000-01-01 00:00:00") + hours(1:nrow(x))
+    return(x)
+  }))
 
 # Extend covariate layers slightly
-covars <- extendRaster(covars, extent(c(-50, 350, -50, 350)))
-plot(covars)
+cov <- cov %>%
+  mutate(Covariates = pbmclapply(Covariates
+    , ignore.interactive = T
+    , mc.cores           = detectCores() - 1
+    , FUN                = function(x) {
+      covars <- extendRaster(x, extent(c(-50, 350, -50, 350)))
+      covars <- writeRaster(covars, tempfile())
+    return(covars)
+  }))
 
-# Specify the different design combinations through which we want to run. Note
-# that a forgiveness of 1 refers to a regular step selection function
+# Specify the different design combinations through which we want to run
 dat <- expand_grid(
     Missingness    = seq(0, 0.5, by = 0.1)                                                 # Fraction of the fixes that is removed
-  , Forgiveness    = 1:5                                                                   # Allowed lag of steps (in steps)
+  , Forgiveness    = 1:5                                                                   # Allowed step-duration
+  , AutocorrRange  = unique(obs$AutocorrRange)                                             # Autocorrelation range in the covariates
   , Replicate      = 1:100                                                                 # Number of replicates for each combination
-  , Approach       = c("uncorrected", "naive", "dynamic", "multistep", "model", "imputed") # Which approach to use to generate random steps
+  , Approach       = c("uncorrected", "naive", "dynamic", "model", "multistep", "imputed") # Which approach to use to analyse the data
 )
 
 ################################################################################
@@ -175,7 +185,19 @@ computeMetrics <- function(data) {
 
 # Function to generate random steps. The approach parameter is used to specify
 # the approach that should be used to generate random steps
-computeSSF <- function(data, n_rsteps, approach) {
+computeSSF <- function(data, n_rsteps, approach, dists) {
+
+  # # TESTING
+  # data <- testing[2, ]
+  # data$x <- 0
+  # data$y <- 0
+  # # # data$duration <- c(1, 3)
+  # data$duration <- 3
+  # data$sl <- 1
+  # data$absta <- 0
+  # data$relta <- 0
+  # n_rsteps <- 1
+  # approach <- "multistep"
 
   # Generate a new column that indicates that the steps are "observed" steps
   data$case <- 1
@@ -241,7 +263,7 @@ computeSSF <- function(data, n_rsteps, approach) {
   #### Approach 4 - Multistep
   ##############################################################################
   # Step lengths and turning angles resulting from multiple random steps, where
-  # the number of steps matches the step duration of the observed step
+  # the number of generated steps matches the step duration of the observed step
   } else if (approach == "multistep") {
     rand <- rand %>% group_by(duration) %>% nest()
     rand$data <- lapply(1:nrow(rand), function(z) {
@@ -253,7 +275,8 @@ computeSSF <- function(data, n_rsteps, approach) {
       relta    <- rand$data[[z]]$relta
       absta    <- rand$data[[z]]$absta
 
-      # Generate sequence of random steps
+      # Generate sequence of random steps (if duration = 1, generate only one
+      # step, if duration = 2, generate two, etc.)
       for (i in 1:duration) {
         sl <- rgamma(n = nrow(rand$data[[z]])
           , scale = dists$uncorrected$sl$scale
@@ -264,6 +287,12 @@ computeSSF <- function(data, n_rsteps, approach) {
           , mu    = dists$uncorrected$ta$mu
           , by    = 0.01
         )
+
+        # # TESTING
+        # sl <- c(1, 1, 1)[i]
+        # relta_new <- c(pi/2, 0, -pi/2)[i]
+        # sl <- 1
+        # relta_new <- 0
 
         # In case we are looking at the first step, we can only calculate the
         # new absolute turning angle by first deriving the difference in
@@ -292,7 +321,8 @@ computeSSF <- function(data, n_rsteps, approach) {
       absta <- (absta - pi / 2) * (-1)
       absta <- ifelse(absta < 0, 2 * pi + absta, absta)
       absta <- ifelse(absta > 2 * pi, absta - 2 * pi, absta)
-      relta <- absta - rand$data[[z]]$absta
+      # relta <- absta - rand$data[[z]]$absta           # THIS IS CAUSING ISSUES!!!!
+      relta <- rand$data[[z]]$relta - (rand$data[[z]]$absta - absta)
       relta <- ifelse(relta > +pi, relta - 2 * pi, relta)
       relta <- ifelse(relta < -pi, 2 * pi + relta, relta)
       rand$data[[z]]$sl <- sl
@@ -345,40 +375,58 @@ computeSSF <- function(data, n_rsteps, approach) {
 # Function to extract covariates along steps and compute step covariates
 computeCovars <- function(data, covariates, multicore = F) {
 
+  # Pair simulated movement data with the appropriate covariate layer
+  data <- data %>%
+    nest(Data = -c(AutocorrRange, ID)) %>%
+    left_join(., cov, by = c("ID", "AutocorrRange"))
+
   # Run the covariate extraction on multiple cores
   if (multicore) {
-    extracted <- pbmclapply(1:nrow(data), ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
-      ints <- interpolatePoints(
-          x1 = data$x[x]
-        , x2 = data$x_to[x]
-        , y1 = data$y[x]
-        , y2 = data$y_to[x]
-        , by = 1
-      )
-      extr <- raster::extract(covariates, ints)
-      extr <- colMeans(extr)
-      return(extr)
+    data$Data <- pbmclapply(1:nrow(data), ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+      gps_data <- data$Data[[x]]
+      cov_data <- data$Covariates[[x]]
+      extracted <- lapply(1:nrow(gps_data), function(y) {
+        ints <- interpolatePoints(
+            x1 = gps_data$x[y]
+          , x2 = gps_data$x_to[y]
+          , y1 = gps_data$y[y]
+          , y2 = gps_data$y_to[y]
+          , by = 1
+        )
+        extr <- raster::extract(cov_data, ints)
+        extr <- colMeans(extr)
+        return(extr)
+      })
+      extracted <- as.data.frame(do.call(rbind, extracted))
+      gps_data <- cbind(gps_data, extracted)
+      return(gps_data)
     })
 
   # Run the covariate extraction on a single core
   } else {
-    extracted <- lapply(1:nrow(data), function(x) {
-      ints <- interpolatePoints(
-          x1 = data$x[x]
-        , x2 = data$x_to[x]
-        , y1 = data$y[x]
-        , y2 = data$y_to[x]
-        , by = 1
-      )
-      extr <- raster::extract(covariates, ints)
-      extr <- colMeans(extr)
-      return(extr)
+    data$Data <- lapply(1:nrow(data), function(x) {
+      gps_data <- data$Data[[x]]
+      cov_data <- data$Covariates[[x]]
+      extracted <- lapply(1:nrow(gps_data), function(y) {
+        ints <- interpolatePoints(
+            x1 = gps_data$x[y]
+          , x2 = gps_data$x_to[y]
+          , y1 = gps_data$y[y]
+          , y2 = gps_data$y_to[y]
+          , by = 1
+        )
+        extr <- raster::extract(cov_data, ints)
+        extr <- colMeans(extr)
+        return(extr)
+      })
+      extracted <- as.data.frame(do.call(rbind, extracted))
+      gps_data <- cbind(gps_data, extracted)
+      return(gps_data)
     })
   }
 
-  # Put extracted covariates into a dataframe and bind them to the original data
-  extracted <- as.data.frame(do.call(rbind, extracted))
-  data <- cbind(data, extracted)
+  # Unnest again
+  data <- data %>% select(-Covariates) %>% unnest(Data)
 
   # Ensure that step lengths cover a minimal distance
   data$sl[data$sl == 0] <- min(data$sl[data$sl != 0])
@@ -438,46 +486,26 @@ runModel <- function(data, approach) {
   return(coefs)
 }
 
-# Before we can test the functions above, we need some distributions from which
-# we can sample step lengths and turning angles to generate random steps. Thus,
-# let's fit step-length and turning angle distributions to the minimum step
-# duration
-metrics <- obs %>%
-  rarifyData(missingness = 0, n_id = 100) %>%
-  computeBursts(forgiveness = 1) %>%
-  computeMetrics() %>%
-  subset(duration == 1) %>%
-  select(sl, relta) %>%
-  tibble()
-sl_dist <- fit_distr(metrics$sl, dist_name = "gamma")$params
-ta_dist <- fit_distr(metrics$relta, dist_name = "vonmises")$params
-dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
+# Function to fit step length and turning angle distributions. Statically, as
+# well as dynamically to different step durations
+fitDists <- function(data, replicate = 100) {
 
-# Try out the functions to see how they work
-testing <- rarifyData(obs, missingness = 0.5, n_id = 50)
-testing <- computeBursts(testing, forgiveness = 2)
-testing <- computeMetrics(testing)
-testing <- computeSSF(testing, n_rsteps = 10, approach = "uncorrected")
-testing <- computeCovars(testing, covars, multicore = T)
-testing <- runModel(testing, approach = "uncorrected")
-testing
+  # Fit distributions to a step duration of one
+  metrics <- data %>%
+    rarifyData(missingness = 0) %>%
+    computeBursts(forgiveness = 1) %>%
+    computeMetrics() %>%
+    subset(duration == 1) %>%
+    select(sl, relta) %>%
+    tibble()
+  sl_dist <- fit_distr(metrics$sl, dist_name = "gamma")$params
+  ta_dist <- fit_distr(metrics$relta, dist_name = "vonmises")$params
+  dists <- list(uncorrected = list(sl = sl_dist, ta = ta_dist))
 
-# Try to impute missing fixes
-testing <- imputeFixes(rarifyData(obs, missingness = 0.5, n_id = 10))
-head(testing)
-
-################################################################################
-#### Fit Step Length Distributions to Different Step Durations
-################################################################################
-# Parametrize separate step length distributions and turning angle distributions
-# for the different accepted step durations. Replicate 1000 times.
-dists_dynamic <- pbmclapply(
-    X                  = 1:1000
-  , ignore.interactive = T
-  , mc.cores           = detectCores() - 1
-  , FUN                = function(x) {
-   params <- obs %>%
-      rarifyData(missingness = 0.5, n_id = 100) %>%
+  # Fit distributions to various step durations
+  dists_dynamic <- lapply(1:replicate, function(x) {
+    params <- data %>%
+      rarifyData(missingness = 0.5) %>%
       computeBursts(forgiveness = max(dat$Forgiveness)) %>%
       computeMetrics() %>%
       dplyr::select(duration, sl, relta) %>%
@@ -498,44 +526,61 @@ dists_dynamic <- pbmclapply(
       dplyr::select(duration, DistParams) %>%
       unnest(DistParams) %>%
       arrange(duration)
-  return(params)
-}) %>% do.call(rbind, .)
+    return(params)
+  }) %>% do.call(rbind, .)
 
-# Summarize values
-dists_means <- dists_dynamic %>%
-  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
-  group_by(duration, Parameter) %>%
-  summarize(mean = mean(Value), sd = sd(Value), .groups = "drop")
+  # Summarize values
+  dists_means <- dists_dynamic %>%
+    pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
+    group_by(duration, Parameter) %>%
+    summarize(mean = mean(Value), sd = sd(Value), .groups = "drop") %>%
+    dplyr::select(duration, Parameter, mean) %>%
+    pivot_wider(names_from = Parameter, values_from = mean)
+  dists_sds <- dists_dynamic %>%
+    pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
+    group_by(duration, Parameter) %>%
+    summarize(mean = mean(Value), sd = sd(Value), .groups = "drop") %>%
+    dplyr::select(duration, Parameter, sd) %>%
+    pivot_wider(names_from = Parameter, values_from = sd) %>%
+    setNames(paste0(names(.), "_sd"))
+  dists_means <- cbind(dists_means, dists_sds[, -1])
 
-# Put values together with the uncorrected distributions
-dists$dynamic <- dists_means %>%
-  dplyr::select(duration, Parameter, mean) %>%
-  pivot_wider(names_from = Parameter, values_from = mean) %>%
-  list(
-      sl = select(., duration, shape, scale)
-    , ta = select(., duration, kappa, mu)
-  )
+  # Put values together with the uncorrected distributions
+  dists$dynamic <- list(
+        sl = select(dists_means, duration, shape, scale, shape_sd, scale_sd)
+      , ta = select(dists_means, duration, kappa, mu, kappa_sd, mu_sd)
+    )
 
-# Store the parameters to file
-write_rds(dists_dynamic, "03_Data/03_Results/StepLengthDynamic.rds")
-write_rds(dists_means, "03_Data/03_Results/StepLengthMeans.rds")
-
-# Visualize everything
-clean_label <- function(l) {
-  rl <- round(l, 3)
-  l <- ifelse(rl == 0 & l != 0, format(l, scientific = T), l)
+  # Return the distributions
+  return(dists)
 }
-dists_dynamic %>%
-  pivot_longer(shape:mu, names_to = "Parameter", values_to = "Value") %>%
-  ggplot(aes(x = duration, y = Value)) +
-    geom_jitter(width = 0.1, alpha = 0.2, size = 0.5) +
-    geom_point(data = dists_means, aes(x = duration, y = mean), col = "orange", size = 5) +
-    geom_line(data = dists_means, aes(x = duration, y = mean), col = "orange") +
-    scale_y_continuous(labels = clean_label) +
-    facet_wrap(~ Parameter, nrow = 2, scales = "free") +
-    theme_minimal() +
-    xlab("Step Duration") +
-    ylab("Parameter Estimate")
+
+# Let's test if the above functions work as they should
+test <- unnest(obs, Simulations)
+test <- subset(test, AutocorrRange == 1)
+test <- rarifyData(test, missingness = 0.5, n_id = 50)
+testi <- imputeFixes(test)
+dists <- fitDists(test, replicate = 10)
+test <- computeBursts(test, forgiveness = 1)
+test <- computeMetrics(test)
+testing1 <- computeSSF(test, n_rsteps = 10, approach = "uncorrected", dists = dists)
+testing2 <- computeSSF(test, n_rsteps = 10, approach = "multistep", dists = dists)
+par(mfrow = c(2, 1))
+hist(testing1$relta[testing1$case == 0])
+hist(testing2$relta[testing2$case == 0])
+fit_distr(testing1$relta[testing1$case == 0], dist_name = "vonmises")$params
+fit_distr(testing2$relta[testing2$case == 0], dist_name = "vonmises")$params
+testing <- computeCovars(testing1, covars, multicore = T)
+testing <- runModel(testing, approach = "uncorrected")
+testing
+
+# Try to impute missing fixes
+testing <- imputeFixes(rarifyData(obs, missingness = 0.5, n_id = 10))
+head(testing)
+
+# Function to fit step length and turn angle distributions uncorrected and
+# dynamically
+data <- obs %>% subset(AutocorrRange == 1) %>% unnest(Simulations)
 
 ################################################################################
 #### Fit Models
@@ -549,6 +594,7 @@ dat$Filename <- paste0(
     "03_Data/03_Results/ModelResults/Simulation/"
   , "M", sprintf("%02d", as.integer(dat$Missingness * 100)), "_"
   , "F", sprintf("%02d", dat$Forgiveness), "_"
+  , "A", sprintf("%02d", dat$AutocorrRange), "_"
   , "R", sprintf("%03d", dat$Replicate), "_"
   , dat$Approach
   , ".rds"
@@ -562,10 +608,10 @@ dir.create("03_Data/03_Results/ModelResults/Simulation", showWarnings = F)
 write_rds(dat, "03_Data/03_Results/SimulationDesign.rds")
 
 # Let's randomize the design matrix
-dat_sub <- dat_sub[sample(nrow(dat_sub)), ]
+dat <- dat[sample(nrow(dat)), ]
 
 # Subset to rows that haven't been run yet
-dat_sub <- subset(dat_sub, !file.exists(Filename))
+dat_sub <- subset(dat, !file.exists(Filename))
 
 # Go through the design and run step selection analysis with the specified
 # parameters
@@ -579,16 +625,28 @@ pbmclapply(
   # Extract important information from dataframe
   miss <- dat_sub$Missingness[[x]]
   forg <- dat_sub$Forgiveness[[x]]
+  auto <- dat_sub$AutocorrRange[[x]]
   appr <- dat_sub$Approach[[x]]
   file <- dat_sub$Filename[[x]]
 
   # Prepare data for ssf
   data <- obs %>%
-    rarifyData(missingness = miss, n_id = 100) %>%
-    {if(appr == "imputed") {imputeFixes(.)} else .} %>%
-    computeBursts(forgiveness = forg) %>%
+    subset(AutocorrRange == auto) %>%
+    unnest(Simulations) %>%
+    rarifyData(missingness = miss, n_id = 100)
+
+  # Compute turning angle and step length distributions
+  dists <- fitDists(data, replicate = 100)
+
+  # Impute if necessary
+  if (appr == "imputed") {
+    data <- imputeFixes(data)
+  }
+
+  # Continue with analysis
+  data <- data %>% computeBursts(forgiveness = forg) %>%
     computeMetrics() %>%
-    computeSSF(n_rsteps = n_rsteps, approach = appr) %>%
+    computeSSF(n_rsteps = n_rsteps, approach = appr, dists = dists) %>%
     computeCovars(covars, multicore = F)
 
   # Run conditional logistic regression

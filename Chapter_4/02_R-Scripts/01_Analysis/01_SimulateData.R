@@ -16,60 +16,80 @@ library(sf)            # For plotting spatial features
 
 # Set working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
+# setwd("C:/Users/david/switchdrive/University/15. PhD/Chapter_4")
 
 # Load custom functions
-source("02_R-Scripts/00_Functions.r")
+source("02_R-Scripts/00_Functions.R")
 
 ################################################################################
 #### Simulate Covariate Layers
 ################################################################################
-# Set seed for reproducability
-set.seed(12345)
-
 # Specify resolution of covariates
 n <- 300
 
-# Simulate forest cover
-forest <- nlm_randomcluster(
-    ncol = n
-  , nrow = n
-  , p    = 0.5
-  , ai   = c(0.8, 0.2)
-)
-plot(forest)
-
-# Simulate elevation
-elev <- nlm_gaussianfield(
-    ncol           = n
-  , nrow           = n
-  , autocorr_range = 10
-  , mag_var        = 1
-  , nug            = 0
-)
-plot(elev)
-
-# Add a point of attraction at the center fo the study area
-center <- coordinates(elev)
-center <- colMeans(center)
-center <- SpatialPoints(t(center))
-
-# Calculate distance to center
-dist <- distanceFromPoints(elev, center)
-
-# Normalize covariates to range betwee 0 and 1 (forest already is 0 to 1)
-elev <- (elev - cellStats(elev, min)) / (cellStats(elev, max) - cellStats(elev, min))
+# Generate a point of attraction at the center of the study area and compute the
+# distance to it
+r <- raster(nrows = n, ncols = n, xmn = 0, xmx = n, ymn = 0, ymx = n)
+cent <- SpatialPoints(t(c(n / 2, n / 2)))
+dist <- distanceFromPoints(r, cent)
 dist <- (dist - cellStats(dist, min)) / (cellStats(dist, max) - cellStats(dist, min))
+plot(dist)
 
-# Put covariate layers into a stack
-covars <- stack(forest, elev, dist)
-names(covars) <- c("forest", "elev", "dist")
+# Function to simulate forest cover
+simForest <- function(autocorr_range = 10, proportion = 0.5) {
+  forest <- nlm_gaussianfield(
+      ncol           = n
+    , nrow           = n
+    , autocorr_range = autocorr_range
+    , mag_var        = 1
+    , nug            = 0
+  )
+  cutoff <- quantile(forest, 1 - proportion)
+  forest <- forest > cutoff
+  forest <- focal(forest
+    , w        = matrix(rep(1, 9), nrow = 3)
+    , fun      = function(x) {sum(x) > 4.5}
+    , pad      = T
+    , padValue = 0
+  )
+  return(forest)
+}
+
+# Function to simulate elevation
+simElev <- function(autocorr_range = 10) {
+  elev <- nlm_gaussianfield(
+      ncol           = n
+    , nrow           = n
+    , autocorr_range = autocorr_range
+    , mag_var        = 1
+    , nug            = 0
+  )
+  return(elev)
+}
+
+# Function to simulate the different covariates and return them as a stack
+simCovars <- function(autocorr_range = 10) {
+
+  # Simulate covariates
+  forest <- simForest(autocorr_range)
+  elev   <- simElev(autocorr_range)
+
+  # Put them into a stack
+  covars <- stack(forest, elev, dist)
+  names(covars) <- c("forest", "elev", "dist")
+  return(covars)
+}
+
+# Let's try it
+covars <- simCovars(autocorr_range = 10)
+plot(covars)
 
 # Let's specify the extent on which animals are allowed to move
-ext <- extent(covars)
+ext <- extent(0, n, 0, n)
 ext <- as(ext, "SpatialPolygons")
 
 # Let's also specify an extent within which individuals will be released
-ext2 <- extent(c(100, 200, 100, 200))
+ext2 <- extent(ext) - 100
 ext2 <- as(ext2, "SpatialPolygons")
 
 # Plot the covariates
@@ -85,7 +105,7 @@ as.data.frame(covars, xy = T) %>%
     theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
 
 ################################################################################
-#### Simulate Trajectory
+#### Simulate Single Trajectory
 ################################################################################
 # Simulation Parameters
 formula <- ~ forest + elev + dist
@@ -129,20 +149,39 @@ ggplot() +
 ################################################################################
 #### Multiple Trajectories
 ################################################################################
-# Number of simulated individuals
-ndisp <- 10000
+# Number of simulated individuals per treatment
+ndisp <- 1000
+
+# Generate a design matrix containing the different treatments through which we
+# will loop
+sims <- expand_grid(
+    AutocorrRange = c(1, 10, 100)
+  , ID            = 1:ndisp
+) %>% mutate(ID = 1:n())
+
+# Simulate covariates for the different treatments. Unfortunately, we can't do
+# this in parallel, as RFoptions must not be called within parallel code, yet is
+# always called when simulating a covariate layer.
+cat("Simulating covariate layers...\n")
+pb <- txtProgressBar(min = 0, max = nrow(sims), style = 3)
+sims$Covariates <- lapply(1:nrow(sims), function(x) {
+  covs <- simCovars(autocorr_range = sims$AutocorrRange[x])
+  setTxtProgressBar(pb, x)
+  return(covs)
+})
 
 # Simulate track for each individual
-sims <- pbmclapply(
-    X                  = 1:ndisp
+cat("Simulating movement...\n")
+sims$Simulations <- pbmclapply(
+    X                  = 1:nrow(sims)
   , ignore.interactive = T
   , mc.cores           = detectCores() - 1
-  , FUN                = function(x){
+  , FUN                = function(x) {
 
   # Simulate trajectory
   sim <- move(
       xy       = matrix(runif(2, xmin(ext2), xmax(ext2)), ncol = 2)
-    , covars   = covars
+    , covars   = sims$Covariates[[x]]
     , formula  = formula
     , prefs    = prefs
     , sl_dist  = sl_dist
@@ -153,36 +192,26 @@ sims <- pbmclapply(
     , stop     = stop
   )
 
-  # Assign unique simulation ID
-  sim$ID <- x
+  # Keep only variables that are observed in reality
+  sim <- dplyr::select(sim, x, y, step_number)
 
   # Return the simulation
   return(sim)
 })
 
-# Bind simulations
-sims <- do.call(rbind, sims)
-rownames(sims) <- NULL
-
-# Assign unique ID to each step
-sims$step_id <- 1:nrow(sims)
+# Store the data to file (we'll separate the movement data from the covariates)
+write_rds(dplyr::select(sims, -Covariates), "03_Data/01_RawData/SimulatedMovement.rds")
+write_rds(dplyr::select(sims, -Simulations), "03_Data/01_RawData/SimulatedCovariates.rds")
 
 # Visualize simulations
-ggplot(sims, aes(x = x, y = y, col = as.factor(ID))) +
-  geom_path(size = 0.1) +
-  geom_point(size = 0.1) +
-  geom_sf(data = st_as_sf(ext2), col = "red", fill = NA, inherit.aes = F) +
-  coord_sf() +
-  theme_minimal() +
-  theme(legend.position = "none") +
-  scale_color_viridis_d()
-
-# In reality, we don't observe step lengths, turning angles etc., but we derive
-# them from xy coordinates. Hence, let's assume that we only observed xy data +
-# ID
-obs <- dplyr::select(sims, x, y, ID, step_number, step_id)
-
-# This is the type of data that we would observe in reality. Let's store it to
-# file. Also store the simulated spatial layers to file
-write_csv(obs, "03_Data/01_RawData/ObservedMovements.csv")
-writeRaster(covars, "03_Data/01_RawData/CovariateLayers.grd", overwrite = T)
+sims %>%
+  dplyr::select(-Covariates) %>%
+  unnest(Simulations) %>%
+  ggplot(aes(x = x, y = y, col = as.factor(ID))) +
+    geom_path(size = 0.1) +
+    geom_point(size = 0.1) +
+    geom_sf(data = st_as_sf(ext2), col = "black", fill = NA, inherit.aes = F) +
+    coord_sf(xlim = c(0, n), ylim = c(0, n)) +
+    theme_minimal() +
+    theme(legend.position = "none") +
+    scale_color_viridis_d()
