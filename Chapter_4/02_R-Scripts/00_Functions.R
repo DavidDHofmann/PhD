@@ -289,7 +289,7 @@ move <- function(
 # Function to extract covariates at interpolated locations and compute their
 # average
 extract_covariates_along_interpolated <- function(x, covariates, by = 0.1){
-  extracted <- pbmclapply(1:nrow(x), ignore.interactive = T, function(i){
+  extracted <- pbmclapply(1:nrow(x), ignore.interactive = T, function(i) {
     int <- interpolatePoints(
         x1 = x$x1_[i]
       , x2 = x$x2_[i]

@@ -8,14 +8,14 @@ rm(list = ls())
 
 # Set working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_7"
-wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_7"
+# wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_7"
 setwd(wd)
 
 # Load required packages
 library(tidyverse)   # For data wrangling
 library(lubridate)   # To handle dates
 library(hms)         # To handle times
-library(runner)      # To apply moving windows
+# library(runner)      # To apply moving windows
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
 dat <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariates.csv")
@@ -38,21 +38,32 @@ dat_nested <- subset(dat_nested, N > 280)
 
 # Can do some plots
 dat_nested %>%
-  slice(58) %>%
+  slice(200) %>%
   unnest(Data) %>%
   ggplot(aes(x = Timestamp, y = ActX, col = ToD)) +
     geom_point() +
     geom_vline(aes(xintercept = max(Sunset))) +
     geom_vline(aes(xintercept = max(Sunset) - hours(2)), lty = 2) +
-    geom_vline(aes(xintercept = max(Sunset) + hours(2)), lty = 2)
+    geom_vline(aes(xintercept = max(Sunset) + hours(2)), lty = 2) +
+    theme_minimal()
 
-# Compute Average activity within 2 hours before and after sunset
-dat_nested <- mutate(dat_nested, EveningActivity = map(Data, function(x) {
-  tsunset <- max(x$Sunset)
-  evening <- subset(x
+# Compute Average activity within 2 hours before and after sunset, as well as
+# some summary statistics that we will use as covariates
+dat_nested$Data <- lapply(1:nrow(dat_nested, function(x) {
+
+  # Extract relevant info
+  subdata <- dat_nested$Data[[x]]
+  dogname <- dat_nested$DogID[[x]]
+  collar  <- dat_nested$CollarID[[x]]
+
+  # Data within 2 hours before and after sunset
+  tsunset <- max(subdata$Sunset)
+  evening <- subset(subdata
     , Timestamp >= tsunset - hours(2) &
       Timestamp <= tsunset + hours(2)
   )
+
+  # Summarize values
   evening <- summarize(evening
     , meanActX               = mean(ActX)
     , SDActX                 = sd(ActX)
@@ -69,6 +80,34 @@ dat_nested <- mutate(dat_nested, EveningActivity = map(Data, function(x) {
     , maxPrecipitation       = max(Precipitation)
     , meanCloudCover         = mean(CloudCover)
   )
+
+  # How much did the dogs move in the morning that day?
+  tsunrise <- min(subdata$Sunrise)
+  morning <- subset(subdata
+    , Timestamp >= tsunrise - hours(2) &
+      Timestamp <= tsunrise + hours(2)
+  )
+  evening$meanActXMorning <- mean(morning$ActX)
+
+  # How much did the dogs move within the past 6, 12, 18, 24 hours? (can use the
+  # aggregated data for this)
+  for (i in c(6, 12, 18, 24)) {
+    meanAct <- subset(dat, DogID == dogname & CollarID == collar &
+      Timestamp >= tsunset - hours(i + 2) &
+      Timestamp < tsunset - hours(2)
+    ) %>% pull(ActX) %>% mean()
+    evening <- cbind(evening, meanAct)
+    names(evening)[ncol(evening)] <- paste0("meanActX", i)
+  }
+
+  # Let's also compute cloud cover of the night that follows
+  tsunrise_next <- max(subdata$SunriseNext)
+  evening$meanCloudCoverNight <- subset(dat, DogID == dogname & CollarID == collar &
+    Timestamp > tsunset + hours(2) &
+    Timestamp <= tsunrise_next
+  ) %>% pull(CloudCover) %>% mean()
+
+  # Return everything
   return(evening)
 }))
 
@@ -79,7 +118,6 @@ evening <- dat_nested %>%
 
 # Normalize values to a range between 0 and 1 (I won't standardize them because
 # they are not normally distributed)
-normalize <- function(x) {(x - min(x, na.rm = T)) / (max(x, na.rm = T) - min(x, na.rm = T))}
 evening <- mutate(evening
   , minMoonlightIntensity  = normalize(minMoonlightIntensity)
   , meanMoonlightIntensity = normalize(meanMoonlightIntensity)
@@ -130,10 +168,14 @@ formula <- quote(meanActX ~
     + Rain
     + maxTemperature
     + meanCloudCover
-    + maxMoonlightIntensity:meanCloudCover
+    # + maxMoonlightIntensity:meanCloudCover
     # + I(maxPrecipitation ** 2)
     # + I(meanTemperature ** 2)
 )
+
+# Run a model ignoring that there are different individuals
+mod <- lm(formula, data = evening)
+summary(mod)
 
 # Run a linear model for each dog separately
 evening_nested$Model <- lapply(evening_nested$Data, function(x) {
@@ -147,7 +189,7 @@ evening_nested$ModelCoefficients <- lapply(evening_nested$Model, function(x) {
 
 # Calculate average movement of the past 24 hours
 
-# Use formulas to compute...
+# Use formulas to compute mean and sd of the coefficients
 
 # Visualize
 evening_nested %>%

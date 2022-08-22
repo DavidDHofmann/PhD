@@ -14,7 +14,6 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_7"
 setwd(wd)
 
 # Load required packages
-library(moonlit)      # To calculate nightly statistics
 library(reticulate)   # Interface to python
 library(rgee)         # Interface to google earth engine
 library(raster)       # To handle spatial data
@@ -24,6 +23,12 @@ library(lubridate)    # To handle dates
 library(sf)           # To handle spatial data
 library(sen2r)        # To download sentinel 2 data
 library(pbmcapply)    # To run stuff in parallel
+library(suncalc)      # To compute moonlight statistics
+library(hms)          # To work with hours
+library(pbmcapply)    # Tu run functions in parallel
+
+# Load custom functions
+source("02_R-Scripts/00_Functions.R")
 
 # # Specify python to use (only necessary on some systems)
 # Sys.setenv(RETICULATE_PYTHON = "/home/david/miniconda3/envs/rgee/bin/python")
@@ -42,6 +47,8 @@ ee_Initialize()
 
 # Load the activity data
 act <- read_csv("03_Data/02_CleanData/ActivityData.csv")
+gps <- act[, c("x", "y")]
+gps <- unique(gps)
 
 # Create an extent from the minimum and maximum x and y coordinates
 xmin <- floor(range(act$x)[1])
@@ -78,48 +85,33 @@ gc()
 #### Calculate Nightly Statistics
 ################################################################################
 # Coordinates and dates for which we want to compute statistics
-coords <- expand_grid(
-    Date = ymd_hms(paste0(seq(dates[1], dates[2], by = "day"), "18:00:00"))
-  , x    = seq(xmin, xmax, by = 25 / 111)
-  , y    = seq(ymin, ymax, by = 25 / 111)
-)
-
-# Nest by location
-coords <- nest(coords, Data = -c(x, y))
-
-# Loop through the above created dataframe and calculate nightly statistics
 if (!file.exists("03_Data/02_CleanData/Moonlight.csv")) {
   cat("Computing nightly statistics...\n")
-  coords$Nightly <- pbmclapply(
-      X                  = 1:nrow(coords)
-    , mc.cores           = detectCores() - 1
-    , ignore.interactive = T
-    , FUN                = function(x) {
-      pdf(file = NULL)
-      moon <- calculateMoonlightStatistics(
-          date     = coords$Data[[x]]$Date
-        , lon      = coords$x[x]
-        , lat      = coords$y[x]
-        , e        = 0.21
-        , t        = "15 mins"
-        , timezone = "UTC"
-      )
-      dev.off()
-      return(moon)
-  })
+  coords <- expand_grid(
+      Date = ymd_hms(paste0(seq(dates[1], dates[2], by = "day"), "16:00:00"))
+    , x    = seq(xmin, xmax, by = 25 / 111)
+    , y    = seq(ymin, ymax, by = 25 / 111)
+  )
 
-  # Unnest and clean
-  nightly <- coords %>%
-    select(-Data) %>%
-    unnest(Nightly) %>%
-    mutate(Date = as_date(date)) %>%
-    select(-date)
+  # Split into multipe chungs
+  ngroups <- ceiling(nrow(coords) / 2000)
+  coords$Chunk <- sort(rep(1:ngroups, length.out = nrow(coords)))
+  coords <- split(coords, coords$Chunk)
+  coords <- pbmclapply(coords, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+    moonlightSummary(
+        date = x$Date
+      , lat  = x$y
+      , lon  = x$x
+      , e    = 0.21
+      , t    = "15 mins"
+    )
+  })
+  coords <- do.call(rbind, coords)
 
   # Store results to file
   write_csv(nightly, "03_Data/02_CleanData/Moonlight.csv")
 
 }
-
 
 ################################################################################
 #### Download Precipitation Data

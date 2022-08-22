@@ -69,4 +69,4 @@ design$NumberSteps <- pbmclapply(1:nrow(design), ignore.interactive = T, mc.core
 }) %>% do.call(c, .)
 
 # Write results to file
-write_csv(design, "03_Data/03_Results/ValidSteps.csv")
+write_csv(design, "03_Data/ValidSteps.csv")

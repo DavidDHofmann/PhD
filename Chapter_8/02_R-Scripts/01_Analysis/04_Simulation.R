@@ -274,11 +274,11 @@ dir.create("03_Data/03_Results/99_Simulations", showWarnings = F)
 # Number of simulated steps
 n_steps <- 2000
 
-# How many dispersers per source area in each iteration do you want to simulate?
+# How many dispersers do you want to simulate per iteration?
 n_points <- 100
 
-# How many iterations (per flood level) do you want to run?
-iterations <- 20
+# How many iterations (per flood level and source area) do you want to run?
+iterations <- 10
 
 # How many random steps do you want to simulate per realized step?
 n_rsteps <- 25
@@ -293,21 +293,27 @@ sl_max <- 35000
 design <- expand_grid(
     FloodLevel = c("Min", "Mean", "Max")
   , Iteration  = 1:iterations
-  ) %>% mutate(Filename = paste0(
-      "03_Data/03_Results/99_Simulations/Flood_"
-    , FloodLevel
-    , "_"
-    , sprintf("%02d", Iteration)
-    , ".rds"
-  )
+  , SourceArea = unique(areas$ID)
 )
+
+# Also prepare filenames for the stored simulations
+design$Filename <- with(design, paste0(
+    "03_Data/03_Results/99_Simulations/Flood_"
+  , FloodLevel
+  , "_Source_"
+  , sprintf("%02d", SourceArea)
+  , "_Rep_"
+  , sprintf("%02d", Iteration)
+  , ".rds"
+))
 design$Done <- file.exists(design$Filename)
 
 # Initiate a file to keep track of simulation progress
 if (!file.exists("03_Data/03_Results/99_Simulations/Report.csv")) {
   report <- data.frame(
       FloodLevel   = NA
-    , iteration    = NA
+    , SourceArea   = NA
+    , Iteration    = NA
     , n_steps      = NA
     , n_points     = NA
     , sl_max       = NA
@@ -332,10 +338,10 @@ for (i in 1:nrow(design)) {
     start <- Sys.time()
 
     # Generate source points
-    source_points <- lapply(1:nrow(areas), function(x) {
-      pts <- spatSample(areas[x, ], size = n_points, method = "random")
-      return(pts)
-    }) %>% do.call(rbind, .)
+    source_points <- spatSample(areas[areas$ID == design$SourceArea[i]]
+      , size   = n_points
+      , method = "random"
+    )
     source_points <- as(source_points, "Spatial")
 
     # Run the simulation for each source point
@@ -361,7 +367,6 @@ for (i in 1:nrow(design)) {
 
         # Assign some more information
         sim$TrackID <- x
-        sim$Area <- source_points$ID[x]
 
         # Return the simulation
         return(sim)
@@ -382,7 +387,8 @@ for (i in 1:nrow(design)) {
     )
     report <- drop_na(rbind(report, data.frame(
         FloodLevel   = design$FloodLevel[i]
-      , iteration    = design$Iteration[i]
+      , SourceArea   = design$SourceArea[i]
+      , Iteration    = design$Iteration[i]
       , n_steps      = n_steps
       , n_points     = n_points
       , sl_max       = sl_max
@@ -404,8 +410,9 @@ for (i in 1:nrow(design)) {
 # Once the simulations are done, let's combine them into a single big dataframe
 sims <- lapply(1:nrow(design), function(x) {
   dat <- read_rds(design$Filename[x])
-  dat$SimID <- x
+  dat$SimID      <- x
   dat$FloodLevel <- design$FloodLevel[x]
+  dat$SourceArea <- design$SourceArea[x]
   return(dat)
 }) %>% do.call(rbind, .)
 
