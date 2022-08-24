@@ -16,7 +16,6 @@ library(lubridate)   # To handle dates
 library(hms)         # To handle times
 library(pracma)      # To identify peaks
 library(broom)       # To clean model summary
-library(runner)      # To apply moving windows
 
 # Reload cleaned activity data (note that the timestamps are all in UTC)
 dat <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariates.csv")
@@ -25,53 +24,6 @@ print(names(dat))
 # How many datapoints for residents and dispersers are there?
 table(dat$State)
 prop.table(table(dat$State)) * 100
-
-# For now, we focus only on residents
-
-# ################################################################################
-# #### TESTING
-# ################################################################################
-# # Subset to one of the individuals
-# unique(dat$DogID)
-# sub <- subset(dat, DogID == "Calvin")
-# table(sub$CollarID)
-#
-# # Let's compute average activity for different moving windows
-# windows <- c("60 minutes", "120 minutes")
-# for (i in windows) {
-#   ran <- runner(sub
-#     , k   = duration(i)
-#     , idx = sub$Timestamp
-#     , f   = function(x) {mean(x$ActX)}
-#   )
-#   sub <- cbind(sub, ran)
-#   names(sub)[ncol(sub)] <- paste0("ActX_", gsub(i, pattern = " ", replacement = ""))
-# }
-#
-# # Active or inactive
-# # Transition probabilities
-# x<-read.table("http://www.rolandlangrock.com//OF.dat")
-#
-#
-#
-#
-#
-# # Pivot and visualize
-# sub %>%
-#   pivot_longer(ActX_60minutes:ActX_120minutes, names_to = "Window", values_to = "ActXWindow") %>%
-#   drop_na() %>%
-#   subset(Date == min(Date) + days(6)) %>%
-#   ggplot(aes(x = hms::as_hms(Timestamp), y = ActXWindow)) +
-#     geom_line(lwd = 1) +
-#     geom_line(aes(y = ActX)) +
-#     facet_wrap(~ Window, ncol = 1)
-#
-# sub %>%
-#   drop_na() %>%
-#   subset(Date == min(Date) + days(28)) %>%
-#   ggplot(aes(x = hms::as_hms(Timestamp), y = Running)) +
-#     geom_line(lwd = 2) +
-#     geom_line(aes(y = ActX))
 
 # For now, only look at residents
 dat <- subset(dat, State != "Disperser")
