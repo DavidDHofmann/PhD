@@ -77,13 +77,13 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_ResultsHabitatKernel.png}
-  \caption{Parameter estimates from the step-selection models with regards to
-  the movement covariates \textsf{dist}, \textsf{elev}, and \textsf{forest}.
-  Dots indicate the mean across 100 replicates, whereas the vertical line
-  delineate $\pm 2SD$ from the mean. For clarity, we only show results for
-  data with missingness of 0.5. The black dotted lines indicate the ``true''
-  values that were used to simulate movement. Colors separate different
-  approaches to account for varying step-durations in the data.}
+  \caption{Parameter estimates with regards to the habitat covariates
+  \textsf{dist}, \textsf{elev}, and \textsf{forest}. Dots indicate the mean
+  estimates across 100 replicates, whereas the vertical line delineate $\pm 2SD$
+  from the mean. The black dotted lines indicate the ``true'' values that were
+  used to simulate movement. Colors separate different approaches to account for
+  varying step-durations in the data. For clarity, we only show results for the
+  treatments with data missingness of 0.5.}
   \label{ResultsHabitat}
   \end{center}
 \end{figure}
@@ -92,7 +92,13 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_ResultsMovementKernel.png}
-  \caption{}
+  \caption{Parameter estimates with regards to the movement covariates
+  \textsf{sl}, \textsf{log(sl)}, and \textsf{cos(ta)}. Dots indicate the mean
+  estimates across 100 replicates, whereas the vertical line delineate $\pm 2SD$
+  from the mean. The black dotted lines indicate the ``true'' values that were
+  used to simulate movement. Colors separate different approaches to account for
+  varying step-durations in the data. For clarity, we only show results for the
+  treatments with data missingness of 0.5.}
   \label{ResultsMovement}
   \end{center}
 \end{figure}

@@ -10,8 +10,8 @@
 \contentsline {subsection}{\numberline {2.7}Regression Model}{7}{subsection.2.7}%
 \contentsline {section}{\numberline {3}Results}{7}{section.3}%
 \contentsline {subsection}{\numberline {3.1}Habitat Kernel}{7}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Movement Kernel}{7}{subsection.3.2}%
-\contentsline {section}{\numberline {4}Discussion}{7}{section.4}%
+\contentsline {subsection}{\numberline {3.2}Movement Kernel}{8}{subsection.3.2}%
+\contentsline {section}{\numberline {4}Discussion}{8}{section.4}%
 \contentsline {section}{\numberline {5}Authors' Contributions}{8}{section.5}%
 \contentsline {section}{\numberline {6}Data Availability}{8}{section.6}%
 \contentsline {section}{\numberline {7}Acknowledgements}{8}{section.7}%
