@@ -25,7 +25,7 @@ library(sen2r)        # To download sentinel 2 data
 library(pbmcapply)    # To run stuff in parallel
 library(suncalc)      # To compute moonlight statistics
 library(hms)          # To work with hours
-library(pbmcapply)    # Tu run functions in parallel
+library(pbmcapply)    # To run functions in parallel
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -84,34 +84,69 @@ gc()
 ################################################################################
 #### Calculate Nightly Statistics
 ################################################################################
-# Coordinates and dates for which we want to compute statistics
+# Compute nightly statistics if necessary
 if (!file.exists("03_Data/02_CleanData/Moonlight.csv")) {
-  cat("Computing nightly statistics...\n")
-  coords <- expand_grid(
-      Date = ymd_hms(paste0(seq(dates[1], dates[2], by = "day"), "16:00:00"))
-    , x    = seq(xmin, xmax, by = 25 / 111)
-    , y    = seq(ymin, ymax, by = 25 / 111)
+
+  # Generate a vector of times for which we want to compute nightly statistics
+  moon <- data.frame(
+      Date = ymd_hms(paste0(seq(dates[1] - days(3), dates[2] + days(3), by = "day"), "16:00:00"))
+    , x    = mean(gps$x)
+    , y    = mean(gps$y)
   )
 
-  # Split into multipe chungs
-  ngroups <- ceiling(nrow(coords) / 2000)
-  coords$Chunk <- sort(rep(1:ngroups, length.out = nrow(coords)))
-  coords <- split(coords, coords$Chunk)
-  coords <- pbmclapply(coords, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+  # Split into multipe chunks
+  ngroups <- ceiling(nrow(moon) / 20)
+  moon$Group <- sort(rep(1:ngroups, length.out = nrow(moon)))
+  moon <- split(moon, moon$Group)
+  moon <- pbmclapply(moon, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
     moonlightSummary(
         date = x$Date
       , lat  = x$y
       , lon  = x$x
       , e    = 0.21
-      , t    = "15 mins"
+      , t    = "1 mins"
     )
   })
-  coords <- do.call(rbind, coords)
+  moon <- do.call(rbind, moon)
 
-  # Store results to file
-  write_csv(nightly, "03_Data/02_CleanData/Moonlight.csv")
-
+  # Store to file
+  write_csv(moon, "03_Data/02_CleanData/Moonlight.csv")
 }
+
+# ################################################################################
+# #### Calculate Nightly Statistics
+# ################################################################################
+# # Coordinates and dates for which we want to compute statistics
+# if (!file.exists("03_Data/02_CleanData/Moonlight.csv")) {
+#   cat("Computing nightly statistics...\n")
+#   coords <- expand_grid(
+#       Date = ymd_hms(paste0(seq(dates[1], dates[2], by = "day"), "16:00:00"))
+#     , x    = seq(xmin, xmax, by = 25 / 111)
+#     , y    = seq(ymin, ymax, by = 25 / 111)
+#   )
+#
+#   # Split into multipe chungs
+#   ngroups <- ceiling(nrow(coords) / 2000)
+#   coords$Chunk <- sort(rep(1:ngroups, length.out = nrow(coords)))
+#   coords <- split(coords, coords$Chunk)
+#   coords <- pbmclapply(coords, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+#     moonlightSummary(
+#         date = x$Date
+#       , lat  = x$y
+#       , lon  = x$x
+#       , e    = 0.21
+#       , t    = "15 mins"
+#     )
+#   })
+#   nightly <- do.call(rbind, coords)
+#
+#   # Compute duration since sunset to maximum moon
+#   nightly$maxMoonDelay <- difftime(nightly$maxMoonTime, nightly$sunset, units = "mins")
+#
+#   # Store results to file
+#   write_csv(nightly, "03_Data/02_CleanData/Moonlight.csv")
+#
+# }
 
 ################################################################################
 #### Download Precipitation Data
@@ -278,6 +313,16 @@ todownload <- subset(todownload, !file.exists(Filename))
 # Create directory into which the downloaded maps go
 dir.create("03_Data/02_CleanData/00_Cloudmaps", showWarnings = F)
 
+# Make slightly bigger aoi
+aoi2 <- ee$Geometry$Polygon(
+  list(
+      c(xmin - 0.25, ymin - 0.25)
+    , c(xmin - 0.25, ymax + 0.25)
+    , c(xmax + 0.25, ymax + 0.25)
+    , c(xmax + 0.25, ymin - 0.25)
+  )
+)
+
 # Function to extract values from specific bits
 getQABits <- function(image, fromBit, toBit) {
   maskSize <- ee$Number(1)$
@@ -313,21 +358,21 @@ if (nrow(todownload) > 0) {
         link <- "MODIS/061/MOD09GA"
     }
 
-    # Query temperature data for our study area during dispersal dates
+    # Query cloud data for our study area during dispersal dates
     query_cloud <- ee$
       ImageCollection(link)$
       filterDate(date_from, date_to)$
-      filterBounds(aoi)$
+      filterBounds(aoi2)$
       map(getClouds)$
       toBands()$
-      clip(aoi)
+      clip(aoi2)
 
     # Check it out
     # ee_print(query_cloud)
 
     # Download the data
     tempfile <- tempfile(fileext = ".tif")
-    ee_as_raster(query_cloud, dsn = tempfile, region = aoi)
+    ee_as_raster(query_cloud, dsn = tempfile, region = aoi2)
 
     # Also store the band names
     names_cloud <- ee_print(query_cloud)$img_bands_names %>%
