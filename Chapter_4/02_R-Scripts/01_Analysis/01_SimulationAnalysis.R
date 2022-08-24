@@ -643,77 +643,77 @@ runModel <- function(data, approach) {
   return(coefs)
 }
 
-################################################################################
-#### Ensure All Functions Work as Intended
-################################################################################
-# Simulate covariates and across the layers
-cov <- simCovars(autocorr_range = 50, proportion_forest = 0.5)
-obs <- simMove(cov, n_id = 10, multicore = T)
-as.data.frame(cov, xy = T) %>%
-  gather(key = covariate, value = value, 3:5) %>%
-  ggplot(aes(x = x, y = y, fill = value)) +
-    geom_raster() +
-    geom_sf(data = st_as_sf(ext2), inherit.aes = F, fill = NA, col = "white", lty = 2) +
-    geom_path(data = obs, aes(x = x, y = y, col = as.factor(ID)), inherit.aes = F) +
-    scale_fill_viridis_c(option = "viridis") +
-    coord_sf() +
-    theme_minimal() +
-    facet_wrap("covariate") +
-    theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
-
-# Rarify data
-obs_missing <- rarifyData(obs, missingness = 0.2, n_id = 9)
-
-# Try to impute missing fixes
-obs_imputed <- imputeFixes(obs_missing)
-ggplot(obs_imputed, aes(x = x, y = y, group = ID, col = imputed)) +
-  geom_path(lwd = 0.2) +
-  geom_point(size = 0.2) +
-  coord_sf() +
-  theme_minimal() +
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
-
-# Compute bursts from the (non-imputed) data -> Try with different forgiveness
-# values!
-obs_bursted <- computeBursts(obs_missing, forgiveness = 2)
-ggplot(obs_bursted, aes(x = x, y = y, group = ID, col = as.factor(burst))) +
-  geom_path(lwd = 0.2) +
-  geom_point(size = 0.2) +
-  coord_sf() +
-  theme_minimal() +
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
-
-# Fit step- and turning-angle distributions to original and rarified data
-fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = F)
-fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = T)
-
-# Compute step metrics
-obs_metrics <- computeMetrics(obs_bursted)
-
-# Generate random steps
-obs_stepsel <- computeSSF(obs_metrics, n_rsteps = 10, approach = "uncorrected", dists = fit_distris)
-
-# Extract covariates
-obs_covaris <- computeCovars(obs_stepsel, cov, multicore = T)
-
-# Run the model
-mod <- runModel(obs_covaris, approach = "uncorrected")
-mod
-
-# Clear up space and remov unused objects
-rm(
-    cov
-  , obs
-  , mod
-  , obs_missing
-  , obs_imputed
-  , obs_bursted
-  , obs_metrics
-  , obs_stepsel
-  , obs_covaris
-  , fit_distris
-)
-gc()
+# ################################################################################
+# #### Ensure All Functions Work as Intended
+# ################################################################################
+# # Simulate covariates and across the layers
+# cov <- simCovars(autocorr_range = 50, proportion_forest = 0.5)
+# obs <- simMove(cov, n_id = 10, multicore = T)
+# as.data.frame(cov, xy = T) %>%
+#   gather(key = covariate, value = value, 3:5) %>%
+#   ggplot(aes(x = x, y = y, fill = value)) +
+#     geom_raster() +
+#     geom_sf(data = st_as_sf(ext2), inherit.aes = F, fill = NA, col = "white", lty = 2) +
+#     geom_path(data = obs, aes(x = x, y = y, col = as.factor(ID)), inherit.aes = F) +
+#     scale_fill_viridis_c(option = "viridis") +
+#     coord_sf() +
+#     theme_minimal() +
+#     facet_wrap("covariate") +
+#     theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+#
+# # Rarify data
+# obs_missing <- rarifyData(obs, missingness = 0.2, n_id = 9)
+#
+# # Try to impute missing fixes
+# obs_imputed <- imputeFixes(obs_missing)
+# ggplot(obs_imputed, aes(x = x, y = y, group = ID, col = imputed)) +
+#   geom_path(lwd = 0.2) +
+#   geom_point(size = 0.2) +
+#   coord_sf() +
+#   theme_minimal() +
+#   theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+#
+# # Compute bursts from the (non-imputed) data -> Try with different forgiveness
+# # values!
+# obs_bursted <- computeBursts(obs_missing, forgiveness = 2)
+# ggplot(obs_bursted, aes(x = x, y = y, group = ID, col = as.factor(burst))) +
+#   geom_path(lwd = 0.2) +
+#   geom_point(size = 0.2) +
+#   coord_sf() +
+#   theme_minimal() +
+#   theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+#
+# # Fit step- and turning-angle distributions to original and rarified data
+# fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = F)
+# fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = T)
+#
+# # Compute step metrics
+# obs_metrics <- computeMetrics(obs_bursted)
+#
+# # Generate random steps
+# obs_stepsel <- computeSSF(obs_metrics, n_rsteps = 10, approach = "uncorrected", dists = fit_distris)
+#
+# # Extract covariates
+# obs_covaris <- computeCovars(obs_stepsel, cov, multicore = T)
+#
+# # Run the model
+# mod <- runModel(obs_covaris, approach = "uncorrected")
+# mod
+#
+# # Clear up space and remov unused objects
+# rm(
+#     cov
+#   , obs
+#   , mod
+#   , obs_missing
+#   , obs_imputed
+#   , obs_bursted
+#   , obs_metrics
+#   , obs_stepsel
+#   , obs_covaris
+#   , fit_distris
+# )
+# gc()
 
 ################################################################################
 #### Proper Analysis
@@ -723,14 +723,14 @@ dat <- expand_grid(
     Missingness    = seq(0, 0.5, by = 0.1)                                                 # Fraction of the fixes that is removed
   , Forgiveness    = 1:5                                                                   # Allowed step-duration
   , AutocorrRange  = c(10, 50, 100)                                                        # Autocorrelation range in the covariates
-  , Replicate      = 1:100                                                                 # Number of replicates for each combination
+  , Replicate      = 1:10                                                                 # Number of replicates for each combination
   , Approach       = c("uncorrected", "naive", "dynamic", "model", "multistep", "imputed") # Which approach to use to analyse the data
 )
 
 # So that we can independently store the results from different iterations,
 # let's prepare a filename for each row of the design table
 dat$Filename <- paste0(
-    "03_Data/ModelResults/Simulation/"
+    "03_Data/ModelResults/"
   , "M", sprintf("%02d", as.integer(dat$Missingness * 100)), "_"
   , "F", sprintf("%02d", dat$Forgiveness), "_"
   , "A", sprintf("%02d", dat$AutocorrRange), "_"
@@ -785,7 +785,7 @@ pbmclapply(
   }
 
   # Compute bursts and on those the relevant step metrics
-  obs <- computeBursts(forgibeness = forg)
+  obs <- computeBursts(obs, forgiveness = forg)
   obs <- computeMetrics(obs)
 
   # Generate random steps
