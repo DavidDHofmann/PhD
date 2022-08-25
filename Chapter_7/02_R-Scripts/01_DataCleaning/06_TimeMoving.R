@@ -1,8 +1,8 @@
 ################################################################################
-#### Data When Dogs Become Active
+#### Time when Dogs Start Moving
 ################################################################################
 # Description: Take the raw activity data to determine at what time in the
-# afternoon they become active
+# afternoon start moving
 
 # Clear R's brain
 rm(list = ls())
@@ -18,7 +18,7 @@ library(hms)         # To handle times
 library(pbmcapply)   # To run stuff in parallel
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariates.csv")
+dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
 
 # Compute some useful time metrics
 dat$Hour <- as_hms(dat$Timestamp)
@@ -99,8 +99,8 @@ first$ToD <- "Evening"
 names(first)[names(first) == "Timestamp"] <- "StartMoving"
 
 # Combine with the activity data that was aggregated by "Time of Day"
-act <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariatesAggregated.csv")
+act <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
 act <- left_join(act, first, by = c("DogID", "CollarID", "Date", "State", "ToD"))
 
 # Store combined data to file
-write_csv(act, "03_Data/02_CleanData/ActivityDataWithCovariatesAggregated.csv")
+write_csv(act, "03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")

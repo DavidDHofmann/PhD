@@ -63,15 +63,6 @@ for (i in layers) {
   # extract, then we can concentrated on those only.
   covariate_id <- covariate[[1]]
   covariate_id[] <- 1:ncell(covariate_id)
-  range(act$x)
-  range(act$y)
-  test <- cbind(act$x, act$y)
-  test <- unique(test)
-  hello <- terra::extract(covariate_id, test)[, 1]
-  plot(covariate_id)
-  points(test)
-  plot(test)
-  sum(is.na(hello))
 
   # Identify for which pixels we need to extract values
   act$CovariatePixelID <- terra::extract(covariate_id, cbind(act$x, act$y))[, 1]
@@ -119,6 +110,11 @@ for (i in layers) {
 
 }
 
+# Ensure that there are no NAs
+if (sum(is.na(act[, layers])) > 0) {
+  stop("Some of the extracted values are NA...\n")
+}
+
 ################################################################################
 #### Moonlight Statistics
 ################################################################################
@@ -127,6 +123,9 @@ moon <- read_csv("03_Data/02_CleanData/Moonlight.csv")
 
 # Remove undesired columns
 moon <- dplyr::select(moon, -c(lon, lat))
+
+# Compute the delay since sunset to maximum moonlight
+moon$maxMoonDelay <- difftime(moon$maxMoonTime, moon$sunset, units = "mins")
 
 # Specify which date we want to match. Before 12:00, we match the day before,
 # after 12, the day after
@@ -137,42 +136,6 @@ act <- mutate(act, DateToMatch = if_else(hour(Timestamp) >= 12
 
 # Join the nightly statistics respectively
 act <- left_join(act, moon, by = c("DateToMatch" = "date"))
-
-# ################################################################################
-# #### Covariate Extraction of Moonlight Statistics
-# ################################################################################
-# # Load nighttime data
-# night <- read_csv("03_Data/02_CleanData/Moonlight.csv")
-#
-# # Assign an ID to each unique pixel (i.e. combination of xy values)
-# night <- night %>%
-#   rename(x = lon, y = lat) %>%
-#   nest(Data = -c(x, y)) %>%
-#   mutate(PixelID = 1:nrow(.))
-#
-# # Prepare a corresponding raster
-# r <- rast(raster::rasterFromXYZ(night[, c("x", "y", "PixelID")]))
-# crs(r) <- "epsg:4326"
-#
-# # Unnest the nightly statistics again
-# night <- unnest(night, Data)
-# night$x <- NULL
-# night$y <- NULL
-#
-# # For each activity fix, identify into which pixel of the raster it falls
-# act$CovariatePixelID <- terra::extract(x = r, y = cbind(act$x, act$y))[, 1]
-#
-# # Specify which date we want to match. Before 12:00, we match the day before,
-# # after 12, the day after
-# act <- mutate(act, DateToMatch = if_else(hour(Timestamp) >= 12
-#   , Date
-#   , Date - days(1))
-# )
-#
-# # Join the nightly statistics respectively
-# act <- left_join(act, night
-#   , by = c("DateToMatch" = "date", "CovariatePixelID" = "PixelID")
-# )
 
 ################################################################################
 #### Reorder and Store
@@ -227,4 +190,40 @@ act$Season <- getSeason(act$Date)
 act$Rain <- act$Precipitation > 0
 
 # Store the final data to file
-write_csv(act, "03_Data/02_CleanData/ActivityDataWithCovariates.csv")
+write_csv(act, "03_Data/02_CleanData/ActivityDataCovariates.csv")
+
+# ################################################################################
+# #### Covariate Extraction of Moonlight Statistics
+# ################################################################################
+# # Load nighttime data
+# night <- read_csv("03_Data/02_CleanData/Moonlight.csv")
+#
+# # Assign an ID to each unique pixel (i.e. combination of xy values)
+# night <- night %>%
+#   rename(x = lon, y = lat) %>%
+#   nest(Data = -c(x, y)) %>%
+#   mutate(PixelID = 1:nrow(.))
+#
+# # Prepare a corresponding raster
+# r <- rast(raster::rasterFromXYZ(night[, c("x", "y", "PixelID")]))
+# crs(r) <- "epsg:4326"
+#
+# # Unnest the nightly statistics again
+# night <- unnest(night, Data)
+# night$x <- NULL
+# night$y <- NULL
+#
+# # For each activity fix, identify into which pixel of the raster it falls
+# act$CovariatePixelID <- terra::extract(x = r, y = cbind(act$x, act$y))[, 1]
+#
+# # Specify which date we want to match. Before 12:00, we match the day before,
+# # after 12, the day after
+# act <- mutate(act, DateToMatch = if_else(hour(Timestamp) >= 12
+#   , Date
+#   , Date - days(1))
+# )
+#
+# # Join the nightly statistics respectively
+# act <- left_join(act, night
+#   , by = c("DateToMatch" = "date", "CovariatePixelID" = "PixelID")
+# )

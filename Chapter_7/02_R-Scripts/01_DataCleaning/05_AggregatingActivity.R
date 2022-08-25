@@ -1,9 +1,9 @@
 ################################################################################
 #### Prepare Activity Data by Time of the Day
 ################################################################################
-# Description: Aggregate Activity data by time of the day. Remember that we
-# prepared nightly statistics for the previous night if a fixe was taken before
-# 12:00, otherwise for the following night
+# Description: Aggregate dctivity data by time of the day. Remember that we
+# prepared nightly statistics for the previous night if a fix was taken before
+# 12:00, otherwise we computed statistics for the following night
 
 # Clear R's brain
 rm(list = ls())
@@ -19,10 +19,10 @@ library(hms)         # To handle times
 library(pbmcapply)   # To run stuff in parallel
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariates.csv")
+dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
 
-# Compute some useful time metrics
-dat$Hour <- as_hms(dat$Timestamp)
+# Let's also generate a column indicating the time of the day
+dat$Time <- as_hms(dat$Timestamp)
 
 # Nest the data by dog, collar, and date
 dat_nested <- dat %>% nest(Data = -c(DogID, CollarID, State, Date))
@@ -161,7 +161,8 @@ dat_tod <- unnest(dat_nested, Data)
 dat_tod$N <- NULL
 
 # For morning and evening bursts we also need to compute the average cloud cover
-# of he preceeding/following night
+# of he preceeding/following night (although cloud cover is anyways not that
+# greatly resolved)
 meanCloudCoverNight <- sapply(1:nrow(dat_tod), function(x) {
   if (dat_tod$ToD[x] == "Night") {
     meanCloudCoverNight <- dat_tod$meanCloudCover[x]
@@ -188,4 +189,4 @@ meanCloudCoverNight <- sapply(1:nrow(dat_tod), function(x) {
 dat_tod$meanCloudCoverNight <- meanCloudCoverNight
 
 # Store the data
-write_csv(dat_tod, "03_Data/02_CleanData/ActivityDataWithCovariatesAggregated.csv")
+write_csv(dat_tod, "03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")

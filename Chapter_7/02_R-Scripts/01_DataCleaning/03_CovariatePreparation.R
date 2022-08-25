@@ -313,13 +313,16 @@ todownload <- subset(todownload, !file.exists(Filename))
 # Create directory into which the downloaded maps go
 dir.create("03_Data/02_CleanData/00_Cloudmaps", showWarnings = F)
 
+# Slightly increase the aoi for this
+ext2 <- ext(xmin, xmax, ymin, ymax) + 0.5
+
 # Make slightly bigger aoi
 aoi2 <- ee$Geometry$Polygon(
   list(
-      c(xmin - 0.25, ymin - 0.25)
-    , c(xmin - 0.25, ymax + 0.25)
-    , c(xmax + 0.25, ymax + 0.25)
-    , c(xmax + 0.25, ymin - 0.25)
+      c(xmin(ext2), ymin(ext2))
+    , c(xmin(ext2), ymax(ext2))
+    , c(xmax(ext2), ymax(ext2))
+    , c(xmax(ext2), ymin(ext2))
   )
 )
 
@@ -391,7 +394,7 @@ if (nrow(todownload) > 0) {
     cloud <- project(cloud, "epsg:4326", method = "near")
 
     # Crop layer to our study area
-    cloud <- crop(cloud, ext, snap = "out")
+    cloud <- crop(cloud, ext2, snap = "out")
 
     # Store the file again
     writeRaster(cloud, todownload$Filename[i])
@@ -403,6 +406,7 @@ if (nrow(todownload) > 0) {
 ################################################################################
 # Rainmaps
 if (!file.exists("03_Data/02_CleanData/Precipitation.tif")) {
+  cat("Combining rainmaps...\n")
   files <- dir(path = "03_Data/02_CleanData/00_Rainmaps", pattern = ".grd$", full.names = T)
   files <- lapply(files, rast)
   files <- do.call(c, files)
@@ -411,6 +415,7 @@ if (!file.exists("03_Data/02_CleanData/Precipitation.tif")) {
 
 # Temperature maps
 if (!file.exists("03_Data/02_CleanData/Temperature.tif")) {
+  cat("Combining temperature maps...\n")
   files <- dir(path = "03_Data/02_CleanData/00_Tempmaps", pattern = ".grd$", full.names = T)
   files <- lapply(files, rast)
   files <- do.call(c, files)
@@ -420,6 +425,7 @@ if (!file.exists("03_Data/02_CleanData/Temperature.tif")) {
 # Cloud maps (we will also coarsen them and combine aqua and terra products from
 # the same date)
 if (!file.exists("03_Data/02_CleanData/CloudCover.tif")) {
+  cat("Combining cloud maps...\n")
   files <- dir(path = "03_Data/02_CleanData/00_Cloudmaps", pattern = ".grd$", full.names = T)
   files <- lapply(files, rast)
   files <- do.call(c, files)
