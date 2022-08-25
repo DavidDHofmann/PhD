@@ -94,6 +94,7 @@ text(src, "ID")
 # ecosystem
 out <- buffer(ell, width = -5000)
 out <- src - out
+src <- src - out
 
 # We use this as one source area
 out$ID <- max(src$ID) + (1:length(out))

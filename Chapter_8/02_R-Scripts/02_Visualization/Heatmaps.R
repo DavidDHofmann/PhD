@@ -47,7 +47,7 @@ labels_waters <- data.frame(
 
 # Merge heatmaps of the same number of steps and flood extent
 maps <- maps %>%
-  nest(Data = -c(Steps, Flood)) %>%
+  nest(Data = -c(Steps, FloodLevel)) %>%
   mutate(Data = map(Data, function(x) {
     result <- sum(stack(x$heatmap))
     result <- crop(result, r)
@@ -56,7 +56,7 @@ maps <- maps %>%
 
 # Compute difference maps
 diffs <- lapply(unique(maps$Steps), function(x) {
-    submaps <- subset(maps, Steps == x & Flood != "Mean")
+    submaps <- subset(maps, Steps == x & FloodLevel != "Mean")
     submaps <- stack(submaps$Data)
     diff <- submaps[[2]] - submaps[[1]]
     names(diff) <- x
@@ -76,7 +76,7 @@ maps <- maps %>%
   })) %>% unnest(Data)
 
 # Make sure the levels are correctly ordered
-maps$Flood <- factor(maps$Flood, levels = c("Min", "Mean", "Max"))
+maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Mean", "Max"))
 
 # Also convert the reference raster to a dataframe
 r <- as.data.frame(r, xy = T)
@@ -101,7 +101,7 @@ p1 <- ggplot() +
   geom_sf(data = afric, lwd = 0.2, col = "black", fill = NA) +
   geom_sf_text(
       data          = area
-    , mapping       = aes(label = Name)
+    , mapping       = aes(label = ID)
     , size          = 1.5
     , col           = "black"
     , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
@@ -187,7 +187,7 @@ p2 <- ggplot() +
   geom_sf(data = afric, lwd = 0.2, col = "black", fill = NA) +
   geom_sf_text(
       data          = area
-    , mapping       = aes(label = Name)
+    , mapping       = aes(label = ID)
     , size          = 1.5
     , col           = "black"
     , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
@@ -271,7 +271,7 @@ p3 <- ggplot() +
   geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
   geom_sf_text(
       data          = area
-    , mapping       = aes(label = Name)
+    , mapping       = aes(label = ID)
     , size          = 1.5
     , col           = "white"
     , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
@@ -333,11 +333,11 @@ p3 <- ggplot() +
         , text_size = 4
       )
   ) +
-  facet_grid(Flood ~ Steps)
+  facet_grid(FloodLevel ~ Steps)
 
 # Let's also generate a map where we only consider 2000 steps
-maps_sub <- subset(maps, Steps == 2000 & Flood != "Mean")
-maps_sub$Flood <- droplevels(maps_sub$Flood)
+maps_sub <- subset(maps, Steps == 2000 & FloodLevel != "Mean")
+maps_sub$FloodLevel <- droplevels(maps_sub$FloodLevel)
 p4 <- ggplot() +
   geom_raster(
       data    = subset(maps_sub)
@@ -356,7 +356,7 @@ p4 <- ggplot() +
   geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
   geom_sf_text(
       data          = area
-    , mapping       = aes(label = Name)
+    , mapping       = aes(label = ID)
     , size          = 1.5
     , col           = "white"
     , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
@@ -418,7 +418,7 @@ p4 <- ggplot() +
         , text_size = 4
       )
   ) +
-  facet_grid(~ Flood)
+  facet_grid(~ FloodLevel)
 
 ################################################################################
 #### Store Plots

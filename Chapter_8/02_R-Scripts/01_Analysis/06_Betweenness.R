@@ -23,10 +23,10 @@ source("02_R-Scripts/00_Functions.R")
 # Load dispersal simulations
 sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 sims <- subset(sims, FloodLevel != "Mean")
-sims <- subset(sims, Area != 2)
+# sims <- subset(sims, Area != 2)
 
 # Keep only certain columns
-sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area", "FloodLevel")]
+sims <- sims[, c("x", "y", "TrackID", "StepNumber", "SourceArea", "FloodLevel")]
 
 # Function to retrieve the visitation history from a sequence of values
 visitHist <- function(x, singlecount = F) {
@@ -35,7 +35,7 @@ visitHist <- function(x, singlecount = F) {
     na.omit() %>%
     summarize(TotalConnections = n(), .groups = "drop")
   if (singlecount){
-    transitions$TotalConnections = 1
+    transitions$TotalConnections <- 1
   }
   return(transitions)
 }
@@ -51,16 +51,16 @@ betweennessMap <- function(network = NULL, raster = NULL, tempfile = F) {
 
 # Prepare design through which we want to loop
 design <- expand_grid(
-    Steps = c(500, 1000, 2000)
-  , Flood = unique(sims$FloodLevel)
+    Steps       = c(500, 1000, 2000)
+  , FloodLevel  = unique(sims$FloodLevel)
 )
 
 # Add a column for temporary but unique filename. Make sure the tempdir has
 # plenty of storage.
 design$filename <- tempfile(
     pattern = paste0(
-        "Steps_", design$Steps
-      , "_Flood_", design$Flood
+        "Steps", design$Steps
+      , "_FloodLevel", design$FloodLevel
       , "_"
     )
   , fileext = ".tif"
@@ -113,8 +113,7 @@ for (i in 1:nrow(design)) {
   # Subset data to desired steps
   sub <- visits[
     visits$StepNumber <= design$Steps[i] &
-    visits$FloodLevel == design$Flood[i]
-  , ]
+    visits$FloodLevel == design$FloodLevel[i], ]
 
   # Nest tracks
   sub <- nest(sub, data = -TrackID)
@@ -125,7 +124,7 @@ for (i in 1:nrow(design)) {
       X                  = sub$data
     , ignore.interactive = T
     , mc.cores           = 1
-    , FUN                = function(y){
+    , FUN                = function(y) {
         visitHist(y$r, singlecount = T)
     }) %>%
     do.call(rbind, .) %>%
@@ -160,6 +159,7 @@ writeRaster(combined, "03_Data/03_Results/BetweennessMaps.tif", overwrite = T)
 design <- mutate(design, betweenness = lapply(1:nlayers(combined), function(x) {
   combined[[x]]
 }))
+print(design)
 
 # Store to file
 write_rds(design, "03_Data/03_Results/Betweenness.rds")

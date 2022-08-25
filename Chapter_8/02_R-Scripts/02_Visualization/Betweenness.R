@@ -8,7 +8,6 @@ rm(list = ls())
 
 # Change the working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_8"
-wd <- "C:/Users/david/switchdrive/University/15. PhD/Chapter_8"
 setwd(wd)
 
 # Load required packages
@@ -54,7 +53,7 @@ maps <- maps %>%
   })) %>% unnest(betweenness)
 
 # Make sure the levels are correctly ordered
-maps$Flood <- factor(maps$Flood, levels = c("Min", "Mean", "Max"))
+maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Mean", "Max"))
 
 # Convert the reference raster to a dataframe
 r <- as.data.frame(r, xy = T)
@@ -78,7 +77,7 @@ p1 <- ggplot() +
   geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
   geom_sf_text(
       data          = area
-    , mapping       = aes(label = Name)
+    , mapping       = aes(label = ID)
     , size          = 1.5
     , check_overlap = T
     , col           = "white"
@@ -142,11 +141,11 @@ p1 <- ggplot() +
         , text_size = 4
       )
   ) +
-  facet_grid(Flood ~ Steps)
+  facet_grid(FloodLevel ~ Steps)
 
 # Let's also generate a map where we only consider 2000 steps
-maps_sub <- subset(maps, Steps == 2000 & Flood != "Mean")
-maps_sub$Flood <- droplevels(maps_sub$Flood)
+maps_sub <- subset(maps, Steps == 2000 & FloodLevel != "Mean")
+maps_sub$FloodLevel <- droplevels(maps_sub$FloodLevel)
 p2 <- ggplot() +
   geom_raster(
       data    = maps_sub
@@ -165,7 +164,7 @@ p2 <- ggplot() +
   geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
   geom_sf_text(
       data          = area
-    , mapping       = aes(label = Name)
+    , mapping       = aes(label = ID)
     , size          = 1.5
     , check_overlap = T
     , col           = "white"
@@ -181,7 +180,7 @@ p2 <- ggplot() +
   scale_fill_gradientn(
       colours = viridis::magma(100)
     , labels  = function(x){format(x, big.mark = "'")}
-    , trans   = "sqrt"
+    # , trans   = "sqrt"
     , guide   = guide_colorbar(
       , title          = "Betweenness"
       , show.limits    = T
@@ -229,7 +228,7 @@ p2 <- ggplot() +
         , text_size = 4
       )
   ) +
-  facet_grid(~ Flood)
+  facet_grid(~ FloodLevel)
 
 ################################################################################
 #### Store Plot

@@ -25,10 +25,10 @@ source("02_R-Scripts/00_Functions.R")
 sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 
 # Keep only columns
-sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area", "FloodLevel")]
+sims <- sims[, c("x", "y", "TrackID", "StepNumber", "SourceArea", "FloodLevel")]
 
 # # Subsample
-sims <- subset(sims, Area != 2)
+# sims <- subset(sims, Area != 2)
 # sims <- subset(sims, FloodLevel == "Max")
 # sims <- subset(sims, TrackID %in% sample(unique(sims$TrackID), size = 1000))
 
@@ -60,18 +60,18 @@ nrow(sims) / 1e6
 # Create a dataframe with all source points and points in time at which we want
 # to rasterize trajectories
 rasterized <- expand_grid(
-    Steps = c(500, 1000, 2000)
-  , Area  = unique(sims$Area)
-  , Flood = unique(sims$FloodLevel)
+    Steps      = c(500, 1000, 2000)
+  , SourceArea = unique(sims$SourceArea)
+  , FloodLevel = unique(sims$FloodLevel)
 )
 
 # Add a column for temporary but unique filename. Make sure the tempdir has
 # plenty of storage.
 rasterized$filename <- tempfile(
     pattern = paste0(
-        "Steps_", rasterized$Steps
-      , "_Area_", rasterized$Area
-      , "_Flood_", rasterized$Flood
+        "Steps", rasterized$Steps
+      , "_SourceArea", rasterized$SourceArea
+      , "_FloodLevel", rasterized$FloodLevel
       , "_"
     )
   , fileext = ".tif"
@@ -87,8 +87,8 @@ for (i in 1:nrow(rasterized)) {
       simulations = sims
     , raster      = r
     , steps       = rasterized$Steps[i]
-    , area        = rasterized$Area[i]
-    , flood       = rasterized$Flood[i]
+    , area        = rasterized$SourceArea[i]
+    , flood       = rasterized$FloodLevel[i]
     , messages    = F
     , mc.cores    = detectCores() - 1
   )

@@ -21,6 +21,7 @@ library(grid)         # To arrange plots
 library(gridExtra)    # To arrange plots
 library(gtable)       # To arrange plots
 library(RColorBrewer) # For colors
+library(ggpattern)    # For hatched fills
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -90,8 +91,19 @@ p2 <- ggplot() +
   geom_sf(data = river, col = "cornflowerblue") +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
-  geom_sf(data = areas, col = "orange", fill = "orange", alpha = 0.2) +
-  geom_sf(data = fault, col = "red", lty = 2) +
+  # geom_sf(data = areas, col = "orange", fill = "orange", alpha = 0.2) +
+  # geom_sf(data = areas, col = "black", fill = "black", alpha = 0.2) +
+  geom_sf_pattern(data = areas,
+    aes(pattern = as.factor(ID), pattern_spacing = as.factor(ID), pattern_angle = as.factor(ID))
+    , col = "orange"
+    , fill = NA
+    , pattern_color = "orange"
+    , pattern_fill = NA
+    , pattern_density = 0.01
+    , pattern_spacing = 0.01
+    , pattern_size = 0.2
+  ) +
+  geom_sf(data = fault, col = "gray30", lty = 2) +
   geom_point(
       data        = vills
     , mapping     = aes(x = x, y = y, size = place)
@@ -169,8 +181,8 @@ df <- prot[1:5, ]
 df <- dplyr::select(df, geometry)
 df <- cbind(
     df
-  , Name  = factor(c("National Park", "Forest Reserve", "Protected", "Major Waters", "Source Area")
-    , levels = c("National Park", "Forest Reserve", "Protected", "Major Waters", "Source Area"))
+  , Name  = factor(c("National Parks", "Forest Reserves", "Protected", "Major Waters", "Source Areas")
+    , levels = c("National Parks", "Forest Reserves", "Protected", "Major Waters", "Source Areas"))
   , Color = c(rev(brewer.pal(n = 3, name = "Greens")), "cornflowerblue", "orange")
   , Alpha = c(0.7, 0.7, 0.7, 1, 0.2)
 )

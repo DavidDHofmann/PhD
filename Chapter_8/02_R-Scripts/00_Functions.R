@@ -481,7 +481,7 @@ rasterizeSims <- function(
     simulations$FloodLevel == flood,
   ]
   if (!is.null(area)) {
-    sub <- sub[sub$Area %in% area, ]
+    sub <- sub[sub$SourceArea %in% area, ]
   }
 
   # Make sure raster values are all 0
