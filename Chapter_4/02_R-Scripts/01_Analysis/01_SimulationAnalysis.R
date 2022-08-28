@@ -37,15 +37,16 @@ source("02_R-Scripts/00_Functions.R")
 ################################################################################
 #### Simulation Parameters
 ################################################################################
-n         <- 300                                                          # Resolution of the covariate layers
-n_rsteps  <- 10                                                           # Number of random steps to be generated
-n_steps   <- 100                                                          # Number of consecutive steps to be simulated
-n_inds    <- 100                                                          # How many individuals to simulate for each treatment
-formula   <- ~ forest + elev + dist                                       # Formula used to predict step-selection scores
-prefs     <- c(-1, 0.5, -20)                                              # Preferences of the simulated individuals
-sl_dist   <- list(name = "gamma", params = list(shape = 3, scale = 1))    # Step-length parameters
-ta_dist   <- list(name = "vonmises", params = list(kappa = 0.5, mu = 0))  # Turning-angle parameters
-stop      <- F                                                            # Should the simulation terminate at boundaries?
+n            <- 300                                                          # Resolution of the covariate layers
+n_rsteps     <- 10                                                           # Number of random steps to be generated
+n_steps      <- 100                                                          # Number of consecutive steps to be simulated
+n_inds       <- 100                                                          # How many individuals to simulate for each treatment
+formula      <- ~ forest + elev + dist                                       # Formula used to predict step-selection scores
+prefs        <- c(-1, 0.5, -20)                                              # Preferences of the simulated individuals
+sl_dist      <- list(name = "gamma", params = list(shape = 3, scale = 1))    # Step-length parameters
+ta_dist      <- list(name = "vonmises", params = list(kappa = 0.5, mu = 0))  # Turning-angle parameters
+stop         <- F                                                            # Should the simulation terminate at boundaries?
+maxattempts  <- 5                                                            # Maximum number of times to repeat an analysis when it fails to converge
 
 # Let's specify the extent on which animals are allowed to move
 ext <- extent(0, n, 0, n)
@@ -285,7 +286,7 @@ computeMetrics <- function(data) {
 
 # Function to fit step length and turning angle distributions. Statically, as
 # well as dynamically to different step durations
-fitDists <- function(data, replicate = 100, max_forgiveness = 5, dynamic = T) {
+fitDists <- function(data, replicate = 100, max_forgiveness = 5, dynamic = T, multicore = F) {
 
   # Fit distributions to a step duration of one
   metrics <- data %>%
@@ -301,31 +302,59 @@ fitDists <- function(data, replicate = 100, max_forgiveness = 5, dynamic = T) {
 
   # Fit distributions to various step durations
   if (dynamic) {
-    dists_dynamic <- lapply(1:replicate, function(x) {
-      params <- data %>%
-        rarifyData(missingness = 0.5) %>%
-        computeBursts(forgiveness = max_forgiveness) %>%
-        computeMetrics() %>%
-        dplyr::select(duration, sl, relta) %>%
-        subset(duration <= max_forgiveness) %>%
-        group_by(duration) %>%
-        nest() %>%
-        mutate(DistParams = map(data, function(y) {
-          fit_sl <- fit_distr(y$sl, "gamma")
-          fit_ta <- fit_distr(y$relta, "vonmises")
-          fit <- data.frame(
-              shape = fit_sl$params$shape
-            , scale = fit_sl$params$scale
-            , kappa = fit_ta$params$kappa
-            , mu    = fit_ta$params$mu
-          )
-          return(fit)
-        })) %>%
-        dplyr::select(duration, DistParams) %>%
-        unnest(DistParams) %>%
-        arrange(duration)
-      return(params)
-    }) %>% do.call(rbind, .)
+    if (multicore) {
+      dists_dynamic <- pbmclapply(1:replicate, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
+        params <- data %>%
+          rarifyData(missingness = 0.5) %>%
+          computeBursts(forgiveness = max_forgiveness) %>%
+          computeMetrics() %>%
+          dplyr::select(duration, sl, relta) %>%
+          subset(duration <= max_forgiveness) %>%
+          group_by(duration) %>%
+          nest() %>%
+          mutate(DistParams = map(data, function(y) {
+            fit_sl <- fit_distr(y$sl, "gamma")
+            fit_ta <- fit_distr(y$relta, "vonmises")
+            fit <- data.frame(
+                shape = fit_sl$params$shape
+              , scale = fit_sl$params$scale
+              , kappa = fit_ta$params$kappa
+              , mu    = fit_ta$params$mu
+            )
+            return(fit)
+          })) %>%
+          dplyr::select(duration, DistParams) %>%
+          unnest(DistParams) %>%
+          arrange(duration)
+        return(params)
+      }) %>% do.call(rbind, .)
+    } else {
+      dists_dynamic <- lapply(1:replicate, function(x) {
+        params <- data %>%
+          rarifyData(missingness = 0.5) %>%
+          computeBursts(forgiveness = max_forgiveness) %>%
+          computeMetrics() %>%
+          dplyr::select(duration, sl, relta) %>%
+          subset(duration <= max_forgiveness) %>%
+          group_by(duration) %>%
+          nest() %>%
+          mutate(DistParams = map(data, function(y) {
+            fit_sl <- fit_distr(y$sl, "gamma")
+            fit_ta <- fit_distr(y$relta, "vonmises")
+            fit <- data.frame(
+                shape = fit_sl$params$shape
+              , scale = fit_sl$params$scale
+              , kappa = fit_ta$params$kappa
+              , mu    = fit_ta$params$mu
+            )
+            return(fit)
+          })) %>%
+          dplyr::select(duration, DistParams) %>%
+          unnest(DistParams) %>%
+          arrange(duration)
+        return(params)
+      }) %>% do.call(rbind, .)
+    }
 
     # Summarize values
     dists_means <- dists_dynamic %>%
@@ -348,7 +377,7 @@ fitDists <- function(data, replicate = 100, max_forgiveness = 5, dynamic = T) {
           sl = select(dists_means, duration, shape, scale, shape_sd, scale_sd)
         , ta = select(dists_means, duration, kappa, mu, kappa_sd, mu_sd)
       )
-    }
+  }
 
   # Return the distributions
   return(dists)
@@ -643,77 +672,80 @@ runModel <- function(data, approach) {
   return(coefs)
 }
 
-################################################################################
-#### Ensure All Functions Work as Intended
-################################################################################
-# Simulate covariates and across the layers
-cov <- simCovars(autocorr_range = 50, proportion_forest = 0.5)
-obs <- simMove(cov, n_id = 10, multicore = T)
-as.data.frame(cov, xy = T) %>%
-  gather(key = covariate, value = value, 3:5) %>%
-  ggplot(aes(x = x, y = y, fill = value)) +
-    geom_raster() +
-    geom_sf(data = st_as_sf(ext2), inherit.aes = F, fill = NA, col = "white", lty = 2) +
-    geom_path(data = obs, aes(x = x, y = y, col = as.factor(ID)), inherit.aes = F) +
-    scale_fill_viridis_c(option = "viridis") +
-    coord_sf() +
-    theme_minimal() +
-    facet_wrap("covariate") +
-    theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
-
-# Rarify data
-obs_missing <- rarifyData(obs, missingness = 0.2, n_id = 9)
-
-# Try to impute missing fixes
-obs_imputed <- imputeFixes(obs_missing)
-ggplot(obs_imputed, aes(x = x, y = y, group = ID, col = imputed)) +
-  geom_path(lwd = 0.2) +
-  geom_point(size = 0.2) +
-  coord_sf() +
-  theme_minimal() +
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
-
-# Compute bursts from the (non-imputed) data -> Try with different forgiveness
-# values!
-obs_bursted <- computeBursts(obs_missing, forgiveness = 2)
-ggplot(obs_bursted, aes(x = x, y = y, group = ID, col = as.factor(burst))) +
-  geom_path(lwd = 0.2) +
-  geom_point(size = 0.2) +
-  coord_sf() +
-  theme_minimal() +
-  theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
-
-# Fit step- and turning-angle distributions to original and rarified data
-fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = F)
-fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = T)
-
-# Compute step metrics
-obs_metrics <- computeMetrics(obs_bursted)
-
-# Generate random steps
-obs_stepsel <- computeSSF(obs_metrics, n_rsteps = 10, approach = "uncorrected", dists = fit_distris)
-
-# Extract covariates
-obs_covaris <- computeCovars(obs_stepsel, cov, multicore = T)
-
-# Run the model
-mod <- runModel(obs_covaris, approach = "uncorrected")
-mod
-
-# Clear up space and remov unused objects
-rm(
-    cov
-  , obs
-  , mod
-  , obs_missing
-  , obs_imputed
-  , obs_bursted
-  , obs_metrics
-  , obs_stepsel
-  , obs_covaris
-  , fit_distris
-)
-gc()
+# ################################################################################
+# #### Ensure All Functions Work as Intended
+# ################################################################################
+# # Simulate covariates and across the layers
+# cov <- simCovars(autocorr_range = 50, proportion_forest = 0.5)
+# obs <- simMove(cov, n_id = 10, multicore = T)
+# as.data.frame(cov, xy = T) %>%
+#   gather(key = covariate, value = value, 3:5) %>%
+#   ggplot(aes(x = x, y = y, fill = value)) +
+#     geom_raster() +
+#     geom_sf(data = st_as_sf(ext2), inherit.aes = F, fill = NA, col = "white", lty = 2) +
+#     geom_path(data = obs, aes(x = x, y = y, col = as.factor(ID)), inherit.aes = F) +
+#     scale_fill_viridis_c(option = "viridis") +
+#     coord_sf() +
+#     theme_minimal() +
+#     facet_wrap("covariate") +
+#     theme(
+#         axis.title.y    = element_text(angle = 0, vjust = 0.5)
+#       , legend.position = "none"
+#     )
+#
+# # Rarify data
+# obs_missing <- rarifyData(obs, missingness = 0.2, n_id = 9)
+#
+# # Try to impute missing fixes
+# obs_imputed <- imputeFixes(obs_missing)
+# ggplot(obs_imputed, aes(x = x, y = y, group = ID, col = imputed)) +
+#   geom_path(lwd = 0.2) +
+#   geom_point(size = 0.2) +
+#   coord_sf() +
+#   theme_minimal() +
+#   theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+#
+# # Compute bursts from the (non-imputed) data -> Try with different forgiveness
+# # values!
+# obs_bursted <- computeBursts(obs_missing, forgiveness = 2)
+# ggplot(obs_bursted, aes(x = x, y = y, group = ID, col = as.factor(burst))) +
+#   geom_path(lwd = 0.2) +
+#   geom_point(size = 0.2) +
+#   coord_sf() +
+#   theme_minimal() +
+#   theme(axis.title.y = element_text(angle = 0, vjust = 0.5))
+#
+# # Fit step- and turning-angle distributions to original and rarified data
+# fit_distris <- fitDists(obs_bursted, max_forgiveness = 2, dynamic = F)
+# fit_distris <- fitDists(obs_bursted, replicate = 10, max_forgiveness = 2, dynamic = T)
+#
+# # Compute step metrics
+# obs_metrics <- computeMetrics(obs_bursted)
+#
+# # Generate random steps
+# obs_stepsel <- computeSSF(obs_metrics, n_rsteps = 10, approach = "uncorrected", dists = fit_distris)
+#
+# # Extract covariates
+# obs_covaris <- computeCovars(obs_stepsel, cov, multicore = T)
+#
+# # Run the model
+# mod <- runModel(obs_covaris, approach = "uncorrected")
+# mod
+#
+# # Clear up space and remov unused objects
+# rm(
+#     cov
+#   , obs
+#   , mod
+#   , obs_missing
+#   , obs_imputed
+#   , obs_bursted
+#   , obs_metrics
+#   , obs_stepsel
+#   , obs_covaris
+#   , fit_distris
+# )
+# gc()
 
 ################################################################################
 #### Proper Analysis
@@ -727,15 +759,14 @@ dat <- expand_grid(
   , Approach       = c("uncorrected", "naive", "dynamic", "model", "multistep", "imputed") # Which approach to use to analyse the data
 )
 
-# So that we can independently store the results from different iterations,
-# let's prepare a filename for each row of the design table
+# Nest by replicate and autocorrelation range
+dat <- nest(dat, Data = -c(Replicate, AutocorrRange))
+
+# Let's prepare a filename for each row of the (nested) design table
 dat$Filename <- paste0(
     "03_Data/ModelResults/"
-  , "M", sprintf("%02d", as.integer(dat$Missingness * 100)), "_"
-  , "F", sprintf("%02d", dat$Forgiveness), "_"
   , "A", sprintf("%02d", dat$AutocorrRange), "_"
-  , "R", sprintf("%03d", dat$Replicate), "_"
-  , dat$Approach
+  , "R", sprintf("%03d", dat$Replicate)
   , ".rds"
 )
 
@@ -751,53 +782,91 @@ dat <- dat[sample(nrow(dat)), ]
 # Subset to rows that haven't been run yet
 dat_sub <- subset(dat, !file.exists(Filename))
 
-# Go through the design and run step selection analysis with the specified
-# parameters
-pbmclapply(
-  # dat$Coefs <- lapply(
-    X                  = 1:nrow(dat_sub)
-  , ignore.interactive = T
-  , mc.cores           = detectCores() - 1
-  , FUN                = function(x) {
+# Loop through the design and run the simulations
+dat_sub$Results <- lapply(1:nrow(dat_sub), function(x) {
 
-  # Extract important information from dataframe
-  miss <- dat_sub$Missingness[[x]]
-  forg <- dat_sub$Forgiveness[[x]]
-  auto <- dat_sub$AutocorrRange[[x]]
-  appr <- dat_sub$Approach[[x]]
-  file <- dat_sub$Filename[[x]]
+  # Extract the authocorrelation range and the filename
+  auto <- dat_sub$AutocorrRange[x]
+  file <- dat_sub$Filename[x]
+  desi <- dat_sub$Data[[x]]
 
-  # Simulate covariates and rarified movement
+  # Simulate covariates and movement
+  cat("Simulating virtual landscape and dpsersal movements...\n")
   cov <- simCovars(autocorr_range = auto, proportion_forest = 0.5)
-  obs <- simMove(covars = cov, n_id = n_inds, multicore = F)
-  obs <- rarifyData(obs, missingness = miss, n_id = NULL)
+  obs <- simMove(covars = cov, n_id = n_inds, multicore = T)
 
-  # Fit step length distributions
-  if (appr == "dynamic" | appr == "model") {
-      dis <- fitDists(obs, replicate = 10, max_forgiveness = forg, dynamic = T)
-    } else {
-      dis <- fitDists(obs, replicate = 0, max_forgiveness = forg, dynamic = F)
-  }
+  # Fitting step length and turning angle distributions (statically and
+  # dynamically)
+  cat("Fitting step length and turning angle distributions...\n")
+  dis <- fitDists(obs
+    , replicate       = 10
+    , max_forgiveness = max(desi$Forgiveness)
+    , dynamic         = T
+    , multicore       = T
+  )
 
-  # If required, impute fixes
-  if (appr == "imputed") {
-    obs <- imputeFixes(obs)
-  }
+  # Analyse the data using the various approaches
+  desi$Coefs <- pbmclapply(
+      X                  = 1:nrow(desi)
+    , ignore.interactive = T
+    , mc.cores           = detectCores() - 1
+    , FUN                = function(y) {
 
-  # Compute bursts and on those the relevant step metrics
-  obs <- computeBursts(obs, forgiveness = forg)
-  obs <- computeMetrics(obs)
+    # Extract relevant design parameters
+    miss <- desi$Missingness[[y]]
+    forg <- desi$Forgiveness[[y]]
+    appr <- desi$Approach[[y]]
 
-  # Generate random steps
-  obs <- computeSSF(obs, n_rsteps = n_rsteps, approach = appr, dists = dis)
+    # The model may not converge. Repeat the analysis if this is the case
+    attempts <- 1
+    coefs <- NA
+    while (!is.data.frame(coefs) & attempts <= maxattempts) {
 
-  # Extract covariates
-  obs_covars <- computeCovars(obs, cov, multicore = F)
+      # Rareify the data
+      obs_sub <- rarifyData(obs, missingness = miss, n_id = NULL)
 
-  # Run the model
-  coefs <- runModel(obs_covars, approach = appr)
+      # If required, impute fixes
+      if (appr == "imputed") {
+        obs_sub <- imputeFixes(obs_sub)
+      }
+
+      # Compute bursts and on those the relevant step metrics
+      obs_sub <- computeBursts(obs_sub, forgiveness = forg)
+      obs_sub <- computeMetrics(obs_sub)
+
+      # Generate random steps
+      obs_ssf <- computeSSF(obs_sub
+        , n_rsteps = n_rsteps
+        , approach = appr
+        , dists    = dis
+      )
+
+      # Extract covariates
+      obs_ssf <- computeCovars(obs_ssf
+        , covars    = cov
+        , multicore = F
+      )
+
+      # Run the model
+      coefs <- tryCatch(runModel(obs_ssf, approach = appr)
+        , warning = function(w) {return (NA)}
+        , error   = function(e) {return (NA)}
+      )
+
+      # Update number of attempts
+      attempts <- attempts + 1
+    }
+
+    # Return the results
+    return(coefs)
+  })
+
+  # Unnest the design
+  desi <- unnest(desi, Coefs)
+
+  # Write results to file
+  write_rds(desi, file)
 
   # Store results to file
-  write_rds(coefs, file)
   return(NULL)
 })
