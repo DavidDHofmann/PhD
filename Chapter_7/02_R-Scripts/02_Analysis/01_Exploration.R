@@ -18,7 +18,7 @@ library(pracma)      # To identify peaks
 library(broom)       # To clean model summary
 
 # Reload cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariates.csv")
+dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
 print(names(dat))
 
 # How many datapoints for residents and dispersers are there?
@@ -47,6 +47,42 @@ dat %>%
   theme_minimal() +
   theme(axis.text.x = element_text(angle = 45))
 
+# Compute summary
+dat %>%
+  count(DogID) %>%
+  summarize(
+      MeanNumberFixes   = mean(`n`)
+    , SDNumberFixes     = sd(`n`)
+    , MedianNumberFixes = median(`n`)
+    , IQRNumberFixes    = IQR(`n`)
+  )
+
+# How active where the dogs on average?
+dat %>%
+  group_by(DogID) %>%
+  summarize(
+      MeanActX   = mean(ActX)
+    , SDActX     = sd(ActX)
+    , MedianActX = median(ActX)
+    , IQRActX    = IQR(ActX)
+  )
+
+# Aggregate activity by day and see if there are differences between the dogs
+dat %>%
+  group_by(DogID, Date) %>%
+  summarize(TotalActivity = sum(ActX), .groups = "drop") %>%
+  ggplot(aes(x = DogID, y = TotalActivity, fill = DogID)) +
+    geom_boxplot() +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 90), legend.position = "none")
+
+# Aggregate activity by hour of the day
+dat %>%
+  ggplot(aes(x = as.factor(hour(Timestamp)), y = ActX)) +
+    geom_boxplot() +
+    theme_minimal() +
+    facet_wrap(~ Season, nrow = 2)
+
 # Remove undesired columns
 dat <- select(dat, -c(DOP, minMoonPhase, meanMoonPhase, maxMoonPhase))
 
@@ -63,8 +99,8 @@ with(dat, expr = {
   hist(CloudCover, col = "cornflowerblue", border = "white", main = "")
 })
 
-# We will clearly have to aggregate data at some point! Otherwise the
-# distributions will be very nasty to work with.
+# We will clearly have to aggregate or transform data at some point! Otherwise
+# the distributions will be very nasty to work with.
 
 ################################################################################
 #### Active vs Inactive

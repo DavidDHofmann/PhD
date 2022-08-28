@@ -1,5 +1,5 @@
 ################################################################################
-#### Analysis of Average Activity
+#### Analysis of Average Activity and Time of Starting Moving
 ################################################################################
 # Description: Analysis of average activity at different times of the day
 
@@ -20,8 +20,8 @@ library(broom)       # To clean model outputs
 source("02_R-Scripts/00_Functions.R")
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataWithCovariatesAggregated.csv")
-dat$NFixes <- NULL
+dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
+dat$NFixes      <- NULL
 
 # For now, ignore dispersers
 dat <- subset(dat, State == "Resident")
@@ -47,25 +47,98 @@ dat <- mutate(dat
   , maxMoonDelay           = normalize(maxMoonDelay)
 )
 
-# Nest data by individual and state
+# Nest data by individual and tod
 dat_nested <- dat %>% nest(Data = -c(DogID, ToD))
 
 # Only work with rows for which there are at least 50 datapoints
 dat_nested$N <- sapply(dat_nested$Data, function(x) {nrow(x)})
 dat_nested <- subset(dat_nested, N >= 50)
 
+################################################################################
+#### Exploratory
+################################################################################
+# How does activity depend on moonlight intensity?
+ggplot(dat, aes(x = maxMoonlightIntensity, y = meanActX)) +
+  geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2))
+
+# How does activity depend on precipitation?
+ggplot(dat, aes(x = maxPrecipitation, y = meanActX)) +
+  geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2))
+
+# How does activity depend on rain (binary)?
+ggplot(dat, aes(x = as.factor(Rain), y = meanActX)) +
+  geom_boxplot() +
+  facet_wrap(~ ToD) +
+  theme_minimal()
+
+# Is there an interaction between the two?
+ggplot(dat, aes(x = maxPrecipitation, y = meanActX, col = as.factor(Rain))) +
+  geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2))
+
+# How does activity depend on temperature?
+ggplot(dat, aes(x = maxTemperature, y = meanActX)) +
+  geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2))
+
+# How does activity depend on cloud cover?
+ggplot(dat, aes(x = meanCloudCover, y = meanActX)) +
+  geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth()
+
+# How does activity depend on cloud cover in the following night?
+ggplot(dat, aes(x = meanCloudCoverNight, y = meanActX)) +
+  geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth()
+
+# Is there an interaction between cloud cover and moonlight intensity?
+ggplot(dat, aes(x = maxMoonlightIntensity, y = meanActX, col = Cloudy)) +
+  # geom_point() +
+  facet_wrap(~ ToD) +
+  theme_minimal() +
+  geom_smooth()
+
+# How does activity depend on the level of activity in the previous xx hours?
+dat %>%
+  select(meanActX, ToD, meanActX6:meanActX24) %>%
+  pivot_longer(meanActX6:meanActX24) %>%
+  ggplot(aes(x = value, y = meanActX, col = name)) +
+    # geom_point() +
+    facet_wrap(~ ToD) +
+    theme_minimal() +
+    geom_smooth()
+
+################################################################################
+#### Analysis I - Average Activity by Time of the Day
+################################################################################
 # Decide on a model formula
 formula <- quote(meanActX ~
     + maxMoonlightIntensity
-    + Rain
+    + I(maxMoonlightIntensity ** 2)
+    # + Rain
     # + maxPrecipitation
     # + Rain:maxPrecipitation
     + maxTemperature
+    # + I(maxTemperature ** 2)
     # + meanCloudCover
-    # + meanCloudCoverNight
-    # + maxMoonlightIntensity:meanCloudCoverNight
+    + meanCloudCoverNight
+    + maxMoonlightIntensity:meanCloudCoverNight
     + maxMoonlightIntensity:maxMoonDelay
-    + meanActX24
+    + meanActX6
     # + I(maxPrecipitation ** 2)
     # + I(meanTemperature ** 2)
 )
@@ -80,104 +153,87 @@ dat_nested$ModelCoefficients <- lapply(dat_nested$Model, function(x) {
   broom::tidy(x)
 })
 
-# Visualize
-dat_nested %>%
+# Unnest
+coefs <- dat_nested %>%
   select(DogID, ToD, ModelCoefficients) %>%
-  unnest(ModelCoefficients) %>%
-  ggplot(aes(x = ToD, y = estimate, col = DogID)) +
-    geom_hline(yintercept = 0, lty = 2) +
-    geom_point(position = position_jitter(width = 0.2)) +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90), legend.position = "none") +
-    facet_wrap(~ term, scale = "free") +
-    scale_color_viridis_d()
+  unnest(ModelCoefficients)
 
+# Compute weight for each coefficient
+coefs_means_weighted <- coefs %>%
+  nest(Coefs = -c(ToD, term)) %>%
+  mutate(Coefs = map(Coefs, function(x) {
+    be <- x$estimate
+    se <- x$std.error
+    we <- (1 / (se ** 2)) / sum(1 / (se ** 2))
+    be_mean <- sum(we * be)
+    se_mean <- sqrt(sum(we * (be - be_mean) ** 2) / (length(be) - 1))
+    result <- tibble(
+        estimate  = be_mean
+      , std.error = se_mean
+      , LWR       = estimate - 1.96 * std.error
+      , UPR       = estimate + 1.96 * std.error
+    )
+    return(result)
+  })) %>% unnest(Coefs)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Visualize how the mean activity depends on moonlight intensity
-ggplot(dat, aes(x = maxMoonlightIntensity, y = meanActX)) +
-  geom_point(alpha = 0.2) +
-  theme_minimal() +
-  facet_wrap(~ State + ToD) +
-  stat_smooth()
-
-# Let's be a bit more elaborate and run the regression for each individual
-# separately
-mods <- dat %>%
-  nest(Data = -c(ToD, DogID, State)) %>%
-  mutate(Model = map(Data, function(x) {
-    lm(meanActX ~ maxMoonlightIntensity, data = x)
-  })) %>%
-  mutate(Coefs = map(Model, function(x) {
-    tidy(x)
-  }))
-
-# Compute mean and se of the model estimates
-coefs_means <- mods %>%
-  select(-c(Data, Model)) %>%
-  unnest(Coefs) %>%
-  group_by(ToD, State, term) %>%
+# Compute mean and se of the model estimates (unweighted)
+coefs_means_unweighted <- coefs %>%
+  group_by(ToD, term) %>%
   summarize(
-      MeanEstimate = mean(estimate)
-    , SE           = sd(estimate) / sqrt(n())
-    , LWR          = MeanEstimate - qt(1 - 0.05 / 2, n() - 1) * SE  # TAKE A LOOK AT MURTAUGH AGAIN
-    , UPR          = MeanEstimate + qt(1 - 0.05 / 2, n() - 1) * SE  # TAKE A LOOK AT MURTAUGH AGAIN
-    , .groups      = "drop"
+      estimate_mean = mean(estimate)
+    , estimate_sd   = sd(estimate) / sqrt(n())
+    , LWR           = estimate_mean - qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
+    , UPR           = estimate_mean + qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
+    , .groups       = "drop"
   )
 
-# Unnest the coefficients and plot them
-mods %>%
-  select(-c(Data, Model)) %>%
-  unnest(Coefs) %>%
+# Visualize
+coefs %>%
   ggplot(aes(x = ToD, y = estimate, col = DogID)) +
+    geom_hline(yintercept = 0, lty = 2) +
+    geom_jitter(width = 0.1, alpha = 0.8) +
     geom_point(
-        data        = coefs_means
-      , mapping     = aes(x = ToD, y = MeanEstimate)
+        data        = coefs_means_unweighted
+      , mapping     = aes(x = ToD, y = estimate_mean)
       , inherit.aes = F
-      , size        = 4
+      , size        = 2
     ) +
     geom_errorbar(
-        data        = coefs_means
+        data        = coefs_means_unweighted
       , mapping     = aes(x = ToD, ymin = LWR, ymax = UPR)
       , inherit.aes = F
-      , width       = 0.3
-      , lwd         = 1.5
+      , width       = 0.2
+      , lwd         = 1
     ) +
     # geom_violin(col = "black") + # Could also use a violin plot
-    geom_jitter(width = 0.1) +
-    facet_wrap(~ State + term, scales = "free") +
+    facet_wrap(~ term, scales = "free") +
     theme_minimal() +
     scale_color_viridis_d() +
     theme(legend.position = "none")
 
-# Is there an issue of correlation of the residuals?
-mods <- mods %>%
-  mutate(Residuals = map(Model, function(x) {
-    resids <- residuals(x)
-    return(resids)
-  })) %>%
-  mutate(ACF = map(Residuals, function(x) {
-    acfvalues <- acf(x, plot = F)
-    return(acfvalues)
-  }))
+################################################################################
+#### Analysis II - Time when Becoming Moving
+################################################################################
+# For this, we'll only work with "evening" data
+evening <- subset(dat, ToD == "Evening")
 
-# Let's put all residuals together and plot one single acf
-mods %>%
-  select(Residuals) %>%
-  unnest(Residuals) %>%
-  pull(Residuals) %>%
-  acf()
+# Compute time of the days a regular seconds since midnight
+evening$StartMovingNumeric <- as.numeric(as_hms(evening$StartMoving))
+
+# Some exploratory plots
+ggplot(evening, aes(x = maxMoonlightIntensity, y = StartMovingNumeric)) +
+  geom_point() +
+  theme_minimal() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2))
+
+# How does the time of becoming active change throghout the year?
+ggplot(evening, aes(x = yday(Date), y = as_hms(evening$StartMoving))) +
+  geom_point() +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2))
+
+# Some exploratory plots
+ggplot(evening, aes(x = maxMoonlightIntensity, y = as.numeric(as_hms(StartMoving)))) +
+  geom_point(aes(col = maxMoonDelay)) +
+  theme_minimal() +
+  geom_smooth(method = "lm") +
+  scale_color_viridis_c(option = "magma")
