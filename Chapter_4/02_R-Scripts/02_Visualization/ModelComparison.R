@@ -17,7 +17,7 @@ setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
 source("02_R-Scripts/00_Functions.R")
 
 # Laod all data
-dat <- "03_Data/03_Results/SimulationDesign.rds" %>%
+dat <- "03_Data/SimulationDesign.rds" %>%
   read_rds() %>%
   mutate(Coefs = map(Filename, read_rds)) %>%
   unnest(Coefs)
