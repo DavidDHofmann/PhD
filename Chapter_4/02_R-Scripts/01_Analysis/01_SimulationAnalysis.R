@@ -755,7 +755,7 @@ dat <- expand_grid(
     Missingness    = seq(0, 0.5, by = 0.1)                                                 # Fraction of the fixes that is removed
   , Forgiveness    = 1:5                                                                   # Allowed step-duration
   , AutocorrRange  = c(10, 50, 100)                                                        # Autocorrelation range in the covariates
-  , Replicate      = 1:10                                                                 # Number of replicates for each combination
+  , Replicate      = 1:30                                                                 # Number of replicates for each combination
   , Approach       = c("uncorrected", "naive", "dynamic", "model", "multistep", "imputed") # Which approach to use to analyse the data
 )
 
@@ -783,7 +783,10 @@ dat <- dat[sample(nrow(dat)), ]
 dat_sub <- subset(dat, !file.exists(Filename))
 
 # Loop through the design and run the simulations
-dat_sub$Results <- lapply(1:nrow(dat_sub), function(x) {
+lapply(1:nrow(dat_sub), function(x) {
+
+  # Print progress
+  cat("Iteration ", x, "out of", nrow(dat_sub), "\n")
 
   # Extract the authocorrelation range and the filename
   auto <- dat_sub$AutocorrRange[x]
@@ -791,7 +794,7 @@ dat_sub$Results <- lapply(1:nrow(dat_sub), function(x) {
   desi <- dat_sub$Data[[x]]
 
   # Simulate covariates and movement
-  cat("Simulating virtual landscape and dpsersal movements...\n")
+  cat("Simulating virtual landscape and dispersal movements...\n")
   cov <- simCovars(autocorr_range = auto, proportion_forest = 0.5)
   obs <- simMove(covars = cov, n_id = n_inds, multicore = T)
 
@@ -806,6 +809,7 @@ dat_sub$Results <- lapply(1:nrow(dat_sub), function(x) {
   )
 
   # Analyse the data using the various approaches
+  cat("Running analyses using different approaches...\n")
   desi$Coefs <- pbmclapply(
       X                  = 1:nrow(desi)
     , ignore.interactive = T
@@ -870,3 +874,10 @@ dat_sub$Results <- lapply(1:nrow(dat_sub), function(x) {
   # Store results to file
   return(NULL)
 })
+
+# Reload the results
+dat_sub <- mutate(dat_sub, Results = map(Filename, read_rds))
+unnest(dat_sub, Results)
+dat_sub %>%
+  select(-Data) %>%
+  unnest(Results)

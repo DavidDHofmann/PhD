@@ -42,7 +42,6 @@ lik <- function(theta_star, x) {
   # Distributional parameters for the two states
   shape <- theta[3:4]
   scale <- theta[5:6]
-  lambd <- theta[7:8]
 
   # Compute probabilities outside the loop -> Maybe this needs to be inside the
   # loop for the bayesian approach
