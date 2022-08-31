@@ -32,17 +32,33 @@ maps <- subset(maps, Steps %in% c(500, 1000, 2000))
 area  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads <- read_sf("03_Data/02_CleanData/Roads.shp")
 afric <- read_sf("03_Data/02_CleanData/Africa.shp")
+vills <- read_sf("03_Data/02_CleanData/Villages.shp")
+vills <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
+  rename(x = X, y = Y)
 
 # Reference raster
 r <- rast("03_Data/02_CleanData/ReferenceRaster.tif")
 # r <- crop(r, extent(22, 25, -20.5, -18.5))
 
+# Create country labels
+labels_countries <- data.frame(
+    x     = c(25.5, 26, 25.7, 21.5, 23.5)
+  , y     = c(-19.3, -18.2, -17.6, -17.6, -17.8)
+  , Label = c("BOTSWANA", "ZIMBABWE", "ZAMBIA", "ANGOLA", "NAMIBIA")
+)
+
 # Create labels for some geographical landmarks
 labels_waters <- data.frame(
     x     = c(22.6, 23.7, 27.1, 25.6)
-  , y     = c(-19, -18.2, -17.5, -20.7)
+  , y     = c(-19.1, -18.2, -17.5, -20.7)
   , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
 )
+
+# # Apply focal filter to buffer/smooth maps
+# maps <- mutate(maps, betweenness = map(betweenness, function(x) {
+#   x <- focal(x, w = matrix(1, 3, 3), fun = mean)
+#   return(x)
+# }))
 
 # Convert maps to dataframes
 maps <- maps %>%
@@ -64,7 +80,7 @@ p1 <- ggplot() +
       data    = maps
     , mapping = aes(x = x, y = y, fill = Betweenness)
   ) +
-  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
+  geom_sf(data = roads, col = "gray50", lwd = 0.1) +
   geom_sf(
       data        = area
     , col         = "white"
@@ -72,16 +88,15 @@ p1 <- ggplot() +
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
-    , alpha       = 0.6
+    , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
+  geom_sf(data = afric, lwd = 0.4, col = "white", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = ID)
     , size          = 1.5
     , check_overlap = T
     , col           = "white"
-    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
   ) +
   geom_text(
       data     = labels_waters
@@ -89,6 +104,13 @@ p1 <- ggplot() +
     , col      = "gray50"
     , fontface = 3
     , size     = 1.3
+  ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "white"
+    , size     = 2
+    , fontface = 2
   ) +
   scale_fill_gradientn(
       colours = viridis::magma(100)
@@ -151,24 +173,29 @@ p2 <- ggplot() +
       data    = maps_sub
     , mapping = aes(x = x, y = y, fill = Betweenness)
   ) +
-  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
+  geom_sf(data = roads, col = "gray50", lwd = 0.1) +
+  geom_point(
+      data        = vills
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray30"
+    , shape       = 15
+    , show.legend = F
+  ) +
   geom_sf(
       data        = area
     , col         = "white"
-    , fill        = NA
+    , fill        = "white"
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
-    , alpha       = 0.6
+    , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
+  geom_sf(data = afric, lwd = 0.4, col = "white", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = ID)
     , size          = 1.5
-    , check_overlap = T
     , col           = "white"
-    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
   ) +
   geom_text(
       data     = labels_waters
@@ -177,10 +204,26 @@ p2 <- ggplot() +
     , fontface = 3
     , size     = 1.3
   ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "white"
+    , size     = 2
+    , fontface = 2
+  ) +
+  geom_text(
+      data     = subset(vills, place == "City")
+    , mapping  = aes(x = x, y = y, label = name)
+    , col      = "gray30"
+    , fontface = 3
+    , size     = 2
+    , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
   scale_fill_gradientn(
       colours = viridis::magma(100)
     , labels  = function(x){format(x, big.mark = "'")}
-    # , trans   = "sqrt"
+    , trans   = "sqrt"
     , guide   = guide_colorbar(
       , title          = "Betweenness"
       , show.limits    = T

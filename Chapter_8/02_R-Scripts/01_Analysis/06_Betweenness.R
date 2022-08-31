@@ -49,23 +49,6 @@ betweennessMap <- function(network = NULL, raster = NULL, tempfile = F) {
     return(betweenness)
 }
 
-# Prepare design through which we want to loop
-design <- expand_grid(
-    Steps       = c(500, 1000, 2000)
-  , FloodLevel  = unique(sims$FloodLevel)
-)
-
-# Add a column for temporary but unique filename. Make sure the tempdir has
-# plenty of storage.
-design$filename <- tempfile(
-    pattern = paste0(
-        "Steps", design$Steps
-      , "_FloodLevel", design$FloodLevel
-      , "_"
-    )
-  , fileext = ".tif"
-)
-
 # Load the reference raster
 r <- raster("03_Data/02_CleanData/ReferenceRaster.tif")
 
@@ -101,9 +84,39 @@ visits <- data.frame(
   , r          = raster::extract(r, sims)
 )
 
-# Remove simulations
-rm(sims)
-gc()
+# # Remove simulations
+# rm(sims)
+# gc()
+
+################################################################################
+#### Individual Betweenness Maps
+################################################################################
+# Prepare design through which we want to loop
+design <- expand_grid(
+    Steps      = c(500, 1000, 2000)
+  , SourceArea = unique(sims$SourceArea)
+  , FloodLevel = unique(sims$FloodLevel)
+)
+
+################################################################################
+#### Combined Betweenness Maps
+################################################################################
+# Prepare design through which we want to loop
+design <- expand_grid(
+    Steps       = c(500, 1000, 2000)
+  , FloodLevel  = unique(sims$FloodLevel)
+)
+
+# Add a column for temporary but unique filename. Make sure the tempdir has
+# plenty of storage.
+design$filename <- tempfile(
+    pattern = paste0(
+        "Steps", design$Steps
+      , "_FloodLevel", design$FloodLevel
+      , "_"
+    )
+  , fileext = ".tif"
+)
 
 # Loop through the design and calculate betweenness map
 maps <- list()

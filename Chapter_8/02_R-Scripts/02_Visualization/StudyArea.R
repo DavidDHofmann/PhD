@@ -45,6 +45,14 @@ vills  <- read_sf("03_Data/02_CleanData/Villages.shp")
 vills  <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
   rename(x = X, y = Y)
 
+# I also want to add the Okavango river
+kava <- raster("03_Data/01_RawData/MERIT/Rivers.tif")
+kava <- crop(kava, extent(c(20.5, 22, -18.2, -17.5)))
+kava <- rasterToPolygons(kava, fun = function(x) {x == 1})
+kava <- aggregate(kava)
+kava <- buffer(kava, width = 0.1 / 111, dissolve = T)
+kava <- st_as_sf(kava)
+
 # Keep only faults of interest
 fault <- fault[1:2, ]
 
@@ -53,23 +61,44 @@ prot$Desig <- factor(prot$Desig, levels = c("National Park", "Forest Reserve", "
 
 # Create country labels
 labels_countries <- data.frame(
-    x     = c(24.5, 26.8, 26, 22, 23.5)
-  , y     = c(-19.3, -18.4, -17.4, -17.3, -17.8)
+    x     = c(25.5, 26, 25.7, 21.5, 23.5)
+  , y     = c(-19.3, -18.2, -17.6, -17.6, -17.8)
   , Label = c("BOTSWANA", "ZIMBABWE", "ZAMBIA", "ANGOLA", "NAMIBIA")
 )
 
 # Create labels for some geographical landmarks
 labels_waters <- data.frame(
-    x     = c(22.6, 23.7, 27.1, 25.6)
-  , y     = c(-19, -18.2, -17.5, -20.7)
-  , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
+    x     = c(22.6, 23.7, 22.8, 25.6)
+  , y     = c(-19, -18.2, -20.5, -20.7)
+  , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nNgami", "Makgadikgadi\nPans")
 )
 
 # Create labels for some national parks and source areas
 labels_nationalparks <- data.frame(
-    x = c(26.56, 22.35, 23.67, 24.51, 24.7)
-  , y = c(-19.08, -17.60, -19.35, -18.65, -20.4)
-  , Label = paste0(c("Hwange", "Luengue-Luiana", "Moremi", "Chobe", "Nxai Pan"), "\nNP")
+    x     = c(26.3, 22.35, 23.67, 24.51, 24.7, 23.35)
+  , y     = c(-19.08, -17.70, -19.35, -18.65, -20.4, -21.3)
+  , Label = paste0(c("Hwange", "Luengue-Luiana", "Moremi", "Chobe", "Nxai Pan", "Central Kalahari"), "\nNP")
+)
+
+# Create labels for rivers
+labels_rivers <- data.frame(
+    x     = c(20.65, 23.18, 23.15, 23.9)
+  , y     = c(-17.85, -18.65, -20.35, -20.25)
+  , Label = c("Okavango", "Selinda", "Nhabe", "Boteti")
+)
+
+# Add fault labels
+labels_faults <- data.frame(
+    x     = c(21.8, 23.78)
+  , y     = c(-20.72, -19.7)
+  , Label = c("Kunyere Fault", "Thamalakane Fault")
+)
+
+# Add albels for source areas
+labels_source <- data.frame(
+    x     = c(23.4, 22, 23.5, 22.7, 23.1, 23.4, 21.55, 24.1, 22.6)
+  , y     = c(-20.3, -19.4, -18.9, -18.3, -19.4, -20.5, -19.5, -19.5, -18)
+  , Label = 1:9
 )
 
 # Prepare plot of africa
@@ -89,9 +118,10 @@ p2 <- ggplot() +
   geom_sf(data = prot, aes(fill = Desig), col = NA, alpha = 0.7) +
   geom_sf(data = water, fill = "cornflowerblue", col = NA) +
   geom_sf(data = river, col = "cornflowerblue") +
+  geom_sf(data = kava, col = "cornflowerblue") +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
-  # geom_sf(data = areas, col = "orange", fill = "orange", alpha = 0.2) +
+  geom_sf(data = areas, col = "orange", fill = "orange", alpha = 0.2) +
   # geom_sf(data = areas, col = "black", fill = "black", alpha = 0.2) +
   geom_sf_pattern(data = areas,
     aes(pattern = as.factor(ID), pattern_spacing = as.factor(ID), pattern_angle = as.factor(ID))
@@ -119,6 +149,14 @@ p2 <- ggplot() +
     , size     = 3
   ) +
   geom_text(
+      data     = labels_rivers
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = darken("cornflowerblue", 1.4)
+    , fontface = 3
+    , size     = 1.5
+    , angle    = c(-30, 40, 20, -32)
+  ) +
+  geom_text(
       data     = labels_nationalparks
     , mapping  = aes(x = x, y = y, label = Label)
     , col      = darken("green", 1.8)
@@ -138,6 +176,27 @@ p2 <- ggplot() +
     , fontface = 3
     , size     = 3
     , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  geom_text(
+      data     = labels_faults
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "gray30"
+    , fontface = 3
+    , size     = 1.5
+    , angle = c(-5, 52)
+  ) +
+  geom_point(
+      data     = labels_source
+    , mapping  = aes(x = x, y = y)
+    , col      = "orange"
+    , size     = 4
+  ) +
+  geom_text(
+      data     = labels_source
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "white"
+    , fontface = 3
+    , size     = 2
   ) +
   scale_fill_brewer(palette = "Greens", direction = -1, name = "") +
   scale_size_manual(values = c(2.0, 0.5)) +
@@ -196,9 +255,10 @@ l1 <- ggplot() +
   theme_minimal()
 l2 <- ggplot() +
   geom_point(data = vills, aes(x = x, y = y, size = place), shape = 15, col = "gray50") +
-  geom_line(data = data.frame(x = c(1, 2), y = c(1, 2)), aes(x = x, y = y, col = "Road")) +
-  scale_color_manual(values = "gray70", name = "") +
+  geom_line(data = data.frame(x = c(1, 2, 1, 2), y = c(1, 2, 1, 2), Class = c("Road", "Fault")), aes(x = x, y = y, col = Class, lty = Class)) +
+  scale_color_manual(values = c("gray30", "gray70"), name = "") +
   scale_size_manual(values = c(2, 0.5), name = "") +
+  scale_linetype_manual(values = c(2, 1), name = "") +
   theme_minimal() +
   theme(legend.spacing.y = unit(-0.38, "cm"))
 

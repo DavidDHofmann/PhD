@@ -21,6 +21,7 @@ library(rgdal)          # To handle spatial data
 library(sf)             # To handle spatial data
 library(scales)         # To squish oob values
 library(latex2exp)      # For easy latex code
+library(RColorBrewer)   # For custom colors
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -33,15 +34,28 @@ maps <- subset(maps, Steps %in% c(500, 1000, 2000))
 area  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads <- read_sf("03_Data/02_CleanData/Roads.shp")
 afric <- read_sf("03_Data/02_CleanData/Africa.shp")
+vills <- read_sf("03_Data/02_CleanData/Villages.shp")
+vills <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
+  rename(x = X, y = Y)
+
+# Prepare a custom color ramp (I don't like ggplots version of spectral)
+spectral <- colorRampPalette(rev(brewer.pal(11, name = "Spectral")))
 
 # Load the reference raster
 r <- raster("03_Data/02_CleanData/ReferenceRaster.tif")
 # r <- crop(r, extent(22, 25, -20.5, -18.5))
 
+# Create country labels
+labels_countries <- data.frame(
+    x     = c(25.5, 26, 25.7, 21.5, 23.5)
+  , y     = c(-19.3, -18.2, -17.6, -17.6, -17.8)
+  , Label = c("BOTSWANA", "ZIMBABWE", "ZAMBIA", "ANGOLA", "NAMIBIA")
+)
+
 # Create labels for some geographical landmarks
 labels_waters <- data.frame(
     x     = c(22.6, 23.7, 27.1, 25.6)
-  , y     = c(-19, -18.2, -17.5, -20.7)
+  , y     = c(-19.1, -18.2, -17.5, -20.7)
   , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
 )
 
@@ -88,7 +102,7 @@ p1 <- ggplot() +
       data    = diffs
     , mapping = aes(x = x, y = y, fill = Difference)
   ) +
-  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
+  geom_sf(data = roads, col = "gray90", lwd = 0.1) +
   geom_sf(
       data        = area
     , col         = "black"
@@ -96,22 +110,28 @@ p1 <- ggplot() +
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
-    , alpha       = 0.6
+    , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.2, col = "black", fill = NA) +
+  geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = ID)
     , size          = 1.5
     , col           = "black"
-    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
   ) +
   geom_text(
       data     = labels_waters
     , mapping  = aes(x = x, y = y, label = Label)
-    , col      = darken("cornflowerblue", 1.4)
+    , col      = "gray20"
     , fontface = 3
     , size     = 1.3
+  ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "black"
+    , size     = 2
+    , fontface = 2
   ) +
   scale_fill_gradientn(
       colours = cols(100)
@@ -174,7 +194,14 @@ p2 <- ggplot() +
       data    = diffs_sub
     , mapping = aes(x = x, y = y, fill = Difference)
   ) +
-  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
+  geom_sf(data = roads, col = "gray90", lwd = 0.1) +
+  geom_point(
+      data        = vills
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray30"
+    , shape       = 15
+    , show.legend = F
+  ) +
   geom_sf(
       data        = area
     , col         = "black"
@@ -182,23 +209,38 @@ p2 <- ggplot() +
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
-    , alpha       = 0.6
+    , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.2, col = "black", fill = NA) +
+  geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = ID)
     , size          = 1.5
     , col           = "black"
-    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
   ) +
   geom_text(
       data     = labels_waters
     , mapping  = aes(x = x, y = y, label = Label)
-    , col      = darken("cornflowerblue", 1.4)
+    , col      = "gray20"
     , fontface = 3
     , size     = 1.3
   ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "black"
+    , size     = 2
+    , fontface = 2
+  ) +
+  geom_text(
+      data     = subset(vills, place == "City")
+    , mapping  = aes(x = x, y = y, label = name)
+    , col      = "gray30"
+    , fontface = 3
+    , size     = 2
+    , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
   scale_fill_gradientn(
       colours = cols(100)
     , limits  = c(-250, +250)
@@ -258,33 +300,39 @@ p3 <- ggplot() +
       data    = maps
     , mapping = aes(x = x, y = y, fill = Heat)
   ) +
-  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
+  geom_sf(data = roads, col = "gray90", lwd = 0.1) +
   geom_sf(
       data        = area
-    , col         = "white"
+    , col         = "black"
     , fill        = NA
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
-    , alpha       = 0.6
+    , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
+  geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = ID)
     , size          = 1.5
-    , col           = "white"
-    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
+    , col           = "black"
   ) +
   geom_text(
       data     = labels_waters
     , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "gray50"
+    , col      = "gray20"
     , fontface = 3
     , size     = 1.3
   ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "black"
+    , size     = 2
+    , fontface = 2
+  ) +
   scale_fill_gradientn(
-      colours = viridis::magma(100)
+      colors  = spectral(100)
     , labels  = function(x){format(x, big.mark = "'")}
     , guide   = guide_colorbar(
       , title          = "#Traversing Trajectories"
@@ -296,6 +344,19 @@ p3 <- ggplot() +
       , barwidth       = unit(16.0, "cm")
     )
   ) +
+  # scale_fill_distiller(
+  #     palette = "Spectral"
+  #   , labels  = function(x){format(x, big.mark = "'")}
+  #   , guide   = guide_colorbar(
+  #     , title          = "#Traversing Trajectories"
+  #     , show.limits    = T
+  #     , title.position = "bottom"
+  #     , title.hjust    = 0.5
+  #     , ticks          = F
+  #     , barheight      = unit(0.2, "cm")
+  #     , barwidth       = unit(16.0, "cm")
+  #   )
+  # ) +
   coord_sf(
       crs    = 4326
     , xlim   = c(min(r$x), max(r$x))
@@ -343,33 +404,55 @@ p4 <- ggplot() +
       data    = subset(maps_sub)
     , mapping = aes(x = x, y = y, fill = Heat)
   ) +
-  geom_sf(data = roads, col = "gray70", lwd = 0.1) +
+  geom_sf(data = roads, col = "gray90", lwd = 0.1) +
+  geom_point(
+      data        = vills
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray90"
+    , shape       = 15
+    , show.legend = F
+  ) +
   geom_sf(
       data        = area
-    , col         = "white"
+    , col         = "black"
     , fill        = NA
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
-    , alpha       = 0.6
+    , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.2, col = "gray50", fill = NA) +
+  geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
   geom_sf_text(
       data          = area
     , mapping       = aes(label = ID)
     , size          = 1.5
-    , col           = "white"
-    , nudge_y       = c(0.1, -0.1, -0.1, 0.2, 0)
+    , col           = "black"
   ) +
   geom_text(
       data     = labels_waters
     , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "gray50"
+    , col      = "gray20"
     , fontface = 3
     , size     = 1.3
   ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "black"
+    , size     = 2
+    , fontface = 2
+  ) +
+  geom_text(
+      data     = subset(vills, place == "City")
+    , mapping  = aes(x = x, y = y, label = name)
+    , col      = "gray90"
+    , fontface = 3
+    , size     = 2
+    , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
   scale_fill_gradientn(
-      colours = viridis::magma(100)
+      colors  = spectral(100)
     , labels  = function(x){format(x, big.mark = "'")}
     , guide   = guide_colorbar(
       , title          = "#Traversing Trajectories"
@@ -381,6 +464,19 @@ p4 <- ggplot() +
       , barwidth       = unit(16.0, "cm")
     )
   ) +
+  # scale_fill_distiller(
+  #     palette = "Spectral"
+  #   , labels  = function(x){format(x, big.mark = "'")}
+  #   , guide   = guide_colorbar(
+  #     , title          = "#Traversing Trajectories"
+  #     , show.limits    = T
+  #     , title.position = "bottom"
+  #     , title.hjust    = 0.5
+  #     , ticks          = F
+  #     , barheight      = unit(0.2, "cm")
+  #     , barwidth       = unit(16.0, "cm")
+  #   )
+  # ) +
   coord_sf(
       crs    = 4326
     , xlim   = c(min(r$x), max(r$x))
@@ -404,17 +500,17 @@ p4 <- ggplot() +
     , line_width = 0.5
     , text_cex   = 0.5
     , height     = unit(0.1, "cm")
-    , bar_cols   = "white"
-    , text_col   = "white"
+    , bar_cols   = c("black", "white")
+    , text_col   = "black"
   ) +
   annotation_north_arrow(
       location = "br"
     , height   = unit(0.7, "cm"),
     , width    = unit(0.6, "cm"),
     , style    = north_arrow_fancy_orienteering(
-          fill      = c("white", "white")
+          fill      = c("black", "black")
         , line_col  = NA
-        , text_col  = "white"
+        , text_col  = "black"
         , text_size = 4
       )
   ) +

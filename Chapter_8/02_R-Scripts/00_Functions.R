@@ -251,7 +251,7 @@ scaleCovars <- function (covars, scaling) {
 #' @return numeric value or vector
 #' @examples
 #' degreesToMeters(0.01)
-reprojCoords <- function(xy, from = NULL, to = NULL) {
+reprojCoords <- function(xy, from = NULL, to = NULL, multicore = F) {
   xy <- as.matrix(xy)
   xy <- suppressWarnings(vect(xy, crs = from))
   xy <- terra::project(xy, to)
@@ -472,14 +472,14 @@ rasterizeSims <- function(
     , area        = NULL      # Simulations from which areas?
     , flood       = "Min"     # Which flood level?
     , messages    = T         # Print update messages?
+    , filename    = tempfile()
     , mc.cores    = detectCores() - 1
   ) {
 
   # Subset to corresponding data
   sub <- simulations[
     simulations$StepNumber <= steps &
-    simulations$FloodLevel == flood,
-  ]
+    simulations$FloodLevel == flood, ]
   if (!is.null(area)) {
     sub <- sub[sub$SourceArea %in% area, ]
   }
@@ -497,7 +497,7 @@ rasterizeSims <- function(
 
   # Convert into spatial lines
   sub_traj <- as(sub_traj, "SpatialLines")
-  crs(sub_traj) <- CRS("+init=epsg:32734")
+  crs(sub_traj) <- crs(raster)
 
   # Rasterize lines onto the cropped raster
   if (messages) {
@@ -509,12 +509,127 @@ rasterizeSims <- function(
     , mc.cores = 1
   )
 
-  # Store heatmap to temporary file
-  heatmap <- writeRaster(heatmap, tempfile())
-  crs(heatmap) <- CRS("+init=epsg:32734")
-
-  # Return the resulting heatmap
+  # Store the map to a temporary file and return it
+  crs(heatmap) <- crs(raster)
+  heatmap <- writeRaster(heatmap, filename)
   return(heatmap)
+}
+
+################################################################################
+#### Function to Generate Visitation Histories
+################################################################################
+#' Generate Visitation Histories
+#'
+#' Function to extract the visitation history of a simulated trajectory
+#' @export
+#' @param x \code{vector} containing the visited raster cells
+#' @param singlecount boolean, should double visits be considered?
+#' @return \code{data.frame}
+visitHist <- function(x, singlecount = F) {
+  transitions <- data.frame(from = lag(x), to = x) %>%
+    group_by(from, to) %>%
+    na.omit() %>%
+    summarize(TotalConnections = n(), .groups = "drop")
+  if (singlecount){
+    transitions$TotalConnections <- 1
+  }
+  return(transitions)
+}
+
+################################################################################
+#### Function to Compute Betweenness
+################################################################################
+#' Calculate Betweenness for Simulations
+#'
+#' Function to compute betweenness on simulated data
+#' @export
+#' @param simulations \code{data.frame} containing the simulated data
+#' @param raster \code{RasterLayer} based on which betweenness should be computed
+#' @param steps numeric, how many steps should be considered?
+#' @param area numeric, ID of the source areas that should be considered
+#' @param flood character, one of "Min", "Mean", "Max"
+#' @param messages boolean, should messages be printed during the rasterization
+#' @param mc.cores numeric How many cores should be used?
+#' @return \code{RasterLayer}
+betweenSims <- function(
+      simulations = NULL      # Simulated trajectories
+    , raster      = NULL      # Raster onto which we rasterize
+    , steps       = 500       # How many steps should be considered
+    , area        = NULL      # Simulations from which areas?
+    , flood       = "Min"     # Which flood level?
+    , messages    = T         # Print update messages?
+    , filename    = tempfile()
+    , mc.cores    = detectCores() - 1
+  ) {
+
+  # Subset to corresponding data
+  sub <- simulations[
+    simulations$StepNumber <= steps &
+    simulations$FloodLevel == flood, ]
+  if (!is.null(area)) {
+    sub <- sub[sub$SourceArea %in% area, ]
+  }
+
+  # Prepare vertices and layout of the network for betweenness
+  raster[] <- 1:ncell(raster)
+  ver <- values(raster)
+  lay  <- as.matrix(as.data.frame(raster, xy = T)[, c(1, 2)])
+
+  # Make coordinates of simulated trajectories spatial
+  coordinates(sub) <- c("x", "y")
+  crs(sub) <- crs(raster)
+
+  # At each coordinate of the simulated trajectories we now extract the cell IDs
+  # from the betweenness raster
+  sub <- data.frame(
+      TrackID    = sub$TrackID
+    , StepNumber = sub$StepNumber
+    , FloodLevel = sub$FloodLevel
+    , x          = coordinates(sub)[, 1]
+    , y          = coordinates(sub)[, 2]
+    , r          = raster::extract(raster, sub)
+  )
+
+  # Get the visitation history
+  sub <- nest(sub, data = -TrackID)
+  if (messages) {
+    cat("Computing visitation history...\n")
+  }
+  if (mc.cores > 1) {
+    history <- pbmclapply(1:length(sub$data), mc.cores = mc.cores, ignore.interactive = T, function(x) {
+      visitHist(sub$data[[x]]$r, singlecount = T)
+    })
+  } else {
+    if (messages) {
+      pb <- txtProgressBar(min = 0, max = length(sub$data), style = 3)
+    }
+    history <- lapply(1:length(sub$data), function(x) {
+      hist <- visitHist(sub$data[[x]]$r, singlecount = T)
+      if (messages) {
+        setTxtProgressBar(pb, x)
+      }
+      return(hist)
+    })
+  }
+  history <- history %>%
+    do.call(rbind, .) %>%
+    group_by(from, to) %>%
+    summarize(TotalConnections = sum(TotalConnections), .groups = "drop") %>%
+    ungroup() %>%
+    mutate(weight = mean(TotalConnections) / TotalConnections)
+
+  # Create network, compute betweenness, and put values onto the raster
+  if (messages) {
+    cat("Computing betweenness...\n")
+  }
+  net <- graph_from_data_frame(history, vertices = ver)
+  betweenness <- raster
+  values(betweenness) <- betweenness(net)
+
+  # Store the map to a temporary file and return it
+  crs(betweenness) <- crs(raster)
+  betweenness <- writeRaster(betweenness, filename)
+  return(betweenness)
 }
 
 ################################################################################
