@@ -16,11 +16,25 @@ setwd("/home/david/ownCloud/University/15. PhD/Chapter_4")
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
 
-# Laod all data
-dat <- "03_Data/SimulationDesign.rds" %>%
-  read_rds() %>%
-  mutate(Coefs = map(Filename, read_rds)) %>%
-  unnest(Coefs)
+# Prepare model files
+dat <- tibble(
+    Filepath = dir(path = "03_Data/ModelResults", pattern = ".rds$", full.names = T)
+  , Autocorr_Range = sapply(Filepath, function(x) {
+      arange <- str_split(basename(x), pattern = "\\_")[[1]][[1]]
+      arange <- as.numeric(gsub(arange, pattern = "A", replacement = ""))
+      return(arange)
+    })
+  , Replicate = sapply(Filepath, function(x) {
+      rep <- str_split(basename(x), pattern = "\\_")[[1]][[2]]
+      rep <- as.numeric(substr(rep, 2, 4))
+      return(rep)
+  })
+)
+
+# Load results
+dat <- dat %>%
+  mutate(Data = map(Filepath, read_rds)) %>%
+  unnest(Data)
 
 # Separate Movement from Habitat Kernel
 dat$Kernel <- with(dat, ifelse(
@@ -29,8 +43,8 @@ dat$Kernel <- with(dat, ifelse(
   , no  = "Movement"
 ))
 
-# For now, ignore the "model" approach
-dat <- subset(dat, Approach != "model")
+# # For now, ignore the "model" approach
+# dat <- subset(dat, Approach != "model")
 
 # Let's also prepare a dataframe containing the "truth", i.e. the simulation
 # parameters
@@ -40,24 +54,45 @@ truth <- data.frame(
   , Kernel      = c("Movement", "Movement", "Movement", "Habitat", "Habitat", "Habitat")
 )
 
-# Coefficients for a missingness of 0.5
-p1 <- dat %>%
-  subset(Missingness == 0.5) %>%
-  subset(Kernel == "Habitat") %>%
-  group_by(Coefficient, Forgiveness, Approach) %>%
+# Summarize Results
+dat_aggr <- dat %>%
+  group_by(Coefficient, Kernel, Autocorr_Range, Missingness, Forgiveness, Approach) %>%
   summarize(
-    , SD       = sd(Estimate)
-    , Estimate = mean(Estimate)
-    , LCI      = Estimate - 2 * SD
-    , UCI      = Estimate + 2 * SD
-    , .groups  = "drop"
+    , meanEstimate = mean(Estimate)
+    , SD           = sd(Estimate)
+    # , SE           = SD / sqrt(n())
+    # , LCI_SE       = meanEstimate - 1.96 * SE
+    # , UCI_SE       = meanEstimate + 1.96 * SE
+    # , LCI_BT       = quantile(Estimate, 0.025, na.rm = T)
+    # , UCI_BT       = quantile(Estimate, 0.975, na.rm = T)
+    , .groups      = "drop"
   ) %>%
+  rename(Estimate = meanEstimate)
+
+# Visualize
+dat %>%
+  subset(Kernel == "Habitat" & Missingness == 0.5) %>%
+  ggplot(aes(x = as.factor(Forgiveness), y = Estimate, col = Approach, fill = Approach)) +
+    geom_hline(data = subset(truth, Kernel == "Habitat"), aes(yintercept = Estimate), lty = 2, lwd = 0.5) +
+    geom_boxplot(outlier.size = 0.1, size = 0.4) +
+    facet_wrap(Autocorr_Range ~ Coefficient, scales = "free") +
+    theme_minimal() +
+    scale_color_viridis_d() +
+    scale_fill_viridis_d(alpha = 0.2) +
+    theme(
+        legend.position  = "bottom"
+      , strip.background = element_rect(fill = "gray95", color = NA)
+    ) +
+    theme() +
+    ylab(expression(beta * "-Estimate"))
+
+dat_aggr %>%
+  subset(Kernel == "Habitat" & Missingness == 0.5) %>%
   ggplot(aes(x = Forgiveness, y = Estimate, col = Approach)) +
     geom_hline(data = subset(truth, Kernel == "Habitat"), aes(yintercept = Estimate), lty = 2, lwd = 0.5) +
     geom_point(position = position_dodge(width = 0.6)) +
-    geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0, position = position_dodge(width = 0.6)) +
-    # geom_point(data = truth, col = "black") +
-    facet_wrap(~ Coefficient, scales = "free") +
+    geom_errorbar(aes(ymin = LCI_SE, ymax = UCI_SE), width = 0, position = position_dodge(width = 0.6)) +
+    facet_wrap(Autocorr_Range ~ Coefficient, scales = "free") +
     theme_minimal() +
     scale_color_viridis_d() +
     theme(
@@ -66,96 +101,3 @@ p1 <- dat %>%
     ) +
     theme() +
     ylab(expression(beta * "-Estimate"))
-
-# Coefficients for a missingness of 0.5
-p2 <- dat %>%
-  subset(Missingness == 0.5) %>%
-  subset(Kernel == "Movement") %>%
-  group_by(Coefficient, Forgiveness, Approach) %>%
-  summarize(
-    , SD       = sd(Estimate)
-    , Estimate = mean(Estimate)
-    , LCI      = Estimate - 2 * SD
-    , UCI      = Estimate + 2 * SD
-    , .groups  = "drop"
-  ) %>%
-  ggplot(aes(x = Forgiveness, y = Estimate, col = Approach)) +
-    geom_hline(data = subset(truth, Kernel == "Movement"), aes(yintercept = Estimate), lty = 2, lwd = 0.5) +
-    geom_point(position = position_dodge(width = 0.6)) +
-    geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0, position = position_dodge(width = 0.6)) +
-    # geom_point(data = truth, col = "black") +
-    facet_wrap(~ Coefficient, scales = "free") +
-    theme_minimal() +
-    scale_color_viridis_d() +
-    theme(
-        legend.position  = "bottom"
-      , strip.background = element_rect(fill = "gray95", color = NA)
-    ) +
-    theme() +
-    ylab(expression(beta * "-Estimate"))
-
-# Store plots to file
-ggsave("04_Manuscript/99_ResultsHabitatKernel.png"
-  , plot   = p1
-  , bg     = "white"
-  , height = 5
-  , width  = 10
-  , scale  = 0.8
-)
-ggsave("04_Manuscript/99_ResultsMovementKernel.png"
-  , plot   = p2
-  , bg     = "white"
-  , height = 5
-  , width  = 10
-  , scale  = 0.8
-)
-
-# ################################################################################
-# #### LEGACY
-# ################################################################################
-# # Let's start with the "base" model and look at its results
-# dat %>%
-#   subset(Missingness == 0.4 & Forgiveness == 5) %>%
-#   group_by(Coefficient, Approach) %>%
-#   summarize(
-#     , SD       = sd(Estimate)
-#     , Estimate = mean(Estimate)
-#     , LCI      = Estimate - 2 * SD
-#     , UCI      = Estimate + 2 * SD
-#     , .groups  = "drop"
-#   ) %>%
-#   ggplot(aes(x = Approach, y = Estimate)) +
-#     geom_hline(data = truth, aes(yintercept = Estimate), lty = 2, lwd = 0.5) +
-#     geom_point(col = "red") +
-#     geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0.2) +
-#     # geom_point(data = truth, col = "black") +
-#     facet_wrap(~ Coefficient, scales = "free") +
-#     theme_minimal() +
-#     theme(axis.text.x = element_text(angle = 45))
-#
-# # Visualize Results
-# dat %>%
-#   subset(Kernel == "Habitat") %>%
-#   group_by(Missingness, Forgiveness, Approach, Coefficient) %>%
-#   summarize(
-#     , SD       = sd(Estimate)
-#     , Estimate = mean(Estimate)
-#     , LCI      = Estimate - 2 * SD
-#     , UCI      = Estimate + 2 * SD
-#     , .groups  = "drop"
-#   ) %>%
-#   ggplot(aes(x = Missingness, y = Estimate, col = as.factor(Forgiveness), fill = as.factor(Forgiveness))) +
-#     geom_ribbon(aes(ymin = LCI, ymax = UCI), alpha = 0.5, lwd = 0.5) +
-#     geom_hline(data = subset(truth, Kernel == "Habitat"), aes(yintercept = Estimate), lty = 2, lwd = 0.5) +
-#     # geom_errorbar(aes(ymin = LCI, ymax = UCI), width = 0.05, alpha = 0.5) +
-#     # geom_point() +
-#     # geom_line() +
-#     facet_wrap(~ Approach + Coefficient, scales = "free", nrow = 3) +
-#     theme_minimal() +
-#     theme(legend.position = "bottom") +
-#     scale_fill_viridis_d(name = "Forgiveness") +
-#     scale_color_viridis_d(name = "Forgiveness") +
-#     scale_x_continuous(breaks = seq(0, 0.5, by = 0.1)) +
-#     theme(axis.text.x = element_text(angle = 45))
-#     # scale_fill_manual(values = c("orange", "cornflowerblue")) +
-#     # scale_color_manual(values = c("orange", "cornflowerblue"))

@@ -676,7 +676,7 @@ runModel <- function(data, approach) {
 # #### Ensure All Functions Work as Intended
 # ################################################################################
 # # Simulate covariates and across the layers
-# cov <- simCovars(autocorr_range = 50, proportion_forest = 0.5)
+# cov <- simCovars(autocorr_range = 100, proportion_forest = 0.5)
 # obs <- simMove(cov, n_id = 10, multicore = T)
 # as.data.frame(cov, xy = T) %>%
 #   gather(key = covariate, value = value, 3:5) %>%
@@ -802,7 +802,7 @@ lapply(1:nrow(dat_sub), function(x) {
   # dynamically)
   cat("Fitting step length and turning angle distributions...\n")
   dis <- fitDists(obs
-    , replicate       = 10
+    , replicate       = 100
     , max_forgiveness = max(desi$Forgiveness)
     , dynamic         = T
     , multicore       = T
@@ -810,7 +810,7 @@ lapply(1:nrow(dat_sub), function(x) {
 
   # Analyse the data using the various approaches
   cat("Running analyses using different approaches...\n")
-  desi$Coefs <- pbmclapply(
+  desi$Results <- pbmclapply(
       X                  = 1:nrow(desi)
     , ignore.interactive = T
     , mc.cores           = detectCores() - 1
@@ -861,12 +861,12 @@ lapply(1:nrow(dat_sub), function(x) {
       attempts <- attempts + 1
     }
 
-    # Return the results
-    return(coefs)
-  })
+    # Also keep track of the distribution used to draw random steps
+    results <- list(Dists = dis, Coefs = coefs)
 
-  # Unnest the design
-  desi <- unnest(desi, Coefs)
+    # Return the results
+    return(results)
+  })
 
   # Write results to file
   write_rds(desi, file)
@@ -874,10 +874,3 @@ lapply(1:nrow(dat_sub), function(x) {
   # Store results to file
   return(NULL)
 })
-
-# Reload the results
-dat_sub <- mutate(dat_sub, Results = map(Filename, read_rds))
-unnest(dat_sub, Results)
-dat_sub %>%
-  select(-Data) %>%
-  unnest(Results)
