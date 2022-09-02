@@ -26,10 +26,6 @@ library(RColorBrewer)   # For custom colors
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
 
-# Load the heatmaps
-maps <- read_rds("03_Data/03_Results/Heatmaps.rds")
-maps <- subset(maps, Steps %in% c(500, 1000, 2000))
-
 # Load shapefiles that we want to plot
 area  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads <- read_sf("03_Data/02_CleanData/Roads.shp")
@@ -43,7 +39,7 @@ spectral <- colorRampPalette(rev(brewer.pal(11, name = "Spectral")))
 
 # Load the reference raster
 r <- raster("03_Data/02_CleanData/ReferenceRaster.tif")
-# r <- crop(r, extent(22, 25, -20.5, -18.5))
+r <- as.data.frame(r, xy = T)
 
 # Create country labels
 labels_countries <- data.frame(
@@ -59,27 +55,23 @@ labels_waters <- data.frame(
   , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
 )
 
-# Merge heatmaps of the same number of steps and flood extent
-maps <- maps %>%
-  nest(Data = -c(Steps, FloodLevel)) %>%
-  mutate(Data = map(Data, function(x) {
-    result <- sum(stack(x$heatmap))
-    result <- crop(result, r)
-    return(result)
-  }))
+# Add albels for source areas
+labels_source <- data.frame(
+    x     = c(23.4, 22, 23.5, 22.7, 23.1, 23.4, 21.55, 24.1, 22.6)
+  , y     = c(-20.3, -19.4, -18.9, -18.3, -19.4, -20.5, -19.5, -19.5, -18)
+  , Label = 1:9
+)
 
-# Compute difference maps
-diffs <- lapply(unique(maps$Steps), function(x) {
-    submaps <- subset(maps, Steps == x & FloodLevel != "Mean")
-    submaps <- stack(submaps$Data)
-    diff <- submaps[[2]] - submaps[[1]]
-    names(diff) <- x
-    return(diff)
-  }) %>%
-  stack() %>%
-  as.data.frame(xy = T) %>%
-  pivot_longer(X500:X2000, names_to = "Steps", values_to = "Difference") %>%
-  mutate(Steps = as.numeric(substr(Steps, start = 2, stop = nchar(Steps))))
+# Load the heatmaps and keep only desired columns
+maps <- "03_Data/03_Results/HeatmapsBetweennessGlobal.rds" %>%
+  read_rds() %>%
+  select(Steps, FloodLevel, Data = Heatmap) %>%
+  subset(Steps == 2000 & FloodLevel != "Mean")
+
+# Let's also generate a difference map
+diffs <- maps$Data[[2]] - maps$Data[[1]]
+diffs <- as.data.frame(diffs, xy = T)
+names(diffs)[3] <- "Difference"
 
 # Convert the maps to dataframes
 maps <- maps %>%
@@ -90,35 +82,33 @@ maps <- maps %>%
   })) %>% unnest(Data)
 
 # Make sure the levels are correctly ordered
-maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Mean", "Max"))
+maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
 
-# Also convert the reference raster to a dataframe
-r <- as.data.frame(r, xy = T)
-
-# Visualize the difference maps
-cols <- colorRampPalette(c("orange", "white", "cornflowerblue"))
+# Visualize the heatmaps
 p1 <- ggplot() +
   geom_raster(
-      data    = diffs
-    , mapping = aes(x = x, y = y, fill = Difference)
+      data    = maps
+    , mapping = aes(x = x, y = y, fill = Heat)
   ) +
   geom_sf(data = roads, col = "gray90", lwd = 0.1) +
+  geom_point(
+      data        = subset(vills, place == "City")
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray90"
+    , shape       = 15
+    , show.legend = F
+    , size        = 1
+  ) +
   geom_sf(
       data        = area
-    , col         = "black"
-    , fill        = NA
+    , col         = "white"
+    , fill        = "white"
     , lty         = 1
     , lwd         = 0.1
     , show.legend = F
     , alpha       = 0.15
   ) +
   geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
-  geom_sf_text(
-      data          = area
-    , mapping       = aes(label = ID)
-    , size          = 1.5
-    , col           = "black"
-  ) +
   geom_text(
       data     = labels_waters
     , mapping  = aes(x = x, y = y, label = Label)
@@ -133,13 +123,33 @@ p1 <- ggplot() +
     , size     = 2
     , fontface = 2
   ) +
+  geom_point(
+      data     = labels_source
+    , mapping  = aes(x = x, y = y)
+    , col      = "black"
+    , size     = 3
+  ) +
+  geom_text(
+      data     = labels_source
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "white"
+    , fontface = 3
+    , size     = 1.5
+  ) +
+  geom_text(
+      data     = subset(vills, place == "City")
+    , mapping  = aes(x = x, y = y, label = name)
+    , col      = "gray90"
+    , fontface = 3
+    , size     = 2
+    , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
   scale_fill_gradientn(
-      colours = cols(100)
-    , limits  = c(-250, +250)
+      colors  = spectral(100)
     , labels  = function(x){format(x, big.mark = "'")}
-    , oob     = squish
     , guide   = guide_colorbar(
-      , title          = TeX(r'(#$Trajectories_{Flood = min}$ - #$Trajectories_{Flood = max}$)')
+      , title          = "#Traversing Trajectories"
       , show.limits    = T
       , title.position = "bottom"
       , title.hjust    = 0.5
@@ -171,27 +181,27 @@ p1 <- ggplot() +
     , line_width = 0.5
     , text_cex   = 0.5
     , height     = unit(0.1, "cm")
-    , bar_cols   = c("black", "white")
-    , text_col   = "black"
+    , bar_cols   = c("white", "white")
+    , text_col   = "white"
   ) +
   annotation_north_arrow(
       location = "br"
     , height   = unit(0.7, "cm"),
     , width    = unit(0.6, "cm"),
     , style    = north_arrow_fancy_orienteering(
-          fill      = c("black", "black")
+          fill      = c("white", "white")
         , line_col  = NA
-        , text_col  = "black"
+        , text_col  = "white"
         , text_size = 4
       )
   ) +
-  facet_grid(~ Steps)
+  facet_grid(~ FloodLevel)
 
-# Visualize the difference maps for 2000 steps
-diffs_sub <- subset(diffs, Steps == 2000)
+# Let's also generate the difference plot
+cols <- colorRampPalette(c("orange", "white", "cornflowerblue"))
 p2 <- ggplot() +
   geom_raster(
-      data    = diffs_sub
+      data    = diffs
     , mapping = aes(x = x, y = y, fill = Difference)
   ) +
   geom_sf(data = roads, col = "gray90", lwd = 0.1) +
@@ -294,263 +304,23 @@ p2 <- ggplot() +
       )
   )
 
-# Visualize the heatmaps
-p3 <- ggplot() +
-  geom_raster(
-      data    = maps
-    , mapping = aes(x = x, y = y, fill = Heat)
-  ) +
-  geom_sf(data = roads, col = "gray90", lwd = 0.1) +
-  geom_sf(
-      data        = area
-    , col         = "black"
-    , fill        = NA
-    , lty         = 1
-    , lwd         = 0.1
-    , show.legend = F
-    , alpha       = 0.15
-  ) +
-  geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
-  geom_sf_text(
-      data          = area
-    , mapping       = aes(label = ID)
-    , size          = 1.5
-    , col           = "black"
-  ) +
-  geom_text(
-      data     = labels_waters
-    , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "gray20"
-    , fontface = 3
-    , size     = 1.3
-  ) +
-  geom_text(
-      data     = labels_countries
-    , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "black"
-    , size     = 2
-    , fontface = 2
-  ) +
-  scale_fill_gradientn(
-      colors  = spectral(100)
-    , labels  = function(x){format(x, big.mark = "'")}
-    , guide   = guide_colorbar(
-      , title          = "#Traversing Trajectories"
-      , show.limits    = T
-      , title.position = "bottom"
-      , title.hjust    = 0.5
-      , ticks          = F
-      , barheight      = unit(0.2, "cm")
-      , barwidth       = unit(16.0, "cm")
-    )
-  ) +
-  # scale_fill_distiller(
-  #     palette = "Spectral"
-  #   , labels  = function(x){format(x, big.mark = "'")}
-  #   , guide   = guide_colorbar(
-  #     , title          = "#Traversing Trajectories"
-  #     , show.limits    = T
-  #     , title.position = "bottom"
-  #     , title.hjust    = 0.5
-  #     , ticks          = F
-  #     , barheight      = unit(0.2, "cm")
-  #     , barwidth       = unit(16.0, "cm")
-  #   )
-  # ) +
-  coord_sf(
-      crs    = 4326
-    , xlim   = c(min(r$x), max(r$x))
-    , ylim   = c(min(r$y), max(r$y))
-    , expand = F
-  ) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , fill     = NULL
-  ) +
-  theme(
-      legend.position  = "bottom"
-    , legend.box       = "vertical"
-    , panel.background = element_blank()
-    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-  ) +
-  annotation_scale(
-      location   = "bl"
-    , width_hint = 0.2
-    , line_width = 0.5
-    , text_cex   = 0.5
-    , height     = unit(0.1, "cm")
-    , bar_cols   = "white"
-    , text_col   = "white"
-  ) +
-  annotation_north_arrow(
-      location = "br"
-    , height   = unit(0.7, "cm"),
-    , width    = unit(0.6, "cm"),
-    , style    = north_arrow_fancy_orienteering(
-          fill      = c("white", "white")
-        , line_col  = NA
-        , text_col  = "white"
-        , text_size = 4
-      )
-  ) +
-  facet_grid(FloodLevel ~ Steps)
-
-# Let's also generate a map where we only consider 2000 steps
-maps_sub <- subset(maps, Steps == 2000 & FloodLevel != "Mean")
-maps_sub$FloodLevel <- droplevels(maps_sub$FloodLevel)
-p4 <- ggplot() +
-  geom_raster(
-      data    = subset(maps_sub)
-    , mapping = aes(x = x, y = y, fill = Heat)
-  ) +
-  geom_sf(data = roads, col = "gray90", lwd = 0.1) +
-  geom_point(
-      data        = vills
-    , mapping     = aes(x = x, y = y, size = place)
-    , col         = "gray90"
-    , shape       = 15
-    , show.legend = F
-  ) +
-  geom_sf(
-      data        = area
-    , col         = "black"
-    , fill        = NA
-    , lty         = 1
-    , lwd         = 0.1
-    , show.legend = F
-    , alpha       = 0.15
-  ) +
-  geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
-  geom_sf_text(
-      data          = area
-    , mapping       = aes(label = ID)
-    , size          = 1.5
-    , col           = "black"
-  ) +
-  geom_text(
-      data     = labels_waters
-    , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "gray20"
-    , fontface = 3
-    , size     = 1.3
-  ) +
-  geom_text(
-      data     = labels_countries
-    , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "black"
-    , size     = 2
-    , fontface = 2
-  ) +
-  geom_text(
-      data     = subset(vills, place == "City")
-    , mapping  = aes(x = x, y = y, label = name)
-    , col      = "gray90"
-    , fontface = 3
-    , size     = 2
-    , nudge_y  = c(0.1, -0.1, 0.1)
-  ) +
-  scale_size_manual(values = c(1.0, 0.25)) +
-  scale_fill_gradientn(
-      colors  = spectral(100)
-    , labels  = function(x){format(x, big.mark = "'")}
-    , guide   = guide_colorbar(
-      , title          = "#Traversing Trajectories"
-      , show.limits    = T
-      , title.position = "bottom"
-      , title.hjust    = 0.5
-      , ticks          = F
-      , barheight      = unit(0.2, "cm")
-      , barwidth       = unit(16.0, "cm")
-    )
-  ) +
-  # scale_fill_distiller(
-  #     palette = "Spectral"
-  #   , labels  = function(x){format(x, big.mark = "'")}
-  #   , guide   = guide_colorbar(
-  #     , title          = "#Traversing Trajectories"
-  #     , show.limits    = T
-  #     , title.position = "bottom"
-  #     , title.hjust    = 0.5
-  #     , ticks          = F
-  #     , barheight      = unit(0.2, "cm")
-  #     , barwidth       = unit(16.0, "cm")
-  #   )
-  # ) +
-  coord_sf(
-      crs    = 4326
-    , xlim   = c(min(r$x), max(r$x))
-    , ylim   = c(min(r$y), max(r$y))
-    , expand = F
-  ) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , fill     = NULL
-  ) +
-  theme(
-      legend.position  = "bottom"
-    , legend.box       = "vertical"
-    , panel.background = element_blank()
-    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
-  ) +
-  annotation_scale(
-      location   = "bl"
-    , width_hint = 0.2
-    , line_width = 0.5
-    , text_cex   = 0.5
-    , height     = unit(0.1, "cm")
-    , bar_cols   = c("black", "white")
-    , text_col   = "black"
-  ) +
-  annotation_north_arrow(
-      location = "br"
-    , height   = unit(0.7, "cm"),
-    , width    = unit(0.6, "cm"),
-    , style    = north_arrow_fancy_orienteering(
-          fill      = c("black", "black")
-        , line_col  = NA
-        , text_col  = "black"
-        , text_size = 4
-      )
-  ) +
-  facet_grid(~ FloodLevel)
-
 ################################################################################
-#### Store Plots
+#### Store the Maps
 ################################################################################
-# Store the first plot
-ggsave("04_Manuscript/99_DifferenceHeatmaps.png"
+# Store the plot
+ggsave("04_Manuscript/99_Heatmaps.png"
   , plot   = p1
   , bg     = "white"
   , width  = 8
-  , height = 3
-  , scale  = 1.4
+  , height = 4
+  , scale  = 1
 )
 
 # Store the first plot
-ggsave("04_Manuscript/99_DifferenceHeatmaps2000.png"
+ggsave("04_Manuscript/99_DifferenceMap.png"
   , plot   = p2
   , bg     = "white"
   , width  = 4
   , height = 3
   , scale  = 1.4
-)
-
-# Store the second plot
-ggsave("04_Manuscript/99_Heatmaps.png"
-  , plot   = p3
-  , bg     = "white"
-  , width  = 8
-  , height = 6
-  , scale  = 1.2
-)
-
-# Store the second plot
-ggsave("04_Manuscript/99_Heatmaps2000.png"
-  , plot   = p4
-  , bg     = "white"
-  , width  = 8
-  , height = 4
-  , scale  = 1
 )

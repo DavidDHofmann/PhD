@@ -33,10 +33,10 @@ vills  <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
 r <- rast("03_Data/02_CleanData/ReferenceRaster.tif")
 r <- as.data.frame(r, xy = T)
 
-# Crop to dynamic area
-flood <- dir(path = "03_Data/01_RawData/FLOODMAPS", pattern = ".tif$", full.names = T)[1]
-flood <- rast(flood)
-water <- crop(water, flood)
+# # Crop to dynamic area
+# flood <- dir(path = "03_Data/01_RawData/FLOODMAPS", pattern = ".tif$", full.names = T)[1]
+# flood <- rast(flood)
+# water <- crop(water, flood)
 
 # Convert to dataframe
 water <- as.data.frame(water, xy = T)
@@ -45,16 +45,16 @@ water$FloodLevel <- factor(water$FloodLevel, levels = c("min", "max"))
 
 # Create country labels
 labels_countries <- data.frame(
-    x     = c(24.5, 26.8, 26, 22, 23.5)
-  , y     = c(-19.3, -18.4, -17.4, -17.3, -17.8)
+    x     = c(25.5, 26, 25.7, 21.5, 23.5)
+  , y     = c(-19.3, -18.2, -17.6, -17.6, -17.8)
   , Label = c("BOTSWANA", "ZIMBABWE", "ZAMBIA", "ANGOLA", "NAMIBIA")
 )
 
 # Create labels for some geographical landmarks
 labels_waters <- data.frame(
-    x     = c(22.6, 23.7)
-  , y     = c(-19, -18.2)
-  , Label = c("Okavango\nDelta", "Linyanti\nSwamp")
+    x     = c(22.6, 23.7, 27.1, 25.6)
+  , y     = c(-19.1, -18.2, -17.5, -20.7)
+  , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
 )
 
 # Plot
