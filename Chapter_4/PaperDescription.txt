@@ -1,1 +1,0 @@
-In this paper, we evaluate how missingness of GPS data influences our results of iSSFs
