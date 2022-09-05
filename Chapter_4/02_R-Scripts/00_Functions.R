@@ -148,7 +148,8 @@ move <- function(
     , n_steps  = 10      # Number of steps simulated
     , n_rsteps = 25      # Number of random steps proposed at each step
     , stop     = TRUE    # Should the simulation stop at boundaries?
-  ){
+    , messages = F       # Would you like to print update messages?
+  ) {
 
   # For testing only
   # xy        <- coordinates(spsample(nps, type = "random", n = 1))
@@ -172,7 +173,10 @@ move <- function(
   )
 
   # Simulate random steps
-  for (i in 2:n_steps){
+  if (messages) {
+    pb <- txtProgressBar(0, n_steps, style = 3)
+  }
+  for (i in 2:n_steps) {
 
     # # For testing only
     # i <- 2
@@ -274,6 +278,11 @@ move <- function(
     track$sl[i] <- rand$sl
     track[i + 1, "x"] <- rand$x
     track[i + 1, "y"] <- rand$y
+
+    # Print update
+    if (messages) {
+      setTxtProgressBar(pb, i)
+    }
   }
 
   # Assign step numbers
