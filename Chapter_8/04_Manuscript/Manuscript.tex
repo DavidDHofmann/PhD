@@ -131,19 +131,26 @@ for African Wild Dog Connectivity
 %------------------------------------------------------------------------------
 \newpage
 \begin{abstract}
-Many ecosystems experience substantial changes in environmental conditions due
-to seasonality. While such seasonal changes may drastically alter connectivity
-for endangered species, most studies represent the environment by a static set
-of spatial layers, thus ignoring seasonal variation. Here, we address this
-shortcoming and employ individual-based simulations to investigate how seasonal
-flooding of the Okavango delta influences connectivity for dispersing African
-wild dogs (\textit{Lycaon pictus}). Our results show that the Okavango delta
-poses a substantial dispersal barrier when the flood is at maximum extent, yet
-that viable dispersal corridors exist when the flood is at a minimum level.
-Despite a better understanding of the conservation needs for African wild dogs,
-our study also provides evidence that incorporating seasonality in studies of
-connectivity is imperative to more accurately predict the dispersal ability of
-endangered species.
+Climate change is expected to considerably impact vital rates of endangered
+species. In particular dispersal, the phase during which species leave their
+natal area and attempt to find a new territory to settle, may
+
+We utilize seasonal changes in the flooding regime across the Okavango delta as
+a large scale natural experiment to investigate how environmental changes impact
+species' ability to disperse, and utlimately connectivity between remaining
+subpopulations. Specifically, we apply individual-based dispersal simualtions to
+simulate dispersal trajectories under two extreme scenarios, assuming minimal
+and maximum flood extents.
+
+Our results show that during years of minimum flood extent, the Okavango delta
+releases vast areas that dispersers use as movement corridors, whereas during
+years of extreme flood the delta's floodwaters pose a considerable dispersal
+barrier that forces dispersing individuals closer towards human settlements.
+Besides a better understanding of the conservation needs for the African wild
+dog, our study also provides evidence that incorporating seasonality in studies
+of connectivity is imperative to more accurately predict the dispersal ability
+of endangered species.
+
 \end{abstract}
 
 %------------------------------------------------------------------------------
@@ -163,14 +170,45 @@ endangered species.
 % \linenumbers
 
 \section{Introduction}
-Hello, I'm an introduction.
+\subsection{Climate Change}
+\subsection{Vital Rates}
+\subsection{Dispersal}
+\subsection{Connectivity}
+Dispersal is an important, if not the important, driver of landscape
+connectivity and therefore of major interest to conservation authorities.
 
-However, \cite{Hofmann.2021} and \cite{Hofmann.2022} used a single floodmap...
+\subsection{Okavango Delta and African Wild Dogs}
+The Okavango delta in Southern Africa poses a unique opportunity to study the
+impacts of environmetal change on species dispersal ability and connectivity in
+large scale natural experiment setup.
+
 
 \section{Methods}
+Programming language, packages, etc.
 
 \subsection{Study Area}
-As depicted in \Cref{StudyArea}, the study area encomassed ...
+The study area for this analysis was focused on the Okavango delta and its
+surroundings in Southern Africa, comprising parts of Angola, Namibia, Botswana,
+Zimbabwe, and Zambia \Cref{StudyArea}. To accomodate for the long distance
+dispersal events commonly observed in the African wild dog, we considered a
+large rectangular extent stretching from ... to ...., totalling to an area of xx
+km. The dominant geographical feature in this region is the Okavango delta, the
+world's largest inland delta and main driver of seasonal environmental change in
+the region. While local rainfalls marginally impact water levels across the
+delta, the main flood-pulsing rythm is driven by the water-influx from the
+Okavango river. The Okavango carries rain waters collected the Angolian
+highlands into the delta's distributaries. Although precipitation in Angola
+peaks around ..., the water arrives in the delta with a delay of ... It only
+slowly descends through the delta and reaches the distal ends (at the faults)
+around ... At minimum extent, the flood covers an area of around xx km, whereas
+during maximum flood it covers ... Vegetation in the study area can largely be
+categorized into dense mopane forest, mixed acacia woodland, and plain
+grassland. Human influence in the study area is generally low and mainly
+concentrated to small villages at the western periphery of the delta, as well as
+to the city of Maun at the southern tip of the delta. Large portions of land are
+dedicated national parks, game reserves or forest reserves and the area is part
+of the world's largest transboundary conservation initiative, the
+Kavango-Zambezi Transfrontier Conservation Area.
 
 \begin{figure}
   \begin{center}
@@ -182,8 +220,24 @@ As depicted in \Cref{StudyArea}, the study area encomassed ...
 \end{figure}
 
 \subsection{Spatial Habitat Layers}
-In order to generate spatial layers that depict the flood extent at different
-points in time, we ... \Cref{FloodExtent}.
+We represented the physical landscape through which dispersers could move by a
+set of spatially referenced habitat layers each resolve at 250m x 250m. The set
+of layers included water-cover, distance-to-water, tree-cover,
+shrub/grassland-cover, and a human influence layer depicting anthropogenic
+influences through villages, roads, and agriculture. A detailed description of
+the different layers is provided in \Cref{Hofmann.2021}. Importantly, the
+water-cover and the derived distance-to water layers were generated using MODIS
+Terra satellite imagery, which enabled us to generate weekly updated layers that
+provided detailed information about the flood-extent at any given point in time.
+We had a total of 8xx remote sensed floodmaps at our disposal and used them to
+generate two extreme scenarios; a minimal and maximum flood scenario. To create
+the minimum flood scenario, we tallied the 50 floodmaps with smallest flood
+extent into an average image. Finally, we created a binary map... Similarly, we
+created an average image for high flood using the 50 most flooded maps. The
+resulting maps are depicted in \Cref{FloodExtent}. For completeness we also
+generated an  ``average'' floodmap by averaging across all 800 floodmaps
+available to us. The results based upond this layer are presented in the
+Appendix.
 
 \begin{figure}
   \begin{center}
@@ -193,21 +247,82 @@ points in time, we ... \Cref{FloodExtent}.
   \end{center}
 \end{figure}
 
-\subsection{Dispersal Simulation}
-We used a previously parametrized movement model to simulate dispersal of
-African wild dogs. To simulate dispersing wild dogs, we employed the simulation
-framework presented in \cite{Hofmann.2022}. In this framework, a movement model
-that renders habitat and movement preferences of dispersing individuals is
-parametrized using step-selection functions. Once parametrized, the model can be
-employed to simulate virtual dispersers moving across the landscape.
+\subsection{Dispersal Model}
+Our dispersal model was based on a previously parametrized and validated
+\textit{integrated step-selection function (iSSF)} applied to the dispersal data
+of 16 dispersing African wild dogs inhabiting the surroundings of the Moremi
+National Park in the Okavango delta \citep{Hofmann.2021}. The iSSF model
+consists of two complementary ``kernels'' plus their interactions. The first
+kernel is a movement kernel and describes general movement behavior of
+dispersing AWDs, irrespective of habitat conditions. The second kernel is a
+habitat kernel and describes preferences of AWDs with regards to environmental
+conditions. Finally, the model also includes interactions among the two kernels
+and therefore allows to render how movement behavior changes depending on
+habitat conditions.
 
-We released virtual dispersers at random locations within the four distinct
-source areas depicted in \Cref{StudyArea}. From each source area we simulated xx
-individuals moving across the landscape at minimum flood and another xx
-individuals at maximum flood. For comparison, we also ran the simulations for a
-medium flood extent, yet the results for this will be presented in the appendix.
+\subsection{Source Areas}
+We simulated dispersing AWDs originating from nine distinct source patches
+located in the vicinity of the Okavango delta. The source areas were generated
+as follows. First, we overlayed the OD with an oval that was bound by
+geographical landmarks; in the north, the oval was bound by the Inflow of the
+Okavango river into the ``pan-handle'' of the OD, north-east the oval was bound
+by the Selinda-Spillway and the Linyanty swamp, towards South-East it was bound
+by the Boteti river, and towards South-West by Lake Ngami. We then dissected the
+polygon into five distinct patches using the same natural landmarks
+(\Cref{StudyArea}). Patch one was given by the area south of the Boteti river
+and area two by the area north of it up until the panhandle. Area three
+stretched from the region easf of Maun towards north until the Selinda-spillway,
+whereas area four stretched north of the spillway until west towards the
+panhandle. Finally, a fifrth source area marked the peninsuale in the center of
+the OD. In addition to these five source patches, we also distributed small
+peripheral patches that we used to simulate individuals immigrating
+\textit{into} system and to keep track of individuals leaving it.
+
+\subsection{Dispersal Simulation}
+For both environmental scenarios we simulated 1'000 individuals dispersing from
+each of the nine source area depicted in \Cref{StudyArea}. The simulation
+algorithm was based on the algorithm described in \Cref{Hofmann.2022} and works
+as follows. A random location within the source area is chosen as a starting
+point. Originating from the starting point, a set of 25 random steps are
+generated by sampling step lengths from a gamma distribution fitted to observed
+steps (what is a step?) (shape = , scale = ) and turning angles from a uniform
+distibution on ($-\pi, +\pi$). Along each random step the underlying spatial
+covariates are extracted and relevant movement metrics are computed (i.e.
+log(sl), cos(ta), ta). The parametrized dispersal model is used to predict the
+probability of each step for being chosen given the steps covariate values. One
+of the steps is sampled based on assigned probabilities and the location of the
+animal is updated. The procedure is then repated until the desired number of
+steps (in our case 2000) is realized. Resulting trajectories resemble correlated
+random walks. As the original model was trained using 4-hourly steps, a
+simulated step also resembled straight line movements within four hours.
+
+% We used a previously parametrized dispersal model to simulate dispersal
+% trajectories of African wild dogs across the study area. To simulate dispersing
+% wild dogs, we employed the simulation framework presented in
+% \cite{Hofmann.2022}. In this framework, a movement model that renders habitat
+% and movement preferences of dispersing individuals is parametrized using
+% step-selection functions. Once parametrized, the model can be employed to
+% simulate virtual dispersers moving across the landscape.
+%
+% We released virtual dispersers at random locations within the four distinct
+% source areas depicted in \Cref{StudyArea}. From each source area we simulated xx
+% individuals moving across the landscape at minimum flood and another xx
+% individuals at maximum flood. For comparison, we also ran the simulations for a
+% medium flood extent, yet the results for this will be presented in the appendix.
 
 \subsection{Connectivity}
+Based on simulated dispersal trajectories we quantified connectivity across the
+OD for both environmental scenaiors in three complementary way. First, we
+generated heatmaps showing how often different areas in the landscape were
+visited by simulated dispersers. Such heatmaps serve to detect dispersal
+hotspots, yet are less suitable to detect pinchpoints and bottlenecks. Hence, we
+also computed spatially explicit betweenness scores which are useful to
+highlight movement corridors (Bastille). For this, we overlayed the study area
+with a regular grid with 2.5 km x 2.5 km grid cells and determined how often
+simulated individuals transitioned from one grid-cell to another. Note that we
+didn't consider revisits to avoid pronouncing regions in which individuals were
+encroached and moved in circles.
+
 To gain insights into landscape connectivity from the simulated dispersal
 events, we prepared three complementary connectivity maps (see again
 \citep{Hofmann.2022}); a heatmap, indicating the absolute frequency at which
@@ -232,7 +347,7 @@ dispersal duration needed until individuals reached the respective area.
 
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_Heatmaps2000.png}
+  \includegraphics[width = \textwidth]{99_Heatmaps.png}
   \caption{}
   \label{Heatmaps}
   \end{center}
@@ -240,7 +355,7 @@ dispersal duration needed until individuals reached the respective area.
 
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_DifferenceHeatmaps.png}
+  \includegraphics[width = \textwidth]{99_DifferenceMap.png}
   \caption{}
   \label{DifferenceHeatmaps}
   \end{center}

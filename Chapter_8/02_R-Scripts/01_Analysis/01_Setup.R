@@ -131,6 +131,15 @@ writeRaster(tre, file.path(new_chap, "03_Data/01_RawData/MODIS/Trees.tif"), over
 writeRaster(gra, file.path(new_chap, "03_Data/01_RawData/MODIS/Shrubs.tif"), overwrite = T)
 
 ################################################################################
+#### Dispersal Data
+################################################################################
+# Copy data of the dispersers
+file.copy(
+    from = file.path(old_chap, "03_Data/02_CleanData/00_General_Dispersers_POPECOL.csv")
+  , to   = file.path(new_chap, "03_Data/02_CleanData/Dispersers.csv")
+)
+
+################################################################################
 #### Reference Layers
 ################################################################################
 # Print to terminal
@@ -168,6 +177,7 @@ vills <- subset(vills, !is.na(place)) %>%
 
 # Make a regular shapefile
 st_write(vills, "03_Data/02_CleanData/Villages.shp", delete_layer = T)
+
 
 ################################################################################
 #### Session Information

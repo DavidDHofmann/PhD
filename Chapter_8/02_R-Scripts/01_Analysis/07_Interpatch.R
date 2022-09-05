@@ -33,10 +33,10 @@ area <- vect("03_Data/02_CleanData/SourceAreas.shp")
 # Rasterize them to the reference raster
 area_r <- terra::rasterize(area, y = r, field = "ID")
 
-# Visualize them
-plot(area_r, main = "Source Areas")
-plot(area, add = T)
-text(area, "ID", cex = 0.5, halo = T)
+# # Visualize them
+# plot(area_r, main = "Source Areas")
+# plot(area, add = T)
+# text(area, "ID", cex = 0.5, halo = T)
 
 ################################################################################
 #### Prepare Simulations
@@ -46,6 +46,14 @@ sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 
 # Keep only desired columns
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "SourceArea", "FloodLevel")]
+
+# Count number of simulations per source area
+n_sample <- sims %>%
+  select(TrackID, SourceArea, FloodLevel) %>%
+  distinct() %>%
+  count(SourceArea, FloodLevel) %>%
+  pull(n) %>%
+  unique()
 
 # Make coordinates of simulated trajectories spatial
 coordinates(sims) <- c("x", "y")
@@ -94,8 +102,8 @@ visits <- visits %>%
 
 # Identify how long it takes to reach the different areas
 visits <- visits %>%
-  rename(From = SourceArea, To = Area) %>%
-  group_by(TrackID, FloodLevel, From, To) %>%
+  rename(SourceArea = SourceArea, CurrentArea = Area) %>%
+  group_by(TrackID, FloodLevel, SourceArea, CurrentArea) %>%
   summarize(
       StepNumber        = min(StepNumber)
     , DistanceFromFirst = min(DistanceFromFirst)
@@ -107,7 +115,7 @@ visits <- visits %>%
 # Compute summary statistics by source area
 summarizeVisits <- function(visits) {
   visits %>%
-    group_by(FloodLevel, From, To) %>%
+    group_by(FloodLevel, SourceArea, CurrentArea) %>%
     summarize(
         MeanStepNumber = mean(StepNumber)
       , SDStepNumber   = sd(StepNumber)
@@ -119,25 +127,12 @@ summarizeVisits <- function(visits) {
 # Try it
 summarizeVisits(visits)
 
-# This is cool. Let's now use the function in a bootstrapping approach to get
-# some confidence around our estimates. Let's determine how much the sample (per
-# floodlevel) needs to be (The approach I have chosen might appear a bit
-# convoluted but it is bulletproof!)
-n_sample <- visits %>%
-  select(TrackID, FloodLevel) %>%
-  distinct() %>%
-  count(FloodLevel) %>%
-  pull(n) %>%
-  unique()
-
-# We then need to have the data in a nested format to repeatedly sample tracks
-# from it
-visits_nested <- nest(visits, Data = -c(TrackID, FloodLevel))
-
-# Let's run the bootstrapping
+# Generate bootstrap samples to compute standard deviation for the number of
+# successful dispersals between source areas and the number of steps required
+visits_nested <- nest(visits, Data = -c(TrackID, FloodLevel, SourceArea))
 bootstrapped <- pbmclapply(1:1000, ignore.interactive = T, mc.cores = detectCores() - 1, function(x) {
   boot <- visits_nested %>%
-    group_by(FloodLevel) %>%
+    group_by(FloodLevel, SourceArea) %>%
     slice_sample(replace = T, n = n_sample) %>%
     unnest(Data) %>%
     summarizeVisits()
@@ -148,12 +143,12 @@ bootstrapped <- do.call(rbind, bootstrapped)
 
 # Bind and compute confidence intervals
 visits_bootstrapped <- bootstrapped %>%
-  group_by(FloodLevel, From, To) %>%
+  group_by(FloodLevel, SourceArea, CurrentArea) %>%
   summarize(
       StepNumber   = mean(MeanStepNumber)
-    , StepNumberSE = sd(MeanStepNumber)
+    , StepNumberSE = sd(MeanStepNumber)   # Bootstrapped sd is the metric's se
     , Freq         = mean(Frequency)
-    , FreqSE       = sd(Frequency)
+    , FreqSE       = sd(Frequency)        # Bootstrapped sd is the metric's se
     , .groups      = "drop"
   )
 

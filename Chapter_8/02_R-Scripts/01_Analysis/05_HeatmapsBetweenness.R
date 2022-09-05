@@ -69,34 +69,34 @@ design <- design[sample(1:nrow(design), size = nrow(design), replace = F), ]
 
 # Loop through the design and generate heatmaps
 if (!file.exists("03_Data/03_Results/HeatmapsLocal.tif")) {
-  heatmaps <- list()
-  for (i in 1:nrow(design)) {
-    cat("Computing heatmap", i, "out of", nrow(design), "\n")
-    if (file.exists(design$FilenameHeatmap[i])) {
-      heatmaps[[i]] <- raster(design$FilenameHeatmap[[i]])
-    } else {
-      heatmaps[[i]] <- rasterizeSims(
-          simulations = sims
-        , raster      = r_heat
-        , steps       = design$Steps[i]
-        , area        = design$SourceArea[i]
-        , flood       = design$FloodLevel[i]
-        , messages    = F
-        , mc.cores    = detectCores() - 1
-        , filename    = design$FilenameHeatmap[i]
-      )
+    heatmaps <- list()
+    for (i in 1:nrow(design)) {
+      cat("Computing heatmap", i, "out of", nrow(design), "\n")
+      if (file.exists(design$FilenameHeatmap[i])) {
+        heatmaps[[i]] <- raster(design$FilenameHeatmap[[i]])
+      } else {
+        heatmaps[[i]] <- rasterizeSims(
+            simulations = sims
+          , raster      = r_heat
+          , steps       = design$Steps[i]
+          , area        = design$SourceArea[i]
+          , flood       = design$FloodLevel[i]
+          , messages    = F
+          , mc.cores    = detectCores() - 1
+          , filename    = design$FilenameHeatmap[i]
+        )
+      }
     }
-  }
 
-  # Combine maps, reproject them, crop, and store them
-  combined <- stack(heatmaps)
-  combined <- rast(combined)
-  combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
-  combined <- stack(combined)
-  combined <- crop(combined, r)
-  writeRaster(combined, "03_Data/03_Results/HeatmapsLocal.tif", overwrite = T)
-} else {
-  combined <- stack("03_Data/03_Results/HeatmapsLocal.tif")
+    # Combine maps, reproject them, crop, and store them
+    combined <- stack(heatmaps)
+    combined <- rast(combined)
+    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- stack(combined)
+    combined <- crop(combined, r)
+    writeRaster(combined, "03_Data/03_Results/HeatmapsLocal.tif", overwrite = T)
+  } else {
+    combined <- stack("03_Data/03_Results/HeatmapsLocal.tif")
 }
 
 # Add maps to the tibble
@@ -106,32 +106,32 @@ design <- mutate(design, Heatmap = lapply(1:nlayers(combined), function(x) {
 
 # Loop through the design and generate betweenness maps
 if (!file.exists("03_Data/03_Results/BetweennessLocal.tif")) {
-  betweenness <- pbmclapply(1:nrow(design), ignore.interactive = T, mc.cores = detectCores() / 2, function(i) {
-    if (file.exists(design$FilenameBetweenness[i])) {
-      raster(design$FilenameBetweenness[[i]])
-    } else {
-      betweenSims(
-          simulations = sims
-        , raster      = r_betw
-        , steps       = design$Steps[i]
-        , area        = design$SourceArea[i]
-        , flood       = design$FloodLevel[i]
-        , messages    = T
-        , mc.cores    = 1
-        , filename    = design$FilenameBetweenness[i]
-      )
-    }
-  })
+    betweenness <- pbmclapply(1:nrow(design), ignore.interactive = T, mc.cores = detectCores() / 2, function(i) {
+      if (file.exists(design$FilenameBetweenness[i])) {
+        raster(design$FilenameBetweenness[[i]])
+      } else {
+        betweenSims(
+            simulations = sims
+          , raster      = r_betw
+          , steps       = design$Steps[i]
+          , area        = design$SourceArea[i]
+          , flood       = design$FloodLevel[i]
+          , messages    = T
+          , mc.cores    = 1
+          , filename    = design$FilenameBetweenness[i]
+        )
+      }
+    })
 
-  # Combine maps, reproject them, crop, and store them
-  combined <- stack(betweenness)
-  combined <- rast(combined)
-  combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
-  combined <- stack(combined)
-  combined <- crop(combined, r)
-  writeRaster(combined, "03_Data/03_Results/BetweennessLocal.tif", overwrite = T)
-} else {
-  combined <- stack("03_Data/03_Results/BetweennessLocal.tif")
+    # Combine maps, reproject them, crop, and store them
+    combined <- stack(betweenness)
+    combined <- rast(combined)
+    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- stack(combined)
+    combined <- crop(combined, r)
+    writeRaster(combined, "03_Data/03_Results/BetweennessLocal.tif", overwrite = T)
+  } else {
+    combined <- stack("03_Data/03_Results/BetweennessLocal.tif")
 }
 
 # Add maps to the tibble
@@ -159,33 +159,33 @@ design <- design[sample(1:nrow(design), size = nrow(design), replace = F), ]
 
 # Loop through the design and generate heatmaps
 if (!file.exists("03_Data/03_Results/HeatmapsGlobal.tif")) {
-  heatmaps <- list()
-  for (i in 1:nrow(design)) {
-    cat("Computing heatmap", i, "out of", nrow(design), "\n")
-    if (file.exists(design$FilenameHeatmap[i])) {
-      heatmaps[[i]] <- raster(design$FilenameHeatmap[[i]])
-    } else {
-      heatmaps[[i]] <- rasterizeSims(
-          simulations = sims
-        , raster      = r_heat
-        , steps       = design$Steps[i]
-        , flood       = design$FloodLevel[i]
-        , messages    = F
-        , mc.cores    = detectCores() - 1
-        , filename    = design$FilenameHeatmap[i]
-      )
+    heatmaps <- list()
+    for (i in 1:nrow(design)) {
+      cat("Computing heatmap", i, "out of", nrow(design), "\n")
+      if (file.exists(design$FilenameHeatmap[i])) {
+        heatmaps[[i]] <- raster(design$FilenameHeatmap[[i]])
+      } else {
+        heatmaps[[i]] <- rasterizeSims(
+            simulations = sims
+          , raster      = r_heat
+          , steps       = design$Steps[i]
+          , flood       = design$FloodLevel[i]
+          , messages    = F
+          , mc.cores    = detectCores() - 1
+          , filename    = design$FilenameHeatmap[i]
+        )
+      }
     }
-  }
 
-  # Combine maps, reproject them, crop, and store them
-  combined <- stack(heatmaps)
-  combined <- rast(combined)
-  combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
-  combined <- stack(combined)
-  combined <- crop(combined, r)
-  writeRaster(combined, "03_Data/03_Results/HeatmapsGlobal.tif", overwrite = T)
-} else {
-  combined <- stack("03_Data/03_Results/HeatmapsGlobal.tif")
+    # Combine maps, reproject them, crop, and store them
+    combined <- stack(heatmaps)
+    combined <- rast(combined)
+    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- stack(combined)
+    combined <- crop(combined, r)
+    writeRaster(combined, "03_Data/03_Results/HeatmapsGlobal.tif", overwrite = T)
+  } else {
+    combined <- stack("03_Data/03_Results/HeatmapsGlobal.tif")
 }
 
 # Add maps to the tibble
@@ -195,31 +195,31 @@ design <- mutate(design, Heatmap = lapply(1:nlayers(combined), function(x) {
 
 # Loop through the design and generate betweenness maps
 if (!file.exists("03_Data/03_Results/BetweennessGlobal.tif")) {
-  betweenness <- pbmclapply(1:nrow(design), ignore.interactive = T, mc.cores = detectCores() / 4, function(i) {
-    if (file.exists(design$FilenameBetweenness[i])) {
-      raster(design$FilenameBetweenness[[i]])
-    } else {
-      betweenSims(
-          simulations = sims
-        , raster      = r_betw
-        , steps       = design$Steps[i]
-        , flood       = design$FloodLevel[i]
-        , messages    = T
-        , mc.cores    = 1
-        , filename    = design$FilenameBetweenness[i]
-      )
-    }
-  })
+    betweenness <- pbmclapply(1:nrow(design), ignore.interactive = T, mc.cores = detectCores() / 4, function(i) {
+      if (file.exists(design$FilenameBetweenness[i])) {
+        raster(design$FilenameBetweenness[[i]])
+      } else {
+        betweenSims(
+            simulations = sims
+          , raster      = r_betw
+          , steps       = design$Steps[i]
+          , flood       = design$FloodLevel[i]
+          , messages    = T
+          , mc.cores    = 1
+          , filename    = design$FilenameBetweenness[i]
+        )
+      }
+    })
 
-  # Combine maps, reproject them, crop, and store them
-  combined <- stack(betweenness)
-  combined <- rast(combined)
-  combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
-  combined <- stack(combined)
-  combined <- crop(combined, r)
-  writeRaster(combined, "03_Data/03_Results/BetweennessGlobal.tif", overwrite = T)
-} else {
-  combined <- stack("03_Data/03_Results/BetweennessGlobal.tif")
+    # Combine maps, reproject them, crop, and store them
+    combined <- stack(betweenness)
+    combined <- rast(combined)
+    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- stack(combined)
+    combined <- crop(combined, r)
+    writeRaster(combined, "03_Data/03_Results/BetweennessGlobal.tif", overwrite = T)
+  } else {
+    combined <- stack("03_Data/03_Results/BetweennessGlobal.tif")
 }
 
 # Add maps to the tibble

@@ -19,7 +19,7 @@
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_Heatmaps2000.png}
+  \includegraphics[width = \textwidth]{99_Heatmaps.png}
   \caption{}
   \label{Heatmaps}
   \end{center}
@@ -28,7 +28,7 @@
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_DifferenceHeatmaps.png}
+  \includegraphics[width = \textwidth]{99_DifferenceMap.png}
   \caption{}
   \label{DifferenceHeatmaps}
   \end{center}

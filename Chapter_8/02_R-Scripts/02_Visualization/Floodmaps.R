@@ -23,7 +23,6 @@ source("02_R-Scripts/00_Functions.R")
 # Load stuff that we would like to plot
 africa <- read_sf("03_Data/02_CleanData/Africa.shp")
 water  <- rast("03_Data/02_CleanData/WaterCover.tif")
-water  <- water[[c(1, 3)]]
 roads  <- read_sf("03_Data/02_CleanData/Roads.shp")
 vills  <- read_sf("03_Data/02_CleanData/Villages.shp")
 vills  <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
@@ -33,10 +32,30 @@ vills  <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
 r <- rast("03_Data/02_CleanData/ReferenceRaster.tif")
 r <- as.data.frame(r, xy = T)
 
-# # Crop to dynamic area
-# flood <- dir(path = "03_Data/01_RawData/FLOODMAPS", pattern = ".tif$", full.names = T)[1]
-# flood <- rast(flood)
-# water <- crop(water, flood)
+# We only care about min/max extents
+water  <- water[[c("min", "max")]]
+
+# To compute the flood extent, we need to focus on the Okavango delta, thus,
+# let's load a shapefile of it
+oka <- vect("03_Data/02_CleanData/MajorWaters.shp")
+oka <- oka[oka$name == "Okavango Delta", ]
+
+# Buffer it slightly
+oka <- buffer(oka, width = 10000)
+oka <- fillHoles(oka)
+
+# This looks good. We now mask anything outside that polygon
+water_masked <- mask(water, oka)
+water_masked <- trim(water_masked)
+water_masked <- subst(water_masked, 0, NA)
+
+# Convert shape of okavango delta to sf
+crs(oka) <- "+init=epsg:4236"
+oka            <- st_as_sf(oka)
+oka            <- rbind(oka, oka)
+oka$Area       <- round(expanse(water_masked, unit = "km"))
+oka$FloodLevel <- names(water_masked)
+oka$Label      <- paste0("Area~flooded:~", oka$Area, "~km^2")
 
 # Convert to dataframe
 water <- as.data.frame(water, xy = T)
@@ -62,6 +81,8 @@ p <- ggplot() +
   geom_raster(data = water, aes(x = x, y = y, fill = as.factor(Flooded))) +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
+  geom_sf(data = oka, col = "black", fill = NA, lty = 2) +
+  geom_sf_text(data = oka, aes(label = Label), nudge_y = 0.7, nudge_x = -0.25, size = 2, parse = T) +
   geom_point(
       data        = subset(vills, place == "City")
     , mapping     = aes(x = x, y = y)

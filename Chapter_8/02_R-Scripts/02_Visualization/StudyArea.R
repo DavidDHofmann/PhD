@@ -101,6 +101,9 @@ labels_source <- data.frame(
   , Label = 1:9
 )
 
+disp <- read_csv("03_Data/02_CleanData/Dispersers.csv")
+disp <- subset(disp, State == "Disperser")
+
 # Prepare plot of africa
 p1 <- ggplot() +
   geom_sf(data = africa, fill = "gray90", col = "white", lwd = 0.1) +
@@ -140,6 +143,12 @@ p2 <- ggplot() +
     , col         = "gray50"
     , shape       = 15
     , show.legend = F
+  ) +
+  geom_path(
+      data    = disp
+    , mapping = aes(x = x, y = y, group = as.factor(DogName))
+    , col     = viridis::viridis(20)[20]
+    , size    = 0.3
   ) +
   geom_text(
       data     = labels_waters
