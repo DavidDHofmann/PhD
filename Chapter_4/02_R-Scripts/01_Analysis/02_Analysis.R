@@ -23,10 +23,17 @@ setwd(wd)
 source("02_R-Scripts/00_Functions.R")
 
 # Reload simulated data
-dat <- read_rds("03_Data/Simulations.rds")
+dat <- read_rds("03_Data/Simulation.rds")
+
+# Load all simulated data into memory
+dat$Covariates <- lapply(dat$Covariates, readAll)
+dat$Movement   <- lapply(dat$MovementFilename, read_rds)
+
+# Remove any columns that are not needed anymore
+dat <- select(dat, -c(CovariateFilename, MovementFilename))
 
 ################################################################################
-#### Simulation Parameters
+#### Global Model Parameters
 ################################################################################
 n_rsteps     <- 10                     # Number of random steps to be generated
 formula      <- ~ forest + elev + dist # Formula used to predict step-selection scores
@@ -641,6 +648,7 @@ lapply(1:nrow(dat_sub), function(x) {
   # Extract relevant information
   cov <- dat_sub$Covariates[[x]]
   obs <- dat_sub$Movement[[x]]
+  fil <- dat_sub$ResultsFilename[x]
 
   # Analyse the data using the various approaches
   desi <- design
@@ -710,7 +718,7 @@ lapply(1:nrow(dat_sub), function(x) {
   })
 
   # Write results to file
-  write_rds(desi, file)
+  write_rds(desi, fil)
 
   # Store results to file
   return(NULL)

@@ -223,3 +223,9 @@ dat$Covariates <- pbmclapply(
     cov <- writeRaster(cov, filename, overwrite = T)
     return(cov)
 })
+
+# Ensure that all covariate layers are loaded propery
+dat$Covariates <- lapply(dat$CovariateFilename, stack)
+
+# Store the entire simulation to file
+write_rds(dat, "03_Data/Simulation.rds")
