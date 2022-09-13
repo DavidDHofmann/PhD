@@ -9,20 +9,9 @@ options(scipen = 999)
 
 # Load required packages
 library(tidyverse)     # For data wrangling
-library(NLMR)          # To simulate covariates
 library(raster)        # To handle spatial data
 library(amt)           # To fit distributions
 library(pbmcapply)     # To run stuff in parallel
-
-# Need to ensure the following versions are installed!
-if (packageVersion("RandomFieldsUtils") != "0.5") {
-  stop("Please install RandomFieldsUtils version 0.5")
-}
-if (packageVersion("RandomFields") != "3.3.1") {
-  stop("Please install RandomFields version 3.3.1")
-}
-# devtools::install_version("RandomFieldsUtils", version = "0.5", repos = "http://cran.us.r-project.org")
-# devtools::install_version("RandomFields", version = "3.3.1", repos = "http://cran.us.r-project.org", dependencies = F)
 
 # Set working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_9"
@@ -32,249 +21,18 @@ setwd(wd)
 source("02_R-Scripts/00_Functions.R")
 
 ################################################################################
-#### Simulation Parameters
+#### Analysis Parameters
 ################################################################################
 # Simulation setup
-n         <- 300   # Resolution of the covariate layers
-n_rsteps  <- 25    # Number of random steps to be generated
-n_steps   <- 250   # Number of consecutive steps to be simulated
-stop      <- F     # Should the simulation terminate at boundaries?
-
-# State-dependent parameters
+n_rsteps  <- 25
 formula   <- ~ elev + dist
-beta_elev <- c(-1, 2)
-beta_dist <- c(-20, -20)
-beta      <- cbind(beta_elev, beta_dist)
-shape     <- c(1, 2)
-scale     <- c(1, 4)
-kappa     <- c(0.2, 0.9)
-trans     <- matrix(c(0.9, 0.1, 0.1, 0.9), nrow = 2)
 
-# Visualize the parametric distributions
-sl <- tibble(
-    x  = seq(0, 20, 0.01)
-  , y1 = dgamma(x, shape = shape[1], scale = scale[1])
-  , y2 = dgamma(x, shape = shape[2], scale = scale[2])
-) %>% pivot_longer(y1:y2)
-ta <- tibble(
-    x  = seq(-pi, pi, 0.01)
-  , y1 = dvonmises(x, mu = 0, kappa = kappa[1])
-  , y2 = dvonmises(x, mu = 0, kappa = kappa[2])
-) %>% pivot_longer(y1:y2)
-ggplot(sl, aes(x = x, y = value, col = name)) + geom_line() + theme_minimal()
-ggplot(ta, aes(x = x, y = value, col = name)) + geom_line() + theme_minimal()
-
-# Put all relevant parameters into a single vector
-params_true <- c(trans[1, 1], trans[2, 2], shape, scale, kappa, beta)
-names(params_true) <- c("t11", "t22", "shape1", "shape2", "scale1", "scale2"
-  , "kappa1", "kappa2", "beta_elev1", "beta_elev2", "beta_dist1", "beta_dist2")
-print(params_true)
-
-# Let's specify the extent on which animals are allowed to move
-ext <- extent(0, n, 0, n)
-ext <- as(ext, "SpatialPolygons")
-
-# Let's also specify an extent within which individuals will be released
-ext2 <- extent(ext) - 100
-ext2 <- as(ext2, "SpatialPolygons")
-
-# And an extent to which we will expand covariates before extracting covariate
-# values
-ext3 <- extent(c(-50, 350, -50, 350))
-ext3 <- as(ext3, "SpatialPolygons")
+# Let's also reload the true simulation parameters
+params_true <- read_rds("03_Data/SimulationParameters.rds")
 
 ################################################################################
 #### Functions
 ################################################################################
-# Function to simulate covariates
-simCovars <- function() {
-
-  # Generate a point of attraction at the center of the study area and compute the
-  # distance to it
-  r <- raster(nrows = n, ncols = n, xmn = 0, xmx = n, ymn = 0, ymx = n)
-  cent <- SpatialPoints(t(c(n / 2, n / 2)))
-  dist <- distanceFromPoints(r, cent)
-  dist <- (dist - cellStats(dist, min)) / (cellStats(dist, max) - cellStats(dist, min))
-
-  # And a continuous covariate layer
-  elev <- nlm_gaussianfield(ncol = n, nrow = n)
-
-  # Put the covariates together into a stack
-  covs <- stack(dist, elev)
-  names(covs) <- c("dist", "elev")
-
-  # Return
-  return(covs)
-
-}
-
-# Function to simulate a single trajectory
-simMove <- function(
-      xy        = NULL    # Source point (in matrix form -> n * 2)
-    , initstate = NULL    # Initial state of the animal
-    , covars    = NULL    # Stack of covariate layers (names need to match formula!)
-    , formula   = NULL    # Model formula used to predict selection score
-    , prefs     = NULL    # Preferences used to predict selection score
-    , shape     = NULL    # Shape parameters
-    , scale     = NULL    # Scale parameters
-    , kappa     = NULL    # Concentration parameters
-    , trans     = NULL    # Matrix of transition probabilities
-    , ext       = NULL    # Extent on which animals are allowed to move
-    , n_steps   = 10      # Number of steps simulated
-    , n_rsteps  = 25      # Number of random steps proposed at each step
-    , stop      = TRUE    # Should the simulation stop at boundaries?
-    , progress  = F       # Should a progress bar be shown?
-  ) {
-
-  # # For testing only
-  # xy        <- cbind(150, 150)
-  # covars    <- covars
-  # formula   <- ~ elev + dist
-  # prefs     <- beta
-  # shape     <- shape
-  # scale     <- scale
-  # kappa     <- kappa
-  # trans     <- trans
-  # initstate <- sample(1:2, 1)
-  # n_rsteps  <- 25
-  # n_steps   <- 200
-  # ext       <- ext
-  # stop      <- F
-
-  # Create a new dataframe based on the source point. Note that we draw random
-  # turning angles to start off
-  track <- data.frame(
-      x     = c(NA, xy[, 1])
-    , y     = c(NA, xy[, 2])
-    , absta = c(runif(1, min = 0, max = 2 * pi), NA)
-    , ta    = NA
-    , sl    = NA
-    , state = initstate
-  )
-
-  # Simulate random steps
-  if (progress) {
-    pb <- txtProgressBar(min = 0, max = n_steps, style = 3)
-  }
-  for (i in 2:(n_steps + 1)) {
-
-    # For testing only
-    # i <- 2
-
-    # Sample a new state
-    track$state[i] <- sample(c(1, 2), size = 1, prob = trans[track$state[i - 1], ])
-
-    # Draw random turning angles
-    ta_new <- rvonmises(n_rsteps
-      , mu    = 0
-      , kappa = kappa[track$state[i]]
-    )
-
-    # Draw random step lengths
-    sl_new <- rgamma(n_rsteps
-      , shape = shape[track$state[i]]
-      , scale = scale[track$state[i]]
-    )
-
-    # Make sure that the steps cover at least a minimal distance (this is
-    # relevant if we need to compute the log of it)
-    sl_new[sl_new < 0.0001] <- 0.0001
-
-    # Put the step lengths and turning angles into a new dataframe. These are
-    # our proposed random steps.
-    rand <- data.frame(
-        absta  = track$absta[i - 1] + ta_new
-      , ta     = ta_new
-      , sl     = sl_new
-    )
-
-    # We need to make sure that the absolute turning angle ranges from 0 to 2 *
-    # pi
-    rand$absta[rand$absta > 2 * pi] <-
-      rand$absta[rand$absta > 2 * pi] - 2 * pi
-    rand$absta[rand$absta < 0] <-
-      rand$absta[rand$absta < 0] + 2 * pi
-
-    # Calculate new endpoints
-    rand$x <- track$x[i] + sin(rand$absta) * rand$sl
-    rand$y <- track$y[i] + cos(rand$absta) * rand$sl
-
-    # Create spatial points from endpoints
-    coordinates(rand) <- c("x", "y")
-
-    # Depending on the answer in the beginning, the loop breaks if one of the
-    # new coordinates is outside the map boundaries
-    if (stop) {
-        if (nrow(rand[ext, ]) != n_rsteps) {
-          break
-        }
-      } else {
-        rand <- rand[ext, ]
-    }
-
-    # Coerce back to regular dataframe
-    rand <- as.data.frame(rand)
-
-    # Prepare a "line" for each random step. We first need the coordinates of
-    # the steps for this
-    begincoords <- track[i, c("x", "y")]
-    endcoords   <- rand[, c("x", "y")]
-
-    # Interpolate coordinates and extract covariates
-    extracted <- sapply(1:nrow(endcoords), function(x) {
-      line <- interpolatePoints(
-          x1 = begincoords[1, 1]
-        , x2 = endcoords[x, 1]
-        , y1 = begincoords[1, 2]
-        , y2 = endcoords[x, 2]
-        , by = 0.1
-      )
-      extr <- raster::extract(covars, line)
-      extr <- colMeans(extr)
-      return(extr)
-    })
-
-    # Bind with data on random steps
-    rand <- cbind(rand, t(extracted))
-
-    # Calculate cos_ta and log_sl
-    rand$cos_ta <- cos(rand$ta)
-    rand$log_sl <- log(rand$sl)
-
-    # Prepare model matrix (and remove intercept)
-    mat <- model.matrix(formula, rand)
-    mat <- mat[ , -1]
-
-    # Calculate selection scores
-    score <- exp(mat %*% prefs[track$state[i], ])
-
-    # Convert scores to probabilities
-    probs <- score / sum(score)
-
-    # Sample one of the steps based on predicted probabilities
-    rand <- rand[sample(nrow(rand), 1, prob = probs), ]
-
-    # Add the step to our track
-    track$absta[i] <- rand$absta
-    track$ta[i] <- rand$ta
-    track$sl[i] <- rand$sl
-    track[i + 1, "x"] <- rand$x
-    track[i + 1, "y"] <- rand$y
-    if (progress) {
-      setTxtProgressBar(pb, i)
-    }
-  }
-
-  # Add "to" coordinates
-  track$x_to <- lead(track$x)
-  track$y_to <- lead(track$y)
-
-  # Return track, yet remove initial pseudo-fix
-  track <- na.omit(track)
-  track$step_number <- 1:nrow(track)
-  return(track)
-}
-
 # Function to generate random steps
 computeSSF <- function(data, n_rsteps, dists) {
 
@@ -339,10 +97,6 @@ computeSSF <- function(data, n_rsteps, dists) {
 
 # Function to extract covariates
 computeCovars <- function(data, covars, multicore = F) {
-
-  # Extend covariates slightly to ensure that random steps are not outside our
-  # borders
-  covars <- extendRaster(covars, ext3)
 
   # Run the covariate extraction on multiple cores
   if (multicore) {
@@ -479,6 +233,70 @@ negLoglik <- function(form, params_star, ssf) {
 
 }
 
+# Function to decode the states
+viterbi <- function(form, theta, ssf) {
+
+  # Transition matrix and steady state
+  t <- matrix(c(theta[1], 1 - theta[2], 1 - theta[1], theta[2]), nrow = 2)
+  d <- solve(t(diag(2) - t + 1), c(1, 1))
+
+  # Distributional parameters for the two states
+  shape <- theta[3:4]
+  scale <- theta[5:6]
+  kappa <- theta[7:8]
+  beta  <- matrix(theta[9:12], nrow = 2, byrow = F)
+
+  # Model matrix
+  mat <- model.matrix(form, ssf)
+  mat <- mat[, -1]
+
+  # Step selection scores if in state 1
+  score <- as.vector(exp(mat %*% beta[1, ]))
+  probs_st1 <- aggregate(score, by = list(ssf$step_id), FUN = function(x) {
+    x[1] / sum(x)
+  })$x
+
+  # Step selection scores if in state 2
+  score <- as.vector(exp(mat %*% beta[2, ]))
+  probs_st2 <- aggregate(score, by = list(ssf$step_id), FUN = function(x) {
+    x[1] / sum(x)
+  })$x
+
+  # Put them together
+  probs_st <- cbind(probs_st1, probs_st2)
+
+  # Step length probabilities
+  probs_sl <- cbind(
+      dgamma(ssf$sl[ssf$case == 1], shape = shape[1], scale = scale[1])
+    , dgamma(ssf$sl[ssf$case == 1], shape = shape[2], scale = scale[2])
+  )
+
+  # Turning angle probabilities
+  probs_ta <- cbind(
+      dvonmises(ssf$ta[ssf$case == 1], mu = 0, kappa = kappa[1])
+    , dvonmises(ssf$ta[ssf$case == 1], mu = 0, kappa = kappa[2])
+  )
+
+  # Put all probabilities together
+  probs <- probs_st * probs_sl * probs_ta
+
+  # Backwards algorithm
+  n <- nrow(probs)
+  xi <- matrix(0, n, 2)
+  foo <- d * probs[1, ]
+  xi[1, ] <- foo / sum(foo)
+  for (i in 2:n) {
+    foo <- apply(xi[i - 1, ] * t, 2, max) * probs[i, ]
+    xi[i, ] <- foo / sum(foo)
+  }
+  iv <- numeric(n)
+  iv[n] <- which.max(xi[n, ])
+  for (i in (n - 1):1) {
+    iv[i] <- which.max(t[, iv[i + 1]] * xi[i, ])
+  }
+  return(iv)
+}
+
 # Function to run through the different models
 runAnalysis <- function(sim, covars, multicore = F) {
 
@@ -496,6 +314,7 @@ runAnalysis <- function(sim, covars, multicore = F) {
   for (i in 1:2) {
 
     # Fit state dependent distributions
+    cat("Running sub-analysis:", i, "/ 3 \n")
     dist_sl <- fit_distr(sim$sl[sim$state == i], dist_name = "gamma")$params
     dist_ta <- fit_distr(sim$ta[sim$state == i], dist_name = "vonmises")$params
     dists <- list(sl = dist_sl, ta = dist_ta)
@@ -523,6 +342,7 @@ runAnalysis <- function(sim, covars, multicore = F) {
   }
 
   # If we dont know the states, we can't fit separate distributions
+  cat("Running sub-analysis: 3 / 3 \n")
   dist_sl <- fit_distr(sim$sl, dist_name = "gamma")$params
   dist_ta <- fit_distr(sim$ta, dist_name = "vonmises")$params
   dists <- list(sl = dist_sl, ta = dist_ta)
@@ -543,103 +363,105 @@ runAnalysis <- function(sim, covars, multicore = F) {
   results$StatesIgnored[results$Parameter %in% c("beta_dist1", "beta_dist2")] <- coefs["dist"]
 
   # Sample initial parameter vector
+  cat("Optimizing ML. This may take a moment...\n")
   params_star <- sampleParams(perfect = F)
 
   # Optimize using nlm
   ml_nlm <- suppressWarnings(nlm(negLoglik, params_star, form = formula, ssf = ssf))
   ml_nlm <- backtransformParams(ml_nlm$est)
+
+  # Apply the viterbi algorithm to decode states and compute how often we were
+  # right.
+  states    <- viterbi(formula, ml_nlm, ssf[ssf$case == 1, ])
+  n_correct <- sum(states == ssf$state[ssf$case == 1])
+
+  # If we have more than half correct, we can leave the labels, otherwise we
+  # should switch them
+  if (n_correct < nrow(ssf[ssf$case == 1, ]) / 2) {
+    ml_nlm <- ml_nlm[c(2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11)]
+  }
   results$Nlm <- ml_nlm
 
   # Optimize using optim
   ml_optim <- suppressWarnings(optim(par = params_star, fn = negLoglik, form = formula, ssf = ssf))
   ml_optim <- backtransformParams(ml_optim$par)
+
+  # Apply the viterbi algorithm to decode states and compute how often we were
+  # right.
+  states    <- viterbi(formula, ml_optim, ssf[ssf$case == 1, ])
+  n_correct <- sum(states == ssf$state[ssf$case == 1])
+
+  # If we have more than half correct, we can leave the labels, otherwise we
+  # should switch them
+  if (n_correct < nrow(ssf[ssf$case == 1, ]) / 2) {
+    ml_optim <- ml_optim[c(2, 1, 4, 3, 6, 5, 8, 7, 10, 9, 12, 11)]
+  }
   results$Optim <- ml_optim
 
   # Return
   return(results)
 }
 
-# ################################################################################
-# #### Verifying the Functions Work
-# ################################################################################
-# # Simulate covariates
-# covars <- simCovars()
-#
-# # Simulate movement
-# sim <- simMove(
-#     xy        = matrix(runif(2, xmin(ext2), xmax(ext2)), ncol = 2)
-#   , covars    = covars
-#   , formula   = formula
-#   , prefs     = beta
-#   , shape     = shape
-#   , scale     = scale
-#   , kappa     = kappa
-#   , trans     = trans
-#   , initstate = sample(1:2, 1)
-#   , n_rsteps  = n_rsteps
-#   , n_steps   = n_steps
-#   , stop      = stop
-#   , ext       = ext
-#   , progress  = T
-# )
-# sim$ID <- 1
-# sim$step_id <- 1:nrow(sim)
-#
-# # Run models
-# runAnalysis(sim, multicore = T)
-
 ################################################################################
-#### Replicated Analysis
+#### Analysis
 ################################################################################
-# Design
-design <- expand_grid(
-    ID        = 1:10
-  , Replicate = 1:10
-)
+# Reload the design
+design <- read_rds("03_Data/Design.rds")
 
-# Loop
-design$Results <- pbmclapply(
-    X                  = 1:nrow(design)
-  , ignore.interactive = T
-  , mc.cores           = detectCores() - 1
-  , FUN                = function(x) {
+# I want to replicate the analysis for each individual
+design <- expand_grid(design, Replicate = 1:10)
 
-  # Simulate covariates
-  covars <- simCovars()
+# Prepare filenames for model results
+design$FilenameModelResults <- paste0("03_Data/ModelResults/Results_ID", sprintf("%03d", design$ID), "_R", sprintf("%03d", design$Replicate), ".rds")
 
-  # Simulate movement
-  sim <- simMove(
-      xy        = matrix(runif(2, xmin(ext2), xmax(ext2)), ncol = 2)
-    , covars    = covars
-    , formula   = formula
-    , prefs     = beta
-    , shape     = shape
-    , scale     = scale
-    , kappa     = kappa
-    , trans     = trans
-    , initstate = sample(1:2, 1)
-    , n_rsteps  = n_rsteps
-    , n_steps   = n_steps
-    , stop      = stop
-    , ext       = ext
-    , progress  = F
-  )
-  sim$ID <- 1
-  sim$step_id <- 1:nrow(sim)
+# Create the respective directory
+dir.create("03_Data/ModelResults", showWarnings = F)
+
+# Write the design to file
+write_rds(select(design, ID, FilenameModelResults), "03_Data/Analysis.rds")
+
+# Loop through the design and run analysis on the data
+lapply(
+    X   = 1:nrow(design)
+  , FUN = function(x) {
+
+  # Load covariates and movements
+  covars          <- stack(design$FilenameCovariates[x])
+  covars          <- readAll(covars)
+  sim             <- read_rds(design$FilenameMovement[x])
+  filename_results <- design$FilenameModelResults[x]
 
   # Run models (rerun if it fails, but not more than 5 times in total)
-  success <- F
-  trials <- 1
-  while (!success & trials <= 5) {
-    results <- tryCatch(runAnalysis(sim, covars, multicore = F)
-      , error = function(e) {return(e)}
-    )
-    success <- is.data.frame(results)
-    trials <- trials + 1
+  if (!file.exists(filename_results)) {
+    success <- F
+    trials <- 1
+    cat("Running analyses: Iteration", x, "/", nrow(design), "\n")
+    while (!success & trials <= 5) {
+      results <- tryCatch(runAnalysis(sim, covars, multicore = T)
+        , error = function(e) {return(e)}
+      )
+      success <- is.data.frame(results)
+      trials <- trials + 1
+    }
+    write_rds(results, filename_results)
   }
-  return(results)
+  return(NULL)
 })
 
-design$Results[[1]]
-print(design, n = 100)
-unnest(design, Results)
+# Load all results
+design$Results <- lapply(design$FilenameModelResults, read_rds)
+design$Results[[14]]
+hi <- design %>% select(ID, Replicate, Results) %>% unnest(Results)
+subset(hi, Parameter == "beta_dist1") %>%
+  pivot_longer(StatesKnown:Optim, names_to = "Method", values_to = "Estimate") %>%
+  group_by(ID, Method) %>%
+  summarize(Estimate = mean(Estimate)) %>%
+  group_by(Method) %>%
+  summarize(Estimate = mean(Estimate))
+
+test <- do.call(rbind, design$Results)
+test <- subset(test, Parameter %in% c("beta_elev1", "beta_elev2", "beta_dist1", "beta_dist2"))
+test %>%
+  subset(Parameter == "beta_elev2") %>%
+  pull(StatesKnown) %>%
+  mean()
