@@ -28,6 +28,9 @@ sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 
 # Keep only columns
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "SourceArea", "FloodLevel")]
+test <- subset(sims, StepNumber == 1)
+ggplot(test, aes(x = x, y = y, col = as.factor(SourceArea))) +
+  geom_point()
 
 # Reproject coordinates to utm (required for spatstat)
 sims[, c("x", "y")] <- reprojCoords(

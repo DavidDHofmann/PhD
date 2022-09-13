@@ -131,25 +131,31 @@ for African Wild Dog Connectivity
 %------------------------------------------------------------------------------
 \newpage
 \begin{abstract}
-Climate change is expected to considerably impact vital rates of endangered
-species. In particular dispersal, the phase during which species leave their
-natal area and attempt to find a new territory to settle, may
+Climate change is expected to profoundly impact vital rates of wild living
+animal populations. While the impact of climate change on the demographics of
+local subpopulations has been studied repeatedly, little is known about the
+consequences of environmental change on dispersal and connectivity between such
+subpopulations.
 
-We utilize seasonal changes in the flooding regime across the Okavango delta as
-a large scale natural experiment to investigate how environmental changes impact
-species' ability to disperse, and utlimately connectivity between remaining
-subpopulations. Specifically, we apply individual-based dispersal simualtions to
-simulate dispersal trajectories under two extreme scenarios, assuming minimal
-and maximum flood extents.
+Here, we capitalize on natural, flood-pulse driven environmental change across
+the Okavando Deltas in northern Botswana to investigate the impact of changing
+environmental conditions on the dispersal ability of the endangered African wild
+dog. For this, we utilize a previously parametrized dispersal model and apply it
+to simulate dispersal under two extreme environmental scenarios; one assuming
+minimal flood extent, one assuming maximum flood extent.
 
-Our results show that during years of minimum flood extent, the Okavango delta
-releases vast areas that dispersers use as movement corridors, whereas during
-years of extreme flood the delta's floodwaters pose a considerable dispersal
-barrier that forces dispersing individuals closer towards human settlements.
-Besides a better understanding of the conservation needs for the African wild
-dog, our study also provides evidence that incorporating seasonality in studies
-of connectivity is imperative to more accurately predict the dispersal ability
-of endangered species.
+In genral, our results suggest only a marginal impact of the flood extent on
+dispersal prospects. Even during maximum flood, dispersal between neighboring
+patches remained high. Between a few selected patches, however, dispersal was
+substantially restricted during times of high flood. That is the Okavango delta
+posed a substantial dispersal barrier that reduced connectivity between patches
+during maximum flood, but revealed vital dispersal corridors that facilitated
+dispersal into neighboring areas during minimum flood. Besides a better
+understanding of the conservation needs for the African wild dog, our study also
+presents a first step towards incorporating environmental change due to
+seasonality or climate change. It also emphasizes the usefulness of
+individual-based dispersal simulations as a conservation tool to study impacts
+of environmental change in a spatially realistic way.
 
 \end{abstract}
 
@@ -171,7 +177,26 @@ of endangered species.
 
 \section{Introduction}
 \subsection{Climate Change}
+
+Despite the importance of climate change in determining species viability,
+predicting the way and extent to which it will affect species remains
+challenging. One exciting avenue to gain insights into the implications of
+environmental change is to utilize seasonal variation in the environment.
+
+Cite IPCC, Planetary boundaries, Tucker (step length). Phenological shifts. Cite
+Robynne, Arpat, Megan, Dominik, Rabaiotti etc.
+
 \subsection{Vital Rates}
+Several studies investigating the impacts of climate change on life-history
+traits have revealed that population persistence may critically depends on
+climate conditions \citep{Paniw.2019}. While many studies examine climate
+impacts on survival and reproductive rates, the influence of global change or
+climatic extreme events on dispersal prospects has received little attention.
+
+Ecosystems that undergoe seasonal environmental variation, in particular arid
+regions that experience extreme climatic conditions, are among the most
+vulnerable to climate change.
+
 \subsection{Dispersal}
 \subsection{Connectivity}
 Dispersal is an important, if not the important, driver of landscape
@@ -180,35 +205,37 @@ connectivity and therefore of major interest to conservation authorities.
 \subsection{Okavango Delta and African Wild Dogs}
 The Okavango delta in Southern Africa poses a unique opportunity to study the
 impacts of environmetal change on species dispersal ability and connectivity in
-large scale natural experiment setup.
+large scale natural experiment setup. According to projections by the IPCC,
+Botswana and its surroundings are among the most vulnerable to climate change.
 
 
 \section{Methods}
-Programming language, packages, etc.
+We conducted all analyses using the programming language R.
 
 \subsection{Study Area}
 The study area for this analysis was focused on the Okavango delta and its
 surroundings in Southern Africa, comprising parts of Angola, Namibia, Botswana,
-Zimbabwe, and Zambia \Cref{StudyArea}. To accomodate for the long distance
-dispersal events commonly observed in the African wild dog, we considered a
-large rectangular extent stretching from ... to ...., totalling to an area of xx
-km. The dominant geographical feature in this region is the Okavango delta, the
-world's largest inland delta and main driver of seasonal environmental change in
-the region. While local rainfalls marginally impact water levels across the
-delta, the main flood-pulsing rythm is driven by the water-influx from the
-Okavango river. The Okavango carries rain waters collected the Angolian
-highlands into the delta's distributaries. Although precipitation in Angola
-peaks around ..., the water arrives in the delta with a delay of ... It only
-slowly descends through the delta and reaches the distal ends (at the faults)
-around ... At minimum extent, the flood covers an area of around xx km, whereas
-during maximum flood it covers ... Vegetation in the study area can largely be
-categorized into dense mopane forest, mixed acacia woodland, and plain
-grassland. Human influence in the study area is generally low and mainly
-concentrated to small villages at the western periphery of the delta, as well as
-to the city of Maun at the southern tip of the delta. Large portions of land are
-dedicated national parks, game reserves or forest reserves and the area is part
-of the world's largest transboundary conservation initiative, the
-Kavango-Zambezi Transfrontier Conservation Area.
+Zimbabwe, and Zambia (\Cref{StudyArea}). To accommodate for the long distance
+dispersal events commonly observed in African wild dogs (e.g.
+\citep{DaviesMostert.2012, Masenga.2016, Cozzi.2020}), we considered a large
+rectangular extent stretching from 20\degree 30' E to 26\degree E. totaling to
+an area of 300'000 km\textsuperscript{2}. The dominant geographical feature in
+this region is the Okavango delta (OD), the world's largest inland delta and the
+main driver of seasonal environmental change in the region. The flood-pulsing
+rhythm of the OD is mainly dictated by precipitation in the Angolian highlands,
+where rainfalls are channeled into the OD through the Okavango River. Although
+precipitation in Angola peaks in ..., water only slowly descends through the
+Okavango river and its tributaries, reaching the distal ends (i.e. the faults)
+of the delta in July or August. At minimum extent, the flood covers an area of
+3'600 km\textsuperscript{2}, whereas during maximum flood it covers more than
+9'000 km\textsuperscript{2}. Vegetation in the study area is dominated by dense
+mopane forest, mixed acacia woodland, and plain grassland. Human influence in
+the study area is low and mainly concentrated around small villages at the
+western periphery of the delta and to the city of Maun at the southern tip of
+the delta. Large portions of land are dedicated national parks, game reserves or
+forest reserves. The study area is also part of the world's largest
+transboundary conservation initiative, the Kavango-Zambezi Transfrontier
+Conservation Area.
 
 \begin{figure}
   \begin{center}
@@ -311,39 +338,56 @@ simulated step also resembled straight line movements within four hours.
 % medium flood extent, yet the results for this will be presented in the appendix.
 
 \subsection{Connectivity}
-Based on simulated dispersal trajectories we quantified connectivity across the
-OD for both environmental scenaiors in three complementary way. First, we
-generated heatmaps showing how often different areas in the landscape were
-visited by simulated dispersers. Such heatmaps serve to detect dispersal
-hotspots, yet are less suitable to detect pinchpoints and bottlenecks. Hence, we
-also computed spatially explicit betweenness scores which are useful to
-highlight movement corridors (Bastille). For this, we overlayed the study area
-with a regular grid with 2.5 km x 2.5 km grid cells and determined how often
-simulated individuals transitioned from one grid-cell to another. Note that we
-didn't consider revisits to avoid pronouncing regions in which individuals were
-encroached and moved in circles.
-
-To gain insights into landscape connectivity from the simulated dispersal
-events, we prepared three complementary connectivity maps (see again
-\citep{Hofmann.2022}); a heatmap, indicating the absolute frequency at which
-each pixel in the study area was traversed by a virtual disperser, a betweenness
-map, highlighting pixels of particular importance to facilitate movement from
-one area to another, and a map of interpatch connectivity, depicting the
-presence and intensity of functional links between source areas. To compute the
-heatmap, we counted how many times each pixel in the study area was traversed by
-a virtual disperser. To calculate betweenness, we overlayed the study area with
-a regular grid and used the simulated trajectories to determine movements from
-one grid-cell to another. Specifically, we counted how often transitions from
-one grid-cell to any other occured. The centerpoint of each grid-cell then
-served as network node, and the number of transitions from one cell to another
-as weights between the respective nodes. Based on the so generated network, we
-then computed betweenness scores for all network nodes (i.e. for all grid-cells
-across the study area). Lastly, to compute interpatch connectivity, we
-determined the frequency at which virtual dispersers originating from one source
-area reached any of the other source areas. We also calculated the average
-dispersal duration needed until individuals reached the respective area.
+Based on simulated dispersal trajectories in the two scenarios we quantified
+connectivity in three complementary ways. First, we generated heatmaps depicting
+the frequency at which different areas in the landscape were visited by
+simulated dispersers. Such heatmaps serve to detect dispersal hotspots but are
+less suitable to detect pinchpoints and bottlenecks. Hence, we also computed
+spatially explicit betweenness scores which are useful to highlight such
+pinchpoints (Bastille). To compute betweenness, we overlayed the study area with
+a regular grid with 2.5 km x 2.5 km grid cells and determined how often
+simulated individuals transitioned from one grid-cell to another. In cases where
+the same individual repeatedly realized the same cell-transition, we only
+counted a single transition to avoid emphasizing regions regions in which
+individuals moved in circles. Finally, we calculated the number of successful
+dispersal events between the different source areas. We coin this type of
+connectivity ``inter-patch connectivity''. Dispersal between two areas was said
+to be successful whenever a trajectory leaving one area intersected with the
+target area. To gauge the dispersal duration needed to move between patches (be
+consistent with ``patches'', ``source-areas'' etc.), we also recorded the
+minimum number of steps that individuals had to move to move between areas.
 
 \section{Results}
+Heatmaps produced from simulated dispersal trajectories reveal that the OD acts
+as a major dispersal barrier during periods of high flood, but reveals viable
+dispersal corridors during periods of low flood. In particular, our analysis
+reveals that the area north-west of Maun is frequently visited by dispersers at
+in the minimum-flood scenario, yet that an extended flood, coupled with high
+human influence around the city of Maun, enforces simulated individuals to
+either detour around Maun, or to slip through the narrow window between village
+and flood. Similarly, the betweenness map indicates the presence of a dispersal
+corridor extending from the western section of the delta leading across the
+delta's center into its western part, yet only during low-flood. During maximum
+flood, the same corridor is pushed south and enforces dispersers to move closer
+to the city of Maun. In general, connectivity during maxium flood is lower
+compared to the minimum flood scenario (number links vs. number liks). Most
+notably, source area 5 is almost inaccessible during maximum flood.
+
+
+
+ Most notably, the
+area north-west of Maun acts as dispersal habitat during phases of low flood,
+yet is almost inaccessible during phases of maxium flood. This is reflected in
+the heatmap, where connectivity across the western part of the delta is low
+during maximum flood, but also in the betweenness map, where an important
+movement corridors through the delta is only visible during minimum flood.
+Although connectivity across large parts of the landscape remains unchanged
+across environmental scenarios, one critical movement corridor shifts in
+response to an expanding flood. Most notably, a corridor that links the western
+and eastern part of the delta during minimum flood gets redirected further
+south, thus leading more closely to the city of Maun. Unsurprisingly, the
+differences are more pronounced for areas directly affected by the flood, yet it
+is worth noting that even some areas not directly affected by the flood.
 
 \begin{figure}
   \begin{center}
@@ -361,8 +405,113 @@ dispersal duration needed until individuals reached the respective area.
   \end{center}
 \end{figure}
 
-\section{Discussion}
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Betweenness.png}
+  \caption{}
+  \label{Betweenness}
+  \end{center}
+\end{figure}
 
+\input{IPC_Frequency.tex}
+\input{IPC_Duration.tex}
+
+\section{Discussion}
+According to our simulations, the propensity to move between the eastern and
+western part of the delta is much lower during maximum extent. This is mainly
+due to the flood-waters and the city of Maun acting as dispersal barriers.
+During maximum extent, the floodwaters of the delta close a gap between the
+delta and Maun that otherwise would serve as dispersal corridor. Anecdotal
+evidence supports this hypothesis, for the only dispersing individuals recorded
+to move from the eastern to the western part of the delta moved at times of low
+flood. In line with this, it appears that a large flood extent pushes dispersing
+individuals to move closer to human inhabited areas such as the village of Maun.
+
+Predicting how climate change will impact the dispersal ability of AWDs is
+challenging for multiple reasons. First of all, predicting the flooding patterns
+of the OD under climate change is merely impossible due to the complex feedbacks
+between surface-temperature, soil conditions, precipitation patterns and the
+associated changes in vegetation. Second, the delta is not only prone to changes
+in environmental conditions, but also to changes in anthropogenic use of the
+inflowing water. Finally, it is unclear how AWDs, in fact, how any
+species, will cope with environmental change due to global warming. Even though
+some studies predict that AWD populations are likely to decline under increasing
+temperatures, these studies fail to account for the behavioral plasticity of
+their focal species. AWDs respiratory system, for instance, has evolved as a
+perfect adaptation to high temperatures and AWDs may, in fact, profit from a
+comparative advantage (cite an economist) over their competitors and prey under
+rising temperatures. Although the theory of comparative advantages is a
+fundamental concept in economics, it has yet to find its way into ecological
+studies.
+
+\cite{MurrayHudson.2006} predicted that increased temperatures, additional human
+abstractions, and reduced river flows might lead to a ``Delta dying'' and that
+the impact of climate will be much more pronounced than the impact of
+anthropogenic water use.
+
+Although local rainfalls in Botswana are expected to increase in terms of
+intensity, simulations show that the length of the rainy season will decline,
+more than offsetting the incline in precipitation \cite{Akinyemi.2019}.
+
+According to our simulations, dispersers are able to cover larger distances
+during periods of low flood. This finding is little surprising, considering that
+inundated areas act as dispersal barriers and force dispersers to detour and
+circumvent water-covered areas. However, it still leads to an interesting
+hypothesis. Previous studies have shown that the euclidean dispersal distance of
+female coalitions is larger than that of male coalitions. This has led to ...
+However, demographic analyses have also revealed that female offspring tend to
+emigrate from their pack at younger ages and earlier in the year, when
+floodwaters are still at a relatively low level (Behr). It is thus conceivable
+that the sex-differences in reported dispersal distances is mainly a consequence
+of environmental conditions during dispersal, rather than owed to physiological
+differences between sexes.
+
+While our analysis marks an important step into incorporating environmental
+change into studies of connectivity, there are several critical additions that
+should be considered in the future. We studied dispersal and connectivity under
+two different environmental scenarios, yet our movement model assumed that
+dispersers had identical habitat and movement preferences in both scenarios. In
+reality, however, it can be expected that movement and habitat kernels of
+dispersers differ depending on the season considered (examples).
+
+An additional complication arises when species movement is not solely driven by
+environmental conditions, but also affected by itra- and inter-specific factors.
+For instance, ... has shown that dispersers...
+Rendering such conditions alone is challenging, yet rendering the conditions
+under changing environmental conditions is merely impossible.
+
+To address such differences, researchers could model
+habitat and movement preferences using season-dependent models, or,
+alternatively, by combining hidden markov models with step-selection functions.
+(cite papers that fieberg sent)
+
+Only recently, it has been discovered that AWDs communicate using shared marking
+sites. The role of such marking sites for dispersing coalitions remains to be
+investigated, yet it is is likely that, akin to resident packs, use SMS as
+navigation waypoint and demarcation lines. Chemical analyses suggest that the
+compounds used for communication are highly volatile and may not persist in
+extreme climate conditions. In result, dispersers may lose their ability to
+effectively navigate across the landscape and locate potential mates with whom
+to settle. This would reduce pack-formation prospects and undermine...
+
+Validating predictions from individual-based dispersal models is challenging and
+requires additional dispersal data, which is inherently scarce anyways. Sciticen
+science may help to fill this gap by augmenting observed GPS data with
+occasional sightings of uncollared dispersing coalitions. This is especially
+ciritical for species that disperse across borders and beyond confined study
+areas. The African carnivore wildbook offers ...
+
+The OD is an important driver of species distribution and it has been found that
+an expanding flood limits available habitat, thus leading to more inter-specific
+competition, particularly between AWDs and lions.
+
+\subsection{Conclusion}
+Our dispersal simulations across two extreme climatic scenarios reveal striking
+differences in dispersal prospects and landscape connectivity for dispersing
+AWDs. This implies that (1) climatic variation, be it due to seasonality or
+climate change, must be included in anlayses dealing with dispersal and (2) that
+projected climate change is likely to have profound impacts on landscape
+connectivity.
 
 \section{Authors' Contributions}
 D.D.H., D.M.B., A.O. and G.C. conceived the study and designed methodology;

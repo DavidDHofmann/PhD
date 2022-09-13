@@ -1,19 +1,20 @@
 \babel@toc {english}{}
-\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}Climate Change}{1}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Vital Rates}{1}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}Dispersal}{1}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}Connectivity}{1}{subsection.1.4}%
-\contentsline {subsection}{\numberline {1.5}Okavango Delta and African Wild Dogs}{1}{subsection.1.5}%
-\contentsline {section}{\numberline {2}Methods}{1}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Study Area}{1}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}Spatial Habitat Layers}{2}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Dispersal Model}{2}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Source Areas}{3}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Dispersal Simulation}{3}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Connectivity}{4}{subsection.2.6}%
-\contentsline {section}{\numberline {3}Results}{4}{section.3}%
-\contentsline {section}{\numberline {4}Discussion}{4}{section.4}%
-\contentsline {section}{\numberline {5}Authors' Contributions}{4}{section.5}%
-\contentsline {section}{\numberline {6}Data Availability}{5}{section.6}%
-\contentsline {section}{\numberline {7}Acknowledgements}{5}{section.7}%
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}
+\contentsline {subsection}{\numberline {1.1}Climate Change}{1}{subsection.1.1}
+\contentsline {subsection}{\numberline {1.2}Vital Rates}{1}{subsection.1.2}
+\contentsline {subsection}{\numberline {1.3}Dispersal}{1}{subsection.1.3}
+\contentsline {subsection}{\numberline {1.4}Connectivity}{1}{subsection.1.4}
+\contentsline {subsection}{\numberline {1.5}Okavango Delta and African Wild Dogs}{1}{subsection.1.5}
+\contentsline {section}{\numberline {2}Methods}{1}{section.2}
+\contentsline {subsection}{\numberline {2.1}Study Area}{2}{subsection.2.1}
+\contentsline {subsection}{\numberline {2.2}Spatial Habitat Layers}{2}{subsection.2.2}
+\contentsline {subsection}{\numberline {2.3}Dispersal Model}{3}{subsection.2.3}
+\contentsline {subsection}{\numberline {2.4}Source Areas}{3}{subsection.2.4}
+\contentsline {subsection}{\numberline {2.5}Dispersal Simulation}{3}{subsection.2.5}
+\contentsline {subsection}{\numberline {2.6}Connectivity}{4}{subsection.2.6}
+\contentsline {section}{\numberline {3}Results}{4}{section.3}
+\contentsline {section}{\numberline {4}Discussion}{5}{section.4}
+\contentsline {subsection}{\numberline {4.1}Conclusion}{7}{subsection.4.1}
+\contentsline {section}{\numberline {5}Authors' Contributions}{7}{section.5}
+\contentsline {section}{\numberline {6}Data Availability}{8}{section.6}
+\contentsline {section}{\numberline {7}Acknowledgements}{8}{section.7}

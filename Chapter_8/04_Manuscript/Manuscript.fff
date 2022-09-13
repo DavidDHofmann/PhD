@@ -33,3 +33,14 @@
   \label{DifferenceHeatmaps}
   \end{center}
 \end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Betweenness.png}
+  \caption{}
+  \label{Betweenness}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 

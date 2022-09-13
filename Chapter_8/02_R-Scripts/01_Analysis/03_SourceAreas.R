@@ -8,7 +8,6 @@ rm(list = ls())
 
 # Change the working directory
 setwd("/home/david/ownCloud/University/15. PhD/Chapter_8")
-# setwd("C:/Users/david/switchdrive/University/15. PhD/Chapter_8")
 
 # Load required packages
 library(raster)         # To handle spatial data
@@ -17,96 +16,88 @@ library(terra)          # To handle spatial data
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
 
-# We'll use geographical, in particular hydrological features to separate source
-# areas
-river <- vect("03_Data/02_CleanData/MajorRivers.shp")
-river <- river[-2, ]
-water <- vect("03_Data/02_CleanData/MajorWaters.shp")
-water <- water[c(1, 2, 4), ]
-roads <- vect("03_Data/02_CleanData/Roads.shp")
+# Load some landmarks according to which we will delineate the source areas
+wat <- vect("03_Data/02_CleanData/MajorWaters.shp")
+wat <- wat[c(1, 2, 4), ]
+roa <- vect("03_Data/02_CleanData/Roads.shp")
+riv <- vect("03_Data/02_CleanData/MajorRivers.shp")
+riv <- riv[-2, ]
 
-# Buffer polygons slightly
-river_buff <- buffer(river, width = 2000)
-water_buff <- buffer(water, width = 500)
+# Buffer slightly
+wat_buff <- buffer(wat, width = 500)
+wat_buff <- makeValid(wat_buff)
 
-# Simplify geometries
-river_buff <- aggregate(river_buff)
-water_buff <- aggregate(water_buff)
+# Specify centroids for the different source areas
+src <- data.frame(
+    x  = c(22.7, 23.75, 23.4, 22.7, 21.8)
+  , y  = c(-20.1, -19.4, -18.8, -18.3, -19.2)
+  , ID = 1:5
+)
+src <- vect(as.matrix(src[, c("x", "y")]), crs = crs(wat), atts = src)
+src <- buffer(src, width = 20000)
 
-# Make sure geometries are valid
-river_buff <- makeValid(river_buff)
-water_buff <- makeValid(water_buff)
+# Let's also generate target zones. One target zone is the center of the delta,
+# the remaining targets are placed on an ellipse around the delta. We'll make
+# use of an ellipse to generate said areas
+cen <- cbind(22.8, -19.26)
+ell <- ellipse(cen[1], cen[2], 1.4, 1.25, phi = 45, spatial = T)
+crs(ell) <- crs(wat)
 
-# We may also want to remove the close vicinity of Maun
-maun <- rast("03_Data/02_CleanData/HumanInfluence.tif")
-maun <- crop(maun, ext(23.3, 23.7, -20.5, -19.6))
-maun <- classify(maun, rbind(c(0, 7, 0), c(7, Inf, 1)))
-maun <- subst(maun, 0, NA)
-maun <- as.polygons(maun)
-maun <- buffer(maun, width = 7500)
+# Generate a set of lines to dissect the ellipse
+# Center of ellipse
+x_end <- 22.8 + sin(seq(0, 2 * pi, by = pi / 4)) * 2
+y_end <- -19.26 + cos(seq(0, 2 * pi, by = pi / 4)) * 2
+xy_end <- cbind(x_end, y_end)
+lns <- lapply(1:nrow(xy_end), function(x) {
+  vect(rbind(cen, xy_end[x, ]), type = "line")
+})
+lns <- do.call(rbind, lns)
+crs(lns) <- crs(wat)
 
-# Drawn an ellipse over the okavango delta
-ell <- ellipse(22.8, -19.3, 1.4, 1.25, phi = 45, spatial = T)
-crs(ell) <- crs(water)
+# Buffer the ellipse very slightly
+out <- buffer(ell, width = 5000)
+ell <- out - ell
+crs(ell) <- crs(wat)
 
-# Visualize it
-plot(ell, col = adjustcolor("darkgreen", alpha.f = 0.2), border = NA)
-plot(water, add = T, col = "cornflowerblue", border = NA)
-plot(river, add = T, col = "cornflowerblue")
-plot(roads, add = T, col = "black")
-plot(water_buff, add = T, border = "gray")
-plot(river_buff, add = T, border = "gray")
-plot(maun, add = T, col = adjustcolor("red", alpha.f = 0.2), border = NA)
+# Now dissect the ellipse using the lines
+bor <- ell - buffer(lns, width = 0.1)
+bor <- disagg(bor)
+bor$ID <- c(14, 13, 12, 7, 8, 9, 10, 11)
 
-# This looks good. Let's buffer the rivers and generate some potential source
-# areas
-src <- ell - water_buff - river_buff - maun
-src <- disagg(src)
-plot(src)
+# Finally, we want to get a polygon for chiefs island, as a target in the center
+# of the delta
+chi      <- out - wat_buff
+chi      <- disagg(chi)
+chi$Area <- expanse(chi)
+chi      <- chi[chi$Area %in% sort(chi$Area, decreasing = T)[2], ]
+chi$ID   <- 6
 
-# We only want to keep the biggest 5 source areas!
-src$Area <- expanse(src)
-src      <- src[src$Area %in% sort(src$Area, decreasing = T)[1:5], ]
-src$ID   <- 1:length(src)
+# Put everything together
+areas <- rbind(src, chi, bor)
+areas$x    <- NULL
+areas$y    <- NULL
+areas$Area <- NULL
 
-# Crop roads
-roads_crop <- crop(roads[roads$fclass == "trunk", ], ext(22, 24, -21, -19.5))
+# Assign IDs to the different areas
+areas$Type <- c(rep("Main", 6), rep("Buffer", nrow(areas) - 6))
 
-# Let's visualize the remaining areas
-plot(src, col = adjustcolor(sample(rainbow(length(src))), alpha.f = 0.2))
-plot(roads_crop, add = T)
-text(src, "ID")
+# Sort by ID
+areas <- areas[order(areas$ID), ]
 
-# Let's remove the part of the source areas in the south that intersect with the
-# road
-src      <- src - buffer(roads_crop, width = 1000)
-src      <- disagg(src)
-src$Area <- expanse(src)
-src      <- src[src$Area %in% sort(src$Area, decreasing = T)[1:5], ]
-src$ID   <- 1:length(src)
-
-# Let's visualize the remaining areas
-plot(src, col = adjustcolor(sample(rainbow(length(src))), alpha.f = 0.2))
-plot(roads_crop, add = T)
-text(src, "ID")
-
-# We also want to generate source points representing immigrants into the
-# ecosystem
-out <- buffer(ell, width = -5000)
-out <- src - out
-src <- src - out
-
-# We use this as one source area
-out$ID <- max(src$ID) + (1:length(out))
-out$Area <- expanse(out)
-src <- rbind(src, out)
-
-# Plot again
-plot(src, col = adjustcolor(sample(rainbow(length(src))), alpha.f = 0.2))
-text(src, "ID")
+# Visualize all
+plot(wat, col = "cornflowerblue", border = NA)
+plot(riv, col = "cornflowerblue", border = NA, add = T)
+plot(roa, col = "gray", add = T)
+plot(lns, add = T, lty = 2)
+plot(areas, col = adjustcolor(sample(rainbow(length(areas))), alpha.f = 0.2), add = T)
+text(areas, "ID", pos = 1)
+text(areas, "Type", pos = 3)
 
 # Store them
-writeVector(src, "03_Data/02_CleanData/SourceAreas.shp", overwrite = T)
+writeVector(areas, "03_Data/02_CleanData/SourceAreas.shp", overwrite = T)
+
+# Let's also store the cutlines
+writeVector(lns, "03_Data/02_CleanData/Cutlines.shp", overwrite = T)
 
 ################################################################################
 #### Session Information

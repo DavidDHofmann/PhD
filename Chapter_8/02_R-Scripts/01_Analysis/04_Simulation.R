@@ -70,7 +70,6 @@ names(cov[[1]]) <- names(cov[[2]]) <- names(cov[[3]]) <-
 # Apply our custom functions to make everything ready for the simulation
 mod <- prepareModel(mod)
 cov[["Min"]]  <- prepareCovars(cov[["Min"]])
-cov[["Mean"]] <- prepareCovars(cov[["Mean"]])
 cov[["Max"]]  <- prepareCovars(cov[["Max"]])
 
 ################################################################################
@@ -291,9 +290,10 @@ sl_max <- 35000
 
 # Prepare design through which we can loop
 design <- expand_grid(
-    FloodLevel = c("Min", "Mean", "Max")
+    FloodLevel = c("Min", "Max")
   , Iteration  = 1:iterations
-  , SourceArea = unique(areas$ID)
+  # , SourceArea = unique(areas$ID)
+  , SourceArea = unique(areas$ID[areas$Type == "Main"])
 )
 
 # Also prepare filenames for the stored simulations

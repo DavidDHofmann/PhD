@@ -21,7 +21,6 @@ library(grid)         # To arrange plots
 library(gridExtra)    # To arrange plots
 library(gtable)       # To arrange plots
 library(RColorBrewer) # For colors
-library(ggpattern)    # For hatched fills
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -94,13 +93,11 @@ labels_faults <- data.frame(
   , Label = c("Kunyere Fault", "Thamalakane Fault")
 )
 
-# Add albels for source areas
-labels_source <- data.frame(
-    x     = c(23.4, 22, 23.5, 22.7, 23.1, 23.4, 21.55, 24.1, 22.6)
-  , y     = c(-20.3, -19.4, -18.9, -18.3, -19.4, -20.5, -19.5, -19.5, -18)
-  , Label = 1:9
-)
+# Generate area labels
+labels_areas <- st_coordinates(st_point_on_surface(areas))
+labels_areas <- cbind(labels_areas, st_drop_geometry(areas))
 
+# Load dispersal trajectories
 disp <- read_csv("03_Data/02_CleanData/Dispersers.csv")
 disp <- subset(disp, State == "Disperser")
 
@@ -124,18 +121,6 @@ p2 <- ggplot() +
   geom_sf(data = kava, col = "cornflowerblue") +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
-  geom_sf(data = areas, col = "orange", fill = "orange", alpha = 0.2) +
-  # geom_sf(data = areas, col = "black", fill = "black", alpha = 0.2) +
-  geom_sf_pattern(data = areas,
-    aes(pattern = as.factor(ID), pattern_spacing = as.factor(ID), pattern_angle = as.factor(ID))
-    , col = "orange"
-    , fill = NA
-    , pattern_color = "orange"
-    , pattern_fill = NA
-    , pattern_density = 0.01
-    , pattern_spacing = 0.01
-    , pattern_size = 0.2
-  ) +
   geom_sf(data = fault, col = "gray30", lty = 2) +
   geom_point(
       data        = vills
@@ -144,11 +129,23 @@ p2 <- ggplot() +
     , shape       = 15
     , show.legend = F
   ) +
-  geom_path(
-      data    = disp
-    , mapping = aes(x = x, y = y, group = as.factor(DogName))
-    , col     = viridis::viridis(20)[20]
-    , size    = 0.3
+  # geom_path(
+  #     data    = disp
+  #   , mapping = aes(x = x, y = y, group = as.factor(DogName))
+  #   , col     = viridis::viridis(20)[20]
+  #   , size    = 0.3
+  # ) +
+  geom_sf(
+      data  = subset(areas, Type == "Main")
+    , col   = "orange"
+    , fill  = "orange"
+    , alpha = 0.2
+  ) +
+  geom_sf(
+      data  = subset(areas, Type == "Buffer")
+    , col   = "purple"
+    , fill  = "purple"
+    , alpha = 0.2
   ) +
   geom_text(
       data     = labels_waters
@@ -166,7 +163,7 @@ p2 <- ggplot() +
     , angle    = c(-30, 40, 20, -32)
   ) +
   geom_text(
-      data     = labels_nationalparks
+      data     = subset(labels_nationalparks, Label != "Moremi\nNP")
     , mapping  = aes(x = x, y = y, label = Label)
     , col      = darken("green", 1.8)
     , fontface = 3
@@ -195,15 +192,22 @@ p2 <- ggplot() +
     , angle = c(-5, 52)
   ) +
   geom_point(
-      data     = labels_source
-    , mapping  = aes(x = x, y = y)
-    , col      = "orange"
+      data     = subset(labels_areas, Type == "Buffer")
+    , mapping  = aes(x = X, y = Y)
+    , col      = "purple"
     , size     = 4
   ) +
   geom_text(
-      data     = labels_source
-    , mapping  = aes(x = x, y = y, label = Label)
+      data     = subset(labels_areas, Type == "Buffer")
+    , mapping  = aes(x = X, y = Y, label = ID)
     , col      = "white"
+    , fontface = 3
+    , size     = 2
+  ) +
+  geom_text(
+      data     = subset(labels_areas, Type == "Main")
+    , mapping  = aes(x = X, y = Y, label = ID)
+    , col      = "black"
     , fontface = 3
     , size     = 2
   ) +
@@ -245,22 +249,22 @@ p2 <- ggplot() +
 #### Legends
 ################################################################################
 # Create a new plot for the legend
-df <- prot[1:5, ]
+df <- prot[1:6, ]
 df <- dplyr::select(df, geometry)
 df <- cbind(
     df
-  , Name  = factor(c("National Parks", "Forest Reserves", "Protected", "Major Waters", "Source Areas")
-    , levels = c("National Parks", "Forest Reserves", "Protected", "Major Waters", "Source Areas"))
-  , Color = c(rev(brewer.pal(n = 3, name = "Greens")), "cornflowerblue", "orange")
-  , Alpha = c(0.7, 0.7, 0.7, 1, 0.2)
+  , Name  = factor(c("National Parks", "Forest Reserves", "Protected", "Major Waters", "Source Areas", "Emigration Zones")
+    , levels = c("National Parks", "Forest Reserves", "Protected", "Major Waters", "Source Areas", "Emigration Zones"))
+  , Color = c(rev(brewer.pal(n = 3, name = "Greens")), "cornflowerblue", "orange", "purple")
+  , Alpha = c(0.7, 0.7, 0.7, 1, 0.2, 0.2)
 )
 
 # Plot
 l1 <- ggplot() +
   geom_sf(data = df, aes(fill = Name, alpha = Name, col = Name)) +
   scale_fill_manual(values = df$Color, name = "Legend") +
-  scale_color_manual(values = c("white", "white", "white", "white", "orange"), name = "Legend") +
-  scale_alpha_manual(values = c(0.7, 0.7, 0.7, 1.0, 0.2), name = "Legend") +
+  scale_color_manual(values = c("white", "white", "white", "white", "orange", "purple"), name = "Legend") +
+  scale_alpha_manual(values = c(0.7, 0.7, 0.7, 1.0, 0.2, 0.2), name = "Legend") +
   theme_minimal()
 l2 <- ggplot() +
   geom_point(data = vills, aes(x = x, y = y, size = place), shape = 15, col = "gray50") +
