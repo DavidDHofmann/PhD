@@ -1,0 +1,42 @@
+---
+title: "Interpatch"
+author: "David Hofmann"
+date: "2022-09-06"
+output: pdf_document
+---
+This is just a test document to prepare the table of inter-patch connectivity.
+
+```{r, echo = F, warning = F, message = F}
+# Clear R's brain
+rm(list = ls())
+
+# Load required packages
+library(tidyverse)    # To wrangle data
+library(kableExtra)   # To generate a nice table
+
+# Load results on interpatch connectivity
+dat <- read_rds("/home/david/ownCloud/University/15. PhD/Chapter_8/03_Data/03_Results/BootstrappedInterpatchConnectivity.rds")
+dat <- subset(dat, FloodLevel != "Mean")
+
+################################################################################
+#### Frequency
+################################################################################
+# Reshape the data
+dat_arr_freq <- dat %>%
+  select(-c(StepNumber, StepNumberSE)) %>%
+  mutate(Combined = paste(round(dat$Freq), "$\\pm$", sprintf("%.2f", round(dat$FreqSE, 2)))) %>%
+  select(-c(Freq, FreqSE)) %>%
+  pivot_wider(names_from = SourceArea, values_from = Combined) %>%
+  arrange(CurrentArea, desc(FloodLevel)) %>%
+  select(To = CurrentArea, everything()) %>%
+  select(-FloodLevel)
+
+# Make a nice table
+table <- kbl(dat_arr_freq, booktabs = T) %>%
+  # add_header_above(c("", "1", "2", "3", "4", "5", "6", "7", "8", "9")) %>%
+  # add_header_above(c("", "Main" = 5, "Buffer" = 4)) %>%
+  add_header_above(c("", "From" = 9)) %>%
+  column_spec(1, border_right = T) %>%
+  collapse_rows(1, latex_hline = c("custom"), custom_latex_hline = 1)
+
+```

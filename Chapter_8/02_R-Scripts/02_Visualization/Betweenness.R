@@ -20,6 +20,7 @@ library(rgdal)          # To handle spatial data
 library(sf)             # To handle spatial data
 library(scales)         # To squish oob values
 library(latex2exp)      # For easy latex code
+library(ggpubr)         # To arrange multiple plots
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -78,7 +79,7 @@ maps <- maps %>%
 maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
 
 # Function to plot
-plotBetweenness <- function(data, formula = ~FloodLevel) {
+plotBetweenness <- function(data, formula = ~FloodLevel, barwidth = 16) {
   ggplot() +
     geom_raster(
         data    = data
@@ -144,7 +145,7 @@ plotBetweenness <- function(data, formula = ~FloodLevel) {
         , title.hjust    = 0.5
         , ticks          = F
         , barheight      = unit(0.2, "cm")
-        , barwidth       = unit(16.0, "cm")
+        , barwidth       = unit(barwidth, "cm")
       )
     ) +
     coord_sf(
@@ -189,7 +190,20 @@ plotBetweenness <- function(data, formula = ~FloodLevel) {
 
 # Apply it
 p1 <- plotBetweenness(subset(maps, Level == "Global" & Steps == 2000))
-plotBetweenness(subset(maps, Level == "Local" & Steps == 2000 & SourceArea == 6))
+
+# I also want to generate source-area specific plots
+p2 <- list()
+for (i in sort(unique(maps$SourceArea))) {
+  p2[[i]] <- plotBetweenness(
+      data     = subset(maps, Level == "Local" & Steps == 2000 & SourceArea == i)
+    , barwidth = 12
+  )
+}
+
+# Put the plots together
+p3 <- ggarrange(p2[[1]], p2[[2]], p2[[3]], ncol = 1, labels = c("(1)", "(2)", "(3)"))
+p4 <- ggarrange(p2[[4]], p2[[5]], p2[[6]], ncol = 1, labels = c("(4)", "(5)", "(6)"))
+p5 <- ggarrange(p3, p4, ncol = 2)
 
 ################################################################################
 #### Store the Maps
@@ -201,4 +215,11 @@ ggsave("04_Manuscript/99_Betweenness.png"
   , width  = 8
   , height = 4
   , scale  = 1
+)
+ggsave("04_Manuscript/99_BetweennessIndividual.png"
+  , plot   = p5
+  , bg     = "white"
+  , height = 7
+  , width  = 8
+  , scale = 1.4
 )

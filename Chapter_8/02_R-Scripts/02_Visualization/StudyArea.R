@@ -39,8 +39,9 @@ water  <- read_sf("03_Data/02_CleanData/MajorWaters.shp")
 river  <- read_sf("03_Data/02_CleanData/MajorRivers.shp")
 areas  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads  <- read_sf("03_Data/02_CleanData/Roads.shp")
-fault  <- read_sf("/home/david/ownCloud/University/15. PhD/Chapter_1/03_Data/01_RawData/DAVID/Faults.shp")
+fault  <- read_sf("03_Data/02_CleanData/Faults.shp")
 vills  <- read_sf("03_Data/02_CleanData/Villages.shp")
+cutli  <- read_sf("03_Data/02_CleanData/Cutlines.shp")
 vills  <- cbind(st_drop_geometry(vills), st_coordinates(vills)) %>%
   rename(x = X, y = Y)
 
@@ -67,8 +68,8 @@ labels_countries <- data.frame(
 
 # Create labels for some geographical landmarks
 labels_waters <- data.frame(
-    x     = c(22.6, 23.7, 22.8, 25.6)
-  , y     = c(-19, -18.2, -20.5, -20.7)
+    x     = c(22.6, 23.7, 22.7, 25.6)
+  , y     = c(-19, -18.1, -20.4, -20.7)
   , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nNgami", "Makgadikgadi\nPans")
 )
 
@@ -121,7 +122,8 @@ p2 <- ggplot() +
   geom_sf(data = kava, col = "cornflowerblue") +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
-  geom_sf(data = fault, col = "gray30", lty = 2) +
+  geom_sf(data = fault, col = "gray30", lty = 4) +
+  geom_sf(data = cutli, lty = 2) +
   geom_point(
       data        = vills
     , mapping     = aes(x = x, y = y, size = place)
@@ -268,10 +270,10 @@ l1 <- ggplot() +
   theme_minimal()
 l2 <- ggplot() +
   geom_point(data = vills, aes(x = x, y = y, size = place), shape = 15, col = "gray50") +
-  geom_line(data = data.frame(x = c(1, 2, 1, 2), y = c(1, 2, 1, 2), Class = c("Road", "Fault")), aes(x = x, y = y, col = Class, lty = Class)) +
-  scale_color_manual(values = c("gray30", "gray70"), name = "") +
-  scale_size_manual(values = c(2, 0.5), name = "") +
-  scale_linetype_manual(values = c(2, 1), name = "") +
+  geom_line(data = data.frame(x = c(1, 2, 1, 2, 1, 2), y = c(1, 2, 1, 2, 1, 2), Class = c("Cutlines", "Faults", "Roads")), aes(x = x, y = y, col = Class, lty = Class)) +
+  scale_color_manual(values = c("black", "gray30", "gray70"), name = "") +
+  scale_size_manual(values = c(1, 0.5, 2), name = "") +
+  scale_linetype_manual(values = c(2, 4, 1), name = "") +
   theme_minimal() +
   theme(legend.spacing.y = unit(-0.38, "cm"))
 

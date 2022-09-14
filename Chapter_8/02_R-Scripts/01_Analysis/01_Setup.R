@@ -85,6 +85,10 @@ riv <- riv[riv$Name %in% c("Tamalakane", "Mababe-Dombo", "Boteti", "Selinda", "S
 riv <- crop(riv, ext)
 writeVector(riv, file.path(new_chap, "03_Data/02_CleanData/MajorRivers.shp"), overwrite = T)
 
+# Copy faults
+fau <- vect(file.path(old_chap, "03_Data/01_RawData/DAVID/Faults.shp"))
+writeVector(fau, file.path(new_chap, "03_Data/02_CleanData/Faults.shp"), overwrite = T)
+
 # Copy protected areas
 pro <- vect(file.path(old_chap, "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp"))
 pro <- crop(pro, ext)

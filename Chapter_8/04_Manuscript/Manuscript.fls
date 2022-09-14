@@ -1,10 +1,10 @@
-PWD /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript
+PWD /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript
 INPUT /etc/texmf/web2c/texmf.cnf
 INPUT /usr/share/texmf/web2c/texmf.cnf
 INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
 INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.tex
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.log
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.tex
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.log
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/article.cls
 INPUT /usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
@@ -200,6 +200,8 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
@@ -229,9 +231,9 @@ INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries
 INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
 INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
 INPUT /usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.aux
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.aux
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.aux
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.aux
 INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
@@ -244,14 +246,14 @@ INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.pdf
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
 INPUT /usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr17.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
@@ -292,28 +294,41 @@ INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx9.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmr12.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.toc
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.toc
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.toc
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.toc
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.toc
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.toc
+INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmss8.tfm
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmbx12.tfm
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.fff
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmti10.tfm
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/IPC_Frequency.tex
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/IPC_Frequency.tex
-OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/IPC_Duration.tex
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/IPC_Duration.tex
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/IPC_Frequency.tex
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/IPC_Frequency.tex
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.ttt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/IPC_Duration.tex
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/IPC_Duration.tex
 INPUT /usr/share/texlive/texmf-dist/fonts/tfm/public/cm/cmtt10.tfm
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/99_StudyArea.png
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/99_StudyArea.png
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/99_StudyArea.png
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.aux
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
-INPUT /home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.fff
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.fff
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_StudyArea.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_StudyArea.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_StudyArea.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_FloodExtent.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_FloodExtent.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_FloodExtent.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Heatmaps.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Heatmaps.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Heatmaps.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Betweenness.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Betweenness.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Betweenness.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Interpatch.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Interpatch.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Interpatch.png
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.ttt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.ttt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb
@@ -324,6 +339,7 @@ INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
 INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb

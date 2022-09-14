@@ -1,10 +1,10 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  11 SEP 2022 10:31
+This is pdfTeX, Version 3.14159265-2.6-1.40.18 (TeX Live 2017/Debian) (preloaded format=pdflatex 2020.2.24)  14 SEP 2022 13:57
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
  %&-line parsing enabled.
 **Manuscript.tex
-(/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.tex
+(/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.tex
 LaTeX2e <2017-04-15>
 Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
 (/usr/share/texlive/texmf-dist/tex/latex/base/article.cls
@@ -837,80 +837,97 @@ LaTeX Info: Redefining \labelcref on input line 2301.
 LaTeX Info: Redefining \labelcpageref on input line 2301.
 Package cleveref Info: include cross-reference names in hyperlinks on input line 7767.
 Package cleveref Info: include cross-reference names in hyperlinks on input line 7783.
+) (/usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+\linenopenalty=\count142
+\output=\toks39
+\linenoprevgraf=\count143
+\linenumbersep=\dimen196
+\linenumberwidth=\dimen197
+\c@linenumber=\count144
+\c@pagewiselinenumber=\count145
+\c@LN@truepage=\count146
+\c@internallinenumber=\count147
+\c@internallinenumbers=\count148
+\quotelinenumbersep=\dimen198
+\bframerule=\dimen199
+\bframesep=\dimen256
+\bframebox=\box40
+LaTeX Info: Redefining \\ on input line 3056.
 ) (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
 Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
 \multirow@colwidth=\skip53
-\multirow@cntb=\count142
+\multirow@cntb=\count149
 \multirow@dima=\skip54
-\bigstrutjot=\dimen196
+\bigstrutjot=\dimen257
 ) (/usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
 Package: arydshln 2016/04/28 v1.73 
-\dashlinedash=\dimen197
-\dashlinegap=\dimen198
-\adl@box=\box40
-\adl@height=\dimen199
-\adl@heightsave=\dimen256
-\adl@depth=\dimen257
-\adl@depthsave=\dimen258
-\adl@finaldepth=\dimen259
-\adl@columns=\count143
-\adl@ncol=\count144
-\adl@currentcolumn=\count145
-\adl@currentcolumnsave=\count146
-\adl@totalheight=\count147
-\adl@totalheightsave=\count148
-\adl@dash=\count149
-\adl@gap=\count150
-\adl@cla=\count151
-\adl@clb=\count152
-\adl@everyvbox=\toks39
-\adl@LTpagetotal=\dimen260
+\dashlinedash=\dimen258
+\dashlinegap=\dimen259
+\adl@box=\box41
+\adl@height=\dimen260
+\adl@heightsave=\dimen261
+\adl@depth=\dimen262
+\adl@depthsave=\dimen263
+\adl@finaldepth=\dimen264
+\adl@columns=\count150
+\adl@ncol=\count151
+\adl@currentcolumn=\count152
+\adl@currentcolumnsave=\count153
+\adl@totalheight=\count154
+\adl@totalheightsave=\count155
+\adl@dash=\count156
+\adl@gap=\count157
+\adl@cla=\count158
+\adl@clb=\count159
+\adl@everyvbox=\toks40
+\adl@LTpagetotal=\dimen265
 ) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty
 Package: threeparttable 2003/06/13  v 3.0
-\@tempboxb=\box41
+\@tempboxb=\box42
 ) (/usr/share/texlive/texmf-dist/tex/latex/endfloat/endfloat.sty
 Package: endfloat 2011/12/25 v2.5d LaTeX2e package puts figures and tables at end (jdm)
-\c@postfigure=\count153
+\c@postfigure=\count160
 \efloat@postfff=\write4
-\@ef@fffopen=\count154
-\c@posttable=\count155
+\@ef@fffopen=\count161
+\c@posttable=\count162
 \efloat@postttt=\write5
-\@ef@tttopen=\count156
-) (/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
+\@ef@tttopen=\count163
+)
+(/usr/share/texlive/texmf-dist/tex/latex/todonotes/todonotes.sty
 Package: todonotes 2015/07/09 .dtx Todonotes source and documentation.
 Package: todonotes 2012/07/25
-
-(/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+ (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
 Package: ifthen 2014/09/29 v1.1c Standard LaTeX ifthen package (DPC)
 ) (/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
 Package: xkeyval 2014/12/03 v2.7a package option processing (HA)
  (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
-\XKV@toks=\toks40
-\XKV@tempa@toks=\toks41
+\XKV@toks=\toks41
+\XKV@tempa@toks=\toks42
 )
-\XKV@depth=\count157
+\XKV@depth=\count164
 File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
 )) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarypositioning.code.tex
 File: tikzlibrarypositioning.code.tex 2008/10/06 v3.0.1a (rcs-revision 1.7)
 ) (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count158
-\calc@Bcount=\count159
-\calc@Adimen=\dimen261
-\calc@Bdimen=\dimen262
+\calc@Acount=\count165
+\calc@Bcount=\count166
+\calc@Adimen=\dimen266
+\calc@Bdimen=\dimen267
 \calc@Askip=\skip55
 \calc@Bskip=\skip56
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count160
+\calc@Ccount=\count167
 \calc@Cskip=\skip57
 )
-\c@@todonotes@numberoftodonotes=\count161
+\c@@todonotes@numberoftodonotes=\count168
 ) (/usr/share/texlive/texmf-dist/tex/latex/scalerel/scalerel.sty
 Package: scalerel 2016/12/29 v1.8 Routines for constrained scaling and stretching of objects, relative to a reference object or in absolute terms
  (/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
 Package: etoolbox 2018/02/11 v2.5e e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count162
+\etb@tempcnta=\count169
 )
 \thesrwidth=\skip58
 \thesrheight=\skip59
@@ -926,18 +943,18 @@ File: pgflibrarysvg.path.code.tex 2013/09/23 v3.0.1a (rcs-revision 1.7)
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
 File: pgfmoduleparser.code.tex 2013/07/15 v3.0.1a (rcs-revision 1.2)
 )
-\pgf@lib@svg@last@x=\dimen263
-\pgf@lib@svg@last@y=\dimen264
-\pgf@lib@svg@last@c@x=\dimen265
-\pgf@lib@svg@last@c@y=\dimen266
-\pgf@lib@svg@count=\count163
-\pgf@lib@svg@max@num=\count164
+\pgf@lib@svg@last@x=\dimen268
+\pgf@lib@svg@last@y=\dimen269
+\pgf@lib@svg@last@c@x=\dimen270
+\pgf@lib@svg@last@c@y=\dimen271
+\pgf@lib@svg@count=\count170
+\pgf@lib@svg@max@num=\count171
 ))
 
 LaTeX Warning: Unused global option(s):
     [abstract=on,bibliography=totocnumbered].
 
-(/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.aux)
+(/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.aux)
 \openout1 = `Manuscript.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
@@ -991,17 +1008,17 @@ LaTeX Font Info:    ... okay on input line 91.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count165
-\scratchdimen=\dimen267
-\scratchbox=\box42
-\nofMPsegments=\count166
-\nofMParguments=\count167
-\everyMPshowfont=\toks42
-\MPscratchCnt=\count168
-\MPscratchDim=\dimen268
-\MPnumerator=\count169
-\makeMPintoPDFobject=\count170
-\everyMPtoPDFconversion=\toks43
+\scratchcounter=\count172
+\scratchdimen=\dimen272
+\scratchbox=\box43
+\nofMPsegments=\count173
+\nofMParguments=\count174
+\everyMPshowfont=\toks43
+\MPscratchCnt=\count175
+\MPscratchDim=\dimen273
+\MPnumerator=\count176
+\makeMPintoPDFobject=\count177
+\everyMPtoPDFconversion=\toks44
 ) (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
  (/usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
@@ -1030,19 +1047,19 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\AtBeginShipoutBox=\box43
+\AtBeginShipoutBox=\box44
 Package hyperref Info: Link coloring OFF on input line 91.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count171
+\c@section@level=\count178
 )
 LaTeX Info: Redefining \ref on input line 91.
 LaTeX Info: Redefining \pageref on input line 91.
 LaTeX Info: Redefining \nameref on input line 91.
- (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out) (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.out)
+ (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out) (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.out)
 \@outlinefile=\write6
 \openout6 = `Manuscript.out'.
 
@@ -1068,7 +1085,7 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <7> not available
 <to be read again> 
                    \relax 
 l.165 \newpage
-               [2] (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.toc)
+               [2] (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.toc)
 \tf@toc=\write7
 \openout7 = `Manuscript.toc'.
 
@@ -1080,19 +1097,19 @@ l.172 \newpage
 
 Package natbib Warning: Citation `Paniw.2019' on page 1 undefined on input line 192.
 
-
-Package natbib Warning: Citation `DaviesMostert.2012' on page 1 undefined on input line 220.
-
-
-Package natbib Warning: Citation `Masenga.2016' on page 1 undefined on input line 220.
-
-
-Package natbib Warning: Citation `Cozzi.2020' on page 1 undefined on input line 220.
-
 [1]
+
+Package natbib Warning: Citation `DaviesMostert.2012' on page 2 undefined on input line 220.
+
+
+Package natbib Warning: Citation `Masenga.2016' on page 2 undefined on input line 220.
+
+
+Package natbib Warning: Citation `Cozzi.2020' on page 2 undefined on input line 220.
+
 \openout4 = `Manuscript.fff'.
 
- (Manuscript.fff)
+(Manuscript.fff)
 
 LaTeX Warning: Reference `Hofmann.2021' on page 1 undefined on input line 255.
 
@@ -1103,167 +1120,83 @@ Package natbib Warning: Citation `Hofmann.2021' on page 3 undefined on input lin
 
 LaTeX Warning: Reference `Hofmann.2022' on page 1 undefined on input line 311.
 
-[3] [4] (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/IPC_Frequency.tex
+[3] [4] (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/IPC_Frequency.tex
 \openout5 = `Manuscript.ttt'.
 
- (Manuscript.ttt)) (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/IPC_Duration.tex) [5]
+ (Manuscript.ttt)) (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/IPC_Duration.tex) [5]
 
-Package natbib Warning: Citation `MurrayHudson.2006' on page 6 undefined on input line 447.
+Package natbib Warning: Citation `MurrayHudson.2006' on page 6 undefined on input line 455.
 
 
-Package natbib Warning: Citation `Akinyemi.2019' on page 6 undefined on input line 454.
+Package natbib Warning: Citation `Akinyemi.2019' on page 6 undefined on input line 462.
 
-[6]
+[6] [7]
 
-Package natbib Warning: Citation `Hofmann.2021b' on page 7 undefined on input line 525.
+Package natbib Warning: Citation `Hofmann.2021b' on page 8 undefined on input line 533.
 
-[7] [8]
+[8]
 No file Manuscript.bbl.
 
 Package natbib Warning: There were undefined citations.
 
-AED endfloat: Processing end Figures and Tables (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff
-<99_StudyArea.png, id=174, 809.424pt x 404.712pt>
+AED endfloat: Processing end Figures and Tables (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.fff
+<99_StudyArea.png, id=175, 809.424pt x 404.712pt>
 File: 99_StudyArea.png Graphic file (type png)
 <use 99_StudyArea.png>
 Package pdftex.def Info: 99_StudyArea.png  used on input line 3.
 (pdftex.def)             Requested size: 398.3386pt x 199.16899pt.
- [9 </home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/99_StudyArea.png (PNG copy)>]
-
-LaTeX Warning: File `99_FloodExtent.png' not found on input line 13.
-
-
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff:13: Package pdftex.def Error: File `99_FloodExtent.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.13 ...cs[width = \textwidth]{99_FloodExtent.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[10]
-
-LaTeX Warning: File `99_Heatmaps.png' not found on input line 22.
-
-
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff:22: Package pdftex.def Error: File `99_Heatmaps.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.22 ...phics[width = \textwidth]{99_Heatmaps.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[11]
-
-LaTeX Warning: File `99_DifferenceMap.png' not found on input line 31.
-
-
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff:31: Package pdftex.def Error: File `99_DifferenceMap.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.31 ...[width = \textwidth]{99_DifferenceMap.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[12]
-
-LaTeX Warning: File `99_Betweenness.png' not found on input line 40.
-
-
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.fff:40: Package pdftex.def Error: File `99_Betweenness.png' not found: using draft setting.
-
-See the pdftex.def package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.40 ...cs[width = \textwidth]{99_Betweenness.png}
-                                                  
-Try typing  <return>  to proceed.
-If that doesn't work, type  X <return>  to quit.
-
-[13]) (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt:52: Extra alignment tab has been changed to \cr.
-<template> \endtemplate 
-                        
-l.52 \end{tabular}}
-                   
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt:52: Extra alignment tab has been changed to \cr.
-<template> \endtemplate 
-                        
-l.52 \end{tabular}}
-                   
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-
-LaTeX Warning: Float too large for page by 133.68661pt on input line 53.
-
-[14]
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt:107: Extra alignment tab has been changed to \cr.
-<template> \endtemplate 
-                        
-l.107 \end{tabular}}
-                    
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.ttt:107: Extra alignment tab has been changed to \cr.
-<template> \endtemplate 
-                        
-l.107 \end{tabular}}
-                    
-You have given more \span or & marks than there were
-in the preamble to the \halign or \valign now in progress.
-So I'll assume that you meant to type \cr instead.
-
-
-LaTeX Warning: Float too large for page by 67.54404pt on input line 108.
-
-[15])
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 549.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 549.
- (/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 549.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 549.
+ [9 </home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_StudyArea.png (PNG copy)>]
+<99_FloodExtent.png, id=180, 809.424pt x 353.8821pt>
+File: 99_FloodExtent.png Graphic file (type png)
+<use 99_FloodExtent.png>
+Package pdftex.def Info: 99_FloodExtent.png  used on input line 13.
+(pdftex.def)             Requested size: 398.3386pt x 174.1543pt.
+ [10 </home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_FloodExtent.png (PNG copy)>]
+<99_Heatmaps.png, id=186, 578.16pt x 289.08pt>
+File: 99_Heatmaps.png Graphic file (type png)
+<use 99_Heatmaps.png>
+Package pdftex.def Info: 99_Heatmaps.png  used on input line 22.
+(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
+ [11 </home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Heatmaps.png (PNG copy)>]
+<99_Betweenness.png, id=192, 578.16pt x 289.08pt>
+File: 99_Betweenness.png Graphic file (type png)
+<use 99_Betweenness.png>
+Package pdftex.def Info: 99_Betweenness.png  used on input line 31.
+(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
+ [12 </home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Betweenness.png (PNG copy)>]
+<99_Interpatch.png, id=198, 578.16pt x 289.08pt>
+File: 99_Interpatch.png Graphic file (type png)
+<use 99_Interpatch.png>
+Package pdftex.def Info: 99_Interpatch.png  used on input line 40.
+(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
+ [13 </home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/99_Interpatch.png (PNG copy)>]) (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.ttt [14] [15])
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 557.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 557.
+ (/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.aux)
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 557.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 557.
 Package rerunfilecheck Info: File `Manuscript.out' has not changed.
 (rerunfilecheck)             Checksum: 1B85C3D6917466BEEC7D2EF3D3642710;1117.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 549.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 557.
  ) 
 Here is how much of TeX's memory you used:
- 22204 strings out of 492982
- 410145 string characters out of 6134896
- 493302 words of memory out of 5000000
- 25297 multiletter control sequences out of 15000+600000
- 12624 words of font info for 49 fonts, out of 8000000 for 9000
+ 22423 strings out of 492982
+ 413522 string characters out of 6134896
+ 508105 words of memory out of 5000000
+ 25511 multiletter control sequences out of 15000+600000
+ 12924 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  55i,15n,78p,937b,864s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
-/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on "/home/david/ownCloud/University/15. PhD/Chapter_10/04_Manuscript/Manuscript.pdf" (18 pages, 997994 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmsy8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on "/home/david/ownCloud/University/15. PhD/Chapter_8/04_Manuscript/Manuscript.pdf" (18 pages, 3382165 bytes).
 PDF statistics:
- 271 PDF objects out of 1000 (max. 8388607)
- 232 compressed objects within 3 object streams
+ 279 PDF objects out of 1000 (max. 8388607)
+ 235 compressed objects within 3 object streams
  44 named destinations out of 1000 (max. 500000)
- 170 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 190 words of extra memory for PDF output out of 10000 (max. 10000000)
 

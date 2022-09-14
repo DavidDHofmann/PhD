@@ -28,18 +28,18 @@
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_DifferenceMap.png}
+  \includegraphics[width = \textwidth]{99_Betweenness.png}
   \caption{}
-  \label{DifferenceHeatmaps}
+  \label{Betweenness}
   \end{center}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_Betweenness.png}
+  \includegraphics[width = \textwidth]{99_Interpatch.png}
   \caption{}
-  \label{Betweenness}
+  \label{Interpatch}
   \end{center}
 \end{figure}
 \efloatseparator
