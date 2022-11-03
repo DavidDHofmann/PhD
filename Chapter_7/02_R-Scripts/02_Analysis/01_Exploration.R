@@ -362,10 +362,26 @@ dat_byphase <- mutate(dat_byphase, MoonBin = cut(maxMoonlightIntensity, breaks =
 dat_byphase$MoonBinNumeric <- as.numeric(dat_byphase$MoonBin)
 
 # Visualize how the mean activity depends on moonlight intensity
-ggplot(dat_byphase, aes(x = as.factor(MoonBinNumeric), y = meanActivity)) +
+p1 <- dat_byphase %>%
+  group_by(MoonBinNumeric, ActivityPhase) %>%
+  summarize(
+      n       = n()
+    , mean    = round(mean(meanActivity))
+    , .groups = "drop"
+  ) %>%
+  pivot_longer(n:mean, names_to = "Metric", values_to = "Value") %>%
+  ggplot(aes(x = as.factor(MoonBinNumeric), y = Metric, label = Value)) +
+    geom_text(size = 2) +
+    facet_wrap(~ActivityPhase) +
+    theme_void() +
+    theme(axis.text.y = element_text())
+p2 <- ggplot(dat_byphase, aes(x = as.factor(MoonBinNumeric), y = meanActivity)) +
   geom_boxplot(alpha = 0.2) +
   theme_minimal() +
-  facet_wrap(~ ActivityPhase)
+  facet_wrap(~ ActivityPhase) +
+  xlab("") +
+  xlab("MoonBinNumeric")
+ggarrange(p2, p1, nrow = 2, heights = c(0.8, 0.2), align = "hv")
 
 # Visualize how the mean activity depends on moonlight intensity
 ggplot(dat_byphase, aes(x = maxMoonlightIntensity, y = meanActivity)) +

@@ -94,7 +94,7 @@ first <- dat %>%
   select(-c(Data, N)) %>%
   unnest(FirstMovement)
 
-# Generate a column indicating that the timing relates to the evning burst
+# Generate a column indicating that the timing relates to the evening burst
 first$ToD <- "Evening"
 names(first)[names(first) == "Timestamp"] <- "StartMoving"
 
