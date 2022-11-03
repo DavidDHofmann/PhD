@@ -34,6 +34,7 @@ r <- as.data.frame(r, xy = T)
 
 # We only care about min/max extents
 water  <- water[[c("min", "max")]]
+names(water) <- c("Min", "Max")
 
 # To compute the flood extent, we need to focus on the Okavango delta, thus,
 # let's load a shapefile of it
@@ -55,12 +56,13 @@ oka            <- st_as_sf(oka)
 oka            <- rbind(oka, oka)
 oka$Area       <- round(expanse(water_masked, unit = "km"))
 oka$FloodLevel <- names(water_masked)
+oka$FloodLevel <- factor(oka$FloodLevel, levels = c("Min", "Max"))
 oka$Label      <- paste0("Area~flooded:~", oka$Area, "~km^2")
 
 # Convert to dataframe
 water <- as.data.frame(water, xy = T)
-water <- pivot_longer(water, min:max, names_to = "FloodLevel", values_to = "Flooded")
-water$FloodLevel <- factor(water$FloodLevel, levels = c("min", "max"))
+water <- pivot_longer(water, Min:Max, names_to = "FloodLevel", values_to = "Flooded")
+water$FloodLevel <- factor(water$FloodLevel, levels = c("Min", "Max"))
 
 # Create country labels
 labels_countries <- data.frame(

@@ -128,9 +128,12 @@ networkPlot <- function(sources, targets, reverse = F, curvature = 0.2) {
       colors = rev(brewer.pal(11, "RdYlGn"))
     ) +
     facet_wrap(~ FloodLevel) +
-    guides(fill = "none") +
+    guides(
+        fill  = "none"
+      , size  = guide_legend(order = 2)
+    ) +
     theme(
-      , panel.background = element_blank()
+        panel.background = element_blank()
       , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
     ) +
     annotation_scale(
@@ -165,42 +168,169 @@ networkPlot(1:14, 1:14)
 networkPlot(2, c(1, 3), reverse = T)
 
 # Let's store one of the plots
-p <- networkPlot(6, 1:5, reverse = T)
+p1 <- networkPlot(6, 1:5, reverse = T)
+
+# Let's generate the same plot for any other source area
+p2 <- list()
+for (i in 1:6) {
+  p2[[i]] <- networkPlot(i, base::setdiff(1:6, i), reverse = T)
+}
+
+# Put the plots together
+p3 <- ggarrange(p2[[1]], p2[[2]], p2[[3]], ncol = 1, labels = c("(1)", "(2)", "(3)"))
+p4 <- ggarrange(p2[[4]], p2[[5]], p2[[6]], ncol = 1, labels = c("(4)", "(5)", "(6)"))
+p5 <- ggarrange(p3, p4, ncol = 2)
+
+# And repeat the same for the borders
+p6 <- list()
+for (i in 1:6) {
+  p6[[i]] <- networkPlot(i, 7:14, curvature = 0)
+}
+
+# Put the plots together
+p7 <- ggarrange(p6[[1]], p6[[2]], p6[[3]], ncol = 1, labels = c("(1)", "(2)", "(3)"))
+p8 <- ggarrange(p6[[4]], p6[[5]], p6[[6]], ncol = 1, labels = c("(4)", "(5)", "(6)"))
+p9 <- ggarrange(p7, p8, ncol = 2)
+
+################################################################################
+#### Store Plots
+################################################################################
 ggsave("04_Manuscript/99_Interpatch.png"
-  , plot   = p
+  , plot   = p1
   , bg     = "white"
   , height = 4
   , width  = 8
   , scale  = 1
 )
+ggsave("04_Manuscript/99_IPCMain.png"
+  , plot   = p5
+  , bg     = "white"
+  , height = 6
+  , width  = 8
+  , scale  = 1.8
+)
+ggsave("04_Manuscript/99_IPCBuffer.png"
+  , plot   = p9
+  , bg     = "white"
+  , height = 6
+  , width  = 8
+  , scale  = 1.8
+)
 
 ################################################################################
 #### Matrix Plots
 ################################################################################
-dat %>%
-  select(FloodLevel, SourceArea, CurrentArea, Freq) %>%
-  ggplot(aes(x = as.factor(SourceArea), y = as.factor(CurrentArea))) +
-    geom_tile(aes(fill = Freq)) +
-    geom_text(aes(label = round(Freq, 2)), size = 2) +
-    coord_fixed() +
-    scale_fill_gradientn(
-      colors = brewer.pal(11, "RdYlGn")
-    ) +
+# dat %>%
+#   select(FloodLevel, SourceArea, CurrentArea, Freq) %>%
+#   ggplot(aes(x = as.factor(SourceArea), y = as.factor(CurrentArea))) +
+#     geom_tile(aes(fill = Freq)) +
+#     geom_text(aes(label = round(Freq, 2)), size = 2) +
+#     coord_fixed() +
+#     scale_fill_gradientn(
+#       colors = brewer.pal(11, "RdYlGn")
+#     ) +
+#     scale_x_discrete(position = "top") +
+#     theme_minimal() +
+#     facet_wrap(~ FloodLevel)
+# dat %>%
+#   select(FloodLevel, SourceArea, CurrentArea, StepNumber) %>%
+#   ggplot(aes(x = as.factor(SourceArea), y = as.factor(CurrentArea))) +
+#     geom_tile(aes(fill = StepNumber)) +
+#     geom_text(aes(label = round(StepNumber)), size = 2) +
+#     coord_fixed() +
+#     scale_fill_gradientn(
+#       colors = rev(brewer.pal(11, "RdYlGn"))
+#     ) +
+#     scale_x_discrete(position = "top") +
+#     theme_minimal() +
+#     facet_wrap(~ FloodLevel)
+
+# Number of successful dispersers
+p1 <- dat %>%
+  mutate(Label = paste(round(dat$Freq), "%+-%", sprintf("%.2f", round(dat$FreqSE, 2)))) %>%
+  select(FloodLevel, SourceArea, CurrentArea, Label, Freq) %>%
+  mutate(FloodLevel = factor(FloodLevel, levels = c("Max", "Min"))) %>%
+  ggplot(aes(x = as.factor(SourceArea), y = as.factor(FloodLevel), fill = Freq)) +
+    geom_tile(col = "black") +
+    geom_text(aes(label = Label), size = 2, parse = T) +
     scale_x_discrete(position = "top") +
-    theme_minimal() +
-    facet_wrap(~ FloodLevel)
-dat %>%
-  select(FloodLevel, SourceArea, CurrentArea, StepNumber) %>%
-  ggplot(aes(x = as.factor(SourceArea), y = as.factor(CurrentArea))) +
-    geom_tile(aes(fill = StepNumber)) +
-    geom_text(aes(label = round(StepNumber)), size = 2) +
-    coord_fixed() +
     scale_fill_gradientn(
-      colors = rev(brewer.pal(11, "RdYlGn"))
+        colors  = adjustcolor(brewer.pal(11, "RdYlGn"), alpha.f = 0.75)
+      , guide   = guide_colorbar(
+        , title          = "Frequency"
+        , show.limits    = T
+        , title.position = "bottom"
+        , title.hjust    = 0.5
+        , ticks          = F
+        , barheight      = unit(0.2, "cm")
+        , barwidth       = unit(5, "cm")
+      )
     ) +
-    scale_x_discrete(position = "top") +
+    facet_grid("CurrentArea", switch = "y") +
     theme_minimal() +
-    facet_wrap(~ FloodLevel)
+    xlab("From") +
+    ylab("To") +
+    theme(
+        strip.placement   = "outside"
+      , strip.text.y.left = element_text(angle = 0)
+      , axis.title.x      = element_text(angle = 0, vjust = 0.5, size = 5)
+      , axis.title.y      = element_text(angle = 0, vjust = 0.5, size = 5)
+      , axis.text.y       = element_text(size = 5)
+      , legend.position   = "none"
+      , legend.box        = "vertical"
+      , panel.grid.minor  = element_blank()
+      , panel.grid.major  = element_blank()
+      , panel.spacing.y   = unit(0.05, "lines")
+    )
+
+# Number of steps required
+p2 <- dat %>%
+  mutate(Label = paste(round(dat$StepNumber), "%+-%", sprintf("%.2f", round(dat$StepNumberSE, 2)))) %>%
+  select(FloodLevel, SourceArea, CurrentArea, Label, StepNumber) %>%
+  mutate(FloodLevel = factor(FloodLevel, levels = c("Max", "Min"))) %>%
+  ggplot(aes(x = as.factor(SourceArea), y = as.factor(FloodLevel), fill = StepNumber)) +
+    geom_tile(col = "black") +
+    geom_text(aes(label = Label), size = 2, parse = T) +
+    scale_x_discrete(position = "top") +
+    scale_fill_gradientn(
+        colors  = adjustcolor(rev(brewer.pal(11, "RdYlGn")), alpha.f = 0.75)
+      , guide   = guide_colorbar(
+        , title          = "StepNumber"
+        , show.limits    = T
+        , title.position = "bottom"
+        , title.hjust    = 0.5
+        , ticks          = F
+        , barheight      = unit(0.2, "cm")
+        , barwidth       = unit(5, "cm")
+      )
+    ) +
+    facet_grid("CurrentArea", switch = "y") +
+    theme_minimal() +
+    xlab("From") +
+    ylab("") +
+    theme(
+        strip.placement   = "outside"
+      , strip.text.y.left = element_text(angle = 0)
+      , axis.title.x      = element_text(angle = 0, vjust = 0.5, size = 5)
+      , axis.title.y      = element_text(angle = 0, vjust = 0.5, size = 5)
+      , axis.text.y       = element_text(size = 5)
+      , legend.position   = "none"
+      , legend.box        = "vertical"
+      , panel.grid.minor  = element_blank()
+      , panel.grid.major  = element_blank()
+      , panel.spacing.y   = unit(0.05, "lines")
+    )
+
+# Arrange plots and store them
+p3 <- ggarrange(p1, p2)
+p3 <- p3 + coord_fixed(ratio = 0.6)
+ggsave("04_Manuscript/99_IPCTable.png"
+  , plot   = p3
+  , bg     = "white"
+  , scale  = 1.5
+  , width  = 6
+  , height = 4
+)
 
 ################################################################################
 #### Frequency

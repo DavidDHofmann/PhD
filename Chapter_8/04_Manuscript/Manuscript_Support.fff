@@ -1,0 +1,34 @@
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = 0.5\textwidth]{99_HeatmapsIndividual.png}
+  \caption{}
+  \label{Heatmaps}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_BetweennessIndividual.png}
+  \caption{}
+  \label{Betweenness}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_IPCMain.png}
+  \caption{}
+  \label{IPCMain}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_IPCBuffer.png}
+  \caption{}
+  \label{IPCBuffer}
+  \end{center}
+\end{figure}

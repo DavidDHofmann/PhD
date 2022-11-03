@@ -1,8 +1,13 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_StudyArea.png}
-  \caption{Study area across which we simulated dispersal events. Virtual
-  dispersers were released at random locations within the orange source areas.}
+  \caption{Study area across which we simulated dispersal. Simulated dispersers
+  were released at random locations within the orange source areas distributed
+  across the delta. Emigration zones (purple) served as checkpoints and enabled
+  us to identify if and where simulated dispersers left the close surroundings
+  of the Okavango delta. These zones were generated using a set of cutlines
+  originating from the center of the delta and roughly cutting an elliptical
+  buffer zone into sections of equal size.}
   \label{StudyArea}
   \end{center}
 \end{figure}
@@ -11,7 +16,12 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_FloodExtent.png}
-  \caption{}
+  \caption{Flood extent in the two scenarios considered. In the left panel, the
+  flood is at an extremely low level, stretching across 3'558
+  km\textsuperscript{2}, whereas in the right panel the flood is at an extremely
+  high level and covers 9'397 km\textsuperscript{2}. The two maps were generated
+  using 700 remote sensed MODIS MCD43A4 satellite images spanning the years 2000
+  to 2019.}
   \label{FloodExtent}
   \end{center}
 \end{figure}
@@ -20,7 +30,11 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_Heatmaps.png}
-  \caption{}
+  \caption{Heatmaps depicting the number of simulated dispersal trajectories
+  traversing each grid-cell in the study area. The left panel shows results for
+  the minimum flood scenario, whereas the right panel shows results for the
+  maximum flood scenario. Source areas (numbered 1-6) from which dispresers were
+  released, and emigration zones (numbered 7-14) are shaded in dark gray.}
   \label{Heatmaps}
   \end{center}
 \end{figure}
@@ -29,7 +43,12 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_Betweenness.png}
-  \caption{}
+  \caption{Betweenness scores highlighting potential dispersal corridors for
+  both the minimum and maximum flood scenario. Areas with high betweenness
+  scores (bright yellow) are used by many simulated individuals to move into
+  adjacent regions and can thus be understood as critical pinch-points. Source
+  areas (numbered 1-6) from which dispresers were released, and emigration zones
+  (numbered 7-14) are shaded in light gray.}
   \label{Betweenness}
   \end{center}
 \end{figure}
@@ -37,10 +56,22 @@
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_Interpatch.png}
-  \caption{}
-  \label{Interpatch}
+  \includegraphics[width = \textwidth]{99_IPCTable.png}
+  \caption{Dispersal frequency (a) and duration (b) (in steps) between source
+  areas and emigration zones during minimum and maximum flood.}
+  \label{IPCTable}
   \end{center}
 \end{figure}
 \efloatseparator
  
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Interpatch.png}
+  \caption{Inter-patch connectivity into and from source area number six. This
+  patch experienced the most drastic reduction in connectivity in result to a
+  high flood level. During minimum flood there is ample connectivity from and
+  into source areas 1-3. During maximum flood, connectivity is lower and mainly
+  limited to source area 2.}
+  \label{Interpatch}
+  \end{center}
+\end{figure}

@@ -1,0 +1,49 @@
+This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Manuscript.aux
+The style file: apalike.bst
+Database file #1: Literature.bib
+Warning--I didn't find a database entry for "Hofmann.2022"
+Warning--I didn't find a database entry for "Hofmann.2021b"
+You've used 27 entries,
+            1935 wiz_defined-function locations,
+            674 strings with 13092 characters,
+and the built_in function-call counts, 15958 in all, are:
+= -- 1411
+> -- 1234
+< -- 6
++ -- 466
+- -- 462
+* -- 1639
+:= -- 2867
+add.period$ -- 81
+call.type$ -- 27
+change.case$ -- 365
+chr.to.int$ -- 27
+cite$ -- 27
+duplicate$ -- 390
+empty$ -- 779
+format.name$ -- 493
+if$ -- 2922
+int.to.chr$ -- 1
+int.to.str$ -- 0
+missing$ -- 28
+newline$ -- 138
+num.names$ -- 81
+pop$ -- 320
+preamble$ -- 1
+purify$ -- 366
+quote$ -- 0
+skip$ -- 292
+stack$ -- 0
+substring$ -- 883
+swap$ -- 41
+text.length$ -- 2
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 160
+warning$ -- 0
+while$ -- 98
+width$ -- 0
+write$ -- 351
+(There were 2 warnings)
