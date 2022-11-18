@@ -4,46 +4,46 @@ The top-level auxiliary file: Manuscript_Support.aux
 The style file: apalike.bst
 Database file #1: Literatur.bib
 Warning--I'm ignoring Hofmann.2021's extra "year" field
---line 3135 of file Literatur.bib
-You've used 6 entries,
+--line 3137 of file Literatur.bib
+You've used 7 entries,
             1935 wiz_defined-function locations,
-            520 strings with 5126 characters,
-and the built_in function-call counts, 2736 in all, are:
-= -- 264
-> -- 133
+            528 strings with 5418 characters,
+and the built_in function-call counts, 3227 in all, are:
+= -- 311
+> -- 161
 < -- 1
-+ -- 46
-- -- 46
-* -- 257
-:= -- 480
-add.period$ -- 19
-call.type$ -- 6
-change.case$ -- 52
-chr.to.int$ -- 6
-cite$ -- 6
-duplicate$ -- 84
-empty$ -- 181
-format.name$ -- 54
-if$ -- 521
++ -- 56
+- -- 56
+* -- 306
+:= -- 566
+add.period$ -- 22
+call.type$ -- 7
+change.case$ -- 62
+chr.to.int$ -- 7
+cite$ -- 7
+duplicate$ -- 98
+empty$ -- 211
+format.name$ -- 65
+if$ -- 613
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 7
-newline$ -- 35
-num.names$ -- 18
-pop$ -- 43
+missing$ -- 8
+newline$ -- 40
+num.names$ -- 21
+pop$ -- 51
 preamble$ -- 2
-purify$ -- 53
+purify$ -- 63
 quote$ -- 0
-skip$ -- 60
+skip$ -- 70
 stack$ -- 0
-substring$ -- 217
-swap$ -- 6
+substring$ -- 254
+swap$ -- 7
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 34
+type$ -- 40
 warning$ -- 0
-while$ -- 21
+while$ -- 25
 width$ -- 0
-write$ -- 83
+write$ -- 96
 (There was 1 warning)

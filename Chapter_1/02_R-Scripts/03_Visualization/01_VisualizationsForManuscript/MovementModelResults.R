@@ -36,16 +36,20 @@ options(scipen = 999)
 #### Prepare Data
 ################################################################################
 # Load the movement model
-move.mod <- readRDS("03_Data/03_Results/99_MovementModel.rds")
+best <- readRDS("03_Data/03_Results/99_MovementModel.rds")
+best <- best$Model[[1]]
 
-# Select best model
-best <- move.mod$Model[[1]]
-
-# Summary of the best model
-summary(best)
+# Extract model results (note that newer versions of glmmTMB and TMB are not
+# compatible with older models and we need to manually extract the values of
+# interest)
+best <- tibble(
+    Covariate   = names(fixef(best)$cond)
+  , Coefficient = fixef(best)$cond
+  , SE          = sqrt(diag(vcov(best, full = T)))[1:length(Coefficient)]
+)
 
 # Calculate confidence intervals
-coeffs <- getCoeffs(best, pvalue = TRUE)[-1, ] %>%
+coeffs <- best[-1, ] %>%
   mutate(
       LCI_90 = Coefficient - qnorm(1 - (1 - 0.90) / 2) * SE
     , UCI_90 = Coefficient + qnorm(1 - (1 - 0.90) / 2) * SE
@@ -55,13 +59,16 @@ coeffs <- getCoeffs(best, pvalue = TRUE)[-1, ] %>%
     , UCI_99 = Coefficient + qnorm(1 - (1 - 0.99) / 2) * SE
   )
 
+# Compute p-values
+coeffs <- mutate(coeffs, pvalue = 2 * pnorm(-abs(Coefficient) / SE))
+
 # Add stars indicating the significance
 coeffs$Significance <- sapply(1:nrow(coeffs), function(x){
   if (coeffs$pvalue[x] <= 0.01){
     return("***")
-  } else if (coeffs$pvalue[x] <= 0.05){
+  } else if (coeffs$pvalue[x] <= 0.05) {
     return("**")
-  } else if (coeffs$pvalue[x] <= 0.1){
+  } else if (coeffs$pvalue[x] <= 0.1) {
     return("*")
   }
 })
@@ -372,9 +379,10 @@ print(xtable(tex, digits = 3)
 #### Validation
 ################################################################################
 # Load required data
-validation <- read_rds("03_Data/03_Results/99_ModelValidation.rds")
-dat_pref <- read_rds("03_Data/03_Results/99_ModelValidation(Data).rds")[[1]]
-dat_rand <- read_rds("03_Data/03_Results/99_ModelValidation(Data).rds")[[2]]
+validation     <- read_rds("03_Data/03_Results/99_ModelValidation.rds")
+dat_pref       <- read_rds("03_Data/03_Results/99_ModelValidation(Data).rds")[[1]]
+dat_rand       <- read_rds("03_Data/03_Results/99_ModelValidation(Data).rds")[[2]]
+validation_con <- read_rds("03_Data/03_Results/99_ConnectivityValidation.rds")
 
 # Put the k-fold cross validation data from observed and random preferences
 # together
@@ -397,7 +405,7 @@ text <- data.frame(
         paste0(
             "$\\bar{r}_s = "
           , validation$Mean[1]
-          , "$, $95%-CI = "
+          , "$, $95\\%-CI = "
           , validation$LCL[1]
           , "$, $"
           , validation$UCL[1], "$"
@@ -405,7 +413,7 @@ text <- data.frame(
       , paste0(
             "$\\bar{r}_s = "
           , validation$Mean[2]
-          , "$, $95%-CI = "
+          , "$, $95\\%-CI = "
           , validation$LCL[2]
           , "$, $"
           , validation$UCL[2], "$"
@@ -435,7 +443,7 @@ loess <- dat %>%
   unnest(data)
 
 # Plot the data, once for realized, once for random preferences
-p4 <- lapply(unique(loess$Group), function(x){
+p4 <- lapply(unique(loess$Group), function(x) {
   sub_loess <- subset(loess, Group == x)
   sub_text <- subset(text, Group == x)
   sub_data <- subset(dat, Group == x)
@@ -473,20 +481,102 @@ p4 <- lapply(unique(loess$Group), function(x){
     ) +
     ylab("Frequency")
 })
-p4 <- ggarrange(p4[[1]], p4[[2]], ncol = 1, labels = c("b1", "b2"), label.x = -0.05)
+
+# Let's add some more information to the validation of our connectivity map
+validation_con <- validation_con %>%
+  subset(ModelType == "PSF") %>%
+  dplyr::select(Steps, Model) %>%
+  unnest(Model) %>%
+  setNames(c("Steps", "Coefficient", "SE", "pvalue")) %>%
+  mutate(
+      LCI_90 = Coefficient - qnorm(1 - (1 - 0.90) / 2) * SE
+    , UCI_90 = Coefficient + qnorm(1 - (1 - 0.90) / 2) * SE
+    , LCI_95 = Coefficient - qnorm(1 - (1 - 0.95) / 2) * SE
+    , UCI_95 = Coefficient + qnorm(1 - (1 - 0.95) / 2) * SE
+    , LCI_99 = Coefficient - qnorm(1 - (1 - 0.99) / 2) * SE
+    , UCI_99 = Coefficient + qnorm(1 - (1 - 0.99) / 2) * SE
+  )
+
+# Add stars indicating the significance
+validation_con$Significance <- sapply(1:nrow(validation_con), function(x){
+  if (validation_con$pvalue[x] <= 0.01){
+    return("***")
+  } else if (validation_con$pvalue[x] <= 0.05){
+    return("**")
+  } else if (validation_con$pvalue[x] <= 0.1){
+    return("*")
+  }
+})
+
+# Prepare dataset for plotting confidence intervals
+validation_confs <- validation_con %>%
+  dplyr::select(Steps, Coefficient, LCI_90:UCI_99) %>%
+  gather(key = confidence_level, value = value, LCI_90:UCI_99) %>%
+  separate(col = confidence_level, into = c("Type", "Level"), sep = "_") %>%
+  spread(key = Type, value = value) %>%
+  mutate(Level = paste0(Level, "%"))
+
+# Plot of path selection model
+p4[[3]] <- ggplot(data = validation_con, aes(y = Coefficient, x = as.factor(Steps))) +
+  geom_point(shape = 3, size = 2.5, col = "steelblue") +
+  geom_errorbar(
+      aes(
+        ymin = LCI
+      , ymax = UCI
+      , size = factor(Level)
+    )
+    , data   = validation_confs
+    , width  = 0
+    , col    = "steelblue"
+    , alpha  = 0.5
+  ) +
+  geom_text(
+      aes(label = Significance, hjust = 0.5, vjust = -0.5, angle = 90)
+    , show.legend = F
+  ) +
+  geom_hline(
+      yintercept = 0
+    , color      = "darkgrey"
+    , lty        = 2
+    , lwd        = 0.3
+  ) +
+  theme_classic() +
+  ylim(c(-1, 3)) +
+  coord_capped_cart(
+      left   = "both"
+    , bottom = "both"
+  ) +
+  labs(
+      x = "Number of Simulated Steps"
+    # , y = expression(beta*"-Coefficient_{Connectivity}")
+    , y = parse(text = TeX("$\\beta-Coefficient_{Connectivity}$"))
+  ) +
+  scale_size_manual(
+      name   = "Confidence Level"
+    , values = c(2, 1, 0.3)
+  ) +
+  theme(
+    , legend.position   = "none"
+    , legend.text       = element_text(face = 3)
+    , legend.title      = element_text(face = 3)
+  ) +
+  guides(size = guide_legend(title.position = "top", title.hjust = 0.5, legend.hjust = 4))
+
+# Put plots together
+p5 <- ggarrange(p4[[1]], p4[[2]], p4[[3]], ncol = 1, labels = c("b1", "b2", "c"), label.x = -0.10)
 
 ################################################################################
 #### Combine Plots
 ################################################################################
 # Arrange the two plots nicely
-p5 <- ggarrange(p3, p4, widths = c(1.5, 1), labels = "a")
+p6 <- ggarrange(p3, p5, widths = c(1.5, 1), labels = "a")
 
 # Show it
-p5
+p6
 
 # Save all
 ggsave("04_Manuscript/99_MovementModel.pdf"
-  , plot   = p5
+  , plot   = p6
   , width  = 12
   , height = 7
   , device = "pdf"

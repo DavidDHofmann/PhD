@@ -218,7 +218,61 @@ not overlap \citep{Fortin.2009}.
 \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S4: All Movement Models
+%	Appendix S4: Betweenness Approaches
+%------------------------------------------------------------------------------
+\newpage
+\section{Betweenness Maps}
+To generate betweenness maps, we first overlaid the study area with a regular
+grid with a resolution of 2.5 km x 2.5 km per grid cell. The grid cells were
+labelled with unique numbers, which allowed us to then generate a ``visitation
+history'' for each simulated trajectory, showing through which grid cells each
+simulated invidual moved. Based on this history, we tallied the number of
+transitions that occured from one cell to another. Ultimately, the so generated
+list of transitions served to generate a network and to compute betweenness
+scores. The resolution of the overlaid grid thus dictates the resolution at
+which betweenness can be mapped and has important implications for the way in
+which cell-transitions need to be determined. In the simplest case,
+cell-transitions can be determined by only looking at the start and endpoint of
+each step. If it ends in a different grid-cell than it started, a transition has
+occured. This approach is computationally simple as it only requires a point
+extraction (at the start and endpoint of each step). However, relying on a point
+extraction has the disadvantage that transitions between non-adjacent cells can
+occur if a single step stretches across multiple grid-cells. Especially when the
+resolution of the grid is high, this problem becomes more pertinent. As an
+alternative, one could not only consider the start and endpoint of each step,
+but the entire line along the step, i.e. conduct a line extraction. However,
+this requires that extracted values (i.e. grid-cell labels) are ordered in
+accordance to the direction of movement. In R, such an extraction can be
+achieved e.g. using \textsf{raster::extract(raster, line, along = T)}, which is
+computationally very demanding and therefore often an unviable solution. Here,
+we employed yet another approach and generated interpolated coordinates along
+each simulated step. We then determined cell transition using those interpolated
+coordinates. Since this approach still uses a point extraction, it is
+considerably faster while still enabling to detect cell-transitions at greater
+resolution. In \Cref{BetweennessApproaches}, we use simulated movement paths to
+compare betweenness maps that are based on a (1) point extraction, a (2) line
+extraction, and a (3) point extraction with interpolated coordinates. As you can
+see, the approach using interpolated coordinates approximates the results from
+the line extraction very closely, even at higher resolutions. A detailed
+discussion about this is can also be found in \citep{BastilleRousseau.2018}.
+
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_BetweennessApproaches.png}
+  \caption{We simulated five trajectories where individuals moved through a
+  narrow corridor. We then overlaid those simulations with a coarse (a1) and
+  detailed (b1) grid that was used to compute betweenness scores. This required
+  us to determine cell-transitions, which we did using three competing
+  approaches. Once using a point extraction (a2 and b2), once using a line
+  extraction (a3 and b3), and once using a point extraction with interpolated
+  coordinates (a4 and b4). In brackets are the average computation times $\pm$
+  SD as computed from 10 repetitions.}
+  \label{BetweennessApproaches}
+ \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S5: All Movement Models
 %------------------------------------------------------------------------------
 \newpage
 \begin{landscape}
@@ -279,7 +333,7 @@ not overlap \citep{Fortin.2009}.
 
 
 %------------------------------------------------------------------------------
-%	Appendix S5: Most Parsimonious Movement Models
+%	Appendix S6: Most Parsimonious Movement Models
 %------------------------------------------------------------------------------
 \newpage
 \section{Movement Model}
@@ -335,7 +389,7 @@ not overlap \citep{Fortin.2009}.
 
 
 %------------------------------------------------------------------------------
-%	Appendix S6: Movement Model interpretation
+%	Appendix S7: Movement Model interpretation
 %------------------------------------------------------------------------------
 \newpage
 % \newgeometry{left=35mm,right=35mm,top=25mm,bottom=5mm,footskip=0pt}
@@ -383,7 +437,7 @@ intervals using standard errors associated with each model estimate
 % \restoregeometry
 
 %------------------------------------------------------------------------------
-%	Appendix S7: Convergence
+%	Appendix S8: Convergence
 %------------------------------------------------------------------------------
 \newpage
 \section{Convergence}
@@ -404,7 +458,7 @@ intervals using standard errors associated with each model estimate
 \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S8: Heatmaps
+%	Appendix S9: Heatmaps
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=5mm,footskip=0pt}
@@ -424,7 +478,7 @@ intervals using standard errors associated with each model estimate
 \restoregeometry
 
 %------------------------------------------------------------------------------
-%	Appendix S9: Evolution of Betweenness Maps
+%	Appendix S10: Evolution of Betweenness Maps
 %------------------------------------------------------------------------------
 \newpage
 \newgeometry{left=35mm,right=35mm,top=25mm,bottom=10mm,footskip=0pt}
@@ -442,7 +496,7 @@ intervals using standard errors associated with each model estimate
 \restoregeometry
 
 %------------------------------------------------------------------------------
-%	Appendix S11: Map Comparison
+%	Appendix S12: Map Comparison
 %------------------------------------------------------------------------------
 \newpage
 \section{Comparison of Traversal Frequencies and Betweenness Scores Inside and Outside KAZA-TFCA}
@@ -465,7 +519,7 @@ intervals using standard errors associated with each model estimate
 \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S12: Areas Reached
+%	Appendix S13: Areas Reached
 %------------------------------------------------------------------------------
 \newpage
 \section{Dispersal into other National Parks}

@@ -91,11 +91,10 @@ Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
 \newblock Oxford University Press, Oxford, UK.
 
 \bibitem[Cozzi et~al., 2020]{Cozzi.2020}
-Cozzi, G., Behr, D., Webster, H., Claase, M., Bryce, C., Modise, B., McNutt,
-  J., and Ozgul, A. (2020).
-\newblock {The Walk of Life: African Wild Dog Dispersal and its Implications
-  for Management and Conservation across Transfrontier Landscapes}.
-\newblock In press.
+Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
+  Mcnutt, J.~W., and Ozgul, A. (2020).
+\newblock African {Wild} {Dog} {Dispersal} and {Implications} for {Management}.
+\newblock {\em {The Journal of Wildlife Management}}, pages 614--621.
 
 \bibitem[Cozzi et~al., 2012]{Cozzi.2012}
 Cozzi, G., Broekhuis, F., McNutt, J.~W., Turnbull, L.~A., Macdonald, D.~W., and
@@ -123,6 +122,12 @@ Cushman, S.~A., Elliot, N.~B., Bauer, D., Kesch, K., Bahaa-el din, L.,
 \newblock {Prioritizing Core Areas, Corridors and Conflict Hotspots for Lion
   Conservation in Southern Africa}.
 \newblock {\em {PLOS ONE}}, 13(7):e0196213.
+
+\bibitem[Cushman and Lewis, 2010]{Cushman.2010}
+Cushman, S.~A. and Lewis, J.~S. (2010).
+\newblock {Movement Behavior Explains Genetic Differentiation in American Black
+  Bears}.
+\newblock {\em {Landscape Ecology}}, 25(10):1613--1625.
 
 \bibitem[Davies-Mostert et~al., 2012]{DaviesMostert.2012}
 Davies-Mostert, H.~T., Kamler, J.~F., Mills, M. G.~L., Jackson, C.~R.,
@@ -177,6 +182,12 @@ Fahrig, L. (2003).
 \newblock {Effects of Habitat Fragmentation on Biodiversity}.
 \newblock {\em {Annual Review of Ecology, Evolution, and Systematics}},
   34(1):487--515.
+
+\bibitem[Fattebert et~al., 2015]{Fattebert.2015}
+Fattebert, J., Robinson, H.~S., Balme, G., Slotow, R., and Hunter, L. (2015).
+\newblock {Structural Habitat Predicts Functional Dispersal Habitat of a Large
+  Carnivore: How Leopards Change Spots}.
+\newblock {\em {Ecological Applications}}, 25(7):1911--1921.
 
 \bibitem[Fieberg et~al., 2021]{Fieberg.2021}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
@@ -268,6 +279,18 @@ Koen, E.~L., Garroway, C.~J., Wilson, P.~J., and Bowman, J. (2010).
   Animal Movement}.
 \newblock {\em PlOS ONE}, 5(7):e11785.
 
+\bibitem[Landguth et~al., 2012]{Landguth.2012}
+Landguth, E.~L., Hand, B.~K., Glassy, J., Cushman, S.~A., and Sawaya, M.~A.
+  (2012).
+\newblock {UNICOR: A Species Connectivity and Corridor Network Simulator}.
+\newblock {\em {Ecography}}, 35(1):9--14.
+
+\bibitem[LaPoint et~al., 2013]{LaPoint.2013}
+LaPoint, S., Gallery, P., Wikelski, M., and Kays, R. (2013).
+\newblock Animal {Behavior}, {Cost}-{Based} {Corridor} {Models}, and {Real}
+  {Corridors}.
+\newblock {\em {Landscape Ecology}}, 28(8):1615--1630.
+
 \bibitem[Latham et~al., 2011]{Latham.2011}
 Latham, A. D.~M., Latham, M.~C., Boyce, M.~S., and Boutin, S. (2011).
 \newblock {Movement Responses by Wolves to Industrial Linear Features and Their
@@ -348,11 +371,24 @@ O’Neill, H. M.~K., Durant, S.~M., and Woodroffe, R. (2020).
   and Orders of Selection in a Wide-Ranging Carnivore}.
 \newblock {\em BMC Zoology}, 5(1).
 
+\bibitem[Panzacchi et~al., 2016]{Panzacchi.2016}
+Panzacchi, M., Van~Moorter, B., Strand, O., Saerens, M., Kivimäki, I.,
+  St.~Clair, C.~C., Herfindal, I., and Boitani, L. (2016).
+\newblock {Predicting the Continuum Between Corridors and Barriers to Animal
+  Movements Using Step Selection Functions and Randomized Shortest Paths}.
+\newblock {\em Journal of Animal Ecology}, 85(1):32--42.
+
 \bibitem[Perrin and Mazalov, 2000]{Perrin.2000}
 Perrin, N. and Mazalov, V. (2000).
 \newblock {Local Competition, Inbreeding, and the Evolution of Sex‐Biased
   Dispersal}.
 \newblock {\em {The American Naturalist}}, 155(1):116--127.
+
+\bibitem[Pinto and Keitt, 2009]{Pinto.2009}
+Pinto, N. and Keitt, T.~H. (2009).
+\newblock {Beyond the Least-Cost Path: Evaluating Corridor Redundancy Using a
+  Graph-Theoretic Approach}.
+\newblock {\em {Landscape Ecology}}, 24(2):253--266.
 
 \bibitem[Pomilia et~al., 2015]{Pomilia.2015}
 Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
@@ -414,6 +450,13 @@ Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
 \newblock {From Dispersal Constraints to Landscape Connectivity: Lessons from
   Species Distribution Modeling}.
 \newblock {\em Ecography}, 38(10):967--978.
+
+\bibitem[Whittingham et~al., 2006]{Whittingham.2006}
+Whittingham, M.~J., Stephens, P.~A., Bradbury, R.~B., and Freckleton, R.~P.
+  (2006).
+\newblock Why {Do} {We} {Still} {Use} {Stepwise} {Modelling} in {Ecology} and
+  {Behaviour}?
+\newblock {\em {Journal of Animal Ecology}}, 75(5):1182--1189.
 
 \bibitem[Wolski et~al., 2017]{Wolski.2017}
 Wolski, P., Murray-Hudson, M., Thito, K., and Cassidy, L. (2017).

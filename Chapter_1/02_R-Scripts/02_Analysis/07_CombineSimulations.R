@@ -89,6 +89,48 @@ sims <- read_rds("03_Data/03_Results/99_DispersalSimulation.rds")
 file.remove(files_main)
 file.remove(files_buffer)
 
+################################################################################
+#### Interpolated Simulation
+################################################################################
+# To compute the betweenness, we will want to use simulations where the steps
+# were interpolated. We will store those interpolated simulations to a special
+# subdirectory.
+dir.create("03_Data/03_Results/99_Simulations/Interpolated", showWarnings = F)
+
+# Now let's loop through all simulated paths and create interpolated versions
+sims <- nest(sims, Data = -TrackID)
+sims$Interpolated <- pbmclapply(
+    X                  = 1:nrow(sims)
+  , ignore.interactive = T
+  , mc.cores           = detectCores() / 2
+  , FUN                = function(x) {
+    filename <- paste0(
+        "03_Data/03_Results/99_Simulations/Interpolated/Track_"
+      , sprintf("%05d", sims$TrackID[x])
+      , ".rds"
+    )
+    if (!file.exists(filename)) {
+      path  <- sims$Data[[x]]
+      inter <- lapply(1:(nrow(path) - 1), function(i) {
+        xy_new <- interpolatePointsC(
+            x1 = path$x[i]
+          , x2 = path$x[i + 1]
+          , y1 = path$y[i]
+          , y2 = path$y[i + 1]
+          , by = 1000 / 111000
+        )
+        int <- path[rep(i, nrow(xy_new)), ]
+        int[, c("x", "y")] <- xy_new
+        return(int)
+      }) %>% do.call(rbind, .)
+      inter$Segment <- 1:nrow(inter)
+      write_rds(inter, filename)
+    }
+  return(filename)
+})
+sims$Interpolated <- NULL
+sims <- unnest(sims, Data)
+
 # ################################################################################
 # #### Verify Turning Angles and Step Lengths
 # ################################################################################

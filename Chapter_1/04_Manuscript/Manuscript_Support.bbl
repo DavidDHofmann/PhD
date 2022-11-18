@@ -1,6 +1,13 @@
  \newcommand{\noop}[1]{}
 \begin{thebibliography}{}
 
+\bibitem[Bastille-Rousseau et~al., 2018]{BastilleRousseau.2018}
+Bastille-Rousseau, G., Douglas-Hamilton, I., Blake, S., Northrup, J.~M., and
+  Wittemyer, G. (2018).
+\newblock {Applying Network Theory to Animal Movements to Identify Properties
+  of Landscape Space Use}.
+\newblock {\em {Ecological Applications}}, 28(3):854--864.
+
 \bibitem[Burnham and Anderson, 2002]{Burnham.2002}
 Burnham, K.~P. and Anderson, D.~R. (2002).
 \newblock {\em {Model Selection and Multimodel Inference: A Practical

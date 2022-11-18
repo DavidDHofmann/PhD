@@ -3,14 +3,15 @@
     \includegraphics[width = \textwidth]{99_GraphicalAbstract.pdf}
     \caption{Flowchart of the simulation-based connectivity analysis. First, GPS
     data and habitat covariates must be collected. The combined data is then
-    analyzed using an integrated step selection model. The parametrized model is
-    then treated as an individual-based movement model and used to simulate
-    dispersal trajectories. Ultimately, simulated trajectories are translated
-    into a set of maps that are pertinent to landscape connectivity. This
-    includes a heatmap, indicating the traversal frequency across each spatial
-    unit of the study area, a betweenness map, highlighting movement corridors
-    and bottlenecks, and, finally, an inter-patch connectivity map, where the
-    frequency of connections and their average duration can be depicted.}
+    analyzed using an integrated step selection model (step 1). The parametrized
+    model is then treated as an individual-based movement model and used to
+    simulate dispersal trajectories (step 2). Ultimately, simulated trajectories
+    are translated into a set of maps that are pertinent to landscape
+    connectivity (step 3). This includes a heatmap, indicating the traversal
+    frequency across each spatial unit of the study area, a betweenness map,
+    highlighting movement corridors and bottlenecks, and, finally, an
+    inter-patch connectivity map, where the frequency of connections and their
+    average duration can be depicted.}
     \label{GraphicalAbstract}
   \end{center}
 \end{figure}
@@ -56,15 +57,20 @@
     interactions. The horizontal line segments delineate the 90\%, 95\%, and
     99\% confidence-intervals for the respective \(\beta\)-coefficients.
     Significance codes: * \(p < 0.10\), ** \(p < 0.05\), *** \(p < 0.01\). (b)
-    Results from the k-fold cross validation procedure. The upper plot shows
-    rank frequencies of realized steps according to model predictions with known
-    preferences, whereas the lower plot shows rank frequencies of realized steps
+    Results from the k-fold cross validation procedure. Subfigure b1 shows rank
+    frequencies of realized steps according to model predictions with known
+    preferences, whereas subfigure b2 shows rank frequencies of realized steps
     when assuming random preferences. The blue ribbon shows the prediction
     interval around a loess smoothing regression that we fitted to ease the
     interpretation of the plots. The significant correlation between rank and
     associated frequency in (b1) highlights that the most parsimonious model
-    successfully outperformed a random guess (b2) and assigned high selection
-    scores to realized steps.}
+    successfully outperformed a random guess (b2) and frequently assigned low
+    ranks (i.e. high selection scores) to realized steps but only rarely high
+    ranks (i.e. low selection scores). (c) Results from the PSF analysis using
+    independent dispersal data show that dispersers preferrably moved through
+    areas where our heatmaps predicted high connectivity. Results are shown for
+    heatmaps realized after 68, 125, 250, 500, and 2'000 simulated steps,
+    respectively.}
     \label{MovementModel}
   \end{center}
 \end{figure}
@@ -79,7 +85,7 @@
   tallied all simulated trajectories. Consequently, the map highlights areas
   that are frequently traversed. For spatial reference we plotted a few selected
   NPs (dark gray). Additional heatmaps showing the traversal frequency when
-  individuals move fewer than 2'000 steps are provided in Figure S4.}
+  individuals move fewer than 2'000 steps are provided in Figure S5.}
   \label{Heatmap}
 \end{figure}
 \efloatseparator
@@ -95,7 +101,7 @@
   \citep{BastilleRousseau.2018}. Note that we square-rooted betweenness scores
   to improve visibility of corridors with comparably low scores. Additional
   betweenness maps showing betweenness scores when individuals move fewer than
-  2'000 steps are provided in Figure S4.}
+  2'000 steps are provided in Figure S6.}
   \label{Betweenness}
 \end{figure}
 \efloatseparator

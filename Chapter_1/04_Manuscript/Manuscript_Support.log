@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  7 APR 2022 10:30
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  16 NOV 2022 13:30
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -760,38 +760,44 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] [1] [2]
-<99_SourceAreas.png, id=91, 650.43pt x 271.0125pt>
+<99_SourceAreas.png, id=95, 650.43pt x 271.0125pt>
 File: 99_SourceAreas.png Graphic file (type png)
 <use 99_SourceAreas.png>
 Package pdftex.def Info: 99_SourceAreas.png  used on input line 205.
 (pdftex.def)             Requested size: 398.3386pt x 165.97902pt.
  [3 <./99_SourceAreas.png (PNG copy)>]
-Overfull \hbox (8.56094pt too wide) in paragraph at lines 238--274
+<99_BetweennessApproaches.png, id=112, 722.7pt x 505.89pt>
+File: 99_BetweennessApproaches.png Graphic file (type png)
+<use 99_BetweennessApproaches.png>
+Package pdftex.def Info: 99_BetweennessApproaches.png  used on input line 261.
+(pdftex.def)             Requested size: 398.3386pt x 278.83473pt.
+ [4] [5 <./99_BetweennessApproaches.png (PNG copy)>]
+Overfull \hbox (8.56094pt too wide) in paragraph at lines 292--328
  [] 
  []
 
 
-Overfull \hbox (15.0pt too wide) in paragraph at lines 277--278
+Overfull \hbox (15.0pt too wide) in paragraph at lines 331--332
 [][] 
  []
 
-[4
+[6
 
-] [5
+] [7
 
 ]
-<99_MovementModelInterpretation.png, id=134, 818.8191pt x 818.8191pt>
+<99_MovementModelInterpretation.png, id=154, 818.8191pt x 818.8191pt>
 File: 99_MovementModelInterpretation.png Graphic file (type png)
 <use 99_MovementModelInterpretation.png>
-Package pdftex.def Info: 99_MovementModelInterpretation.png  used on input line 364.
+Package pdftex.def Info: 99_MovementModelInterpretation.png  used on input line 418.
 (pdftex.def)             Requested size: 398.3386pt x 398.33873pt.
- [6] [7 <./99_MovementModelInterpretation.png (PNG copy)>]
-<99_Convergence.png, id=152, 722.7pt x 433.62pt>
+ [8] [9 <./99_MovementModelInterpretation.png (PNG copy)>]
+<99_Convergence.png, id=172, 722.7pt x 433.62pt>
 File: 99_Convergence.png Graphic file (type png)
 <use 99_Convergence.png>
-Package pdftex.def Info: 99_Convergence.png  used on input line 392.
+Package pdftex.def Info: 99_Convergence.png  used on input line 446.
 (pdftex.def)             Requested size: 398.3386pt x 239.0012pt.
- [8 <./99_Convergence.png (PNG copy)>]
+ [10 <./99_Convergence.png (PNG copy)>]
 *geometry* verbose mode - [ newgeometry ] result:
 * driver: pdftex
 * paper: a4paper
@@ -824,12 +830,12 @@ Package pdftex.def Info: 99_Convergence.png  used on input line 392.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<99_HeatmapsIndividual.png, id=158, 867.24pt x 1300.86pt>
+<99_HeatmapsIndividual.png, id=178, 867.24pt x 1300.86pt>
 File: 99_HeatmapsIndividual.png Graphic file (type png)
 <use 99_HeatmapsIndividual.png>
-Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 414.
+Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 468.
 (pdftex.def)             Requested size: 342.57143pt x 513.86385pt.
- [9
+ [11
 
  <./99_HeatmapsIndividual.png (PNG copy)>]
 *geometry* verbose mode - [ newgeometry ] result:
@@ -864,61 +870,61 @@ Package pdftex.def Info: 99_HeatmapsIndividual.png  used on input line 414.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-<99_BetweennessIndividual.png, id=164, 867.24pt x 867.24pt>
+<99_BetweennessIndividual.png, id=184, 867.24pt x 867.24pt>
 File: 99_BetweennessIndividual.png Graphic file (type png)
 <use 99_BetweennessIndividual.png>
-Package pdftex.def Info: 99_BetweennessIndividual.png  used on input line 434.
+Package pdftex.def Info: 99_BetweennessIndividual.png  used on input line 488.
 (pdftex.def)             Requested size: 342.57143pt x 342.5759pt.
- [10
+ [12
 
 
  <./99_BetweennessIndividual.png (PNG copy)>]
-Overfull \hbox (4.7893pt too wide) in paragraph at lines 448--448
+Overfull \hbox (4.7893pt too wide) in paragraph at lines 502--502
 []\OT1/cmr/bx/n/14.4 Comparison of Traver-sal Fre-quen-cies and Be-tween-
  []
 
-<99_MapComparison.png, id=171, 505.89pt x 361.35pt>
+<99_MapComparison.png, id=191, 505.89pt x 361.35pt>
 File: 99_MapComparison.png Graphic file (type png)
 <use 99_MapComparison.png>
-Package pdftex.def Info: 99_MapComparison.png  used on input line 451.
+Package pdftex.def Info: 99_MapComparison.png  used on input line 505.
 (pdftex.def)             Requested size: 398.3386pt x 284.53156pt.
-<99_MapComparisonCountries.png, id=172, 607.068pt x 780.2751pt>
+<99_MapComparisonCountries.png, id=192, 607.068pt x 780.2751pt>
 File: 99_MapComparisonCountries.png Graphic file (type png)
 <use 99_MapComparisonCountries.png>
-Package pdftex.def Info: 99_MapComparisonCountries.png  used on input line 460.
+Package pdftex.def Info: 99_MapComparisonCountries.png  used on input line 514.
 (pdftex.def)             Requested size: 398.3386pt x 511.99475pt.
-[11
+[13
 
- <./99_MapComparison.png (PNG copy)>] [12 <./99_MapComparisonCountries.png (PNG copy)>]
-<99_AreasReached.png, id=184, 578.16pt x 433.62pt>
+ <./99_MapComparison.png (PNG copy)>] [14 <./99_MapComparisonCountries.png (PNG copy)>]
+<99_AreasReached.png, id=203, 578.16pt x 433.62pt>
 File: 99_AreasReached.png Graphic file (type png)
 <use 99_AreasReached.png>
-Package pdftex.def Info: 99_AreasReached.png  used on input line 474.
+Package pdftex.def Info: 99_AreasReached.png  used on input line 528.
 (pdftex.def)             Requested size: 398.3386pt x 298.75482pt.
- [13 <./99_AreasReached.png (PNG copy)>] (./Manuscript_Support.bbl) [14]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 493.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 493.
+ [15 <./99_AreasReached.png (PNG copy)>] (./Manuscript_Support.bbl) [16]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 547.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 547.
  (./Manuscript_Support.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 493.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 493.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 547.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 547.
 Package rerunfilecheck Info: File `Manuscript_Support.out' has not changed.
-(rerunfilecheck)             Checksum: 01E1F2142E82E7AAA242DF60AC6BCB51;790.
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 493.
+(rerunfilecheck)             Checksum: 5335535013246A562CBD46A7C7025FA0;843.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 547.
  ) 
 Here is how much of TeX's memory you used:
- 22758 strings out of 481239
- 425101 string characters out of 5920378
- 682638 words of memory out of 5000000
- 37519 multiletter control sequences out of 15000+600000
+ 22775 strings out of 481239
+ 425505 string characters out of 5920378
+ 682841 words of memory out of 5000000
+ 37530 multiletter control sequences out of 15000+600000
  543681 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,16n,71p,1244b,885s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb>
-Output written on Manuscript_Support.pdf (15 pages, 15532867 bytes).
+usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb>
+Output written on Manuscript_Support.pdf (17 pages, 15695819 bytes).
 PDF statistics:
- 264 PDF objects out of 1000 (max. 8388607)
- 211 compressed objects within 3 object streams
- 46 named destinations out of 1000 (max. 500000)
- 141 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 287 PDF objects out of 1000 (max. 8388607)
+ 230 compressed objects within 3 object streams
+ 51 named destinations out of 1000 (max. 500000)
+ 154 words of extra memory for PDF output out of 10000 (max. 10000000)
 

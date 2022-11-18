@@ -27,302 +27,186 @@ library(ggridges)  # For ridgeline plot
 library(lemon)     # For capped coordinate system
 
 ################################################################################
-#### Simulate Permeability Surface (could be any set of covariates)
+#### Required Functions
 ################################################################################
-# Create a permeability surface
-set.seed(2)
-perm <- nlm_gaussianfield(ncol = 100, nrow = 50)
-names(perm) <- "permeability"
-
-# Visualize
-plot(perm)
-
-# Place two source areas
-source_areas <- SpatialPoints(rbind(
-    c(20, 25)
-  , c(80, 25)
-))
-source_areas$ID <- 1:length(source_areas)
-
-# Create buffers
-source_areas <- gBuffer(source_areas, byid = T, width = 6, quadsegs = 50)
-
-# Visualize them
-plot(perm)
-plot(source_areas, add = T)
-text(source_areas, "ID")
-
-# Create transition matrix
-t <- transition(perm, directions = 8, transitionFunction = mean)
-t <- geoCorrection(t, type = "c")
-
-# Calculate least-cost path between the two points
-path <- shortestPath(t
-  , origin  = gCentroid(source_areas[1, ])
-  , goal    = gCentroid(source_areas[2, ])
-  , output  = "SpatialLines"
-)
-
-# Buffer the path to create a corridor
-corr <- gBuffer(path, width = 1.5, byid = F)
-
-# Visualize them
-plot(perm)
-plot(corr, add = T)
-plot(source_areas, add = T)
-text(source_areas, "ID")
-
-# Create paths between the two areas
-createPath <- function(start, end, reverse = F){
-  points1 <- coordinates(spsample(start, 20, type = "random"))
-  points2 <- arrange(as.data.frame(coordinates(spsample(corr, 20, type = "random"))), x)
-  points3 <- coordinates(spsample(end, 20, type = "random"))
-  track <- rbind(points1, points2, points3)
-  if (reverse){
-    track <- track[nrow(track):1, ]
-  }
-  return(track)
+# Function to sample locations uniformly within a circle
+simCircle <- function(n = 20, x = 0, y = 0, r = 1) {
+  sl <- runif(n, 0, r ** 2)
+  ta <- runif(n, 0, 2 * pi)
+  x_ <- sqrt(sl) * cos(ta) + x
+  y_ <- sqrt(sl) * sin(ta) + y
+  df <- data.frame(x = x_, y = y_)
+  return(df)
 }
 
-# Try it
-plot(perm)
-plot(corr, add = T, border = "red", lty = 2, lwd = 2)
-points(createPath(source_areas[1, ], source_areas[2, ], reverse = F), type = "o", pch = 16)
-plot(perm)
-plot(corr, add = T, border = "red", lty = 2, lwd = 2)
-points(createPath(source_areas[1, ], source_areas[2, ], reverse = T), type = "o", pch = 16)
+# Function to sample locations uniformly on a sine
+simSine <- function(n = 100, var = 0.1, reverse = F) {
+  x <- sort(runif(n, 0, 2 * pi))
+  y <- sin(x)
+  y <- y + rnorm(n, 0, var)
+  if (reverse) {
+    x <- rev(x)
+    y <- rev(y)
+  }
+  df <- data.frame(x = x, y = y)
+  return(df)
+}
 
-# Simulate several trajectories at each source location
-nsims <- 5
-sims <- lapply(1:nsims, function(x){
+# Function to simulate a path using the above two functions
+simPath <- function(n_circle = 20, n_sine = 20, reverse = F, var = 0.05) {
+  l1 <- simCircle(n = n_circle, x = -0.25, y = 0, r = 0.5)
+  l2 <- simSine(n = n_sine, var = var, reverse = reverse)
+  l3 <- simCircle(n = n_circle, x = 2 * pi + 0.25, y = 0, r = 0.5)
+  if (reverse) {
+    l <- rbind(l3, l2, l1)
+  } else {
+    l <- rbind(l1, l2, l3)
+  }
+  return(l)
+}
 
-  # From source 1
-  path <- createPath(source_areas[1, ], source_areas[2, ], reverse = F)
-  path <- as.data.frame(path)
-  path$StepNumber <- 1:nrow(path)
-  path$SourceArea <- 1
-  path$ID <- x
-  path1 <- path
+# Function to interpolate spatial coordinates (we use a slightly different
+# interpolation function in the true analysis)
+interpolatePath <- function(x, y, eps = 0.1) {
+  ppp <- psp(
+      x0 = x[-length(x)]
+    , x1 = x[-1]
+    , y0 = y[-length(y)]
+    , y1 = y[-1]
+    , window = owin(xrange = range(x), yrange = range(y))
+  )
+  ppp_int <- pointsOnLines(ppp, eps = eps, shortok = F)
+  ppp_int <- as.data.frame(ppp_int)
+  return(ppp_int)
+}
 
-  # From source 2
-  path <- createPath(source_areas[1, ], source_areas[2, ], reverse = T)
-  path <- as.data.frame(path)
-  path$StepNumber <- 1:nrow(path)
-  path$SourceArea <- 2
-  path$ID <- x
-  path2 <- path
+# Function to generate the visitation history
+visitHist <- function(path, r, singlecount = F, along_line = F, interpolate = F, eps = NULL) {
 
-  # Put together and make IDs unique
-  path <- rbind(path1, path2)
+  # Interpolate path if desired
+  if (interpolate) {
+    path <- interpolatePath(path$x, path$y, eps = eps)
+  }
 
-  # Return both
-  return(path)
+  # Create spatial line from coordinates if desired, then extract raster values
+  if (along_line) {
+      path_sp <- spLines(cbind(path$x, path$y))
+      extracted <- raster::extract(r, y = path_sp, along = T)
+      extracted <- unname(extracted[[1]])
+    } else {
+      extracted <- raster::extract(r, y = cbind(path$x, path$y))
+  }
 
-}) %>% do.call(rbind, .)
+  # Count cell transitions
+  visits <- extracted %>%
+    data.frame(from = lag(.), to = .) %>%
+    na.omit() %>%
+    subset(from != to) %>%
+    group_by(from, to) %>%
+    summarize(count = n(), .groups = "drop")
 
-# Assign unique IDs
-sims$ID <- group_indices(sims, SourceArea, ID)
+  # Adjust count if necessary
+  if (singlecount) {
+    visits$count <- 1
+  }
 
-# Arrange
-sims <- arrange(sims, ID)
+  # Return the visits
+  return(visits)
+}
 
-# Prepare paths as spatial lines
-ids <- unique(sims$ID)
-tracks <- lapply(1:length(ids), function(x){
-  sub <- sims[sims$ID == ids[x], ]
-  coordinates(sub) <- c("x", "y")
-  track <- spLines(sub)
-  track$SourceArea <- sub$SourceArea[1]
-  track$ID <- sub$ID[1]
-  return(track)
-}) %>% do.call(rbind, .)
+# Function to compute betweenness map
+betweennessMap <- function(paths, r, id = NULL, singlecount = F, along_line = F, interpolate = F, eps = NULL) {
+  if (is.null(id)) {
+    paths$id <- "dummy"
+  }
+  paths_nested <- paths %>% nest(Data = -all_of(id))
+  histories <- lapply(paths_nested$Data, function(x) {
+    x %>%
+      visitHist(r, singlecount, along_line, interpolate = interpolate, eps = eps) %>%
+      group_by(from, to) %>%
+      summarize(count = n(), .groups = "drop")
+  })
+  history <- histories %>%
+    do.call(rbind, .) %>%
+    group_by(from, to) %>%
+    summarize(count = sum(count), .groups = "drop") %>%
+    mutate(weight = mean(count) / count)
+  net <- graph_from_data_frame(history, vertices = unique(values(r)))
+  bet <- r
+  values(bet) <- betweenness(net)
+  return(bet)
+}
 
-# Plot them
-plot(tracks, col = tracks$SourceArea)
-
-################################################################################
-#### Heatmap
-################################################################################
-# Function to rasterize spatial lines (l) quickly onto a raster (r)
-rasterizeSpatstat <- function(l, r){
-
-  # Create im layer
+# Function to compute heatmap
+heatMap <- function(paths, r, id = NULL) {
+  if (is.null(id)) {
+    paths$id <- "dummy"
+  }
+  lines <- lapply(unique(paths$id), function(x) {
+    sub <- paths[paths$id == x, ]
+    lines <- SpatialPoints(as.matrix(sub[, c("x", "y")]))
+    lines <- spLines(lines)
+    lines$ID <- x
+    return(lines)
+  })
+  lines <- do.call(rbind, lines)
   values(r) <- 0
   im <- as.im.RasterLayer(r)
   summed <- im
-
-  # Prepare progress bar
-  pb <- txtProgressBar(
-      min     = 0
-    , max     = length(l)
-    , initial = 0
-    , style   = 3
-    , width   = 55
-  )
-
-  # Go through all lines and rasterize them
-  for (y in 1:length(l)){
-    line    <- as.psp(l[y, ], window = im)
+  for (y in 1:length(lines)){
+    line    <- as.psp(lines[y, ], window = im)
     line    <- as.mask.psp(line)
     line_r  <- as.im.owin(line, na.replace = 0)
     summed  <- Reduce("+", list(summed, line_r))
-    setTxtProgressBar(pb, y)
   }
-
-  # Return heatmap as a raster
   return(raster(summed))
-
 }
-
-# Rasterize simulated trajctories
-heatmap <- rasterizeSpatstat(
-    l = as(tracks, "SpatialLines")
-  , r = disaggregate(perm, fact = 2)
-)
-
-# Visualize them
-plot(heatmap, col = viridis(50))
 
 ################################################################################
-#### Betweenness
+#### Simulating Paths and Generating Maps
 ################################################################################
-# Overlay the study area with a regular raster grid
-regular <- raster(extent(perm), ncol = 100, nrow = 50)
-values(regular) <- 1:ncell(regular)
+# Let's simulate some paths, going both directions
+set.seed(123)
+paths <- lapply(1:50, function(x) {
+  reverse <- rbernoulli(n = 1, p = 0.2)
+  path    <- simPath(n_circle = 20, n_sine = 10, var = 0.1, reverse = reverse)
+  path$id <- x
+  return(path)
+}) %>% do.call(rbind, .)
 
-# We want to determine all connections from one raster cell on the regular grid
-# to another cell as per our simulations. For this, we'll identify the
-# "visitation history" of each trajectory, i.e. the sequence of raster cells
-# across which it moves.
-visits <- data.frame(
-    ID         = sims$ID
-  , StepNumber = sims$StepNumber
-  , x          = coordinates(sims)[, 1]
-  , y          = coordinates(sims)[, 2]
-  , cell       = raster::extract(regular, sims[, c("x", "y")])
+# Generate a raster
+n <- 50
+r <- raster(
+    xmn  = min(paths$x) - 0.5
+  , xmx  = max(paths$x) + 0.5
+  , ymn  = min(paths$y) - 0.5
+  , ymx  = max(paths$y) + 0.5
+  , ncol = n * 3
+  , nrow = n
 )
+r[] <- 1:ncell(r)
 
-# Function to retrieve the visitation history from a sequence of values
-visitHist <- function(x, singlecount = F){
-  transitions <- data.frame(from = lag(x), to = x) %>%
-    group_by(from, to) %>%
-    na.omit() %>%
-    summarize(TotalConnections = n(), .groups = "drop")
-  if (singlecount){
-    transitions$TotalConnections = 1
-  }
-  return(transitions)
-}
+# Compute heatmap and betweenness map
+heat <- heatMap(paths, r = r, id = "id")
+betw <- betweennessMap(paths, r = r, id = "id", singlecount = T, interpolate = T, eps = 0.01)
 
-# Apply it to each simulated trajectory separately
-visits <- nest(visits, data = -ID)
-history <- pbmclapply(
-    X                  = visits$data
-  , ignore.interactive = T
-  , mc.cores           = 1
-  , FUN                = function(y){
-      visitHist(y$cell, singlecount = T)
-  }) %>%
-  do.call(rbind, .) %>%
-  group_by(from, to) %>%
-  summarize(TotalConnections = sum(TotalConnections), .groups = "drop") %>%
-  ungroup() %>%
-  mutate(weight = mean(TotalConnections) / TotalConnections)
-
-# Function to calculate betweenness
-betwe <- function(network = NULL, raster = NULL){
-  betweenness <- raster
-  values(betweenness) <- betweenness(network)
-  names(betweenness) <- "betweenness"
-  return(betweenness)
-}
-
-# Coerce visits into a network (each cell in the regular raster serves as
-# potential node/vertex)
-vertices <- 1:ncell(regular)
-net <- graph_from_data_frame(history, vertices = vertices)
-
-# Calculate Betweenness
-betweenness <- betwe(net, regular)
-
-# Let's apply some transformations to make the graph look nicer
-betweenness <- betweenness %>%
+# Apply some transformations for nicer plots
+heat <- heat %>%
+  disaggregate(method = "bilinear", fact = 2) %>%
+  aggregate(fact = 2, fun = max)
+betw <- betw %>%
   disaggregate(method = "bilinear", fact = 2) %>%
   aggregate(fact = 2, fun = max) %>%
   sqrt()
 
-################################################################################
-#### Interpatch Connectivity
-################################################################################
-# Determine for each trajectory into which areas it moves
-ints <- gIntersects(source_areas, tracks, byid = T)
-visits <- cbind(tracks$SourceArea, ints) %>%
-  as.data.frame() %>%
-  gather(key = To, value = Reached, 2:ncol(.)) %>%
-  setNames(c("From", "To", "Reached")) %>%
-  subset(From != To & Reached == 1) %>%
-  group_by(From, To) %>%
-  count() %>%
-  mutate(n = n / nsims)
-
-# Let's create our own data to make it more interesting
-visits <- data.frame(
-    From         = c(1, 2)
-  , To           = c(2, 1)
-  , RelFrequency = c(0.8, 0.6)
-  , Duration     = c(10, 15)
-)
-
-# Create network
-net <- graph_from_data_frame(visits, vertices = source_areas$ID)
-lay <- coordinates(gCentroid(source_areas, byid = T))
-
-################################################################################
-#### Visualize All Maps
-################################################################################
-# Visualize
-par(mfrow = c(2, 2))
-plot(perm)
-plot(corr, add = T)
-plot(source_areas, add = T)
-text(source_areas, "ID")
-plot(heatmap, col = viridis(50))
-plot(source_areas, add = T, border = "white")
-text(source_areas, "ID", col = "white")
-plot(betweenness, col = magma(50))
-plot(source_areas, add = T, border = "white")
-text(source_areas, "ID", col = "white")
-plot(perm, col = "white")
-plot(net
-  , layout      = lay
-  , rescale     = F
-  , add         = T
-  , vertex.size = 500
-  , edge.label  = round(E(net)$RelFrequency, 2)
-  , edge.width  = E(net)$n
-  , edge.curved = 0.2
-  , edge.arrow.size = 0.5
-)
-
-################################################################################
-#### Visualization with GGplot
-################################################################################
-# Convert objects for plotting with ggplot
-heatmap_gg <- as.data.frame(heatmap, xy = T)
-betweenness_gg <- as.data.frame(betweenness, xy = T)
-source_areas_gg <- st_as_sf(source_areas)
-source_areas_gg$Name <- c("A", "B")
-net_gg <- ggnetwork(net, layout = lay, arrow.gap = 8, scale = F)
-
 # Plot of heatmap
 p1 <- ggplot() +
   geom_raster(
-      data    = heatmap_gg
+      data    = as.data.frame(heat, xy = T)
     , mapping = aes(x = x, y = y, fill = layer)
   ) +
   scale_fill_gradientn(
-      # colours = viridis(100)
-      colours = c("white", rev(magma(100)))
+      colours = c("white", magma(100))
     , guide   = guide_colorbar(
       , title          = expression("Traversal Frequency")
       , show.limits    = T
@@ -333,23 +217,7 @@ p1 <- ggplot() +
       , barwidth       = unit(10.0, "cm")
     )
   ) +
-  geom_sf(
-      data        = source_areas_gg
-    , fill        = NA
-    , col         = "black"
-    , lty         = 1
-    , lwd         = 0.5
-    , show.legend = "line"
-  ) +
-  geom_sf_text(
-      data     = source_areas_gg
-    , mapping  = aes(label = Name)
-    , col      = "white"
-    , nudge_y  = 9
-    , fontface = 2
-    , size     = 5
-  ) +
-  coord_sf(xlim = c(10, 90), ylim = c(10, 40)) +
+  coord_equal() +
   labs(
       x        = NULL
     , y        = NULL
@@ -361,30 +229,23 @@ p1 <- ggplot() +
 # Plot of betweenness
 p2 <- ggplot() +
   geom_raster(
-      data    = betweenness_gg
+      data    = as.data.frame(betw, xy = T)
     , mapping = aes(x = x, y = y, fill = layer)
   ) +
   scale_fill_gradientn(
-      # colours = magma(100)
-      colours = c("white", rev(magma(100)))
+      colours = c("white", magma(100))
+    # , trans   = "sqrt"
     , guide   = guide_colorbar(
-      , show.limits    = T
+      , show.limits = T
       , title.position = "top"
       , title.hjust    = 0.5
       , ticks          = T
       , barheight      = unit(0.6, "cm")
       , barwidth       = unit(10.0, "cm")
     )
+    , na.value = "transparent"
   ) +
-  geom_sf(
-      data        = source_areas_gg
-    , fill        = NA
-    , col         = "black"
-    , lty         = 1
-    , lwd         = 0.5
-    , show.legend = "line"
-  ) +
-  coord_sf(xlim = c(10, 90), ylim = c(10, 40)) +
+  coord_equal() +
   labs(
       x        = NULL
     , y        = NULL
@@ -392,40 +253,8 @@ p2 <- ggplot() +
   ) +
   theme_void() +
   theme(legend.position  = "none")
+ggarrange(p1, p2, ncol = 1)
 
-# Prepare a plot for interpatch connectivity (I'll do the rest in powerpoint)
-p3 <- ggplot() +
-  geom_raster(
-      data    = betweenness_gg
-    , mapping = aes(x = x, y = y, fill = layer)
-  ) +
-  scale_fill_gradientn(
-      colours = "white"
-    , guide   = guide_colorbar(
-      , show.limits    = T
-      , title.position = "top"
-      , title.hjust    = 0.5
-      , ticks          = T
-      , barheight      = unit(0.6, "cm")
-      , barwidth       = unit(10.0, "cm")
-    )
-  ) +
-  geom_sf(
-      data        = source_areas_gg
-    , fill        = NA
-    , col         = "black"
-    , lty         = 1
-    , lwd         = 0.5
-    , show.legend = "line"
-  ) +
-  coord_sf(xlim = c(10, 90), ylim = c(10, 40)) +
-  labs(
-      x        = NULL
-    , y        = NULL
-    , fill     = NULL
-  ) +
-  theme_void() +
-  theme(legend.position  = "none")
 
 ################################################################################
 #### Plot of Arbitrary Movement Model
@@ -460,7 +289,7 @@ averaged <- data.frame(
 )
 
 # Generate plot
-p4 <- ggplot(dat, aes(x = x, y = Covariate, height = y, group = Covariate)) +
+p3 <- ggplot(dat, aes(x = x, y = Covariate, height = y, group = Covariate)) +
   geom_errorbarh(
       data        = averaged
     , inherit.aes = F
@@ -512,14 +341,10 @@ p2 <- p2 +
   labs(title = "Betweenness", subtitle = "(Bottlenecks & Dispersal Corridors)") +
   theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
 p3 <- p3 +
-  labs(title = "Inter-Patch Connectivity", subtitle = "(Frequency & Duration of Movements between Patches)") +
-  theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
-p4 <- p4 +
   labs(title = "Integrated Step\nSelection Model") +
   theme(plot.title = element_text(face = 2, hjust = 0.5), plot.subtitle = element_text(face = 3, hjust = 0.5))
 
 # Store the plots
 ggsave("test.png", plot = p1)
 ggsave("test2.png", plot = p2)
-ggsave("test3.png", plot = p3)
-ggsave("test4.png", plot = p4, height = 3, width = 4)
+ggsave("test3.png", plot = p4, height = 3, width = 4)

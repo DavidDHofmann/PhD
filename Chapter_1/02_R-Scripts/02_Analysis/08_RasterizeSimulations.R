@@ -24,6 +24,7 @@ library(tmap)         # For nice spatial plots
 library(davidoff)     # Custom functions
 library(spatstat)     # For quick rasterization
 library(maptools)     # For quick rasterization
+library(reproj)       # For quick reprojection of coordinates
 
 ################################################################################
 #### Load and Prepare Data
@@ -41,11 +42,11 @@ sims <- ungroup(sims)
 # Remove undesired columns
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "Area")]
 
-# Reproject coordinates to utm (required for spatstat)
-sims[, c("x", "y")] <- reprojCoords(
-    xy   = sims[, c("x", "y")]
-  , from = CRS("+init=epsg:4326")
-  , to   = CRS("+init=epsg:32734")
+# Reproject coordinates
+sims[, c("x", "y")] <- reproj_xy(
+    x      = sims[, c("x", "y")]
+  , source = 4326
+  , target = 32734
 )
 
 # Prepare extent that encompassess all coordinates + some buffer
@@ -56,6 +57,7 @@ ext <- extent(min(sims$x), max(sims$x), min(sims$y), max(sims$y)) +
 r <- raster(ext, res = 1000)
 values(r) <- runif(ncell(r))
 crs(r) <- CRS("+init=epsg:32734")
+plot(r)
 
 # Collect garbage
 gc()
@@ -75,7 +77,7 @@ rasterizeSims <- function(
     , area        = "Main"    # Simulations from which areas?
     , messages    = T         # Print update messages?
     , mc.cores    = detectCores() - 1
-  ){
+  ) {
 
   # Subset to corresponding data
   sub <- simulations[which(
@@ -123,7 +125,7 @@ rasterizeSims <- function(
 # to rasterize trajectories
 rasterized <- as_tibble(
   expand.grid(
-      steps            = c(68, 125, 250, 500, 1000, 2000)
+      steps            = c(125, 500, 2000)
     , area             = unique(sims$Area)
     , stringsAsFactors = F
   )
@@ -142,7 +144,7 @@ rasterized$filename <- tempfile(
 
 # Loop through the study design and reasterize trajectories
 heatmaps <- list()
-for (i in 1:nrow(rasterized)){
+for (i in 1:nrow(rasterized)) {
 
   # Create heatmap
   heatmaps[[i]] <- rasterizeSims(
