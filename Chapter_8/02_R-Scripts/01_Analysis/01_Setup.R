@@ -16,6 +16,7 @@ library(sf)             # To handle spatial data
 library(glmmTMB)        # To handle glmmTMB models
 library(tidyverse)      # To wrangle data
 library(osmdata)        # To download data from open streetmap
+library(wilddogr)       # To download validation wilddog data
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -182,6 +183,43 @@ vills <- subset(vills, !is.na(place)) %>%
 # Make a regular shapefile
 st_write(vills, "03_Data/02_CleanData/Villages.shp", delete_layer = T)
 
+################################################################################
+#### Validation Dispersal Data
+################################################################################
+# Authenticate on dropbox
+rdrop2::drop_auth(cache = F)
+
+# Get a list of all data available
+files <- dog_files(rvc = F)
+
+# We are only interested in some of the dispersers
+keep <- c("Aspen", "Calvin", "Carson", "Chiounard", "Dell", "Earth", "Encinitas"
+  , "Ripley", "Rossignol", "Saturday", "Sishen")
+dispersers <- subset(files, DogName %in% keep)
+
+# Download their data to a temporary file
+downloaded <- dog_download(dispersers
+  , outdir    = tempdir()
+  , printpath = T
+  , overwrite = T
+  , clean     = T
+)
+
+# Note that we are only interested in dispersal phases
+dat <- downloaded %>%
+  read_csv() %>%
+  subset(State == "Disperser" & !is.na(x) & !is.na(y))
+
+# Let's only keep individuals for which there are at least 10 datapoints
+keep <- dat %>%
+  count(DogName) %>%
+  subset(n >= 10) %>%
+  pull(DogName)
+dat <- subset(dat, DogName %in% keep)
+
+# Store those to file
+write_csv(dat, "03_Data/02_CleanData/99_ValidationDispersalData.csv")
+dat <- read_csv("03_Data/02_CleanData/99_ValidationDispersalData.csv")
 
 ################################################################################
 #### Session Information
