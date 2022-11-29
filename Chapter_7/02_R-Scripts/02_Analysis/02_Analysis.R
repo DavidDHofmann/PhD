@@ -148,11 +148,15 @@ formula <- quote(meanActX ~
 # Run a linear model for each dog separately for the different times of the day
 dat_nested$Model <- lapply(dat_nested$Data, function(x) {
   lm(formula, x)
+  # Could use a tobit regression as well
+  # coef(tobit(formula, data = x, left = 0, right = 255)
 })
 
 # Extract model results
 dat_nested$ModelCoefficients <- lapply(dat_nested$Model, function(x) {
   broom::tidy(x)
+  # If tobit
+  # tidy(summary(x)$coefficients)
 })
 
 # Unnest
@@ -160,68 +164,8 @@ coefs <- dat_nested %>%
   select(DogID, ToD, ModelCoefficients) %>%
   unnest(ModelCoefficients)
 
-# Compute weight for each coefficient
-coefs_means_weighted <- coefs %>%
-  nest(Coefs = -c(ToD, term)) %>%
-  mutate(Coefs = map(Coefs, function(x) {
-    be <- x$estimate
-    se <- x$std.error
-    we <- (1 / (se ** 2)) / sum(1 / (se ** 2))
-    be_mean <- sum(we * be)
-    se_mean <- sqrt(sum(we * (be - be_mean) ** 2) / (length(be) - 1))
-    result <- tibble(
-        estimate  = be_mean
-      , std.error = se_mean
-      , LWR       = estimate - 1.96 * std.error
-      , UPR       = estimate + 1.96 * std.error
-    )
-    return(result)
-  })) %>% unnest(Coefs)
-
-# Compute mean and se of the model estimates (unweighted)
-coefs_means_unweighted <- coefs %>%
-  group_by(ToD, term) %>%
-  summarize(
-      estimate_mean = mean(estimate)
-    , estimate_sd   = sd(estimate) / sqrt(n())
-    , LWR           = estimate_mean - qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
-    , UPR           = estimate_mean + qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
-    , .groups       = "drop"
-  )
-
-# Visualize
-coefs %>%
-  ggplot(aes(x = ToD, y = estimate, col = DogID)) +
-    geom_hline(yintercept = 0, lty = 2) +
-    geom_jitter(width = 0.1, alpha = 0.8) +
-    geom_point(
-        data        = coefs_means_unweighted
-      , mapping     = aes(x = ToD, y = estimate_mean)
-      , inherit.aes = F
-      , size        = 2
-    ) +
-    geom_errorbar(
-        data        = coefs_means_unweighted
-      , mapping     = aes(x = ToD, ymin = LWR, ymax = UPR)
-      , inherit.aes = F
-      , width       = 0.2
-      , lwd         = 1
-    ) +
-    # geom_violin(col = "black") + # Could also use a violin plot
-    facet_wrap(~ term, scales = "free") +
-    theme_minimal() +
-    scale_color_viridis_d() +
-    theme(legend.position = "none")
-
-# Alternative visualization
-coefs_means_unweighted %>%
-  ggplot(aes(y = estimate_mean, x = as.factor(term), col = as.factor(ToD), ymin = LWR, ymax = UPR)) +
-    geom_point(position = position_dodge(width = 0.5)) +
-    geom_errorbar(position = position_dodge(width = 0.5)) +
-    geom_hline(yintercept = 0, lty = 2, col = "gray") +
-    scale_color_viridis_d(begin = 0.3) +
-    theme_minimal() +
-    theme(legend.position = "bottom", axis.text.x = element_text(angle = 45, hjust = 1))
+# Write this to file
+write_rds(coefs, "03_Data/03_Results/99_MeanActivityModelCoefficients.rds")
 
 ################################################################################
 #### Analysis II - Time when Becoming Moving

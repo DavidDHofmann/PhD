@@ -16,6 +16,7 @@ library(lubridate)   # To handle dates
 library(hms)         # To handle times
 library(pracma)      # To identify peaks
 library(broom)       # To clean model summary
+library(ggpubr)      # To arrange multiple plots
 
 # Reload cleaned activity data (note that the timestamps are all in UTC)
 dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
@@ -55,6 +56,8 @@ dat %>%
     , SDNumberFixes     = sd(`n`)
     , MedianNumberFixes = median(`n`)
     , IQRNumberFixes    = IQR(`n`)
+    , MinNumberFixes    = min(`n`)
+    , MaxNumberFixes    = max(`n`)
   )
 
 # How active where the dogs on average?
@@ -70,18 +73,27 @@ dat %>%
 # Aggregate activity by day and see if there are differences between the dogs
 dat %>%
   group_by(DogID, Date) %>%
-  summarize(TotalActivity = sum(ActX), .groups = "drop") %>%
-  ggplot(aes(x = DogID, y = TotalActivity, fill = DogID)) +
-    geom_boxplot() +
+  summarize(AverageDailyActivity = mean(ActX), n = n(), .groups = "drop") %>%
+  subset(n > 250) %>%
+  ggplot(aes(x = DogID, y = AverageDailyActivity, fill = DogID, col = DogID)) +
+    geom_boxplot(alpha = 0.3) +
     theme_minimal() +
-    theme(axis.text.x = element_text(angle = 90), legend.position = "none")
+    theme(axis.text.x = element_text(angle = 90), legend.position = "none") +
+    scale_fill_viridis_d() +
+    scale_color_viridis_d()
 
-# Aggregate activity by hour of the day
+# Aggregate activity by month
 dat %>%
-  ggplot(aes(x = as.factor(hour(Timestamp)), y = ActX)) +
-    geom_boxplot() +
+  subset(DogID %in% c("Abel", "Amacuro", "Aramis", "Aspen", "Atwood")) %>%
+  mutate(Month = month(Timestamp), Hour = hour(Timestamp)) %>%
+  group_by(Month, Hour, DogID) %>%
+  summarize(MeanHourlyAct = mean(ActX), .groups = "drop") %>%
+  ggplot(aes(x = Hour, y = MeanHourlyAct, col = as.factor(Month))) +
+    geom_line(alpha = 0.75) +
+    facet_wrap(~DogID, ncol = 1) +
     theme_minimal() +
-    facet_wrap(~ Season, nrow = 2)
+    scale_color_viridis_d() +
+    theme(legend.position = "bottom")
 
 # Remove undesired columns
 dat <- select(dat, -c(DOP, minMoonPhase, meanMoonPhase, maxMoonPhase))
@@ -174,12 +186,10 @@ ggplot(dat, aes(x = Time, y = Date, z = ActX)) +
   scale_y_date(date_breaks = "3 months")
 
 # Plot activity against month, regardless of the year
-ggplot(dat, aes(x = Time, y = update(Date, year = 2000), z = ActX)) +
+ggplot(dat, aes(x = Time, y = yday(Timestamp), z = ActX)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(option = "magma", name = "Activity") +
-  theme_minimal() +
-  scale_y_date(date_breaks = "3 months") +
-  ylab("FAKE YEAR!!!")
+  theme_minimal()
 
 # Let's get an idea of the usual activity patterns by computing average activity
 # for the different times.
@@ -337,7 +347,7 @@ dat_byphase <- subset(dat, ActivityPhase != "Ignore") %>%
 dat_byphase %>%
   pivot_longer(meanActivity:minActivity, names_to = "Variable", values_to = "Value") %>%
   ggplot(aes(x = ActivityPhase, y = Value, fill = ActivityPhase)) +
-    geom_violin(alpha = 0.5) +
+    geom_violin(alpha = 0.5, col = NA) +
     facet_wrap(~ Variable, scales = "free") +
     theme_minimal() +
     scale_fill_manual(values = c("cornflowerblue", "orange", "gray"))
@@ -350,7 +360,7 @@ dat_byphase %>%
   count(ActivityPhase)
 dat_byphase %>%
   ggplot(aes(x = ActivityPhase, y = meanActivity, fill = ActivityPhase)) +
-    geom_violin(alpha = 0.5) +
+    geom_violin(alpha = 0.5, col = NA) +
     theme_minimal() +
     scale_fill_manual(values = c("cornflowerblue", "orange", "gray"))
 
