@@ -1,3 +1,4 @@
+
 ################################################################################
 #### Function to calculate Distances on a Raster Efficiently
 ################################################################################
@@ -528,6 +529,7 @@ rasterizeSims <- function(
 visitHist <- function(x, singlecount = F) {
   transitions <- data.frame(from = lag(x), to = x) %>%
     group_by(from, to) %>%
+    subset(from != to) %>%
     na.omit() %>%
     summarize(TotalConnections = n(), .groups = "drop")
   if (singlecount){
@@ -535,6 +537,34 @@ visitHist <- function(x, singlecount = F) {
   }
   return(transitions)
 }
+
+
+################################################################################
+#### Function to Interpolate a Path
+################################################################################
+#' Interpolate a path
+#'
+#' Function that takes a sequence of xy coordinates and generates interpolated
+#' points
+#' @export
+#' @param x \code{vector} x-coordinates
+#' @param y \code{vector} y-coordinates
+#' @param eps distance at which interpolated points should be placed
+#' @return \code{matrix} of interpolated xy-coordinates
+interpolatePath <- function(x, y, eps = 0.1) {
+  inter <- lapply(1:(length(x) - 1), function(i) {
+    xy_new <- interpolatePoints(
+        x1 = x[i]
+      , x2 = x[i + 1]
+      , y1 = y[i]
+      , y2 = y[i + 1]
+      , by = eps
+    )
+    return(xy_new)
+  }) %>% do.call(rbind, .)
+  return(inter)
+}
+
 
 ################################################################################
 #### Function to Compute Betweenness
@@ -549,7 +579,9 @@ visitHist <- function(x, singlecount = F) {
 #' @param area numeric, ID of the source areas that should be considered
 #' @param flood character, one of "Min", "Mean", "Max"
 #' @param messages boolean, should messages be printed during the rasterization
-#' @param mc.cores numeric How many cores should be used?
+#' @param eps numeric, the interpolation distance (if desired) for point interpolation
+#' @param filename character, the filename to which the raster should be stored (tempfile() by default)
+#' @param mc.cores numeric, How many cores should be used?
 #' @return \code{RasterLayer}
 betweenSims <- function(
       simulations = NULL      # Simulated trajectories
@@ -558,6 +590,7 @@ betweenSims <- function(
     , area        = NULL      # Simulations from which areas?
     , flood       = "Min"     # Which flood level?
     , messages    = T         # Print update messages?
+    , eps         = NULL      # Interpolation distance
     , filename    = tempfile()
     , mc.cores    = detectCores() - 1
   ) {
@@ -572,45 +605,51 @@ betweenSims <- function(
 
   # Prepare vertices and layout of the network for betweenness
   raster[] <- 1:ncell(raster)
-  ver <- values(raster)
-  lay  <- as.matrix(as.data.frame(raster, xy = T)[, c(1, 2)])
+  ver      <- values(raster)
+  lay      <- as.matrix(as.data.frame(raster, xy = T)[, c(1, 2)])
 
-  # Make coordinates of simulated trajectories spatial
-  coordinates(sub) <- c("x", "y")
-  crs(sub) <- crs(raster)
-
-  # At each coordinate of the simulated trajectories we now extract the cell IDs
-  # from the betweenness raster
-  sub <- data.frame(
-      TrackID    = sub$TrackID
-    , StepNumber = sub$StepNumber
-    , FloodLevel = sub$FloodLevel
-    , x          = coordinates(sub)[, 1]
-    , y          = coordinates(sub)[, 2]
-    , r          = raster::extract(raster, sub)
-  )
-
-  # Get the visitation history
+  # Nest tracks by their IDs
   sub <- nest(sub, data = -TrackID)
+
+  # Determine the visitation history of each path. Note that we will
+  # "interpolate" each of the simulated steps. This will allow us to determine
+  # cell-transitions at a much finer scale than if we would simply use the start
+  # and endpoint of each step.
   if (messages) {
     cat("Computing visitation history...\n")
   }
   if (mc.cores > 1) {
-    history <- pbmclapply(1:length(sub$data), mc.cores = mc.cores, ignore.interactive = T, function(x) {
-      visitHist(sub$data[[x]]$r, singlecount = T)
-    })
+    history <- pbmclapply(
+        X                  = sub$data
+      , ignore.interactive = T
+      , mc.cores           = 1
+      , FUN                = function(path) {
+        if (!is.null(eps)) {
+          path <- interpolatePath(path$x, path$y, eps = eps)
+        }
+        visits <- raster::extract(raster, path)
+        visits <- visitHist(visits, singlecount = T)
+        return(visits)
+      })
   } else {
     if (messages) {
       pb <- txtProgressBar(min = 0, max = length(sub$data), style = 3)
     }
     history <- lapply(1:length(sub$data), function(x) {
-      hist <- visitHist(sub$data[[x]]$r, singlecount = T)
+      path <- sub$data[[x]]
+      if (!is.null(eps)) {
+        path <- interpolatePath(path$x, path$y, eps = eps)
+      }
+      visits <- raster::extract(raster, path)
+      visits <- visitHist(visits, singlecount = T)
       if (messages) {
         setTxtProgressBar(pb, x)
       }
-      return(hist)
+      return(visits)
     })
   }
+
+  # Aggregate visitation histories across all paths
   history <- history %>%
     do.call(rbind, .) %>%
     group_by(from, to) %>%
@@ -631,6 +670,7 @@ betweenSims <- function(
   betweenness <- writeRaster(betweenness, filename)
   return(betweenness)
 }
+
 
 ################################################################################
 #### Function to Create Centroids that lie WITHIN Polygons

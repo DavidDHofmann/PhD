@@ -16,9 +16,19 @@ library(pbmcapply)      # To run stuff in parallel
 library(spatstat)       # To rasterize lines quickly
 library(maptools)       # To rasterize lines quickly
 library(igraph)         # For network analysis
+library(Rcpp)           # To import C++ functions
+
+# Weirdes issue ever: igraph will sometimes struggle with scientific notation in
+# the vertex names
+options(scipen = 999)
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
+sourceCpp("02_R-Scripts/00_Functions.cpp")
+
+# CRS to be used
+crs_lonlat <- "+proj=longlat +datum=WGS84 +no_defs +type=crs"
+crs_meters <- "+proj=utm +zone=34 +south +datum=WGS84 +units=m +no_defs +type=crs"
 
 # Load reference raster
 r <- raster("03_Data/02_CleanData/ReferenceRaster.tif")
@@ -28,15 +38,12 @@ sims <- read_rds("03_Data/03_Results/DispersalSimulation.rds")
 
 # Keep only columns
 sims <- sims[, c("x", "y", "TrackID", "StepNumber", "SourceArea", "FloodLevel")]
-test <- subset(sims, StepNumber == 1)
-ggplot(test, aes(x = x, y = y, col = as.factor(SourceArea))) +
-  geom_point()
 
 # Reproject coordinates to utm (required for spatstat)
-sims[, c("x", "y")] <- reprojCoords(
-    xy   = sims[, c("x", "y")]
-  , from = CRS("+init=epsg:4326")
-  , to   = CRS("+init=epsg:32734")
+sims[, c("x", "y")] <- reproj::reproj_xy(
+    x        = as.matrix(sims[, c("x", "y")])
+  , source   = crs_lonlat
+  , target   = crs_meters
 )
 
 # Generate a raster on which we will compute the heatmaps
@@ -48,7 +55,7 @@ r_heat <- raster(ext, res = 1000)
 r_betw <- raster(ext, res = 2500)
 values(r_heat) <- 1:ncell(r_heat)
 values(r_betw) <- 1:ncell(r_betw)
-crs(r_heat) <- crs(r_betw) <- CRS("+init=epsg:32734")
+crs(r_heat) <- crs(r_betw) <- crs_meters
 
 ################################################################################
 #### Local Metrics
@@ -66,9 +73,6 @@ design <- expand_grid(
 )
 design$FilenameHeatmap <- with(design, paste0("03_Data/03_Results/99_Heatmaps/Heatmap_Steps", Steps, "_SourceArea", SourceArea, "_FloodLevel", FloodLevel, ".tif"))
 design$FilenameBetweenness <- with(design, paste0("03_Data/03_Results/99_Betweenness/Betweenness_Steps", Steps, "_SourceArea", SourceArea, "_FloodLevel", FloodLevel, ".tif"))
-
-# Shuffle the design to get more reliable estimates of computation times
-design <- design[sample(1:nrow(design), size = nrow(design), replace = F), ]
 
 # Loop through the design and generate heatmaps
 if (!file.exists("03_Data/03_Results/HeatmapsLocal.tif")) {
@@ -94,7 +98,7 @@ if (!file.exists("03_Data/03_Results/HeatmapsLocal.tif")) {
     # Combine maps, reproject them, crop, and store them
     combined <- stack(heatmaps)
     combined <- rast(combined)
-    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- terra::project(combined, crs_lonlat, method = "bilinear")
     combined <- stack(combined)
     combined <- crop(combined, r)
     writeRaster(combined, "03_Data/03_Results/HeatmapsLocal.tif", overwrite = T)
@@ -121,6 +125,7 @@ if (!file.exists("03_Data/03_Results/BetweennessLocal.tif")) {
           , flood       = design$FloodLevel[i]
           , messages    = T
           , mc.cores    = 1
+          , eps         = 500
           , filename    = design$FilenameBetweenness[i]
         )
       }
@@ -129,7 +134,7 @@ if (!file.exists("03_Data/03_Results/BetweennessLocal.tif")) {
     # Combine maps, reproject them, crop, and store them
     combined <- stack(betweenness)
     combined <- rast(combined)
-    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- terra::project(combined, crs_lonlat, method = "bilinear")
     combined <- stack(combined)
     combined <- crop(combined, r)
     writeRaster(combined, "03_Data/03_Results/BetweennessLocal.tif", overwrite = T)
@@ -157,9 +162,6 @@ design <- expand_grid(
 design$FilenameHeatmap <- with(design, paste0("03_Data/03_Results/99_Heatmaps/Heatmap_Steps", Steps, "_FloodLevel", FloodLevel, ".tif"))
 design$FilenameBetweenness <- with(design, paste0("03_Data/03_Results/99_Betweenness/Betweenness_Steps", Steps, "_FloodLevel", FloodLevel, ".tif"))
 
-# Shuffle the design to get more reliable estimates of computation times
-design <- design[sample(1:nrow(design), size = nrow(design), replace = F), ]
-
 # Loop through the design and generate heatmaps
 if (!file.exists("03_Data/03_Results/HeatmapsGlobal.tif")) {
     heatmaps <- list()
@@ -183,7 +185,7 @@ if (!file.exists("03_Data/03_Results/HeatmapsGlobal.tif")) {
     # Combine maps, reproject them, crop, and store them
     combined <- stack(heatmaps)
     combined <- rast(combined)
-    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- terra::project(combined, crs_lonlat, method = "bilinear")
     combined <- stack(combined)
     combined <- crop(combined, r)
     writeRaster(combined, "03_Data/03_Results/HeatmapsGlobal.tif", overwrite = T)
@@ -209,6 +211,7 @@ if (!file.exists("03_Data/03_Results/BetweennessGlobal.tif")) {
           , flood       = design$FloodLevel[i]
           , messages    = T
           , mc.cores    = 1
+          , eps         = 500
           , filename    = design$FilenameBetweenness[i]
         )
       }
@@ -217,7 +220,7 @@ if (!file.exists("03_Data/03_Results/BetweennessGlobal.tif")) {
     # Combine maps, reproject them, crop, and store them
     combined <- stack(betweenness)
     combined <- rast(combined)
-    combined <- terra::project(combined, CRS("+init=epsg:4326"), method = "bilinear")
+    combined <- terra::project(combined, crs_lonlat, method = "bilinear")
     combined <- stack(combined)
     combined <- crop(combined, r)
     writeRaster(combined, "03_Data/03_Results/BetweennessGlobal.tif", overwrite = T)

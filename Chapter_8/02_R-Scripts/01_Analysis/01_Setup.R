@@ -184,26 +184,64 @@ vills <- subset(vills, !is.na(place)) %>%
 st_write(vills, "03_Data/02_CleanData/Villages.shp", delete_layer = T)
 
 ################################################################################
-#### Validation Dispersal Data
+#### Download Validation Dispersal Data
 ################################################################################
 # Authenticate on dropbox
 rdrop2::drop_auth(cache = F)
 
-# Get a list of all data available
-files <- dog_files(rvc = F)
+# Get a list of all dispersers
+new_disps <- .phaseDates() %>%
+  subset(Phase %in% c("Disperser")) %>%
+  pull(DogName) %>%
+  unique()
 
-# We are only interested in some of the dispersers
-keep <- c("Aspen", "Calvin", "Carson", "Chiounard", "Dell", "Earth", "Encinitas"
-  , "Ripley", "Rossignol", "Saturday", "Sishen")
-dispersers <- subset(files, DogName %in% keep)
+# Let's also check which dispersers we originally used to fit the model (so we
+# don't use them again)
+old_disps <- "03_Data/02_CleanData/Dispersers.csv" %>%
+  read_csv() %>%
+  subset(State == "Disperser") %>%
+  pull(DogName) %>%
+  unique()
+
+# From the list of new dispersers, remove the ones we already used
+new_disps <- setdiff(new_disps, old_disps)
+
+# Get a list of all data available and subset to those dispersers only
+files <- dog_files(rvc = F) %>% subset(DogName %in% new_disps)
 
 # Download their data to a temporary file
-downloaded <- dog_download(dispersers
+downloaded <- dog_download(files
   , outdir    = tempdir()
   , printpath = T
   , overwrite = T
   , clean     = T
+  , legacy    = F # Different segmentation!
 )
+
+# Load the data
+dat <- read_csv(downloaded)
+
+# In case you want to get an overview
+dog_overview(dat)
+downloaded2 <- dog_download(files
+  , outdir    = tempdir()
+  , printpath = T
+  , overwrite = T
+  , clean     = T
+  , legacy    = T
+)
+dat2 <- read_csv(downloaded2)
+list(
+    nrow(subset(dat1, State == "Disperser"))
+  , nrow(subset(dat2, State == "Disperser"))
+)
+dat1disp <- subset(dat1, State == "Disperser")
+dat2disp <- subset(dat2, State == "Disperser")
+list(
+    table(dat1disp$DogName)
+  , table(dat2disp$DogName)
+)
+dog_overview(dat, ncol = 2)
 
 # Note that we are only interested in dispersal phases
 dat <- downloaded %>%

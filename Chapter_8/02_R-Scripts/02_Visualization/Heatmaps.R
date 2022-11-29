@@ -63,11 +63,13 @@ labels_areas <- cbind(labels_areas, st_drop_geometry(areas))
 maps1 <- "03_Data/03_Results/HeatmapsBetweennessGlobal.rds" %>%
   read_rds() %>%
   mutate(SourceArea = NA, Level = "Global") %>%
-  select(Steps, SourceArea, FloodLevel, Level, Data = Heatmap)
+  select(Steps, SourceArea, FloodLevel, Level, Data = Heatmap) %>%
+  arrange(Steps, SourceArea, FloodLevel, Level)
 maps2 <- "03_Data/03_Results/HeatmapsBetweennessLocal.rds" %>%
   read_rds() %>%
   mutate(Level = "Local") %>%
-  select(Steps, SourceArea, FloodLevel, Level, Data = Heatmap)
+  select(Steps, SourceArea, FloodLevel, Level, Data = Heatmap) %>%
+  arrange(Steps, SourceArea, FloodLevel, Level)
 maps <- rbind(maps1, maps2)
 
 # Convert the maps to dataframes

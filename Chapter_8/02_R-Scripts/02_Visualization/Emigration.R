@@ -45,8 +45,8 @@ p1 <- ggplot(emigration, aes(x = as.factor(CurrentArea), y = n, fill = FloodLeve
   geom_textpath(aes(y = n + 200, label = format(n, big.mark = "'", scientific = FALSE)), position = position_dodge(width = 1), col = "black", size = 2, angle = 90) +
   coord_polar(direction = -1, start = 2.35) +
   theme_void() +
-  scale_fill_manual(values = c("cornflowerblue", "orange")) +
-  scale_color_manual(values = c("cornflowerblue", "orange"))
+  scale_fill_manual(values = c("cornflowerblue", "orange"), name = "Flood-Level") +
+  scale_color_manual(values = c("cornflowerblue", "orange"), name = "Flood-Level")
 
 # Extract the legend and remove it from the original plot
 p1_legend <- get_legend(p1)
@@ -57,7 +57,7 @@ scale <- 1.5
 p2 <- ggplot() +
   geom_sf(data = water, fill = "cornflowerblue", col = NA, alpha = 0.2) +
   geom_sf(data = river, col = "cornflowerblue", alpha = 0.2) +
-  geom_sf(data = cutli, lty = 2) +
+  geom_sf(data = cutli, lty = 2, size = 0.3) +
   geom_sf(
       data  = subset(areas, Type == "Buffer")
     , col   = "purple"
@@ -123,3 +123,12 @@ p2 <- ggplot() +
     , ymin = -20
     , ymax = -20.5
   )
+
+# Store the plot to file
+ggsave("04_Manuscript/99_Emigration.png"
+  , plot   = p2
+  , bg     = "white"
+  , height = 7
+  , width  = 8
+  , scale = 0.8
+)
