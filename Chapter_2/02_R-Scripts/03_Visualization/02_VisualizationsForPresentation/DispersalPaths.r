@@ -113,8 +113,8 @@ p3 <- ggplot(sat, aes(x = x, y = y, fill = rgb(red, green, blue, maxColorValue =
   geom_raster() +
   geom_point(data = dat, inherit.aes = F, aes(x = x, y = y, col = DogName), size = 0.4) +
   geom_path(data = dat, inherit.aes = F, aes(x = x, y = y, col = DogName), size = 0.3) +
-  geom_sf(data = subset(prot, Name %in% c("Hwange", "Moremi")), fill = "white", col = "white", alpha = 0.2, inherit.aes = F) +
-  geom_sf(data = afri, fill = NA, col = "white", inherit.aes = F, lty = 2) +
+  # geom_sf(data = subset(prot, Name %in% c("Hwange", "Moremi")), fill = "white", col = "white", alpha = 0.2, inherit.aes = F) +
+  geom_sf(data = afri, fill = NA, col = "white", inherit.aes = F, lty = 1) +
   scale_fill_identity() +
   coord_sf(crs = "+init=epsg:4326") +
   theme_minimal() +

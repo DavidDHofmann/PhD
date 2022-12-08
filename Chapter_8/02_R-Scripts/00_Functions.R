@@ -1,4 +1,3 @@
-
 ################################################################################
 #### Function to calculate Distances on a Raster Efficiently
 ################################################################################
@@ -53,35 +52,19 @@ distanceTo <- function(x, value = 1) {
 #' @param y extent to which the raster should be extended
 #' @return \code{SpatRaster}
 extendRaster <- function(x, y) {
-
-  # Create mask of NA values
-  na_mask <- is.na(x)
-
-  # Extract values from raster
-  vals <- values(x, data.frame = F)
-
-  # Remove na's
-  vals <- na.omit(vals)
-
-  # Extend raster to new extent
-  r <- extend(x, y)
-
-  # Also extend the mask
-  na_mask <- extend(na_mask, y)
-
-  # Identify NAs in the new extent
-  indices <- which(is.na(values(r)))
-
-  # Replace them with values sampled from old raster
-  values(r)[indices] <- vals[runif(length(indices), min = 1, max = length(vals))]
-
-  # Make sure original NA's are put back on the map
-  r <- mask(r, na_mask, maskvalue = 1, updatevalue = NA)
-
-  # Return the new raster
-  return(r)
+  x_mask  <- is.na(x)
+  x_mask  <- extend(x_mask, y, fill = F)
+  x_large <- extend(x, y, fill = NA)
+  for (i in 1:nlyr(x_large)) {
+    indices <- which(is.na(x_large[[i]][]))
+    n       <- length(indices)
+    values  <- na.omit(x[[i]][])
+    x_large[[i]][indices] <- sample(values, size = n, replace = T)
+    x_large[[i]] <- mask(x_large[[i]], x_mask[[i]], maskvalues = 1, updatevalue = NA)
+  }
+  names(x_large) <- names(x)
+  return(x_large)
 }
-
 
 ################################################################################
 #### Function to Prepare Movement Model for Dispersal Simulation

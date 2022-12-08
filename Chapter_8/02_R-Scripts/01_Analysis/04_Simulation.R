@@ -18,7 +18,6 @@ library(lubridate)      # To handle dates
 library(glmmTMB)        # To handle the movement model
 library(Rcpp)           # To load C++ functions
 library(pbmcapply)      # For multicore use with progress bar
-install.packages("glmmTMB", type = "source")
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
