@@ -124,6 +124,18 @@ hum <- crop(hum, ext)
 names(hum) <- "HumanInfluence"
 writeRaster(hum, file.path(new_chap, "03_Data/02_CleanData/HumanInfluence.tif"), overwrite = T)
 
+# I will also compute the distance to the nearest human influenced cell on a slightly larger extent
+hum <- rast(file.path(old_chap, "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluenceBuff_FACEBOOK.grd"))
+hum <- hum[[1]]
+hum <- crop(hum, ext * 1.4)
+hum <- hum > 0
+dis <- distanceTo(hum, value = 1)
+dis <- rast(dis)
+dis <- crop(dis, ext)
+plot(dis)
+names(dis) <- "DistanceToHumans"
+writeRaster(dis, file.path(new_chap, "03_Data/02_CleanData/DistanceToHumans.tif"), overwrite = T)
+
 # Copy Vegetation layers, also cropped to a smaller extent
 dir.create("03_Data/01_RawData/MODIS", showWarnings = F)
 tre <- rast(file.path(old_chap, "03_Data/01_RawData/MODIS/MOD44B/Stitched/01_LandCover_TreeCover_MODIS.tif"))

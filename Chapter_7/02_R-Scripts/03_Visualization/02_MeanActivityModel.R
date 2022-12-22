@@ -58,7 +58,7 @@ order <- c(
   , "maxMoonlightIntensity"
   , "I(maxMoonlightIntensity^2)"
   , "maxMoonlightIntensity:meanCloudCoverNight"
-  , "maxMoonlightIntensity:maxMoonDelay"
+  # , "maxMoonlightIntensity:maxMoonDelay"
   , "maxTemperature"
   , "meanCloudCoverNight"
   , "meanActX6"
@@ -70,7 +70,7 @@ labels <- c(
   , TeX("$_{max}MoonlightIntensity$")
   , TeX("$_{max}MoonlightIntensity^{0.5}$")
   , TeX("$_{max}MoonlightIntensity$ x $_{mean}CloudCoverNight$")
-  , TeX("$_{max}MoonlightIntensity$ x $_{max}MoonDelay$")
+  # , TeX("$_{max}MoonlightIntensity$ x $_{max}MoonDelay$")
   , TeX("$_{max}Temperature$")
   , TeX("$_{mean}CloudCoverNight$")
   , TeX("$_{mean}Activity_{6 Hours}$")
@@ -148,7 +148,7 @@ p1 <- ggplot() +
   ) +
   xlab(expression(beta*"-Coefficient")) +
   ylab("Covariates") +
-  coord_capped_cart(bottom = "both", left = "both") +
+  # coord_capped_cart(bottom = "both", left = "both") +
   facet_wrap(~ ToD, ncol = 3)
 
 # Load pngs to overlay

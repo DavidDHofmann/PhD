@@ -320,20 +320,19 @@ extract_covariates_along_interpolated <- function(x, covariates, by = 0.1){
 ################################################################################
 # Function that extends a covariate layer and fills the added border with values
 # sampled from the layer
-extendRaster <- function(x, y){
-  extended <- lapply(1:nlayers(x), function(z) {
-    layer <- x[[z]]
-    na_mask <- is.na(layer)
-    vals <- values(layer)
-    vals <- na.omit(vals)
-    r <- extend(layer, y)
-    na_mask <- extend(na_mask, y, value = 0)
-    indices <- which(is.na(values(r)))
-    values(r)[indices] <- vals[runif(length(indices), min = 1, max = length(vals))]
-    r <- mask(r, na_mask, maskvalue = 1, updatevalue = NA)
-    return(r)
-  })
-  return(stack(extended))
+extendRaster <- function(x, y) {
+  x_mask  <- is.na(x)
+  x_mask  <- extend(x_mask, y, fill = F)
+  x_large <- extend(x, y, fill = NA)
+  for (i in 1:nlyr(x_large)) {
+    indices <- which(is.na(x_large[[i]][]))
+    n       <- length(indices)
+    values  <- na.omit(x[[i]][])
+    x_large[[i]][indices] <- sample(values, size = n, replace = T)
+    x_large[[i]] <- mask(x_large[[i]], x_mask[[i]], maskvalues = 1, updatevalue = NA)
+  }
+  names(x_large) <- names(x)
+  return(x_large)
 }
 
 ################################################################################

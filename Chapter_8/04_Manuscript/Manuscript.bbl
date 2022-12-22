@@ -18,6 +18,13 @@ Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
   Between Resource Selection}} and {{Animal Movement}}.
 \newblock {\em Methods in Ecology and Evolution}, 7(5):619--630.
 
+\bibitem[Baguette et~al., 2013]{Baguette.2013}
+Baguette, M., Blanchet, S., Legrand, D., Stevens, V.~M., and Turlure, C.
+  (2013).
+\newblock Individual {{Dispersal}}, {{Landscape Connectivity}} and {{Ecological
+  Networks}}: {{Dispersal}}, {{Connectivity}} and {{Networks}}.
+\newblock {\em Biological Reviews}, 88(2):310--326.
+
 \bibitem[{Bastille-Rousseau} et~al., 2018]{Bastille-Rousseau.2018}
 {Bastille-Rousseau}, G., {Douglas-Hamilton}, I., Blake, S., Northrup, J.~M.,
   and Wittemyer, G. (2018).
@@ -30,6 +37,23 @@ Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
 \newblock Characterizing the {{Landscape}} of {{Movement}} to {{Identify
   Critical Wildlife Habitat}} and {{Corridors}}.
 \newblock {\em Conservation Biology}, 35(1):14.
+
+\bibitem[Behr, 2020]{Behr.2020}
+Behr, D.~M. (2020).
+\newblock Dispersal and {{Its Demographic Consequences}} in the {{Endangered
+  African Wild Dog}} ({{Lycaon}} pictus).
+\newblock page~14.
+
+\bibitem[Brown and {Kodric-Brown}, 1977]{Brown.1977}
+Brown, J.~H. and {Kodric-Brown}, A. (1977).
+\newblock Turnover {{Rates}} in {{Insular Biogeography}}: {{Effect}} of
+  {{Immigration}} on {{Extinction}}.
+\newblock {\em Ecology}, 58(2):445--449.
+
+\bibitem[Clobert et~al., 2012]{Clobert.2012}
+Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
+\newblock {\em Dispersal {{Ecology}} and {{Evolution}}}.
+\newblock {Oxford University Press}.
 
 \bibitem[Cozzi et~al., 2020]{Cozzi.2020}
 Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
@@ -65,24 +89,45 @@ Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
   Cascade}} in {{Yellowstone National Park}}.
 \newblock {\em Ecology}, 86(5):1320--1330.
 
+\bibitem[Frankham et~al., 2002]{Frankham.2002}
+Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
+\newblock {\em Introduction to {{Conservation Genetics}}}.
+\newblock {Cambridge university press}.
+
 \bibitem[Graves et~al., 2014]{Graves.2014}
 Graves, T., Chandler, R.~B., Royle, J.~A., Beier, P., and Kendall, K.~C.
   (2014).
 \newblock Estimating {{Landscape Resistance}} to {{Dispersal}}.
 \newblock {\em Landscape Ecology}, 29(7):1201--1211.
 
+\bibitem[Gustafson and Gardner, 1996]{Gustafson.1996}
+Gustafson, E.~J. and Gardner, R.~H. (1996).
+\newblock The {{Effect}} of {{Landscape Heterogeneity}} on the {{Probability}}
+  of {{Patch Colonization}}.
+\newblock {\em Ecology}, 77(1):94--107.
+
+\bibitem[Hodgson et~al., 2009]{Hodgson.2009}
+Hodgson, J.~A., Thomas, C.~D., Wintle, B.~A., and Moilanen, A. (2009).
+\newblock Climate {{Change}}, {{Connectivity}} and {{Conservation Decision
+  Making}}: {{Back}} to {{Basics}}.
+\newblock {\em Journal of Applied Ecology}, 46(5):964--969.
+
 \bibitem[Hofmann et~al., 2021]{Hofmann.2021}
 Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
 \newblock Bound {{Within Boundaries}}: {{Do Protected Areas Cover Movement
   Corridors}} of {{Their Most Mobile}}, {{Protected Species}}?
-\newblock {\em Journal of Applied Ecology}.
+\newblock {\em Journal of Applied Ecology}, 58(6):1133--1144.
 
-\bibitem[Maestre et~al., 2012]{Maestre.2012}
-Maestre, F.~T., {Salguero-G{\'o}mez}, R., and Quero, J.~L. (2012).
-\newblock It is getting hotter in here: Determining and projecting the impacts
-  of global environmental change on drylands.
-\newblock {\em Philosophical Transactions of the Royal Society B: Biological
-  Sciences}, 367(1606):3062--3075.
+\bibitem[Leigh et~al., 2012]{Leigh.2012}
+Leigh, K.~A., Zenger, K.~R., Tammen, I., and Raadsma, H.~W. (2012).
+\newblock Loss of {{Genetic Diversity}} in an {{Outbreeding Species}}: {{Small
+  Population Effects}} in the {{African Wild Dog}} ({{Lycaon}} pictus).
+\newblock {\em Conservation Genetics}, 13(3):767--777.
+
+\bibitem[MacArthur and Wilson, 2001]{MacArthur.2001}
+MacArthur, R.~H. and Wilson, E.~O. (2001).
+\newblock {\em The {{Theory}} of {{Island Biogeography}}}, volume~1.
+\newblock {Princeton university press}.
 
 \bibitem[Masenga et~al., 2016]{Masenga.2016}
 Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
@@ -91,11 +136,10 @@ Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
   {{East Africa}}.
 \newblock {\em African Journal of Ecology}, 54(1):95--98.
 
-\bibitem[Midgley and Bond, 2015]{Midgley.2015}
-Midgley, G.~F. and Bond, W.~J. (2015).
-\newblock Future of {{African}} terrestrial biodiversity and ecosystems under
-  anthropogenic climate change.
-\newblock {\em Nature Climate Change}, 5(9):823--829.
+\bibitem[McNutt, 1996]{McNutt.1996}
+McNutt, J. (1996).
+\newblock Sex-{{Biased Dispersal}} in {{African Wild Dogs}}, {{Lycaon}} pictus.
+\newblock {\em Animal Behaviour}, 52(6):1067--1077.
 
 \bibitem[Muff et~al., 2020]{Muff.2020}
 Muff, S., Signer, J., and Fieberg, J. (2020).
@@ -150,17 +194,6 @@ Radchuk, V., Reed, T., Teplitsky, C., {van de Pol}, M., Charmantier, A.,
 Raia, P., Passaro, F., Fulgione, D., and Carotenuto, F. (2012).
 \newblock Habitat tracking, stasis and survival in {{Neogene}} large mammals.
 \newblock {\em Biology Letters}, 8(1):64--66.
-
-\bibitem[Rockstr{\"o}m et~al., 2009]{Rockstrom.2009}
-Rockstr{\"o}m, J., Steffen, W., Noone, K., Persson, {\AA}., Chapin, F. S.~I.,
-  Lambin, E., Lenton, T.~M., Scheffer, M., Folke, C., Schellnhuber, H.~J.,
-  Nykvist, B., {de Wit}, C.~A., Hughes, T., {van der Leeuw}, S., Rodhe, H.,
-  S{\"o}rlin, S., Snyder, P.~K., Costanza, R., Svedin, U., Falkenmark, M.,
-  Karlberg, L., Corell, R.~W., Fabry, V.~J., Hansen, J., Walker, B., Liverman,
-  D., Richardson, K., Crutzen, P., and Foley, J. (2009).
-\newblock Planetary {{Boundaries}}: {{Exploring}} the {{Safe Operating Space}}
-  for {{Humanity}}.
-\newblock {\em Ecology and Society}, 14(2):art32.
 
 \bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
 Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).

@@ -17,9 +17,14 @@ library(tidyverse)   # For data wrangling
 library(lubridate)   # To handle dates
 library(hms)         # To handle times
 library(pbmcapply)   # To run stuff in parallel
+library(gggibbous)   # For plotting moon phases
+library(ggpubr)      # To arrange multiple plots
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
 dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
+
+# Load moonangles
+moon <- read_csv("03_Data/02_CleanData/MoonAngle.csv")
 
 # Let's also generate a column indicating the time of the day
 dat$Time <- as_hms(dat$Timestamp)
@@ -33,17 +38,38 @@ dat_nested$N <- sapply(dat_nested$Data, function(x) {nrow(x)})
 # Let's only keep days where we have at least 280 datapoints
 dat_nested <- subset(dat_nested, N > 280)
 
-# Can do some plots
-dat_nested %>%
-  slice(200) %>%
-  unnest(Data) %>%
-  ggplot(aes(x = Timestamp, y = ActX, col = ToD)) +
-    geom_point() +
-    geom_vline(aes(xintercept = max(Sunset))) +
-    geom_vline(aes(xintercept = max(Sunset) - hours(2)), lty = 2) +
-    geom_vline(aes(xintercept = max(Sunset) + hours(2)), lty = 2) +
+# Can do some plots using the function below (THE DARKER THE MORE ILLUMINATED)
+plotActivityMoon <- function(index) {
+  dates <- dat_nested[index, ] %>% pull(Date)
+  moon_sub <- moon[moon$date %in% dates, ]
+  p1 <- ggplot(moon_sub, aes(x = timestamp, y = moonAltDegrees)) +
+    geom_hline(yintercept = 0, col = "gray", lty = 2) +
+    geom_line() +
+    geom_moon(data = moon_sub[10, ], aes(x = timestamp, y = 0, ratio = 1), col = "black", fill = "white") +
+    geom_moon(data = moon_sub[10, ], aes(x = timestamp, y = 0, ratio = moonPhase), fill = "black") +
     theme_minimal() +
-    scale_color_viridis_d()
+    ylim(c(-90, 90))
+  p2 <- dat_nested %>%
+    slice(index) %>%
+    unnest(Data) %>%
+    ggplot(aes(x = Timestamp, y = ActX, col = ToD)) +
+      geom_point() +
+      geom_vline(aes(xintercept = max(Sunset))) +
+      geom_vline(aes(xintercept = max(Sunset) - hours(2)), lty = 2) +
+      geom_vline(aes(xintercept = max(Sunset) + hours(2)), lty = 2) +
+      geom_vline(aes(xintercept = max(Sunrise))) +
+      geom_vline(aes(xintercept = max(Sunrise) - hours(2)), lty = 2) +
+      geom_vline(aes(xintercept = max(Sunrise) + hours(2)), lty = 2) +
+      theme_minimal() +
+      scale_color_viridis_d() +
+      theme(legend.position = c(0.1, 0.8)) +
+      xlab("") +
+      ylim(c(0, 255))
+  ggarrange(p2, p1, nrow = 2, align = "hv", heights = c(0.8, 0.2))
+}
+
+# Try it
+plotActivityMoon(index = 12)
 
 # Function to summarize data between two dates
 summarizeDat <- function(data, dogname, collar, state, timestamp_from, timestamp_to) {

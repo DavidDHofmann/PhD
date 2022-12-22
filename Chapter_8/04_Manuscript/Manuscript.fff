@@ -29,6 +29,15 @@
  
 \begin{figure}
   \begin{center}
+  \includegraphics[width = \textwidth]{99_Emigration.png}
+  \caption{Caption}
+  \label{Emigration}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
   \includegraphics[width = \textwidth]{99_Heatmaps.png}
   \caption{Heatmaps depicting the number of simulated dispersal trajectories
   traversing each grid-cell in the study area. The left panel shows results for
@@ -75,3 +84,5 @@
   \label{Interpatch}
   \end{center}
 \end{figure}
+\efloatseparator
+ 

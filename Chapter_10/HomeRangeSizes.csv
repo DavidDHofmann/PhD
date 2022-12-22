@@ -1,0 +1,13 @@
+Site,Country,Study,MCP_Min,MCP_Mean,MCP_Max,MCP_SampleSize,KDE_Min,KDE_Mean,KDE_Max,KDE_SampleSize,Taken From,Comment,Longitude,Latitude
+Moremi GR,Botswana,"Pomilia, 2015",412,1043,1608,7,376,739,999,7,Pomilia,,23.213477668,-19.2889651888
+Moremi GR,Botswana,"Fuller, 1992",375,617,1050,9,176,513,762,7,Pomilia,,23.213477668,-19.2889651888
+Samburu-Laikipia,Kenya,"Woodroffe, 2011",60,278,718,29,212,423,833,29,Pomilia,,36.88239904,0.75799716
+Lower Zambezi NP,Zambia,"Leigh, 2005",74,273,459,7,,,,,Pomilia,,29.6833631736,-15.459122313
+Hwange NP,Zimbabwe,"Fuller, 1992",260,423,633,4,,,,,Pomilia,,26.5613240931,-19.0785000529
+Save Valley Conservancy,Zimbabwe,"Pole, 2000",352,499,844,10,,,,,Pomilia,,32.1013496912,-20.4211060553
+Kruger NP,South Africa,"Reich, 1981; Mills and Gorman, 1997",150,555,1110,16,,,,,Pomilia,,31.4850372867,-24.0104374532
+Serengeti NP,Tanzania,"Schaller, 1972",620,665,710,2,,,,,Pomilia,,34.8034253966,-2.3053205759
+Selous Game Reserve,Tanzania,"Creel and Creel, 2002",,,,,206,379,851,8,Pomilia,,37.4909643411,-8.7872145225
+Mkhuze GR,South Africa,"Jenkins, 2015",,384,,1,,378,,1,Jenkins,,32.2475388347,-27.6658806726
+Northern Tuli GR,Botswana,"Mottram, 2018",,1937,,1,,767,,1,Mottram,"100% MCP, Msc thesis",29.0844734651,-22.136061129
+Gorongosa NP,Mozambique,"Bouley, 2021",,,,,,356,,4,Bouley,,34.5031894536,-18.8228926641

@@ -1,5 +1,5 @@
 ################################################################################
-#### Download and Curate Climate Data
+#### Download and Curate Climate Data and Moonlight Summaries
 ################################################################################
 # Description: Use Google Earth Engine to download hourly precipitation and
 # temperature data for our study area. We also use the moonlit package (on
@@ -81,6 +81,29 @@ dates <- act %>%
 rm(act)
 gc()
 
+# Generate a vector of times for which we want to compute nightly statistics
+if (!file.exists("03_Data/02_CleanData/MoonAngle.csv")) {
+  moon <- data.frame(
+      Date = seq(
+          from = as_datetime(dates[1] - days(3))
+        , to   = as_datetime(dates[2] + days(3))
+        , by   = "5 mins"
+      )
+    , x    = mean(gps$x)
+    , y    = mean(gps$y)
+  )
+
+  # Compute moonlight stats
+  moon <- moonlightIntensity(lon = moon$x, lat = moon$y, date = moon$Date, e = 0.21)
+
+  # Convert timestamps and dates
+  moon$timestamp <- moon$date
+  moon$date <- as_date(moon$date)
+
+  # Store to file
+  write_csv(moon, "03_Data/02_CleanData/MoonAngle.csv")
+}
+
 ################################################################################
 #### Calculate Nightly Statistics
 ################################################################################
@@ -89,7 +112,11 @@ if (!file.exists("03_Data/02_CleanData/Moonlight.csv")) {
 
   # Generate a vector of times for which we want to compute nightly statistics
   moon <- data.frame(
-      Date = ymd_hms(paste0(seq(dates[1] - days(3), dates[2] + days(3), by = "day"), "16:00:00"))
+      Date = ymd_hms(
+          from = paste0(seq(dates[1] - days(3)
+        , to   = dates[2] + days(3)
+        , by   = "day"), "16:00:00")
+      )
     , x    = mean(gps$x)
     , y    = mean(gps$y)
   )
@@ -108,6 +135,10 @@ if (!file.exists("03_Data/02_CleanData/Moonlight.csv")) {
     )
   })
   moon <- do.call(rbind, moon)
+
+  # Parse date columns nicer
+  moon$timestamp <- moon$date
+  moon$date      <- as_date(moon$timestamp)
 
   # Store to file
   write_csv(moon, "03_Data/02_CleanData/Moonlight.csv")

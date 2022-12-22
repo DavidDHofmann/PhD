@@ -67,6 +67,7 @@ maps2 <- "03_Data/03_Results/HeatmapsBetweennessLocal.rds" %>%
   mutate(Level = "Local") %>%
   select(Steps, SourceArea, FloodLevel, Level, Data = Betweenness) %>%
   arrange(Steps, SourceArea, FloodLevel, Level)
+maps <- rbind(maps1, maps2)
 
 # Convert maps to dataframes
 maps <- maps %>%
@@ -80,14 +81,15 @@ maps <- maps %>%
 maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
 
 # Function to plot
-plotBetweenness <- function(data, formula = ~FloodLevel, barwidth = 16) {
+plotBetweenness <- function(data, formula = ~FloodLevel, area = unique(areas$ID), barwidth = 16) {
+  areas$Highlight <- areas$ID %in% area
   ggplot() +
     geom_raster(
         data    = data
       , mapping = aes(x = x, y = y, fill = Betweenness)
     ) +
     geom_sf(data = water, fill = "gray50", col = NA, alpha = 0.25) +
-    geom_sf(data = roads, col = "gray50", lwd = 0.1) +
+    geom_sf(data = roads, col = "gray50", linewidth = 0.1) +
     geom_point(
         data        = subset(vills, place == "City")
       , mapping     = aes(x = x, y = y)
@@ -97,15 +99,15 @@ plotBetweenness <- function(data, formula = ~FloodLevel, barwidth = 16) {
       , size        = 1
     ) +
     geom_sf(
-        data        = areas
-      , col         = "white"
+        data        = subset(areas, Type == "Main")
+      , mapping     = aes(col = Highlight)
       , fill        = "white"
       , lty         = 1
-      , lwd         = 0.1
+      , linewidth   = 0.2
       , show.legend = F
       , alpha       = 0.15
     ) +
-    geom_sf(data = afric, lwd = 0.4, col = "white", fill = NA) +
+    geom_sf(data = afric, linewidth = 0.4, col = "white", fill = NA) +
     geom_text(
         data     = labels_waters
       , mapping  = aes(x = x, y = y, label = Label)
@@ -121,7 +123,7 @@ plotBetweenness <- function(data, formula = ~FloodLevel, barwidth = 16) {
       , fontface = 2
     ) +
     geom_text(
-        data     = labels_areas
+        data     = subset(labels_areas, Type == "Main")
       , mapping  = aes(x = X, y = Y, label = ID)
       , col      = "white"
       , fontface = 3
@@ -135,6 +137,7 @@ plotBetweenness <- function(data, formula = ~FloodLevel, barwidth = 16) {
       , size     = 2
       , nudge_y  = c(0.1, -0.1, 0.1)
     ) +
+    scale_color_manual(values = c("white", "red")) +
     scale_fill_gradientn(
         colours = viridis::magma(100)
       , labels  = function(x){format(x, big.mark = "'")}
@@ -198,6 +201,7 @@ for (i in sort(unique(maps$SourceArea))) {
   p2[[i]] <- plotBetweenness(
       data     = subset(maps, Level == "Local" & Steps == 2000 & SourceArea == i)
     , barwidth = 12
+    , area     = i
   )
 }
 

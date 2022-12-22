@@ -84,13 +84,14 @@ maps <- maps %>%
 maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
 
 # Function to plot
-plotHeatmap <- function(data, formula = ~FloodLevel, barwidth = 16) {
+plotHeatmap <- function(data, formula = ~FloodLevel, area = unique(areas$ID), barwidth = 16) {
+  areas$Highlight <- areas$ID %in% area
   ggplot() +
     geom_raster(
         data    = data
       , mapping = aes(x = x, y = y, fill = Heat)
     ) +
-    geom_sf(data = roads, col = "gray90", lwd = 0.1) +
+    geom_sf(data = roads, col = "gray90", linewidth = 0.1) +
     geom_point(
         data        = subset(vills, place == "City")
       , mapping     = aes(x = x, y = y, size = place)
@@ -100,15 +101,15 @@ plotHeatmap <- function(data, formula = ~FloodLevel, barwidth = 16) {
       , size        = 1
     ) +
     geom_sf(
-        data        = areas
-      , col         = "black"
+        data        = subset(areas, Type == "Main")
+      , mapping     = aes(col = Highlight)
       , fill        = "black"
       , lty         = 1
-      , lwd         = 0.1
+      , linewidth   = 0.2
       , show.legend = F
       , alpha       = 0.15
     ) +
-    geom_sf(data = afric, lwd = 0.4, col = "black", fill = NA) +
+    geom_sf(data = afric, linewidth = 0.4, col = "black", fill = NA) +
     geom_text(
         data     = labels_waters
       , mapping  = aes(x = x, y = y, label = Label)
@@ -124,7 +125,7 @@ plotHeatmap <- function(data, formula = ~FloodLevel, barwidth = 16) {
       , fontface = 2
     ) +
     geom_text(
-        data     = labels_areas
+        data     = subset(labels_areas, Type == "Main")
       , mapping  = aes(x = X, y = Y, label = ID)
       , col      = "black"
       , fontface = 3
@@ -139,6 +140,7 @@ plotHeatmap <- function(data, formula = ~FloodLevel, barwidth = 16) {
       , nudge_y  = c(0.1, -0.1, 0.1)
     ) +
     scale_size_manual(values = c(1.0, 0.25)) +
+    scale_color_manual(values = c("black", "red")) +
     scale_fill_gradientn(
         colors  = spectral(100)
       , labels  = function(x){format(x, big.mark = "'")}
@@ -201,8 +203,10 @@ for (i in sort(unique(maps$SourceArea))) {
   p2[[i]] <- plotHeatmap(
       data     = subset(maps, Level == "Local" & Steps == 2000 & SourceArea == i)
     , barwidth = 12
+    , area     = i
   )
 }
+p2[[1]]
 
 # Put the plots together
 p3 <- ggarrange(p2[[1]], p2[[2]], p2[[3]], ncol = 1, labels = c("(1)", "(2)", "(3)"))

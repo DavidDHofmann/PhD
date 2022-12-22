@@ -141,26 +141,28 @@ We capitalize on a ``natural experimental setup'', the flood-pulse driven
 environmental change across the Okavango Delta in northern Botswana, to
 investigate the impact of changing environmental conditions on dispersal
 patterns and connectivity of the endangered African wild dog (\textit{Lycaon
-pictus}). For this, we simulate dispersal trajectories across the landscape
-under two extreme environmental scenarios; one assuming a maximum flood extent,
-one assuming a minimum flood extent.
+pictus}). For this, we simulate dispersal trajectories across the landscape of
+the Okavango Delta under two extreme environmental scenarios; one assuming a
+maximum flood extent, one assuming a minimum flood extent.
 
 During maximum flood, we observe a reduction in connectivity and an increase in
 dispersal durations between distinct habitat patches. Notably, dispersal into
 the center of the Okavango delta is reduced by 80\% during maximum flooding. At
 minimum flooding, conversely, the delta reveals vital dispersal corridors and
-increases chances of successful dispersal into neighboring habitat patches.
-Concomittantly, dispersal durations to move between patches is reduced at low
-flood levels.
+increases chances of successful dispersal into neighboring habitat patches by xx
+percent. Concomitantly, dispersal durations to move between patches is reduced,
+on average by xx days,at low flood levels.
 
 Climate change is expected to critically impact the flood-pulsing cycles of the
 Okavango delta and may therefore substantially alter landscape connectivity in
-this area. Besides a better understanding of the conservation needs for the
-African wild dog, our study also presents a first step towards incorporating
-environmental changes due to seasonality or climate change in dispersal and
-connectivity analyses. Finally, our analysis demonstrates the usefulness of
-individual-based dispersal simulations as a pertinent conservation tool to study
-impacts of environmental change while accounting for dispersal movements.
+this area. Our analysis suggests that anticipating such alterations in
+environmental conditions is key when implementing conservation strategies.
+Besides a better understanding of the conservation needs for the African wild
+dog, our study also presents a first step towards incorporating environmental
+changes due to seasonality or climate change in dispersal and connectivity
+analyses and demonstrates the usefulness of individual-based dispersal
+simulations as a pertinent conservation tool to study impacts of environmental
+change on dispersal success.
 
 \end{abstract}
 
@@ -181,65 +183,123 @@ impacts of environmental change while accounting for dispersal movements.
 % \linenumbers
 
 \section{Introduction}
-\subsection{Climate Change}
-Climate change is expected to profoundly impact ecosystems worldwide, with
-far-reaching consequences for species living therein (cite IPCC)
-\citep{Ozgul.2010, Radchuk.2019}. However, empirical information on species' responses to climate change remains
-scarce, especially for regions most vulnerable to altered conditions
+Climate change is expected to profoundly impact ecosystems worldwide with
+far-reaching consequences for species living therein \citep{Ozgul.2010,
+Radchuk.2019, IPCC.2022}. By altering environmental conditions, climate change
+affects animal behavior \citep{Fuller.2016}, resource availability
+\citep{Durant.2007}, population dynamics \citep{Paniw.2021}, and the
+distribution of wild living animal populations \citep{Thomas.2004,
+Thuiller.2006}. One potential life-history pathway through which species may
+mediate the effects of environmental change is dispersal \citep{Anderson.2012}.
+By bringing individuals away from their natal location \citep{Clobert.2012},
+dispersal equips species with a means to adapt to climate change by tracking
+favorable habitat conditions \citep{Raia.2012} and to shift into a different
+part of their fundamental niches \citep{Kokko.2022}. Dispersal furthermore
+provides resilience against changing conditions by ensuring genetic diversity
+\citep{Frankham.2002, Leigh.2012, Baguette.2013}, facilitating the colonization
+empty habitats \citep{Gustafson.1996, Hanski.1999b, MacArthur.2001}, and
+promoting the reinforcement of weakened and small subpopulations
+\citep{Brown.1977}. As such, it is little surpsing that improving connectivity
+is viewed as the number one strategy to combat the adverse effects of climate
+change \citep{Heller.2009}.
+
+While dispersal offers a means to offset the demographic consequences of climate
+change \citep{Kokko.2006, Hodgson.2009, Travis.2013}, it itself is a function of
+climatic and environmental conditions (e.g. \citep{Behr.2020}). The link between
+dispersal and climaticor environmental can either be indirect, for example if
+the propensity of individuals to disperse depends on environmental conditions,
+or direct, when the biophysical environment through which dispersers move
+affects dispersal prospects \citep{Travis.2013}. As the latter case indicates,
+dispersal is also inextricably linked to the concept landscape connectivity
+\citep{Baguette.2013}, which is understood as the degree by which the landscape
+facilitates or impedes movements \citep{Taylor.1993}. Only if a sufficient
+degree of landscape connectivity is maintained, successful dispersal of
+individuals can be guaranteed \citep{Fahrig.2003}. Unfortunately, our
+understanding how changing environmental conditions influence connectivity and
+dispersal is limited \citep{Kokko.2006, Travis.2013}. Because collecting
+information on dispersing animals is difficult and because it is difficult to
+assess how changing environmental conditions affect connectivity...
+
+The continued degradation and destruction habitats across the globe impedes
+dispersal, promotes inbreeding and genetic drift and increases the
+likelihood of local extirpation due to stochastic events \citep{Sawyer.2011}.
+Combined, these factors limit species ability to adapt to changing environmental
+conditions \citep{Fahrig.2003}.
+
+\cite{Ashrafzadeh.2019} found that cimate change is likely to substantially
+reduce connectivity for mountain newts in Iran. Similarly, \cite{Luo.2021}
+predicted significant reductions in connectivity for the giant spiny frog in
+South-East Asia.
+
+However, failing to take into account potential changes in climatic and
+environmental conditions imperils our ability to design cost-effective
+conservation strategies.
+
+Here, we used naturally occuring seasonal flood-cycles to approximate the likely
+changes in connectivity that will arise under amplified climatic conditions due
+to climate change. While a better understanding of the ODs flooding regime under global change is of major interest, reliable predictions remain challenging due to the complex interplay between climate,
+anthropogenic water use, animal behavior, and topography of the region.
+
+Climate change
+could lead to the disruption of existing dispersal corridors and the emergence
+of new dispersal barriers but may also provide possibilities to access
+previously unsuitable dispersal routes. Designing and implementing effective
+conservation strategies that aim to improve landscape connectivity, such as
+habitat restoration or the creation of wildlife corridors, requires better
+understanding of such dynamics.
+
+Albeit the impacts of climate change on connectivity cannot be directly
+estimated, one can study how changing environmental conditions due to
+seasonality influence patterns of dispersal and connectivity.
+
+Habitat degradation and fragmentation lead to isolated subpopulations that have
+a high associated risk of extinction due to stochastic events and generally
+decreased genetic variability \citep{Melbourne.2008}.
+
+More recently, individual-based movement models (IBMMs) have been uprising and
+are recommended for their ability to incorporate several crucial realities of
+animal behavior, such as, for example, autocorrelation, that are by omitted by
+necessity using resistance-based approaches \citep{Hofmann.2023,
+Unnithan.2022a}. IBMMs allow much greater flexibility and are thus considered
+powerful tools for examining connectivity under different landscape
+configurations \citep{Littlefield.2019}.
+
+Botswana is among the countries most heavily influenced by climate change .
+
+For multispecies approaches to connectivity within the KAZA-TFCA, see
+\cite{Brennan.2020} and \cite{Lines.2021}.
+
+
+
+
+Talk about connectivity models
+Talk about functional connectivity
+Talk about habitat fragmentation and destruction
+
+Osipova
+
+Unfortunately, little is known about the specific responses of different species
+to climate change, especially for regions most vulnerable to altered conditions
 \citep{Paniw.2021}.
 
 
 
+Only if there
 
-\subsection{Dispersal}
-The lack of knowledge in terms of species ability to cope with climate change is
-further compounded by a lack of information on dispersal under changing
-environmental conditions \citep{Travis.2013}. By bringing individuals away from
-their natal location, dispersal strongly influences population dynamics
-\citep{Clobert.2012}; it enables genetic exchange \citep{Frankham.2002,
-Leigh.2012, Baguette.2013}, facilitates the colonization of empty habitats
-\citep{Gustafson.1996, Hanski.1999b, MacArthur.2001}, and promotes reinforcement
-of weakened and small subpopulations \citep{Brown.1977}. Dispersal also serves
-as a means to track suitable habitat \citep{Raia.2012} and may thus serve as a
-means to mediate the demographic consequences of environmental change
-\citep{Hodgson.2009, Travis.2013}. Dispersal is also inextricably linked to the
-concept of landscape connectivity, which is generally understood as the degree
-by which the landscape facilitates or impedes movements among habitat patches
-\citep{Tylor.1993}.
+The challenges associated with studying dispersing animals have thus far
+impaired the collection of data of dispersers at the appropriate temporal and
+spatial scale \citep{Graves.2014, Vasudev.2015} and weakened our ability to
+project dispersal prospects under changing environmental conditions into the
+future. Nevertheless, a more comprehensive understanding of dispersal under
+changing environmental conditions is critical for designing effective
+conservation strategies in the light of climate change. By predicting and
+modeling dispersal patterns under different scenarios, we can better anticipate
+the impacts of climate change on species and design effective conservation
+strategies to protect them. This is especially important for endangered species
+that are already at the verge of extinction.
 
-As previously highlighted by \cite{Travis.2013}, climate may affect dispersal
-directly, by altering the propensity of individuals to disperse, or indirectly,
-through changes in the biophysical environment. Here, we will focus on the
-latter and study dispersal prospects under changing environmental conditions.
-
-In spite of its importance for determining population dynamics and landscape
-connectivity, our understanding of dispersal and how dispersal is affected by
-changing environmental conditions is limited. This is owed to the difficulty of
-obtaining data collected on dispersing animals at the appropriate temporal and
-spatial scale \citep{Graves.2014, Vasudev.2015} and our inability to project
-dispersal prospects under changing environmental conditions into the future.
-
-The ability of species
-to persist under these changing conditions depends on the amplitude and speed of
-environmental change and species' responses to such changes (cite someone).
-
-It is, in fact, presumed that humanity has already transgressed the planetary
-boundary for climate change, therefore triggering irreversible feedbacks in the
-biosphere \citep{Rockstrom.2009}.
-
-Cite IPCC, Planetary boundaries, Tucker (step length). Phenological shifts. Cite
-Robynne, Arpat, Megan, Dominik, Rabaiotti etc.
-
-\subsection{Connectivity}
-Dispersal is an important, if not the important, driver of landscape
-connectivity and therefore of major interest to conservation authorities. It has
-also been demonstrated that dispersal may lead to population declines in areas
-where anthropogenic mortality is high and dispersal prospects low
-\citep{Leigh.2012}.
-
-\subsection{Okavango Delta and African Wild Dogs}
 The Okavango delta in Southern Africa poses a unique opportunity to study the
-impacts of environmetal change on species dispersal ability and connectivity in
+impacts of environmental change on species dispersal ability and connectivity in a
 large scale natural experiment setup. According to projections by the IPCC,
 Botswana and its surroundings are among the most vulnerable to climate change.
 While global temperatures are expected to increase by xx degrees until the end
@@ -262,15 +322,20 @@ are not uniformly distributed across the planet, but particularly pronounced at
 high latitudes and arid ecosystems, the species may be seen as most vulnerable
 to such ecosystem shifts.
 
-\subsection{Our Study}
-Here, we capitalize on a previously parametrized dispersal model and use
-dispersal simulations to investigate connectivity patterns for African wild dogs
-under two extreme scenarios; one assuming maximum flooding of the Okavango delta
-and one assuming minimum flooding of the Okavango delta. Given that water poses
-a barrier to dispersing individuals, we anticipate that dispersal prospects and
-connectivity during maximum flood are low. During minimum flood, in contrast, we
-expect to reveal the presence of several dispersal corridors that may be used to
-freely and quickly move between remaining habitat patches.
+Talk about Zeller und Osipova
+
+In a previous study, \citep{Hofmann.2022} have investigated landscape
+connectivity in the same ecosystem, yet assuming a static landscape.
+
+Here, we capitalize on a previously parameterized dispersal model and use
+dispersal simulations to investigate dispersal success and connectivity patterns
+for African wild dogs under two extreme scenarios; one assuming maximum flooding
+of the Okavango delta and one assuming minimum flooding of the Okavango delta.
+Given that water poses a barrier to dispersing individuals, we anticipated that
+dispersal prospects and connectivity during maximum flood are low. During
+minimum flood, in contrast, we expect to reveal the presence of several
+dispersal corridors that may be used to freely and quickly move between
+remaining habitat patches.
 
 \section{Materials and Methods}
 We conducted all analyses using the programming language \textsf{R}. Any spatial
@@ -469,6 +534,16 @@ dispersal duration needed to move between patches (be consistent with
 steps that individuals moved before arriving at the respective patch.
 
 \section{Results}
+\subsection{General}
+See \Cref{Emigration}
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Emigration.png}
+  \caption{Caption}
+  \label{Emigration}
+  \end{center}
+\end{figure}
+
 \subsection{Heatmaps}
 Heatmaps produced from simulated dispersal trajectories reveal that the OD acts
 as a major dispersal barrier during periods of high flood, but reveals viable
@@ -604,12 +679,25 @@ Although local rainfalls in Botswana are expected to increase in terms of
 intensity, simulations show that the length of the rainy season will decline,
 more than offsetting the incline in precipitation \cite{Akinyemi.2019}.
 
+Although dispersal is generally believed to be beneficial for the long term viability of species, it can also lead to the net-loss of individuals in areas where edge effects and anthropogenic mortality are high \citep{Leigh.2012}.
+
 We studied a population of African wild dogs that resides in a natural
 environment with little human influence. This is only representative for a small
 share of the extant wild dog populations, as most individuals reside in areas
 that are prone to substantial edge effects. For these populations, the benefit
 of dispersal is disputed, as dispersal under high anthropogenic mortality may
 lead to a net-loss of individuals \citep{Leigh.2012}.
+
+Dispersal is an important, if not the most important, driver of landscape
+connectivity and therefore of major interest to conservation authorities. It has
+also been demonstrated that dispersal may lead to population declines in areas
+where anthropogenic mortality is high and dispersal prospects low
+\citep{Leigh.2012}.
+
+
+Efforts aiming at restoring or improving landscape connectivity should consider
+and take into account changes in landscape characteristics due to climate
+change.
 
 We assessed the implications of environmental change on the dispersal prospects,
 yet we did not consider how changing conditions alter dispersal propensity.
@@ -641,10 +729,23 @@ For instance, ... has shown that dispersers...
 Rendering such conditions alone is challenging, yet rendering the conditions
 under changing environmental conditions is merely impossible.
 
+Climate change will not only change species distribution but also community
+composition \citep{Thuiller.2006}.
+
 To address such differences, researchers could model
 habitat and movement preferences using season-dependent models, or,
 alternatively, by combining hidden markov models with step-selection functions.
 (cite papers that fieberg sent)
+
+For the discussion: Through changing environmental conditions, climate change
+will also impact the distribution of various species with far-reaching
+consequences on inter- and intra-specific competition (Abrahms). Due to a lack
+of data, we omitted any inclusion of social factors in our dispersal model,
+albeit they are known to be important determinants of dispersal (Armansin).
+Studying how climate change influences species distribution and their
+interactions, and ultimately how this alters dispersal, will be challenging but
+necessary to more realistically simulate dispersal.
+
 
 Only recently, it has been discovered that AWDs communicate using shared marking
 sites. The role of such marking sites for dispersing coalitions remains to be
@@ -662,9 +763,18 @@ occasional sightings of uncollared dispersing coalitions. This is especially
 ciritical for species that disperse across borders and beyond confined study
 areas. The African carnivore wildbook offers ...
 
+Although the OD is arguably the main driver of seasonal change across the
+studied ecosystem, there are several other factors that undergoe seasonal
+change, including vegetation and the abundance and distribution of prey or
+predators.
+
 The OD is an important driver of species distribution and it has been found that
 an expanding flood limits available habitat, thus leading to more inter-specific
 competition, particularly between AWDs and lions.
+
+Although validating the predictions resulting from our dispersal model is
+challenging, the simulations enable us to generate several interesting
+hypotheses...
 
 \subsection{Conclusion}
 Our dispersal simulations across two extreme climatic scenarios reveal striking

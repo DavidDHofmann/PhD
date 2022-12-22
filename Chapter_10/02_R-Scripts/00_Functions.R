@@ -874,7 +874,7 @@ splitPoly <- function(x) {
 #' @param x SpatVect Polygon to be split
 #' @param max_area numeric area above which polygon should be split
 #' @return SpatVect Split polygon
-polySplitUntil <- function(x, max_area = NULL) {
+splitPolyUntil <- function(x, max_area = NULL) {
   x$Area <- expanse(x, unit = "km")
   while (any(x$Area > max_area)) {
 
@@ -883,7 +883,7 @@ polySplitUntil <- function(x, max_area = NULL) {
     split <- list()
     for (i in 1:length(x)) {
       if (i %in% index) {
-        split[[i]] <- polySplit(x[i, ])
+        split[[i]] <- splitPoly(x[i, ])
       } else {
         split[[i]] <- x[i, ]
       }
@@ -940,7 +940,7 @@ simHR <- function(
 
   # Split polygons that are too big and remove polygons that are too small
   if (crs(pols) == "") { crs(pols) <- crs(r) }
-  pols      <- polySplitUntil(pols, max_area = max_area)
+  pols      <- splitPolyUntil(pols, max_area = max_area)
   pols      <- pols[pols$Area >= min_area, ]
   pols      <- disagg(pols)
   pols$ID   <- sample(1:length(pols))
@@ -970,4 +970,210 @@ metricsHR <- function(x) {
       , Number   = length(area)
     )
   return(metrics)
+}
+
+################################################################################
+#### Dispersal Simulation Function
+################################################################################
+#' Simulate Dispersal
+#'
+#' Function to simulate dispersal using a step selection function
+#' @export
+#' @param source matrix of start coordinates
+#' @param covars spatial covariates prepared using the custom function
+#' @param model issf model prepared using the custom function
+#' @param sl_dist Step Length Distribution
+#' @param sl_max What is the largest possible step?
+#' @param date Start date
+#' @param n_steps Number of steps simulated
+#' @param n_rsteps Number of random steps proposed
+#' @param scaling Dataframe to scale extracted covariates
+#' @param stop Should the simulation stop at a boundary?
+#' @param x SpatRaster of the home ranges
+#' @return tibble containing the metrics
+disperse <- function(
+    source              = NULL    # Start Coordinates
+  , covars              = NULL    # Spatial Covariates, prepared with our funct.
+  , model               = NULL    # iSSF Model, prepared with our funct.
+  , sl_dist             = NULL    # Step Length Distribution
+  , sl_max              = Inf     # What is the largest possible step?
+  , date                = as.POSIXct("2015-06-15 07:00:00", tz = "UTC")
+  , n_steps             = 10      # Number of steps simulated
+  , n_rsteps            = 25      # Number of random steps proposed
+  , scaling             = NULL    # Dataframe to scale extracted covariates
+  , stop                = F) {    # Should the simulation stop at a boundary?
+
+  # # For testing
+  # source <- cbind(x = c(23), y = c(-19))
+  # covars <- cov$Min
+  # model <- mod
+  # date <- as.POSIXct("2015-06-15 07:00:00", tz = "UTC")
+  # sl_max <- 35000
+  # n_rsteps <- 25
+  # stop <- F
+
+  # Create a new dataframe indicating the first location. Note that we draw
+  # random turning angles to start off
+  track <- data.frame(
+      x           = coordinates(source)[, 1]
+    , y           = coordinates(source)[, 2]
+    , absta_      = runif(1, min = 0, max = 2 * pi) # tentative
+    , ta_         = NA
+    , sl_         = NA
+    , Timestamp   = date
+    , BoundaryHit = FALSE
+    , inactive    = NA
+  )
+
+  # Simulate random steps
+  for (i in 1:n_steps) {
+
+    # Check if the timestamp corresponds to low or high activity
+    inactive <- strftime(date, tz = "UTC", format = "%H:%M:%S")
+    inactive <- ifelse(inactive %in% c("07:00:00"), 1, 0)
+
+    # Draw random turning angles
+    ta_new <- runif(n_rsteps
+      , min = - pi
+      , max = + pi
+    )
+
+    # Draw random step lengths
+    sl_new <- rgamma(n_rsteps
+      , shape = sl_dist$params$shape
+      , scale = sl_dist$params$scale
+    )
+
+    # In case the sl_ should be capped, do so
+    if (sl_max != Inf) {
+      sl_new <- pmin(sl_new, sl_max)
+    }
+
+    # Identify origin of track
+    begincoords <- track[i, c("x", "y")]
+
+    # Calculate new absolute turning angles
+    absta_new <- getAbsNew(
+        absta = track$absta_[i]
+      , ta    = ta_new
+    )
+
+    # Calculate new endpoints
+    endpoints_new <- calcEndpoints(
+        xy    = as.matrix(track[i, c("x", "y")])
+      , absta = absta_new
+      , sl    = sl_new
+    )
+
+    # Check which endpoints leave the study extent
+    inside <- pointsInside(
+        xy     = endpoints_new
+      , extent = covars$extent
+    )
+
+    # In case some steps are not inside the study area and we want the loop to
+    # break
+    if (sum(!inside) > 0 & stop) {
+
+        # Break the loop
+        break
+
+      # In case some steps are not inside the study area and we DONT want the
+      # loop to break
+      } else if (sum(!inside) > 0 & !stop) {
+
+        # Keep only steps inside the study area
+        endpoints_new <- endpoints_new[inside, ]
+        absta_new     <- absta_new[inside]
+        ta_new        <- ta_new[inside]
+        sl_new        <- sl_new[inside]
+
+    }
+
+    # Create spatial lines from origin to new coordinates
+    l <- vector("list", nrow(endpoints_new))
+    for (j in seq_along(l)){
+        l[[j]] <- Lines(
+          list(
+            Line(
+              rbind(
+                  begincoords[1, ]
+                , endpoints_new[j,]
+              )
+            )
+          ), as.character(j)
+        )
+    }
+
+    # Coerce to spatial lines
+    steps <- SpatialLines(l)
+
+    # Extract covariates along each step
+    extracted <- extrCov(covars$covars, steps)
+
+    # Put some nice column names
+    names(extracted) <- covars$covar_names
+
+    # Put everything into a dataframe
+    rand <- data.frame(
+        x           = endpoints_new[, 1]
+      , y           = endpoints_new[, 2]
+      , absta_      = absta_new
+      , ta_         = ta_new
+      , sl_         = sl_new
+      , BoundaryHit = sum(!inside) > 0
+    )
+
+    # Put all covariates into a dataframe. We will use this to calculate
+    # selection scores
+    covariates <- data.frame(
+        extracted
+      , cos_ta_  = cos(ta_new)
+      , log_sl_  = log(sl_new)
+      , sl_      = sl_new
+    )
+
+    # Scale covariates
+    covariates <- scaleCovars(covariates, scaling)
+
+    # Put the activity phase into the covariate table as well
+    covariates$inactive <- inactive
+
+    # Prepare model matrix (and remove intercept)
+    mat <- model.matrix(model$formula, covariates)
+    mat <- mat[ , -1]
+
+    # Calculate selection scores
+    score <- exp(mat %*% model$coefficients)
+
+    # Update date
+    date <- date + hours(4)
+
+    # Note that we assume that no fix exists at 11:00. In this case we add
+    # another 4 hours
+    if(strftime(date, tz = "UTC", format = "%H:%M:%S") == "11:00:00") {
+      date <- date + hours(4)
+    }
+
+    # Coerce selection scores to probabilities
+    Probs <- score / sum(score)
+
+    # Sample a step according to the above predicted probabilities
+    rand <- rand[sample(1:nrow(rand), size = 1, prob = Probs), ]
+
+    # Add updated values to current step
+    track$absta_[i]       <- rand$absta_[1]
+    track$ta_[i]          <- rand$ta_[1]
+    track$sl_[i]          <- rand$sl_[1]
+    track$BoundaryHit[i]  <- rand$BoundaryHit[1]
+    track$inactive[i]     <- inactive
+
+    # Add new endpoints and new (tentative) absolute turning angle to the next
+    # step
+    track[i + 1, "x"]         <- rand$x[1]
+    track[i + 1, "y"]         <- rand$y[1]
+    track[i + 1, "absta_"]    <- rand$absta_[1]
+    track[i + 1, "Timestamp"] <- date
+  }
+  return(track)
 }

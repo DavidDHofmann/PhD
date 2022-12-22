@@ -139,7 +139,7 @@ formula <- quote(meanActX ~
     # + meanCloudCover
     + meanCloudCoverNight
     + maxMoonlightIntensity:meanCloudCoverNight
-    + maxMoonlightIntensity:maxMoonDelay
+    # + maxMoonlightIntensity:maxMoonDelay
     + meanActX6
     # + I(maxPrecipitation ** 2)
     # + I(meanTemperature ** 2)
@@ -221,6 +221,7 @@ formula <- quote(StartMovingNumeric ~
     # + maxPrecipitation
     # + Rain:maxPrecipitation
     + maxTemperature
+    + maxTemperature:maxMoonlightIntensity
     # + I(maxTemperature ** 2)
     # + meanCloudCover
     + meanCloudCoverNight
@@ -296,3 +297,4 @@ coefs %>%
     theme_minimal() +
     scale_color_viridis_d() +
     theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+ggsave("04_Manuscript/99_TimeBecomingActive.png", plot = last_plot(), bg = "white")

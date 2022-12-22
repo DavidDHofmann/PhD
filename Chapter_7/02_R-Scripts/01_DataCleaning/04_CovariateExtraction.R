@@ -116,6 +116,21 @@ if (sum(is.na(act[, layers])) > 0) {
 }
 
 ################################################################################
+#### Moon Angle
+################################################################################
+# Load moonangle data
+moon <- read_csv("03_Data/02_CleanData/MoonAngle.csv")
+moon <- dplyr::select(moon, timestamp, moonPhase, moonAltDegrees)
+
+# Join the data
+act <- left_join(act, moon, by = c("Timestamp" = "timestamp"))
+
+# Ensure that there are no NAs
+if (sum(is.na(act$MoonAngle) | is.na(act$moonPhase)) > 0) {
+  stop("Some of the extracted values are NA...\n")
+}
+
+################################################################################
 #### Moonlight Statistics
 ################################################################################
 # Load moonlight data
@@ -154,6 +169,8 @@ act <- dplyr::select(act, c(
   , DOP
   , State
   , SunAngle
+  , MoonAngle   = moonAltDegrees
+  , MoonPhase   = moonPhase
   , SunsetLast  = sunset_last
   , Sunrise     = sunrise
   , Sunset      = sunset
