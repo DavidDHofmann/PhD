@@ -49,7 +49,7 @@ plotActivityMoon <- function(index) {
       theme_minimal() +
       theme(panel.grid.minor = element_blank()) +
       ylim(c(-90, 90))
-  p2 <- ggplot(subdat, aes(x = Timestamp, y = ActX, col = ToD)) +
+  p2 <- ggplot(subdat, aes(x = Timestamp, y = Act, col = ToD)) +
       geom_point() +
       geom_vline(aes(xintercept = max(Sunset))) +
       geom_vline(aes(xintercept = max(Sunset) - hours(2)), lty = 2) +
@@ -61,7 +61,7 @@ plotActivityMoon <- function(index) {
       scale_color_viridis_d() +
       theme(legend.position = c(0.1, 0.8)) +
       xlab("") +
-      ylim(c(0, 255))
+      ylim(c(0, 510))
   ggarrange(p2, p1, nrow = 2, align = "hv", heights = c(0.8, 0.2))
 }
 
@@ -84,8 +84,8 @@ summarizeDat <- function(data, dogname, collar, state, timestamp_from, timestamp
 
   # Summarize values
   subdat <- summarize(subdat
-    , meanActX               = mean(ActX)
-    , SDActX                 = sd(ActX)
+    , meanAct                = mean(Act)
+    , SDAct                  = sd(Act)
     , Rain                   = ifelse(any(Rain), 1, 0)
     , Season                 = unique(Season)
     , minMoonlightIntensity  = min(minMoonlightIntensity)
@@ -112,9 +112,9 @@ summarizeDat <- function(data, dogname, collar, state, timestamp_from, timestamp
         CollarID  == collar &
         Timestamp >= timestamp_from - hours(i + 2) &
         Timestamp < timestamp_from - hours(2)
-    ) %>% pull(ActX) %>% mean()
+    ) %>% pull(Act) %>% mean()
     subdat <- cbind(subdat, meanAct)
-    names(subdat)[ncol(subdat)] <- paste0("meanActX", i)
+    names(subdat)[ncol(subdat)] <- paste0("meanAct", i)
   }
 
   # Return it
