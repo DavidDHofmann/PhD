@@ -20,6 +20,9 @@ library(pbmcapply)   # To run stuff in parallel
 # Load cleaned activity data (note that the timestamps are all in UTC)
 dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
 
+################################################################################
+#### Consecutive Activity Bouts
+################################################################################
 # Compute some useful time metrics
 dat$Hour <- as_hms(dat$Timestamp)
 
@@ -48,8 +51,12 @@ dat$Data <- pbmclapply(
     return(x)
 })
 
-# Function to assess activity depending on an activity threshold that has to be
-# exceeded for a minimal number of periods
+# Function that determines whether the dogs are moving or resting and returns
+# the time of becoming active. It uses two parameters: "activity", which is the
+# activity threshold. If an activity fix is above this threshold, the animals is
+# said to be active. The second parameter is the "periods" parameter, which
+# tells how many times animals need to be subsequently "active" to become
+# "moving".
 getActivity <- function(data, activity, periods) {
   # data <- dat
   # activity <- 20
@@ -76,6 +83,18 @@ getActivity <- function(data, activity, periods) {
       }
     return(x)
   })
+  return(data)
+}
+
+# Let's write another function that uses the function above, but then returns
+# the first time at which the dogs become active in the evening
+getFirstMovement <- function(data, activity, periods) {
+
+  # Determine phases of activity and inactivity
+  # activity <- 20
+  # periods <- 6
+  # data <- dat
+  data <- getActivity(data, activity, periods)
 
   # Each day, determine time of the day when the dogs became active first
   data$FirstMovement <- pbmclapply(
@@ -97,82 +116,56 @@ getActivity <- function(data, activity, periods) {
   first$ToD <- "Evening"
   names(first)[names(first) == "Timestamp"] <- "StartMoving"
   return(first)
+
 }
 
 # Try it for different values
-design <- expand_grid(activity = c(20, 50, 100), periods = c(4, 6, 8))
+design <- expand_grid(activity = seq(20, 160, 10), periods = c(2:6))
 design$Results <- lapply(1:nrow(design), function(x) {
-  first <- getActivity(dat, activity = design$activity[x], periods = design$periods[x])
+  first <- getFirstMovement(dat, activity = design$activity[x], periods = design$periods[x])
   return(first)
 })
 
-# Unnest and plot
-design %>%
-  unnest(Results) %>%
-  ggplot(aes(x = yday(Date), y = as_hms(StartMoving))) +
-    geom_point(alpha = 0.5) +
-    geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
-    theme_minimal() +
-    facet_wrap(~ activity + periods)
+# # Unnest and plot
+# design %>%
+#   unnest(Results) %>%
+#   ggplot(aes(x = yday(Date), y = as_hms(StartMoving))) +
+#     geom_point(alpha = 0.5) +
+#     geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
+#     theme_minimal() +
+#     facet_wrap(~ activity + periods)
 
 # What is the percentage of fixes where individuals are active before 1400?
-design %>%
+perc <- design %>%
   unnest(Results) %>%
   mutate(Before1400 = hour(StartMoving) < 14) %>%
   group_by(activity, periods) %>%
   count(Before1400) %>%
   pivot_wider(names_from = Before1400, values_from = n) %>%
   setNames(c("activity", "period", "After1400", "Before1400", "NeverActive")) %>%
-  mutate(PercentBefore1400 = Before1400 / sum(Before1400, After1400))
+  mutate(Total = sum(After1400, Before1400, NeverActive)) %>%
+  mutate(
+      After1400 = After1400 / Total
+    , Before1400 = Before1400 / Total
+    , NeverActive = NeverActive / Total
+    , Minimize = Before1400 + NeverActive
+  )
 
-# # We now create a 30 min. moving window to find the time at which time the dogs
-# # start moving. Specifically, the dogs are deemed to start moving once all fixes
-# # inside the moving window are "active". Similarly, the dogs are resting once
-# # all fixes become "inactive"
-# activity <- 20
-# periods  <- 6
-# dat$Data <- pbmclapply(
-#     X                  = dat$Data
-#   , mc.cores           = detectCores() - 1
-#   , ignore.interactive = T
-#   , FUN                = function(x) {
-#     x$Active <- x$ActX > activity
-#     x$Status <- NA
-#     for (i in periods:nrow(x)) {
-#       if (as.numeric(x$Lag[i]) > 5 | is.na(x$Lag[i])) {
-#         x$Status[i] <- NA
-#       } else {
-#         if (all(x$Active[(i - (periods - 1)):i])) {
-#           x$Status[(i - (periods - 1)):i] <-"Moving"
-#         } else if (all(!x$Active[(i - (periods - 1)):i])) {
-#           x$Status[(i - (periods - 1)):i] <- "Resting"
-#         } else {
-#           x$Status[i] <- x$Status[i - 1]
-#         }
-#       }
-#     }
-#   return(x)
-# })
-#
-# # Each day, determine time of the day when the dogs became active first
-# dat$FirstMovement <- pbmclapply(
-#     X                  = dat$Data
-#   , mc.cores           = detectCores() - 1
-#   , ignore.interactive = T
-#   , FUN                = function(x) {
-#   first <- subset(x, Status == "Moving")[1, ]
-#   first <- select(first, Timestamp)
-#   return(first)
-# })
-#
-# # Unnest
-# first <- dat %>%
-#   select(-c(Data, N)) %>%
-#   unnest(FirstMovement)
-#
-# # Generate a column indicating that the timing relates to the evening burst
-# first$ToD <- "Evening"
-# names(first)[names(first) == "Timestamp"] <- "StartMoving"
+# Visualize
+ggplot(perc, aes(x = activity, y = Minimize, col = as.factor(period))) +
+  geom_line() +
+  theme_minimal()
+
+# Find the value both values are minimal
+perc %>% subset(Minimize == min(Minimize))
+
+# Store them to file
+write_csv(perc, "03_Data/03_Results/99_ActiveInactiveSeparation.csv")
+
+# We'll go with 4 periods of over 50
+first <- design[design$activity == 90 & design$periods == 3, ]
+first <- unnest(first, Results)
+first[, c("activity", "periods")] <- NULL
 
 # How does the time of becoming active change throghout the year?
 ggplot(first, aes(x = yday(Date), y = as_hms(StartMoving))) +
@@ -185,27 +178,4 @@ act <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
 act <- left_join(act, first, by = c("DogID", "CollarID", "Date", "State", "ToD"))
 
 # Store combined data to file
-write_csv(act, "03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
-
-################################################################################
-#### CONTINUE HERE
-################################################################################
-# For this, we'll only work with "evening" data
-evening <- subset(act, ToD == "Evening")
-
-# Compute time of the day as regular seconds since midnight
-evening$StartMovingNumeric <- as.numeric(as_hms(evening$StartMoving))
-
-# Nest data by individual and tod
-evening_nested <- evening %>% nest(Data = -c(DogID, ToD))
-
-# Only work with rows for which there are at least 50 datapoints
-evening_nested$N <- sapply(evening_nested$Data, function(x) {nrow(x)})
-evening_nested <- subset(evening_nested, N >= 50)
-print(evening_nested)
-
-# How does the time of becoming active change throghout the year?
-ggplot(evening, aes(x = yday(Date), y = as_hms(StartMoving))) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
-  theme_minimal()
+write_csv(act, "03_Data/02_CleanData/ActivityDataCovariatesAggregatedTime.csv")

@@ -58,7 +58,8 @@ order <- c(
   , "maxMoonlightIntensity"
   , "I(maxMoonlightIntensity^2)"
   , "maxMoonlightIntensity:meanCloudCoverNight"
-  # , "maxMoonlightIntensity:maxMoonDelay"
+  , "maxMoonlightIntensity:maxMoonDelay"
+  , "maxMoonlightIntensity:maxTemperature"
   , "maxTemperature"
   , "meanCloudCoverNight"
   , "meanActX6"
@@ -70,7 +71,8 @@ labels <- c(
   , TeX("$_{max}MoonlightIntensity$")
   , TeX("$_{max}MoonlightIntensity^{0.5}$")
   , TeX("$_{max}MoonlightIntensity$ x $_{mean}CloudCoverNight$")
-  # , TeX("$_{max}MoonlightIntensity$ x $_{max}MoonDelay$")
+  , TeX("$_{max}MoonlightIntensity$ x $_{max}MoonDelay$")
+  , TeX("$_{max}MoonlightIntensity$ x $_{max}Temperature$")
   , TeX("$_{max}Temperature$")
   , TeX("$_{mean}CloudCoverNight$")
   , TeX("$_{mean}Activity_{6 Hours}$")

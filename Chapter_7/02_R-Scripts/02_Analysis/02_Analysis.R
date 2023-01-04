@@ -20,7 +20,7 @@ library(broom)       # To clean model outputs
 source("02_R-Scripts/00_Functions.R")
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat         <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
+dat         <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregatedTime.csv")
 dat$NFixes  <- NULL
 print(names(dat))
 
@@ -135,11 +135,12 @@ formula <- quote(meanActX ~
     # + maxPrecipitation
     # + Rain:maxPrecipitation
     + maxTemperature
+    + maxTemperature:maxMoonlightIntensity
     # + I(maxTemperature ** 2)
     # + meanCloudCover
     + meanCloudCoverNight
     + maxMoonlightIntensity:meanCloudCoverNight
-    # + maxMoonlightIntensity:maxMoonDelay
+    + maxMoonlightIntensity:maxMoonDelay
     + meanActX6
     # + I(maxPrecipitation ** 2)
     # + I(meanTemperature ** 2)
@@ -164,6 +165,13 @@ coefs <- dat_nested %>%
   select(DogID, ToD, ModelCoefficients) %>%
   unnest(ModelCoefficients)
 
+# Plot
+ggplot(coefs, aes(x = estimate, y = term)) +
+  geom_vline(xintercept = 0, lty = 2) +
+  geom_jitter(height = 0.2) +
+  stat_summary(col = "red") +
+  facet_wrap(~ ToD)
+
 # Write this to file
 write_rds(coefs, "03_Data/03_Results/99_MeanActivityModelCoefficients.rds")
 
@@ -172,9 +180,30 @@ write_rds(coefs, "03_Data/03_Results/99_MeanActivityModelCoefficients.rds")
 ################################################################################
 # For this, we'll only work with "evening" data
 evening <- subset(dat, ToD == "Evening")
+evening <- subset(evening, !is.na(StartMoving))
+evening$Day <- yday(evening$Date)
+evening$Day[evening$Day == 366] <- 365
 
-# Compute time of the day as regular seconds since midnight
-evening$StartMovingNumeric <- as.numeric(as_hms(evening$StartMoving))
+# Compute sunset time again so we can compute the "relative" time at which the
+# dogs started to move, relative to the sunset time
+evening$Sunset <- evening$ActivityEnd - hours(2)
+
+# Compute time of the day as regular seconds since midnight and relative to the
+# sunset time
+evening$StartMovingAbsolute <- as.numeric(as_hms(evening$StartMoving) - as_hms("14:00:00"))
+evening$StartMovingRelative <- as.numeric(as_hms(evening$StartMoving) - as_hms(evening$Sunset))
+
+# Let's compute average start of the activity for different moonlight intensities
+thresholds  <- seq(0, max(evening$maxMoonlightIntensity), by = 0.01)
+starttimes <- lapply(thresholds, function(x) {
+  sub <- subset(evening, maxMoonlightIntensity > x)
+  starttime_mean <- mean(sub$StartMovingRelative)
+  starttime_sd   <- sd(sub$StartMovingRelative)
+  return(data.frame(moonlight = x, starttime_mean, starttime_sd))
+}) %>% do.call(rbind, .)
+ggplot(starttimes, aes(x = moonlight, y = starttime_mean, ymax = starttime_mean + starttime_sd, ymin = starttime_mean - starttime_sd)) +
+  geom_point() +
+  theme_minimal()
 
 # Nest data by individual and tod
 evening_nested <- evening %>% nest(Data = -c(DogID, ToD))
@@ -182,39 +211,31 @@ evening_nested <- evening %>% nest(Data = -c(DogID, ToD))
 # Only work with rows for which there are at least 50 datapoints
 evening_nested$N <- sapply(evening_nested$Data, function(x) {nrow(x)})
 evening_nested <- subset(evening_nested, N >= 50)
-print(evening_nested)
-
-# Some exploratory plots. How does the time of activity depend on the moonlight
-# intensity of the upcoming night and the delay of the moon?
-ggplot(evening, aes(x = maxMoonlightIntensity, y = as.numeric(as_hms(StartMoving)), col = maxMoonDelay)) +
-  geom_point(alpha = 0.5) +
-  theme_minimal() +
-  geom_smooth(method = "lm") +
-  scale_color_viridis_c(option = "magma")
-
-# Let's separate between cloudy and clear nights
-evening %>%
-  mutate(Cloudy = meanCloudCoverNight > 0.5) %>%
-  ggplot(aes(x = maxMoonlightIntensity, y = as.numeric(as_hms(StartMoving)), col = Cloudy)) +
-    geom_point(alpha = 0.5) +
-    theme_minimal() +
-    geom_smooth(method = "lm") +
-    scale_color_manual(values = c("orange", "cornflowerblue"))
 
 # How does the time of becoming active change throghout the year?
-ggplot(evening, aes(x = yday(Date), y = as_hms(StartMoving))) +
+ggplot(evening, aes(x = yday(Date), y = StartMovingAbsolute)) +
+  geom_point(alpha = 0.5) +
+  geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
+  theme_minimal()
+ggplot(evening, aes(x = yday(Date), y = StartMovingRelative)) +
   geom_point(alpha = 0.5) +
   geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
   theme_minimal()
 
-# In some cases the dogs were already moving at 12:00. What if we ignore those?
-ggplot(subset(evening, as_hms(StartMoving) > as_hms("14:00:00")), aes(x = yday(Date), y = as_hms(StartMoving))) +
-  geom_point(alpha = 0.5) +
-  geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
-  theme_minimal()
+# # In some cases the dogs were already moving at 12:00. What if we ignore those?
+# ggplot(subset(evening, as_hms(StartMoving) > as_hms("14:00:00")), aes(x = yday(Date), y = StartMovingAbsolute)) +
+#   geom_point(alpha = 0.5) +
+#   geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
+#   theme_minimal()
+#
+# # In some cases the dogs were already moving at 12:00. What if we ignore those?
+# ggplot(subset(evening, as_hms(StartMoving) > as_hms("14:00:00")), aes(x = yday(Date), y = StartMovingRelative)) +
+#   geom_point(alpha = 0.5) +
+#   geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
+#   theme_minimal()
 
 # Decide on a model formula
-formula <- quote(StartMovingNumeric ~
+formula <- quote(StartMovingRelative ~
     + maxMoonlightIntensity
     + I(maxMoonlightIntensity ** 2)
     # + Rain
@@ -224,10 +245,12 @@ formula <- quote(StartMovingNumeric ~
     + maxTemperature:maxMoonlightIntensity
     # + I(maxTemperature ** 2)
     # + meanCloudCover
-    + meanCloudCoverNight
-    + maxMoonlightIntensity:meanCloudCoverNight
+    # + meanCloudCoverNight
+    # + maxMoonlightIntensity:meanCloudCoverNight
     + maxMoonlightIntensity:maxMoonDelay
     + meanActX12
+    + sin(2 * pi / 365 * Day)
+    + cos(2 * pi / 365 * Day)
     # + I(maxPrecipitation ** 2)
     # + I(meanTemperature ** 2)
 )
@@ -247,54 +270,58 @@ coefs <- evening_nested %>%
   select(DogID, ToD, ModelCoefficients) %>%
   unnest(ModelCoefficients)
 
-# Compute weight for each coefficient
-coefs_means_weighted <- coefs %>%
-  nest(Coefs = -c(ToD, term)) %>%
-  mutate(Coefs = map(Coefs, function(x) {
-    be <- x$estimate
-    se <- x$std.error
-    we <- (1 / (se ** 2)) / sum(1 / (se ** 2))
-    be_mean <- sum(we * be)
-    se_mean <- sqrt(sum(we * (be - be_mean) ** 2) / (length(be) - 1))
-    result <- tibble(
-        estimate  = be_mean
-      , std.error = se_mean
-      , LWR       = estimate - 1.96 * std.error
-      , UPR       = estimate + 1.96 * std.error
-    )
-    return(result)
-  })) %>% unnest(Coefs)
+# Write this to file
+write_rds(coefs, "03_Data/03_Results/99_StartActivityModelCoefficients.rds")
 
-# Compute mean and se of the model estimates (unweighted)
-coefs_means_unweighted <- coefs %>%
-  group_by(ToD, term) %>%
-  summarize(
-      estimate_mean = mean(estimate)
-    , estimate_sd   = sd(estimate) / sqrt(n())
-    , LWR           = estimate_mean - qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
-    , UPR           = estimate_mean + qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
-    , .groups       = "drop"
-  )
-
-# Visualize
-coefs %>%
-  ggplot(aes(x = term, y = estimate, col = DogID)) +
-    geom_hline(yintercept = 0, lty = 2) +
-    geom_jitter(width = 0.1, alpha = 0.8) +
-    geom_point(
-        data        = coefs_means_unweighted
-      , mapping     = aes(x = term, y = estimate_mean)
-      , inherit.aes = F
-      , size        = 2
-    ) +
-    geom_errorbar(
-        data        = coefs_means_unweighted
-      , mapping     = aes(x = term, ymin = LWR, ymax = UPR)
-      , inherit.aes = F
-      , width       = 0.2
-      , lwd         = 1
-    ) +
-    theme_minimal() +
-    scale_color_viridis_d() +
-    theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
-ggsave("04_Manuscript/99_TimeBecomingActive.png", plot = last_plot(), bg = "white")
+# # Compute weight for each coefficient
+# coefs_means_weighted <- coefs %>%
+#   nest(Coefs = -c(ToD, term)) %>%
+#   mutate(Coefs = map(Coefs, function(x) {
+#     be <- x$estimate
+#     se <- x$std.error
+#     we <- (1 / (se ** 2)) / sum(1 / (se ** 2))
+#     be_mean <- sum(we * be)
+#     se_mean <- sqrt(sum(we * (be - be_mean) ** 2) / (length(be) - 1))
+#     result <- tibble(
+#         estimate  = be_mean
+#       , std.error = se_mean
+#       , LWR       = estimate - 1.96 * std.error
+#       , UPR       = estimate + 1.96 * std.error
+#     )
+#     return(result)
+#   })) %>% unnest(Coefs)
+#
+# # Compute mean and se of the model estimates (unweighted)
+# coefs_means_unweighted <- coefs %>%
+#   group_by(ToD, term) %>%
+#   summarize(
+#       estimate_mean = mean(estimate)
+#     , estimate_sd   = sd(estimate) / sqrt(n())
+#     , LWR           = estimate_mean - qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
+#     , UPR           = estimate_mean + qt(1 - 0.05 / 2, n() - 1) * estimate_sd  # UNWEIGHTED: TAKE A LOOK AT MURTAUGH AGAIN
+#     , .groups       = "drop"
+#   )
+#
+# # Visualize
+# coefs %>%
+#   ggplot(aes(x = term, y = estimate, col = DogID)) +
+#     geom_hline(yintercept = 0, lty = 2) +
+#     geom_jitter(width = 0.1, alpha = 0.8) +
+#     geom_point(
+#         data        = coefs_means_unweighted
+#       , mapping     = aes(x = term, y = estimate_mean)
+#       , inherit.aes = F
+#       , size        = 2
+#     ) +
+#     geom_errorbar(
+#         data        = coefs_means_unweighted
+#       , mapping     = aes(x = term, ymin = LWR, ymax = UPR)
+#       , inherit.aes = F
+#       , width       = 0.2
+#       , lwd         = 1
+#     ) +
+#     theme_minimal() +
+#     scale_color_viridis_d() +
+#     theme(legend.position = "none", axis.text.x = element_text(angle = 45, hjust = 1))
+#
+# ggsave("04_Manuscript/99_TimeBecomingActive.png", plot = last_plot(), bg = "white")

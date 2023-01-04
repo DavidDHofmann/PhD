@@ -17,6 +17,7 @@ library(terra)       # To handle spatial data
 library(tidyverse)   # For data wrangling
 library(pbmcapply)   # For multicore abilities with progress bar
 library(lubridate)   # To handle timestamps
+library(runner)      # To have a moving window
 
 # Load activity data
 act <- read_csv("03_Data/02_CleanData/ActivityData.csv")
@@ -153,13 +154,51 @@ act <- mutate(act, DateToMatch = if_else(hour(Timestamp) >= 12
 act <- left_join(act, moon, by = c("DateToMatch" = "date"))
 
 ################################################################################
+#### Activity Metrics
+################################################################################
+# Combine the x and y axis into a single activity metric
+act$Act <- act$ActX + act$ActY
+
+# Function to apply a moving window to the data
+windowActivity <- function(x, timestamps, window_size = "60_mins") {
+  x_coarse <- runner(x
+    , k   = window_size
+    , idx = timestamps
+    , f   = function(x) {mean(x)}
+  )
+  return(x_coarse)
+}
+
+# Loop through the individuals and compute activity within moving windows
+act_nested <- act %>% nest(Data = -DogID)
+act_nested$Data <- pbmclapply(
+    X                  = act_nested$Data
+  , mc.cores           = detectCores() - 1
+  , ignore.interactive = T
+  , FUN                = function(x) {
+  x <- arrange(x, Timestamp)
+  x$Act15 <- windowActivity(x$Act, x$Timestamp, window_size = "15 mins")
+  x$Act30 <- windowActivity(x$Act, x$Timestamp, window_size = "30 mins")
+  x$Act45 <- windowActivity(x$Act, x$Timestamp, window_size = "45 mins")
+  x$Act60 <- windowActivity(x$Act, x$Timestamp, window_size = "60 mins")
+  return(x)
+})
+
+# Unnest again
+act <- unnest(act_nested, Data)
+
+################################################################################
 #### Reorder and Store
 ################################################################################
 # Reorder the columns slightly
 act <- dplyr::select(act, c(
     DogID
   , CollarID
-  , ActX
+  , Act
+  , Act15
+  , Act30
+  , Act45
+  , Act60
   , Date
   , TimestampRounded
   , Timestamp
@@ -208,39 +247,3 @@ act$Rain <- act$Precipitation > 0
 
 # Store the final data to file
 write_csv(act, "03_Data/02_CleanData/ActivityDataCovariates.csv")
-
-# ################################################################################
-# #### Covariate Extraction of Moonlight Statistics
-# ################################################################################
-# # Load nighttime data
-# night <- read_csv("03_Data/02_CleanData/Moonlight.csv")
-#
-# # Assign an ID to each unique pixel (i.e. combination of xy values)
-# night <- night %>%
-#   rename(x = lon, y = lat) %>%
-#   nest(Data = -c(x, y)) %>%
-#   mutate(PixelID = 1:nrow(.))
-#
-# # Prepare a corresponding raster
-# r <- rast(raster::rasterFromXYZ(night[, c("x", "y", "PixelID")]))
-# crs(r) <- "epsg:4326"
-#
-# # Unnest the nightly statistics again
-# night <- unnest(night, Data)
-# night$x <- NULL
-# night$y <- NULL
-#
-# # For each activity fix, identify into which pixel of the raster it falls
-# act$CovariatePixelID <- terra::extract(x = r, y = cbind(act$x, act$y))[, 1]
-#
-# # Specify which date we want to match. Before 12:00, we match the day before,
-# # after 12, the day after
-# act <- mutate(act, DateToMatch = if_else(hour(Timestamp) >= 12
-#   , Date
-#   , Date - days(1))
-# )
-#
-# # Join the nightly statistics respectively
-# act <- left_join(act, night
-#   , by = c("DateToMatch" = "date", "CovariatePixelID" = "PixelID")
-# )
