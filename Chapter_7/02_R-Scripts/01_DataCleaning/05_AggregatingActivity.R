@@ -61,7 +61,7 @@ plotActivityMoon <- function(index) {
       scale_color_viridis_d() +
       theme(legend.position = c(0.1, 0.8)) +
       xlab("") +
-      ylim(c(0, 510))
+      ylim(c(0, 255))
   ggarrange(p2, p1, nrow = 2, align = "hv", heights = c(0.8, 0.2))
 }
 

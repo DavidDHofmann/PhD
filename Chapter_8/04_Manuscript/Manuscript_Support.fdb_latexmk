@@ -1,12 +1,12 @@
 # Fdb version 3
-["bibtex Manuscript_Support"] 1666692835 "Manuscript_Support.aux" "Manuscript_Support.bbl" "Manuscript_Support" 1666692836
+["bibtex Manuscript_Support"] 1672920564 "Manuscript_Support.aux" "Manuscript_Support.bbl" "Manuscript_Support" 1672920565
   "/usr/share/texlive/texmf-dist/bibtex/bst/base/apalike.bst" 1292289607 24635 604dafcc79f521a11ea73e506e1fbd98 ""
   "Literatur.bib" 1663229418 99151 f17ec265fb0c973f8ee0acc2b98a7576 ""
-  "Manuscript_Support.aux" 1666692836 2211 1377042105d9107bfbdd86145b28703a "pdflatex"
+  "Manuscript_Support.aux" 1672920564 2997 82bf4131c9aa89e6a1591ee8283b4c99 "pdflatex"
   (generated)
   "Manuscript_Support.bbl"
   "Manuscript_Support.blg"
-["pdflatex"] 1666692835 "Manuscript_Support.tex" "Manuscript_Support.pdf" "Manuscript_Support" 1666692836
+["pdflatex"] 1672920564 "Manuscript_Support.tex" "Manuscript_Support.pdf" "Manuscript_Support" 1672920565
   "/etc/texmf/web2c/texmf.cnf" 1609582976 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/jknappen/ec/tcrm0700.tfm" 1136768653 1536 73da8e8f1d2a4c957d51ca133585586b ""
@@ -202,16 +202,18 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1581979058 38841 ce3692aa899bb693b90b87eaa5d4d84e ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1609583022 4770781 1ed1abab22da9c3e2cc82e4db562318b ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1609583054 8256056 624d873ce5d20fc6fe7598a49bd55340 ""
-  "99_BetweennessIndividual.png" 1663140647 2551922 bec57866e9f150e1c2d78418b494cf0a ""
-  "99_HeatmapsIndividual.png" 1663139677 4248116 731a556235d1f5c53eb8c3ce75a9a999 ""
+  "99_BetweennessDifference.png" 1672920099 393845 8bfc4995cb434419a71777dd166b049a ""
+  "99_BetweennessIndividual.png" 1672920067 2356457 c57da68e25a58485ec2ff79c60662f94 ""
+  "99_HeatmapsDifference.png" 1672920403 748213 b5c499e6c0875271098ca5d9c5d99660 ""
+  "99_HeatmapsIndividual.png" 1672920316 4069198 da2a1a7c472bec854f479f588b1d10ac ""
   "99_IPCBuffer.png" 1663226284 1287809 eef9bcfd4932c726a1e85c4f46bc0147 ""
   "99_IPCMain.png" 1663226203 1261677 2b826f73910f4db250f987e1916d3e84 ""
-  "Manuscript_Support.aux" 1666692836 2211 1377042105d9107bfbdd86145b28703a "pdflatex"
-  "Manuscript_Support.bbl" 1666692835 74 536db186668197cddf7baf7f1a230574 "bibtex Manuscript_Support"
-  "Manuscript_Support.out" 1666692836 199 bd1d085416aa90572da596d92666ac71 "pdflatex"
-  "Manuscript_Support.tex" 1666692827 6099 33635baec4ac60f8636a49d251ca4db1 ""
+  "Manuscript_Support.aux" 1672920564 2997 82bf4131c9aa89e6a1591ee8283b4c99 "pdflatex"
+  "Manuscript_Support.bbl" 1672920564 74 536db186668197cddf7baf7f1a230574 "bibtex Manuscript_Support"
+  "Manuscript_Support.out" 1672920564 311 e2ecd8e4b739bcf93fa4d27c25939ff6 "pdflatex"
+  "Manuscript_Support.tex" 1672920561 6943 07405615f915ffa50392ee179318891c ""
   (generated)
+  "Manuscript_Support.aux"
+  "Manuscript_Support.out"
   "Manuscript_Support.log"
   "Manuscript_Support.pdf"
-  "Manuscript_Support.out"
-  "Manuscript_Support.aux"

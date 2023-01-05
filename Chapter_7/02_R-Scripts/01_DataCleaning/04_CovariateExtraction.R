@@ -157,7 +157,7 @@ act <- left_join(act, moon, by = c("DateToMatch" = "date"))
 #### Activity Metrics
 ################################################################################
 # Combine the x and y axis into a single activity metric
-act$Act <- act$ActX + act$ActY
+act$Act <- (act$ActX + act$ActY) / 2
 
 # Function to apply a moving window to the data
 windowActivity <- function(x, timestamps, window_size = "60_mins") {

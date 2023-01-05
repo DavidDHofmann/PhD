@@ -86,3 +86,10 @@
 \end{figure}
 \efloatseparator
  
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Distance.png}
+  \caption{Caption}
+  \label{Distance}
+  \end{center}
+\end{figure}

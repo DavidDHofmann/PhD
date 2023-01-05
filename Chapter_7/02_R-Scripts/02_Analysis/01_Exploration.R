@@ -19,16 +19,9 @@ library(broom)       # To clean model summary
 library(ggpubr)      # To arrange multiple plots
 
 # Reload cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
-print(names(dat))
-
-# How many datapoints for residents and dispersers are there?
-table(dat$State)
-prop.table(table(dat$State)) * 100
-
-# For now, only look at residents
-dat <- subset(dat, State != "Disperser")
-gc()
+dat <- read_rds("03_Data/02_CleanData/ActivityDataCovariatesStates.rds")
+dat <- select(dat, -ModelParams)
+dat <- unnest(dat, Data)
 
 # Get a feeling of the data
 dim(dat)
@@ -64,16 +57,16 @@ dat %>%
 dat %>%
   group_by(DogID) %>%
   summarize(
-      MeanActX   = mean(ActX)
-    , SDActX     = sd(ActX)
-    , MedianActX = median(ActX)
-    , IQRActX    = IQR(ActX)
+      MeanAct   = mean(Act)
+    , SDAct     = sd(Act)
+    , MedianAct = median(Act)
+    , IQRAct    = IQR(Act)
   )
 
 # Aggregate activity by day and see if there are differences between the dogs
 dat %>%
   group_by(DogID, Date) %>%
-  summarize(AverageDailyActivity = mean(ActX), n = n(), .groups = "drop") %>%
+  summarize(AverageDailyActivity = mean(Act), n = n(), .groups = "drop") %>%
   subset(n > 250) %>%
   ggplot(aes(x = DogID, y = AverageDailyActivity, fill = DogID, col = DogID)) +
     geom_boxplot(alpha = 0.3) +
@@ -87,7 +80,7 @@ dat %>%
   subset(DogID %in% c("Abel", "Amacuro", "Aramis", "Aspen", "Atwood")) %>%
   mutate(Month = month(Timestamp), Hour = hour(Timestamp)) %>%
   group_by(Month, Hour, DogID) %>%
-  summarize(MeanHourlyAct = mean(ActX), .groups = "drop") %>%
+  summarize(MeanHourlyAct = mean(Act), .groups = "drop") %>%
   ggplot(aes(x = Hour, y = MeanHourlyAct, col = as.factor(Month))) +
     geom_line(alpha = 0.75) +
     facet_wrap(~DogID, ncol = 1) +
@@ -102,7 +95,7 @@ dat <- select(dat, -c(DOP, minMoonPhase, meanMoonPhase, maxMoonPhase))
 # ggplot as it takes way too long)
 par(mfrow = c(3, 3), mar = c(5, 5, 1, 1))
 with(dat, expr = {
-  hist(ActX, col = "cornflowerblue", border = "white", main = "")
+  hist(Act, col = "cornflowerblue", border = "white", main = "")
   hist(minMoonlightIntensity, col = "cornflowerblue", border = "white", main = "")
   hist(meanMoonlightIntensity, col = "cornflowerblue", border = "white", main = "")
   hist(maxMoonlightIntensity, col = "cornflowerblue", border = "white", main = "")
@@ -117,8 +110,8 @@ with(dat, expr = {
 ################################################################################
 #### Active vs Inactive
 ################################################################################
-# We deem an animal active whenever its activity is above 20
-dat$Active <- dat$ActX > 20
+# We deem an animal active whenever its activity is above 40
+dat$Active <- dat$Act > 40
 
 # How many points during activity and inactivity?
 table(dat$Active)
@@ -165,28 +158,28 @@ dat %>%
 # How does activity change during different times of the day?
 dat %>%
   group_by(Hour) %>%
-  summarize(MeanActX = mean(ActX), MedianActX = median(ActX)) %>%
-  pivot_longer(MeanActX:MedianActX, names_to = "Metric", values_to = "Value") %>%
+  summarize(MeanAct = mean(Act), MedianAct = median(Act)) %>%
+  pivot_longer(MeanAct:MedianAct, names_to = "Metric", values_to = "Value") %>%
   ggplot(aes(x = Hour, y = Value, fill = as.factor(Metric))) +
     geom_col(position = position_dodge()) +
     theme_minimal() +
     scale_fill_manual(values = c("cornflowerblue", "orange"), name = "Metric")
 
 # Plot activity against moonlight intensity
-ggplot(dat, aes(x = Time, y = maxMoonlightIntensity, z = ActX)) +
+ggplot(dat, aes(x = Time, y = maxMoonlightIntensity, z = Act)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(option = "magma", name = "Activity") +
   theme_minimal()
 
 # Plot activity against date
-ggplot(dat, aes(x = Time, y = Date, z = ActX)) +
+ggplot(dat, aes(x = Time, y = Date, z = Act)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(option = "magma", name = "Activity") +
   theme_minimal() +
   scale_y_date(date_breaks = "3 months")
 
 # Plot activity against month, regardless of the year
-ggplot(dat, aes(x = Time, y = yday(Timestamp), z = ActX)) +
+ggplot(dat, aes(x = Time, y = yday(Timestamp), z = Act)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(option = "magma", name = "Activity") +
   theme_minimal()
@@ -196,12 +189,12 @@ ggplot(dat, aes(x = Time, y = yday(Timestamp), z = ActX)) +
 means_hour <- dat %>%
   group_by(Time) %>%
   summarize(
-      Mean    = mean(ActX)
-    , SD      = sd(ActX)
-    # , LWR     = mean(ActX) - qt(1 - 0.05 / 2, (n() - 1)) * sd(ActX) / sqrt(n())
-    # , UPR     = mean(ActX) + qt(1 - 0.05 / 2, (n() - 1)) * sd(ActX) / sqrt(n())
-    # , LWR     = quantile(ActX, 0.025)
-    # , UPR     = quantile(ActX, 0.975)
+      Mean    = mean(Act)
+    , SD      = sd(Act)
+    # , LWR     = mean(Act) - qt(1 - 0.05 / 2, (n() - 1)) * sd(Act) / sqrt(n())
+    # , UPR     = mean(Act) + qt(1 - 0.05 / 2, (n() - 1)) * sd(Act) / sqrt(n())
+    # , LWR     = quantile(Act, 0.025)
+    # , UPR     = quantile(Act, 0.975)
     , .groups = "drop"
   ) %>%
   ungroup()
@@ -248,8 +241,8 @@ ggplot(means_hour, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD)) 
 means_month <- dat %>%
   group_by(Month, Time) %>%
   summarize(
-      Mean    = mean(ActX)
-    , SD      = sd(ActX)
+      Mean    = mean(Act)
+    , SD      = sd(Act)
     , .groups = "drop"
   ) %>%
   ungroup()
@@ -280,8 +273,8 @@ ggplot(means_month, aes(x = Time, y = Mean, ymin = Mean - SD, ymax = Mean + SD))
 means_year <- dat %>%
   group_by(Year, Time) %>%
   summarize(
-      Mean    = mean(ActX)
-    , SD      = sd(ActX)
+      Mean    = mean(Act)
+    , SD      = sd(Act)
     , .groups = "drop"
   ) %>%
   ungroup()
@@ -328,11 +321,11 @@ sort(unique(dat[dat$ActivityPhase == "Ignore", ]$Hour))
 dat_byphase <- subset(dat, ActivityPhase != "Ignore") %>%
   group_by(DogID, CollarID, Date, ActivityPhase) %>%
   summarize(
-      meanActivity           = mean(ActX)
-    , medianActivity         = median(ActX)
-    , totalActivity          = sum(ActX)
-    , maxActivity            = max(ActX)
-    , minActivity            = min(ActX)
+      meanActivity           = mean(Act)
+    , medianActivity         = median(Act)
+    , totalActivity          = sum(Act)
+    , maxActivity            = max(Act)
+    , minActivity            = min(Act)
     , minMoonlightIntensity  = min(minMoonlightIntensity)
     , meanMoonlightIntensity = mean(meanMoonlightIntensity)
     , maxMoonlightIntensity  = max(maxMoonlightIntensity)
@@ -422,8 +415,8 @@ means <- dat %>%
   subset(NightIllumination != "Ignore") %>%
   group_by(Time, NightIllumination) %>%
   summarize(
-      Mean    = mean(ActX)
-    , SD      = sd(ActX)
+      Mean    = mean(Act)
+    , SD      = sd(Act)
     , .groups = "drop"
   ) %>%
   ungroup()

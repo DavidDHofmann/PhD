@@ -1,10 +1,38 @@
 \begin{thebibliography}{}
 
+\bibitem[Adriaensen et~al., 2003]{Adriaensen.2003}
+Adriaensen, F., Chardon, J., De~Blust, G., Swinnen, E., Villalba, S., Gulinck,
+  H., and Matthysen, E. (2003).
+\newblock The {{Application}} of `{{Least-Cost}}' {{Modelling}} as a
+  {{Functional Landscape Model}}.
+\newblock {\em Landscape and Urban Planning}, 64(4):233--247.
+
 \bibitem[Akinyemi, 2019]{Akinyemi.2019}
 Akinyemi, F.~O. (2019).
 \newblock Potential {{Impacts}} of {{Global Warming Levels}} 1.5 {{C}} and
   {{Above}} on {{Climate Extremes}} in {{Botswana}}.
 \newblock {\em Climatic Change}, page~14.
+
+\bibitem[Allen et~al., 2016]{Allen.2016}
+Allen, C.~H., Parrott, L., and Kyle, C. (2016).
+\newblock An {{Individual-Based Modelling Approach}} to {{Estimate Landscape
+  Connectivity}} for {{Bighorn Sheep}} ({\emph{ovis
+  }}{{{\emph{Canadensis}}}}{\emph{)}}.
+\newblock {\em PeerJ}, 4:e2001.
+
+\bibitem[Anderson et~al., 2012]{Anderson.2012}
+Anderson, A.~S., Reside, A.~E., VanDerWal, J.~J., Shoo, L.~P., Pearson, R.~G.,
+  and Williams, S.~E. (2012).
+\newblock Immigrants and refugees: The importance of dispersal in mediating
+  biotic attrition under climate change.
+\newblock {\em Global Change Biology}, 18(7):2126--2134.
+
+\bibitem[Ashrafzadeh et~al., 2019]{Ashrafzadeh.2019}
+Ashrafzadeh, M.~R., Naghipour, A.~A., Haidarian, M., Kusza, S., and Pilliod,
+  D.~S. (2019).
+\newblock Effects of climate change on habitat and connectivity for populations
+  of a vulnerable, endemic salamander in {{Iran}}.
+\newblock {\em Global Ecology and Conservation}, 19:e00637.
 
 \bibitem[Avgar et~al., 2017]{Avgar.2017}
 Avgar, T., Lele, S.~R., Keim, J.~L., and Boyce, M.~S. (2017).
@@ -17,6 +45,12 @@ Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
 \newblock Integrated {{Step Selection Analysis}}: {{Bridging}} the {{Gap
   Between Resource Selection}} and {{Animal Movement}}.
 \newblock {\em Methods in Ecology and Evolution}, 7(5):619--630.
+
+\bibitem[Baddeley et~al., 2015]{Baddeley.2015}
+Baddeley, A., Rubak, E., and Turner, R. (2015).
+\newblock {\em Spatial Point Patterns: {{Methodology}} and Applications with
+  {{R}}}.
+\newblock {Chapman and Hall/CRC Press}, {London}.
 
 \bibitem[Baguette et~al., 2013]{Baguette.2013}
 Baguette, M., Blanchet, S., Legrand, D., Stevens, V.~M., and Turlure, C.
@@ -44,11 +78,47 @@ Behr, D.~M. (2020).
   African Wild Dog}} ({{Lycaon}} pictus).
 \newblock page~14.
 
+\bibitem[Benz et~al., 2016]{Benz.2016}
+Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
+  C.~F., and Ciuti, S. (2016).
+\newblock Dispersal {{Ecology Informs Design}} of {{Large-Scale Wildlife
+  Corridors}}.
+\newblock {\em PLoS ONE}, 11(9):e0162989.
+
+\bibitem[Boyce et~al., 2002]{Boyce.2002}
+Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F.~K. (2002).
+\newblock Evaluating {{Resource Selection Functions}}.
+\newblock {\em Ecological Modelling}, 157(2-3):281--300.
+
+\bibitem[Brennan et~al., 2020]{Brennan.2020}
+Brennan, A., Beytell, P., Aschenborn, O., Du~Preez, P., Funston, P., Hanssen,
+  L., Kilian, J., Stuart-Hill, G., Taylor, R., and Naidoo, R. (2020).
+\newblock Characterizing {{Multispecies Connectivity Across}} a {{Transfrontier
+  Conservation Landscape}}.
+\newblock {\em Journal of Applied Ecology}, 57:1700--1710.
+
+\bibitem[Briatte, 2021]{Briatte.2021}
+Briatte, F. (2021).
+\newblock {\em Ggnetwork: {{Geometries}} to {{Plot Networks}} with 'Ggplot2'}.
+
 \bibitem[Brown and {Kodric-Brown}, 1977]{Brown.1977}
 Brown, J.~H. and {Kodric-Brown}, A. (1977).
 \newblock Turnover {{Rates}} in {{Insular Biogeography}}: {{Effect}} of
   {{Immigration}} on {{Extinction}}.
 \newblock {\em Ecology}, 58(2):445--449.
+
+\bibitem[Chetkiewicz and Boyce, 2009]{Chetkiewicz.2009}
+Chetkiewicz, C.-L.~B. and Boyce, M.~S. (2009).
+\newblock Use of {{Resource Selection Functions}} to {{Identify Conservation
+  Corridors}}.
+\newblock {\em Journal of Applied Ecology}, 46(5):1036--1047.
+
+\bibitem[Chetkiewicz et~al., 2006]{Chetkiewicz.2006}
+Chetkiewicz, C.-L.~B., St.~Clair, C.~C., and Boyce, M.~S. (2006).
+\newblock Corridors for {{Conservation}}: {{Integrating Pattern}} and
+  {{Process}}.
+\newblock {\em Annual Review of Ecology, Evolution, and Systematics},
+  37(1):317--342.
 
 \bibitem[Clobert et~al., 2012]{Clobert.2012}
 Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
@@ -62,6 +132,17 @@ Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
   {{Management}}.
 \newblock {\em The Journal of Wildlife Management}, pages 614--621.
 
+\bibitem[Csardi and Nepusz, 2006]{Csardi.2006}
+Csardi, G. and Nepusz, T. (2006).
+\newblock The igraph software package for complex network research.
+\newblock {\em InterJournal}, Complex Systems:1695.
+
+\bibitem[Cushman and Lewis, 2010]{Cushman.2010}
+Cushman, S.~A. and Lewis, J.~S. (2010).
+\newblock Movement {{Behavior Explains Genetic Differentiation}} in {{American
+  Black Bears}}.
+\newblock {\em Landscape Ecology}, 25(10):1613--1625.
+
 \bibitem[{Davies{\textendash}Mostert} et~al., 2012]{Davies-Mostert.2012}
 {Davies{\textendash}Mostert}, H.~T., Kamler, J.~F., Mills, M. G.~L., Jackson,
   C.~R., Rasmussen, G. S.~A., Groom, R.~J., and Macdonald, D.~W. (2012).
@@ -69,12 +150,48 @@ Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
   Dogs Among Protected Areas}} in {{Southern Africa}}.
 \newblock {\em African Journal of Ecology}, 50(4):500--506.
 
-\bibitem[Engelbrecht et~al., 2015]{Engelbrecht.2015}
-Engelbrecht, F., Adegoke, J., Bopape, M.-J., Naidoo, M., Garland, R., Thatcher,
-  M., McGregor, J., Katzfey, J., Werner, M., Ichoku, C., and Gatebe, C. (2015).
-\newblock Projections of rapidly rising surface temperatures over {{Africa}}
-  under low mitigation.
-\newblock {\em Environmental Research Letters}, 10(8):085004.
+\bibitem[Diniz et~al., 2019]{Diniz.2019}
+Diniz, M.~F., Cushman, S.~A., Machado, R.~B., and De~Marco~J{\'u}nior, P.
+  (2019).
+\newblock Landscape {{Connectivity Modeling}} from the {{Perspective}} of
+  {{Animal Dispersal}}.
+\newblock {\em Landscape Ecology}, 35:41--58.
+
+\bibitem[Doerr et~al., 2011]{Doerr.2011}
+Doerr, V. A.~J., Barrett, T., and Doerr, E.~D. (2011).
+\newblock Connectivity, {{Dispersal Behaviour}} and {{Conservation Under
+  Climate Change}}: {{A Response}} to {{Hodgson Et Al}}.: {{Connectivity}} and
+  {{Dispersal Behaviour}}.
+\newblock {\em Journal of Applied Ecology}, 48(1):143--147.
+
+\bibitem[Durant et~al., 2007]{Durant.2007}
+Durant, J., Hjermann, D., Ottersen, G., and Stenseth, N. (2007).
+\newblock Climate and the {{Match}} or {{Mismatch Between Predator
+  Requirements}} and {{Resource Availability}}.
+\newblock {\em Climate Research}, 33:271--283.
+
+\bibitem[Eddelbuettel and Fran{\c c}ois, 2011]{Eddelbuettel.2011}
+Eddelbuettel, D. and Fran{\c c}ois, R. (2011).
+\newblock Rcpp: {{Seamless R}} and {{C}}++ integration.
+\newblock {\em Journal of Statistical Software}, 40(8):1--18.
+
+\bibitem[Elliot et~al., 2014]{Elliot.2014}
+Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
+\newblock The {{Devil Is}} in the {{Dispersers}}: {{Predictions}} of
+  {{Landscape Connectivity Change}} with {{Demography}}.
+\newblock {\em Journal of Applied Ecology}, 51(5):1169--1178.
+
+\bibitem[Etherington, 2016]{Etherington.2016}
+Etherington, T.~R. (2016).
+\newblock Least-{{Cost Modelling}} and {{Landscape Ecology}}: {{Concepts}},
+  {{Applications}}, and {{Opportunities}}.
+\newblock {\em Current Landscape Ecology Reports}, 1(1):40--53.
+
+\bibitem[Fahrig, 2003]{Fahrig.2003}
+Fahrig, L. (2003).
+\newblock Effects of {{Habitat Fragmentation}} on {{Biodiversity}}.
+\newblock {\em Annual Review of Ecology, Evolution, and Systematics},
+  34(1):487--515.
 
 \bibitem[Fieberg et~al., 2021]{Fieberg.2021}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
@@ -89,10 +206,24 @@ Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
   Cascade}} in {{Yellowstone National Park}}.
 \newblock {\em Ecology}, 86(5):1320--1330.
 
+\bibitem[Fortin et~al., 2009]{Fortin.2009}
+Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
+  Dancose, K. (2009).
+\newblock Group-{{Size-Mediated Habitat Selection}} and {{Group
+  Fusion}}\textendash{{Fission Dynamics}} of {{Bison Under Predation Risk}}.
+\newblock {\em Ecology}, 90(9):2480--2490.
+
 \bibitem[Frankham et~al., 2002]{Frankham.2002}
 Frankham, R., Briscoe, D.~A., and Ballou, J.~D. (2002).
 \newblock {\em Introduction to {{Conservation Genetics}}}.
 \newblock {Cambridge university press}.
+
+\bibitem[Fuller et~al., 2016]{Fuller.2016}
+Fuller, A., Mitchell, D., Maloney, S.~K., and Hetem, R.~S. (2016).
+\newblock Towards a {{Mechanistic Understanding}} of the {{Responses}} of
+  {{Large Terrestrial Mammals}} to {{Heat}} and {{Aridity Associated}} with
+  {{Climate Change}}.
+\newblock {\em Climate Change Responses}, 3(1):10.
 
 \bibitem[Graves et~al., 2014]{Graves.2014}
 Graves, T., Chandler, R.~B., Royle, J.~A., Beier, P., and Kendall, K.~C.
@@ -106,6 +237,23 @@ Gustafson, E.~J. and Gardner, R.~H. (1996).
   of {{Patch Colonization}}.
 \newblock {\em Ecology}, 77(1):94--107.
 
+\bibitem[Hauenstein et~al., 2019]{Hauenstein.2019}
+Hauenstein, S., Fattebert, J., Gr{\"u}ebler, M.~U., Naef-Daenzer, B., Pe'er,
+  G., and Hartig, F. (2019).
+\newblock Calibrating an {{Individual}}-{{Based Movement Model}} to {{Predict
+  Functional Connectivity}} for {{Little Owls}}.
+\newblock {\em Ecological Applications}, 29(4):e01873.
+
+\bibitem[Heller and Zavaleta, 2009]{Heller.2009}
+Heller, N.~E. and Zavaleta, E.~S. (2009).
+\newblock Biodiversity {{Management}} in the {{Face}} of {{Climate Change}}:
+  {{A Review}} of 22 {{Years}} of {{Recommendations}}.
+\newblock {\em Biological conservation}, 142(1):14--32.
+
+\bibitem[Hijmans, 2022]{Hijmans.2022}
+Hijmans, R.~J. (2022).
+\newblock {\em Terra: {{Spatial}} Data Analysis}.
+
 \bibitem[Hodgson et~al., 2009]{Hodgson.2009}
 Hodgson, J.~A., Thomas, C.~D., Wintle, B.~A., and Moilanen, A. (2009).
 \newblock Climate {{Change}}, {{Connectivity}} and {{Conservation Decision
@@ -118,11 +266,67 @@ Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
   Corridors}} of {{Their Most Mobile}}, {{Protected Species}}?
 \newblock {\em Journal of Applied Ecology}, 58(6):1133--1144.
 
+\bibitem[{IPCC}, 2022]{IPCC.2022}
+{IPCC} (2022).
+\newblock Summary for {{Policymakers}}.
+\newblock In Shukla, P., Skea, J., Slade, R., Khourdajie, A.~A., {van Diemen},
+  R., McCollum, D., Pathak, M., Some, S., Vyas, P., Fradera, R., Belkacemi, M.,
+  Hasija, A., Lisboa, G., Luz, S., and Malley, J., editors, {\em Climate
+  {{Change}} 2022: {{Mitigation}} of {{Climate Change}}. {{Contribution}} of
+  {{Working Group III}} to the {{Sixth Assessment Report}} of the
+  {{Intergovernmental Panel}} on {{Climate Change}}}. {Cambridge University
+  Press}, {Cambridge, UK and New York, NY, USA}.
+
+\bibitem[Kanagaraj et~al., 2013]{Kanagaraj.2013}
+Kanagaraj, R., Wiegand, T., {Kramer-Schadt}, S., and Goyal, S.~P. (2013).
+\newblock Using {{Individual-Based Movement Models}} to {{Assess Inter-Patch
+  Connectivity}} for {{Large Carnivores}} in {{Fragmented Landscapes}}.
+\newblock {\em Biological Conservation}, 167:298--309.
+
+\bibitem[Kaszta et~al., 2021]{Kaszta.2021}
+Kaszta, {\.Z}., Cushman, S.~A., and Slotow, R. (2021).
+\newblock Temporal {{Non-Stationarity}} of {{Path-Selection Movement Models}}
+  and {{Connectivity}}: {{An Example}} of {{African Elephants}} in {{Kruger
+  National Park}}.
+\newblock {\em Frontiers in Ecology and Evolution}, 9:553263.
+
+\bibitem[Killeen et~al., 2014]{Killeen.2014}
+Killeen, J., Thurfjell, H., Ciuti, S., Paton, D., Musiani, M., and Boyce, M.~S.
+  (2014).
+\newblock Habitat {{Selection During Ungulate Dispersal}} and {{Exploratory
+  Movement}} at {{Broad}} and {{Fine Scale}} with {{Implications}} for
+  {{Conservation Management}}.
+\newblock {\em Movement Ecology}, page~13.
+
+\bibitem[Kokko, 2006]{Kokko.2006}
+Kokko, H. (2006).
+\newblock From {{Individual Dispersal}} to {{Species Ranges}}: {{Perspectives}}
+  for a {{Changing World}}.
+\newblock {\em Science}, 313(5788):789--791.
+
 \bibitem[Leigh et~al., 2012]{Leigh.2012}
 Leigh, K.~A., Zenger, K.~R., Tammen, I., and Raadsma, H.~W. (2012).
 \newblock Loss of {{Genetic Diversity}} in an {{Outbreeding Species}}: {{Small
   Population Effects}} in the {{African Wild Dog}} ({{Lycaon}} pictus).
 \newblock {\em Conservation Genetics}, 13(3):767--777.
+
+\bibitem[Lines et~al., 2021]{Lines.2021}
+Lines, R., Bormpoudakis, D., Xofis, P., and Tzanopoulos, J. (2021).
+\newblock Modelling {{Multi-Species Connectivity}} at the {{Kafue-Zambezi
+  Interface}}: {{Implications}} for {{Transboundary Carnivore Conservation}}.
+\newblock {\em Sustainability}, 13(22):12886.
+
+\bibitem[Littlefield et~al., 2019]{Littlefield.2019}
+Littlefield, C.~E., Krosby, M., Michalak, J.~L., and Lawler, J.~J. (2019).
+\newblock Connectivity for {{Species}} on the {{Move}}: {{Supporting
+  Climate}}-{{Driven Range Shifts}}.
+\newblock {\em Frontiers in Ecology and the Environment}, 17(5):270--278.
+
+\bibitem[Luo et~al., 2021]{Luo.2021}
+Luo, Z., Wang, X., Yang, S., Cheng, X., Liu, Y., and Hu, J. (2021).
+\newblock Combining the {{Responses}} of {{Habitat Suitability}} and
+  {{Connectivity}} to {{Climate Change}} for an {{East Asian Endemic Frog}}.
+\newblock {\em Frontiers in Zoology}, 18(1):14.
 
 \bibitem[MacArthur and Wilson, 2001]{MacArthur.2001}
 MacArthur, R.~H. and Wilson, E.~O. (2001).
@@ -141,6 +345,18 @@ McNutt, J. (1996).
 \newblock Sex-{{Biased Dispersal}} in {{African Wild Dogs}}, {{Lycaon}} pictus.
 \newblock {\em Animal Behaviour}, 52(6):1067--1077.
 
+\bibitem[McRae et~al., 2008]{McRae.2008}
+McRae, B.~H., Dickson, B.~G., Keitt, T.~H., and Shah, V.~B. (2008).
+\newblock Using {{Circuit Theory}} to {{Model Connectivity}} in {{Ecology}},
+  {{Evolution}}, and {{Conservation}}.
+\newblock {\em Ecology}, 89(10):2712--2724.
+
+\bibitem[Melbourne and Hastings, 2008]{Melbourne.2008}
+Melbourne, B.~A. and Hastings, A. (2008).
+\newblock Extinction {{Risk Depends Strongly}} on {{Factors Contributing}} to
+  {{Stochasticity}}.
+\newblock {\em Nature}, 454(7200):100--103.
+
 \bibitem[Muff et~al., 2020]{Muff.2020}
 Muff, S., Signer, J., and Fieberg, J. (2020).
 \newblock Accounting for {{Individual-Specific Variation}} in
@@ -148,12 +364,27 @@ Muff, S., Signer, J., and Fieberg, J. (2020).
   Models Using Bayesian}} or {{Frequentist Computation}}.
 \newblock {\em Journal of Animal Ecology}, 89(1):80--92.
 
+\bibitem[Mui et~al., 2017]{Mui.2017}
+Mui, A.~B., Caverhill, B., Johnson, B., Fortin, M.-J., and He, Y. (2017).
+\newblock Using {{Multiple Metrics}} to {{Estimate Seasonal Landscape
+  Connectivity}} for {{Blanding}}'s {{Turtles}} (emydoidea {{Blandingii}}) in a
+  {{Fragmented Landscape}}.
+\newblock {\em Landscape Ecology}, 32(3):531--546.
+
 \bibitem[{Murray-Hudson} et~al., 2006]{Murray-Hudson.2006}
 {Murray-Hudson}, M., Wolski, P., and Ringrose, S. (2006).
 \newblock Scenarios of the {{Impact}} of {{Local}} and {{Upstream Changes}} in
   {{Climate}} and {{Water Use}} on {{Hydro-Ecology}} in the {{Okavango Delta}},
   {{Botswana}}.
 \newblock {\em Journal of Hydrology}, 331(1):73--84.
+
+\bibitem[Osipova et~al., 2019]{Osipova.2019}
+Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
+  M.~W., and Balkenhol, N. (2019).
+\newblock Using {{Step}}-{{Selection Functions}} to {{Model Landscape
+  Connectivity}} for {{African Elephants}}: {{Accounting}} for {{Variability
+  Across Individuals}} and {{Seasons}}.
+\newblock {\em Animal Conservation}, 22(1):35--48.
 
 \bibitem[Ozgul et~al., 2010]{Ozgul.2010}
 Ozgul, A., Childs, D.~Z., Oli, M.~K., Armitage, K.~B., Blumstein, D.~T., Olson,
@@ -170,6 +401,11 @@ Paniw, M., James, T.~D., Ruth~Archer, C., R{\"o}mer, G., Levin, S., Compagnoni,
 \newblock The myriad of complex demographic responses of terrestrial mammals to
   climate change and gaps of knowledge: {{A}} global analysis.
 \newblock {\em Journal of Animal Ecology}, 90(6):1398--1407.
+
+\bibitem[{R Core Team}, 2022]{RCoreTeam.2022}
+{R Core Team} (2022).
+\newblock {\em R: {{A}} Language and Environment for Statistical Computing}.
+\newblock {R Foundation for Statistical Computing}, {Vienna, Austria}.
 
 \bibitem[Radchuk et~al., 2019]{Radchuk.2019}
 Radchuk, V., Reed, T., Teplitsky, C., {van de Pol}, M., Charmantier, A.,
@@ -195,11 +431,52 @@ Raia, P., Passaro, F., Fulgione, D., and Carotenuto, F. (2012).
 \newblock Habitat tracking, stasis and survival in {{Neogene}} large mammals.
 \newblock {\em Biology Letters}, 8(1):64--66.
 
+\bibitem[Sawyer et~al., 2011]{Sawyer.2011}
+Sawyer, S.~C., Epps, C.~W., and Brashares, J.~S. (2011).
+\newblock Placing {{Linkages Among Fragmented Habitats}}: {{Do Least-Cost
+  Models Reflect How Animals Use Landscapes}}?: {{Least-Cost Modelling}} for
+  {{Habitat Linkage Design}}.
+\newblock {\em Journal of Applied Ecology}, 48(3):668--678.
+
+\bibitem[Squires et~al., 2013]{Squires.2013}
+Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
+  and Parks, S.~A. (2013).
+\newblock Combining {{Resource Selection}} and {{Movement Behavior}} to
+  {{Predict Corridors}} for {{Canada Lynx}} at {{Their Southern Range
+  Periphery}}.
+\newblock {\em Biological Conservation}, 157:187--195.
+
+\bibitem[Taylor et~al., 1993]{Taylor.1993}
+Taylor, P.~D., Fahrig, L., Henein, K., and Merriam, G. (1993).
+\newblock Connectivity {{Is}} a {{Vital Element}} of {{Landscape Structure}}.
+\newblock {\em Oikos}, 68(3):571--573.
+
+\bibitem[Thomas et~al., 2004]{Thomas.2004}
+Thomas, C.~D., Cameron, A., Green, R.~E., Bakkenes, M., Beaumont, L.~J.,
+  Collingham, Y.~C., Erasmus, B. F.~N., {de Siqueira}, M.~F., Grainger, A.,
+  Hannah, L., Hughes, L., Huntley, B., {van Jaarsveld}, A.~S., Midgley, G.~F.,
+  Miles, L., {Ortega-Huerta}, M.~A., Peterson, A.~T., Phillips, O.~L., and
+  Williams, S.~E. (2004).
+\newblock Extinction {{Risk}} from {{Climate Change}}.
+\newblock 427.
+
+\bibitem[Thuiller et~al., 2006]{Thuiller.2006}
+Thuiller, W., Broennimann, O., Hughes, G., Alkemade, J. R.~M., Midgley, G.~F.,
+  and Corsi, F. (2006).
+\newblock Vulnerability of {{African Mammals}} to {{Anthropogenic Climate
+  Change Under Conservative Land Transformation Assumptions}}.
+\newblock {\em Global Change Biology}, 12(3):424--440.
+
 \bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
 Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
 \newblock Applications of {{Step-Selection Functions}} in {{Ecology}} and
   {{Conservation}}.
 \newblock {\em Movement Ecology}, 2(4).
+
+\bibitem[Tischendorf and Fahrig, 2000]{Tischendorf.2000}
+Tischendorf, L. and Fahrig, L. (2000).
+\newblock On the {{Usage}} and {{Measurement}} of {{Landscape Connectivity}}.
+\newblock {\em Oikos}, 90(1):7--19.
 
 \bibitem[Travis et~al., 2013]{Travis.2013}
 Travis, J. M.~J., Delgado, M., Bocedi, G., Baguette, M., Barto{\'n}, K., Bonte,
@@ -220,11 +497,33 @@ Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
   {{Lessons}} from {{Species Distribution Modeling}}.
 \newblock {\em Ecography}, 38(10):967--978.
 
+\bibitem[Wickham, 2016]{Wickham.2016}
+Wickham, H. (2016).
+\newblock {\em Ggplot2: {{Elegant}} Graphics for Data Analysis}.
+\newblock {Springer-Verlag New York}.
+
+\bibitem[Wilson et~al., 2012]{Wilson.2012}
+Wilson, R.~R., {Gilbert-Norton}, L., and Gese, E.~M. (2012).
+\newblock Beyond {{Use Versus Availability}}: {{Behaviour-Explicit Resource
+  Selection}}.
+\newblock {\em Wildlife Biology}, 18(4):424--430.
+
 \bibitem[Wolski et~al., 2017]{Wolski.2017}
 Wolski, P., {Murray-Hudson}, M., Thito, K., and Cassidy, L. (2017).
 \newblock Keeping {{It Simple}}: {{Monitoring Flood Extent}} in {{Large
   Data-Poor Wetlands Using MODIS SWIR Data}}.
 \newblock {\em International Journal of Applied Earth Observation and
   Geoinformation}, 57:224--234.
+
+\bibitem[Zeller et~al., 2012]{Zeller.2012}
+Zeller, K.~A., McGarigal, K., and Whiteley, A.~R. (2012).
+\newblock Estimating {{Landscape Resistance}} to {{Movement}}: {{A Review}}.
+\newblock {\em Landscape Ecology}, 27(6):777--797.
+
+\bibitem[Zeller et~al., 2020]{Zeller.2020}
+Zeller, K.~A., Wattles, D.~W., Bauder, J.~M., and DeStefano, S. (2020).
+\newblock Forecasting {{Seasonal Habitat Connectivity}} in a {{Developing
+  Landscape}}.
+\newblock {\em Land}, 9(7):233.
 
 \end{thebibliography}

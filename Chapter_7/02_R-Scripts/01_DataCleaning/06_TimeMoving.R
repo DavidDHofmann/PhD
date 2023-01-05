@@ -145,10 +145,10 @@ perc <- design %>%
   setNames(c("activity", "period", "After1400", "Before1400", "NeverActive")) %>%
   mutate(Total = sum(After1400, Before1400, NeverActive)) %>%
   mutate(
-      After1400 = After1400 / Total
-    , Before1400 = Before1400 / Total
+      After1400   = After1400 / Total
+    , Before1400  = Before1400 / Total
     , NeverActive = NeverActive / Total
-    , Minimize = Before1400 + NeverActive
+    , Minimize    = Before1400 + NeverActive
   )
 
 # Visualize

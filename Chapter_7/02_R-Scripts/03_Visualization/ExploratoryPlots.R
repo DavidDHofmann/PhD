@@ -34,7 +34,7 @@ dat$Time  <- as_hms(dat$Timestamp)
 # Aggregate activity by day and see if there are differences between the dogs
 p1 <- dat %>%
   group_by(DogID, Date) %>%
-  summarize(AverageDailyActivity = mean(ActX), n = n(), .groups = "drop") %>%
+  summarize(AverageDailyActivity = mean(Act), n = n(), .groups = "drop") %>%
   subset(n > 250) %>%
   ggplot(aes(x = DogID, y = AverageDailyActivity, fill = DogID, col = DogID)) +
     geom_boxplot(alpha = 0.3) +
@@ -44,7 +44,7 @@ p1 <- dat %>%
     scale_color_viridis_d()
 
 # Plot activity against month, regardless of the year
-p2 <- ggplot(dat, aes(y = Time, x = yday(Timestamp), z = ActX)) +
+p2 <- ggplot(dat, aes(y = Time, x = yday(Timestamp), z = Act)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(
       option   = "magma"
@@ -67,7 +67,7 @@ p2 <- ggplot(dat, aes(y = Time, x = yday(Timestamp), z = ActX)) +
   xlab("Day of Year")
 
 # Plot activity against moonlight intensity
-p3 <- ggplot(dat, aes(y = Time, x = maxMoonlightIntensity, z = ActX)) +
+p3 <- ggplot(dat, aes(y = Time, x = maxMoonlightIntensity, z = Act)) +
   stat_summary_2d(fun = "mean", bins = 100) +
   scale_fill_viridis_c(
       option   = "magma"
@@ -124,33 +124,43 @@ dat_byphase <- mutate(dat_byphase
   , ToD  = factor(ToD, levels = c("Morning", "Evening", "Night"))
 )
 
+# Define classes
+levels <- c("Very Low", "Low", "Medium", "High", "Very High")
+classes <- data.frame(
+    MoonBinNumeric = 1:5
+  , MoonClass      = factor(levels, levels = levels)
+)
+
 # Let's bin the nights by moon illumination
-dat_byphase <- mutate(dat_byphase, MoonBin = cut(maxMoonlightIntensity, breaks = 5))
-dat_byphase$MoonBinNumeric <- as.numeric(dat_byphase$MoonBin)
+dat_byphase <- dat_byphase %>%
+  mutate(MoonBin = cut(maxMoonlightIntensity, breaks = c(0, 0.2, 0.4, 0.6, 0.8, 1), include.lowest = T)) %>%
+  mutate(MoonBinNumeric = as.numeric(MoonBin)) %>%
+  left_join(., classes, by = "MoonBinNumeric")
 
 # Visualize the relationship between activity and moon-illumination
 p1 <- dat_byphase %>%
-  group_by(MoonBinNumeric, ToD) %>%
+  group_by(MoonClass, ToD) %>%
   summarize(
       n       = n()
-    , mean    = round(mean(meanActX))
+    , mean    = round(mean(meanAct))
     , .groups = "drop"
   ) %>%
   pivot_longer(n:mean, names_to = "Metric", values_to = "Value") %>%
-  ggplot(aes(x = as.factor(MoonBinNumeric), y = Metric, label = Value)) +
+  ggplot(aes(x = MoonClass, y = Metric, label = Value)) +
     geom_text(size = 2) +
     facet_wrap(~ToD) +
     theme_void() +
     theme(axis.text.y = element_text())
 
-p2 <- ggplot(dat_byphase, aes(x = as.factor(MoonBinNumeric), y = meanActX, col = ToD, fill = ToD)) +
+p2 <- ggplot(dat_byphase, aes(x = MoonClass, y = meanAct, col = ToD, fill = ToD)) +
   geom_boxplot(alpha = 0.2, show.legend = F) +
   theme_minimal() +
   facet_wrap(~ ToD) +
-  xlab("") +
-  xlab("MoonBinNumeric") +
+  ylab("Average Activity") +
+  xlab("Maximum Moon Illumination at Night") +
   scale_color_viridis_d(begin = 0.2, end = 0.8) +
-  scale_fill_viridis_d(begin = 0.2, end = 0.8, alpha = 0.2)
+  scale_fill_viridis_d(begin = 0.2, end = 0.8, alpha = 0.2) +
+  theme(axis.text.x = element_text(angle = 45))
 
 # Load pngs to overlay
 imgs <- c(
@@ -165,8 +175,8 @@ imgs <- c(
 pngs <- tibble(
     ToD  = unique(dat_byphase$ToD)
   , grob = imgs
-  , x    = 5
-  , y    = 210
+  , x    = 5.75
+  , y    = 380
 )
 
 # Add them to the plot
@@ -176,7 +186,7 @@ p3 <- p2 + geom_custom(aes(data = grob, x = x, y = y)
 )
 
 # Put plots together
-p4 <- ggpubr::ggarrange(p3, p1, nrow = 2, heights = c(0.8, 0.2), align = "hv")
+p4 <- ggpubr::ggarrange(p3, p1, nrow = 2, heights = c(0.75, 0.25), align = "hv")
 
 # Save to file
 # Store plot to file

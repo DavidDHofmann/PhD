@@ -69,6 +69,18 @@ maps2 <- "03_Data/03_Results/HeatmapsBetweennessLocal.rds" %>%
   arrange(Steps, SourceArea, FloodLevel, Level)
 maps <- rbind(maps1, maps2)
 
+# I also want to plot a difference map
+diff <- subset(maps, Level == "Global" & Steps == 2000)
+diff <- diff$Data[[1]] - diff$Data[[2]]
+diff <- tibble(
+    Steps      = 2000
+  , SourceArea = NA
+  , FloodLevel = "Difference"
+  , Level      = "Difference"
+  , Data       = list(diff)
+)
+maps <- rbind(maps, diff)
+
 # Convert maps to dataframes
 maps <- maps %>%
   mutate(Data = map(Data, function(x) {
@@ -78,7 +90,7 @@ maps <- maps %>%
   })) %>% unnest(Data)
 
 # Make sure the levels are correctly ordered
-maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
+maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max", "Difference"))
 
 # Function to plot
 plotBetweenness <- function(data, formula = ~FloodLevel, area = unique(areas$ID), barwidth = 16) {
@@ -211,6 +223,118 @@ p4 <- ggarrange(p2[[4]], p2[[5]], p2[[6]], ncol = 1, labels = c("(4)", "(5)", "(
 p5 <- ggarrange(p3, p4, ncol = 2)
 
 ################################################################################
+#### Difference Map
+################################################################################
+# Let's also create a difference map
+p6 <- ggplot() +
+  geom_raster(
+      data    = subset(maps, Level == "Difference" & Steps == 2000)
+    , mapping = aes(x = x, y = y, fill = Betweenness)
+  ) +
+  geom_sf(data = water, col = "gray80", alpha = 0.25, fill = NA) +
+  geom_sf(data = roads, col = "gray50", linewidth = 0.1) +
+  geom_point(
+      data        = subset(vills, place == "City")
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray50"
+    , shape       = 15
+    , show.legend = F
+    , size        = 1
+  ) +
+  geom_sf(
+      data        = subset(areas, Type == "Main")
+    , fill        = "black"
+    , lty         = 1
+    , linewidth   = 0.2
+    , show.legend = F
+    , alpha       = 0.15
+  ) +
+  geom_sf(data = afric, linewidth = 0.4, col = "black", fill = NA) +
+  geom_text(
+      data     = labels_waters
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "gray20"
+    , fontface = 3
+    , size     = 1.3
+  ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "black"
+    , size     = 2
+    , fontface = 2
+  ) +
+  geom_text(
+      data     = subset(labels_areas, Type == "Main")
+    , mapping  = aes(x = X, y = Y, label = ID)
+    , col      = "black"
+    , fontface = 3
+    , size     = 2
+  ) +
+  geom_text(
+      data     = subset(vills, place == "City")
+    , mapping  = aes(x = x, y = y, label = name)
+    , col      = "gray50"
+    , fontface = 3
+    , size     = 2
+    , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
+  scale_color_manual(values = c("black", "red")) +
+  scale_fill_gradientn(
+      colors  = c("orange", "white", "cornflowerblue")
+    , labels  = function(x){format(x, big.mark = "'")}
+    , limits  = c(-5e8, 5e8)
+    , oob     = squish
+    , guide   = guide_colorbar(
+      , title          = TeX(r'($\Delta$ Betweenness)')
+      , show.limits    = T
+      , title.position = "bottom"
+      , title.hjust    = 0.5
+      , ticks          = F
+      , barheight      = unit(0.2, "cm")
+      , barwidth       = unit(8, "cm")
+    )
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
+    , expand = F
+  ) +
+  labs(
+      x        = NULL
+    , y        = NULL
+    , fill     = NULL
+  ) +
+  theme(
+      legend.position  = "bottom"
+    , legend.box       = "vertical"
+    , panel.background = element_blank()
+    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 0.5
+    , text_cex   = 0.5
+    , height     = unit(0.1, "cm")
+    , bar_cols   = c("black", "white")
+    , text_col   = "black"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(0.7, "cm"),
+    , width    = unit(0.6, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("black", "black")
+        , line_col  = NA
+        , text_col  = "black"
+        , text_size = 4
+      )
+  )
+
+################################################################################
 #### Store the Maps
 ################################################################################
 # Store the plot
@@ -226,5 +350,12 @@ ggsave("04_Manuscript/99_BetweennessIndividual.png"
   , bg     = "white"
   , height = 7
   , width  = 8
+  , scale = 1.4
+)
+ggsave("04_Manuscript/99_BetweennessDifference.png"
+  , plot   = p6
+  , bg     = "white"
+  , height = 3.5
+  , width  = 4
   , scale = 1.4
 )

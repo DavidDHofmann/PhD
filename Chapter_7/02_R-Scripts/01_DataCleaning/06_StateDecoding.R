@@ -189,5 +189,4 @@ dat_nested$Data <- pbmclapply(
   })
 
 # Store the results
-write_rds(dat_nested, "03_Data/03_Results/99_DecodedHiddenMarkov.rds")
-dat_nested <- read_rds("03_Data/03_Results/99_DecodedHiddenMarkov.rds")
+write_rds(dat_nested, "03_Data/02_CleanData/ActivityDataCovariatesStates.rds")
