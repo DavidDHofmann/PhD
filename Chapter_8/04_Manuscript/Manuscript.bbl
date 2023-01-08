@@ -181,6 +181,13 @@ Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
   {{Landscape Connectivity Change}} with {{Demography}}.
 \newblock {\em Journal of Applied Ecology}, 51(5):1169--1178.
 
+\bibitem[Engelbrecht et~al., 2015]{Engelbrecht.2015a}
+Engelbrecht, F., Adegoke, J., Bopape, M.-J., Naidoo, M., Garland, R., Thatcher,
+  M., McGregor, J., Katzfey, J., Werner, M., Ichoku, C., and Gatebe, C. (2015).
+\newblock Projections of rapidly rising surface temperatures over {{Africa}}
+  under low mitigation.
+\newblock {\em Environmental Research Letters}, 10(8):085004.
+
 \bibitem[Etherington, 2016]{Etherington.2016}
 Etherington, T.~R. (2016).
 \newblock Least-{{Cost Modelling}} and {{Landscape Ecology}}: {{Concepts}},
@@ -237,6 +244,12 @@ Gustafson, E.~J. and Gardner, R.~H. (1996).
   of {{Patch Colonization}}.
 \newblock {\em Ecology}, 77(1):94--107.
 
+\bibitem[Hanski, 1999]{Hanski.1999a}
+Hanski, I. (1999).
+\newblock Habitat {{Connectivity}}, {{Habitat Continuity}}, and
+  {{Metapopulations}} in {{Dynamic Landscapes}}.
+\newblock {\em Oikos}, 87(2):209.
+
 \bibitem[Hauenstein et~al., 2019]{Hauenstein.2019}
 Hauenstein, S., Fattebert, J., Gr{\"u}ebler, M.~U., Naef-Daenzer, B., Pe'er,
   G., and Hartig, F. (2019).
@@ -259,12 +272,6 @@ Hodgson, J.~A., Thomas, C.~D., Wintle, B.~A., and Moilanen, A. (2009).
 \newblock Climate {{Change}}, {{Connectivity}} and {{Conservation Decision
   Making}}: {{Back}} to {{Basics}}.
 \newblock {\em Journal of Applied Ecology}, 46(5):964--969.
-
-\bibitem[Hofmann et~al., 2021]{Hofmann.2021}
-Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
-\newblock Bound {{Within Boundaries}}: {{Do Protected Areas Cover Movement
-  Corridors}} of {{Their Most Mobile}}, {{Protected Species}}?
-\newblock {\em Journal of Applied Ecology}, 58(6):1133--1144.
 
 \bibitem[{IPCC}, 2022]{IPCC.2022}
 {IPCC} (2022).
@@ -490,6 +497,19 @@ Turchin, P. (1998).
 \newblock {\em Quantitative {{Analysis}} of {{Movement}}: {{Measuring}} and
   {{Modeling Population Redistribution}} in {{Plants}} and {{Animals}}}.
 \newblock {Sinauer Associates, Sunderland, MA}.
+
+\bibitem[Unnithan~Kumar et~al., 2022a]{UnnithanKumar.2022}
+Unnithan~Kumar, S., Kaszta, {\.Z}., and Cushman, S.~A. (2022a).
+\newblock Pathwalker: {{A New Individual-Based Movement Model}} for
+  {{Conservation Science}} and {{Connectivity Modelling}}.
+\newblock {\em ISPRS International Journal of Geo-Information}, 11(6):329.
+
+\bibitem[Unnithan~Kumar et~al., 2022b]{UnnithanKumar.2022a}
+Unnithan~Kumar, S., Turnbull, J., Hartman~Davies, O., Hodgetts, T., and
+  Cushman, S.~A. (2022b).
+\newblock Moving {{Beyond Landscape Resistance}}: {{Considerations}} for the
+  {{Future}} of {{Connectivity Modelling}} and {{Conservation Science}}.
+\newblock {\em Landscape Ecology}, 37(10):2465--2480.
 
 \bibitem[Vasudev et~al., 2015]{Vasudev.2015}
 Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).

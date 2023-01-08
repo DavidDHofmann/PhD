@@ -3,58 +3,50 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literature.bib
-Warning--I didn't find a database entry for "Kokko.2022"
-Warning--I didn't find a database entry for "Hanski.1999b"
-Warning--I didn't find a database entry for "Diniz.2020"
-Warning--I didn't find a database entry for "Cushmann.2010"
-Warning--I didn't find a database entry for "Unnithan.2021"
-Warning--I didn't find a database entry for "Unnithan.2022"
 Warning--I didn't find a database entry for "Hofmann.2022"
 Warning--I didn't find a database entry for "Hofmann.2023"
-Warning--I didn't find a database entry for "Unnithan.2022a"
-Warning--I didn't find a database entry for "Engelbrecht.2015"
 Warning--I didn't find a database entry for "Hofmann.2021b"
 Warning--empty journal in Behr.2020
 Warning--empty journal in Thomas.2004
-You've used 81 entries,
+You've used 84 entries,
             1935 wiz_defined-function locations,
-            1025 strings with 24686 characters,
-and the built_in function-call counts, 38623 in all, are:
-= -- 3587
-> -- 2308
-< -- 28
-+ -- 843
-- -- 827
-* -- 3724
-:= -- 6853
-add.period$ -- 242
-call.type$ -- 81
-change.case$ -- 802
-chr.to.int$ -- 81
-cite$ -- 83
-duplicate$ -- 1157
-empty$ -- 2298
-format.name$ -- 930
-if$ -- 7239
-int.to.chr$ -- 1
+            1027 strings with 25302 characters,
+and the built_in function-call counts, 39972 in all, are:
+= -- 3706
+> -- 2391
+< -- 29
++ -- 874
+- -- 857
+* -- 3857
+:= -- 7099
+add.period$ -- 251
+call.type$ -- 84
+change.case$ -- 832
+chr.to.int$ -- 83
+cite$ -- 86
+duplicate$ -- 1199
+empty$ -- 2379
+format.name$ -- 963
+if$ -- 7490
+int.to.chr$ -- 2
 int.to.str$ -- 0
-missing$ -- 84
-newline$ -- 406
-num.names$ -- 245
-pop$ -- 682
+missing$ -- 87
+newline$ -- 421
+num.names$ -- 254
+pop$ -- 705
 preamble$ -- 1
-purify$ -- 811
+purify$ -- 841
 quote$ -- 0
-skip$ -- 854
+skip$ -- 884
 stack$ -- 0
-substring$ -- 2537
-swap$ -- 107
+substring$ -- 2609
+swap$ -- 110
 text.length$ -- 5
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 474
+type$ -- 492
 warning$ -- 2
-while$ -- 287
+while$ -- 296
 width$ -- 0
-write$ -- 1044
-(There were 13 warnings)
+write$ -- 1083
+(There were 5 warnings)
