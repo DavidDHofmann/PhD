@@ -127,8 +127,14 @@ for (i in seq_along(names)) {
 # Check if there are any duplicates
 dups_indices <- gps_dat %>%
   select(DogID, Timestamp) %>%
-  duplicated()
-table(dups_indices)
+  duplicated() %>%
+  which()
+length(dups_indices)
+
+# Remove them
+if (length(dups_indices) > 0) {
+  gps_dat <- gps_dat[-dups_indices, ]
+}
 
 # We also need to remove any data where the coordinates are NA
 gps_dat <- subset(gps_dat, !is.na(x) & !is.na(y))
@@ -245,8 +251,14 @@ for (i in seq_along(names)) {
 # Check how many duplicates there are
 dups_indices <- act_dat %>%
   select(DogID, Timestamp) %>%
-  duplicated()
-table(dups_indices)
+  duplicated() %>%
+  which()
+length(dups_indices)
+
+# Remove them
+if (length(dups_indices) > 0) {
+  act_dat <- act_dat[-dups_indices, ]
+}
 
 # We also need to remove any data where the activity was NA
 act_dat <- subset(act_dat, !is.na(ActX) & !is.na(ActY))
@@ -314,60 +326,31 @@ dat <- mutate(dat, ToD = case_when(
 dat <- mutate(dat, ToD2 = ifelse(ToD == "Night", "Night", "Day"))
 
 # Arrange such that the oldest data comes first
-dat <- arrange(dat, DogID, CollarID, Timestamp)
+dat <- arrange(dat, DogID, Timestamp)
 
 # Add an indicator for the date
 dat$Date <- date(dat$Timestamp)
 
-# Nest the data by dog
+# Nest the data by dog and date
 dat <- dat %>% nest(data = -DogID)
 
-# Identify tuples of night and day. That is, put together data collected during
-# the day, plus the data of the following night. For this, we first grab the
-# daily data and then add the data collected during the following night.
-pb <- txtProgressBar(min = 0, max = nrow(dat), style = 3)
-dat$Cycles <- lapply(1:nrow(dat), function(i) {
-  x <- dat$data[[i]]
-  dates <- unique(x$Date)
-  cycles <- lapply(dates, function(y) {
+# The date is a bit useless. Instead, we'd prefer to work with cycles. Here,
+# we'll assume that a cycle starts with the (start of the) evening activity and
+# ends with the (end of the) morning activity. That is, one cycle comprises of
+# evening burst, nighly burst, morning burst. This will match the way in which
+# we will match the nightly statistics later.
+dat <- mutate(dat, data = map(data, function(x) {
+  cycle <- x$Timestamp + hours(12)
+  cycle <- as_date(cycle)
+  cycle <- cycle != lag(cycle)
+  cycle[1] <- T
+  cycle <- cumsum(cycle)
+  x$Cycle <- cycle
+  return(x)
+}))
 
-    # Get the data collected during the day on that date
-    day <- x[x$Date == y & x$ToD2 == "Day", ]
-
-    # Get the data collected on the following night (may be from the same or the
-    # following day)
-    night <- x[
-      (x$Date == y & hour(x$Timestamp) > 12) |
-      (x$Date == y + days(1) & hour(x$Timestamp) < 12), ]
-    night <- night[night$ToD2 == "Night", ]
-
-    # Put the data together and arrange by the timestamp
-    cycle <- rbind(day, night)
-    cycle <- arrange(cycle, Timestamp)
-
-    # Return it
-    setTxtProgressBar(pb, i)
-    return(cycle)
-  })
-
-  # Put the cycles into a dataframe
-  final <- tibble(Date = dates, Data = cycles, Cycle = 1:length(dates))
-  final$Date <- NULL
-
-  # Unnest the data
-  final <- unnest(final, Data)
-
-  # Return them
-  return(final)
-})
-
-# Unnest the data and make cycle numbers unique across animals
-dat <- dat %>%
-  select(DogID, Cycles) %>%
-  unnest(Cycles) %>%
-  group_by(DogID, Cycle) %>%
-  mutate(Cycle = cur_group_id()) %>%
-  ungroup()
+# Unnest data again
+dat <- unnest(dat, data)
 
 # Write the final data to file
 write_csv(dat, "03_Data/02_CleanData/ActivityData.csv")

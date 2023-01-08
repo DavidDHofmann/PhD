@@ -17,8 +17,14 @@ library(hms)         # To handle times
 library(pbmcapply)   # For multicore use with progress bar
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
+dat <- read_rds("03_Data/02_CleanData/ActivityDataCovariates.rds")
 dat <- subset(dat, State == "Resident")
+
+# To be able to work with a gamma distribution, we need to get rid of 0s
+dat$Act15[dat$Act15 == 0] <- min(dat$Act15[dat$Act15 > 0])
+dat$Act30[dat$Act30 == 0] <- min(dat$Act30[dat$Act30 > 0])
+dat$Act45[dat$Act45 == 0] <- min(dat$Act45[dat$Act45 > 0])
+dat$Act60[dat$Act60 == 0] <- min(dat$Act60[dat$Act60 > 0])
 
 # # For now, keep only the first 2000 entries per individual
 # dat <- dat %>%
@@ -49,7 +55,6 @@ transformTheta  <- function(theta, N, direction) {
 lik <- function(theta_star, x, N) {
 
   # Backtransform theta
-  # N <- 3
   theta <- transformTheta(theta = theta_star, N = N, direction = "backward")
 
   # Transition matrix and steady state
@@ -129,7 +134,7 @@ viterbi <- function(x, theta, N) {
 ################################################################################
 # Subset to a desired individual
 print(unique(dat$DogID))
-sub <- subset(dat, DogID == "Sishen")
+sub <- subset(dat, DogID == "Abel")
 sub <- sub[1:2000, ]
 
 # Initial values
@@ -151,12 +156,9 @@ ggplot(sub, aes(x = as_hms(Timestamp), y = Act30, col = as.factor(State))) +
   facet_wrap(~Date, ncol = 1)
 
 # Let's check if we get nice unimodal distributions within the states
-# hist(sub$Act30[sub$State == 3])
-# hist(sub$Act30[sub$State == 2])
-# hist(sub$Act30[sub$State == 1])
-hist(sub$Act[sub$State == 3])
-hist(sub$Act[sub$State == 2])
-hist(sub$Act[sub$State == 1])
+hist(sub$Act30[sub$State == 3])
+hist(sub$Act30[sub$State == 2])
+hist(sub$Act30[sub$State == 1])
 
 ################################################################################
 #### Multiple Individuals

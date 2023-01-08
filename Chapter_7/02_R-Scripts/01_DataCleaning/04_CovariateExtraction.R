@@ -59,9 +59,10 @@ for (i in layers) {
 
   # I want to avoid repeatedly extracting covariate values at the same pixel for
   # the same date. However, this would happen if we simply loop through all the
-  # activity data and extract from the closes location (as most fixes fall into
+  # activity data and extract from the closest location (as most fixes fall into
   # the same pixel). Instead, I want to identify at which pixels we need to
-  # extract, then we can concentrated on those only.
+  # extract, then we do the extraction, and map the extracted data to the
+  # coordinates
   covariate_id <- covariate[[1]]
   covariate_id[] <- 1:ncell(covariate_id)
 
@@ -127,7 +128,7 @@ moon <- dplyr::select(moon, timestamp, moonPhase, moonAltDegrees)
 act <- left_join(act, moon, by = c("Timestamp" = "timestamp"))
 
 # Ensure that there are no NAs
-if (sum(is.na(act$MoonAngle) | is.na(act$moonPhase)) > 0) {
+if (sum(is.na(act$moonAngle) | is.na(act$moonPhase)) > 0) {
   stop("Some of the extracted values are NA...\n")
 }
 
@@ -143,8 +144,8 @@ moon <- dplyr::select(moon, -c(lon, lat))
 # Compute the delay since sunset to maximum moonlight
 moon$maxMoonDelay <- difftime(moon$maxMoonTime, moon$sunset, units = "mins")
 
-# Specify which date we want to match. Before 12:00, we match the day before,
-# after 12, the day after
+# Specify which date we want to match. Before 12:00 (14:00 local time), we match
+# the day before, after 12, the day after
 act <- mutate(act, DateToMatch = if_else(hour(Timestamp) >= 12
   , Date
   , Date - days(1))
@@ -246,4 +247,4 @@ act$Season <- getSeason(act$Date)
 act$Rain <- act$Precipitation > 0
 
 # Store the final data to file
-write_csv(act, "03_Data/02_CleanData/ActivityDataCovariates.csv")
+write_rds(act, "03_Data/02_CleanData/ActivityDataCovariates.rds")

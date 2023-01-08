@@ -2,7 +2,10 @@
 #### Time when Dogs Start Moving
 ################################################################################
 # Description: Take the raw activity data to determine at what time in the
-# afternoon start moving
+# afternoon start moving. We will use two competing approaches for this. First,
+# we'll use the decoded states from our HMM. Then, we will also use a
+# thresholding method were we look at the number of subsequent activity bursts
+# that exceed a certain threshold
 
 # Clear R's brain
 rm(list = ls())
@@ -18,20 +21,24 @@ library(hms)         # To handle times
 library(pbmcapply)   # To run stuff in parallel
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariates.csv")
+dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesStates.csv")
+dat <- read_rds("03_Data/02_CleanData/ActivityDataCovariatesStates.rds")
+dat <- dat[1:2, ]
+dat <- select(dat, -ModelParams)
+dat <- unnest(dat, Data)
 
 ################################################################################
 #### Consecutive Activity Bouts
 ################################################################################
-# Compute some useful time metrics
-dat$Hour <- as_hms(dat$Timestamp)
+# # Compute some useful time metrics
+# dat$Hour <- as_hms(dat$Timestamp)
 
 # We are only interested in data that is collected after 12:00 (14:00 Botswana
 # time)
-dat <- subset(dat, Hour >= as_hms("12:00:00"))
+# dat <- subset(dat, Hour >= as_hms("12:00:00"))
 
-# Nest the data by dog, collar, state, and date
-dat <- dat %>% nest(Data = -c(DogID, CollarID, State, Date))
+# Nest the data by dog, collar, and cycle
+dat <- dat %>% nest(Data = -c(DogID, Cycle, CollarID))
 
 # Check the number of datapoints per day
 dat$N <- sapply(dat$Data, function(x) {nrow(x)})
@@ -51,6 +58,23 @@ dat$Data <- pbmclapply(
     return(x)
 })
 
+################################################################################
+#### Approach I: HMM States
+################################################################################
+# Within each cycle (which start at 12:00 UTC), we want to identify the first
+# fix that is classified as active.
+dat$StartMovingHMM <- lapply(1:nrow(dat), function(x) {
+  starttime <- x %>%
+    subset(State == 3) %>%
+    pull(Timestamp) %>%
+    min() %>%
+    as_hms()
+  return(starttime)
+}) %>% do.call(c, .)
+
+################################################################################
+#### Approach II: Thresholding
+################################################################################
 # Function that determines whether the dogs are moving or resting and returns
 # the time of becoming active. It uses two parameters: "activity", which is the
 # activity threshold. If an activity fix is above this threshold, the animals is
@@ -73,7 +97,7 @@ getActivity <- function(data, activity, periods) {
           x$Status[i] <- NA
         } else {
           if (all(x$Active[(i - (periods - 1)):i])) {
-            x$Status[(i - (periods - 1)):i] <-"Moving"
+            x$Status[(i - (periods - 1)):i] <- "Moving"
           } else if (all(!x$Active[(i - (periods - 1)):i])) {
             x$Status[(i - (periods - 1)):i] <- "Resting"
           } else {
@@ -173,9 +197,11 @@ ggplot(first, aes(x = yday(Date), y = as_hms(StartMoving))) +
   geom_smooth(method = "lm", formula = y ~ poly(x, 2)) +
   theme_minimal()
 
-# Combine with the activity data that was aggregated by "Time of Day"
-act <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
-act <- left_join(act, first, by = c("DogID", "CollarID", "Date", "State", "ToD"))
+# STORE IT AS A SEPARATE CSV
 
-# Store combined data to file
-write_csv(act, "03_Data/02_CleanData/ActivityDataCovariatesAggregatedTime.csv")
+# # Combine with the activity data that was aggregated by "Time of Day"
+# act <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesAggregated.csv")
+# act <- left_join(act, first, by = c("DogID", "CollarID", "Date", "State", "ToD"))
+#
+# # Store combined data to file
+# write_csv(act, "03_Data/02_CleanData/ActivityDataCovariatesAggregatedTime.csv")
