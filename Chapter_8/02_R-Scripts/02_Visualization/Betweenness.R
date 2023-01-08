@@ -293,7 +293,7 @@ p6 <- ggplot() +
       , title.hjust    = 0.5
       , ticks          = F
       , barheight      = unit(0.2, "cm")
-      , barwidth       = unit(8, "cm")
+      , barwidth       = unit(6, "cm")
     )
   ) +
   coord_sf(
@@ -352,10 +352,11 @@ ggsave("04_Manuscript/99_BetweennessIndividual.png"
   , width  = 8
   , scale = 1.4
 )
-ggsave("04_Manuscript/99_BetweennessDifference.png"
-  , plot   = p6
-  , bg     = "white"
-  , height = 3.5
-  , width  = 4
-  , scale = 1.4
-)
+write_rds(p6, "04_Manuscript/99_BetweennessDifference.rds")
+# ggsave("04_Manuscript/99_BetweennessDifference.png"
+#   , plot   = p6
+#   , bg     = "white"
+#   , height = 3.5
+#   , width  = 4
+#   , scale = 1.4
+# )

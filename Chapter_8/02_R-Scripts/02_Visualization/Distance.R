@@ -27,6 +27,7 @@ library(ggpubr)         # To arrange multiple plots
 source("02_R-Scripts/00_Functions.R")
 
 # Load shapefiles that we want to plot
+water <- read_sf("03_Data/02_CleanData/MajorWaters.shp")
 areas <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads <- read_sf("03_Data/02_CleanData/Roads.shp")
 afric <- read_sf("03_Data/02_CleanData/Africa.shp")
@@ -60,17 +61,6 @@ labels_areas <- cbind(labels_areas, st_drop_geometry(areas))
 maps1 <- read_rds("03_Data/03_Results/Distance.rds")
 maps1$Level = "Local"
 
-
-
-test <- sum(rast(stack(maps1$Distance[7:12])))
-test <- sum(rast(stack(maps1$Distance[1:6])))
-test <- aggregate(test, fact = 10, fun = sum)
-test <- focal(test, c(3, 3), fun = mean)
-plot(test, col = hcl.colors(n = 100, palette = "Lajolla", rev = T))
-plot(test, col = hcl.colors(n = 100, palette = "Rocket", rev = F))
-plot(test, col = hcl.colors(n = 100, palette = "Reds", rev = T))
-print(hcl.pals(type = "sequential"))
-
 # Create "Global Metrics"
 maps2 <- lapply(c("Min", "Max"), function(x) {
   global <- maps1 %>%
@@ -92,11 +82,28 @@ maps2 <- lapply(c("Min", "Max"), function(x) {
 # Put all maps together
 maps <- rbind(maps1, maps2)
 
-# Smoothen them and convert to dataframe
+# Smoothen them
 maps$Distance <- lapply(maps$Distance, function(x) {
   x <- rast(x)
   x <- aggregate(x, fact = 10, fun = "sum")
   x <- focal(x, c(3, 3), fun = mean)
+  return(x)
+})
+
+# I also want to plot a difference map
+diff <- subset(maps, Level == "Global")
+diff <- diff$Distance[[2]] - diff$Distance[[1]]
+diff <- tibble(
+    Filename   = NA
+  , SourceArea = NA
+  , FloodLevel = "Difference"
+  , Level      = "Difference"
+  , Distance   = list(diff)
+)
+maps <- rbind(maps, diff)
+
+# Convert rasterlayers to dataframe
+maps$Distance <- lapply(maps$Distance, function(x) {
   x <- as.data.frame(x, xy = T)
   names(x) <- c("x", "y", "NumberPoints")
   return(x)
@@ -104,7 +111,7 @@ maps$Distance <- lapply(maps$Distance, function(x) {
 maps <- unnest(maps, Distance)
 
 # Make sure the levels are correctly ordered
-maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
+maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max", "Difference"))
 
 # Function to plot
 # plotNumberPoints(data = subset(maps, Level == "Global"))
@@ -238,6 +245,118 @@ p4 <- ggarrange(p2[[4]], p2[[5]], p2[[6]], ncol = 1, labels = c("(4)", "(5)", "(
 p5 <- ggarrange(p3, p4, ncol = 2)
 
 ################################################################################
+#### Difference Map
+################################################################################
+# Let's also create a difference map
+p6 <- ggplot() +
+  geom_raster(
+      data    = subset(maps, Level == "Difference")
+    , mapping = aes(x = x, y = y, fill = NumberPoints)
+  ) +
+  geom_sf(data = water, col = "gray80", alpha = 0.25, fill = NA) +
+  geom_sf(data = roads, col = "gray50", linewidth = 0.1) +
+  geom_point(
+      data        = subset(vills, place == "City")
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray50"
+    , shape       = 15
+    , show.legend = F
+    , size        = 1
+  ) +
+  geom_sf(
+      data        = subset(areas, Type == "Main")
+    , fill        = "black"
+    , lty         = 1
+    , linewidth   = 0.2
+    , show.legend = F
+    , alpha       = 0.15
+  ) +
+  geom_sf(data = afric, linewidth = 0.4, col = "black", fill = NA) +
+  geom_text(
+      data     = labels_waters
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "gray20"
+    , fontface = 3
+    , size     = 1.3
+  ) +
+  geom_text(
+      data     = labels_countries
+    , mapping  = aes(x = x, y = y, label = Label)
+    , col      = "black"
+    , size     = 2
+    , fontface = 2
+  ) +
+  geom_text(
+      data     = subset(labels_areas, Type == "Main")
+    , mapping  = aes(x = X, y = Y, label = ID)
+    , col      = "black"
+    , fontface = 3
+    , size     = 2
+  ) +
+  geom_text(
+      data     = subset(vills, place == "City")
+    , mapping  = aes(x = x, y = y, label = name)
+    , col      = "gray50"
+    , fontface = 3
+    , size     = 2
+    , nudge_y  = c(0.1, -0.1, 0.1)
+  ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
+  scale_color_manual(values = c("black", "red")) +
+  scale_fill_gradientn(
+      colors  = c("orange", "white", "cornflowerblue")
+    , labels  = function(x){format(x, big.mark = "'")}
+    , limits  = c(-100, 100)
+    , oob     = squish
+    , guide   = guide_colorbar(
+      , title          = TeX(r'($\Delta$ Frequency)')
+      , show.limits    = T
+      , title.position = "bottom"
+      , title.hjust    = 0.5
+      , ticks          = F
+      , barheight      = unit(0.2, "cm")
+      , barwidth       = unit(6, "cm")
+    )
+  ) +
+  coord_sf(
+      crs    = 4326
+    , xlim   = c(min(r$x), max(r$x))
+    , ylim   = c(min(r$y), max(r$y))
+    , expand = F
+  ) +
+  labs(
+      x        = NULL
+    , y        = NULL
+    , fill     = NULL
+  ) +
+  theme(
+      legend.position  = "bottom"
+    , legend.box       = "vertical"
+    , panel.background = element_blank()
+    , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
+  ) +
+  annotation_scale(
+      location   = "bl"
+    , width_hint = 0.2
+    , line_width = 0.5
+    , text_cex   = 0.5
+    , height     = unit(0.1, "cm")
+    , bar_cols   = c("black", "white")
+    , text_col   = "black"
+  ) +
+  annotation_north_arrow(
+      location = "br"
+    , height   = unit(0.7, "cm"),
+    , width    = unit(0.6, "cm"),
+    , style    = north_arrow_fancy_orienteering(
+          fill      = c("black", "black")
+        , line_col  = NA
+        , text_col  = "black"
+        , text_size = 4
+      )
+  )
+
+################################################################################
 #### Store the Maps
 ################################################################################
 # Store the plot
@@ -255,3 +374,11 @@ ggsave("04_Manuscript/99_DistanceIndividual.png"
   , width  = 8
   , scale = 1.4
 )
+write_rds(p6, "04_Manuscript/99_DistanceDifference.rds")
+# ggsave("04_Manuscript/99_DistanceDifference.png"
+#   , plot   = p6
+#   , bg     = "white"
+#   , height = 3.5
+#   , width  = 4
+#   , scale = 1.4
+# )
