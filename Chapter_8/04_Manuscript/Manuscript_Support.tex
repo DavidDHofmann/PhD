@@ -75,8 +75,8 @@
 %------------------------------------------------------------------------------
 %	Titlepage: Header
 %------------------------------------------------------------------------------
-\title{\textbf{Appendix}\\ Flooding of the Okavango Delta influences
-Connectivity for Dispersing African Wild Dogs}
+\title{\textbf{Appendix}\\ African Wild Dog Dispersal and Connectivity under
+Climate Change - Lessons Learned from Seasonal Flood Extremes}
 
 % List of Authors
 \author{
@@ -131,6 +131,9 @@ Maun, Botswana.
 \textbf{Running Title:} Seasonal Flooding of the Okavango Delta and its
 Consequences for African Wild Dog Dispersal and Connectivity
 
+\textbf{Running Title:} Seasonal Flooding of the Okavango Delta and its
+Consequences for African Wild Dog Connectivity under Climate Change
+
 \vspace{0.5cm}
 
 \textbf{Keywords:} movement, connectivity, seasonality, dispersal, conservation,
@@ -153,22 +156,41 @@ permeability
 \appendix
 \beginappendix
 
-%------------------------------------------------------------------------------
-%  Appendix S1: Difference Heatmap
-%------------------------------------------------------------------------------
 \newpage
-\section{Difference Heatmap}
-\begin{figure}[htbp]
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_HeatmapsDifference.png}
-  \caption{}
-  \label{HeatmapsDifference}
-  \end{center}
-\end{figure}
+\section{Dispersal Model}
+The model employed to simulate dispersal was based on an integrated step
+selection function (iSSF). In (integrated) step selection functions (iSSFs,
+\citealp{Fortin.2005, Avgar.2016}), observed GPS locations are converted into
+steps (the straight-line traveled between two GPS recordings
+\citep{Turchin.1998}) and compared to a set of \textit{random} steps in a
+conditional logistic regression framework \citep{Fortin.2005, Thurfjell.2014,
+Muff.2020, Fieberg.2021}. The model presented in \citep{Hofmann.2023} used
+dispersal data collected on 16 dispersing AWDs from a free-ranging wild dog
+population in northern Botswana. GPS data during dispersal was collected at
+4-hourly intervals and translated into steps of similar duration. Observed steps
+were then paired step with 24 random steps that were generated using a uniform
+distribution for turning angles (\(-\pi, +\pi\)) and step lengths from a gamma
+distribution fitted to observed steps (scale \(\theta\) = 6'308 and shape \(k\)
+= 0.37). It was then assumed that animals assigned to each observed and random
+step a selection score of the form \citep{Fortin.2005}:
 
-%------------------------------------------------------------------------------
-%  Appendix S2: Source-Specific Heatmaps
-%------------------------------------------------------------------------------
+\begin{equation}
+\label{EQ1}
+  w(x) = exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)
+\end{equation}
+
+Where (\(x_1, x_2, ..., x_n\)) represent the covariate values along each of the
+steps and the (\(\beta_1, \beta_2, ..., \beta_n\)) are the animal's relative
+selection strengths \citealp{Avgar.2017} towards these covariates. The benefit
+of \textit{integrated} SSFs over regular SSFs is that they provide a means to
+render two complementary ``kernels''. A \textit{movement} kernel that describes
+general movement behavior of dispersing AWDs and a \textit{habitat} kernel that
+describes preferences of AWDs with regards to environmental conditions
+\citep{Fieberg.2021}. iSSFs also allow interactions among the two kernels and
+are thus suitable to render that movement behavior may change depending on
+habitat conditions. A fitted iSSF model can be used as an individual-based
+movement model to simulate dispersal \citep{Signer.2017, Hofmann.2023}
+
 \newpage
 \section{Source-Specific Heatmaps}
 \begin{figure}[htbp]
@@ -179,22 +201,6 @@ permeability
   \end{center}
 \end{figure}
 
-%------------------------------------------------------------------------------
-%  Appendix S3: Difference Betweenness
-%------------------------------------------------------------------------------
-\newpage
-\section{Difference Betweenness}
-\begin{figure}[htbp]
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_BetweennessDifference.png}
-  \caption{}
-  \label{BetweennessDifference}
-  \end{center}
-\end{figure}
-
-%------------------------------------------------------------------------------
-%  Appendix S4: Source-Specific Betweenness
-%------------------------------------------------------------------------------
 \newpage
 \section{Source-Specific Betweenness}
 \begin{figure}[htbp]
@@ -205,19 +211,28 @@ permeability
   \end{center}
 \end{figure}
 
-%------------------------------------------------------------------------------
-%  Appendix S5: Source-Specific Interpatch Connectivity
-%------------------------------------------------------------------------------
+\newpage
+\section{Source-Specific Human Wildlife Conflict}
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_HumanWildlifeConflictIndividual.png}
+  \caption{}
+  \label{HWC}
+  \end{center}
+\end{figure}
+
 \newpage
 \section{Source-Specific Inter-Patch Connectivity}
 \begin{figure}[htbp]
   \begin{center}
   \includegraphics[width = \textwidth]{99_IPCMain.png}
-  \caption{}
+  \caption{Spatial representation of the tables 1a and 1b from the main
+  manuscript.}
   \label{IPCMain}
   \end{center}
 \end{figure}
 
+\newpage
 \begin{figure}[htbp]
   \begin{center}
   \includegraphics[width = \textwidth]{99_IPCBuffer.png}
@@ -226,16 +241,14 @@ permeability
   \end{center}
 \end{figure}
 
-%------------------------------------------------------------------------------
-%  Appendix S6: Difference Distance
-%------------------------------------------------------------------------------
 \newpage
-\section{Difference Distance}
+\section{Emigration}
 \begin{figure}[htbp]
   \begin{center}
-  \includegraphics[width = \textwidth]{99_DistanceDifference.png}
-  \caption{}
-  \label{DistanceDifference}
+  \includegraphics[width = 0.8\textwidth]{99_Emigration.png}
+  \caption{Absolute number of simulated AWDs moving into each of the designated
+  emigration zones (purple), in the minimum and maximum flood scenarios.}
+  \label{Emigration}
   \end{center}
 \end{figure}
 

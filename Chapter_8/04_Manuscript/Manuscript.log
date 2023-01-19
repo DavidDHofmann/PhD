@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  5 JAN 2023 13:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.1.2)  13 JAN 2023 15:58
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -655,22 +655,22 @@ LaTeX Warning: Unused global option(s):
 (./Manuscript.aux)
 \openout1 = `Manuscript.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 91.
-LaTeX Font Info:    ... okay on input line 91.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 93.
+LaTeX Font Info:    ... okay on input line 93.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -725,14 +725,14 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 48
  (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
-LaTeX Info: Redefining \celsius on input line 91.
-Package gensymb Info: Faking symbols for \degree and \celsius on input line 91.
+LaTeX Info: Redefining \celsius on input line 93.
+Package gensymb Info: Faking symbols for \degree and \celsius on input line 93.
 
 
 Package gensymb Warning: Not defining \perthousand.
 
-LaTeX Info: Redefining \ohm on input line 91.
-Package gensymb Info: Using \Omega for \ohm on input line 91.
+LaTeX Info: Redefining \ohm on input line 93.
+Package gensymb Info: Using \Omega for \ohm on input line 93.
 
 Package gensymb Warning: Not defining \micro.
 
@@ -742,7 +742,7 @@ Package caption Info: hyperref package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
 \AtBeginShipoutBox=\box65
-Package hyperref Info: Link coloring OFF on input line 91.
+Package hyperref Info: Link coloring OFF on input line 93.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2019/09/16 v2.46 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -752,26 +752,26 @@ Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
 \c@section@level=\count332
 )
-LaTeX Info: Redefining \ref on input line 91.
-LaTeX Info: Redefining \pageref on input line 91.
-LaTeX Info: Redefining \nameref on input line 91.
+LaTeX Info: Redefining \ref on input line 93.
+LaTeX Info: Redefining \pageref on input line 93.
+LaTeX Info: Redefining \nameref on input line 93.
  (./Manuscript.out) (./Manuscript.out)
 \@outlinefile=\write6
 \openout6 = `Manuscript.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 101.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 103.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 101.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 103.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./99_NumberReachingArea6Percentage.tex) (./99_StepsToReachingArea6Percentage.tex) (./99_NumberReachingOthersPercentage.tex) (./99_StepsToReachingOthersPercentage.tex)pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.172 \newpage
+l.183 \newpage
                [2] (./Manuscript.toc)
 \tf@toc=\write7
 \openout7 = `Manuscript.toc'.
@@ -779,134 +779,99 @@ l.172 \newpage
 pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.179 \newpage
+l.190 \newpage
                [3] [1]
 
-Package natbib Warning: Citation `Hofmann.2022' on page 2 undefined on input line 272.
+Package natbib Warning: Citation `Hofmann.2023' on page 2 undefined on input line 261.
 
-[2] [3]
-
-Package natbib Warning: Citation `Hofmann.2023' on page 4 undefined on input line 325.
-
-
-Overfull \hbox (22.801pt too wide) in paragraph at lines 341--347
-[]\OT1/cmr/m/n/10 Earlier stud-ies demon-strat-ing the im-por-tance of ren-der-ing sea-sonal change in-clude []Chetkiewicz
- []
-
-[4]
-
-Package natbib Warning: Citation `Hofmann.2023' on page 5 undefined on input line 391.
-
-[5]
+[2] [3] [4] [5]
 \openout4 = `Manuscript.fff'.
 
- (Manuscript.fff)
+ (Manuscript.fff) [6]
 
-LaTeX Warning: Reference `Hofmann.2021' on page 1 undefined on input line 458.
-
-[6]
-
-Package natbib Warning: Citation `Hofmann.2023' on page 7 undefined on input line 488.
+Package natbib Warning: Citation `Hofmann.2023' on page 7 undefined on input line 470.
 
 
-Package natbib Warning: Citation `Hofmann.2023' on page 7 undefined on input line 493.
-
-[7]
-
-LaTeX Warning: Reference `Hofmann.2023' on page 1 undefined on input line 538.
+Package natbib Warning: Citation `Hofmann.2023' on page 7 undefined on input line 476.
 
 
-Package natbib Warning: Citation `Hofmann.2023' on page 8 undefined on input line 572.
+Package natbib Warning: Citation `Hofmann.2023' on page 7 undefined on input line 483.
 
-[8] [9] (./99_NumberReachingOthersMinFlood.tex) (./99_NumberReachingOthersMaxFlood.tex) (./99_NumberReachingArea6MinFlood.tex) (./99_NumberReachingArea6MaxFlood.tex) (./99_StepsToReachingArea6MinFlood.tex) (./99_StepsToReachingArea6MaxFlood.tex)
-Overfull \hbox (3.99545pt too wide) in paragraph at lines 659--676
-\OT1/cmr/m/n/10 Our anal-y-sis of in-ter-patch con-nec-tiv-ity demon-strates no-table dif-fer-ences in dis-per-sal prospects
- []
 
-[10] [11] [12] [13]
+LaTeX Warning: Reference `Hofmann.2023' on page 1 undefined on input line 489.
 
-Package natbib Warning: Citation `Hofmann.2021b' on page 14 undefined on input line 868.
 
-[14] (./Manuscript.bbl [15] [16] [17] [18])
+Package natbib Warning: Citation `Hofmann.2023' on page 7 undefined on input line 524.
+
+[7] (./99_NumberReachingOthersMinFlood.tex) (./99_NumberReachingOthersMaxFlood.tex) (./99_NumberReachingOthersPercentage.tex) (./99_StepsToReachingOthersPercentage.tex) (./99_NumberReachingOthersMinFlood.tex) (./99_NumberReachingOthersMaxFlood.tex) (./99_NumberReachingArea6MinFlood.tex) (./99_NumberReachingArea6MaxFlood.tex) (./99_NumberReachingArea6Percentage.tex) (./99_StepsToReachingArea6Percentage.tex) (./99_StepsToReachingArea6MinFlood.tex) (./99_StepsToReachingArea6MaxFlood.tex) [8]
+\openout5 = `Manuscript.ttt'.
+
+ (Manuscript.ttt) [9] [10] [11] [12] [13] [14] (./Manuscript.bbl [15] [16] [17] [18] [19])
 
 Package natbib Warning: There were undefined citations.
 
-AED endfloat: Processing end Figures and Tables [19] (./Manuscript.fff
-<99_StudyArea.png, id=603, 809.424pt x 404.712pt>
+AED endfloat: Processing end Figures and Tables [20] (./Manuscript.fff
+<99_StudyArea.png, id=595, 809.424pt x 404.712pt>
 File: 99_StudyArea.png Graphic file (type png)
 <use 99_StudyArea.png>
 Package pdftex.def Info: 99_StudyArea.png  used on input line 3.
 (pdftex.def)             Requested size: 398.3386pt x 199.16899pt.
- [20 <./99_StudyArea.png (PNG copy)>]
-<99_FloodExtent.png, id=608, 809.424pt x 353.8821pt>
+ [21 <./99_StudyArea.png (PNG copy)>]
+<99_FloodExtent.png, id=600, 809.424pt x 353.8821pt>
 File: 99_FloodExtent.png Graphic file (type png)
 <use 99_FloodExtent.png>
-Package pdftex.def Info: 99_FloodExtent.png  used on input line 18.
+Package pdftex.def Info: 99_FloodExtent.png  used on input line 23.
 (pdftex.def)             Requested size: 398.3386pt x 174.1543pt.
- [21 <./99_FloodExtent.png (PNG copy)>]
-<99_Emigration.png, id=614, 462.528pt x 404.712pt>
-File: 99_Emigration.png Graphic file (type png)
-<use 99_Emigration.png>
-Package pdftex.def Info: 99_Emigration.png  used on input line 32.
-(pdftex.def)             Requested size: 398.3386pt x 348.56427pt.
- [22 <./99_Emigration.png (PNG copy)>]
-<99_Heatmaps.png, id=620, 578.16pt x 289.08pt>
-File: 99_Heatmaps.png Graphic file (type png)
-<use 99_Heatmaps.png>
-Package pdftex.def Info: 99_Heatmaps.png  used on input line 41.
-(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
- [23 <./99_Heatmaps.png (PNG copy)>]
-<99_Betweenness.png, id=625, 578.16pt x 289.08pt>
-File: 99_Betweenness.png Graphic file (type png)
-<use 99_Betweenness.png>
-Package pdftex.def Info: 99_Betweenness.png  used on input line 54.
-(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
- [24 <./99_Betweenness.png (PNG copy)>]
-<99_IPCTable.png, id=630, 650.43pt x 433.62pt>
+ [22 <./99_FloodExtent.png (PNG copy)>]
+<99_Metrics.png, id=607, 635.976pt x 1271.952pt>
+File: 99_Metrics.png Graphic file (type png)
+<use 99_Metrics.png>
+Package pdftex.def Info: 99_Metrics.png  used on input line 36.
+(pdftex.def)             Requested size: 318.67209pt x 637.33302pt.
+
+
+LaTeX Warning: Float too large for page by 45.77632pt on input line 48.
+
+[23 <./99_Metrics.png (PNG copy)>]
+<99_Difference.png, id=612, 722.7pt x 252.945pt>
+File: 99_Difference.png Graphic file (type png)
+<use 99_Difference.png>
+Package pdftex.def Info: 99_Difference.png  used on input line 53.
+(pdftex.def)             Requested size: 398.3386pt x 139.41736pt.
+) [24 <./99_Difference.png (PNG copy)>] (./Manuscript.ttt
+<99_IPCTable.png, id=620, 650.43pt x 433.62pt>
 File: 99_IPCTable.png Graphic file (type png)
 <use 99_IPCTable.png>
-Package pdftex.def Info: 99_IPCTable.png  used on input line 68.
+Package pdftex.def Info: 99_IPCTable.png  used on input line 6.
 (pdftex.def)             Requested size: 398.3386pt x 265.56645pt.
- [25 <./99_IPCTable.png (PNG copy)>]
-<99_Interpatch.png, id=635, 578.16pt x 289.08pt>
-File: 99_Interpatch.png Graphic file (type png)
-<use 99_Interpatch.png>
-Package pdftex.def Info: 99_Interpatch.png  used on input line 78.
-(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
- [26 <./99_Interpatch.png (PNG copy)>]
-<99_Distance.png, id=640, 578.16pt x 289.08pt>
-File: 99_Distance.png Graphic file (type png)
-<use 99_Distance.png>
-Package pdftex.def Info: 99_Distance.png  used on input line 91.
-(pdftex.def)             Requested size: 398.3386pt x 199.16986pt.
-) [27 <./99_Distance.png (PNG copy)>]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 892.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 892.
+) [25 <./99_IPCTable.png (PNG copy)>]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 844.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 844.
  (./Manuscript.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 892.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 892.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 844.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 844.
 Package rerunfilecheck Info: File `Manuscript.out' has not changed.
-(rerunfilecheck)             Checksum: 0B113A557C2BF014DBAA06ABBE648213;1234.
+(rerunfilecheck)             Checksum: 4AB492BEB75631667572A7E790BA95A7;1174.
 
 
 LaTeX Warning: There were undefined references.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 892.
+Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 844.
  ) 
 Here is how much of TeX's memory you used:
  23715 strings out of 481239
- 445021 string characters out of 5920378
- 692466 words of memory out of 5000000
- 38330 multiletter control sequences out of 15000+600000
- 543894 words of font info for 68 fonts, out of 8000000 for 9000
+ 445618 string characters out of 5920378
+ 695504 words of memory out of 5000000
+ 38314 multiletter control sequences out of 15000+600000
+ 543726 words of font info for 67 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,15n,83p,937b,902s stack positions out of 5000i,500n,10000p,200000b,80000s
-{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></
-usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb>
-Output written on Manuscript.pdf (30 pages, 4773390 bytes).
+ 60i,15n,83p,1060b,902s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></u
+sr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb>
+Output written on Manuscript.pdf (28 pages, 4567893 bytes).
 PDF statistics:
- 742 PDF objects out of 1000 (max. 8388607)
- 659 compressed objects within 7 object streams
- 144 named destinations out of 1000 (max. 500000)
- 309 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 723 PDF objects out of 1000 (max. 8388607)
+ 644 compressed objects within 7 object streams
+ 137 named destinations out of 1000 (max. 500000)
+ 286 words of extra memory for PDF output out of 10000 (max. 10000000)
 

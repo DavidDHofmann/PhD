@@ -149,6 +149,16 @@ visits_bootstrapped <- bootstrapped %>%
 
 # Store visits to file
 write_rds(visits_bootstrapped, "03_Data/03_Results/BootstrappedInterpatchConnectivity.rds")
+# visits_bootstrapped <- read_rds("03_Data/03_Results/BootstrappedInterpatchConnectivity.rds")
+
+# For a few selected source areas we get an increase in connectivity / dispersal
+# success
+better <- visits_bootstrapped %>%
+  subset(CurrentArea <= 6 & SourceArea != CurrentArea) %>%
+  select(SourceArea, CurrentArea, FloodLevel, Freq) %>%
+  pivot_wider(names_from = FloodLevel, values_from = Freq) %>%
+  mutate(Percentage = Max / Min * 100 - 100) %>%
+  mutate(Better = Percentage > 0)
 
 ################################################################################
 #### Additional Metrics: Number of Individuals Reaching any other Area
@@ -189,8 +199,9 @@ metrics[[1]] <- bootstrapped %>%
     , NumberSE = sd(n)
   ) %>%
   mutate(combined = paste0(round(Number), "\\pm", sprintf("%.2f", round(NumberSE, 2)))) %>%
-  pull(combined)
-names(metrics[[1]]) <- "Number individuals reaching other source areas at maximum and minimum extent"# Bootstrap number of dispersers reaching another source area
+  mutate(NumberRev = rev(Number)) %>%
+  mutate(Percent = round(Number / NumberRev * 100 - 100, 0))
+names(metrics)[1] <- "Number individuals reaching other source areas at maximum and minimum extent"# Bootstrap number of dispersers reaching another source area
 
 ################################################################################
 #### Additional Metrics: Dispersal Duration before Reaching any other Area
@@ -231,8 +242,9 @@ metrics[[2]] <- bootstrapped %>%
     , NumberSE = sd(StepNumber)
   ) %>%
   mutate(combined = paste0(round(Number), "\\pm", sprintf("%.2f", round(NumberSE, 2)))) %>%
-  pull(combined)
-names(metrics[[2]]) <- "Steps until reaching any other area at maximum and minimum extent"
+  mutate(NumberRev = rev(Number)) %>%
+  mutate(Percent = round(Number / NumberRev * 100 - 100, 0))
+names(metrics)[2] <- "Steps until reaching any other area at maximum and minimum extent"
 
 ################################################################################
 #### Additional Metrics: Number of Individuals Moving into area 6
@@ -269,8 +281,9 @@ metrics[[3]] <- bootstrapped %>%
     , NumberSE = sd(n)
   ) %>%
   mutate(combined = paste0(round(Number), "\\pm", sprintf("%.2f", round(NumberSE, 2)))) %>%
-  pull(combined)
-names(metrics[[3]]) <- "Number individuals reaching source area 6 at maximum and minimum extent"
+  mutate(NumberRev = rev(Number)) %>%
+  mutate(Percent = round(Number / NumberRev * 100 - 100, 0))
+names(metrics)[3] <- "Number individuals reaching source area 6 at maximum and minimum extent"
 
 ################################################################################
 #### Additional Metrics: Number of Steps before Moving into area 6
@@ -310,18 +323,25 @@ metrics[[4]] <- bootstrapped %>%
     , NumberSE = sd(StepNumber)
   ) %>%
   mutate(combined = paste0(round(Number), "\\pm", sprintf("%.2f", round(NumberSE, 2)))) %>%
-  pull(combined)
-names(metrics[[4]]) <- "Steps until reaching source area 6 at maximum and minimum extent"
+  mutate(NumberRev = rev(Number)) %>%
+  mutate(Percent = round(Number / NumberRev * 100 - 100, 0))
+names(metrics)[4] <- "Steps until reaching source area 6 at maximum and minimum extent"
 
 # Store all the metrics to file
-writeLines(metrics[[1]][[1]], "04_Manuscript/99_NumberReachingOthersMaxFlood.tex")
-writeLines(metrics[[1]][[2]], "04_Manuscript/99_NumberReachingOthersMinFlood.tex")
-writeLines(metrics[[2]][[1]], "04_Manuscript/99_StepsToReachingOthersMaxFlood.tex")
-writeLines(metrics[[2]][[2]], "04_Manuscript/99_StepsToReachingOthersMinFlood.tex")
-writeLines(metrics[[3]][[1]], "04_Manuscript/99_NumberReachingArea6MaxFlood.tex")
-writeLines(metrics[[3]][[2]], "04_Manuscript/99_NumberReachingArea6MinFlood.tex")
-writeLines(metrics[[4]][[1]], "04_Manuscript/99_StepsToReachingArea6MaxFlood.tex")
-writeLines(metrics[[4]][[2]], "04_Manuscript/99_StepsToReachingArea6MinFlood.tex")
+writeLines(metrics[[1]]$combined[1], "04_Manuscript/99_NumberReachingOthersMaxFlood.tex")
+writeLines(metrics[[1]]$combined[2], "04_Manuscript/99_NumberReachingOthersMinFlood.tex")
+writeLines(metrics[[2]]$combined[1], "04_Manuscript/99_StepsToReachingOthersMaxFlood.tex")
+writeLines(metrics[[2]]$combined[2], "04_Manuscript/99_StepsToReachingOthersMinFlood.tex")
+writeLines(metrics[[3]]$combined[1], "04_Manuscript/99_NumberReachingArea6MaxFlood.tex")
+writeLines(metrics[[3]]$combined[2], "04_Manuscript/99_NumberReachingArea6MinFlood.tex")
+writeLines(metrics[[4]]$combined[1], "04_Manuscript/99_StepsToReachingArea6MaxFlood.tex")
+writeLines(metrics[[4]]$combined[2], "04_Manuscript/99_StepsToReachingArea6MinFlood.tex")
+
+# Let's also store the percentage differences between min and max flood
+writeLines(paste0(abs(metrics[[1]]$Percent[[1]])), "04_Manuscript/99_NumberReachingOthersPercentage.tex")
+writeLines(paste0(abs(metrics[[2]]$Percent[[1]])), "04_Manuscript/99_StepsToReachingOthersPercentage.tex")
+writeLines(paste0(abs(metrics[[3]]$Percent[[1]])), "04_Manuscript/99_NumberReachingArea6Percentage.tex")
+writeLines(paste0(abs(metrics[[4]]$Percent[[1]])), "04_Manuscript/99_StepsToReachingArea6Percentage.tex")
 
 # Function to determine how many of the simulated individuals reached another
 # national park, as well as the average dispersal duration required for this
@@ -348,7 +368,7 @@ getConnections(0, grouping = "SourceArea")
 getConnections(0, grouping = "CurrentArea")
 
 # Run the function for different distances to see how the success rate
-# deacreases if one only consideres more distant areas are considered
+# deacreases if one only considers more distant areas
 results <- tibble(MinDistance = seq(0, 300 * 1000, length.out = 25))
 results$Results <- pbmclapply(results$MinDistance
     , ignore.interactive = T
@@ -414,7 +434,12 @@ emigration <- visits %>%
   subset(CurrentArea > 6) %>%
   select(TrackID, FloodLevel, CurrentArea) %>%
   distinct() %>%
-  count(FloodLevel, CurrentArea)
+  count(FloodLevel, CurrentArea) %>%
+  rename(Number = n) %>%
+  arrange(CurrentArea, FloodLevel) %>%
+  group_by(CurrentArea) %>%
+  mutate(NumberRev = rev(Number)) %>%
+  mutate(Percent = round(Number / NumberRev * 100 - 100, 0))
 
 # Store this to file
-write_rds(emigration, "03_Data/03_Results/99_Emigration.rds")
+write_rds(emigration, "03_Data/03_Results/Emigration.rds")

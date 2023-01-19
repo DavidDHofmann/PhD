@@ -20,12 +20,14 @@ library(rgdal)          # To handle spatial data
 library(sf)             # To handle spatial data
 library(scales)         # To squish oob values
 library(latex2exp)      # For easy latex code
+library(ggpubr)         # To arrange multiple plots
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
 
 # Load shapefiles that we want to plot
-area  <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
+water <- read_sf("03_Data/02_CleanData/MajorWaters.shp")
+areas <- read_sf("03_Data/02_CleanData/SourceAreas.shp")
 roads <- read_sf("03_Data/02_CleanData/Roads.shp")
 afric <- read_sf("03_Data/02_CleanData/Africa.shp")
 vills <- read_sf("03_Data/02_CleanData/Villages.shp")
@@ -50,23 +52,34 @@ labels_waters <- data.frame(
   , Label = c("Okavango\nDelta", "Linyanti\nSwamp", "Lake\nKariba", "Makgadikgadi\nPans")
 )
 
-# Add albels for source areas
-labels_source <- data.frame(
-    x     = c(23.4, 22, 23.5, 22.7, 23.1, 23.4, 21.55, 24.1, 22.6)
-  , y     = c(-20.3, -19.4, -18.9, -18.3, -19.4, -20.5, -19.5, -19.5, -18)
-  , Label = 1:9
-)
+# Generate area labels
+labels_areas <- st_coordinates(st_point_on_surface(areas))
+labels_areas <- cbind(labels_areas, st_drop_geometry(areas))
 
-# # Apply focal filter to buffer/smooth maps
-# maps <- mutate(maps, betweenness = map(betweenness, function(x) {
-#   x <- focal(x, w = matrix(1, 3, 3), fun = mean)
-#   return(x)
-# }))
-
-maps <- "03_Data/03_Results/HeatmapsBetweennessGlobal.rds" %>%
+# Load the heatmaps and keep only desired columns
+maps1 <- "03_Data/03_Results/HeatmapsBetweennessGlobal.rds" %>%
   read_rds() %>%
-  select(Steps, FloodLevel, Data = Betweenness) %>%
-  subset(Steps == 2000 & FloodLevel != "Mean")
+  mutate(SourceArea = NA, Level = "Global") %>%
+  select(Steps, SourceArea, FloodLevel, Level, Data = Betweenness) %>%
+  arrange(Steps, SourceArea, FloodLevel, Level)
+maps2 <- "03_Data/03_Results/HeatmapsBetweennessLocal.rds" %>%
+  read_rds() %>%
+  mutate(Level = "Local") %>%
+  select(Steps, SourceArea, FloodLevel, Level, Data = Betweenness) %>%
+  arrange(Steps, SourceArea, FloodLevel, Level)
+maps <- rbind(maps1, maps2)
+
+# I also want to plot a difference map
+diff <- subset(maps, Level == "Global" & Steps == 2000)
+diff <- diff$Data[[1]] - diff$Data[[2]]
+diff <- tibble(
+    Steps      = 2000
+  , SourceArea = NA
+  , FloodLevel = "Difference"
+  , Level      = "Difference"
+  , Data       = list(diff)
+)
+maps <- rbind(maps, diff)
 
 # Convert maps to dataframes
 maps <- maps %>%
@@ -77,80 +90,229 @@ maps <- maps %>%
   })) %>% unnest(Data)
 
 # Make sure the levels are correctly ordered
-maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max"))
+maps$FloodLevel <- factor(maps$FloodLevel, levels = c("Min", "Max", "Difference"))
 
-# Visualize the betweenness
-p1 <- ggplot() +
+# Create facet labels
+lab <- data.frame(
+    FloodLevel = factor(c("Min", "Max"), levels = c("Min", "Max"))
+  , Label      = c("a", "b")
+  , x = c(20.75, 20.75)
+  , y = c(-17.75, -17.75)
+)
+
+# Function to plot
+plotBetweenness <- function(data, formula = ~FloodLevel, area = unique(areas$ID), barwidth = 16, labels = F) {
+  areas$Highlight <- areas$ID %in% area
+  ggplot() +
+    geom_raster(
+        data    = data
+      , mapping = aes(x = x, y = y, fill = Betweenness)
+    ) +
+    geom_sf(data = water, fill = "gray50", col = NA, alpha = 0.25) +
+    geom_sf(data = roads, col = "gray50", linewidth = 0.1) +
+    geom_point(
+        data        = subset(vills, place == "City")
+      , mapping     = aes(x = x, y = y)
+      , col         = "gray90"
+      , shape       = 15
+      , show.legend = F
+      , size        = 1
+    ) +
+    geom_sf(
+        data        = subset(areas, Type == "Main")
+      , mapping     = aes(col = Highlight)
+      , fill        = "white"
+      , lty         = 1
+      , linewidth   = 0.2
+      , show.legend = F
+      , alpha       = 0.15
+    ) +
+    geom_sf(data = afric, linewidth = 0.4, col = "white", fill = NA) +
+    geom_text(
+        data     = labels_waters
+      , mapping  = aes(x = x, y = y, label = Label)
+      , col      = "gray50"
+      , fontface = 3
+      , size     = 1.3
+    ) +
+    geom_text(
+        data     = labels_countries
+      , mapping  = aes(x = x, y = y, label = Label)
+      , col      = "white"
+      , size     = 2
+      , fontface = 2
+    ) +
+    geom_text(
+        data     = subset(labels_areas, Type == "Main")
+      , mapping  = aes(x = X, y = Y, label = ID)
+      , col      = "white"
+      , fontface = 3
+      , size     = 2
+    ) +
+    geom_text(
+        data     = subset(vills, place == "City")
+      , mapping  = aes(x = x, y = y, label = name)
+      , col      = "gray90"
+      , fontface = 3
+      , size     = 2
+      , nudge_y  = c(0.1, -0.1, 0.1)
+    ) +
+    {
+      if (labels) {
+        geom_text(
+            data     = lab
+          , aes(x    = x, y = y, label = Label)
+          , fontface = 2
+          , size     = 5
+          , col      = "white"
+        )
+      }
+    } +
+    scale_color_manual(values = c("white", "red")) +
+    scale_fill_gradientn(
+        colours = viridis::magma(100)
+      , labels  = function(x){format(x, big.mark = "'")}
+      , trans   = "sqrt"
+      , guide   = guide_colorbar(
+        , title          = "Betweenness"
+        , show.limits    = T
+        , title.position = "bottom"
+        , title.hjust    = 0.5
+        , ticks          = F
+        , barheight      = unit(0.2, "cm")
+        , barwidth       = unit(barwidth, "cm")
+      )
+    ) +
+    coord_sf(
+        crs    = 4326
+      , xlim   = c(min(r$x), max(r$x))
+      , ylim   = c(min(r$y), max(r$y))
+      , expand = F
+    ) +
+    labs(
+        x        = NULL
+      , y        = NULL
+      , fill     = NULL
+    ) +
+    theme(
+        legend.position  = "bottom"
+      , legend.box       = "vertical"
+      , panel.background = element_blank()
+      , panel.border     = element_rect(colour = "black", fill = NA, size = 1)
+    ) +
+    annotation_scale(
+        location   = "bl"
+      , width_hint = 0.2
+      , line_width = 0.5
+      , text_cex   = 0.5
+      , height     = unit(0.1, "cm")
+      , bar_cols   = "white"
+      , text_col   = "white"
+    ) +
+    annotation_north_arrow(
+        location = "br"
+      , height   = unit(0.7, "cm"),
+      , width    = unit(0.6, "cm"),
+      , style    = north_arrow_fancy_orienteering(
+            fill      = c("white", "white")
+          , line_col  = NA
+          , text_col  = "white"
+          , text_size = 4
+        )
+    ) +
+    facet_grid(formula)
+}
+
+# Apply it
+p1 <- plotBetweenness(subset(maps, Level == "Global" & Steps == 2000), labels = T)
+
+# I also want to generate source-area specific plots
+p2 <- list()
+for (i in sort(unique(maps$SourceArea))) {
+  p2[[i]] <- plotBetweenness(
+      data     = subset(maps, Level == "Local" & Steps == 2000 & SourceArea == i)
+    , barwidth = 12
+    , area     = i
+  )
+}
+
+# Put the plots together
+p3 <- ggarrange(p2[[1]], p2[[2]], p2[[3]], ncol = 1, labels = c("(1)", "(2)", "(3)"))
+p4 <- ggarrange(p2[[4]], p2[[5]], p2[[6]], ncol = 1, labels = c("(4)", "(5)", "(6)"))
+p5 <- ggarrange(p3, p4, ncol = 2)
+
+################################################################################
+#### Difference Map
+################################################################################
+# Let's also create a difference map
+p6 <- ggplot() +
   geom_raster(
-      data    = maps
+      data    = subset(maps, Level == "Difference" & Steps == 2000)
     , mapping = aes(x = x, y = y, fill = Betweenness)
   ) +
-  geom_sf(data = roads, col = "gray50", lwd = 0.1) +
+  geom_sf(data = water, col = "gray80", alpha = 0.25, fill = NA) +
+  geom_sf(data = roads, col = "gray50", linewidth = 0.1) +
   geom_point(
       data        = subset(vills, place == "City")
-    , mapping     = aes(x = x, y = y)
-    , col         = "gray90"
+    , mapping     = aes(x = x, y = y, size = place)
+    , col         = "gray50"
     , shape       = 15
     , show.legend = F
     , size        = 1
   ) +
   geom_sf(
-      data        = area
-    , col         = "white"
-    , fill        = "white"
+      data        = subset(areas, Type == "Main")
+    , fill        = "black"
     , lty         = 1
-    , lwd         = 0.1
+    , linewidth   = 0.2
     , show.legend = F
     , alpha       = 0.15
   ) +
-  geom_sf(data = afric, lwd = 0.4, col = "white", fill = NA) +
+  geom_sf(data = afric, linewidth = 0.4, col = "black", fill = NA) +
   geom_text(
       data     = labels_waters
     , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "gray50"
+    , col      = "gray20"
     , fontface = 3
     , size     = 1.3
   ) +
   geom_text(
       data     = labels_countries
     , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "white"
+    , col      = "black"
     , size     = 2
     , fontface = 2
   ) +
-  geom_point(
-      data     = labels_source
-    , mapping  = aes(x = x, y = y)
-    , col      = "black"
-    , size     = 3
-  ) +
   geom_text(
-      data     = labels_source
-    , mapping  = aes(x = x, y = y, label = Label)
-    , col      = "white"
+      data     = subset(labels_areas, Type == "Main")
+    , mapping  = aes(x = X, y = Y, label = ID)
+    , col      = "black"
     , fontface = 3
-    , size     = 1.5
+    , size     = 2
   ) +
   geom_text(
       data     = subset(vills, place == "City")
     , mapping  = aes(x = x, y = y, label = name)
-    , col      = "gray90"
+    , col      = "gray50"
     , fontface = 3
     , size     = 2
     , nudge_y  = c(0.1, -0.1, 0.1)
   ) +
+  scale_size_manual(values = c(1.0, 0.25)) +
+  scale_color_manual(values = c("black", "red")) +
   scale_fill_gradientn(
-      colours = viridis::magma(100)
+      colors  = c("orange", "white", "cornflowerblue")
     , labels  = function(x){format(x, big.mark = "'")}
-    , trans   = "sqrt"
+    , limits  = c(-5e8, 5e8)
+    , oob     = squish
     , guide   = guide_colorbar(
-      , title          = "Betweenness"
+      , title          = TeX(r'($\Delta$ Betweenness)')
       , show.limits    = T
       , title.position = "bottom"
       , title.hjust    = 0.5
       , ticks          = F
       , barheight      = unit(0.2, "cm")
-      , barwidth       = unit(16.0, "cm")
+      , barwidth       = unit(6, "cm")
     )
   ) +
   coord_sf(
@@ -176,21 +338,20 @@ p1 <- ggplot() +
     , line_width = 0.5
     , text_cex   = 0.5
     , height     = unit(0.1, "cm")
-    , bar_cols   = "white"
-    , text_col   = "white"
+    , bar_cols   = c("black", "white")
+    , text_col   = "black"
   ) +
   annotation_north_arrow(
       location = "br"
     , height   = unit(0.7, "cm"),
     , width    = unit(0.6, "cm"),
     , style    = north_arrow_fancy_orienteering(
-          fill      = c("white", "white")
+          fill      = c("black", "black")
         , line_col  = NA
-        , text_col  = "white"
+        , text_col  = "black"
         , text_size = 4
       )
-  ) +
-  facet_grid(~ FloodLevel)
+  )
 
 ################################################################################
 #### Store the Maps
@@ -203,3 +364,11 @@ ggsave("04_Manuscript/99_Betweenness.png"
   , height = 4
   , scale  = 1
 )
+ggsave("04_Manuscript/99_BetweennessIndividual.png"
+  , plot   = p5
+  , bg     = "white"
+  , height = 7
+  , width  = 8
+  , scale = 1.4
+)
+write_rds(p6, "03_Data/03_Results/BetweennessDifference.rds")

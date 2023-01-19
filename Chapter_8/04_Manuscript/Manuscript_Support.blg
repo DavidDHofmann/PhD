@@ -2,47 +2,47 @@ This is BibTeX, Version 0.99d (TeX Live 2019/Debian)
 Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript_Support.aux
 The style file: apalike.bst
-I found no \citation commands---while reading file Manuscript_Support.aux
 Database file #1: Literatur.bib
-You've used 0 entries,
+Warning--I didn't find a database entry for "Hofmann.2023"
+You've used 8 entries,
             1935 wiz_defined-function locations,
-            472 strings with 3722 characters,
-and the built_in function-call counts, 19 in all, are:
-= -- 0
-> -- 0
-< -- 0
-+ -- 0
-- -- 0
-* -- 0
-:= -- 7
-add.period$ -- 0
-call.type$ -- 0
-change.case$ -- 0
-chr.to.int$ -- 0
-cite$ -- 0
-duplicate$ -- 0
-empty$ -- 1
-format.name$ -- 0
-if$ -- 1
+            535 strings with 5469 characters,
+and the built_in function-call counts, 3417 in all, are:
+= -- 327
+> -- 163
+< -- 1
++ -- 56
+- -- 56
+* -- 321
+:= -- 606
+add.period$ -- 24
+call.type$ -- 8
+change.case$ -- 67
+chr.to.int$ -- 8
+cite$ -- 8
+duplicate$ -- 111
+empty$ -- 228
+format.name$ -- 64
+if$ -- 646
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 0
-newline$ -- 4
-num.names$ -- 0
-pop$ -- 0
+missing$ -- 9
+newline$ -- 44
+num.names$ -- 24
+pop$ -- 55
 preamble$ -- 2
-purify$ -- 0
+purify$ -- 68
 quote$ -- 0
-skip$ -- 0
+skip$ -- 81
 stack$ -- 0
-substring$ -- 0
-swap$ -- 0
+substring$ -- 251
+swap$ -- 8
 text.length$ -- 0
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 0
+type$ -- 46
 warning$ -- 0
-while$ -- 0
+while$ -- 27
 width$ -- 0
-write$ -- 3
-(There was 1 error message)
+write$ -- 107
+(There was 1 warning)

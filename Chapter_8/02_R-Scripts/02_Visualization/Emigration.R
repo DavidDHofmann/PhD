@@ -19,7 +19,7 @@ library(ggspatial)      # To add scale bars and north arrows
 library(ggpubr)         # To extract legends
 
 # Reload emigration data
-emigration <- read_rds("03_Data/03_Results/99_Emigration.rds")
+emigration <- read_rds("03_Data/03_Results/Emigration.rds")
 
 # Load stuff that we would like to plot
 water  <- read_sf("03_Data/02_CleanData/MajorWaters.shp")
@@ -40,7 +40,7 @@ labels_areas <- st_coordinates(st_point_on_surface(areas))
 labels_areas <- cbind(labels_areas, st_drop_geometry(areas))
 
 # Visualize emigration using a circular plot
-p1 <- ggplot(emigration, aes(x = as.factor(CurrentArea), y = n, fill = FloodLevel, col = FloodLevel)) +
+p1 <- ggplot(emigration, aes(x = as.factor(CurrentArea), y = Number, fill = FloodLevel, col = FloodLevel)) +
   geom_bar(stat = "identity", position = position_dodge(width = 1), size = 0.3, width = 0.75, alpha = 0.8) +
   geom_textpath(aes(y = n + 200, label = format(n, big.mark = "'", scientific = FALSE)), position = position_dodge(width = 1), col = "black", size = 2, angle = 90) +
   coord_polar(direction = -1, start = 2.35) +
@@ -118,8 +118,8 @@ p2 <- ggplot() +
   ) +
   annotation_custom(
       grob = p1_legend
-    , xmin = 21
-    , xmax = 21.5
+    , xmin = 21.1
+    , xmax = 21.6
     , ymin = -20
     , ymax = -20.5
   )

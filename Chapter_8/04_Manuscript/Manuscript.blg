@@ -3,50 +3,48 @@ Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
 The top-level auxiliary file: Manuscript.aux
 The style file: apalike.bst
 Database file #1: Literature.bib
-Warning--I didn't find a database entry for "Hofmann.2022"
 Warning--I didn't find a database entry for "Hofmann.2023"
-Warning--I didn't find a database entry for "Hofmann.2021b"
 Warning--empty journal in Behr.2020
 Warning--empty journal in Thomas.2004
 You've used 84 entries,
             1935 wiz_defined-function locations,
-            1027 strings with 25302 characters,
-and the built_in function-call counts, 39972 in all, are:
-= -- 3706
-> -- 2391
-< -- 29
-+ -- 874
-- -- 857
-* -- 3857
-:= -- 7099
+            1031 strings with 25003 characters,
+and the built_in function-call counts, 39853 in all, are:
+= -- 3699
+> -- 2355
+< -- 30
++ -- 862
+- -- 843
+* -- 3846
+:= -- 7070
 add.period$ -- 251
 call.type$ -- 84
-change.case$ -- 832
+change.case$ -- 825
 chr.to.int$ -- 83
 cite$ -- 86
-duplicate$ -- 1199
-empty$ -- 2379
-format.name$ -- 963
-if$ -- 7490
+duplicate$ -- 1194
+empty$ -- 2394
+format.name$ -- 951
+if$ -- 7472
 int.to.chr$ -- 2
 int.to.str$ -- 0
 missing$ -- 87
 newline$ -- 421
 num.names$ -- 254
-pop$ -- 705
+pop$ -- 693
 preamble$ -- 1
-purify$ -- 841
+purify$ -- 834
 quote$ -- 0
-skip$ -- 884
+skip$ -- 881
 stack$ -- 0
-substring$ -- 2609
-swap$ -- 110
-text.length$ -- 5
+substring$ -- 2654
+swap$ -- 105
+text.length$ -- 4
 text.prefix$ -- 0
 top$ -- 0
 type$ -- 492
 warning$ -- 2
-while$ -- 296
+while$ -- 295
 width$ -- 0
 write$ -- 1083
-(There were 5 warnings)
+(There were 3 warnings)

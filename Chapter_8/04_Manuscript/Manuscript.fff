@@ -1,13 +1,18 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_StudyArea.png}
-  \caption{Study area across which we simulated dispersal. Simulated dispersers
-  were released at random locations within the orange source areas distributed
-  across the delta. Emigration zones (purple) served as checkpoints and enabled
-  us to identify if and where simulated dispersers left the close surroundings
-  of the Okavango delta. These zones were generated using a set of cutlines
-  originating from the center of the delta and roughly cutting an elliptical
-  buffer zone into sections of equal size.}
+  \caption{(a) Location of the study area in Southern Africa across which we
+  simulated dispersing African wild dogs. To mitigate edge effects, our study
+  area comprised a buffer zone (red polygon) within which we randomized
+  covariate values of the habitat layers. (b) The study area was centered on the
+  Okavango Delta and encompassed its immediate surroundings. We initiated
+  simulated dispersers at random locations within one of the six source areas
+  (orange polygons) that we distributed across the delta. Emigration zones
+  (purple polygons) served as checkpoints to identify if and where simulated
+  dispersers left the close surroundings of the Okavango delta. These zones were
+  generated using a set of cutlines (black dotted lines) originating from the
+  center of the delta that dissected an elliptical buffer surrounding the delta
+  into sections of equal size and in accordance with the cardinal directions.}
   \label{StudyArea}
   \end{center}
 \end{figure}
@@ -16,12 +21,11 @@
 \begin{figure}
   \begin{center}
   \includegraphics[width = \textwidth]{99_FloodExtent.png}
-  \caption{Flood extent in the two scenarios considered. In the left panel, the
-  flood is at an extremely low level, stretching across 3'558
-  km\textsuperscript{2}, whereas in the right panel the flood is at an extremely
-  high level and covers 9'397 km\textsuperscript{2}. The two maps were generated
-  using 700 remote sensed MODIS MCD43A4 satellite images spanning the years 2000
-  to 2019.}
+  \caption{Flood extent in the minimum (a) and maximum (b) flood scenarios. In
+  the minimum flood scenario (a), water stretched across 3'558
+  km\textsuperscript{2}, whereas during maximum flood (b) it covered 9'397
+  km\textsuperscript{2}. The two maps were generated using 700 remote sensed
+  MODIS MCD43A4 satellite images spanning the years 2000 to 2019.}
   \label{FloodExtent}
   \end{center}
 \end{figure}
@@ -29,67 +33,30 @@
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_Emigration.png}
-  \caption{Caption}
-  \label{Emigration}
+  \includegraphics[width = 0.8\textwidth]{99_Metrics.png}
+  \caption{(a) Heatmaps, (b) betweenness maps, (c) maps of human wildlife
+  conflict, and (d) maps of inter-patch connectivity, derived from simulated
+  dispersal events. Left panels were derived from the minimum flood scenario,
+  right panels from the maximum flood scenario. Source areas from which
+  dispresers were released are numbered 1-6.  The color scale for betweenness
+  scores in (b) was square-rooted to improve visibility of corridors with lower
+  values. Note that for clarity in (d) we only present links between adjacent
+  source areas. Additional, source-specific maps for each of the four metrics
+  are provided in the appendix.)}
+  \label{Metrics}
   \end{center}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
   \begin{center}
-  \includegraphics[width = \textwidth]{99_Heatmaps.png}
-  \caption{Heatmaps depicting the number of simulated dispersal trajectories
-  traversing each grid-cell in the study area. The left panel shows results for
-  the minimum flood scenario, whereas the right panel shows results for the
-  maximum flood scenario. Source areas (numbered 1-6) from which dispresers were
-  released, and emigration zones (numbered 7-14) are shaded in dark gray.}
-  \label{Heatmaps}
-  \end{center}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_Betweenness.png}
-  \caption{Betweenness scores highlighting potential dispersal corridors for
-  both the minimum and maximum flood scenario. Areas with high betweenness
-  scores (bright yellow) are used by many simulated individuals to move into
-  adjacent regions and can thus be understood as critical pinch-points. Source
-  areas (numbered 1-6) from which dispresers were released, and emigration zones
-  (numbered 7-14) are shaded in light gray.}
-  \label{Betweenness}
-  \end{center}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_IPCTable.png}
-  \caption{Dispersal frequency (a) and duration (b) (in steps) between source
-  areas and emigration zones during minimum and maximum flood.}
-  \label{IPCTable}
-  \end{center}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_Interpatch.png}
-  \caption{Inter-patch connectivity into and from source area number six. This
-  patch experienced the most drastic reduction in connectivity in result to a
-  high flood level. During minimum flood there is ample connectivity from and
-  into source areas 1-3. During maximum flood, connectivity is lower and mainly
-  limited to source area 2.}
-  \label{Interpatch}
-  \end{center}
-\end{figure}
-\efloatseparator
- 
-\begin{figure}
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_Distance.png}
-  \caption{Caption}
-  \label{Distance}
+  \includegraphics[width = \textwidth]{99_Difference.png}
+  \caption{Difference maps generated for (a) heatmaps, (b) betweenness maps, and
+  (c) maps of human wildlife conflict. The maps depict the difference between
+  maximum and minimum flood for each metric (i.e. $Metric_{flood:max} -
+  Metric_{flood:min}$). Orange regions indicate that the respective metric was
+  higher during minimum flood, blue regions that the metric was higher during
+  maximum flood.}
+  \label{Difference}
   \end{center}
 \end{figure}

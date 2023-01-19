@@ -2,20 +2,19 @@
 \contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
 \contentsline {subsection}{\numberline {1.1}Climate Change and Dispersal}{1}{subsection.1.1}%
 \contentsline {subsection}{\numberline {1.2}Connectivity}{1}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Modeling Connectivity}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Climate Change and Seasonality}{3}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}Okavango Delta}{4}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}What We Did}{4}{subsection.1.6}%
 \contentsline {section}{\numberline {2}Materials and Methods}{5}{section.2}%
-\contentsline {subsection}{\numberline {2.1}Study Area}{6}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.1}Study Area}{5}{subsection.2.1}%
 \contentsline {subsection}{\numberline {2.2}Spatial Habitat Layers}{6}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}Dispersal Model}{7}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}Source Areas and Emigration Zones}{8}{subsection.2.4}%
-\contentsline {subsection}{\numberline {2.5}Dispersal Simulation}{8}{subsection.2.5}%
-\contentsline {subsection}{\numberline {2.6}Dispersal Prospects and Connectivity}{8}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.3}Source Areas and Emigration Zones}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Dispersal Simulation}{7}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Derived Metrics}{8}{subsection.2.5}%
 \contentsline {section}{\numberline {3}Results}{9}{section.3}%
-\contentsline {subsection}{\numberline {3.1}General}{9}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}Heatmaps}{9}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}Betweenness}{10}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}Inter-Patch Connectivity}{10}{subsection.3.4}%
 \contentsline {section}{\numberline {4}Discussion}{10}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Conclusion}{13}{subsection.4.1}%
-\contentsline {section}{\numberline {5}Authors' Contributions}{14}{section.5}%
-\contentsline {section}{\numberline {6}Data Availability}{14}{section.6}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{13}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{13}{section.6}%
 \contentsline {section}{\numberline {7}Acknowledgements}{14}{section.7}%

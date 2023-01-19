@@ -29,6 +29,14 @@ source("02_R-Scripts/00_Functions.R")
 r <- raster("03_Data/02_CleanData/ReferenceRaster.tif")
 extent <- as(extent(r), "SpatialPolygons")
 crs(extent) <- CRS("+init=epsg:4326")
+
+# Expanded study area (buffer zone)
+buffer <- as(extent(r) * 1.2, "SpatialPolygons")
+crs(buffer) <- CRS("+init=epsg:4326")
+buffer <- buffer - extent
+
+# Convert to sf
+buffer <- st_as_sf(buffer)
 extent <- st_as_sf(extent)
 r <- as.data.frame(r, xy = T)
 
@@ -105,7 +113,8 @@ disp <- subset(disp, State == "Disperser")
 # Prepare plot of africa
 p1 <- ggplot() +
   geom_sf(data = africa, fill = "gray90", col = "white", lwd = 0.1) +
-  geom_sf(data = extent, fill = "gray30", col = "gray30", alpha = 0.2) +
+  geom_sf(data = buffer, fill = "red", col = "red", alpha = 0.4) +
+  geom_sf(data = extent, fill = "gray30", col = "gray30", alpha = 0.4) +
   theme_minimal() +
   coord_sf(xlim = c(-18, 48), ylim = c(-32, 35)) +
   theme(
@@ -290,7 +299,7 @@ legend <- gtable_add_padding(legend, unit(c(-2, -1, 0, 0), "cm"))
 
 # Arrange legend with plots
 p3 <- ggarrange(p1, legend, nrow = 2, heights = c(2, 1))
-p4 <- ggarrange(p3, p2, nrow = 1, widths = c(2, 5))
+p4 <- ggarrange(p3, p2, nrow = 1, widths = c(2, 5), labels = "auto")
 
 # Store the plot
 ggsave("04_Manuscript/99_StudyArea.png"

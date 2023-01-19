@@ -21,7 +21,6 @@ library(hms)         # To handle times
 library(pbmcapply)   # To run stuff in parallel
 
 # Load cleaned activity data (note that the timestamps are all in UTC)
-dat <- read_csv("03_Data/02_CleanData/ActivityDataCovariatesStates.csv")
 dat <- read_rds("03_Data/02_CleanData/ActivityDataCovariatesStates.rds")
 dat <- dat[1:2, ]
 dat <- select(dat, -ModelParams)
@@ -37,15 +36,36 @@ dat <- unnest(dat, Data)
 # time)
 # dat <- subset(dat, Hour >= as_hms("12:00:00"))
 
-# Nest the data by dog, collar, and cycle
-dat <- dat %>% nest(Data = -c(DogID, Cycle, CollarID))
+# Nest the data by dog and cycle
+dat <- dat %>% nest(Data = -c(DogID, Cycle))
 
-# Check the number of datapoints per day
+# Check the number of datapoints per cycle
 dat$N <- sapply(dat$Data, function(x) {nrow(x)})
 
 # Let's only keep days where we have at least 140 datapoints
 dat <- subset(dat, N > 140)
 
+################################################################################
+#### WHAT IF THEY NEVER START MOVING????
+################################################################################
+
+################################################################################
+#### Approach I: HMM States
+################################################################################
+# Within each cycle (which start at 12:00 UTC), we want to identify the first
+# fix that is classified as active.
+dat$StartMovingHMM <- lapply(dat$Data, function(x) {
+  starttime <- x %>%
+    subset(State == 3) %>%
+    pull(Timestamp) %>%
+    min() %>%
+    as_hms()
+  return(starttime)
+}) %>% do.call(c, .)
+
+################################################################################
+#### Approach II: Thresholding
+################################################################################
 # Compute temporal lag between fixes (the lag of the first fix doesn't matter,
 # so set it to 5 minutes)
 dat$Data <- pbmclapply(
@@ -58,23 +78,6 @@ dat$Data <- pbmclapply(
     return(x)
 })
 
-################################################################################
-#### Approach I: HMM States
-################################################################################
-# Within each cycle (which start at 12:00 UTC), we want to identify the first
-# fix that is classified as active.
-dat$StartMovingHMM <- lapply(1:nrow(dat), function(x) {
-  starttime <- x %>%
-    subset(State == 3) %>%
-    pull(Timestamp) %>%
-    min() %>%
-    as_hms()
-  return(starttime)
-}) %>% do.call(c, .)
-
-################################################################################
-#### Approach II: Thresholding
-################################################################################
 # Function that determines whether the dogs are moving or resting and returns
 # the time of becoming active. It uses two parameters: "activity", which is the
 # activity threshold. If an activity fix is above this threshold, the animals is
@@ -90,7 +93,7 @@ getActivity <- function(data, activity, periods) {
     , mc.cores           = detectCores() - 1
     , ignore.interactive = T
     , FUN                = function(x) {
-      x$Active <- x$ActX > activity
+      x$Active <- x$Act > activity
       x$Status <- NA
       for (i in periods:nrow(x)) {
         if (as.numeric(x$Lag[i]) > 5 | is.na(x$Lag[i])) {
@@ -120,7 +123,7 @@ getFirstMovement <- function(data, activity, periods) {
   # data <- dat
   data <- getActivity(data, activity, periods)
 
-  # Each day, determine time of the day when the dogs became active first
+  # Each cycle, determine time of the day when the dogs became active first
   data$FirstMovement <- pbmclapply(
       X                  = data$Data
     , mc.cores           = detectCores() - 1
@@ -144,7 +147,7 @@ getFirstMovement <- function(data, activity, periods) {
 }
 
 # Try it for different values
-design <- expand_grid(activity = seq(20, 160, 10), periods = c(2:6))
+design <- expand_grid(activity = seq(40, 160, 10), periods = c(2:6))
 design$Results <- lapply(1:nrow(design), function(x) {
   first <- getFirstMovement(dat, activity = design$activity[x], periods = design$periods[x])
   return(first)

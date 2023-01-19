@@ -59,6 +59,14 @@ oka$FloodLevel <- names(water_masked)
 oka$FloodLevel <- factor(oka$FloodLevel, levels = c("Min", "Max"))
 oka$Label      <- paste0("Area~flooded:~", oka$Area, "~km^2")
 
+# Create facet labels
+lab <- data.frame(
+    FloodLevel = factor(c("Min", "Max"), levels = c("Min", "Max"))
+  , Label      = c("a", "b")
+  , x = c(20.75, 20.75)
+  , y = c(-17.75, -17.75)
+)
+
 # Convert to dataframe
 water <- as.data.frame(water, xy = T)
 water <- pivot_longer(water, Min:Max, names_to = "FloodLevel", values_to = "Flooded")
@@ -84,7 +92,8 @@ p <- ggplot() +
   geom_sf(data = roads, col = "gray70", lwd = 0.2) +
   geom_sf(data = africa, col = "black", fill = NA, lwd = 0.3) +
   geom_sf(data = oka, col = "black", fill = NA, lty = 2) +
-  geom_sf_text(data = oka, aes(label = Label), nudge_y = 0.7, nudge_x = -0.25, size = 2, parse = T) +
+  geom_sf_text(data = oka, aes(label = Label), nudge_y = 0.7, nudge_x = -0.25, size = 2, parse = T, col = "red") +
+  geom_text(data = lab, aes(x = x, y = y, label = Label), fontface = 2, size = 5) +
   geom_point(
       data        = subset(vills, place == "City")
     , mapping     = aes(x = x, y = y)

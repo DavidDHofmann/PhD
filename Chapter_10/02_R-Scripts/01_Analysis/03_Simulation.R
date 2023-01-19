@@ -19,6 +19,7 @@ library(glmmTMB)        # To handle the movement model
 library(Rcpp)           # To load C++ functions
 library(pbmcapply)      # For multicore use with progress bar
 library(mapview)        # For interactive plots
+library(sf)             # For plotting
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -92,12 +93,20 @@ sl_max <- 35000
 # Generate a layer of home ranges
 hrs <- simHR(n = 400, m = m, r = r, buff = 10000, 50, 1800)
 hrs <- as.polygons(hrs)
+hrs <- buffer(hrs, width = 0)
 # mapview(as(hrs, "Spatial"))
 
 # Function to sample locations from the different HRs
-sampleLocations <- function(p) {
-  locs <- lapply(1:length(p), function(x) {
-    pts <- spatSample(p[x, ], size = 20)
+sampleLocations <- function(p, ID = NULL) {
+  # p <- hrs
+  # ID <- sample(hrs$ID, size = 10, replace = F)
+  if (is.null(ID)) {
+    p_sub <- p
+  } else {
+    p_sub <- p[p$ID %in% ID, ]
+  }
+  locs <- lapply(1:length(p_sub), function(x) {
+    pts <- spatSample(p_sub[x, ], size = 20)
     return(pts[1, ])
   })
   locs <- do.call(rbind, locs)
@@ -110,20 +119,40 @@ sampleLocations <- function(p) {
 # Go through the design and run the simulation
 cat("Simulating dispersal...\n")
 
-# Generate 10 source points
-pts <- spatSample(hrs, size = 20)
-plot(hrs)
-plot(pts, add = T, col = "red")
+# Generate updated locations for residents
+residents <- sampleLocations(hrs, ID = sample(hrs$ID, 50))
+values(residents) <- data.frame(PackID = residents$ID)
+hrs$Occupied <- hrs$ID %in% residents$PackID
+
+# From some resident groups, we may see dispersers
+dispersers     <- residents[sample(1:nrow(residents), size = 20, replace = F), ]
+dispersers$Sex <- sample(c("M", "F"), size = length(dispersers), replace = T)
+dispersers$Sex <- factor(dispersers$Sex, levels = c("M", "F"))
+dispersers$CoalitionID <- 1:length(dispersers)
+
+# Convert all to dataframes
+dispersers <- as.data.frame(dispersers, geom = "XY")
+residents  <- as.data.frame(residents, geom = "XY")
+
+# Plot them
+ggplot() +
+  geom_sf(data = st_as_sf(hrs), aes(fill = Occupied), col = "white") +
+  geom_point(data = residents, aes(x = x, y = y), col = "black", size = 3) +
+  geom_point(data = dispersers, aes(x = x, y = y, col = Sex)) +
+  scale_color_manual(values = c("cornflowerblue", "orange")) +
+  scale_fill_manual(values = c("gray90", "gray70")) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
 # Run the simulation for each source point
 tracks <- pbmclapply(
-    X                   = 1:length(pts)
+    X                   = 1:nrow(dispersers)
   , mc.cores            = detectCores() - 1
   , ignore.interactive  = T
   , FUN                 = function(x) {
     sim <- suppressWarnings(
       disperse(
-          source    = crds(pts[x, ])
+          source    = cbind(dispersers$x[x], dispersers$y[x])
         , covars    = cov
         , model     = mod
         , sl_dist   = sl_dist
@@ -136,8 +165,11 @@ tracks <- pbmclapply(
       )
     )
 
-    # Assign some more information
-    sim$TrackID <- x
+    # Assign some more information (We will need to make sure that each group
+    # has a unique ID!!!)
+    sim$PackID      <- dispersers$PackID[x]
+    sim$CoalitionID <- dispersers$CoalitionID[x]
+    sim$Sex         <- dispersers$Sex[x]
 
     # Create new columns containing the endpoints of each step
     sim$x_to <- lead(sim$x)
@@ -148,108 +180,90 @@ tracks <- pbmclapply(
     return(sim)
 })
 
-# Identify closest track for each coordinate
+# Bind all together
 tracks <- tracks %>%
   do.call(rbind, .) %>%
-  subset(!is.na(x_to) & !is.na(y_to)) %>%
+  subset(!is.na(x_to) & !is.na(y_to))
+
+# Identify closest group of (1) different sex dispersers from a different pack,
+# or (2) different pack residents
+tracks <- tracks %>%
   nest(Data = -Timestamp) %>%
   mutate(Data = map(Data, function(x) {
-      d       <- distance(cbind(x$x_to, x$y_to), lonlat = T)
-      d       <- as.matrix(d)
-      diag(d) <- NA
-      closest <- lapply(1:ncol(d), function(z) {
-        index <- which.min(d[, z])
-        dista <- d[index, z]
-        return(data.frame(ClosestTrack = index, Distance = dista))
+
+      # Get relevant coordiantes
+      dis <- select(x, x = x_to, y = y_to, CoalitionID, PackID, Sex)
+      res <- select(residents, x, y, PackID)
+
+      # Find distances between dispersers and dispersers, as well as between
+      # dispersers and residents
+      d1 <- distance(cbind(dis$x, dis$y), cbind(dis$x, dis$y), lonlat = T)
+      d2 <- distance(cbind(dis$x, dis$y), cbind(res$x, res$y), lonlat = T)
+
+      # Filter to find closest other-sex, other-pack dispersal coalition
+      filter1 <- outer(dis$CoalitionID, dis$CoalitionID, FUN = function(x, y) {x != y})
+      filter2 <- outer(dis$Sex, dis$Sex, FUN = function(x, y) {x != y})
+
+      # Filter to find closest other-pack resident coalition
+      filter3 <- outer(dis$PackID, res$PackID, FUN = function(x, y) {x != y})
+
+      # Apply filters
+      d1[!filter1 | !filter2] <- NA
+      d2[!filter3] <- NA
+
+      # Extract IDs
+      closest <- lapply(1:nrow(d1), function(z) {
+
+        # Closest dispersers
+        index_dispersers <- which.min(d1[z, ])
+        if (length(index_dispersers) == 0) {
+          close_dispersers <- NA
+          dista_dispersers <- NA
+        } else {
+          close_dispersers <- dis$CoalitionID[index_dispersers]
+          dista_dispersers <- d1[z, index_dispersers]
+        }
+
+        # Closest residents
+        index_residents <- which.min(d2[z, ])
+        if (length(index_residents) == 0) {
+          close_residents <- NA
+          dista_residents <- NA
+        } else {
+          close_residents <- res$PackID[index_residents]
+          dista_residents <- d2[z, index_residents]
+        }
+
+        # Put all into a dataframe
+        result <- data.frame(
+            ClosestDispersers    = close_dispersers
+          , DistanceToDispersers = dista_dispersers
+          , ClosestResidents     = close_residents
+          , DistanceToResidents  = dista_residents
+        )
+        return(result)
       }) %>% do.call(rbind, .)
       return(cbind(x, closest))
   })) %>%
   unnest(Data) %>%
-  arrange(TrackID, Timestamp)
+  arrange(PackID, Timestamp)
 
-# # For each step, identify the closest step from another group
-# testing <- tracks %>%
-#   do.call(rbind, .) %>%
-#   nest(Data = -Timestamp) %>%
-#   mutate(Data = map(Data, function(x) {
-#       x <- testing$Data[[1]]
-#       steps <- lapply(1:nrow(x), function(z) {
-#         vect(rbind(c(x$x[z], x$y[z]), c(x$x_to[z], x$y_to[z])), type = "lines", crs = "epsg:4326")
-#       }) %>% do.call(rbind, .)
-#       distance(steps)
-#
-#       d       <- distance(cbind(x$x, x$y), lonlat = T)
-#       d       <- as.matrix(d)
-#       diag(d) <- NA
-#       closest <- lapply(1:ncol(d), function(z) {
-#         index <- which.min(d[, z])
-#         dista <- d[index, z]
-#         return(data.frame(ClosestTrack = index, Distance = dista))
-#       }) %>% do.call(rbind, .)
-#       return(cbind(x, closest))
-#   })) %>%
-#   unnest(Data) %>%
-#   arrange(TrackID, Timestamp)
-
-
-# Put tracks together
-tracks <- do.call(rbind, tracks)
-
-# Convert to tibble (this saves an amazing amount of space)
-tracks <- as_tibble(tracks)
-
-# Store the simulations
-write_rds(tracks, design$Filename[i])
-
-################################################################################
-#### Combine Simulations
-################################################################################
-# Once the simulations are done, let's combine them into a single big dataframe
-sims <- lapply(1:nrow(design), function(x) {
-  dat <- read_rds(design$Filename[x])
-  dat$SimID      <- x
-  dat$FloodLevel <- design$FloodLevel[x]
-  dat$SourceArea <- design$SourceArea[x]
-  return(dat)
-}) %>% do.call(rbind, .)
-
-# Because in each simulation we start off with new IDs for trajectories, they
-# are not unique across simulations. We thus combine ID and SimID to create an
-# ID that is unqiue to each simulated path, across all simulations
-sims <- sims %>%
-  group_by(SimID, TrackID) %>%
-  mutate(TrackID = cur_group_id())
-
-# Make sure it worked
-table(table(sims$TrackID))
-
-# Collect garbage
-gc()
-
-# Let's also create a step counter, indicating the number of the step in its
-# respective trajectory
-sims <- sims %>%
-  group_by(TrackID) %>%
-  mutate(StepNumber = row_number())
-
-# Check object size
-format(object.size(sims), units = "Gb")
-
-# Ungroup
-sims <- ungroup(sims)
-
-# Write to an rds
-write_rds(sims, "03_Data/03_Results/DispersalSimulation.rds")
-
-# Remove separate files to free some space
-# file.remove(design$Filename)
+# Plot them
+ggplot() +
+  geom_sf(data = st_as_sf(hrs), aes(fill = Occupied), col = "white") +
+  geom_path(data = tracks, aes(x = x, y = y, col = Sex, group = CoalitionID)) +
+  geom_point(data = residents, aes(x = x, y = y), col = "black") +
+  scale_color_manual(values = c("cornflowerblue", "orange")) +
+  scale_fill_manual(values = c("gray90", "gray70")) +
+  theme_minimal() +
+  theme(legend.position = "bottom")
 
 ################################################################################
 #### Session Information
 ################################################################################
 # Store session information
 session <- devtools::session_info()
-readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/04_Simulation.rds")
+readr::write_rds(session, file = "02_R-Scripts/99_SessionInformation/03_Simulation.rds")
 
 # Print to terminal
 cat("Done :)\n")
