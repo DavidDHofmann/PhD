@@ -36,16 +36,17 @@ ref <- rast(files$File[1])
 # Let's determine the flood extent in each image
 flood_summary <- files$File %>%
   rast() %>%
-  freq(bylayer = T) %>%
+  expanse(unit = "km", byValue = T) %>%
   as.data.frame() %>%
-  mutate(count = count / ncell(ref)) %>%
   pivot_wider(
     , id_cols     = layer
     , names_from  = value
-    , values_from = count
+    , values_from = area
     , values_fill = 0
   ) %>%
   rename(Flood = "0", Dryland = "255", Cloud = "127") %>%
+  mutate(Total = Flood + Dryland + Cloud) %>%
+  mutate(Cloud = Cloud / Total) %>%
   mutate(Date = files$Date)
 
 # Put data into a nice tibble for plotting
@@ -66,6 +67,7 @@ rm(flood_summary, ref)
 
 # Keep only floodmaps with cloud cover below 5%
 files <- subset(files, Cloud < 0.05)
+summary(files$Flood)
 
 # # Visualize
 # ggplot(files, aes(x = Day, y = Flood, col = Year, group = Year)) +
@@ -77,34 +79,37 @@ files <- subset(files, Cloud < 0.05)
 # # How many files do we have for each month?
 # plot(table(month(files$Date)))
 
-# Let's pull the 50 maps with the lowest flood extent and the 50 maps with the
+# Let's pull the 100 maps with the lowest flood extent and the 50 maps with the
 # highest flood extent
+n <- 100
 min <- files %>%
   arrange(Flood) %>%
-  slice(1:100) %>%
+  slice(1:n) %>%
   pull(File) %>%
   rast() %>%
   classify(cbind(c(0, 127, 255), c(1, 0, 0))) %>%
   mean()
 max <- files %>%
   arrange(desc(Flood)) %>%
-  slice(1:100) %>%
+  slice(1:n) %>%
   pull(File) %>%
   rast() %>%
   classify(cbind(c(0, 127, 255), c(1, 0, 0))) %>%
   mean()
 
 # Let's also create an averaged map
-avg <- files %>%
-  pull(File) %>%
-  rast() %>%
-  classify(cbind(c(0, 127, 255), c(1, 0, 0))) %>%
-  mean()
+# avg <- files %>%
+#   pull(File) %>%
+#   rast() %>%
+#   classify(cbind(c(0, 127, 255), c(1, 0, 0))) %>%
+#   mean()
 
 # Threshold
 min <- min > 0.5
 max <- max > 0.5
 avg <- avg > 0.5
+plot(min)
+plot(max)
 
 # Put the maps into a stack
 flood <- c(min, avg, max)

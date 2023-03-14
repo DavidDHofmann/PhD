@@ -187,7 +187,10 @@ for (i in 1:length(dates)) {
 #### Download Sentinel 2 Data
 ################################################################################
 # Login to scihub
-write_scihub_login("dodx9", "Scihubbuster69_")
+load("/home/david/ownCloud/Dokumente/Bibliothek/Wissen/R-Scripts/ScihubLogin.rds")
+# username <- "username"
+# password <- "password"
+write_scihub_login(username, password)
 
 # Identify the files that we need to download
 todownload <- lapply(dates, function(x) {

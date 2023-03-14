@@ -18,11 +18,12 @@ setwd(wd)
 glob <- rast("03_Data/01_RawData/GLOBELAND/Globeland.tif")
 
 # Load the reference shapefile and raster
-s <- vect("03_Data/02_CleanData/00_General_Shapefile.shp")
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+s <- vect("03_Data/02_CleanData/Shapefile.gpkg")
+r <- rast("03_Data/02_CleanData/Raster.tif")
 
 # Crop the merged tiles to our reference shapefile
 glob <- crop(glob, s)
+plot(glob)
 
 # Aggregate to coarser resolution
 cat("Aggregating land cover to coarser resolution...\n")
@@ -98,17 +99,13 @@ ggplot(as.data.frame(glob, xy = T), aes(x = x, y = y, fill = as.factor(Globeland
 
 # Store the raster
 cat("Storing data...\n")
-writeRaster(
-    x         = glob
-  , filename  = "03_Data/02_CleanData/01_LandCover_LandCover.tif"
-  , overwrite = TRUE
-)
+writeRaster(glob, "03_Data/02_CleanData/LandCover.tif", overwrite = TRUE)
 
 # Store the information table
 info %>%
   dplyr::select(Class = ClassNew, Code = CodeNew, Color) %>%
   distinct() %>%
-  write_csv("03_Data/02_CleanData/01_LandCover_LandCover.csv")
+  write_csv("03_Data/02_CleanData/LandCover.csv")
 
 ################################################################################
 #### Session Information

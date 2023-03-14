@@ -21,8 +21,9 @@ library(floodmapr)    # For floodmapping
 library(pbmcapply)    # For multicore use
 
 # Specify username and password to Earth Data account
-username <- "DoDx9"
-password <- "EarthData99"
+load("/home/david/ownCloud/Dokumente/Bibliothek/Wissen/R-Scripts/EarthDataLogin.rds")
+# username <- "username"
+# password <- "password"
 
 ################################################################################
 #### Reclassify and Resample ORI Floodmaps
@@ -119,7 +120,7 @@ pot_dates %>% mutate(Month = month(Date)) %>% count(Month, Floodmap) %>% subset(
 
 # Load dispersal data and identify first and last date. We can use those to
 # determine for timerange we should try to download additional floodmaps
-dis_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+dis_dates <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv(show_col_types = F) %>%
   subset(State == "Disperser") %>%
   pull(Timestamp) %>%
@@ -337,7 +338,7 @@ newnames <- paste0("03_Data/02_CleanData/00_Floodmaps/02_Resampled/", basename(f
 
 # Resample floodmaps
 dir.create("03_Data/02_CleanData/00_Floodmaps/02_Resampled", showWarnings = F)
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- rast("03_Data/02_CleanData/Raster.tif")
 if (length(files) > 0) {
   cat("Resampling floodmaps...\n")
   invisible(pbmclapply(1:length(files), ignore.interactive = T, mc.cores = 1, function(x) {

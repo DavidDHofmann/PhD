@@ -1,7 +1,9 @@
 \begin{table}
-  \caption{(a) Dispersal frequency and (b) duration (in steps) between source
+ \caption{(a) Dispersal frequency and (b) duration (in steps) between source
   areas (labeled 1 to 6) and emigration zones (labeled 7 to 14) during minimum
   and maximum flood.}
-  \label{IPCTable}
-  \includegraphics[width = \textwidth]{99_IPCTable.png}
+ \label{IPCTable}
+ \includegraphics[width = \textwidth]{99_IPCTable.png}
 \end{table}
+\efloatseparator
+ 

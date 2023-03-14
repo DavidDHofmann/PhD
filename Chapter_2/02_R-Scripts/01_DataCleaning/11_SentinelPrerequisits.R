@@ -25,20 +25,21 @@ wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
 setwd(wd)
 
 # Login to scihub
-write_scihub_login("dodx9", "Scihubbuster69_")
+load("/home/david/ownCloud/Dokumente/Bibliothek/Wissen/R-Scripts/ScihubLogin.rds")
+write_scihub_login(username, password)
 
 ################################################################################
 #### Check Overlap with Sentinel Tiles
 ################################################################################
 # Get a rough overview of the different sentinel tiles and how many overlap with
 # our main study area. Hence, let's load a shapefile of study area
-study <- shapefile("03_Data/02_CleanData/00_General_Shapefile.shp")
+study <- vect("03_Data/02_CleanData/Shapefile.gpkg")
 
 # Check with which tiles of the sentinel grid our study area overlaps
 tiles <- as(tiles_intersects(st_as_sf(study), out_format = "sf"), "Spatial")
 
 # Also load dispersal data
-disp <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+disp <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv() %>%
   subset(State == "Disperser")
 
@@ -61,7 +62,7 @@ axis(2)
 # range of dates, I'm going to create a spatio-temporal moving window over the
 # locations of our dispersing wild dogs. This should help to reduce the amount
 # of data that needs to be downloaded. Thus, let's load the dispersal data again
-disp <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+disp <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv() %>%
   subset(State == "Disperser")
 
@@ -93,7 +94,6 @@ disp$Window <- pbmclapply(
   buff <- buffer(pts, width = 50 * 1000)
   buff <- aggregate(buff)
   ext <- disagg(buff)
-
   ext <- as(ext, "Spatial")
   ext <- as(ext, "SpatialPolygonsDataFrame")
   return(ext)
@@ -167,7 +167,7 @@ write_rds(disp, "/media/david/Elements/Windows.rds")
 # We want to download by month, so let's generate sequences for all dates that
 # we want to download. First, create all possible dates for the duration of our
 # study and nest the dates by year and month.
-sent <- seq(ymd("2011-01-01"), ymd("2021-12-31"), by = "day") %>%
+sent <- seq(ymd("2011-01-01"), ymd("2022-12-31"), by = "day") %>%
   tibble(Year = year(.), Month = month(.), Date = .) %>%
   group_by(Year, Month) %>%
   nest()
@@ -201,7 +201,7 @@ rm(disp, sent, ext, study, tiles, wind, index)
 # since 2015
 dat <- subset(dat, Year >= 2015)
 
-# Go through the rows and check for availability of the fils
+# Go through the rows and check for availability of the files
 cat("Checking available Sentinel data for the area and time of interest...\n")
 pb <- txtProgressBar(min = 0, max = nrow(dat), style = 3)
 dat$Files <- lapply(1:nrow(dat), function(x) {

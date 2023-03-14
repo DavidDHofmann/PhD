@@ -35,6 +35,7 @@ if (!file.exists("03_Data/01_RawData/POPECOL/Cleaned_GPSData.csv")) {
       , clean     = T
       , overwrite = T
       , outdir    = "03_Data/01_RawData/POPECOL"
+      , legacy    = T
     )
   } else {
     cat("GPS data has already been downloaded and will not be downloaded again...\n")
@@ -79,7 +80,7 @@ p1 <- ggplot(dat, aes(x = x, y = y)) +
   coord_sf()
 p2 <- ggplot(subset(dat, State == "Disperser"), aes(x = x, y = y, col = as.factor(DogName))) +
   geom_point(size = 0.1, alpha = 0.5) +
-  geom_path(size = 0.2, alpha = 0.5) +
+  geom_path(linewidth = 0.2, alpha = 0.5) +
   theme_minimal() +
   theme(legend.position = "none") +
   coord_sf()
@@ -91,7 +92,7 @@ ggarrange(p1, p2, ncol = 1)
 graphics.off()
 
 # Store the data to file
-write_csv(dat, "03_Data/02_CleanData/00_General_Dispersers.csv")
+write_csv(dat, "03_Data/02_CleanData/Dispersers.csv")
 
 ################################################################################
 #### Session Information

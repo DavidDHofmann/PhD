@@ -75,7 +75,7 @@ resampleFixes <- function(data, hours, start, tol = 0.5) {
     set_names("Timestamp")
 
   # For each Timestamp we now identify the closest fix
-  closest <- sapply(1:nrow(dates), function(x){
+  closest <- sapply(1:nrow(dates), function(x) {
     index <- which.min(abs(dates$Timestamp[x] - data$Timestamp))[1]
     close <- as.numeric(abs(dates$Timestamp[x] - data$Timestamp[index]), units = "hours") <= tol
 
@@ -89,7 +89,11 @@ resampleFixes <- function(data, hours, start, tol = 0.5) {
 
   # Return respective fixes
   closest <- na.omit(closest)
-  return(data[closest, ])
+  if (length(closest) > 0) {
+    return(data[closest, ])
+  } else {
+    return(NA)
+  }
 }
 
 ################################################################################

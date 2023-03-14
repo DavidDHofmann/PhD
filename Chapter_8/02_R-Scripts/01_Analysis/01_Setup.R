@@ -90,6 +90,11 @@ writeVector(riv, file.path(new_chap, "03_Data/02_CleanData/MajorRivers.shp"), ov
 fau <- vect(file.path(old_chap, "03_Data/01_RawData/DAVID/Faults.shp"))
 writeVector(fau, file.path(new_chap, "03_Data/02_CleanData/Faults.shp"), overwrite = T)
 
+# Copy areas of interest
+aoi <- vect(file.path(old_chap, "03_Data/01_RawData/DAVID/AreasOfInterest.shp"))
+aoi <- smooth(aoi)
+writeVector(aoi, file.path(new_chap, "03_Data/02_CleanData/AreasOfInterest.shp"), overwrite = T)
+
 # Copy protected areas
 pro <- vect(file.path(old_chap, "03_Data/02_CleanData/02_LandUse_Protected_PEACEPARKS.shp"))
 pro <- crop(pro, ext)
@@ -135,6 +140,26 @@ dis <- crop(dis, ext)
 plot(dis)
 names(dis) <- "DistanceToHumans"
 writeRaster(dis, file.path(new_chap, "03_Data/02_CleanData/DistanceToHumans.tif"), overwrite = T)
+
+# Copy the raw "Human Density" layer
+hum <- rast(file.path(old_chap, "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluence_FACEBOOK.tif"))
+hum <- crop(hum, ext * 1.4)
+names(hum) <- "HumanDensity"
+writeRaster(hum, file.path(new_chap, "03_Data/02_CleanData/HumanDensity.tif"), overwrite = T)
+
+# Copy the raw "Agriculture" layer(s)
+cro1 <- rast(file.path(old_chap, "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_CROPLANDS.tif"))
+cro2 <- rast(file.path(old_chap, "03_Data/02_CleanData/04_AnthropogenicFeatures_Agriculture_GLOBELAND.tif"))
+cro <- max(c(cro1, cro2))
+cro <- crop(cro, ext * 1.4)
+names(cro) <- "Agriculture"
+writeRaster(cro, file.path(new_chap, "03_Data/02_CleanData/Agriculture.tif"), overwrite = T)
+
+# Copy information on cattle
+cat <- vect(file.path(old_chap, "03_Data/01_RawData/GABRIELE/Cattle.shp"))
+ras <- rast(cat, resolution = 1 / 111)
+cat <- rasterize(cat, ras, field = "DENS_KM2")
+writeRaster(cat, file.path(new_chap, "03_Data/02_CleanData/CattleDensity.tif"), overwrite = T)
 
 # Copy Vegetation layers, also cropped to a smaller extent
 dir.create("03_Data/01_RawData/MODIS", showWarnings = F)

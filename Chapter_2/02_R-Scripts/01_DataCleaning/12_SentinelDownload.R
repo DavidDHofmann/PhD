@@ -29,7 +29,10 @@ dir.create(outdir_l1c, showWarnings = F)
 dir.create(outdir_l2a, showWarnings = F)
 
 # Login to scihub
-write_scihub_login("dodx9", "Scihubbuster69_")
+load("/home/david/ownCloud/Dokumente/Bibliothek/Wissen/R-Scripts/ScihubLogin.rds")
+# username <- "username"
+# password <- "password"
+write_scihub_login(username, password)
 
 # Read the file containing all data that we need to download
 todownload <- read_rds("/media/david/Elements/Todownload.rds")
@@ -54,7 +57,7 @@ print(todownload)
 
 # Depending on the group we will use different login credentials
 todownload$Username <- ifelse(todownload$GroupID %% 2 == 1, "dodx9", "dodx92")
-todownload$Password <- "Scihubbuster69_"
+todownload$Password <- password
 
 # Let's write a function that we can use to check if a file already exists
 # The function needs to tolerate minor mismatches in names as the ingestion date

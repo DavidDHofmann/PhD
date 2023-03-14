@@ -36,6 +36,8 @@ new_chap <- "/home/david/ownCloud/University/15. PhD/Chapter_10"
 dir.create("03_Data/01_RawData", showWarnings = F)
 dir.create("03_Data/02_CleanData", showWarnings = F)
 dir.create("03_Data/03_Results", showWarnings = F)
+dir.create("04_Manuscript", showWarnings = F)
+dir.create("05_Presentation", showWarnings = F)
 
 ################################################################################
 #### Copy Data from Chapter 1

@@ -16,7 +16,7 @@ setwd(wd)
 
 # Import the human influence layer and the reference raster
 human <- rast("03_Data/01_RawData/DAVID/HumanInfluence.grd")
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- rast("03_Data/02_CleanData/Raster.tif")
 
 # Crop humans to reference raster
 cat("Preparing human influence layer...\n")
@@ -27,10 +27,7 @@ human <- human$Buffer_5000
 names(human) <- "HumanInfluence"
 
 # Write the raster to file
-writeRaster(human
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_HumanInfluence.tif"
-  , overwrite = T
-)
+writeRaster(human, "03_Data/02_CleanData/Humans.tif", overwrite = T)
 
 # Let's also load some roads that we can plot later
 roads <- vect("03_Data/01_RawData/GEOFABRIK/Roads.shp")
@@ -46,15 +43,11 @@ legend <- read.csv2(
 roads <- subset(roads, roads$fclass %in% legend$Value[c(1:4, 9:12)])
 
 # Crop roads to our study extent
-s <- vect("03_Data/02_CleanData/00_General_Shapefile.shp")
+s <- vect("03_Data/02_CleanData/Shapefile.gpkg")
 roads <- crop(roads, ext(s))
 
 # Save the cropped shapefile
-writeVector(
-    x         = roads
-  , filename  = "03_Data/02_CleanData/04_AnthropogenicFeatures_Roads.shp"
-  , overwrite = T
-)
+writeVector(roads, "03_Data/02_CleanData/Roads.gpkg", overwrite = T)
 
 ################################################################################
 #### Session Information

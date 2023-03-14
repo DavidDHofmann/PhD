@@ -29,7 +29,7 @@ library(lubridate)   # To handle dates
 library(tidyverse)   # To wrangle data
 
 # Load the layers we want to merge
-flood <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd")
+flood <- rast("03_Data/02_CleanData/WaterCoverDynamic.gpkg")
 veget <- "03_Data/02_CleanData/00_Vegmaps" %>%
   dir(pattern = ".grd$", full.names = T) %>%
   rast()
@@ -101,19 +101,19 @@ shrub_maps <- veget[[grepl(names(veget), pattern = "Shrubs")]]
 
 # Store the layers to file
 cat("Storing data...\n")
-writeRaster(trees_maps, "03_Data/02_CleanData/01_LandCover_TreeCoverDynamic.grd", overwrite = T)
-writeRaster(shrub_maps, "03_Data/02_CleanData/01_LandCover_ShrubCoverDynamic.grd", overwrite = T)
+writeRaster(trees_maps, "03_Data/02_CleanData/TreeCoverDynamic.gpkg", overwrite = T)
+writeRaster(shrub_maps, "03_Data/02_CleanData/ShrubCoverDynamic.gpkg", overwrite = T)
 
 # We also want to create a corresponding set of maps for the "static" watermap
 cat("Creating static vegetation maps...\n")
-flood_static <- rast("03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif")
+flood_static <- rast("03_Data/02_CleanData/WaterCoverStatic.gpkg")
 trees_static <- mask(mean(trees), flood_static, maskvalue = 1, updatevalue = 0)
 shrub_static <- mask(mean(shrub), flood_static, maskvalue = 1, updatevalue = 0)
 
 # Store the layers to file
 cat("Storing data...\n")
-writeRaster(trees_static, "03_Data/02_CleanData/01_LandCover_TreeCoverStatic.tif", overwrite = T)
-writeRaster(shrub_static, "03_Data/02_CleanData/01_LandCover_ShrubCoverStatic.tif", overwrite = T)
+writeRaster(trees_static, "03_Data/02_CleanData/TreeCoverStatic.gpkg", overwrite = T)
+writeRaster(shrub_static, "03_Data/02_CleanData/ShrubCoverStatic.gpkg", overwrite = T)
 
 ################################################################################
 #### Session Information

@@ -83,7 +83,7 @@ Climate Change - Lessons Learned from Seasonal Flood Extremes}
   David D. Hofmann\textsuperscript{1,2,\S} \orcid{0000-0003-3477-4365} \and
   Dominik M. Behr\textsuperscript{1,2} \orcid{0000-0001-7378-8538} \and
   John W. McNutt\textsuperscript{2} \and
-  Arpat Ozgul\textsuperscript{1} \orcid{0000-0001-7477-2642} \and
+  Arpat Ozgul\textsuperscript{1,2} \orcid{0000-0001-7477-2642} \and
   Gabriele Cozzi\textsuperscript{1,2} \orcid{0000-0002-1744-1940}
 }
 
@@ -121,23 +121,20 @@ Climate Change - Lessons Learned from Seasonal Flood Extremes}
 Studies, University of Zurich, Winterthurerstarsse 190, 8057 Zurich,
 Switzerland.
 
-\textsuperscript{2} Botswana Predator Conservation Program, Private Bag 13,
-Maun, Botswana.
+\textsuperscript{2} Botswana Predator Conservation Program, Wild Entrust,
+Private Bag 13, Maun, Botswana.
 
 \textsuperscript{\S} Corresponding author (david.hofmann2@uzh.ch)
 
 \vspace{4cm}
 
-\textbf{Running Title:} Seasonal Flooding of the Okavango Delta and its
-Consequences for African Wild Dog Dispersal and Connectivity
-
-\textbf{Running Title:} Seasonal Flooding of the Okavango Delta and its
-Consequences for African Wild Dog Connectivity under Climate Change
+\textbf{Running Title:} African Wild Dog Dispersal in a Changing Climate:
+Lessons Learned from Seasonal Flood Extremes
 
 \vspace{0.5cm}
 
-\textbf{Keywords:} movement, connectivity, seasonality, dispersal, conservation,
-permeability
+\textbf{Keywords:} movement, connectivity, climate change, seasonality,
+dispersal, conservation, individual-based simulations, step-selection
 
 \end{flushleft}
 
@@ -192,11 +189,58 @@ habitat conditions. A fitted iSSF model can be used as an individual-based
 movement model to simulate dispersal \citep{Signer.2017, Hofmann.2023}
 
 \newpage
+\section{Dispersal Model Estimates}
+\Cref{Model} depicts the model estimates from \cite{Hofmann.2023} that we used
+to simulate dispersal trajectories in this study.
+
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_MovementModel.png}
+  \caption{Model parameters from the step-selection model implemented by
+  \cite{Hofmann.2023}. The model was fit to GPS data of dispersing African wild
+  dogs and comprises of a habitat kernel (light blue band), a movement kernel
+  (dark blue band), and their interactions (purple band). Abbreviations are as
+  follows: sl = step-length, log(sl) = natural logarithm of the step-length,
+  cos(ta) = cosine of the relative turning angle.}
+  \label{Model}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Source-Specific Inter-Patch Connectivity}
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_IPCMain.png}
+  \caption{Spatial representation of inter-patch connectivity derived for each
+  source-area separately across the two extreme flood-scenarios. The focal
+  source area of each subfigure is highlighted by a red circle. Subfigure (a),
+  for instance, depicts inter-patch connectivity for source-area 1.}
+  \label{IPCMain}
+  \end{center}
+\end{figure}
+
+\newpage
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_IPCBuffer.png}
+  \caption{Spatial representation of emigration patterns derived for each
+  source-area separately across the two extreme flood-scenarios. The focal
+  source area of each subfigure is highlighted by a red circle. Subfigure (a),
+  for instance, depicts the number of emigrating individuals from source-area
+  1.}
+  \label{IPCBuffer}
+  \end{center}
+\end{figure}
+
+\newpage
 \section{Source-Specific Heatmaps}
 \begin{figure}[htbp]
   \begin{center}
   \includegraphics[width = \textwidth]{99_HeatmapsIndividual.png}
-  \caption{}
+  \caption{Heatmaps prepared for each source-area separately across the two
+  extreme flood-scenarios. The focal source area of each subfigure is
+  highlighted by a red circle. Subfigure (a), for instance, depicts the heatmaps
+  for source-area 1.}
   \label{Heatmaps}
   \end{center}
 \end{figure}
@@ -206,7 +250,10 @@ movement model to simulate dispersal \citep{Signer.2017, Hofmann.2023}
 \begin{figure}[htbp]
   \begin{center}
   \includegraphics[width = \textwidth]{99_BetweennessIndividual.png}
-  \caption{}
+  \caption{Betweenness maps prepared for each source-area separately across the
+  two extreme flood-scenarios. The focal source area of each subfigure is
+  highlighted by a red circle. Subfigure (a), for instance, depicts the
+  betweenness maps for source-area 1.}
   \label{Betweenness}
   \end{center}
 \end{figure}
@@ -216,46 +263,18 @@ movement model to simulate dispersal \citep{Signer.2017, Hofmann.2023}
 \begin{figure}[htbp]
   \begin{center}
   \includegraphics[width = \textwidth]{99_HumanWildlifeConflictIndividual.png}
-  \caption{}
+  \caption{Human wildlife conflict maps prepared for each source-area separately
+  across the two extreme flood-scenarios. The focal source area of each
+  subfigure is highlighted by a red circle. Subfigure (a), for instance, depicts
+  the human wildlife conflict maps for source-area 1.}
   \label{HWC}
-  \end{center}
-\end{figure}
-
-\newpage
-\section{Source-Specific Inter-Patch Connectivity}
-\begin{figure}[htbp]
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_IPCMain.png}
-  \caption{Spatial representation of the tables 1a and 1b from the main
-  manuscript.}
-  \label{IPCMain}
-  \end{center}
-\end{figure}
-
-\newpage
-\begin{figure}[htbp]
-  \begin{center}
-  \includegraphics[width = \textwidth]{99_IPCBuffer.png}
-  \caption{}
-  \label{IPCBuffer}
-  \end{center}
-\end{figure}
-
-\newpage
-\section{Emigration}
-\begin{figure}[htbp]
-  \begin{center}
-  \includegraphics[width = 0.8\textwidth]{99_Emigration.png}
-  \caption{Absolute number of simulated AWDs moving into each of the designated
-  emigration zones (purple), in the minimum and maximum flood scenarios.}
-  \label{Emigration}
   \end{center}
 \end{figure}
 
 \newpage
 \begingroup
 \singlespacing
-\bibliography{Literatur}
+\bibliography{Literature}
 \endgroup
 
 \end{document}

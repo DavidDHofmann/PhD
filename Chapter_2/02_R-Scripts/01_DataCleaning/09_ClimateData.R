@@ -22,10 +22,10 @@ library(lubridate)    # To handle dates
 # Sys.setenv(RETICULATE_PYTHON = "/home/david/miniconda3/envs/rgee/bin/python")
 
 # Specify correct python environment
-ee_install_set_pyenv(
-    py_path = "/home/david/miniconda3/envs/rgee/bin/python"
-  , py_env  = "rgee"
-)
+# ee_install_set_pyenv(
+#     py_path = "/home/david/miniconda3/envs/rgee/bin/python"
+#   , py_env  = "rgee"
+# )
 
 # Make sure we have all installed for rgee
 ee_check()
@@ -44,7 +44,7 @@ aoi <- ee$Geometry$Polygon(
 )
 
 # Load the reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- rast("03_Data/02_CleanData/Raster.tif")
 
 ################################################################################
 #### Download Precipitation Data
@@ -53,7 +53,7 @@ r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
 # want to download the maps by month. This will allow me to observe the download
 # process better and to save files in between. Let's first identify the dates
 # for which we want to download data.
-dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+dates <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv(show_col_types = F) %>%
   pull(Timestamp) %>%
   range() %>%
@@ -136,7 +136,7 @@ if (nrow(todownload) > 0) {
 # want to download the maps by month. This will allow me to observe the download
 # process better and to save files in between. Let's first identify the dates
 # for which we want to download data.
-dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+dates <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv(show_col_types = F) %>%
   pull(Timestamp) %>%
   range() %>%
@@ -260,7 +260,8 @@ averaged <- mutate(help, Average = map(Timestamp, function(x) {
 print(averaged)
 
 # Each entry should either contain 4 or 8 maps. Let's check this
-table(sapply(averaged$Average, length))
+check <- sapply(averaged$Average, length)
+table(check)
 
 # For some reason we are missing the 00:00 data for one entry. I tried multiple
 # time to access this data but it's not possible. Anyways, it shouldn't
@@ -286,7 +287,7 @@ names(averaged)
 plot(averaged[[sample(nlyr(averaged), 4)]])
 
 # Store the final maps to file
-writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Precipitation.grd", overwrite = T)
+writeRaster(averaged, "03_Data/02_CleanData/Precipitation.grd", overwrite = T)
 
 ################################################################################
 #### Aggregate Temperature Data
@@ -361,7 +362,7 @@ names(averaged)
 plot(averaged[[sample(nlyr(averaged), 4)]])
 
 # Store the final maps to file
-writeRaster(averaged, "03_Data/02_CleanData/05_Climate_Temperature.grd", overwrite = T)
+writeRaster(averaged, "03_Data/02_CleanData/Temperature.grd", overwrite = T)
 
 ################################################################################
 #### Session Information

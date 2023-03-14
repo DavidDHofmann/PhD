@@ -3,7 +3,7 @@
 ################################################################################
 # Description: Use the step selection data generated in the previous script and
 # extract covariate values below each observed and random step. To speed up
-# extraction speeds, we might extract covariate values along interpolated points
+# extractions, we will extract covariate values along interpolated points
 # instead of along lines. For dynamic covariates, we'll extract data from the
 # layer that is closest in date to the actual step.
 
@@ -16,7 +16,6 @@ library(terra)      # To handle spatial data
 library(raster)     # To handle spatial data
 library(lubridate)  # To handle dates
 library(pbmcapply)  # To run stuff on multiple cores
-library(velox)      # To extract data quickly
 
 # Change the working directory
 wd <- "/home/david/ownCloud/University/15. PhD/Chapter_2"
@@ -26,8 +25,8 @@ setwd(wd)
 source("02_R-Scripts/00_Functions.R")
 
 # Load step selection data
-ssf <- read_csv("03_Data/02_CleanData/00_General_SSF.csv", show_col_types = F)
-ssf <- subset(ssf, ID == "Abel")
+ssf <- read_csv("03_Data/02_CleanData/SSF.csv", show_col_types = F)
+# ssf <- subset(ssf, ID == "Abel")
 
 # Let's generate a set of interpolated points along each of the steps
 ssf$Points <- pbmclapply(
@@ -48,16 +47,12 @@ ssf$Points <- pbmclapply(
 #### Precipitation
 ################################################################################
 # Load precipitation data
-covariate <- stack("03_Data/02_CleanData/05_Climate_Precipitation.grd")
+covariate <- rast("03_Data/02_CleanData/Precipitation.grd")
 
 # Generate timestamps from the layernames
 covariate_dates <- covariate %>%
   names() %>%
-  substr(start = 2, stop = 21) %>%
   ymd_hms()
-
-# Generate velox rasters
-covariate <- velox(covariate)
 
 # Extract precipitation data
 ssf$Precipitation <- pbmclapply(
@@ -66,16 +61,16 @@ ssf$Precipitation <- pbmclapply(
   , mc.cores           = detectCores() - 1
   , FUN                = function(i) {
     index <- which.min(abs(ssf$Timestamp[i] - covariate_dates))[1]
-    pts <- SpatialPoints(ssf$Points[[i]])
-    extr <- covariate$extract_points(pts)
+    extr <- terra::extract(covariate[[index]], ssf$Points[[i]])
     extr <- colMeans(extr)
-    extr <- extr[index]
     return(extr)
 }) %>% do.call(c, .)
 
 ################################################################################
 #### Temperature
 ################################################################################
+library(velox)
+
 # Load temperature data
 covariate <- stack("03_Data/02_CleanData/05_Climate_Temperature.grd")
 
@@ -94,11 +89,15 @@ ssf$Temperature <- pbmclapply(
   , ignore.interactive = T
   , mc.cores           = detectCores() - 1
   , FUN                = function(i) {
+#     index <- which.min(abs(ssf$Timestamp[i] - covariate_dates))[1]
+#     covar <- velox(covariate[[index]])
+#     pts <- SpatialPoints(ssf$Points[[i]])
+#     extr <- covar$extract_points(pts)
+#     extr <- colMeans(extr)
+#     extr <- extr[index]
     index <- which.min(abs(ssf$Timestamp[i] - covariate_dates))[1]
-    pts <- SpatialPoints(ssf$Points[[i]])
-    extr <- covariate$extract_points(pts)
+    extr <- terra::extract(covariate[[index]], ssf$Points[[i]])
     extr <- colMeans(extr)
-    extr <- extr[index]
     return(extr)
 }) %>% do.call(c, .)
 

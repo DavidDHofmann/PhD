@@ -33,7 +33,7 @@ rcl <- data.frame(from = c(-Inf, 10), to = c(10, Inf), new = c(0, 1))
 riv <- classify(riv, rcl)
 
 # Load reference raster
-r <- rast("03_Data/02_CleanData/00_General_Raster.tif")
+r <- rast("03_Data/02_CleanData/Raster.tif")
 
 # Aggregate the layer to match the resolution of the reference raster
 fact <- res(r)[1] / res(riv)[1]
@@ -44,11 +44,7 @@ riv <- aggregate(riv, fact = round(fact), fun = max)
 riv <- resample(riv, r, "near")
 
 # Store the final result to file
-writeRaster(
-    riv
-  , "03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif"
-  , overwrite = TRUE
-)
+writeRaster(riv, "03_Data/02_CleanData/Rivers.tif", overwrite = TRUE)
 
 ################################################################################
 #### Session Information

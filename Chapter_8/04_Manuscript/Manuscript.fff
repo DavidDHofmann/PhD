@@ -1,62 +1,91 @@
 \begin{figure}
-  \begin{center}
+ \begin{center}
   \includegraphics[width = \textwidth]{99_StudyArea.png}
   \caption{(a) Location of the study area in Southern Africa across which we
-  simulated dispersing African wild dogs. To mitigate edge effects, our study
-  area comprised a buffer zone (red polygon) within which we randomized
-  covariate values of the habitat layers. (b) The study area was centered on the
-  Okavango Delta and encompassed its immediate surroundings. We initiated
-  simulated dispersers at random locations within one of the six source areas
-  (orange polygons) that we distributed across the delta. Emigration zones
-  (purple polygons) served as checkpoints to identify if and where simulated
-  dispersers left the close surroundings of the Okavango delta. These zones were
-  generated using a set of cutlines (black dotted lines) originating from the
-  center of the delta that dissected an elliptical buffer surrounding the delta
-  into sections of equal size and in accordance with the cardinal directions.}
+   simulated dispersing African wild dogs. To mitigate edge effects, our study
+   area comprised a buffer zone (red polygon) within which we randomized
+   covariate values of the habitat layers. (b) The study area was centered on the
+   Okavango Delta and encompassed its immediate surroundings. We initiated
+   simulated dispersers at random locations within one of the six source areas
+   (orange polygons) that we distributed across the delta. Emigration zones
+   (purple polygons) served as checkpoints to identify if and where simulated
+   dispersers left the close surroundings of the Okavango delta. These zones were
+   generated using a set of cutlines (black dotted lines) originating from the
+   center of the delta that dissected an elliptical buffer surrounding the delta
+   into sections of equal size and in accordance with the cardinal directions.}
   \label{StudyArea}
-  \end{center}
+ \end{center}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
-  \begin{center}
+ \begin{center}
   \includegraphics[width = \textwidth]{99_FloodExtent.png}
   \caption{Flood extent in the minimum (a) and maximum (b) flood scenarios. In
-  the minimum flood scenario (a), water stretched across 3'558
-  km\textsuperscript{2}, whereas during maximum flood (b) it covered 9'397
-  km\textsuperscript{2}. The two maps were generated using 700 remote sensed
-  MODIS MCD43A4 satellite images spanning the years 2000 to 2019.}
+   the minimum flood scenario (a), water stretched across 3'558
+   km\textsuperscript{2}, whereas during maximum flood (b) it covered 9'397
+   km\textsuperscript{2}. The two maps were generated using 700 remote sensed
+   MODIS MCD43A4 satellite images spanning the years 2000 to 2019.}
   \label{FloodExtent}
-  \end{center}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_ImmigrationEmigration.png}
+  \caption{Number of individuals emigrating from, or immigrating into a specific
+  source area (focal area). Colors indicate into which other areas emigrants
+  moved or from which other areas immigrants originate. For instance, the most
+  left plot in the upper panel shows the number of individuals moving from
+  source area 1 into the six other source areas during minimum and maximum
+  flood, respectively.}
+  \label{EmigrationImmigration}
+ \end{center}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
   \begin{center}
+  \includegraphics[width = \textwidth]{99_Emigration.png}
+  \caption{Absolute number of simulated trajectories running into each of the
+  designated emigration zones (purple) during minimum and maximum flood.
+  Subfigure (a) depicts the total number of emigrating trajectories, including
+  temporary emigrants that eventually returned into the OD's vicinity. Subfigure
+  (b) only depicts permanent emigration events.}
+  \label{Emigration}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
   \includegraphics[width = 0.8\textwidth]{99_Metrics.png}
   \caption{(a) Heatmaps, (b) betweenness maps, (c) maps of human wildlife
-  conflict, and (d) maps of inter-patch connectivity, derived from simulated
-  dispersal events. Left panels were derived from the minimum flood scenario,
-  right panels from the maximum flood scenario. Source areas from which
-  dispresers were released are numbered 1-6.  The color scale for betweenness
-  scores in (b) was square-rooted to improve visibility of corridors with lower
-  values. Note that for clarity in (d) we only present links between adjacent
-  source areas. Additional, source-specific maps for each of the four metrics
-  are provided in the appendix.)}
+   conflict, and (d) maps of inter-patch connectivity, derived from simulated
+   dispersal events. Left panels were derived from the minimum flood scenario,
+   right panels from the maximum flood scenario. Source areas from which
+   dispersers were released are numbered 1-6.  The color scale for betweenness
+   scores in (b) was square-rooted to improve visibility of corridors with lower
+   values. Note that for clarity in (d) we only present links between adjacent
+   source areas. Additional, source-specific maps for each of the four metrics
+   are provided in the appendix.)}
   \label{Metrics}
-  \end{center}
+ \end{center}
 \end{figure}
 \efloatseparator
  
 \begin{figure}
-  \begin{center}
+ \begin{center}
   \includegraphics[width = \textwidth]{99_Difference.png}
-  \caption{Difference maps generated for (a) heatmaps, (b) betweenness maps, and
-  (c) maps of human wildlife conflict. The maps depict the difference between
-  maximum and minimum flood for each metric (i.e. $Metric_{flood:max} -
-  Metric_{flood:min}$). Orange regions indicate that the respective metric was
-  higher during minimum flood, blue regions that the metric was higher during
-  maximum flood.}
+  \caption{Difference maps generated from the (a) heatmaps, (b) betweenness
+   maps, and (c) maps of human wildlife conflict in \Cref{Metrics}. The maps
+   depict the difference between maximum and minimum flood for each metric (i.e.
+   $Metric_{flood:max} - Metric_{flood:min}$). Orange regions indicate that the
+   respective metric was higher during minimum flood, blue regions that the
+   metric was higher during maximum flood.}
   \label{Difference}
-  \end{center}
+ \end{center}
 \end{figure}
+\efloatseparator
+ 

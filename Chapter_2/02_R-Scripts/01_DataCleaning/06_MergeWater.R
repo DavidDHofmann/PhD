@@ -25,8 +25,8 @@ source("02_R-Scripts/00_Functions.R")
 #### Merge Layers
 ################################################################################
 # Load the layers we want to merge
-water <- rast("03_Data/02_CleanData/01_LandCover_LandCover.tif") == 1
-river <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
+water <- rast("03_Data/02_CleanData/LandCover.tif") == 1
+river <- rast("03_Data/02_CleanData/Rivers.tif")
 
 # Extract dates
 flood_dates <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
@@ -35,7 +35,7 @@ flood_dates <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
 
 # From the floodmaps, we only want to keep those that are closest to some
 # dispersal date. So identify unique dates of dispersal
-disp_dates <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+disp_dates <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv() %>%
   subset(State == "Disperser") %>%
   pull(Timestamp) %>%
@@ -91,17 +91,13 @@ plot(dynamic[[sample(nlyr(dynamic), size = 4)]], col = c("white", "blue"))
 
 # Save the result to file. We'll store them uncompressed which allows faster
 # reading times
-writeRaster(
-    x         = dynamic
-  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd"
-  , overwrite = TRUE
-)
+writeRaster(dynamic, "03_Data/02_CleanData/WaterCoverDynamic.grd", overwrite = TRUE)
 
 ################################################################################
 #### Distance To Water
 ################################################################################
 # Reload dynamic watermaps
-water <- stack("03_Data/02_CleanData/01_LandCover_WaterCoverDynamic.grd")
+water <- stack("03_Data/02_CleanData/WaterCoverDynamic.grd")
 
 # Compute distance to water for each watermap
 cat("Comptuing distance to dynamic water layers...\n")
@@ -116,7 +112,7 @@ distances <- pbmclapply(1:nlayers(water), ignore.interactive = T, mc.cores = det
 distances <- rast(stack(distances))
 
 # Store them
-writeRaster(distances, "03_Data/02_CleanData/01_LandCover_DistanceToWaterDynamic.grd", overwrite = T)
+writeRaster(distances, "03_Data/02_CleanData/DistanceToWaterDynamic.grd", overwrite = T)
 
 ################################################################################
 #### Create Averaged Watermap
@@ -124,8 +120,8 @@ writeRaster(distances, "03_Data/02_CleanData/01_LandCover_DistanceToWaterDynamic
 # We also want to create a static watermap. This map basically resembles the
 # type of data most people would consider for their analysis. For this, we'll
 # create an "average representation of the flood" across the Okavango delta.
-water <- rast("03_Data/02_CleanData/01_LandCover_LandCover.tif") == 1
-river <- rast("03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
+water <- rast("03_Data/02_CleanData/LandCover.tif") == 1
+river <- rast("03_Data/02_CleanData/Rivers.tif")
 flood <- "03_Data/02_CleanData/00_Floodmaps/02_Resampled" %>%
   dir(pattern = ".tif$", full.names  = T) %>%
   rast()
@@ -141,11 +137,7 @@ summed <- sum(flood)
 summed <- summed > nlyr(flood) * 0.1
 
 # Store the static floodmap to file
-writeRaster(
-    x         = summed
-  , filename  = "03_Data/02_CleanData/00_Floodmaps/FloodMapStatic.tif"
-  , overwrite = T
-)
+writeRaster(summed, "03_Data/02_CleanData/00_Floodmaps/FloodMapStatic.tif", overwrite = T)
 
 # Extend to the main study area
 summed <- extend(summed, water)
@@ -164,16 +156,8 @@ plot(static, col = c("white", "cornflowerblue"))
 plot(distance)
 
 # Store the file
-writeRaster(
-    x         = static
-  , filename  = "03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif"
-  , overwrite = TRUE
-)
-writeRaster(
-    x         = distance
-  , filename  = "03_Data/02_CleanData/01_LandCover_DistanceToWaterStatic.tif"
-  , overwrite = TRUE
-)
+writeRaster(static, "03_Data/02_CleanData/WaterCoverStatic.tif", overwrite = TRUE)
+writeRaster(distance, "03_Data/02_CleanData/DistanceToWaterStatic.tif", overwrite = TRUE)
 
 ################################################################################
 #### Session Information

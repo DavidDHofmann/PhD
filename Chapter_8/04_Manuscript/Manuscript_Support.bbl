@@ -1,54 +1,59 @@
- \newcommand{\noop}[1]{}
 \begin{thebibliography}{}
 
 \bibitem[Avgar et~al., 2017]{Avgar.2017}
 Avgar, T., Lele, S.~R., Keim, J.~L., and Boyce, M.~S. (2017).
-\newblock {Relative Selection Strength: Quantifying Effect Size in Habitat‐
-  and Step‐Selection Inference}.
-\newblock {\em {Ecology and Evolution}}, 7(14):5322--5330.
+\newblock Relative {{Selection Strength}}: {{Quantifying Effect Size}} in
+  {{Habitat}}- and {{Step}}-{{Selection Inference}}.
+\newblock {\em Ecology and Evolution}, 7(14):5322--5330.
 
 \bibitem[Avgar et~al., 2016]{Avgar.2016}
 Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
-\newblock {Integrated Step Selection Analysis: Bridging the Gap Between
-  Resource Selection and Animal Movement}.
-\newblock {\em {Methods in Ecology and Evolution}}, 7(5):619--630.
+\newblock Integrated {{Step Selection Analysis}}: {{Bridging}} the {{Gap
+  Between Resource Selection}} and {{Animal Movement}}.
+\newblock {\em Methods in Ecology and Evolution}, 7(5):619--630.
 
 \bibitem[Fieberg et~al., 2021]{Fieberg.2021}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
-\newblock {A ‘How to’ Guide for Interpreting Parameters in
-  Habitat-Selection Analyses}.
-\newblock {\em {Journal of Animal Ecology}}, 90(5):1027--1043.
+\newblock A `{{How}} to' {{Guide}} for {{Interpreting Parameters}} in
+  {{Habitat-Selection Analyses}}.
+\newblock {\em Journal of Animal Ecology}, 90(5):1027--1043.
 
 \bibitem[Fortin et~al., 2005]{Fortin.2005}
 Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
   J.~S. (2005).
-\newblock {Wolves Influence Elk Movements: Behavior Shapes a Trophic Cascade in
-  Yellowstone National Park}.
+\newblock Wolves {{Influence Elk Movements}}: {{Behavior Shapes}} a {{Trophic
+  Cascade}} in {{Yellowstone National Park}}.
 \newblock {\em Ecology}, 86(5):1320--1330.
+
+\bibitem[Hofmann et~al., 2023]{Hofmann.2023}
+Hofmann, D.~D., Cozzi, G., McNutt, J.~W., Ozgul, A., and Behr, D.~M. (2023).
+\newblock A {{Three-Step Approach}} for {{Assessing Landscape Connectivity Via
+  Simulated Dispersal}}: {{African Wild Dog Case Study}}.
+\newblock {\em Landscape Ecology}.
 
 \bibitem[Muff et~al., 2020]{Muff.2020}
 Muff, S., Signer, J., and Fieberg, J. (2020).
-\newblock {Accounting for Individual-Specific Variation in Habitat-Selection
-  Studies: Efficient Estimation of Mixed-Effects Models Using Bayesian or
-  Frequentist Computation}.
-\newblock {\em {Journal of Animal Ecology}}, 89(1):80--92.
+\newblock Accounting for {{Individual-Specific Variation}} in
+  {{Habitat-Selection Studies}}: {{Efficient Estimation}} of {{Mixed-Effects
+  Models Using Bayesian}} or {{Frequentist Computation}}.
+\newblock {\em Journal of Animal Ecology}, 89(1):80--92.
 
 \bibitem[Signer et~al., 2017]{Signer.2017}
 Signer, J., Fieberg, J., and Avgar, T. (2017).
-\newblock {Estimating Utilization Distributions from Fitted Step-Selection
-  Functions}.
-\newblock {\em {Ecosphere}}, 8(4):e01771.
+\newblock Estimating {{Utilization Distributions}} from {{Fitted Step-Selection
+  Functions}}.
+\newblock {\em Ecosphere}, 8(4):e01771.
 
 \bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
 Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
-\newblock {Applications of Step-Selection Functions in Ecology and
-  Conservation}.
-\newblock {\em {Movement Ecology}}, 2(4).
+\newblock Applications of {{Step-Selection Functions}} in {{Ecology}} and
+  {{Conservation}}.
+\newblock {\em Movement Ecology}, 2(4).
 
 \bibitem[Turchin, 1998]{Turchin.1998}
 Turchin, P. (1998).
-\newblock {\em {Quantitative Analysis of Movement: Measuring and Modeling
-  Population Redistribution in Plants and Animals}}.
-\newblock Sinauer Associates, Sunderland, MA, USA.
+\newblock {\em Quantitative Analysis of Movement: Measuring and Modeling
+  Population Redistribution in Animals and Plants}.
+\newblock {Sinauer Associates}.
 
 \end{thebibliography}

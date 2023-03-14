@@ -1,5 +1,10 @@
 \begin{thebibliography}{}
 
+\bibitem[Abrahms, 2021]{Abrahms.2021}
+Abrahms, B. (2021).
+\newblock Human-{{Wildlife Conflict Under Climate Change}}.
+\newblock {\em Science}, 373(6554):484--485.
+
 \bibitem[Adriaensen et~al., 2003]{Adriaensen.2003}
 Adriaensen, F., Chardon, J., De~Blust, G., Swinnen, E., Villalba, S., Gulinck,
   H., and Matthysen, E. (2003).
@@ -23,15 +28,30 @@ Allen, C.~H., Parrott, L., and Kyle, C. (2016).
 \bibitem[Anderson et~al., 2012]{Anderson.2012}
 Anderson, A.~S., Reside, A.~E., VanDerWal, J.~J., Shoo, L.~P., Pearson, R.~G.,
   and Williams, S.~E. (2012).
-\newblock Immigrants and refugees: The importance of dispersal in mediating
-  biotic attrition under climate change.
+\newblock Immigrants and {{Refugees}}: {{The Importance}} of {{Dispersal}} in
+  {{Mediating Biotic Attrition Under Climate Change}}.
 \newblock {\em Global Change Biology}, 18(7):2126--2134.
+
+\bibitem[Apps et~al., 2022]{Apps.2022}
+Apps, P., Claase, M., {van Mourik}, E., Lostrom, S., Yexley, B., Webster, H.,
+  and McNutt, J.~W. (2022).
+\newblock A {{Description}} of a {{New Discovery}}: {{African Wild Dog Packs
+  Communicate}} with {{Other Packs}} by {{Posting Scent-Mark Messages}} at a
+  {{Shared Marking Site}}.
+\newblock {\em Behavioral Ecology and Sociobiology}, 76(3):37.
+
+\bibitem[Armansin et~al., 2019]{Armansin.2019}
+Armansin, N.~C., Stow, A.~J., Cantor, M., Leu, S.~T., {Klarevas-Irby}, J.~A.,
+  Chariton, A.~A., and Farine, D.~R. (2019).
+\newblock Social {{Barriers}} in {{Ecological Landscapes}}: {{The Social
+  Resistance Hypothesis}}.
+\newblock {\em Trends in Ecology \& Evolution}, pages 137--148.
 
 \bibitem[Ashrafzadeh et~al., 2019]{Ashrafzadeh.2019}
 Ashrafzadeh, M.~R., Naghipour, A.~A., Haidarian, M., Kusza, S., and Pilliod,
   D.~S. (2019).
-\newblock Effects of climate change on habitat and connectivity for populations
-  of a vulnerable, endemic salamander in {{Iran}}.
+\newblock Effects of {{Climate Change}} on {{Habitat}} and {{Connectivity}} for
+  {{Populations}} of a {{Vulnerable}}, {{Endemic Salamander}} in {{Iran}}.
 \newblock {\em Global Ecology and Conservation}, 19:e00637.
 
 \bibitem[Avgar et~al., 2016]{Avgar.2016}
@@ -42,8 +62,8 @@ Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
 
 \bibitem[Baddeley et~al., 2015]{Baddeley.2015}
 Baddeley, A., Rubak, E., and Turner, R. (2015).
-\newblock {\em Spatial Point Patterns: {{Methodology}} and Applications with
-  {{R}}}.
+\newblock {\em Spatial {{Point Patterns}}: {{Methodology}} and {{Applications}}
+  with {{R}}}.
 \newblock {Chapman and Hall/CRC Press}, {London}.
 
 \bibitem[Baguette et~al., 2013]{Baguette.2013}
@@ -72,6 +92,19 @@ Behr, D.~M. (2020).
   African Wild Dog}} ({{Lycaon}} pictus).
 \newblock page~14.
 
+\bibitem[Bennitt et~al., 2014]{Bennitt.2014}
+Bennitt, E., Bonyongo, M.~C., and Harris, S. (2014).
+\newblock Habitat {{Selection}} by {{African Buffalo}} ({{Syncerus}} caffer) in
+  {{Response}} to {{Landscape-Level Fluctuations}} in {{Water Availability}} on
+  {{Two Temporal Scales}}.
+\newblock {\em PLoS ONE}, 9(7):e101346.
+
+\bibitem[Bonyongo, 2005]{Bonyongo.2005}
+Bonyongo, C.~M. (2005).
+\newblock Habitat {{Utilization}} by {{Impala}} ({{Aepyceros}} memmpus) in the
+  {{Okavango Delta}}.
+\newblock {\em Botswana Notes \& Records}, 37(1):227--235.
+
 \bibitem[Boyce et~al., 2002]{Boyce.2002}
 Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F.~K. (2002).
 \newblock Evaluating {{Resource Selection Functions}}.
@@ -94,6 +127,26 @@ Brown, J.~H. and {Kodric-Brown}, A. (1977).
   {{Immigration}} on {{Extinction}}.
 \newblock {\em Ecology}, 58(2):445--449.
 
+\bibitem[Buchholtz et~al., 2020]{Buchholtz.2020}
+Buchholtz, E.~K., Stronza, A., Songhurst, A., McCulloch, G., and Fitzgerald,
+  L.~A. (2020).
+\newblock Using {{Landscape Connectivity}} to {{Predict Human-Wildlife
+  Conflict}}.
+\newblock {\em Biological Conservation}, 248:108677.
+
+\bibitem[Chapman and McPhee, 2016]{Chapman.2016}
+Chapman, B.~K. and McPhee, D. (2016).
+\newblock Global {{Shark Attack Hotspots}}: {{Identifying Underlying Factors
+  Behind Increased Unprovoked Shark Bite Incidence}}.
+\newblock {\em Ocean \& Coastal Management}, 133:72--84.
+
+\bibitem[Claase et~al., 2022]{Claase.2022}
+Claase, M., Cherry, M., Apps, P., McNutt, J., Hansen, K., and Jordan, N.
+  (2022).
+\newblock Interpack {{Communication}} in {{African Wild Dogs}} at {{Long-Term
+  Shared Marking Sites}}.
+\newblock {\em Animal Behaviour}, 192:27--38.
+
 \bibitem[Clobert et~al., 2012]{Clobert.2012}
 Clobert, J., Baguette, M., Benton, T.~G., and Bullock, J.~M. (2012).
 \newblock {\em Dispersal {{Ecology}} and {{Evolution}}}.
@@ -105,12 +158,25 @@ Collins, M., Chandler, R.~E., Cox, P.~M., Huthnance, J.~M., Rougier, J., and
 \newblock Quantifying future climate change.
 \newblock {\em Nature Climate Change}, 2(6):403--409.
 
+\bibitem[Cozzi, 2013]{Cozzi.2013}
+Cozzi, G. (2013).
+\newblock {\em Patterns of {{Habitat Use}} and {{Segregation Among African
+  Large Carnivores}}}.
+\newblock PhD thesis, University of Zurich, {Zurich}.
+
 \bibitem[Cozzi et~al., 2020]{Cozzi.2020}
 Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
   Mcnutt, J.~W., and Ozgul, A. (2020).
 \newblock African {{Wild Dog Dispersal}} and {{Implications}} for
   {{Management}}.
 \newblock {\em The Journal of Wildlife Management}, pages 614--621.
+
+\bibitem[Cozzi et~al., 2018]{Cozzi.2018}
+Cozzi, G., Maag, N., B{\"o}rger, L., {Clutton-Brock}, T.~H., and Ozgul, A.
+  (2018).
+\newblock Socially {{Informed Dispersal}} in a {{Territorial Cooperative
+  Breeder}}.
+\newblock {\em Journal of Animal Ecology}, 87(3):838--849.
 
 \bibitem[Csardi and Nepusz, 2006]{Csardi.2006}
 Csardi, G. and Nepusz, T. (2006).
@@ -143,6 +209,12 @@ Doerr, V. A.~J., Barrett, T., and Doerr, E.~D. (2011).
   Climate Change}}: {{A Response}} to {{Hodgson Et Al}}.: {{Connectivity}} and
   {{Dispersal Behaviour}}.
 \newblock {\em Journal of Applied Ecology}, 48(1):143--147.
+
+\bibitem[Dr{\"o}ge et~al., 2017]{Droge.2017}
+Dr{\"o}ge, E., Creel, S., Becker, M.~S., and M'soka, J. (2017).
+\newblock Spatial and {{Temporal Avoidance}} of {{Risk Within}} a {{Large
+  Carnivore Guild}}.
+\newblock {\em Ecology and Evolution}, 7(1):189--199.
 
 \bibitem[Durant et~al., 2007]{Durant.2007}
 Durant, J., Hjermann, D., Ottersen, G., and Stenseth, N. (2007).
@@ -180,6 +252,12 @@ Fahrig, L. (2003).
 \newblock {\em Annual Review of Ecology, Evolution, and Systematics},
   34(1):487--515.
 
+\bibitem[Fattebert et~al., 2015]{Fattebert.2015}
+Fattebert, J., Robinson, H.~S., Balme, G., Slotow, R., and Hunter, L. (2015).
+\newblock Structural {{Habitat Predicts Functional Dispersal Habitat}} of a
+  {{Large Carnivore}}: {{How Leopards Change Spots}}.
+\newblock {\em Ecological Applications}, 25(7):1911--1921.
+
 \bibitem[Fieberg et~al., 2021]{Fieberg.2021}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
 \newblock A `{{How}} to' {{Guide}} for {{Interpreting Parameters}} in
@@ -212,6 +290,13 @@ Fuller, A., Mitchell, D., Maloney, S.~K., and Hetem, R.~S. (2016).
   {{Climate Change}}.
 \newblock {\em Climate Change Responses}, 3(1):10.
 
+\bibitem[Ghoddousi et~al., 2021]{Ghoddousi.2021}
+Ghoddousi, A., Buchholtz, E.~K., Dietsch, A.~M., Williamson, M.~A., Sharma, S.,
+  Balkenhol, N., Kuemmerle, T., and Dutta, T. (2021).
+\newblock Anthropogenic {{Resistance}}: {{Accounting}} for {{Human Behavior}}
+  in {{Wildlife Connectivity Planning}}.
+\newblock {\em One Earth}, 4(1):39--48.
+
 \bibitem[Graves et~al., 2014]{Graves.2014}
 Graves, T., Chandler, R.~B., Royle, J.~A., Beier, P., and Kendall, K.~C.
   (2014).
@@ -223,6 +308,13 @@ Gumbricht, T., Wolski, P., Frost, P., and McCarthy, T. (2004).
 \newblock Forecasting the {{Spatial Extent}} of the {{Annual Flood}} in the
   {{Okavango Delta}}, {{Botswana}}.
 \newblock {\em Journal of Hydrology}, 290(3-4):178--191.
+
+\bibitem[Gusset et~al., 2009]{Gusset.2009}
+Gusset, M., Swarner, M., Mponwane, L., Keletile, K., and McNutt, J. (2009).
+\newblock Human\textendash{{Wildlife Conflict}} in {{Northern Botswana}}:
+  {{Livestock Predation}} by {{Endangered African Wild Dog Lycaon Pictus}} and
+  {{Other Carnivores}}.
+\newblock {\em Oryx}, 43(01):67.
 
 \bibitem[Gustafson and Gardner, 1996]{Gustafson.1996}
 Gustafson, E.~J. and Gardner, R.~H. (1996).
@@ -251,7 +343,7 @@ Heller, N.~E. and Zavaleta, E.~S. (2009).
 
 \bibitem[Hijmans, 2022]{Hijmans.2022}
 Hijmans, R.~J. (2022).
-\newblock {\em Terra: {{Spatial}} Data Analysis}.
+\newblock {\em Terra: {{Spatial Data Analysis}}}.
 
 \bibitem[Hodgson et~al., 2009]{Hodgson.2009}
 Hodgson, J.~A., Thomas, C.~D., Wintle, B.~A., and Moilanen, A. (2009).
@@ -264,6 +356,18 @@ Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
 \newblock Bound {{Within Boundaries}}: {{Do Protected Areas Cover Movement
   Corridors}} of {{Their Most Mobile}}, {{Protected Species}}?
 \newblock {\em Journal of Applied Ecology}, 58(6):1133--1144.
+
+\bibitem[Hofmann et~al., 2023]{Hofmann.2023}
+Hofmann, D.~D., Cozzi, G., McNutt, J.~W., Ozgul, A., and Behr, D.~M. (2023).
+\newblock A {{Three-Step Approach}} for {{Assessing Landscape Connectivity Via
+  Simulated Dispersal}}: {{African Wild Dog Case Study}}.
+\newblock {\em Landscape Ecology}.
+
+\bibitem[Hughes et~al., 2011]{Hughes.2011}
+Hughes, D.~A., Kingston, D.~G., and Todd, M.~C. (2011).
+\newblock Uncertainty in {{Water Resources Availability}} in the {{Okavango
+  River Basin}} as a {{Result}} of {{Climate Change}}.
+\newblock {\em Hydrology and Earth System Sciences}, 15(3):931--941.
 
 \bibitem[{IPCC}, 2022]{IPCC.2022}
 {IPCC} (2022).
@@ -289,6 +393,13 @@ Kaszta, {\.Z}., Cushman, S.~A., and Slotow, R. (2021).
   National Park}}.
 \newblock {\em Frontiers in Ecology and Evolution}, 9:553263.
 
+\bibitem[Kgathi et~al., 2006]{Kgathi.2006}
+Kgathi, D., Kniveton, D., Ringrose, S., Turton, A., Vanderpost, C., Lundqvist,
+  J., and Seely, M. (2006).
+\newblock The {{Okavango}}; a {{River Supporting Its People}}, {{Environment}}
+  and {{Economic Development}}.
+\newblock {\em Journal of Hydrology}, 331(1-2):3--17.
+
 \bibitem[Koen et~al., 2010]{Koen.2010}
 Koen, E.~L., Garroway, C.~J., Wilson, P.~J., and Bowman, J. (2010).
 \newblock The {{Effect}} of {{Map Boundary}} on {{Estimates}} of {{Landscape
@@ -300,6 +411,12 @@ Kokko, H. (2006).
 \newblock From {{Individual Dispersal}} to {{Species Ranges}}: {{Perspectives}}
   for a {{Changing World}}.
 \newblock {\em Science}, 313(5788):789--791.
+
+\bibitem[LeFlore et~al., 2019]{LeFlore.2019}
+LeFlore, E.~G., Fuller, T.~K., Tomeletso, M., and Stein, A.~B. (2019).
+\newblock Livestock {{Depredation}} by {{Large Carnivores}} in {{Northern
+  Botswana}}.
+\newblock {\em Global Ecology and Conservation}, 18:e00592.
 
 \bibitem[Leigh et~al., 2012]{Leigh.2012}
 Leigh, K.~A., Zenger, K.~R., Tammen, I., and Raadsma, H.~W. (2012).
@@ -337,6 +454,13 @@ Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
   {{East Africa}}.
 \newblock {\em African Journal of Ecology}, 54(1):95--98.
 
+\bibitem[McCarthy et~al., 1998]{McCarthy.1998a}
+McCarthy, T.~S., Ellery, W.~N., and Bloem, A. (1998).
+\newblock Some {{Observations}} on the {{Geomorphological Impact}} of
+  {{Hippopotamus}} (hippopotamus {{Amphibius L}}.) in the {{Okavango Delta}},
+  {{Botswana}}.
+\newblock {\em African Journal of Ecology}, 36(1):44--56.
+
 \bibitem[McNutt, 1996]{McNutt.1996}
 McNutt, J. (1996).
 \newblock Sex-{{Biased Dispersal}} in {{African Wild Dogs}}, {{Lycaon}} pictus.
@@ -353,6 +477,19 @@ Melbourne, B.~A. and Hastings, A. (2008).
 \newblock Extinction {{Risk Depends Strongly}} on {{Factors Contributing}} to
   {{Stochasticity}}.
 \newblock {\em Nature}, 454(7200):100--103.
+
+\bibitem[Michalski et~al., 2006]{Michalski.2006}
+Michalski, F., Boulhosa, R. L.~P., Faria, A., and Peres, C.~A. (2006).
+\newblock Human-{{Wildlife Conflicts}} in a {{Fragmented Amazonian Forest
+  Landscape}}: {{Determinants}} of {{Large Felid Depredation}} on
+  {{Livestock}}.
+\newblock {\em Animal Conservation}, 9(2):179--188.
+
+\bibitem[Moses and Hambira, 2018]{Moses.2018}
+Moses, O. and Hambira, W.~L. (2018).
+\newblock Effects of {{Climate Change}} on {{Evapotranspiration Over}} the
+  {{Okavango Delta Water Resources}}.
+\newblock {\em Physics and Chemistry of the Earth, Parts A/B/C}, 105:98--103.
 
 \bibitem[Muff et~al., 2020]{Muff.2020}
 Muff, S., Signer, J., and Fieberg, J. (2020).
@@ -374,6 +511,11 @@ Mui, A.~B., Caverhill, B., Johnson, B., Fortin, M.-J., and He, Y. (2017).
   {{Climate}} and {{Water Use}} on {{Hydro-Ecology}} in the {{Okavango Delta}},
   {{Botswana}}.
 \newblock {\em Journal of Hydrology}, 331(1):73--84.
+
+\bibitem[Northrup et~al., 2012]{Northrup.2012}
+Northrup, J.~M., Stenhouse, G.~B., and Boyce, M.~S. (2012).
+\newblock Agricultural {{Lands}} as {{Ecological Traps}} for {{Grizzly Bears}}.
+\newblock {\em Animal Conservation}, 15(4):369--377.
 
 \bibitem[Osipova et~al., 2019]{Osipova.2019}
 Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
@@ -419,13 +561,14 @@ Radchuk, V., Reed, T., Teplitsky, C., {van de Pol}, M., Charmantier, A.,
   Sheldon, B.~C., Pape~M{\o}ller, A., Matthysen, E., Janzen, F., Dobson, F.~S.,
   Visser, M.~E., Beissinger, S.~R., Courtiol, A., and {Kramer-Schadt}, S.
   (2019).
-\newblock Adaptive responses of animals to climate change are most likely
-  insufficient.
+\newblock Adaptive {{Responses}} of {{Animals}} to {{Climate Change Are Most
+  Likely Insufficient}}.
 \newblock {\em Nature Communications}, 10(1):3109.
 
 \bibitem[Raia et~al., 2012]{Raia.2012}
 Raia, P., Passaro, F., Fulgione, D., and Carotenuto, F. (2012).
-\newblock Habitat tracking, stasis and survival in {{Neogene}} large mammals.
+\newblock Habitat {{Tracking}}, {{Stasis}} and {{Survival}} in {{Neogene Large
+  Mammals}}.
 \newblock {\em Biology Letters}, 8(1):64--66.
 
 \bibitem[Sawyer et~al., 2011]{Sawyer.2011}
@@ -434,6 +577,14 @@ Sawyer, S.~C., Epps, C.~W., and Brashares, J.~S. (2011).
   Models Reflect How Animals Use Landscapes}}?: {{Least-Cost Modelling}} for
   {{Habitat Linkage Design}}.
 \newblock {\em Journal of Applied Ecology}, 48(3):668--678.
+
+\bibitem[Spear et~al., 2010]{Spear.2010}
+Spear, S.~F., Balkenhol, N., Fortin, M.-J., Mcrae, B.~H., and Scribner, K.
+  (2010).
+\newblock Use of {{Resistance Surfaces}} for {{Landscape Genetic Studies}}:
+  {{Considerations}} for {{Parameterization}} and {{Analysis}}: {{Resistance
+  Surfaces}} in {{Landscape Genetics}}.
+\newblock {\em Molecular Ecology}, 19(17):3576--3591.
 
 \bibitem[Stott, 2016]{Stott.2016}
 Stott, P. (2016).
@@ -444,6 +595,14 @@ Stott, P. (2016).
 Taylor, P.~D., Fahrig, L., Henein, K., and Merriam, G. (1993).
 \newblock Connectivity {{Is}} a {{Vital Element}} of {{Landscape Structure}}.
 \newblock {\em Oikos}, 68(3):571--573.
+
+\bibitem[Tensen et~al., 2022]{Tensen.2022}
+Tensen, L., {Jansen van Vuuren}, B., Groom, R., Bertola, L.~D., {de Iongh}, H.,
+  Rasmussen, G., Du~Plessis, C., {Davies-Mostert}, H., {van der Merwe}, D.,
+  Fabiano, E., Lages, F., Rocha, F., Monterroso, P., and Godinho, R. (2022).
+\newblock Spatial {{Genetic Patterns}} in {{African Wild Dogs Reveal Signs}} of
+  {{Effective Dispersal Across Southern Africa}}.
+\newblock {\em Frontiers in Ecology and Evolution}, 10:992389.
 
 \bibitem[Thomas et~al., 2004]{Thomas.2004}
 Thomas, C.~D., Cameron, A., Green, R.~E., Bakkenes, M., Beaumont, L.~J.,
@@ -511,10 +670,31 @@ Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
   {{Lessons}} from {{Species Distribution Modeling}}.
 \newblock {\em Ecography}, 38(10):967--978.
 
+\bibitem[Wasserman et~al., 2012]{Wasserman.2012}
+Wasserman, T.~N., Cushman, S.~A., Shirk, A.~S., Landguth, E.~L., and Littell,
+  J.~S. (2012).
+\newblock Simulating the {{Effects}} of {{Climate Change}} on {{Population
+  Connectivity}} of {{American Marten}} (martes {{Americana}}) in the
+  {{Northern Rocky Mountains}}, {{Usa}}.
+\newblock {\em Landscape Ecology}, 27(2):211--225.
+
+\bibitem[Wey et~al., 2015]{Wey.2015}
+Wey, T.~W., Spiegel, O., Montiglio, P.-O., and Mabry, K.~E. (2015).
+\newblock Natal {{Dispersal}} in a {{Social Landscape}}: {{Considering
+  Individual Behavioral Phenotypes}} and {{Social Environment}} in {{Dispersal
+  Ecology}}.
+\newblock {\em Current Zoology}, 61(3):543--556.
+
 \bibitem[Wickham, 2016]{Wickham.2016}
 Wickham, H. (2016).
 \newblock {\em Ggplot2: {{Elegant}} Graphics for Data Analysis}.
 \newblock {Springer-Verlag New York}.
+
+\bibitem[Wolski and {Murray-Hudson}, 2008]{Wolski.2008}
+Wolski, P. and {Murray-Hudson}, M. (2008).
+\newblock Alternative {{Futures}}' of the {{Okavango Delta Simulated}} by a
+  {{Suite}} of {{Global Climate}} and {{Hydro-Ecological Models}}.
+\newblock {\em Water SA}, 34(5):605.
 
 \bibitem[Wolski et~al., 2017]{Wolski.2017}
 Wolski, P., {Murray-Hudson}, M., Thito, K., and Cassidy, L. (2017).
@@ -523,11 +703,31 @@ Wolski, P., {Murray-Hudson}, M., Thito, K., and Cassidy, L. (2017).
 \newblock {\em International Journal of Applied Earth Observation and
   Geoinformation}, 57:224--234.
 
+\bibitem[Wolski et~al., 2012]{Wolski.2012}
+Wolski, P., Todd, M., {Murray-Hudson}, M., and Tadross, M. (2012).
+\newblock Multi-{{Decadal Oscillations}} in the {{Hydro-Climate}} of the
+  {{Okavango River System During}} the {{Past}} and {{Under}} a {{Changing
+  Climate}}.
+\newblock {\em Journal of Hydrology}, 475:294--305.
+
+\bibitem[Woodroffe and Ginsberg, 1998]{Woodroffe.1998}
+Woodroffe, R. and Ginsberg, J.~R. (1998).
+\newblock Edge {{Effects}} and the {{Extinction}} of {{Populations Inside
+  Protected Areas}}.
+\newblock {\em Science}, 280(5372):2126--2128.
+
 \bibitem[Woodroffe and {Sillero-Zubiri}, 2012]{Woodroffe.2012}
 Woodroffe, R. and {Sillero-Zubiri}, C. (2012).
 \newblock Lycaon pictus.
 \newblock {\em The IUCN Red List of Threatened Species}, 2012:e.
   T12436A16711116.
+
+\bibitem[Zeller et~al., 2016]{Zeller.2016}
+Zeller, K.~A., McGarigal, K., Cushman, S.~A., Beier, P., Vickers, T.~W., and
+  Boyce, W.~M. (2016).
+\newblock Using {{Step}} and {{Path Selection Functions}} for {{Estimating
+  Resistance}} to {{Movement}}: {{Pumas}} as a {{Case Study}}.
+\newblock {\em Landscape Ecology}, 31(6):1319--1335.
 
 \bibitem[Zeller et~al., 2012]{Zeller.2012}
 Zeller, K.~A., McGarigal, K., and Whiteley, A.~R. (2012).

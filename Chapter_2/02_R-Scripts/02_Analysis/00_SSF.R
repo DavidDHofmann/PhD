@@ -28,9 +28,9 @@ cores <- detectCores() - 1
 ################################################################################
 #### Computing Step Metrics
 ################################################################################
-# Load the gps data of dispersers and create rounded timestamps. Then nest the
+# Load the gps data of dispersers and create rounded timestamps. Then, nest the
 # data by individual
-data <- "03_Data/02_CleanData/00_General_Dispersers.csv" %>%
+data <- "03_Data/02_CleanData/Dispersers.csv" %>%
   read_csv(show_col_types = F) %>%
   subset(State == "Disperser") %>%
   mutate(TimestampRounded = round_date(Timestamp, "1 hour")) %>%
@@ -48,7 +48,13 @@ print(data, n = 30)
 cat("Computing bursts from GPS data...\n")
 data$Bursts <- pbmclapply(data$GPS, ignore.interactive = T, mc.cores = cores, function(x) {
   res <- resampleFixes(x, hours = 2, start = 1, tol = 0.5)
+  if (length(res) == 1) {
+    return(NA)
+  }
   sub <- subset(res, hour(TimestampRounded) %in% c(3, 7, 15, 19, 23))
+  if (length(sub) == 1) {
+    return(NA)
+  }
   bur <- computeBursts(sub)
   bur[, c("x", "y")] <- reprojectCoords(cbind(bur$x, bur$y)
     , from = "+init=epsg:4326"
@@ -73,8 +79,8 @@ steps <- data %>%
   mutate(Nrow = map_dbl(data, nrow)) %>%
   subset(Nrow > 3) %>%
   mutate(Steps = map(data, stepMetrics)) %>%
-  dplyr::select(ID, burst_id, Steps) %>%
-  mutate(burst_id = 1:n()) %>%
+  dplyr::select(ID, BurstID = burst_id, Steps) %>%
+  mutate(BurstID = 1:n()) %>%
   unnest(Steps)
 
 # Remove steps where the relative turning angle is NA
@@ -108,7 +114,7 @@ steps %>%
   plot(type = "l")
 
 # Visualize the steps
-ggplot(steps, aes(x = x, y = y, col = as.factor(burst_id), group = burst_id)) +
+ggplot(steps, aes(x = x, y = y, col = as.factor(BurstID), group = BurstID)) +
   geom_path(size = 0.1) +
   geom_point(size = 0.5) +
   coord_sf() +
@@ -155,24 +161,25 @@ p4 <- ggplot(steps, aes(x = relta, col = Sex, fill = Sex)) +
 ggarrange(p1, p2, p3, p4)
 
 ################################################################################
-#### Generating Random Steps
+#### Fitting Step-Length Distribution
 ################################################################################
-# Fit a Gamma distribution to the step speed (again, fitting a gamma to step
-# speeds or fitting a gamma to (normalized) step lengths yields the same under
-# iSSF) -> almost at least
-# sl <- fit_distr(tracks$sl_, "gamma")
+# Fit a Gamma distribution to the step length. To avoid scaling issues, we'll
+# fit the gamma distribution to step lengths in kilometers
 sl <- fitdist(as.numeric(steps$sl), "gamma", method = "mle", lower = 0)
 sl <- list(
-    scale = 1 / sl$estimate[["rate"]]
-  , shape = sl$estimate[["shape"]]
+    shape = sl$estimate[["shape"]]
+  , scale = 1 / sl$estimate[["rate"]]
 )
 
 # Let's visualize the fit
 x <- seq(0, max(steps$sl), length.out = 1000)
-y <- dgamma(x, scale = sl$scale, shape = sl$shape)
-hist(steps$sl, freq = F, breaks = 100, col = "cornflowerblue")
+y <- dgamma(x, shape = sl$shape, scale = sl$scale)
+hist(steps$sl, freq = F, breaks = 100, col = "cornflowerblue", border = "white")
 lines(y ~ x, col = "orange", lwd = 3)
 
+################################################################################
+#### Generating Random Steps
+################################################################################
 # Generate random steps
 set.seed(12345)
 cat("Generating random steps...\n")
@@ -184,7 +191,7 @@ ssf <- randomSteps(steps
 )
 
 # I'd like to work exclusively with lon-lat data instead of utm, hence, let's
-# reproject start and endcoordinates to lon-lat
+# reproject start and end coordinates to lon-lat
 ssf[, c("x", "y")] <- reprojectCoords(
     xy   = cbind(ssf$x, ssf$y)
   , from = "+init=epsg:32734"
@@ -198,7 +205,7 @@ ssf[, c("x_to", "y_to")] <- reprojectCoords(
 
 # Visualize the random steps of a single individual
 ssf %>%
-  subset(ID == "Odzala") %>%
+  subset(ID == "Abel") %>%
   ggplot(aes(x = x, y = y, xend = x_to, yend = y_to, col = as.factor(case))) +
     geom_segment(lwd = 0.1) +
     theme_minimal() +
@@ -206,7 +213,7 @@ ssf %>%
     scale_color_manual(values = c("orange", "cornflowerblue"))
 
 # Write the step selection data to file
-write_csv(ssf, "03_Data/02_CleanData/00_General_SSF.csv")
+write_csv(ssf, "03_Data/02_CleanData/SSF.csv")
 
 ################################################################################
 #### Session Information
