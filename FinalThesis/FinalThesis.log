@@ -1,0 +1,2564 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.21)  22 MAY 2024 11:06
+entering extended mode
+ restricted \write18 enabled.
+ file:line:error style messages enabled.
+ %&-line parsing enabled.
+**FinalThesis.tex
+(./FinalThesis.tex
+LaTeX2e <2021-11-15> patch level 1
+L3 programming layer <2022-01-21> (/usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2021/10/04 v1.4n Standard LaTeX document class
+(/usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2021/10/04 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count185
+\c@chapter=\count186
+\c@section=\count187
+\c@subsection=\count188
+\c@subsubsection=\count189
+\c@paragraph=\count190
+\c@subparagraph=\count191
+\c@figure=\count192
+\c@table=\count193
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen138
+) (/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks16
+) (/usr/share/texlive/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+ (/usr/share/texlive/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count194
+\Gm@cntv=\count195
+\c@Gm@tempcnt=\count196
+\Gm@bindingoffset=\dimen139
+\Gm@wd@mp=\dimen140
+\Gm@odd@mp=\dimen141
+\Gm@even@mp=\dimen142
+\Gm@layoutwidth=\dimen143
+\Gm@layoutheight=\dimen144
+\Gm@layouthoffset=\dimen145
+\Gm@layoutvoffset=\dimen146
+\Gm@dimlist=\toks17
+) (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+) (/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2022/01/26 3.70 The Babel package
+\babel@savecnt=\count197
+\U@D=\dimen147
+\l@unhyphenated=\language87
+ (/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def)
+\bbl@readstream=\read2
+\bbl@dirlevel=\count198
+ (/usr/share/texlive/texmf-dist/tex/generic/babel-english/english.ldf
+Language: english 2017/06/06 v3.3r English support from the babel system
+Package babel Info: Hyphen rules for 'canadian' set to \l@english
+(babel)             (\language0). Reported on input line 102.
+Package babel Info: Hyphen rules for 'australian' set to \l@ukenglish
+(babel)             (\language45). Reported on input line 105.
+Package babel Info: Hyphen rules for 'newzealand' set to \l@ukenglish
+(babel)             (\language45). Reported on input line 108.
+)) (/usr/share/texlive/texmf-dist/tex/latex/lato/lato.sty
+Package: lato 2019/06/20 Style file for Lato.
+ (/usr/share/texlive/texmf-dist/tex/latex/fontaxes/fontaxes.sty
+Package: fontaxes 2020/07/21 v1.0e Font selection axes
+LaTeX Info: Redefining \upshape on input line 29.
+LaTeX Info: Redefining \itshape on input line 31.
+LaTeX Info: Redefining \slshape on input line 33.
+LaTeX Info: Redefining \swshape on input line 35.
+LaTeX Info: Redefining \scshape on input line 37.
+LaTeX Info: Redefining \sscshape on input line 39.
+LaTeX Info: Redefining \ulcshape on input line 41.
+LaTeX Info: Redefining \textsw on input line 47.
+LaTeX Info: Redefining \textssc on input line 48.
+LaTeX Info: Redefining \textulc on input line 49.
+) (/usr/share/texlive/texmf-dist/tex/generic/iftex/ifluatex.sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+) (/usr/share/texlive/texmf-dist/tex/generic/iftex/ifxetex.sty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+) (/usr/share/texlive/texmf-dist/tex/latex/xkeyval/xkeyval.sty
+Package: xkeyval 2020/11/20 v2.8 package option processing (HA)
+ (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkeyval.tex (/usr/share/texlive/texmf-dist/tex/generic/xkeyval/xkvutils.tex
+\XKV@toks=\toks18
+\XKV@tempa@toks=\toks19
+)
+\XKV@depth=\count199
+File: xkeyval.tex 2014/12/03 v2.7a key=value parser (HA)
+)))
+(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+LaTeX Font Info:    Trying to load font information for T1+lato-TLF on input line 112.
+ (/usr/share/texlive/texmf-dist/tex/latex/lato/T1lato-TLF.fd
+File: T1lato-TLF.fd 2019/06/24 Font definitions for T1/lato-TLF.
+)
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 10.0pt on input line 112.
+) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2021/10/15 v2.17l AMS math features
+\@mathmargin=\skip49
+
+For additional information on amsmath, use the `?' option.
+(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+ (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks20
+\ex@=\dimen148
+)) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen149
+) (/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2021/08/26 v2.02 operator names
+)
+\inf@bad=\count266
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count267
+\leftroot@=\count268
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count269
+\DOTSCASE@=\count270
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box50
+\strutbox@=\box51
+\big@size=\dimen150
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count271
+\c@MaxMatrixCols=\count272
+\dotsspace@=\muskip16
+\c@parentequation=\count273
+\dspbrk@lvl=\count274
+\tag@help=\toks21
+\row@=\count275
+\column@=\count276
+\maxfields@=\count277
+\andhelp@=\toks22
+\eqnshift@=\dimen151
+\alignsep@=\dimen152
+\tagshift@=\dimen153
+\tagwidth@=\dimen154
+\totwidth@=\dimen155
+\lineht@=\dimen156
+\@envbody=\toks23
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks24
+LaTeX Info: Redefining \[ on input line 2938.
+LaTeX Info: Redefining \] on input line 2939.
+) (/usr/share/texlive/texmf-dist/tex/latex/colortbl/colortbl.sty
+Package: colortbl 2020/01/04 v1.0e Color table columns (DPC)
+ (/usr/share/texlive/texmf-dist/tex/latex/tools/array.sty
+Package: array 2021/10/04 v2.5f Tabular extension package (FMi)
+\col@sep=\dimen157
+\ar@mcellbox=\box52
+\extrarowheight=\dimen158
+\NC@list=\toks25
+\extratabsurround=\skip52
+\backup@length=\skip53
+\ar@cellbox=\box53
+) (/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2021/12/07 v1.3c Standard LaTeX Color (DPC)
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: pdftex.def on input line 149.
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2020/10/05 v1.2a Graphics/color driver for pdftex
+))
+\everycr=\toks26
+\minrowclearance=\skip54
+) (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+) (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+) (/usr/share/texlive/texmf-dist/tex/latex/was/gensymb.sty
+Package: gensymb 2003/07/02 v1.0 (WaS)
+) (/usr/share/texlive/texmf-dist/tex/latex/base/textcomp.sty
+Package: textcomp 2020/02/02 v2.0n Standard LaTeX package
+) (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2021/03/04 v1.4d Standard LaTeX Graphics (DPC,SPQR)
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+)
+\Gin@req@height=\dimen159
+\Gin@req@width=\dimen160
+) (/usr/share/texlive/texmf-dist/tex/latex/pgf/frontendlayer/tikz.sty (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgf.sty (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfrcs.sty (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common.tex
+\pgfutil@everybye=\toks27
+\pgfutil@tempdima=\dimen161
+\pgfutil@tempdimb=\dimen162
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-common-lists.tex)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfutil-latex.def
+\pgfutil@abb=\box54
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfrcs.code.tex (/usr/share/texlive/texmf-dist/tex/generic/pgf/pgf.revision.tex)
+Package: pgfrcs 2021/05/15 v3.1.9a (3.1.9a)
+))
+Package: pgf 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/latex/pgf/basiclayer/pgfcore.sty (/usr/share/texlive/texmf-dist/tex/latex/pgf/systemlayer/pgfsys.sty (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys.code.tex
+Package: pgfsys 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex
+\pgfkeys@pathtoks=\toks28
+\pgfkeys@temptoks=\toks29
+
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex
+\pgfkeys@tmptoks=\toks30
+))
+\pgf@x=\dimen163
+\pgf@y=\dimen164
+\pgf@xa=\dimen165
+\pgf@ya=\dimen166
+\pgf@xb=\dimen167
+\pgf@yb=\dimen168
+\pgf@xc=\dimen169
+\pgf@yc=\dimen170
+\pgf@xd=\dimen171
+\pgf@yd=\dimen172
+\w@pgf@writea=\write3
+\r@pgf@reada=\read3
+\c@pgf@counta=\count278
+\c@pgf@countb=\count279
+\c@pgf@countc=\count280
+\c@pgf@countd=\count281
+\t@pgf@toka=\toks31
+\t@pgf@tokb=\toks32
+\t@pgf@tokc=\toks33
+\pgf@sys@id@count=\count282
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgf.cfg
+File: pgf.cfg 2021/05/15 v3.1.9a (3.1.9a)
+)
+Driver file for pgf: pgfsys-pdftex.def
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-pdftex.def
+File: pgfsys-pdftex.def 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def
+File: pgfsys-common-pdf.def 2021/05/15 v3.1.9a (3.1.9a)
+))) (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex
+File: pgfsyssoftpath.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfsyssoftpath@smallbuffer@items=\count283
+\pgfsyssoftpath@bigbuffer@items=\count284
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex
+File: pgfsysprotocol.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+)) (/usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+Package: xcolor 2021/10/31 v2.13 LaTeX color extensions (UK)
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 227.
+LaTeX Info: Redefining \color on input line 711.
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1352.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1356.
+Package xcolor Info: Model `RGB' extended on input line 1368.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1370.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1371.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1372.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1373.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1374.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1375.
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcore.code.tex
+Package: pgfcore 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathcalc.code.tex (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathutil.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathparser.code.tex
+\pgfmath@dimen=\dimen173
+\pgfmath@count=\count285
+\pgfmath@box=\box55
+\pgfmath@toks=\toks34
+\pgfmath@stack@operand=\toks35
+\pgfmath@stack@operation=\toks36
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.code.tex (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.random.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.base.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.round.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex))) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmathfloat.code.tex
+\c@pgfmathroundto@lastzeros=\count286
+)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfint.code.tex)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
+File: pgfcorepoints.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@picminx=\dimen174
+\pgf@picmaxx=\dimen175
+\pgf@picminy=\dimen176
+\pgf@picmaxy=\dimen177
+\pgf@pathminx=\dimen178
+\pgf@pathmaxx=\dimen179
+\pgf@pathminy=\dimen180
+\pgf@pathmaxy=\dimen181
+\pgf@xx=\dimen182
+\pgf@xy=\dimen183
+\pgf@yx=\dimen184
+\pgf@yy=\dimen185
+\pgf@zx=\dimen186
+\pgf@zy=\dimen187
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
+File: pgfcorepathconstruct.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@path@lastx=\dimen188
+\pgf@path@lasty=\dimen189
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
+File: pgfcorepathusage.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@shorten@end@additional=\dimen190
+\pgf@shorten@start@additional=\dimen191
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex
+File: pgfcorescopes.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfpic=\box56
+\pgf@hbox=\box57
+\pgf@layerbox@main=\box58
+\pgf@picture@serial@count=\count287
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex
+File: pgfcoregraphicstate.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgflinewidth=\dimen192
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex
+File: pgfcoretransformations.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@pt@x=\dimen193
+\pgf@pt@y=\dimen194
+\pgf@pt@temp=\dimen195
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorequick.code.tex
+File: pgfcorequick.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex
+File: pgfcoreobjects.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex
+File: pgfcorepathprocessing.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex
+File: pgfcorearrows.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfarrowsep=\dimen196
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex
+File: pgfcoreshade.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@max=\dimen197
+\pgf@sys@shading@range@num=\count288
+\pgf@shadingcount=\count289
+)
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex
+File: pgfcoreimage.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex
+File: pgfcoreexternal.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfexternal@startupbox=\box59
+)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex
+File: pgfcorelayers.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex
+File: pgfcoretransparency.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex
+File: pgfcorepatterns.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex
+File: pgfcorerdf.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+))) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleshapes.code.tex
+File: pgfmoduleshapes.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfnodeparttextbox=\box60
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleplot.code.tex
+File: pgfmoduleplot.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+) (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty
+Package: pgfcomp-version-0-65 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@nodesepstart=\dimen198
+\pgf@nodesepend=\dimen199
+) (/usr/share/texlive/texmf-dist/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty
+Package: pgfcomp-version-1-18 2021/05/15 v3.1.9a (3.1.9a)
+)) (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgffor.sty (/usr/share/texlive/texmf-dist/tex/latex/pgf/utilities/pgfkeys.sty
+(/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgfkeys.code.tex)) (/usr/share/texlive/texmf-dist/tex/latex/pgf/math/pgfmath.sty (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/utilities/pgffor.code.tex
+Package: pgffor 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/math/pgfmath.code.tex)
+\pgffor@iter=\dimen256
+\pgffor@skip=\dimen257
+\pgffor@stack=\toks37
+\pgffor@toks=\toks38
+)) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex
+Package: tikz 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex
+File: pgflibraryplothandlers.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgf@plot@mark@count=\count290
+\pgfplotmarksize=\dimen258
+)
+\tikz@lastx=\dimen259
+\tikz@lasty=\dimen260
+\tikz@lastxsaved=\dimen261
+\tikz@lastysaved=\dimen262
+\tikz@lastmovetox=\dimen263
+\tikz@lastmovetoy=\dimen264
+\tikzleveldistance=\dimen265
+\tikzsiblingdistance=\dimen266
+\tikz@figbox=\box61
+\tikz@figbox@bg=\box62
+\tikz@tempbox=\box63
+\tikz@tempbox@bg=\box64
+\tikztreelevel=\count291
+\tikznumberofchildren=\count292
+\tikznumberofcurrentchild=\count293
+\tikz@fig@count=\count294
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmodulematrix.code.tex
+File: pgfmodulematrix.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfmatrixcurrentrow=\count295
+\pgfmatrixcurrentcolumn=\count296
+\pgf@matrix@numberofcolumns=\count297
+)
+\tikz@expandcount=\count298
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex
+File: tikzlibrarytopaths.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+))) (/usr/share/texlive/texmf-dist/tex/latex/tools/enumerate.sty
+Package: enumerate 2015/07/23 v3.00 enumerate extensions (DPC)
+\@enLab=\toks39
+) (/usr/share/texlive/texmf-dist/tex/latex/enumitem/enumitem.sty
+Package: enumitem 2019/06/20 v3.9 Customized lists
+\labelindent=\skip55
+\enit@outerparindent=\dimen267
+\enit@toks=\toks40
+\enit@inbox=\box65
+\enit@count@id=\count299
+\enitdp@description=\count300
+) (/usr/share/texlive/texmf-dist/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/10/07 v1.3j Sub-captions (AR)
+ (/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+\captionmargin=\dimen268
+\captionmargin@=\dimen269
+\captionwidth=\dimen270
+\caption@tempdima=\dimen271
+\caption@indent=\dimen272
+\caption@parindent=\dimen273
+\caption@hangindent=\dimen274
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count301
+\c@continuedfloat=\count302
+)
+\c@subfigure=\count303
+\c@subtable=\count304
+) (/usr/share/texlive/texmf-dist/tex/latex/booktabs/booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen275
+\lightrulewidth=\dimen276
+\cmidrulewidth=\dimen277
+\belowrulesep=\dimen278
+\belowbottomsep=\dimen279
+\aboverulesep=\dimen280
+\abovetopsep=\dimen281
+\cmidrulesep=\dimen282
+\cmidrulekern=\dimen283
+\defaultaddspace=\dimen284
+\@cmidla=\count305
+\@cmidlb=\count306
+\@aboverulesep=\dimen285
+\@belowrulesep=\dimen286
+\@thisruleclass=\count307
+\@lastruleclass=\count308
+\@thisrulewidth=\dimen287
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2021-06-07 v7.00m Hypertext links for LaTeX
+ (/usr/share/texlive/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+) (/usr/share/texlive/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO)
+ (/usr/share/texlive/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+) (/usr/share/texlive/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+) (/usr/share/texlive/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+) (/usr/share/texlive/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+) (/usr/share/texlive/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+) (/usr/share/texlive/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+) (/usr/share/texlive/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+) (/usr/share/texlive/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen288
+\Hy@linkcounter=\count309
+\Hy@pagecounter=\count310
+ (/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2021-06-07 v7.00m Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+) (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def
+File: hyperref-langpatches.def 2021-06-07 v7.00m Hyperref: patches for babel languages
+) (/usr/share/texlive/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+) (/usr/share/texlive/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count311
+ (/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2021-06-07 v7.00m Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4192.
+Package hyperref Info: Link nesting OFF on input line 4197.
+Package hyperref Info: Hyper index ON on input line 4200.
+Package hyperref Info: Plain pages OFF on input line 4207.
+Package hyperref Info: Backreferencing OFF on input line 4212.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4445.
+\c@Hy@tempcnt=\count312
+ (/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4804.
+\XeTeXLinkMargin=\dimen289
+ (/usr/share/texlive/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+ (/usr/share/texlive/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO)
+))
+\Fld@menulength=\count313
+\Field@Width=\dimen290
+\Fld@charsize=\dimen291
+Package hyperref Info: Hyper figures OFF on input line 6076.
+Package hyperref Info: Link nesting OFF on input line 6081.
+Package hyperref Info: Hyper index ON on input line 6084.
+Package hyperref Info: backreferencing OFF on input line 6091.
+Package hyperref Info: Link coloring OFF on input line 6096.
+Package hyperref Info: Link coloring with OCG OFF on input line 6101.
+Package hyperref Info: PDF/A mode OFF on input line 6106.
+LaTeX Info: Redefining \ref on input line 6146.
+LaTeX Info: Redefining \pageref on input line 6150.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
+package with kernel methods
+)
+\Hy@abspage=\count314
+\c@Item=\count315
+\c@Hfootnote=\count316
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+ (/usr/share/texlive/texmf-dist/tex/latex/hyperref/hpdftex.def
+File: hpdftex.def 2021-06-07 v7.00m Hyperref driver for pdfTeX
+ (/usr/share/texlive/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend package
+with kernel methods
+)
+\Fld@listcount=\count317
+\c@bookmark@seq@number=\count318
+ (/usr/share/texlive/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+ (/usr/share/texlive/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 286.
+)
+\Hy@SectionHShift=\skip56
+) (/usr/share/texlive/texmf-dist/tex/latex/cleveref/cleveref.sty
+Package: cleveref 2018/03/27 v0.21.4 Intelligent cross-referencing
+Package cleveref Info: `hyperref' support loaded on input line 2370.
+LaTeX Info: Redefining \cref on input line 2370.
+LaTeX Info: Redefining \Cref on input line 2370.
+LaTeX Info: Redefining \crefrange on input line 2370.
+LaTeX Info: Redefining \Crefrange on input line 2370.
+LaTeX Info: Redefining \cpageref on input line 2370.
+LaTeX Info: Redefining \Cpageref on input line 2370.
+LaTeX Info: Redefining \cpagerefrange on input line 2370.
+LaTeX Info: Redefining \Cpagerefrange on input line 2370.
+LaTeX Info: Redefining \labelcref on input line 2370.
+LaTeX Info: Redefining \labelcpageref on input line 2370.
+Package cleveref Info: include cross-reference names in hyperlinks on input line 7836.
+Package cleveref Info: include cross-reference names in hyperlinks on input line 7852.
+) (/usr/share/texlive/texmf-dist/tex/latex/multirow/multirow.sty
+Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
+\multirow@colwidth=\skip57
+\multirow@cntb=\count319
+\multirow@dima=\skip58
+\bigstrutjot=\dimen292
+) (/usr/share/texlive/texmf-dist/tex/latex/arydshln/arydshln.sty
+Package: arydshln 2019/02/21 v1.76 
+\dashlinedash=\dimen293
+\dashlinegap=\dimen294
+\adl@box=\box66
+\adl@height=\dimen295
+\adl@heightsave=\dimen296
+\adl@depth=\dimen297
+\adl@depthsave=\dimen298
+\adl@finaldepth=\dimen299
+\adl@columns=\count320
+\adl@ncol=\count321
+\adl@currentcolumn=\count322
+\adl@currentcolumnsave=\count323
+\adl@totalheight=\count324
+\adl@totalheightsave=\count325
+\adl@dash=\count326
+\adl@gap=\count327
+\adl@cla=\count328
+\adl@clb=\count329
+\adl@everyvbox=\toks41
+\adl@LTpagetotal=\dimen300
+) (/usr/share/texlive/texmf-dist/tex/latex/threeparttable/threeparttable.sty
+Package: threeparttable 2003/06/13  v 3.0
+\@tempboxb=\box67
+)
+(/usr/share/texlive/texmf-dist/tex/latex/scalerel/scalerel.sty
+Package: scalerel 2016/12/29 v1.8 Routines for constrained scaling and stretching of objects, relative to a reference object or in absolute terms
+ (/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count330
+\calc@Bcount=\count331
+\calc@Adimen=\dimen301
+\calc@Bdimen=\dimen302
+\calc@Askip=\skip59
+\calc@Bskip=\skip60
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count332
+\calc@Cskip=\skip61
+) (/usr/share/texlive/texmf-dist/tex/latex/etoolbox/etoolbox.sty
+Package: etoolbox 2020/10/05 v2.5k e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count333
+)
+\thesrwidth=\skip62
+\thesrheight=\skip63
+\srblobheight=\skip64
+\srblobdepth=\skip65
+\mnxsrwidth=\skip66
+\LMex=\skip67
+\LMpt=\skip68
+) (/usr/share/texlive/texmf-dist/tex/latex/makecell/makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen303
+\c@nlinenum=\count334
+\TeXr@lab=\toks42
+) (/usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+Package: ifthen 2020/11/24 v1.1c Standard LaTeX ifthen package (DPC)
+) (/usr/share/texlive/texmf-dist/tex/latex/lineno/lineno.sty
+Package: lineno 2005/11/02 line numbers on paragraphs v4.41
+\linenopenalty=\count335
+\output=\toks43
+\linenoprevgraf=\count336
+\linenumbersep=\dimen304
+\linenumberwidth=\dimen305
+\c@linenumber=\count337
+\c@pagewiselinenumber=\count338
+\c@LN@truepage=\count339
+\c@internallinenumber=\count340
+\c@internallinenumbers=\count341
+\quotelinenumbersep=\dimen306
+\bframerule=\dimen307
+\bframesep=\dimen308
+\bframebox=\box68
+LaTeX Info: Redefining \\ on input line 3056.
+) (/usr/share/texlive/texmf-dist/tex/latex/subfiles/subfiles.sty
+Package: subfiles 2020/11/14 v2.2 Multi-file projects (package)
+ (/usr/share/texlive/texmf-dist/tex/latex/import/import.sty
+Package: import 2020/04/01  v 6.2
+)) (/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+Package: pdfpages 2022/01/29 v0.5u Insert pages of external PDF documents (AM)
+ (/usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+Package: eso-pic 2020/10/14 v3.0a eso-pic (RN)
+\ESO@tempdima=\dimen309
+\ESO@tempdimb=\dimen310
+)
+\AM@pagewidth=\dimen311
+\AM@pageheight=\dimen312
+\AM@fboxrule=\dimen313
+ (/usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
+File: pppdftex.def 2022/01/29 v0.5u Pdfpages driver for pdfTeX (AM)
+)
+\pdfpages@includegraphics@status=\count342
+\AM@pagebox=\box69
+\AM@global@opts=\toks44
+\AM@pagecnt=\count343
+\AM@toc@title=\toks45
+\c@AM@survey=\count344
+\AM@templatesizebox=\box70
+) (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjustbox.sty
+Package: adjustbox 2020/08/19 v1.3 Adjusting TeX boxes (trim, clip, ...)
+ (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/adjcalc.sty
+Package: adjcalc 2012/05/16 v1.1 Provides advanced setlength with multiple back-ends (calc, etex, pgfmath)
+) (/usr/share/texlive/texmf-dist/tex/latex/adjustbox/trimclip.sty
+Package: trimclip 2020/08/19 v1.2 Trim and clip general TeX material
+ (/usr/share/texlive/texmf-dist/tex/latex/collectbox/collectbox.sty
+Package: collectbox 2012/05/17 v0.4b Collect macro arguments as boxes
+\collectedbox=\box71
+)
+\tc@llx=\dimen314
+\tc@lly=\dimen315
+\tc@urx=\dimen316
+\tc@ury=\dimen317
+Package trimclip Info: Using driver 'tc-pdftex.def'.
+
+(/usr/share/texlive/texmf-dist/tex/latex/adjustbox/tc-pdftex.def
+File: tc-pdftex.def 2019/01/04 v2.2 Clipping driver for pdftex
+))
+\adjbox@Width=\dimen318
+\adjbox@Height=\dimen319
+\adjbox@Depth=\dimen320
+\adjbox@Totalheight=\dimen321
+\adjbox@pwidth=\dimen322
+\adjbox@pheight=\dimen323
+\adjbox@pdepth=\dimen324
+\adjbox@ptotalheight=\dimen325
+ (/usr/share/texlive/texmf-dist/tex/latex/ifoddpage/ifoddpage.sty
+Package: ifoddpage 2016/04/23 v1.1 Conditionals for odd/even page detection
+\c@checkoddpage=\count345
+) (/usr/share/texlive/texmf-dist/tex/latex/varwidth/varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box72
+\sift@deathcycles=\count346
+\@vwid@loff=\dimen326
+\@vwid@roff=\dimen327
+)) (/usr/share/texlive/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
+Package: fancyhdr 2021/01/28 v4.0.1 Extensive control of page headers and footers
+\f@nch@headwidth=\skip69
+\f@nch@O@elh=\skip70
+\f@nch@O@erh=\skip71
+\f@nch@O@olh=\skip72
+\f@nch@O@orh=\skip73
+\f@nch@O@elf=\skip74
+\f@nch@O@erf=\skip75
+\f@nch@O@olf=\skip76
+\f@nch@O@orf=\skip77
+) (/usr/share/texlive/texmf-dist/tex/latex/nowidow/nowidow.sty
+Package: nowidow 2011/09/20 1.0 Easily prevent widows and orphans
+Package: nowidow 
+) (/usr/share/texlive/texmf-dist/tex/latex/appendix/appendix.sty
+Package: appendix 2020/02/08 v1.2c extra appendix facilities
+\c@@pps=\count347
+\c@@ppsavesec=\count348
+\c@@ppsaveapp=\count349
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2021/07/05 v2.14 Sectioning titles
+\ttl@box=\box73
+\beforetitleunit=\skip78
+\aftertitleunit=\skip79
+\ttl@plus=\dimen328
+\ttl@minus=\dimen329
+\ttl@toksa=\toks46
+\titlewidth=\dimen330
+\titlewidthlast=\dimen331
+\titlewidthfirst=\dimen332
+) (/usr/share/texlive/texmf-dist/tex/latex/tocbibind/tocbibind.sty
+Package: tocbibind 2010/10/13 v1.5k extra ToC listings
+Package tocbibind Info: The document has chapter divisions on input line 50.
+
+
+Package tocbibind Note: Using chapter style headings, unless overridden.
+
+) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
+File: tikzlibrarysvg.path.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
+File: pgflibrarysvg.path.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+ (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
+File: pgfmoduleparser.code.tex 2021/05/15 v3.1.9a (3.1.9a)
+\pgfparserdef@arg@count=\count350
+)
+\pgf@lib@svg@last@x=\dimen333
+\pgf@lib@svg@last@y=\dimen334
+\pgf@lib@svg@last@c@x=\dimen335
+\pgf@lib@svg@last@c@y=\dimen336
+\pgf@lib@svg@count=\count351
+\pgf@lib@svg@max@num=\count352
+)) (./FinalThesis.sty (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
+Package: csquotes 2021-02-22 v5.2l context-sensitive quotations (JAW)
+\csq@reset=\count353
+\csq@gtype=\count354
+\csq@glevel=\count355
+\csq@qlevel=\count356
+\csq@maxlvl=\count357
+\csq@tshold=\count358
+\csq@ltx@everypar=\toks47
+ (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def
+File: csquotes.def 2021-02-22 v5.2l csquotes generic definitions (JAW)
+)
+Package csquotes Info: Trying to load configuration file 'csquotes.cfg'...
+Package csquotes Info: ... configuration file loaded successfully.
+ (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
+File: csquotes.cfg 
+)) (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.sty
+Package: biblatex 2022/02/02 v3.17 programmable bibliographies (PK/MW)
+ (/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.sty
+Package: logreq 2010/08/04 v1.0 xml request logger
+\lrq@indent=\count359
+ (/usr/share/texlive/texmf-dist/tex/latex/logreq/logreq.def
+File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
+))
+\c@tabx@nest=\count360
+\c@listtotal=\count361
+\c@listcount=\count362
+\c@liststart=\count363
+\c@liststop=\count364
+\c@citecount=\count365
+\c@citetotal=\count366
+\c@multicitecount=\count367
+\c@multicitetotal=\count368
+\c@instcount=\count369
+\c@maxnames=\count370
+\c@minnames=\count371
+\c@maxitems=\count372
+\c@minitems=\count373
+\c@citecounter=\count374
+\c@maxcitecounter=\count375
+\c@savedcitecounter=\count376
+\c@uniquelist=\count377
+\c@uniquename=\count378
+\c@refsection=\count379
+\c@refsegment=\count380
+\c@maxextratitle=\count381
+\c@maxextratitleyear=\count382
+\c@maxextraname=\count383
+\c@maxextradate=\count384
+\c@maxextraalpha=\count385
+\c@abbrvpenalty=\count386
+\c@highnamepenalty=\count387
+\c@lownamepenalty=\count388
+\c@maxparens=\count389
+\c@parenlevel=\count390
+\blx@tempcnta=\count391
+\blx@tempcntb=\count392
+\blx@tempcntc=\count393
+\c@blx@maxsection=\count394
+\c@blx@maxsegment@0=\count395
+\blx@notetype=\count396
+\blx@parenlevel@text=\count397
+\blx@parenlevel@foot=\count398
+\c@blx@sectionciteorder@0=\count399
+\blx@entrysetcounter=\count400
+\blx@biblioinstance=\count401
+\labelnumberwidth=\skip80
+\labelalphawidth=\skip81
+\biblabelsep=\skip82
+\bibitemsep=\skip83
+\bibnamesep=\skip84
+\bibinitsep=\skip85
+\bibparsep=\skip86
+\bibhang=\skip87
+\blx@bcfin=\read4
+\blx@bcfout=\write4
+\blx@langwohyphens=\language88
+\c@mincomprange=\count402
+\c@maxcomprange=\count403
+\c@mincompwidth=\count404
+Package biblatex Info: Trying to load biblatex default data model...
+Package biblatex Info: ... file 'blx-dm.def' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-dm.def
+File: blx-dm.def 2022/02/02 v3.17 biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load biblatex style data model...
+Package biblatex Info: ... file 'apa.dbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/apa.dbx
+File: apa.dbx 2021/12/24 v9.15 APA biblatex style data model
+)
+Package biblatex Info: Trying to load biblatex custom data model...
+Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
+\c@afterword=\count405
+\c@savedafterword=\count406
+\c@annotator=\count407
+\c@savedannotator=\count408
+\c@author=\count409
+\c@savedauthor=\count410
+\c@bookauthor=\count411
+\c@savedbookauthor=\count412
+\c@commentator=\count413
+\c@savedcommentator=\count414
+\c@editor=\count415
+\c@savededitor=\count416
+\c@editora=\count417
+\c@savededitora=\count418
+\c@editorb=\count419
+\c@savededitorb=\count420
+\c@editorc=\count421
+\c@savededitorc=\count422
+\c@foreword=\count423
+\c@savedforeword=\count424
+\c@holder=\count425
+\c@savedholder=\count426
+\c@introduction=\count427
+\c@savedintroduction=\count428
+\c@namea=\count429
+\c@savednamea=\count430
+\c@nameb=\count431
+\c@savednameb=\count432
+\c@namec=\count433
+\c@savednamec=\count434
+\c@translator=\count435
+\c@savedtranslator=\count436
+\c@shortauthor=\count437
+\c@savedshortauthor=\count438
+\c@shorteditor=\count439
+\c@savedshorteditor=\count440
+\c@narrator=\count441
+\c@savednarrator=\count442
+\c@execproducer=\count443
+\c@savedexecproducer=\count444
+\c@execdirector=\count445
+\c@savedexecdirector=\count446
+\c@with=\count447
+\c@savedwith=\count448
+\c@labelname=\count449
+\c@savedlabelname=\count450
+\c@institution=\count451
+\c@savedinstitution=\count452
+\c@lista=\count453
+\c@savedlista=\count454
+\c@listb=\count455
+\c@savedlistb=\count456
+\c@listc=\count457
+\c@savedlistc=\count458
+\c@listd=\count459
+\c@savedlistd=\count460
+\c@liste=\count461
+\c@savedliste=\count462
+\c@listf=\count463
+\c@savedlistf=\count464
+\c@location=\count465
+\c@savedlocation=\count466
+\c@organization=\count467
+\c@savedorganization=\count468
+\c@origlocation=\count469
+\c@savedoriglocation=\count470
+\c@origpublisher=\count471
+\c@savedorigpublisher=\count472
+\c@publisher=\count473
+\c@savedpublisher=\count474
+\c@language=\count475
+\c@savedlanguage=\count476
+\c@origlanguage=\count477
+\c@savedoriglanguage=\count478
+\c@citation=\count479
+\c@savedcitation=\count480
+\c@pageref=\count481
+\c@savedpageref=\count482
+\shorthandwidth=\skip88
+\shortjournalwidth=\skip89
+\shortserieswidth=\skip90
+\shorttitlewidth=\skip91
+\shortauthorwidth=\skip92
+\shorteditorwidth=\skip93
+\locallabelnumberwidth=\skip94
+\locallabelalphawidth=\skip95
+\localshorthandwidth=\skip96
+\localshortjournalwidth=\skip97
+\localshortserieswidth=\skip98
+\localshorttitlewidth=\skip99
+\localshortauthorwidth=\skip100
+\localshorteditorwidth=\skip101
+Package biblatex Info: Trying to load compatibility code...
+Package biblatex Info: ... file 'blx-compat.def' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
+File: blx-compat.def 2022/02/02 v3.17 biblatex compatibility (PK/MW)
+)
+Package biblatex Info: Trying to load generic definitions...
+Package biblatex Info: ... file 'biblatex.def' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.def
+File: biblatex.def 2022/02/02 v3.17 biblatex compatibility (PK/MW)
+\c@textcitecount=\count483
+\c@textcitetotal=\count484
+\c@textcitemaxnames=\count485
+\c@biburlbigbreakpenalty=\count486
+\c@biburlbreakpenalty=\count487
+\c@biburlnumpenalty=\count488
+\c@biburlucpenalty=\count489
+\c@biburllcpenalty=\count490
+\biburlbigskip=\muskip18
+\biburlnumskip=\muskip19
+\biburlucskip=\muskip20
+\biburllcskip=\muskip21
+\c@smartand=\count491
+)
+Package biblatex Info: Trying to load natbib compatibility...
+Package biblatex Info: ... file 'blx-natbib.def' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-natbib.def
+File: blx-natbib.def 2022/02/02 v3.17 biblatex compatibility (PK/MW)
+Package biblatex Info: Delimiter 'nameyeardelim' in context '' already defined, overwriting.
+)
+Package biblatex Info: Trying to load bibliography style 'apa'...
+Package biblatex Info: ... file 'apa.bbx' found.
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/apa.bbx
+File: apa.bbx 2021/12/24 v9.15 APA biblatex references style
+Package biblatex Info: Trying to load bibliography style 'standard'...
+Package biblatex Info: ... file 'standard.bbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
+File: standard.bbx 2022/02/02 v3.17 biblatex bibliography style (PK/MW)
+\c@bbx:relatedcount=\count492
+\c@bbx:relatedtotal=\count493
+)
+Package biblatex Info: Delimiter 'nameyeardelim' in context 'bib' already defined, overwriting.
+Package biblatex Info: Delimiter 'nameyeardelim' in context 'biblist' already defined, overwriting.
+
+
+Package biblatex Warning: The starred command '\DeclareDelimAlias*' is
+(biblatex)                deprecated.
+(biblatex)                Use the unstarred version '\DeclareDelimAlias'
+(biblatex)                instead.
+
+Package biblatex Info: Delimiter 'nonameyeardelim' in context 'bib' already defined, overwriting.
+Package biblatex Info: Delimiter 'nonameyeardelim' in context 'biblist' already defined, overwriting.
+)
+Package biblatex Info: Trying to load citation style 'apa'...
+Package biblatex Info: ... file 'apa.cbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/apa.cbx
+File: apa.cbx 2021/12/24 v9.15 APA biblatex citation style
+Package biblatex Info: Delimiter 'nameyeardelim' in context '' already defined, overwriting.
+Package biblatex Info: Delimiter 'andothersdelim' in context '' already defined, overwriting.
+Package biblatex Info: Redefining '\fullcite'.
+Package biblatex Info: Redefining '\citeauthor'.
+Package biblatex Info: Redefining '\citeyear'.
+Package biblatex Info: Redefining '\cite'.
+Package biblatex Info: Redefining '\cites'.
+Package biblatex Info: Redefining '\parencite'.
+Package biblatex Info: Redefining '\parencites'.
+Package biblatex Info: Redefining '\footcite'.
+Package biblatex Info: Redefining '\footcites'.
+Package biblatex Info: Redefining '\footcitetext'.
+Package biblatex Info: Redefining '\footcitetexts'.
+Package biblatex Info: Redefining '\smartcite'.
+Package biblatex Info: Redefining '\smartcites'.
+Package biblatex Info: Redefining '\textcite'.
+Package biblatex Info: Redefining '\textcites'.
+)
+Package biblatex Info: Trying to load configuration file...
+Package biblatex Info: ... file 'biblatex.cfg' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/biblatex.cfg
+File: biblatex.cfg 
+)
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Document encoding is UTF8 ....
+ (/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2022-01-21 L3 programming layer (loader) 
+ (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count494
+\l__pdf_internal_box=\box74
+))
+Package biblatex Info: ... and expl3
+(biblatex)             2022-01-21 L3 programming layer (loader) 
+(biblatex)             is new enough (at least 2020/04/06),
+(biblatex)             setting 'casechanger=expl3'.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-case-expl3.sty (/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+Package: xparse 2022-01-12 L3 Experimental document command parser
+)
+Package: blx-case-expl3 2022/02/02 v3.17 expl3 case changing code for biblatex
+))
+Package hyperref Info: Option `colorlinks' set `true' on input line 138.
+)
+Package csquotes Info: Checking for multilingual support...
+Package csquotes Info: ... found 'babel' package.
+Package csquotes Info: Adjusting default style.
+Package csquotes Info: Redefining alias 'default' -> 'english'.
+
+
+LaTeX Warning: Unused global option(s):
+    [abstract,bibliography].
+
+(./FinalThesis.aux)
+\openout1 = `FinalThesis.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 57.
+LaTeX Font Info:    ... okay on input line 57.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(71.13188pt, 455.24411pt, 71.13188pt)
+* v-part:(T,H,B)=(71.13188pt, 688.5567pt, 85.35826pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=455.24411pt
+* \textheight=688.5567pt
+* \oddsidemargin=-1.1381pt
+* \evensidemargin=-1.1381pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=30.0pt
+* \marginparwidth=111.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+\c@mv@tabular=\count495
+\c@mv@boldtabular=\count496
+(/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count497
+\scratchdimen=\dimen337
+\scratchbox=\box75
+\nofMPsegments=\count498
+\nofMParguments=\count499
+\everyMPshowfont=\toks48
+\MPscratchCnt=\count500
+\MPscratchDim=\dimen338
+\MPnumerator=\count501
+\makeMPintoPDFobject=\count502
+\everyMPtoPDFconversion=\toks49
+) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
+ (/usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
+))
+\symgns@font=\mathgroup6
+LaTeX Font Info:    Overwriting symbol font `gns@font' in version `bold'
+(Font)                  TS1/lato-TLF/m/n --> TS1/lato-TLF/b/n on input line 57.
+Package gensymb Info: Math companion symbols declared on input line 57.
+LaTeX Info: Redefining \degree on input line 57.
+LaTeX Info: Redefining \celsius on input line 57.
+Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 57.
+LaTeX Info: Redefining \ohm on input line 57.
+Package gensymb Info: Using \textohm for \ohm on input line 57.
+Package gensymb Info: Using \textmu for \micro on input line 57.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: threeparttable package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring ON on input line 57.
+ (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+ (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count503
+)
+LaTeX Info: Redefining \ref on input line 57.
+LaTeX Info: Redefining \pageref on input line 57.
+LaTeX Info: Redefining \nameref on input line 57.
+ (./FinalThesis.out) (./FinalThesis.out)
+\@outlinefile=\write5
+\openout5 = `FinalThesis.out'.
+
+ (/usr/share/texlive/texmf-dist/tex/latex/pdflscape/pdflscape.sty
+Package: pdflscape 2019/12/05 v0.12 Display of landscape pages in PDF (HO)
+ (/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)
+Package biblatex Info: Trying to load language 'english' -> 'english-apa'...
+Package biblatex Info: ... file 'english-apa.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/english-apa.lbx
+File: english-apa.lbx 2021/12/24 v9.15 APA biblatex localisation
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2022/02/02 v3.17 biblatex localization (PK/MW)
+)
+Package biblatex Info: Trying to load language 'american' -> 'american-apa'...
+Package biblatex Info: ... file 'american-apa.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/american-apa.lbx
+File: american-apa.lbx 2021/12/24 v9.15 APA biblatex localisation
+Package biblatex Info: Trying to load language 'american'...
+Package biblatex Info: ... file 'american.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/american.lbx
+File: american.lbx 2022/02/02 v3.17 biblatex localization (PK/MW)
+Package biblatex Info: Trying to load language 'english'...
+Package biblatex Info: ... file 'english.lbx' found.
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/lbx/english.lbx
+File: english.lbx 2022/02/02 v3.17 biblatex localization (PK/MW)
+))))
+Package biblatex Info: Input encoding 'utf8' detected.
+Package biblatex Info: Automatic encoding selection.
+(biblatex)             Assuming data encoding 'utf8'.
+\openout4 = `FinalThesis.bcf'.
+
+Package biblatex Info: Trying to load bibliographic data...
+Package biblatex Info: ... file 'FinalThesis.bbl' found.
+ (./FinalThesis.bbl)
+Package biblatex Info: Reference section=0 on input line 57.
+Package biblatex Info: Reference segment=0 on input line 57.
+ (./Titlepage/TitlepageGerman.tex
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 10.0pt on input line 8.
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 17.28pt on input line 8.
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 12.0pt on input line 12.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 20.74pt on input line 71.
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 20.74pt on input line 71.
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 14.4pt on input line 71.
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/it' will be
+(Font)              scaled to size 10.0pt on input line 110.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 111.
+
+(/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 111.
+ (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+LaTeX Font Info:    Trying to load font information for TS1+lato-TLF on input line 111.
+ (/usr/share/texlive/texmf-dist/tex/latex/lato/TS1lato-TLF.fd
+File: TS1lato-TLF.fd 2019/06/24 Font definitions for TS1/lato-TLF.
+)
+LaTeX Font Info:    Font shape `TS1/lato-TLF/m/n' will be
+(Font)              scaled to size 10.0pt on input line 111.
+LaTeX Font Info:    Font shape `TS1/lato-TLF/m/n' will be
+(Font)              scaled to size 7.0pt on input line 111.
+LaTeX Font Info:    Font shape `TS1/lato-TLF/m/n' will be
+(Font)              scaled to size 5.0pt on input line 111.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.113 \Cref{ChapterFlood}
+                          investigates how changing environmental conditions... [2
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.162 O
+       verall, this thesis provides a detailed investigation of dispersal and [3]pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.173 \newpage
+               [4] (./FinalThesis.toc
+Overfull \hbox (1.89993pt too wide) detected at line 173
+ []\T1/lato-TLF/m/n/10 107
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 181
+ []\T1/lato-TLF/m/n/10 111
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 182
+ []\T1/lato-TLF/m/n/10 116
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 212
+ []\T1/lato-TLF/m/n/10 138
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 214
+ []\T1/lato-TLF/m/n/10 145
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 230
+ []\T1/lato-TLF/m/n/10 151
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 232
+ []\T1/lato-TLF/m/n/10 151
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 234
+ []\T1/lato-TLF/m/n/10 155
+ []
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.235 ... {section}{Appendices}{161}{appendix*.84}
+                                                  % [5
+
+]
+Overfull \hbox (1.89993pt too wide) detected at line 235
+ []\T1/lato-TLF/m/n/10 161
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 252
+ []\T1/lato-TLF/m/n/10 170
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 254
+ []\T1/lato-TLF/m/n/10 173
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 256
+ []\T1/lato-TLF/m/n/10 174
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 258
+ []\T1/lato-TLF/m/n/10 177
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 260
+ []\T1/lato-TLF/m/n/10 180
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 264
+ []\T1/lato-TLF/m/n/10 189
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 266
+ []\T1/lato-TLF/m/n/10 190
+ []
+
+
+Overfull \hbox (1.89993pt too wide) detected at line 268
+ []\T1/lato-TLF/m/n/10 193
+ []
+
+)
+\tf@toc=\write6
+\openout6 = `FinalThesis.toc'.
+
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.180 \newpage
+               [6]
+<Images/Delta.jpg, id=427, 597.432pt x 844.5954pt>
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.43054pt x 844.59334pt.
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.43054pt x 844.59334pt.
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.43054pt x 844.59334pt.
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+pdfTeX warning (ext4): destination with the same identifier (name{page.}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.191 \includepdf{Images/Delta.jpg}
+                                   
+File: Images/Delta.jpg Graphic file (type jpg)
+<use Images/Delta.jpg>
+Package pdftex.def Info: Images/Delta.jpg  used on input line 191.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+ [7 <./Images/Delta.jpg>] (./Chapter_00/Manuscript.tex
+Chapter 1.
+[1
+
+]
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 14.4pt on input line 28.
+
+Overfull \hbox (4.6141pt too wide) in paragraph at lines 30--41
+\T1/lato-TLF/m/it/10 no-vaean-gliae\T1/lato-TLF/m/n/10 ) tra-verse thou-sands of kilo-me-ters to gather at breed-ing sites ([][][]Ras-mussen et al., 2007[][]), monarch
+ []
+
+
+Underfull \vbox (badness 6063) has occurred while \output is active []
+
+ [2] [3] [4]
+
+pdfTeX warning: pdflatex (file ./Chapter_00//Figures/ConnectivityModeling.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
+<Chapter_00//Figures/ConnectivityModeling.pdf, id=650, 697.09248pt x 412.56496pt>
+File: Chapter_00//Figures/ConnectivityModeling.pdf Graphic file (type pdf)
+<use Chapter_00//Figures/ConnectivityModeling.pdf>
+Package pdftex.def Info: Chapter_00//Figures/ConnectivityModeling.pdf  used on input line 195.
+(pdftex.def)             Requested size: 455.24411pt x 269.43567pt.
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 9.0pt on input line 211.
+LaTeX Font Info:    Font shape `T1/lato-TLF/b/n' will be
+(Font)              scaled to size 9.0pt on input line 211.
+LaTeX Font Info:    Font shape `TS1/lato-TLF/m/n' will be
+(Font)              scaled to size 9.0pt on input line 211.
+LaTeX Font Info:    Font shape `TS1/lato-TLF/m/n' will be
+(Font)              scaled to size 6.0pt on input line 211.
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 12.0pt on input line 225.
+[5] [6 <./Chapter_00//Figures/ConnectivityModeling.pdf>]
+Underfull \vbox (badness 6110) has occurred while \output is active []
+
+ [7]
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 7.0pt on input line 313.
+ [8]
+<Chapter_00//Figures/WildDogPoster.jpg, id=912, 6022.5pt x 3764.0625pt>
+File: Chapter_00//Figures/WildDogPoster.jpg Graphic file (type jpg)
+<use Chapter_00//Figures/WildDogPoster.jpg>
+Package pdftex.def Info: Chapter_00//Figures/WildDogPoster.jpg  used on input line 359.
+(pdftex.def)             Requested size: 455.24411pt x 284.47504pt.
+ [9]
+
+pdfTeX warning: pdflatex (file ./Chapter_00//Figures/GeneralStudyArea.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Chapter_00//Figures/GeneralStudyArea.pdf, id=970, 796.67719pt x 448.1309pt>
+File: Chapter_00//Figures/GeneralStudyArea.pdf Graphic file (type pdf)
+<use Chapter_00//Figures/GeneralStudyArea.pdf>
+Package pdftex.def Info: Chapter_00//Figures/GeneralStudyArea.pdf  used on input line 406.
+(pdftex.def)             Requested size: 455.24411pt x 256.08002pt.
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 6.0pt on input line 415.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [10 <./Chapter_00//Figures/WildDogPoster.jpg>] [11 <./Chapter_00//Figures/GeneralStudyArea.pdf>]
+LaTeX Font Info:    Trying to load font information for T1+cmtt on input line 458.
+ (/usr/share/texlive/texmf-dist/tex/latex/base/t1cmtt.fd
+File: t1cmtt.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+) [12] [13]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [14])
+<Images/Jessie.jpg, id=1093, 597.1911pt x 845.0772pt>
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+ [15]
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+File: Images/Jessie.jpg Graphic file (type jpg)
+<use Images/Jessie.jpg>
+Package pdftex.def Info: Images/Jessie.jpg  used on input line 196.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+ [16 <./Images/Jessie.jpg>] (./Chapter_01/Manuscript.tex
+Chapter 2.
+[17
+
+] [18]
+Underfull \vbox (badness 6063) has occurred while \output is active []
+
+ [19]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [20]
+
+pdfTeX warning: pdflatex (file ./Chapter_01//Figures/GraphicalAbstract.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Chapter_01//Figures/GraphicalAbstract.pdf, id=1217, 625.33624pt x 198.7425pt>
+File: Chapter_01//Figures/GraphicalAbstract.pdf Graphic file (type pdf)
+<use Chapter_01//Figures/GraphicalAbstract.pdf>
+Package pdftex.def Info: Chapter_01//Figures/GraphicalAbstract.pdf  used on input line 214.
+(pdftex.def)             Requested size: 455.24411pt x 144.68657pt.
+[21 <./Chapter_01//Figures/GraphicalAbstract.pdf>]
+Overfull \hbox (1.31589pt too wide) in paragraph at lines 265--278
+\T1/lato-TLF/m/n/10 Our sim-u-la-tion of dis-per-sal tra-jec-to-ries and as-sess-ment of con-nec-tiv-ity spanned across the en-tire Kavango-
+ []
+
+<Chapter_01//Figures/StudyArea.png, id=1287, 650.43pt x 379.4175pt>
+File: Chapter_01//Figures/StudyArea.png Graphic file (type png)
+<use Chapter_01//Figures/StudyArea.png>
+Package pdftex.def Info: Chapter_01//Figures/StudyArea.png  used on input line 283.
+(pdftex.def)             Requested size: 455.24411pt x 265.56728pt.
+LaTeX Font Info:    Trying to load font information for T1+cmss on input line 314.
+(/usr/share/texlive/texmf-dist/tex/latex/base/t1cmss.fd
+File: t1cmss.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+Overfull \hbox (13.60358pt too wide) in paragraph at lines 332--343
+\T1/lato-TLF/m/n/10 We com-bined the col-lected GPS data with habi-tat co-vari-ates and used iSSFs ([][][]Av-gar et al., 2016[][]) to parametrize
+ []
+
+
+Underfull \vbox (badness 2521) has occurred while \output is active []
+
+ [22] [23 <./Chapter_01//Figures/StudyArea.png (PNG copy)>] [24]
+Underfull \vbox (badness 3989) has occurred while \output is active []
+
+ [25]
+Underfull \vbox (badness 4024) has occurred while \output is active []
+
+ [26] [27]
+<Chapter_01//Figures/MovementModel.pdf, id=1401, 606.265pt x 353.32pt>
+File: Chapter_01//Figures/MovementModel.pdf Graphic file (type pdf)
+<use Chapter_01//Figures/MovementModel.pdf>
+Package pdftex.def Info: Chapter_01//Figures/MovementModel.pdf  used on input line 584.
+(pdftex.def)             Requested size: 455.24411pt x 265.31282pt.
+ [28] [29 <./Chapter_01//Figures/MovementModel.pdf>]
+<Chapter_01//Figures/Heatmap.png, id=1442, 481.5591pt x 481.5591pt>
+File: Chapter_01//Figures/Heatmap.png Graphic file (type png)
+<use Chapter_01//Figures/Heatmap.png>
+Package pdftex.def Info: Chapter_01//Figures/Heatmap.png  used on input line 644.
+(pdftex.def)             Requested size: 455.24411pt x 455.2668pt.
+<Chapter_01//Figures/Betweenness.png, id=1448, 481.5591pt x 481.5591pt>
+File: Chapter_01//Figures/Betweenness.png Graphic file (type png)
+<use Chapter_01//Figures/Betweenness.png>
+Package pdftex.def Info: Chapter_01//Figures/Betweenness.png  used on input line 679.
+(pdftex.def)             Requested size: 455.24411pt x 455.2668pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [30] [31 <./Chapter_01//Figures/Heatmap.png (PNG copy)>] [32 <./Chapter_01//Figures/Betweenness.png (PNG copy)>]
+<Chapter_01//Figures/InterpatchConnectivity.png, id=1478, 481.5591pt x 481.5591pt>
+File: Chapter_01//Figures/InterpatchConnectivity.png Graphic file (type png)
+<use Chapter_01//Figures/InterpatchConnectivity.png>
+Package pdftex.def Info: Chapter_01//Figures/InterpatchConnectivity.png  used on input line 717.
+(pdftex.def)             Requested size: 455.24411pt x 455.2668pt.
+ [33] [34 <./Chapter_01//Figures/InterpatchConnectivity.png (PNG copy)>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [35]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [36]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [37]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [38]) [39] (./Chapter_01/Manuscript_Support.tex [40
+
+] [41]
+Overfull \hbox (2.34103pt too wide) in paragraph at lines 29--50
+\T1/lato-TLF/m/n/10 We val-i-dated the pre-dic-tive power of the most par-si-mo-nious move-ment model us-ing k-fold cross-validation
+ []
+
+[42]
+<Chapter_01//Figures/SourceAreas.png, id=1587, 650.43pt x 271.0125pt>
+File: Chapter_01//Figures/SourceAreas.png Graphic file (type png)
+<use Chapter_01//Figures/SourceAreas.png>
+Package pdftex.def Info: Chapter_01//Figures/SourceAreas.png  used on input line 59.
+(pdftex.def)             Requested size: 455.24411pt x 189.6909pt.
+ [43 <./Chapter_01//Figures/SourceAreas.png (PNG copy)>]
+<Chapter_01//Figures/BetweennessApproaches.png, id=1596, 722.7pt x 505.89pt>
+File: Chapter_01//Figures/BetweennessApproaches.png Graphic file (type png)
+<use Chapter_01//Figures/BetweennessApproaches.png>
+Package pdftex.def Info: Chapter_01//Figures/BetweennessApproaches.png  used on input line 116.
+(pdftex.def)             Requested size: 455.24411pt x 318.67378pt.
+ [44] [45 <./Chapter_01//Figures/BetweennessApproaches.png (PNG copy)>]
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(99.58464pt, 398.3386pt, 99.58464pt)
+* v-part:(T,H,B)=(71.13188pt, 745.46222pt, 28.45274pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=398.3386pt
+* \textheight=745.46222pt
+* \oddsidemargin=27.31465pt
+* \evensidemargin=27.31465pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=-142.26378pt
+* \marginparwidth=111.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+
+
+Package fancyhdr Warning: \footskip is too small (-142.26378pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[46
+
+] [47
+
+]
+<Chapter_01//Figures/MovementModelInterpretation.png, id=1628, 818.8191pt x 818.8191pt>
+File: Chapter_01//Figures/MovementModelInterpretation.png Graphic file (type png)
+<use Chapter_01//Figures/MovementModelInterpretation.png>
+Package pdftex.def Info: Chapter_01//Figures/MovementModelInterpretation.png  used on input line 268.
+(pdftex.def)             Requested size: 455.24411pt x 455.23712pt.
+ [48] [49 <./Chapter_01//Figures/MovementModelInterpretation.png (PNG copy)>]
+<Chapter_01//Figures/Convergence.png, id=1641, 722.7pt x 433.62pt>
+File: Chapter_01//Figures/Convergence.png Graphic file (type png)
+<use Chapter_01//Figures/Convergence.png>
+Package pdftex.def Info: Chapter_01//Figures/Convergence.png  used on input line 296.
+(pdftex.def)             Requested size: 455.24411pt x 273.14896pt.
+ [50 <./Chapter_01//Figures/Convergence.png (PNG copy)>]
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(99.58464pt, 398.3386pt, 99.58464pt)
+* v-part:(T,H,B)=(71.13188pt, 759.6886pt, 14.22636pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=398.3386pt
+* \textheight=759.6886pt
+* \oddsidemargin=27.31465pt
+* \evensidemargin=27.31465pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=0.0pt
+* \marginparwidth=111.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+<Chapter_01//Figures/HeatmapsIndividual.png, id=1646, 867.24pt x 1300.86pt>
+File: Chapter_01//Figures/HeatmapsIndividual.png Graphic file (type png)
+<use Chapter_01//Figures/HeatmapsIndividual.png>
+Package pdftex.def Info: Chapter_01//Figures/HeatmapsIndividual.png  used on input line 318.
+(pdftex.def)             Requested size: 342.57143pt x 513.86385pt.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[51
+
+ <./Chapter_01//Figures/HeatmapsIndividual.png (PNG copy)>]
+*geometry* verbose mode - [ newgeometry ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(99.58464pt, 398.3386pt, 99.58464pt)
+* v-part:(T,H,B)=(71.13188pt, 745.46222pt, 28.45274pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=398.3386pt
+* \textheight=745.46222pt
+* \oddsidemargin=27.31465pt
+* \evensidemargin=27.31465pt
+* \topmargin=-38.1381pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=10.0pt
+* \footskip=0.0pt
+* \marginparwidth=111.0pt
+* \marginparsep=11.0pt
+* \columnsep=10.0pt
+* \skip\footins=9.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+<Chapter_01//Figures/BetweennessIndividual.png, id=1653, 867.24pt x 867.24pt>
+File: Chapter_01//Figures/BetweennessIndividual.png Graphic file (type png)
+<use Chapter_01//Figures/BetweennessIndividual.png>
+Package pdftex.def Info: Chapter_01//Figures/BetweennessIndividual.png  used on input line 336.
+(pdftex.def)             Requested size: 342.57143pt x 342.5759pt.
+
+
+Package fancyhdr Warning: \footskip is too small (0.0pt): 
+(fancyhdr)                Make it at least 3.60004pt, for example:
+(fancyhdr)                \setlength{\footskip}{3.60004pt}.
+
+[52
+
+
+ <./Chapter_01//Figures/BetweennessIndividual.png (PNG copy)>]
+<Chapter_01//Figures/MapComparison.png, id=1658, 505.89pt x 361.35pt>
+File: Chapter_01//Figures/MapComparison.png Graphic file (type png)
+<use Chapter_01//Figures/MapComparison.png>
+Package pdftex.def Info: Chapter_01//Figures/MapComparison.png  used on input line 351.
+(pdftex.def)             Requested size: 455.24411pt x 325.17891pt.
+<Chapter_01//Figures/MapComparisonCountries.png, id=1659, 607.068pt x 780.2751pt>
+File: Chapter_01//Figures/MapComparisonCountries.png Graphic file (type png)
+<use Chapter_01//Figures/MapComparisonCountries.png>
+Package pdftex.def Info: Chapter_01//Figures/MapComparisonCountries.png  used on input line 360.
+(pdftex.def)             Requested size: 455.24411pt x 585.13345pt.
+
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 22.82253pt, for example:
+(fancyhdr)                \setlength{\headheight}{22.82253pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-10.82253pt}.
+
+[53
+
+ <./Chapter_01//Figures/MapComparison.png (PNG copy)>]
+
+Package fancyhdr Warning: \headheight is too small (12.0pt): 
+(fancyhdr)                Make it at least 22.82253pt, for example:
+(fancyhdr)                \setlength{\headheight}{22.82253pt}.
+(fancyhdr)                You might also make \topmargin smaller to compensate:
+(fancyhdr)                \addtolength{\topmargin}{-10.82253pt}.
+
+[54 <./Chapter_01//Figures/MapComparisonCountries.png (PNG copy)>]
+<Chapter_01//Figures/AreasReached.png, id=1670, 578.16pt x 433.62pt>
+File: Chapter_01//Figures/AreasReached.png Graphic file (type png)
+<use Chapter_01//Figures/AreasReached.png>
+Package pdftex.def Info: Chapter_01//Figures/AreasReached.png  used on input line 375.
+(pdftex.def)             Requested size: 455.24411pt x 341.43124pt.
+)
+<Images/BeeEater.jpg, id=1671, 597.432pt x 844.8363pt>
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+ [55 <./Chapter_01//Figures/AreasReached.png (PNG copy)>]
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+File: Images/BeeEater.jpg Graphic file (type jpg)
+<use Images/BeeEater.jpg>
+Package pdftex.def Info: Images/BeeEater.jpg  used on input line 203.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+ [56 <./Images/BeeEater.jpg>] (./Chapter_02/Manuscript.tex
+Chapter 3.
+[57
+
+] (./Chapter_02//Figures/NumberReachingOtherSourceAreasMaxFloodPercent.tex) (./Chapter_02//Figures/DurationReachingOtherSourceAreasMaxFloodPercent.tex) (./Chapter_02//Figures/NumberReaching6MaxFloodPercent.tex) (./Chapter_02//Figures/DensityHWCPanhandlePercentage.tex) (./Chapter_02//Figures/DensityHWCMaunPercentage.tex) [58]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [59]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [60]
+
+pdfTeX warning: pdflatex (file ./Chapter_02//Figures/GraphicalAbstract.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Chapter_02//Figures/GraphicalAbstract.pdf, id=1803, 896.26843pt x 446.62859pt>
+File: Chapter_02//Figures/GraphicalAbstract.pdf Graphic file (type pdf)
+<use Chapter_02//Figures/GraphicalAbstract.pdf>
+Package pdftex.def Info: Chapter_02//Figures/GraphicalAbstract.pdf  used on input line 211.
+(pdftex.def)             Requested size: 455.24411pt x 226.85753pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [61 <./Chapter_02//Figures/GraphicalAbstract.pdf>] [62]
+<Chapter_02//Figures/StudyArea2.png, id=1922, 925.056pt x 462.528pt>
+File: Chapter_02//Figures/StudyArea2.png Graphic file (type png)
+<use Chapter_02//Figures/StudyArea2.png>
+Package pdftex.def Info: Chapter_02//Figures/StudyArea2.png  used on input line 284.
+(pdftex.def)             Requested size: 455.24411pt x 227.6217pt.
+ (./Chapter_02//Figures/FloodExtentMinimum.tex) (./Chapter_02//Figures/FloodExtentMaximum.tex) [63 <./Chapter_02//Figures/StudyArea2.png>]
+<Chapter_02//Figures/FloodExtent.png, id=1941, 667.0521pt x 328.8285pt>
+File: Chapter_02//Figures/FloodExtent.png Graphic file (type png)
+<use Chapter_02//Figures/FloodExtent.png>
+Package pdftex.def Info: Chapter_02//Figures/FloodExtent.png  used on input line 346.
+(pdftex.def)             Requested size: 455.24411pt x 224.41827pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [64 <./Chapter_02//Figures/FloodExtent.png (PNG copy)>] [65]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [66]
+Underfull \vbox (badness 2452) has occurred while \output is active []
+
+ [67] [68] (./Chapter_02//Figures/NumberReachingOtherSourceAreasMinFlood.tex) (./Chapter_02//Figures/NumberReachingOtherSourceAreasMaxFlood.tex) (./Chapter_02//Figures/NumberReachingOtherSourceAreasMaxFloodPercent.tex) (./Chapter_02//Figures/DurationReachingOtherSourceAreasMaxFloodPercent.tex) (./Chapter_02//Figures/DurationReachingOtherSourceAreasMinFlood.tex) (./Chapter_02//Figures/DurationReachingOtherSourceAreasMaxFlood.tex) (./Chapter_02//Figures/NumberReaching6MinFlood.tex) (./Chapter_02//Figures/NumberReaching6MaxFlood.tex) (./Chapter_02//Figures/NumberReaching6MaxFloodPercent.tex) (./Chapter_02//Figures/Connectivity5to4MaxFloodPercent.tex) (./Chapter_02//Figures/Connectivity5to4MinFlood.tex) (./Chapter_02//Figures/Connectivity5to4MaxFlood.tex) (./Chapter_02//Figures/EgressionMaxFloodPercent.tex) (./Chapter_02//Figures/EgressionMinFlood.tex) (./Chapter_02//Figures/EgressionMaxFlood.tex)
+<Chapter_02//Figures/InterpatchConnectivityTable2.png, id=2056, 2710.125pt x 2258.4375pt>
+File: Chapter_02//Figures/InterpatchConnectivityTable2.png Graphic file (type png)
+<use Chapter_02//Figures/InterpatchConnectivityTable2.png>
+Package pdftex.def Info: Chapter_02//Figures/InterpatchConnectivityTable2.png  used on input line 605.
+(pdftex.def)             Requested size: 455.24411pt x 379.346pt.
+<Chapter_02//Figures/InterpatchConnectivityMap.png, id=2057, 542.025pt x 325.215pt>
+File: Chapter_02//Figures/InterpatchConnectivityMap.png Graphic file (type png)
+<use Chapter_02//Figures/InterpatchConnectivityMap.png>
+Package pdftex.def Info: Chapter_02//Figures/InterpatchConnectivityMap.png  used on input line 610.
+(pdftex.def)             Requested size: 455.24411pt x 273.15392pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [69] [70 <./Chapter_02//Figures/InterpatchConnectivityTable2.png>] [71 <./Chapter_02//Figures/InterpatchConnectivityMap.png (PNG copy)>] (./Chapter_02//Figures/DensityHWCPanhandlePercentage.tex) (./Chapter_02//Figures/DensityHWCMaunPercentage.tex)
+<Chapter_02//Figures/Metrics.png, id=2099, 722.7pt x 722.7pt>
+File: Chapter_02//Figures/Metrics.png Graphic file (type png)
+<use Chapter_02//Figures/Metrics.png>
+Package pdftex.def Info: Chapter_02//Figures/Metrics.png  used on input line 670.
+(pdftex.def)             Requested size: 455.24411pt x 455.24826pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [72] [73 <./Chapter_02//Figures/Metrics.png (PNG copy)>]
+Underfull \vbox (badness 3108) has occurred while \output is active []
+
+ [74] (./Chapter_02//Figures/FloodExtentMaximum.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [75]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [76]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [77]) [78] (./Chapter_02/Manuscript_Support.tex [79
+
+] [80]
+<Chapter_02//Figures/MovementModel.png, id=2314, 379.4175pt x 379.4175pt>
+File: Chapter_02//Figures/MovementModel.png Graphic file (type png)
+<use Chapter_02//Figures/MovementModel.png>
+Package pdftex.def Info: Chapter_02//Figures/MovementModel.png  used on input line 46.
+(pdftex.def)             Requested size: 455.24411pt x 455.2524pt.
+ [81 <./Chapter_02//Figures/MovementModel.png (PNG copy)>]
+<Chapter_02//Figures/ImmigrationEmigration.png, id=2321, 650.43pt x 325.215pt>
+File: Chapter_02//Figures/ImmigrationEmigration.png Graphic file (type png)
+<use Chapter_02//Figures/ImmigrationEmigration.png>
+Package pdftex.def Info: Chapter_02//Figures/ImmigrationEmigration.png  used on input line 61.
+(pdftex.def)             Requested size: 455.24411pt x 227.62909pt.
+ [82 <./Chapter_02//Figures/ImmigrationEmigration.png (PNG copy)>]
+<Chapter_02//Figures/IPCMain.png, id=2326, 1040.688pt x 780.516pt>
+File: Chapter_02//Figures/IPCMain.png Graphic file (type png)
+<use Chapter_02//Figures/IPCMain.png>
+Package pdftex.def Info: Chapter_02//Figures/IPCMain.png  used on input line 76.
+(pdftex.def)             Requested size: 455.24411pt x 341.43918pt.
+ [83 <./Chapter_02//Figures/IPCMain.png (PNG copy)>]
+<Chapter_02//Figures/IPCBuffer.png, id=2331, 1040.688pt x 780.516pt>
+File: Chapter_02//Figures/IPCBuffer.png Graphic file (type png)
+<use Chapter_02//Figures/IPCBuffer.png>
+Package pdftex.def Info: Chapter_02//Figures/IPCBuffer.png  used on input line 88.
+(pdftex.def)             Requested size: 455.24411pt x 341.43918pt.
+ [84 <./Chapter_02//Figures/IPCBuffer.png (PNG copy)>]
+<Chapter_02//Figures/Egression.png, id=2337, 404.712pt x 404.712pt>
+File: Chapter_02//Figures/Egression.png Graphic file (type png)
+<use Chapter_02//Figures/Egression.png>
+Package pdftex.def Info: Chapter_02//Figures/Egression.png  used on input line 101.
+(pdftex.def)             Requested size: 455.24411pt x 455.26901pt.
+ [85 <./Chapter_02//Figures/Egression.png (PNG copy)>]
+<Chapter_02//Figures/HeatmapsIndividual.png, id=2342, 809.424pt x 708.0051pt>
+File: Chapter_02//Figures/HeatmapsIndividual.png Graphic file (type png)
+<use Chapter_02//Figures/HeatmapsIndividual.png>
+Package pdftex.def Info: Chapter_02//Figures/HeatmapsIndividual.png  used on input line 112.
+(pdftex.def)             Requested size: 455.24411pt x 398.20866pt.
+ [86 <./Chapter_02//Figures/HeatmapsIndividual.png (PNG copy)>]
+<Chapter_02//Figures/BetweennessIndividual.png, id=2347, 809.424pt x 708.0051pt>
+File: Chapter_02//Figures/BetweennessIndividual.png Graphic file (type png)
+<use Chapter_02//Figures/BetweennessIndividual.png>
+Package pdftex.def Info: Chapter_02//Figures/BetweennessIndividual.png  used on input line 125.
+(pdftex.def)             Requested size: 455.24411pt x 398.20866pt.
+ [87 <./Chapter_02//Figures/BetweennessIndividual.png (PNG copy)>]
+<Chapter_02//Figures/HumanWildlifeConflictIndividual.png, id=2353, 809.424pt x 708.0051pt>
+File: Chapter_02//Figures/HumanWildlifeConflictIndividual.png Graphic file (type png)
+<use Chapter_02//Figures/HumanWildlifeConflictIndividual.png>
+Package pdftex.def Info: Chapter_02//Figures/HumanWildlifeConflictIndividual.png  used on input line 138.
+(pdftex.def)             Requested size: 455.24411pt x 398.20866pt.
+ [88 <./Chapter_02//Figures/HumanWildlifeConflictIndividual.png (PNG copy)>]
+<Chapter_02//Figures/HWCDifferenceAOI.png, id=2360, 346.896pt x 260.172pt>
+File: Chapter_02//Figures/HWCDifferenceAOI.png Graphic file (type png)
+<use Chapter_02//Figures/HWCDifferenceAOI.png>
+Package pdftex.def Info: Chapter_02//Figures/HWCDifferenceAOI.png  used on input line 153.
+(pdftex.def)             Requested size: 455.24411pt x 341.45107pt.
+ [89 <./Chapter_02//Figures/HWCDifferenceAOI.png (PNG copy)>]
+Overfull \hbox (3.15742pt too wide) in paragraph at lines 163--163
+|[]\T1/lato-TLF/b/n/14.4 Alternative Ap-proach to Map Po-ten-tial Human-Wildlife In-ter-ac-tions| 
+ []
+
+<Chapter_02//Figures/HumanWildlifeConflictAlternative.png, id=2376, 722.7pt x 481.8pt>
+File: Chapter_02//Figures/HumanWildlifeConflictAlternative.png Graphic file (type png)
+<use Chapter_02//Figures/HumanWildlifeConflictAlternative.png>
+Package pdftex.def Info: Chapter_02//Figures/HumanWildlifeConflictAlternative.png  used on input line 188.
+(pdftex.def)             Requested size: 455.24411pt x 303.49884pt.
+)
+<Images/Elephant.jpg, id=2377, 597.432pt x 844.8363pt>
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+ [90 <./Chapter_02//Figures/HumanWildlifeConflictAlternative.png (PNG copy)>]
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+File: Images/Elephant.jpg Graphic file (type jpg)
+<use Images/Elephant.jpg>
+Package pdftex.def Info: Images/Elephant.jpg  used on input line 210.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+ [91 <./Images/Elephant.jpg>] (./Chapter_03/Manuscript.tex
+Chapter 4.
+[92
+
+] [93]
+Underfull \vbox (badness 6063) has occurred while \output is active []
+
+ [94]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [95]
+
+pdfTeX warning: pdflatex (file ./Chapter_03//Figures/GraphicalAbstract.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
+<Chapter_03//Figures/GraphicalAbstract.pdf, id=2520, 711.31892pt x 625.96065pt>
+File: Chapter_03//Figures/GraphicalAbstract.pdf Graphic file (type pdf)
+<use Chapter_03//Figures/GraphicalAbstract.pdf>
+Package pdftex.def Info: Chapter_03//Figures/GraphicalAbstract.pdf  used on input line 246.
+(pdftex.def)             Requested size: 455.24411pt x 400.61343pt.
+(./Chapter_03//GeneralMetrics/CollarsTotal.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [96] [97 <./Chapter_03//Figures/GraphicalAbstract.pdf>] (./Chapter_03//GeneralMetrics/StudyAreaCenter.tex) (./Chapter_03//GeneralMetrics/SizeStudyArea.tex) (./Chapter_03//GeneralMetrics/MinimumPrecipitation.tex) (./Chapter_03//GeneralMetrics/MaximumPrecipitation.tex) (./Chapter_03//GeneralMetrics/TotalPrecipitation.tex) (./Chapter_03//GeneralMetrics/MinimumTemperature.tex) (./Chapter_03//GeneralMetrics/MaximumTemperature.tex) (./Chapter_03//GeneralMetrics/PercentageProtected.tex) [98]
+<Chapter_03//Figures/StudyArea.png, id=2640, 7607.36842pt x 4705.15736pt>
+File: Chapter_03//Figures/StudyArea.png Graphic file (type png)
+<use Chapter_03//Figures/StudyArea.png>
+Package pdftex.def Info: Chapter_03//Figures/StudyArea.png  used on input line 346.
+(pdftex.def)             Requested size: 455.24411pt x 281.50752pt.
+<Chapter_03//Figures/SeasonalCovariates.png, id=2641, 487.8225pt x 292.6935pt>
+File: Chapter_03//Figures/SeasonalCovariates.png Graphic file (type png)
+<use Chapter_03//Figures/SeasonalCovariates.png>
+Package pdftex.def Info: Chapter_03//Figures/SeasonalCovariates.png  used on input line 360.
+(pdftex.def)             Requested size: 455.24411pt x 273.14896pt.
+ (./Chapter_03//GeneralMetrics/GPSFromYear.tex) (./Chapter_03//GeneralMetrics/GPSToYear.tex) (./Chapter_03//GeneralMetrics/CollarsTotal.tex) (./Chapter_03//GeneralMetrics/CollarsFemales.tex) (./Chapter_03//GeneralMetrics/CollarsMales.tex) (./Chapter_03//GeneralMetrics/FixesTotal.tex) (./Chapter_03//GeneralMetrics/FixesMeanSD.tex) (./Chapter_03//GeneralMetrics/AcquisitionRate.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [99] [100 <./Chapter_03//Figures/StudyArea.png>] [101 <./Chapter_03//Figures/SeasonalCovariates.png (PNG copy)>] (./Chapter_03//Figures/Covariates.tex) [102] [103] (./Chapter_03//GeneralMetrics/SSFTotal.tex) (./Chapter_03//GeneralMetrics/SSFFemales.tex) (./Chapter_03//GeneralMetrics/SSFMales.tex) (./Chapter_03//GeneralMetrics/StepsTotal.tex) (./Chapter_03//GeneralMetrics/StepsMeanSD.tex) (./Chapter_03//GeneralMetrics/NumberStepsDry.tex) (./Chapter_03//GeneralMetrics/PercentageStepsDry.tex) (./Chapter_03//GeneralMetrics/NumberStepsWet.tex) (./Chapter_03//GeneralMetrics/PercentageStepsWet.tex) (./Chapter_03//GeneralMetrics/GammaScale.tex) (./Chapter_03//GeneralMetrics/GammaShape.tex) [104] [105] [106]
+
+pdfTeX warning: pdflatex (file ./Chapter_03//Figures/Schematic.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Chapter_03//Figures/Schematic.pdf, id=2771, 796.67719pt x 448.1309pt>
+File: Chapter_03//Figures/Schematic.pdf Graphic file (type pdf)
+<use Chapter_03//Figures/Schematic.pdf>
+Package pdftex.def Info: Chapter_03//Figures/Schematic.pdf  used on input line 665.
+(pdftex.def)             Requested size: 455.24411pt x 256.08002pt.
+
+Underfull \vbox (badness 2197) has occurred while \output is active []
+
+ [107 <./Chapter_03//Figures/Schematic.pdf>]
+<Chapter_03//Figures/MovementModel.png, id=2822, 469.755pt x 375.804pt>
+File: Chapter_03//Figures/MovementModel.png Graphic file (type png)
+<use Chapter_03//Figures/MovementModel.png>
+Package pdftex.def Info: Chapter_03//Figures/MovementModel.png  used on input line 719.
+(pdftex.def)             Requested size: 455.24411pt x 364.19685pt.
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/it' will be
+(Font)              scaled to size 9.0pt on input line 732.
+
+
+pdfTeX warning: pdflatex (file ./Chapter_03//Figures/RankCorrelation.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
+<Chapter_03//Figures/RankCorrelation.pdf, id=2828, 398.3386pt x 448.1309pt>
+File: Chapter_03//Figures/RankCorrelation.pdf Graphic file (type pdf)
+<use Chapter_03//Figures/RankCorrelation.pdf>
+Package pdftex.def Info: Chapter_03//Figures/RankCorrelation.pdf  used on input line 758.
+(pdftex.def)             Requested size: 455.24411pt x 512.18056pt.
+[108] [109 <./Chapter_03//Figures/MovementModel.png (PNG copy)>] [110 <./Chapter_03//Figures/RankCorrelation.pdf>]
+<Chapter_03//Figures/HeatmapComparison.png, id=2869, 693.792pt x 462.528pt>
+File: Chapter_03//Figures/HeatmapComparison.png Graphic file (type png)
+<use Chapter_03//Figures/HeatmapComparison.png>
+Package pdftex.def Info: Chapter_03//Figures/HeatmapComparison.png  used on input line 788.
+(pdftex.def)             Requested size: 455.24411pt x 303.49796pt.
+ [111 <./Chapter_03//Figures/HeatmapComparison.png (PNG copy)>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [112]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [113]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [114]) [115] (./Chapter_03/Manuscript_Support.tex [116
+
+]
+<Chapter_03//Figures/Pan.jpg, id=2942, 2069.7325pt x 1608.0075pt>
+File: Chapter_03//Figures/Pan.jpg Graphic file (type jpg)
+<use Chapter_03//Figures/Pan.jpg>
+Package pdftex.def Info: Chapter_03//Figures/Pan.jpg  used on input line 38.
+(pdftex.def)             Requested size: 455.24411pt x 353.6646pt.
+ (./Chapter_03//Figures/Satellites.tex) (./Chapter_03//GeneralMetrics/TrainingTotal.tex) (./Chapter_03//GeneralMetrics/TrainingDryland.tex) (./Chapter_03//GeneralMetrics/TrainingWater.tex) (./Chapter_03//GeneralMetrics/TrainingWetpan.tex) (./Chapter_03//GeneralMetrics/TrainingDates.tex)
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [117] [118 <./Chapter_03//Figures/Pan.jpg>]
+<Chapter_03//Figures/PanMapping.pdf, id=2960, 796.6487pt x 448.10245pt>
+File: Chapter_03//Figures/PanMapping.pdf Graphic file (type pdf)
+<use Chapter_03//Figures/PanMapping.pdf>
+Package pdftex.def Info: Chapter_03//Figures/PanMapping.pdf  used on input line 106.
+(pdftex.def)             Requested size: 455.24411pt x 256.0706pt.
+ [119] (./Chapter_03//Figures/ND.tex) (./Chapter_03//GeneralMetrics/PercentageTrainingWetpan.tex) [120 <./Chapter_03//Figures/PanMapping.pdf>]
+<Chapter_03//Figures/Reflectances.png, id=3019, 722.7pt x 867.24pt>
+File: Chapter_03//Figures/Reflectances.png Graphic file (type png)
+<use Chapter_03//Figures/Reflectances.png>
+Package pdftex.def Info: Chapter_03//Figures/Reflectances.png  used on input line 188.
+(pdftex.def)             Requested size: 455.24411pt x 546.29794pt.
+<Chapter_03//Figures/ClassificationValidation.png, id=3021, 693.792pt x 433.62pt>
+File: Chapter_03//Figures/ClassificationValidation.png Graphic file (type png)
+<use Chapter_03//Figures/ClassificationValidation.png>
+Package pdftex.def Info: Chapter_03//Figures/ClassificationValidation.png  used on input line 212.
+(pdftex.def)             Requested size: 455.24411pt x 284.52934pt.
+ (./Chapter_03//GeneralMetrics/NumberTilesTotal.tex) (./Chapter_03//GeneralMetrics/NumberTiles2A.tex) (./Chapter_03//GeneralMetrics/NumberTiles1C.tex) [121] [122 <./Chapter_03//Figures/Reflectances.png (PNG copy)>]
+<Chapter_03//Figures/MovingWindows.png, id=3045, 520.344pt x 390.0171pt>
+File: Chapter_03//Figures/MovingWindows.png Graphic file (type png)
+<use Chapter_03//Figures/MovingWindows.png>
+Package pdftex.def Info: Chapter_03//Figures/MovingWindows.png  used on input line 250.
+(pdftex.def)             Requested size: 455.24411pt x 341.24031pt.
+<Chapter_03//Figures/MovingWindows2.png, id=3046, 520.344pt x 520.344pt>
+File: Chapter_03//Figures/MovingWindows2.png Graphic file (type png)
+<use Chapter_03//Figures/MovingWindows2.png>
+Package pdftex.def Info: Chapter_03//Figures/MovingWindows2.png  used on input line 263.
+(pdftex.def)             Requested size: 455.24411pt x 455.26811pt.
+ [123 <./Chapter_03//Figures/ClassificationValidation.png (PNG copy)>] [124 <./Chapter_03//Figures/MovingWindows.png (PNG copy)>] [125 <./Chapter_03//Figures/MovingWindows2.png (PNG copy)>]
+<Chapter_03//Figures/Moonlight.png, id=3063, 433.62pt x 433.62pt>
+File: Chapter_03//Figures/Moonlight.png Graphic file (type png)
+<use Chapter_03//Figures/Moonlight.png>
+Package pdftex.def Info: Chapter_03//Figures/Moonlight.png  used on input line 293.
+(pdftex.def)             Requested size: 341.43307pt x 341.4511pt.
+ [126 <./Chapter_03//Figures/Moonlight.png (PNG copy)>]
+
+pdfTeX warning: pdflatex (file ./Chapter_03//Figures/Light.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
+<Chapter_03//Figures/Light.pdf, id=3073, 711.31892pt x 540.60239pt>
+File: Chapter_03//Figures/Light.pdf Graphic file (type pdf)
+<use Chapter_03//Figures/Light.pdf>
+Package pdftex.def Info: Chapter_03//Figures/Light.pdf  used on input line 309.
+(pdftex.def)             Requested size: 455.24411pt x 345.98434pt.
+[127 <./Chapter_03//Figures/Light.pdf>] (./Chapter_03//Figures/MovementModelStaticSimple.tex) (./Chapter_03//Figures/MovementModelDynamicSimple.tex) (./Chapter_03//Figures/MovementModelStaticFull.tex) (./Chapter_03//Figures/MovementModelDynamicFull.tex) [128] [129] [130] [131]
+<Chapter_03//Figures/Stability.png, id=3137, 693.792pt x 578.16pt>
+File: Chapter_03//Figures/Stability.png Graphic file (type png)
+<use Chapter_03//Figures/Stability.png>
+Package pdftex.def Info: Chapter_03//Figures/Stability.png  used on input line 393.
+(pdftex.def)             Requested size: 455.24411pt x 379.37245pt.
+ [132 <./Chapter_03//Figures/Stability.png (PNG copy)>]
+<Chapter_03//Figures/MovementModelInterpretation.png, id=3143, 578.16pt x 361.35pt>
+File: Chapter_03//Figures/MovementModelInterpretation.png Graphic file (type png)
+<use Chapter_03//Figures/MovementModelInterpretation.png>
+Package pdftex.def Info: Chapter_03//Figures/MovementModelInterpretation.png  used on input line 411.
+(pdftex.def)             Requested size: 455.24411pt x 284.52603pt.
+ [133 <./Chapter_03//Figures/MovementModelInterpretation.png (PNG copy)>]
+<Chapter_03//Figures/RankCorrelationNumberSteps.png, id=3148, 650.43pt x 390.258pt>
+File: Chapter_03//Figures/RankCorrelationNumberSteps.png Graphic file (type png)
+<use Chapter_03//Figures/RankCorrelationNumberSteps.png>
+Package pdftex.def Info: Chapter_03//Figures/RankCorrelationNumberSteps.png  used on input line 431.
+(pdftex.def)             Requested size: 455.24411pt x 273.1549pt.
+)
+<Images/Hyena.jpg, id=3149, 1318.9275pt x 1865.97125pt>
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 1318.92429pt x 1865.96672pt.
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 1318.92429pt x 1865.96672pt.
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 1318.92429pt x 1865.96672pt.
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 597.5973pt x 845.45921pt.
+ [134 <./Chapter_03//Figures/RankCorrelationNumberSteps.png (PNG copy)>]
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 597.5973pt x 845.45921pt.
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 597.5973pt x 845.45921pt.
+File: Images/Hyena.jpg Graphic file (type jpg)
+<use Images/Hyena.jpg>
+Package pdftex.def Info: Images/Hyena.jpg  used on input line 217.
+(pdftex.def)             Requested size: 597.5973pt x 845.45921pt.
+ [135 <./Images/Hyena.jpg>] (./Chapter_04/Manuscript.tex
+Chapter 5.
+[136
+
+] [137] (./Chapter_04//Figures/Glossary.tex) [138] [139]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [140]
+<Chapter_04//Figures/Overview.png, id=3279, 737.154pt x 491.436pt>
+File: Chapter_04//Figures/Overview.png Graphic file (type png)
+<use Chapter_04//Figures/Overview.png>
+Package pdftex.def Info: Chapter_04//Figures/Overview.png  used on input line 223.
+(pdftex.def)             Requested size: 455.24411pt x 303.50238pt.
+<Chapter_04//Figures/NumberOfSteps.png, id=3280, 542.025pt x 271.0125pt>
+File: Chapter_04//Figures/NumberOfSteps.png Graphic file (type png)
+<use Chapter_04//Figures/NumberOfSteps.png>
+Package pdftex.def Info: Chapter_04//Figures/NumberOfSteps.png  used on input line 257.
+(pdftex.def)             Requested size: 455.24411pt x 227.62825pt.
+
+Overfull \hbox (1.4551pt too wide) in paragraph at lines 280--290
+[]\T1/lato-TLF/m/it/10 Imputation\T1/lato-TLF/m/n/10 : An in-tu-itive so-lu-tion is pro-vided by [][][]Mc-Clin-tock (2017)[][], who sug-gests fit-ting a continuous-
+ []
+
+[141] [142 <./Chapter_04//Figures/Overview.png (PNG copy)>] [143 <./Chapter_04//Figures/NumberOfSteps.png (PNG copy)>]
+Underfull \vbox (badness 1168) has occurred while \output is active []
+
+ [144]
+<Chapter_04//Figures/Design.png, id=3341, 3414.7575pt x 2237.35875pt>
+File: Chapter_04//Figures/Design.png Graphic file (type png)
+<use Chapter_04//Figures/Design.png>
+Package pdftex.def Info: Chapter_04//Figures/Design.png  used on input line 386.
+(pdftex.def)             Requested size: 455.24411pt x 298.27507pt.
+ [145 <./Chapter_04//Figures/Design.png>]
+<Chapter_04//Figures/Covariates.png, id=3356, 520.344pt x 216.81pt>
+File: Chapter_04//Figures/Covariates.png Graphic file (type png)
+<use Chapter_04//Figures/Covariates.png>
+Package pdftex.def Info: Chapter_04//Figures/Covariates.png  used on input line 425.
+(pdftex.def)             Requested size: 455.24411pt x 189.69504pt.
+ [146 <./Chapter_04//Figures/Covariates.png (PNG copy)>] [147] [148] [149]
+Underfull \vbox (badness 2573) has occurred while \output is active []
+
+ [150]
+<Chapter_04//Figures/ModelComparisonForgiveness.png, id=3423, 505.89pt x 657.657pt>
+File: Chapter_04//Figures/ModelComparisonForgiveness.png Graphic file (type png)
+<use Chapter_04//Figures/ModelComparisonForgiveness.png>
+Package pdftex.def Info: Chapter_04//Figures/ModelComparisonForgiveness.png  used on input line 706.
+(pdftex.def)             Requested size: 455.24411pt x 591.82562pt.
+
+
+LaTeX Warning: Float too large for page by 22.26892pt on input line 723.
+
+<Chapter_04//Figures/ModelComparisonMissingness.png, id=3424, 505.89pt x 657.657pt>
+File: Chapter_04//Figures/ModelComparisonMissingness.png Graphic file (type png)
+<use Chapter_04//Figures/ModelComparisonMissingness.png>
+Package pdftex.def Info: Chapter_04//Figures/ModelComparisonMissingness.png  used on input line 727.
+(pdftex.def)             Requested size: 455.24411pt x 591.82562pt.
+
+LaTeX Warning: Float too large for page by 22.26892pt on input line 744.
+
+[151] [152 <./Chapter_04//Figures/ModelComparisonForgiveness.png (PNG copy)>] [153 <./Chapter_04//Figures/ModelComparisonMissingness.png (PNG copy)>] [154]
+<Chapter_04//Figures/CaseStudy.png, id=3461, 578.16pt x 375.804pt>
+File: Chapter_04//Figures/CaseStudy.png Graphic file (type png)
+<use Chapter_04//Figures/CaseStudy.png>
+Package pdftex.def Info: Chapter_04//Figures/CaseStudy.png  used on input line 824.
+(pdftex.def)             Requested size: 455.24411pt x 295.90707pt.
+ [155 <./Chapter_04//Figures/CaseStudy.png (PNG copy)>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [156]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [157]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [158]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [159]) [160] (./Chapter_04/Manuscript_Support.tex [161
+
+]
+<Chapter_04//Figures/CovariatesAppendix.png, id=3574, 520.344pt x 433.62pt>
+File: Chapter_04//Figures/CovariatesAppendix.png Graphic file (type png)
+<use Chapter_04//Figures/CovariatesAppendix.png>
+Package pdftex.def Info: Chapter_04//Figures/CovariatesAppendix.png  used on input line 11.
+(pdftex.def)             Requested size: 455.24411pt x 379.3901pt.
+ [162 <./Chapter_04//Figures/CovariatesAppendix.png (PNG copy)>]
+<Chapter_04//Figures/DistributionParameters.png, id=3586, 505.89pt x 505.89pt>
+File: Chapter_04//Figures/DistributionParameters.png Graphic file (type png)
+<use Chapter_04//Figures/DistributionParameters.png>
+Package pdftex.def Info: Chapter_04//Figures/DistributionParameters.png  used on input line 30.
+(pdftex.def)             Requested size: 409.71692pt x 409.72232pt.
+ [163 <./Chapter_04//Figures/DistributionParameters.png (PNG copy)>]
+Overfull \hbox (2.54544pt too wide) in paragraph at lines 46--46
+|[]\T1/lato-TLF/b/n/14.4 Distribution of Rel-a-tive Turn-ing An-gles fol-low-ing Dif-fer-ent Step Du-
+ []
+
+<Chapter_04//Figures/TurningAnglePreviousDuration.png, id=3595, 303.2931pt x 404.712pt>
+File: Chapter_04//Figures/TurningAnglePreviousDuration.png Graphic file (type png)
+<use Chapter_04//Figures/TurningAnglePreviousDuration.png>
+Package pdftex.def Info: Chapter_04//Figures/TurningAnglePreviousDuration.png  used on input line 49.
+(pdftex.def)             Requested size: 364.19667pt x 485.9978pt.
+[164 <./Chapter_04//Figures/TurningAnglePreviousDuration.png (PNG copy)>]
+<Chapter_04//Figures/ModelComparisonAppendix.png, id=3600, 939.51pt x 1127.412pt>
+File: Chapter_04//Figures/ModelComparisonAppendix.png Graphic file (type png)
+<use Chapter_04//Figures/ModelComparisonAppendix.png>
+Package pdftex.def Info: Chapter_04//Figures/ModelComparisonAppendix.png  used on input line 65.
+(pdftex.def)             Requested size: 409.71692pt x 491.65887pt.
+ [165 <./Chapter_04//Figures/ModelComparisonAppendix.png (PNG copy)>]
+<Chapter_04//Figures/CaseStudyCovariates.png, id=3605, 563.706pt x 234.8775pt>
+File: Chapter_04//Figures/CaseStudyCovariates.png Graphic file (type png)
+<use Chapter_04//Figures/CaseStudyCovariates.png>
+Package pdftex.def Info: Chapter_04//Figures/CaseStudyCovariates.png  used on input line 84.
+(pdftex.def)             Requested size: 455.24411pt x 189.69063pt.
+ [166 <./Chapter_04//Figures/CaseStudyCovariates.png (PNG copy)>] (./Chapter_04//Figures/CaseStudyTable.tex
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/n' will be
+(Font)              scaled to size 8.0pt on input line 7.
+LaTeX Font Info:    Font shape `T1/lato-TLF/m/it' will be
+(Font)              scaled to size 8.0pt on input line 7.
+))
+<Images/Kingfisher.jpg, id=3610, 597.432pt x 844.5954pt>
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.43054pt x 844.59334pt.
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.43054pt x 844.59334pt.
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.43054pt x 844.59334pt.
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+ [167]
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+File: Images/Kingfisher.jpg Graphic file (type jpg)
+<use Images/Kingfisher.jpg>
+Package pdftex.def Info: Images/Kingfisher.jpg  used on input line 224.
+(pdftex.def)             Requested size: 597.93192pt x 845.30214pt.
+ [168 <./Images/Kingfisher.jpg>] (./Chapter_05/Manuscript.tex
+Chapter 6.
+[169
+
+]
+
+pdfTeX warning: pdflatex (file ./Chapter_05//Figures/MapComparison.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Chapter_05//Figures/MapComparison.pdf, id=3633, 672.05412pt x 425.65323pt>
+File: Chapter_05//Figures/MapComparison.pdf Graphic file (type pdf)
+<use Chapter_05//Figures/MapComparison.pdf>
+Package pdftex.def Info: Chapter_05//Figures/MapComparison.pdf  used on input line 46.
+(pdftex.def)             Requested size: 455.24411pt x 288.34271pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [170] [171 <./Chapter_05//Figures/MapComparison.pdf>]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [172]
+Overfull \hbox (6.05688pt too wide) in paragraph at lines 149--156
+\T1/lato-TLF/m/n/10 fa-cil-i-tate nav-i-gat-ing the con-fus-ing di-ver-sity of con-nec-tiv-ity lit-er-a-ture and con-nec-tiv-ity mod-el-ing ap-proaches,
+ []
+
+[173] [174]
+<Chapter_05//Figures/ModelingDecisions.png, id=3748, 722.7pt x 433.62pt>
+File: Chapter_05//Figures/ModelingDecisions.png Graphic file (type png)
+<use Chapter_05//Figures/ModelingDecisions.png>
+Package pdftex.def Info: Chapter_05//Figures/ModelingDecisions.png  used on input line 276.
+(pdftex.def)             Requested size: 455.24411pt x 273.14896pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [175]
+Underfull \vbox (badness 4096) has occurred while \output is active []
+
+ [176 <./Chapter_05//Figures/ModelingDecisions.png>] [177]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [178]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [179])
+<Images/WildDogPup.jpg, id=3838, 597.1911pt x 845.0772pt>
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+ [180]
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+File: Images/WildDogPup.jpg Graphic file (type jpg)
+<use Images/WildDogPup.jpg>
+Package pdftex.def Info: Images/WildDogPup.jpg  used on input line 228.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+ [181 <./Images/WildDogPup.jpg>] (./Acknowledgements/Manuscript.tex [182
+
+]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [183]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [184]
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [185])
+<Images/Bateleur.jpg, id=3866, 597.432pt x 844.8363pt>
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.43054pt x 844.83424pt.
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+ [186]
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+File: Images/Bateleur.jpg Graphic file (type jpg)
+<use Images/Bateleur.jpg>
+Package pdftex.def Info: Images/Bateleur.jpg  used on input line 232.
+(pdftex.def)             Requested size: 597.93192pt x 845.54324pt.
+ [187 <./Images/Bateleur.jpg>] (./Appendix/Manuscript.tex
+Appendix .
+[188
+
+]
+
+pdfTeX warning: pdflatex (file ./Appendix//Figures/Cameras.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Appendix//Figures/Cameras.pdf, id=3889, 796.67719pt x 399.76123pt>
+File: Appendix//Figures/Cameras.pdf Graphic file (type pdf)
+<use Appendix//Figures/Cameras.pdf>
+Package pdftex.def Info: Appendix//Figures/Cameras.pdf  used on input line 36.
+(pdftex.def)             Requested size: 409.71692pt x 205.58958pt.
+
+Underfull \vbox (badness 1062) has occurred while \output is active []
+
+ [189 <./Appendix//Figures/Cameras.pdf>]
+
+pdfTeX warning: pdflatex (file ./Appendix//Figures/CameratrapPipeline.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Appendix//Figures/CameratrapPipeline.pdf, id=3922, 455.2441pt x 184.94292pt>
+File: Appendix//Figures/CameratrapPipeline.pdf Graphic file (type pdf)
+<use Appendix//Figures/CameratrapPipeline.pdf>
+Package pdftex.def Info: Appendix//Figures/CameratrapPipeline.pdf  used on input line 67.
+(pdftex.def)             Requested size: 455.24411pt x 184.9509pt.
+
+Overfull \hbox (2.58522pt too wide) in paragraph at lines 91--121
+[]\T1/lato-TLF/b/n/10 Factors In-flu-enc-ing Phase-Specific Move-ment and Ac-tiv-ity Pat-terns of African Wild Dogs (by Megan
+ []
+
+[190 <./Appendix//Figures/CameratrapPipeline.pdf>]
+Underfull \vbox (badness 1762) has occurred while \output is active []
+
+ [191]
+
+pdfTeX warning: pdflatex (file ./Appendix//Figures/MasterTheses.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Appendix//Figures/MasterTheses.pdf, id=3995, 680.02084pt x 320.0935pt>
+File: Appendix//Figures/MasterTheses.pdf Graphic file (type pdf)
+<use Appendix//Figures/MasterTheses.pdf>
+Package pdftex.def Info: Appendix//Figures/MasterTheses.pdf  used on input line 168.
+(pdftex.def)             Requested size: 455.24411pt x 214.29059pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [192 <./Appendix//Figures/MasterTheses.pdf>]
+
+pdfTeX warning: pdflatex (file ./Appendix//Figures/Packages.pdf): PDF inclusion: found PDF version <1.7>, but at most version <1.5> allowed
+<Appendix//Figures/Packages.pdf, id=4029, 796.67719pt x 227.62204pt>
+File: Appendix//Figures/Packages.pdf Graphic file (type pdf)
+<use Appendix//Figures/Packages.pdf>
+Package pdftex.def Info: Appendix//Figures/Packages.pdf  used on input line 222.
+(pdftex.def)             Requested size: 455.24411pt x 130.07239pt.
+)
+<Images/DogFollow.jpg, id=4030, 597.1911pt x 845.0772pt>
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.18965pt x 845.07513pt.
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+ [193 <./Appendix//Figures/Packages.pdf>]
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+File: Images/DogFollow.jpg Graphic file (type jpg)
+<use Images/DogFollow.jpg>
+Package pdftex.def Info: Images/DogFollow.jpg  used on input line 242.
+(pdftex.def)             Requested size: 597.21698pt x 845.11382pt.
+ [194 <./Images/DogFollow.jpg>] [195
+
+] [196] [197]
+Overfull \hbox (3.56853pt too wide) in paragraph at lines 251--251
+[][]\T1/lato-TLF/m/n/10 Cagnacci, F., Boi-tani, L., Pow-ell, R. A., & Boyce, M. S. (2010). An-i-mal Ecol-ogy Meets GPS-Based Ra-dioteleme-
+ []
+
+[198]
+Overfull \hbox (0.33305pt too wide) in paragraph at lines 251--251
+[][]\T1/lato-TLF/m/n/10 Crutzen, P. J. (2006). The ^^PAn-thro-pocene^^Q. In \T1/lato-TLF/m/it/10 Earth Sys-tem Sci-ence in the An-thro-pocene \T1/lato-TLF/m/n/10 (pp. 13^^U18). Springer.
+ []
+
+[199] [200] [201]
+Overfull \hbox (2.10692pt too wide) in paragraph at lines 251--251
+\T1/lato-TLF/m/n/10 M. G. L. (1992). Pop-u-la-tion Dy-nam-ics of African Wild Dogs. In \T1/lato-TLF/m/it/10 Wildlife 2001: Pop-u-la-tions \T1/lato-TLF/m/n/10 (pp. 1125^^U
+ []
+
+[202] [203] [204]
+Overfull \hbox (10.63272pt too wide) in paragraph at lines 251--251
+[][]\T1/lato-TLF/m/n/10 Klappstein, N. J., Thomas, L., & Mich-e-lot, T. (2023). Flex-i-ble Hid-den Markov Mod-els for Behaviour-Dependent
+ []
+
+[205]
+Overfull \hbox (2.1579pt too wide) in paragraph at lines 251--251
+[][]\T1/lato-TLF/m/n/10 Main-Knorn, M., Pflug, B., Louis, J., De-baecker, V., Müller-Wilm, U., & Gas-con, F. (2017, Oc-to-ber 4). Sen2Cor
+ []
+
+[206] [207]
+Overfull \hbox (3.59216pt too wide) in paragraph at lines 251--251
+\T1/lato-TLF/m/n/10 caon pic-tus) Us-ing a Ke-tamine/Xylazine/Atropine Com-bi-na-tion. \T1/lato-TLF/m/it/10 Jour-nal of Zoo and Wildlife Medicine\T1/lato-TLF/m/n/10 ,
+ []
+
+[208] [209] [210]
+Overfull \hbox (13.98181pt too wide) in paragraph at lines 251--251
+[][]\T1/lato-TLF/m/n/10 Therneau, T., Atkin-son, B., & Rip-ley, B. (2024). \T1/lato-TLF/m/it/10 Rpart: Re-cur-sive Par-ti-tion-ing and Re-gres-sion Trees \T1/lato-TLF/m/n/10 (Ver-sion 4.1.21).
+ []
+
+[211] [212] [213] [214] (./FinalThesis.aux)
+Package rerunfilecheck Info: File `FinalThesis.out' has not changed.
+(rerunfilecheck)             Checksum: 61E56E3E5E38AE73613F84979C2EF55E;18164.
+Package logreq Info: Writing requests to 'FinalThesis.run.xml'.
+\openout1 = `FinalThesis.run.xml'.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 45009 strings out of 478287
+ 927306 string characters out of 5849289
+ 3246120 words of memory out of 5000000
+ 61019 multiletter control sequences out of 15000+600000
+ 857429 words of font info for 90 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 84i,26n,131p,6627b,5163s stack positions out of 5000i,500n,10000p,200000b,80000s
+{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-t1.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/lato/a_rt66h3.enc}{/usr/share/texlive/texmf-dist/fonts/enc/dvips/lato/a_cl4kdn.enc}</usr/share/texlive/texmf-dist/fonts/type1/typoland/lato/Lato-Bold.pfb></usr/share/texlive/texmf-dist/fonts/type1/typoland/lato/Lato-Italic.pfb></usr/share/texlive/texmf-dist/fonts/type1/typoland/lato/Lato-Regular.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5.pfb></usr/share/te
+xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfss1000.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sftt1000.pfb>
+Output written on FinalThesis.pdf (221 pages, 84221592 bytes).
+PDF statistics:
+ 4905 PDF objects out of 5155 (max. 8388607)
+ 4164 compressed objects within 42 object streams
+ 818 named destinations out of 1000 (max. 500000)
+ 1162 words of extra memory for PDF output out of 10000 (max. 10000000)
+

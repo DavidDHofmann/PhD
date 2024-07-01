@@ -1,0 +1,195 @@
+%------------------------------------------------------------------------------
+%  Latex Preamble
+%------------------------------------------------------------------------------
+% Define font size of the chapter title
+\titleformat{\chapter}[display]
+{\normalfont\huge\bfseries\centering}{\chaptertitlename\ \thechapter}
+{40pt}{\Large#1}
+\titleformat{\section}
+{\normalfont\Large\bfseries}{\thesection}{1em}{#1}
+\titleformat{\subsection}
+{\normalfont\large\bfseries}{\thesubsection}{1em}{#1}
+\titleformat{\subsubsection}
+{\normalfont\normalsize\bfseries}{\thesubsubsection}{1em}{#1}
+\titleformat{\paragraph}[runin]
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{#1}
+\titleformat{\subparagraph}[runin]
+{\normalfont\normalsize\bfseries}{\thesubparagraph}{1em}{#1}
+
+% prevent page breaks in toc before a subsection
+\let\oldsubsection\subsection
+\renewcommand{\subsection}{%
+    \addtocontents{toc}{\penalty10000}%
+    \oldsubsection%
+}
+
+% Remove indent at new paragraph
+% \setlength{\parindent}{0pt}
+
+% prevent page breaks in toc before a section
+\let\oldsection\section
+\renewcommand{\section}{%
+    \addtocontents{toc}{\penalty10000}%
+    \oldsection%
+}
+
+% Define spacing around section headers (these are the defaults for now)
+\titlespacing*{\chapter} {0pt}{50pt}{40pt}
+\titlespacing*{\section} {0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
+\titlespacing*{\subsection} {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\subsubsection}{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+\titlespacing*{\paragraph} {0pt}{3.25ex plus 1ex minus .2ex}{1em}
+\titlespacing*{\subparagraph} {\parindent}{3.25ex plus 1ex minus .2ex}{1em}
+
+% To get subappendices
+\AtBeginEnvironment{subappendices}{%
+  \chapter*{Appendices}
+  \addcontentsline{toc}{section}{Appendices}
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{0}} % set toc level to 0
+  \counterwithin{figure}{section}
+  \counterwithin{table}{section}
+}
+\AtEndEnvironment{subappendices}{%
+  \addtocontents{toc}{\protect\setcounter{tocdepth}{1}} % set toc level to 1
+}
+
+\AtBeginEnvironment{appendices}{%
+  \renewcommand{\appendixname}{Appendix}
+  \renewcommand{\thechapter}{} % Remove the chapter numbering from appendix title
+}
+
+% Reduce number of levels shown in the table of content
+\setcounter{tocdepth}{1}
+
+% Setup document for use with bibtex or biblatex
+\ifthenelse{\boolean{usebiblatex}}{
+  %-----------------------------------------------------------------------------
+  %  If using biblatex
+  %-----------------------------------------------------------------------------
+  % Load required packages and refer to correct bibliography
+  \usepackage{csquotes}
+  \usepackage[
+      backend=biber
+    , style=apa          % To display Author-year in the text
+    , natbib=true        % Necessary to use citep, etc.
+    , hyperref=true      % To have clickable links in the references
+    , useeditor=false    % Don't add editor to publications
+    , sorting=ynt        % Sort by year, name, and title
+    , uniquename=false   % Avoid that initials are put
+  ]{biblatex}
+  \addbibresource{\subfix{Literature.bib}}
+
+  % To include author in link
+  \DeclareFieldFormat{citehyperref}{%
+  \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+  \bibhyperref{#1}}
+  \DeclareFieldFormat{textcitehyperref}{%
+  \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+  \bibhyperref{%
+    #1%
+    \ifbool{cbx:parens}
+      {\bibcloseparen\global\boolfalse{cbx:parens}}
+      {}}}
+  \savebibmacro{cite}
+  \savebibmacro{textcite}
+  \renewbibmacro*{cite}{%
+    \printtext[citehyperref]{%
+      \restorebibmacro{cite}%
+      \usebibmacro{cite}}}
+  \renewbibmacro*{textcite}{%
+    \ifboolexpr{
+      ( not test {\iffieldundef{prenote}} and
+        test {\ifnumequal{\value{citecount}}{1}} )
+      or
+      ( not test {\iffieldundef{postnote}} and
+        test {\ifnumequal{\value{citecount}}{\value{citetotal}}} )
+    }
+      {\DeclareFieldAlias{textcitehyperref}{noformat}}
+      {}%
+    \printtext[textcitehyperref]{%
+      \restorebibmacro{textcite}%
+      \usebibmacro{textcite}}}
+
+  % Remove editor form everything but books
+  \AtEveryBibitem{%
+   \ifentrytype{book}{}{%
+    \clearname{editor}
+   }
+  }
+}{
+  %-----------------------------------------------------------------------------
+  %  If using bibtex
+  %-----------------------------------------------------------------------------
+  % Load required packages and select citation style
+  \usepackage[round]{natbib}
+  \bibliographystyle{apalike}
+}
+
+%------------------------------------------------------------------------------
+%	Some Styling
+%------------------------------------------------------------------------------
+% Link colors
+\definecolor{linkcolor}{HTML}{000000}
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = linkcolor,
+  urlcolor   = linkcolor,
+  citecolor  = linkcolor,
+}
+
+% Changing the style of captions in figures etc.
+\captionsetup{labelfont=bf, format=plain, font=small}
+
+% Change how equations are referenced
+\renewcommand{\theequation}{Equation \thechapter.\arabic{equation}}%
+
+% Avoid skip when including text from external .tex file
+\newcommand{\inputy}[1]{\input{#1}\unskip}
+
+% % For supplementary material
+% \newcommand{\beginappendix}{%
+%   \setcounter{table}{0}
+%   \renewcommand{\thetable}{S\arabic{table}}%
+%   \setcounter{figure}{0}
+%   \renewcommand{\thefigure}{S\arabic{figure}}%
+%   \setcounter{equation}{0}
+%   \renewcommand{\theequation}{Equation S\arabic{equation}}%
+%   \setcounter{section}{0}
+%   \renewcommand{\thesection}{A.\arabic{section}}%
+% }
+
+%------------------------------------------------------------------------------
+%  ORCID
+%------------------------------------------------------------------------------
+% Creating some TikZ styles
+\tikzset{
+  nonterminal/.style = {rectangle
+    , minimum size = 6mm
+    , very thick
+    , draw = black!
+  }
+}
+
+% Create the ORCID logo
+\definecolor{orcidlogocol}{HTML}{A6CE39}
+\tikzset{
+  orcidlogo/.pic={
+    \fill[orcidlogocol]
+      svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3
+        ,0,128,0C198.7,0,256,57.3,256,128z};
+    \fill[white]
+      svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+      svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8
+        ,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5
+        ,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+      svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6
+      ,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+  }
+}
+
+% Command to create the ORCID
+\newcommand\orcid[1]{\href{https://orcid.org/#1}{\mbox{\scalerel*{
+\begin{tikzpicture}[yscale=-1,transform shape]
+  \pic{orcidlogo};
+\end{tikzpicture}
+}{|}}}}

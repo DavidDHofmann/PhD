@@ -1,0 +1,9 @@
+[0] Config.pm:307> INFO - This is Biber 2.17
+[0] Config.pm:310> INFO - Logfile is 'TitlepageGerman.blg'
+[111] biber:340> INFO - === Mi Mai 22, 2024, 11:04:38
+[137] Biber.pm:418> INFO - Reading 'TitlepageGerman.bcf'
+[228] Biber.pm:972> INFO - Found 0 citekeys in bib section 0
+[244] bbl.pm:654> INFO - Writing 'TitlepageGerman.bbl' with encoding 'UTF-8'
+[244] bbl.pm:757> INFO - Output to TitlepageGerman.bbl
+[244] Biber.pm:130> WARN - The file 'TitlepageGerman.bcf' does not contain any citations!
+[245] Biber.pm:132> INFO - WARNINGS: 1

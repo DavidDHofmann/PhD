@@ -1,0 +1,153 @@
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Overview.png}
+  \caption{(\textbf{a}) Demonstration of how missingness affects the number of
+  valid steps that can be used for step-selection analyses under different
+  levels of forgiveness. The upper panel depicts a trajectory with zero missing
+  locations. That is, all aspired locations were successfully collected on a
+  regular interval (yielding a regular step duration of $\Delta t = 1$). This
+  trajectory produces four valid steps that can be included in the iSSF model
+  and one invalid step that has to be omitted because it has no turning angle
+  associated with it. In the central panel, animal location 4 was not obtained,
+  introducing a missingness of 16.7\%. If the modeler has a forgiveness of one,
+  only a single step can be included for further analysis, as all other steps
+  are invalid (either because no turning angle can be computed or because
+  step durations exceed the forgiveness). If, however, the modeler exhibited a
+  forgiveness of two, such as in the lower panel, a total of three steps could
+  be obtained for further analysis. (\textbf{b}) Conceptual illustration of how
+  increasing the forgiveness allows one to retain additional steps that can be
+  used for step-selection analysis. The sequence of dots resembles the sequence
+  of locations that were scheduled to be collected (e.g. using a GPS device),
+  with the lines representing hypothetical steps. Because not all locations were
+  successfully obtained (gray dots), there is missingness. Depending on the
+  forgiveness level, already a single missing location enforces the introduction
+  of a new burst, which leads to the loss of several steps. In addition, some of
+  the remaining steps are invalid (dotted) because they are lacking a
+  turning angle. By increasing the forgiveness, a modeler is willing to retain
+  steps that exceed the regular step duration by a certain threshold, which
+  enables them to obtain longer bursts and increase the number of steps that can
+  be used for further analysis. In the figure, forgiveness increases from left
+  to right.}
+  \label{Overview}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_NumberOfSteps.png}
+  \caption{Illustration of how missingness in animal location data reduces the
+  number of valid steps that can be used in step-selection analyses (left panel)
+  and how increasing forgiveness helps to retain additional steps that are
+  otherwise omitted (right panel). At a missingness of 0, 998 valid steps can be
+  obtained from the total of 1,000 animal locations. At higher missingness,
+  step durations become irregular, which means that the number of valid steps
+  decreases substantially. However, if the modeler is willing to increase their
+  forgiveness, additional steps can be gained. The right panel shows the number
+  of valid steps that is gained when increasing the forgiveness from 1 to
+  2, 3, 4, and 5, respectively. Ribbons indicate the 95\%-percentile intervals
+  derived from 1,000 replicates.}
+  \label{NumberOfSteps}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Design.png}
+  \caption{Illustration of the study design. We varied the autocorrelation range
+  when simulating spatial covariates from 5 to 20 and tested for different
+  missingness scenarios (ranging from 0\% to 50\% missing locations). To
+  investigate how increasing forgiveness (i.e., the willingness to include steps
+  with duration above the regular step duration) influenced model results, we
+  varied its value from 1 (regular step selection) to 5 (considering steps that
+  are five times the regular step duration). Finally, we tested five different
+  methods to account for potential biases introduced by including irregular
+  steps. This gave 3 x 6 x 5 x 5 = 450 combinations, each of which we replicated
+  100 times. We assumed step lengths (sl) to follow a gamma distribution,
+  whereas turning angles (ta) followed a von Mises distribution.}
+  \label{Design}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Covariates.png}
+  \caption{Example of a landscape configuration across which we simulated
+  movement trajectories. All simulated layers had a resolution of 300 x 300
+  pixels. The distance layer indicated the distance to the center of the
+  landscape and served to simulate attraction. The elevation and forest layers
+  were simulated by sampling pixel-values from a normal distribution and
+  applying a moving window to achieve spatial autocorrelation. Simulated
+  individuals were initiated within the white dashed rectangle, which ensured
+  that they would not be released directly at a map border. Simulated
+  individuals were attracted to the landscape's center, preferred elevated
+  areas, and avoided areas covered by forest. The black line shows the simulated
+  trajectory associated with the visualized landscape configuration (cfr.
+  \Cref{MovementSimulation}).}
+  \label{Covariates}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ModelComparisonForgiveness.png}
+  \caption{(\textbf{a}) Parameter estimates and (\textbf{b}) Root mean-square
+  error (RMSE) with regard to the movement kernel and habitat-selection function
+  as a function of forgiveness. Results are shown for the scenario with
+  landscape autocorrelation of 20 and missingness of 20\%. The movement kernel
+  comprised of a gamma distribution with shape parameter $k$ and scale parameter
+  $\theta$ governing the step-length distribution and a von Mises distribution
+  with concentration parameter $\kappa$ governing the turning-angle
+  distribution. Habitat-selection was based on three covariates, namely a
+  \textsf{Distance}, \textsf{Elevation}, and a \textsf{Forest} layer. Estimates
+  are shown for the five different approaches we tested for. The uncorrected
+  approach ignored the fact that higher forgiveness implied temporal
+  irregularity in the data, while all other approaches attempted to correct for
+  the potential biases introduced by temporal irregularity. Note, the imputation
+  approach is not affected by the forgiveness level, since it always starts with
+  a full trajectory.}
+  \label{ModelComparisonForgiveness}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ModelComparisonMissingness.png}
+  \caption{(\textbf{a}) Parameter estimates and (\textbf{b}) Root mean-square
+  error (RMSE) with regard to the movement kernel and habitat-selection function
+  as a function of missingness. Results are shown for the scenario with
+  landscape autocorrelation of 20 and forgiveness of 2. The movement kernel
+  comprised of a gamma distribution with shape parameter $k$ and scale parameter
+  $\theta$ governing the step-length distribution and a von Mises distribution
+  with concentration parameter $\kappa$ governing the turning-angle
+  distribution. Habitat-selection was based on three covariates, namely a
+  \textsf{Distance}, \textsf{Elevation}, and a \textsf{Forest} layer. Estimates
+  are shown for the five different approaches we tested for. The uncorrected
+  approach ignored the fact that higher forgiveness implied temporal
+  irregularity in the data, while all other approaches attempted to correct for
+  the potential biases introduced by temporal irregularity. Note, the imputation
+  approach is not affected by the forgiveness level, since it always starts with
+  a full trajectory.}
+  \label{ModelComparisonMissingness}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_CaseStudy.png}
+  \caption{Model results from the case study using GPS data collected on Apollo.
+  In F1, forgiveness was set to one (only 2-hour steps were considered), whereas
+  in F3-S and F3-SH a forgiveness of three was employed (allowing for step
+  durations of up to 6 hours). In model F3-S, the step duration was interacted
+  with step descriptors. In model F3-SH, step duration was interacted with step
+  descriptors and habitat covariates. The bars indicate the 90\%, 95\%, and 99\%
+  confidence intervals. Note that for simplicity, we omitted interactions with
+  the step duration from this figure.}
+  \label{CaseStudy}
+  \end{center}
+\end{figure}

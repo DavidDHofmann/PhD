@@ -1,0 +1,19 @@
+[0] Config.pm:307> INFO - This is Biber 2.17
+[1] Config.pm:310> INFO - Logfile is 'Manuscript.blg'
+[112] biber:340> INFO - === Mo Apr 15, 2024, 15:51:51
+[134] Biber.pm:418> INFO - Reading 'Manuscript.bcf'
+[284] Biber.pm:972> INFO - Found 125 citekeys in bib section 0
+[307] Biber.pm:4383> INFO - Processing section 0
+[320] Biber.pm:4574> INFO - Looking for bibtex file 'Literature.bib' for section 0
+[453] bibtex.pm:1713> INFO - LaTeX decoding ...
+[2408] bibtex.pm:1518> INFO - Found BibTeX data source 'Literature.bib'
+[4543] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[4543] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[4543] Biber.pm:4203> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[4543] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[5011] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[5011] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[5011] Biber.pm:4203> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[5011] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[5229] bbl.pm:654> INFO - Writing 'Manuscript.bbl' with encoding 'UTF-8'
+[5660] bbl.pm:757> INFO - Output to Manuscript.bbl

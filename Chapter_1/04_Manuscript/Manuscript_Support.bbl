@@ -1,0 +1,49 @@
+ \newcommand{\noop}[1]{}
+\begin{thebibliography}{}
+
+\bibitem[Bastille-Rousseau et~al., 2018]{BastilleRousseau.2018}
+Bastille-Rousseau, G., Douglas-Hamilton, I., Blake, S., Northrup, J.~M., and
+  Wittemyer, G. (2018).
+\newblock {Applying Network Theory to Animal Movements to Identify Properties
+  of Landscape Space Use}.
+\newblock {\em {Ecological Applications}}, 28(3):854--864.
+
+\bibitem[Burnham and Anderson, 2002]{Burnham.2002}
+Burnham, K.~P. and Anderson, D.~R. (2002).
+\newblock {\em {Model Selection and Multimodel Inference: A Practical
+  Information-Theoretic Approach}}.
+\newblock {Springer Science \& Business Media}, Ney York, NY, USA.
+
+\bibitem[Fieberg et~al., 2021]{Fieberg.2021}
+Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
+\newblock {A ‘How to’ Guide for Interpreting Parameters in
+  Habitat-Selection Analyses}.
+\newblock {\em {Journal of Animal Ecology}}, 90(5):1027--1043.
+
+\bibitem[Fortin et~al., 2009]{Fortin.2009}
+Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
+  Dancose, K. (2009).
+\newblock {Group-Size-Mediated Habitat Selection and Group Fusion–Fission
+  Dynamics of Bison under Predation Risk}.
+\newblock {\em Ecology}, 90(9):2480--2490.
+
+\bibitem[Hofmann et~al., 2021]{Hofmann.2021}
+Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
+\newblock Bound within boundaries: Do protected areas cover movement corridors
+  of their most mobile, protected species?
+\newblock {\em {Journal of Applied Ecology}}, 58(6):1133--1144.
+\newblock Publisher: Wiley Online Library.
+
+\bibitem[Pomilia et~al., 2015]{Pomilia.2015}
+Pomilia, M.~A., McNutt, J.~W., and Jordan, N.~R. (2015).
+\newblock {Ecological Predictors of African Wild Dog Ranging Patterns in
+  Northern Botswana}.
+\newblock {\em {Journal of Mammalogy}}, 96(6):1214--1223.
+
+\bibitem[Signer et~al., 2019]{Amt.2019}
+Signer, J., Fieberg, J., and Avgar, T. (2019).
+\newblock {Animal Movement Tools (amt): R Package for Managing Tracking Data
+  and Conducting Habitat Selection Analyses}.
+\newblock {\em {Ecology and Evolution}}, 9:880--890.
+
+\end{thebibliography}

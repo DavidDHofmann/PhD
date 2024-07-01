@@ -1,0 +1,726 @@
+\begin{thebibliography}{}
+
+\bibitem[Abrahms et~al., 2017]{Abrahms.2017}
+Abrahms, B., Sawyer, S.~C., Jordan, N.~R., McNutt, J.~W., Wilson, A.~M., and
+  Brashares, J.~S. (2017).
+\newblock Does {{Wildlife Resource Selection Accurately Inform Corridor
+  Conservation}}?
+\newblock {\em Journal of Applied Ecology}, 54(2):412--422.
+
+\bibitem[Adriaensen et~al., 2003]{Adriaensen.2003}
+Adriaensen, F., Chardon, J., De~Blust, G., Swinnen, E., Villalba, S., Gulinck,
+  H., and Matthysen, E. (2003).
+\newblock The {{Application}} of `{{Least-Cost}}' {{Modelling}} as a
+  {{Functional Landscape Model}}.
+\newblock {\em Landscape and Urban Planning}, 64(4):233--247.
+
+\bibitem[Allen et~al., 2016]{Allen.2016}
+Allen, C.~H., Parrott, L., and Kyle, C. (2016).
+\newblock An {{Individual-Based Modelling Approach}} to {{Estimate Landscape
+  Connectivity}} for {{Bighorn Sheep}} ({{Ovis}} canadensis).
+\newblock {\em PeerJ}, 4:e2001.
+
+\bibitem[Avgar et~al., 2017]{Avgar.2017}
+Avgar, T., Lele, S.~R., Keim, J.~L., and Boyce, M.~S. (2017).
+\newblock Relative {{Selection Strength}}: {{Quantifying Effect Size}} in
+  {{Habitat}}- and {{Step}}-{{Selection Inference}}.
+\newblock {\em Ecology and Evolution}, 7(14):5322--5330.
+
+\bibitem[Avgar et~al., 2016]{Avgar.2016}
+Avgar, T., Potts, J.~R., Lewis, M.~A., and Boyce, M.~S. (2016).
+\newblock Integrated {{Step Selection Analysis}}: {{Bridging}} the {{Gap
+  Between Resource Selection}} and {{Animal Movement}}.
+\newblock {\em Methods in Ecology and Evolution}, 7(5):619--630.
+
+\bibitem[Aybar et~al., 2024]{Aybar.2024}
+Aybar, C., Qiusheng, W., Bautista, L., Yali, R., Barja, A., Ushey, K., Ooms,
+  J., Appelhans, T., Allaire, J.~J., Tang, Y., Roy, S., Adauto, M., Carrasco,
+  G., Bengtsson, H., Hollister, J., Donchyts, G., and JOSS, M. (2024).
+\newblock Rgee: {{R Bindings}} for {{Calling}} the '{{Earth Engine}}' {{API}}.
+
+\bibitem[Baddeley et~al., 2015]{Baddeley.2015}
+Baddeley, A., Rubak, E., and Turner, R. (2015).
+\newblock {\em Spatial {{Point Patterns}}: {{Methodology}} and {{Applications}}
+  with {{R}}}.
+\newblock {Chapman and Hall/CRC Press}, London.
+
+\bibitem[Baguette et~al., 2013]{Baguette.2013}
+Baguette, M., Blanchet, S., Legrand, D., Stevens, V.~M., and Turlure, C.
+  (2013).
+\newblock Individual {{Dispersal}}, {{Landscape Connectivity}} and {{Ecological
+  Networks}}.
+\newblock {\em Biological Reviews}, 88(2):310--326.
+
+\bibitem[Baldwin et~al., 2006]{Baldwin.2006}
+Baldwin, R.~F., Calhoun, A. J.~K., and {deMaynadier}, P.~G. (2006).
+\newblock Conservation {{Planning}} for {{Amphibian Species}} with {{Complex
+  Habitat Requirements}}: {{A Case Study Using Movements}} and {{Habitat
+  Selection}} of the {{Wood Frog Rana Sylvatica}}.
+\newblock {\em Journal of Herpetology}, 40(4):442--453.
+
+\bibitem[Behr et~al., 2020]{Behr.2020}
+Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2020).
+\newblock When to {{Stay}} and {{When}} to {{Leave}}? {{Proximate Causes}} of
+  {{Dispersal}} in an {{Endangered Social Carnivore}}.
+\newblock {\em Journal of Animal Ecology}, 89(10):2356--2366.
+
+\bibitem[Benz et~al., 2016]{Benz.2016}
+Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
+  C.~F., and Ciuti, S. (2016).
+\newblock Dispersal {{Ecology Informs Design}} of {{Large-Scale Wildlife
+  Corridors}}.
+\newblock {\em PLoS ONE}, 11(9):e0162989.
+
+\bibitem[Beyer et~al., 2010]{Beyer.2010}
+Beyer, H.~L., Haydon, D.~T., Morales, J.~M., Frair, J.~L., Hebblewhite, M.,
+  Mitchell, M., and Matthiopoulos, J. (2010).
+\newblock The {{Interpretation}} of {{Habitat Preference Metrics Under
+  Use}}--{{Availability Designs}}.
+\newblock {\em Philosophical Transactions of the Royal Society B: Biological
+  Sciences}, 365(1550):2245--2254.
+
+\bibitem[{Bishop-Taylor} et~al., 2018]{Bishop-Taylor.2018}
+{Bishop-Taylor}, R., Tulbure, M.~G., and Broich, M. (2018).
+\newblock Evaluating {{Static}} and {{Dynamic Landscape Connectivity Modelling
+  Using}} a 25-{{Year Remote Sensing Time Series}}.
+\newblock {\em Landscape Ecology}, 33(4):625--640.
+
+\bibitem[Boyce et~al., 2002]{Boyce.2002}
+Boyce, M.~S., Vernier, P.~R., Nielsen, S.~E., and Schmiegelow, F.~K. (2002).
+\newblock Evaluating {{Resource Selection Functions}}.
+\newblock {\em Ecological Modelling}, 157(2-3):281--300.
+
+\bibitem[Brennan et~al., 2020]{Brennan.2020}
+Brennan, A., Beytell, P., Aschenborn, O., Du~Preez, P., Funston, P., Hanssen,
+  L., Kilian, J., Stuart-Hill, G., Taylor, R., and Naidoo, R. (2020).
+\newblock Characterizing {{Multispecies Connectivity Across}} a {{Transfrontier
+  Conservation Landscape}}.
+\newblock {\em Journal of Applied Ecology}, 57(9):1700--1710.
+
+\bibitem[Brooks et~al., 2017]{Brooks.2017}
+Brooks, M.~E., Kristensen, K., {van Benthem}, K.~J., Magnusson, A., Berg,
+  C.~W., Nielsen, A., Skaug, H.~J., Maechler, M., and Bolker, B.~M. (2017).
+\newblock {{glmmTMB Balances Speed}} and {{Flexibility Among Packages}} for
+  {{Zero-Inflated Generalized Linear Mixed Modeling}}.
+\newblock {\em The R Journal}, 9(2):378--400.
+
+\bibitem[Chen et~al., 2015]{Chen.2015}
+Chen, J., Chen, J., Liao, A., Cao, X., Chen, L., Chen, X., He, C., Han, G.,
+  Peng, S., and Lu, M. (2015).
+\newblock Global {{Land Cover Mapping}} at 30 m {{Resolution}}: {{A POK-Based
+  Operational Approach}}.
+\newblock {\em ISPRS Journal of Photogrammetry and Remote Sensing}, 103:7--27.
+
+\bibitem[Chetkiewicz and Boyce, 2009]{Chetkiewicz.2009}
+Chetkiewicz, C.-L.~B. and Boyce, M.~S. (2009).
+\newblock Use of {{Resource Selection Functions}} to {{Identify Conservation
+  Corridors}}.
+\newblock {\em Journal of Applied Ecology}, 46(5):1036--1047.
+
+\bibitem[Ciudad et~al., 2021]{Ciudad.2021}
+Ciudad, C., {Mateo-S{\'a}nchez}, M.~C., Gast{\'o}n, A., {Blazquez-Cabrera}, S.,
+  and Saura, S. (2021).
+\newblock Landscape {{Connectivity Estimates Are Affected}} by {{Spatial
+  Resolution}}, {{Habitat Seasonality}} and {{Population Trends}}.
+\newblock {\em Biodiversity and Conservation}, 30(5):1395--1413.
+
+\bibitem[Cozzi et~al., 2020]{Cozzi.2020}
+Cozzi, G., Behr, D.~M., Webster, H.~S., Claase, M., Bryce, C.~M., Modise, B.,
+  McNutt, J.~W., and Ozgul, A. (2020).
+\newblock African {{Wild Dog Dispersal}} and {{Implications}} for
+  {{Management}}.
+\newblock {\em The Journal of Wildlife Management}, 84(4):614--621.
+
+\bibitem[Cozzi et~al., 2013]{Cozzi.2013}
+Cozzi, G., Broekhuis, F., McNutt, J.~W., and Schmid, B. (2013).
+\newblock Comparison of the {{Effects}} of {{Artificial}} and {{Natural
+  Barriers}} on {{Large African Carnivores}}: {{Implications}} for
+  {{Interspecific Relationships}} and {{Connectivity}}.
+\newblock {\em Journal of Animal Ecology}, 82(3):707--715.
+
+\bibitem[Cozzi et~al., 2012]{Cozzi.2012}
+Cozzi, G., Broekhuis, F., McNutt, J.~W., Turnbull, L.~A., Macdonald, D.~W., and
+  Schmid, B. (2012).
+\newblock Fear of the {{Dark}} or {{Dinner}} by {{Moonlight}}? {{Reduced
+  Temporal Partitioning Among Africa}}'s {{Large Carnivores}}.
+\newblock {\em Ecology}, 93(12):2590--2599.
+
+\bibitem[Cozzi et~al., 2018]{Cozzi.2018}
+Cozzi, G., Maag, N., B{\"o}rger, L., {Clutton-Brock}, T.~H., and Ozgul, A.
+  (2018).
+\newblock Socially {{Informed Dispersal}} in a {{Territorial Cooperative
+  Breeder}}.
+\newblock {\em Journal of Animal Ecology}, 87(3):838--849.
+
+\bibitem[Creel, 2001]{Creel.2001}
+Creel, S. (2001).
+\newblock Four {{Factors Modifying}} the {{Effect}} of {{Competition}} on
+  {{Carnivore Population Dynamics}} as {{Illustrated}} by {{African Wild
+  Dogs}}.
+\newblock {\em Conservation Biology}, 15(1):271--274.
+
+\bibitem[Creel and Creel, 1996]{Creel.1996}
+Creel, S. and Creel, N.~M. (1996).
+\newblock Limitation of {{African Wild Dogs}} by {{Competition}} with {{Larger
+  Carnivores}}.
+\newblock {\em Conservation Biology}, 10(2):526--538.
+
+\bibitem[Cushman and Lewis, 2010]{Cushman.2010}
+Cushman, S.~A. and Lewis, J.~S. (2010).
+\newblock Movement {{Behavior Explains Genetic Differentiation}} in {{American
+  Black Bears}}.
+\newblock {\em Landscape Ecology}, 25(10):1613--1625.
+
+\bibitem[{Davies--Mostert} et~al., 2012]{Davies-Mostert.2012}
+{Davies--Mostert}, H.~T., Kamler, J.~F., Mills, M. G.~L., Jackson, C.~R.,
+  Rasmussen, G. S.~A., Groom, R.~J., and Macdonald, D.~W. (2012).
+\newblock Long--{{Distance Transboundary Dispersal}} of {{African Wild Dogs
+  Among Protected Areas}} in {{Southern Africa}}.
+\newblock {\em African Journal of Ecology}, 50(4):500--506.
+
+\bibitem[Didan, 2015]{Didan.2015}
+Didan, K. (2015).
+\newblock {{MOD13Q1 Modis}}/{{Terra Vegetation Indices}} 16-{{Day L3 Global}}
+  250m {{Sin Grid V006}}.
+
+\bibitem[DiMiceli et~al., 2022]{DiMiceli.2022}
+DiMiceli, C., Sohlberg, R., and Townshend, J. (2022).
+\newblock {{MODIS}}/{{Terra Vegetation Continuous Fields Yearly L3 Global}}
+  250m {{SIN Grid V061}}.
+
+\bibitem[Diniz et~al., 2019]{Diniz.2019}
+Diniz, M.~F., Cushman, S.~A., Machado, R.~B., and De~Marco~J{\'u}nior, P.
+  (2019).
+\newblock Landscape {{Connectivity Modeling}} from the {{Perspective}} of
+  {{Animal Dispersal}}.
+\newblock {\em Landscape Ecology}, 35:41--58.
+
+\bibitem[Doerr et~al., 2011]{Doerr.2011}
+Doerr, V. A.~J., Barrett, T., and Doerr, E.~D. (2011).
+\newblock Connectivity, {{Dispersal Behaviour}} and {{Conservation Under
+  Climate Change}}: {{A Response}} to {{Hodgson}} et al.: {{Connectivity}} and
+  {{Dispersal Behaviour}}.
+\newblock {\em Journal of Applied Ecology}, 48(1):143--147.
+
+\bibitem[Elliot et~al., 2014]{Elliot.2014}
+Elliot, N.~B., Cushman, S.~A., Macdonald, D.~W., and Loveridge, A.~J. (2014).
+\newblock The {{Devil Is}} in the {{Dispersers}}: {{Predictions}} of
+  {{Landscape Connectivity Change}} with {{Demography}}.
+\newblock {\em Journal of Applied Ecology}, 51(5):1169--1178.
+
+\bibitem[{European Space Agency}, 2018]{EuropeanSpaceAgency.2018}
+{European Space Agency} (2018).
+\newblock Sentinel-2 {{MSI Level-2A BOA Reflectance}}.
+
+\bibitem[Fahrig, 2003]{Fahrig.2003}
+Fahrig, L. (2003).
+\newblock Effects of {{Habitat Fragmentation}} on {{Biodiversity}}.
+\newblock {\em Annual Review of Ecology, Evolution, and Systematics},
+  34(1):487--515.
+
+\bibitem[Fattebert et~al., 2015]{Fattebert.2015}
+Fattebert, J., Robinson, H.~S., Balme, G., Slotow, R., and Hunter, L. (2015).
+\newblock Structural {{Habitat Predicts Functional Dispersal Habitat}} of a
+  {{Large Carnivore}}: {{How Leopards Change Spots}}.
+\newblock {\em Ecological Applications}, 25(7):1911--1921.
+
+\bibitem[Fieberg et~al., 2010]{Fieberg.2010}
+Fieberg, J., Matthiopoulos, J., Hebblewhite, M., Boyce, M.~S., and Frair, J.~L.
+  (2010).
+\newblock Correlation and {{Studies}} of {{Habitat Selection}}: {{Problem}},
+  {{Red Herring}} or {{Opportunity}}?
+\newblock {\em Philosophical Transactions of the Royal Society B: Biological
+  Sciences}, 365(1550):2233--2244.
+
+\bibitem[Fieberg et~al., 2021]{Fieberg.2021}
+Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
+\newblock A `{{How}} to' {{Guide}} for {{Interpreting Parameters}} in
+  {{Habitat-Selection Analyses}}.
+\newblock {\em Journal of Animal Ecology}, 90(5):1027--1043.
+
+\bibitem[Finerty et~al., 2023]{Finerty.2023}
+Finerty, G.~E., Cushman, S.~A., Bauer, D.~T., Elliot, N.~B., Kesch, M.~K.,
+  Macdonald, D.~W., and Loveridge, A.~J. (2023).
+\newblock Evaluating {{Connectivity Models}} for {{Conservation}}: {{Insights}}
+  from {{African Lion Dispersal Patterns}}.
+\newblock {\em Landscape Ecology}, 38(12):3205--3219.
+
+\bibitem[Fortin et~al., 2005]{Fortin.2005}
+Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
+  J.~S. (2005).
+\newblock Wolves {{Influence Elk Movements}}: {{Behavior Shapes}} a {{Trophic
+  Cascade}} in {{Yellowstone National Park}}.
+\newblock {\em Ecology}, 86(5):1320--1330.
+
+\bibitem[Fortin et~al., 2009]{Fortin.2009}
+Fortin, D., Fortin, M.-E., Beyer, H.~L., Duchesne, T., Courant, S., and
+  Dancose, K. (2009).
+\newblock Group-{{Size-Mediated Habitat Selection}} and {{Group
+  Fusion}}--{{Fission Dynamics}} of {{Bison Under Predation Risk}}.
+\newblock {\em Ecology}, 90(9):2480--2490.
+
+\bibitem[Frankham et~al., 2002]{Frankham.2002}
+Frankham, R., Ballou, J.~D., Briscoe, D.~A., and McInnes, K.~H. (2002).
+\newblock {\em Introduction to {{Conservation Genetics}}}.
+\newblock Cambridge University Press.
+
+\bibitem[Gorelick et~al., 2017]{Gorelick.2017}
+Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., and Moore, R.
+  (2017).
+\newblock Google {{Earth Engine}}: {{Planetary-Scale Geospatial Analysis}} for
+  {{Everyone}}.
+\newblock {\em Remote Sensing of Environment}.
+
+\bibitem[Gumbricht et~al., 2004]{Gumbricht.2004}
+Gumbricht, T., Wolski, P., Frost, P., and McCarthy, T. (2004).
+\newblock Forecasting the {{Spatial Extent}} of the {{Annual Flood}} in the
+  {{Okavango Delta}}, {{Botswana}}.
+\newblock {\em Journal of Hydrology}, 290(3-4):178--191.
+
+\bibitem[Hanski, 1999]{Hanski.1999}
+Hanski, I. (1999).
+\newblock {\em Metapopulation {{Ecology}}}.
+\newblock Oxford University Press.
+
+\bibitem[Hauenstein et~al., 2019]{Hauenstein.2019}
+Hauenstein, S., Fattebert, J., Gr{\"u}ebler, M.~U., Naef-Daenzer, B., Pe'er,
+  G., and Hartig, F. (2019).
+\newblock Calibrating an {{Individual}}-{{Based Movement Model}} to {{Predict
+  Functional Connectivity}} for {{Little Owls}}.
+\newblock {\em Ecological Applications}, 29(4):e01873.
+
+\bibitem[Hayward and Slotow, 2009]{Hayward.2009}
+Hayward, M.~W. and Slotow, R. (2009).
+\newblock Temporal {{Partitioning}} of {{Activity}} in {{Large African
+  Carnivores}}: {{Tests}} of {{Multiple Hypotheses}}.
+\newblock {\em South African Journal of Wildlife Research}, 39(2):109--125.
+
+\bibitem[Heller and Zavaleta, 2009]{Heller.2009}
+Heller, N.~E. and Zavaleta, E.~S. (2009).
+\newblock Biodiversity {{Management}} in the {{Face}} of {{Climate Change}}:
+  {{A Review}} of 22 {{Years}} of {{Recommendations}}.
+\newblock {\em Biological Conservation}, 142(1):14--32.
+
+\bibitem[Hijmans et~al., 2024]{Hijmans.2024}
+Hijmans, R.~J., Bivand, R., Pebesma, E., and Sumner, M.~D. (2024).
+\newblock Terra: {{Spatial Data Analysis}}.
+
+\bibitem[Hofmann et~al., 2021]{Hofmann.2021}
+Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
+\newblock Bound {{Within Boundaries}}: {{Do Protected Areas Cover Movement
+  Corridors}} of {{Their Most Mobile}}, {{Protected Species}}?
+\newblock {\em Journal of Applied Ecology}, 58(6):1133--1144.
+
+\bibitem[Hofmann et~al., 2024]{Hofmann.2024}
+Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2024).
+\newblock Dispersal and {{Connectivity}} in {{Increasingly Extreme Climatic
+  Conditions}}.
+\newblock {\em Global Change Biology}.
+
+\bibitem[Hofmann et~al., 2023]{Hofmann.2023}
+Hofmann, D.~D., Cozzi, G., McNutt, J.~W., Ozgul, A., and Behr, D.~M. (2023).
+\newblock A {{Three-Step Approach}} for {{Assessing Landscape Connectivity Via
+  Simulated Dispersal}}: {{African Wild Dog Case Study}}.
+\newblock {\em Landscape Ecology}, 38(4):981--998.
+
+\bibitem[Kanagaraj et~al., 2013]{Kanagaraj.2013}
+Kanagaraj, R., Wiegand, T., {Kramer-Schadt}, S., and Goyal, S.~P. (2013).
+\newblock Using {{Individual-Based Movement Models}} to {{Assess Inter-Patch
+  Connectivity}} for {{Large Carnivores}} in {{Fragmented Landscapes}}.
+\newblock {\em Biological Conservation}, 167:298--309.
+
+\bibitem[Kassambara, 2024]{Kassambara.2024}
+Kassambara, A. (2024).
+\newblock Ggpubr: 'ggplot2' {{Based Publication Ready Plots}}.
+
+\bibitem[Kaszta et~al., 2021]{Kaszta.2021}
+Kaszta, {\.Z}., Cushman, S.~A., and Slotow, R. (2021).
+\newblock Temporal {{Non-Stationarity}} of {{Path-Selection Movement Models}}
+  and {{Connectivity}}: {{An Example}} of {{African Elephants}} in {{Kruger
+  National Park}}.
+\newblock {\em Frontiers in Ecology and Evolution}, 9:553263.
+
+\bibitem[Keeley et~al., 2019]{Keeley.2019}
+Keeley, A. T.~H., Beier, P., Creech, T., Jones, K., Jongman, R.~H.,
+  Stonecipher, G., and Tabor, G.~M. (2019).
+\newblock Thirty {{Years}} of {{Connectivity Conservation Planning}}: {{An
+  Assessment}} of {{Factors Influencing Plan Implementation}}.
+\newblock {\em Environmental Research Letters}, 14(10):103001.
+
+\bibitem[Kubota et~al., 2020]{Kubota.2020}
+Kubota, T., Aonashi, K., Ushio, T., Shige, S., Takayabu, Y.~N., Kachi, M.,
+  Arai, Y., Tashima, T., Masaki, T., Kawamoto, N., Mega, T., Yamamoto, M.~K.,
+  Hamada, A., Yamaji, M., Liu, G., and Oki, R. (2020).
+\newblock Global {{Satellite Mapping}} of {{Precipitation}} ({{GSMaP}})
+  {{Products}} in the {{GPM Era}}.
+\newblock In Levizzani, V., Kidd, C., Kirschbaum, D.~B., Kummerow, C.~D.,
+  Nakamura, K., and Turk, F.~J., editors, {\em Satellite {{Precipitation
+  Measurement}}: {{Volume}} 1}, Advances in {{Global Change Research}}, pages
+  355--373. Springer International Publishing, Cham.
+
+\bibitem[MacArthur and Wilson, 2001]{MacArthur.2001}
+MacArthur, R.~H. and Wilson, E.~O. (2001).
+\newblock {\em The {{Theory}} of {{Island Biogeography}}}.
+\newblock Princeton University Press.
+
+\bibitem[Manly et~al., 2007]{Manly.2007}
+Manly, B.~F., McDonald, L., Thomas, D.~L., McDonald, T.~L., and Erickson, W.~P.
+  (2007).
+\newblock {\em Resource {{Selection}} by {{Animals}}: {{Statistical Design}}
+  and {{Analysis}} for {{Field Studies}}}.
+\newblock Springer Science \& Business Media.
+
+\bibitem[Martensen et~al., 2017]{Martensen.2017}
+Martensen, A.~C., Saura, S., and Fortin, M.-J. (2017).
+\newblock Spatio-{{Temporal Connectivity}}: {{Assessing}} the {{Amount}} of
+  {{Reachable Habitat}} in {{Dynamic Landscapes}}.
+\newblock {\em Methods in Ecology and Evolution}, 8(10):1253--1264.
+
+\bibitem[Masenga et~al., 2016]{Masenga.2016}
+Masenga, E.~H., Jackson, C.~R., Mjingo, E.~E., Jacobson, A., Riggio, J.,
+  Lyamuya, R.~D., Fyumagwa, R.~D., Borner, M., and R{\o}skaft, E. (2016).
+\newblock Insights into {{Long-Distance Dispersal}} by {{African Wild Dogs}} in
+  {{East Africa}}.
+\newblock {\em African Journal of Ecology}, 54(1):95--98.
+
+\bibitem[McCarthy et~al., 2003]{McCarthy.2003}
+McCarthy, J.~M., Gumbricht, T., McCarthy, T., Frost, P., Wessels, K., and
+  Seidel, F. (2003).
+\newblock Flooding {{Patterns}} of the {{Okavango Wetland}} in {{Botswana}}
+  between 1972 and 2000.
+\newblock {\em AMBIO: A Journal of the Human Environment}, 32(7):453--457.
+
+\bibitem[McCarthy et~al., 1997]{McCarthy.1997}
+McCarthy, T., Barry, M., Bloem, A., Ellery, W., Heister, H., Merry, C.,
+  R{\"o}ther, H., and Sternberg, H. (1997).
+\newblock The {{Gradient}} of the {{Okavango Fan}}, {{Botswana}}, and {{Its
+  Sedimentological}} and {{Tectonic Implications}}.
+\newblock {\em Journal of African Earth Sciences}, 24(1-2):65--78.
+
+\bibitem[McClure et~al., 2016]{McClure.2016}
+McClure, M.~L., Hansen, A.~J., and Inman, R.~M. (2016).
+\newblock Connecting {{Models}} to {{Movements}}: {{Testing Connectivity Model
+  Predictions Against Empirical Migration}} and {{Dispersal Data}}.
+\newblock {\em Landscape Ecology}, 31(7):1419--1432.
+
+\bibitem[McNutt, 1996]{McNutt.1996}
+McNutt, J.~W. (1996).
+\newblock Sex-{{Biased Dispersal}} in {{African Wild Dogs}}, {{Lycaon}} pictus.
+\newblock {\em Animal Behaviour}, 52(6):1067--1077.
+
+\bibitem[McRae et~al., 2008]{McRae.2008}
+McRae, B.~H., Dickson, B.~G., Keitt, T.~H., and Shah, V.~B. (2008).
+\newblock Using {{Circuit Theory}} to {{Model Connectivity}} in {{Ecology}},
+  {{Evolution}}, and {{Conservation}}.
+\newblock {\em Ecology}, 89(10):2712--2724.
+
+\bibitem[Mendelsohn et~al., 2010]{Mendelsohn.2010}
+Mendelsohn, J.~M., Vander~Post, C., Ramberg, L., {Murray-Hudson}, M., Wolski,
+  P., and Mosepele, K. (2010).
+\newblock {\em Okavango {{Delta}}: {{Floods}} of {{Life}}}.
+\newblock RAISON, Windhoek, Namibia.
+
+\bibitem[Merkle et~al., 2016]{Merkle.2016}
+Merkle, J.~A., Monteith, K.~L., Aikens, E.~O., Hayes, M.~M., Hersey, K.~R.,
+  Middleton, A.~D., Oates, B.~A., Sawyer, H., Scurlock, B.~M., and Kauffman,
+  M.~J. (2016).
+\newblock Large {{Herbivores Surf Waves}} of {{Green-up During Spring}}.
+\newblock {\em Proceedings of the Royal Society B: Biological Sciences},
+  283(1833):20160456.
+
+\bibitem[{Mu{\~n}oz-Sabater} et~al., 2021]{Munoz-Sabater.2021}
+{Mu{\~n}oz-Sabater}, J., Dutra, E., {Agust{\'i}-Panareda}, A., Albergel, C.,
+  Arduini, G., Balsamo, G., Boussetta, S., Choulga, M., Harrigan, S., and
+  Hersbach, H. (2021).
+\newblock {{ERA5-Land}}: {{A}} state-of-the-art global reanalysis dataset for
+  land applications.
+\newblock {\em Earth System Science Data}, 13(9):4349--4383.
+
+\bibitem[Muff et~al., 2020]{Muff.2020}
+Muff, S., Signer, J., and Fieberg, J. (2020).
+\newblock Accounting for {{Individual-Specific Variation}} in
+  {{Habitat-Selection Studies}}: {{Efficient Estimation}} of {{Mixed-Effects
+  Models Using Bayesian}} or {{Frequentist Computation}}.
+\newblock {\em Journal of Animal Ecology}, 89(1):80--92.
+
+\bibitem[Mui et~al., 2017]{Mui.2017}
+Mui, A.~B., Caverhill, B., Johnson, B., Fortin, M.-J., and He, Y. (2017).
+\newblock Using {{Multiple Metrics}} to {{Estimate Seasonal Landscape
+  Connectivity}} for {{Blanding}}'s {{Turtles}} ({{Emydoidea}} blandingii) in a
+  {{Fragmented Landscape}}.
+\newblock {\em Landscape Ecology}, 32(3):531--546.
+
+\bibitem[Naidoo et~al., 2016]{Naidoo.2016}
+Naidoo, R., Chase, M.~J., Beytell, P., Du~Preez, P., Landen, K., {Stuart-Hill},
+  G., and Taylor, R. (2016).
+\newblock A {{Newly Discovered Wildlife Migration}} in {{Namibia}} and
+  {{Botswana Is}} the {{Longest}} in {{Africa}}.
+\newblock {\em Oryx}, 50(1):138--146.
+
+\bibitem[O'Neill et~al., 2020]{ONeill.2020}
+O'Neill, H. M.~K., Durant, S.~M., and Woodroffe, R. (2020).
+\newblock What {{Wild Dogs Want}}: {{Habitat Selection Differs Across Life
+  Stages}} and {{Orders}} of {{Selection}} in a {{Wide-Ranging Carnivore}}.
+\newblock {\em BMC Zoology}, 5(1).
+
+\bibitem[{OpenStreetMap contributors}, 2017]{OpenStreetMapContributors.2017}
+{OpenStreetMap contributors} (2017).
+\newblock Planet dump retrieved from {{https://planet.osm.org}}.
+
+\bibitem[Osipova et~al., 2019]{Osipova.2019}
+Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
+  M.~W., and Balkenhol, N. (2019).
+\newblock Using {{Step}}-{{Selection Functions}} to {{Model Landscape
+  Connectivity}} for {{African Elephants}}: {{Accounting}} for {{Variability
+  Across Individuals}} and {{Seasons}}.
+\newblock {\em Animal Conservation}, 22(1):35--48.
+
+\bibitem[Otis and White, 1999]{Otis.1999}
+Otis, D.~L. and White, G.~C. (1999).
+\newblock Autocorrelation of {{Location Estimates}} and the {{Analysis}} of
+  {{Radiotracking Data}}.
+\newblock {\em The Journal of Wildlife Management}, 63(3):1039--1044.
+
+\bibitem[{P{\'e}rez-Goya} et~al., 2020]{Perez-Goya.2020}
+{P{\'e}rez-Goya}, U., {Montesino-SanMartin}, M., Militino, A.~F., and Ugarte,
+  M.~D. (2020).
+\newblock {{RGISTools}}: {{Downloading}}, {{Customizing}}, and {{Processing
+  Time Series}} of {{Remote Sensing Data}} in {{R}}.
+
+\bibitem[Perrin and Mazalov, 2000]{Perrin.2000}
+Perrin, N. and Mazalov, V. (2000).
+\newblock Local {{Competition}}, {{Inbreeding}}, and the {{Evolution}} of
+  {{Sex}}-{{Biased Dispersal}}.
+\newblock {\em The American Naturalist}, 155(1):116--127.
+
+\bibitem[Puy and Saltelli, 2022]{Puy.2022}
+Puy, A. and Saltelli, A. (2022).
+\newblock Mind the {{Hubris}}: {{Complexity Can Misfire}}.
+
+\bibitem[{R Core Team}, 2023]{RCoreTeam.2023}
+{R Core Team} (2023).
+\newblock {\em R: {{A Language}} and {{Environment}} for {{Statistical
+  Computing}}}.
+\newblock R Foundation for Statistical Computing, Vienna, Austria.
+
+\bibitem[Rabaiotti et~al., 2021]{Rabaiotti.2021}
+Rabaiotti, D., Groom, R., McNutt, J.~W., Watermeyer, J., O'Neill, H. M.~K., and
+  Woodroffe, R. (2021).
+\newblock High {{Temperatures}} and {{Human Pressures Interact}} to {{Influence
+  Mortality}} in an {{African Carnivore}}.
+\newblock {\em Ecology and Evolution}, 11(13):8495--8506.
+
+\bibitem[Rabaiotti and Woodroffe, 2019]{Rabaiotti.2019}
+Rabaiotti, D. and Woodroffe, R. (2019).
+\newblock Coping with {{Climate Change}}: {{Limited Behavioral Responses}} to
+  {{Hot Weather}} in a {{Tropical Carnivore}}.
+\newblock {\em Oecologia}, 189(3):587--599.
+
+\bibitem[Ramberg et~al., 2006]{Ramberg.2006}
+Ramberg, L., Hancock, P., Lindholm, M., Meyer, T., Ringrose, S., Sliva, J.,
+  Van~As, J., and Vander~Post, C. (2006).
+\newblock Species {{Diversity}} of the {{Okavango Delta}}, {{Botswana}}.
+\newblock {\em Aquatic Sciences}, 68(3):310--337.
+
+\bibitem[Rasmussen and Macdonald, 2012]{Rasmussen.2012}
+Rasmussen, G. S.~A. and Macdonald, D.~W. (2012).
+\newblock Masking of the {{Zeitgeber}}: {{African Wild Dogs Mitigate
+  Persecution}} by {{Balancing Time}}.
+\newblock {\em Journal of Zoology}, 286(3):232--242.
+
+\bibitem[Rudnick et~al., 2012]{Rudnick.2012}
+Rudnick, D.~A., Ryan, S.~J., Beier, P., Cushman, S.~A., Dieffenbach, F., Epps,
+  C.~W., Gerber, L.~R., Hartter, J., Jenness, J.~S., Kintsch, J., Merenlender,
+  A.~M., Perkl, R.~M., Preziosi, D.~V., and Trombulak, S.~C. (2012).
+\newblock The {{Role}} of {{Landscape Connectivity}} in {{Planning}} and
+  {{Implementing Conservation}} and {{Restoration Priorities}}.
+\newblock {\em Issues in Ecology}, (16):1--23.
+
+\bibitem[Rumiano et~al., 2020]{Rumiano.2020}
+Rumiano, F., Wielgus, E., Miguel, E., {Chamaill{\'e}-Jammes}, S., {Valls-Fox},
+  H., Corn{\'e}lis, D., {Garine-Wichatitsky}, M.~D., Fritz, H., Caron, A., and
+  Tran, A. (2020).
+\newblock Remote {{Sensing}} of {{Environmental Drivers Influencing}} the
+  {{Movement Ecology}} of {{Sympatric Wild}} and {{Domestic Ungulates}} in
+  {{Semi-Arid Savannas}}, a {{Review}}.
+\newblock {\em Remote Sensing}, 12(19):3218.
+
+\bibitem[Sandoval-Seres et~al., 2022]{Sandoval-Seres.2022}
+Sandoval-Seres, E., Moyo, W., Madhlamoto, D., Madzikanda, H., Blinston, P.,
+  Kotze, R., Van Der~Meer, E., and Loveridge, A. (2022).
+\newblock Long-{{Distance African Wild Dog Dispersal Within}} the
+  {{Kavango-Zambezi Transfrontier Conservation Area}}.
+\newblock {\em African Journal of Ecology}, 60(4):1262--1266.
+
+\bibitem[Serneels and Lambin, 2001]{Serneels.2001}
+Serneels, S. and Lambin, E.~F. (2001).
+\newblock Impact of {{Land-Use Changes}} on the {{Wildebeest Migration}} in the
+  {{Northern Part}} of the {{Serengeti}}--{{Mara Ecosystem}}.
+\newblock {\em Journal of Biogeography}, 28(3):391--407.
+
+\bibitem[Signer et~al., 2017]{Signer.2017}
+Signer, J., Fieberg, J., and Avgar, T. (2017).
+\newblock Estimating {{Utilization Distributions}} from {{Fitted Step-Selection
+  Functions}}.
+\newblock {\em Ecosphere}, 8(4):e01771.
+
+\bibitem[Signer et~al., 2024]{Signer.2024}
+Signer, J., Fieberg, J., Reineking, B., Schl{\"a}gel, U.~E., Smith, B.~J.,
+  Balkenhol, N., and Avgar, T. (2024).
+\newblock Simulating {{Animal Space Use}} from {{Fitted Integrated
+  Step-Selection Functions}}.
+\newblock {\em Methods in Ecology and Evolution}, 15(1):43--50.
+
+\bibitem[Simpkins and Perry, 2017]{Simpkins.2017a}
+Simpkins, C.~E. and Perry, G.~L. (2017).
+\newblock Understanding the {{Impacts}} of {{Temporal Variability}} on
+  {{Estimates}} of {{Landscape Connectivity}}.
+\newblock {\em Ecological Indicators}, 83:243--248.
+
+\bibitem[{\'S}mielak, 2023]{Smielak.2023}
+{\'S}mielak, M.~K. (2023).
+\newblock Biologically {{Meaningful Moonlight Measures}} and {{Their
+  Application}} in {{Ecological Research}}.
+\newblock {\em Behavioral Ecology and Sociobiology}, 77(2):21.
+
+\bibitem[Squires et~al., 2013]{Squires.2013}
+Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
+  and Parks, S.~A. (2013).
+\newblock Combining {{Resource Selection}} and {{Movement Behavior}} to
+  {{Predict Corridors}} for {{Canada Lynx}} at {{Their Southern Range
+  Periphery}}.
+\newblock {\em Biological Conservation}, 157:187--195.
+
+\bibitem[Taylor et~al., 1993]{Taylor.1993}
+Taylor, P.~D., Fahrig, L., Henein, K., and Merriam, G. (1993).
+\newblock Connectivity {{Is}} a {{Vital Element}} of {{Landscape Structure}}.
+\newblock {\em Oikos}, 68(3):571--573.
+
+\bibitem[Thieurmel and Elmarhraoui, 2022]{Thieurmel.2022}
+Thieurmel, B. and Elmarhraoui, A. (2022).
+\newblock {\em Suncalc: {{Compute Sun Position}}, {{Sunlight Phases}}, {{Moon
+  Position}} and {{Lunar Phase}}}.
+
+\bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
+Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
+\newblock Applications of {{Step-Selection Functions}} in {{Ecology}} and
+  {{Conservation}}.
+\newblock {\em Movement Ecology}, 2(1):4.
+
+\bibitem[Tiecke et~al., 2017]{Tiecke.2017}
+Tiecke, T.~G., Liu, X., Zhang, A., Gros, A., Li, N., Yetman, G., Kilic, T.,
+  Murray, S., Blankespoor, B., Prydz, E.~B., and Dang, H.-A.~H. (2017).
+\newblock Mapping the {{World Population One Building}} at a {{Time}}.
+
+\bibitem[Toth and J{\'o}{\'z}k{\'o}w, 2016]{Toth.2016}
+Toth, C. and J{\'o}{\'z}k{\'o}w, G. (2016).
+\newblock Remote {{Sensing Platforms}} and {{Sensors}}: {{A Survey}}.
+\newblock {\em ISPRS Journal of Photogrammetry and Remote Sensing}, 115:22--36.
+
+\bibitem[Turchin, 1998]{Turchin.1998}
+Turchin, P. (1998).
+\newblock {\em Quantitative {{Analysis}} of {{Movement}}: {{Measuring}} and
+  {{Modeling Population Redistribution}} in {{Animals}} and {{Plants}}}.
+\newblock Sinauer Associates, Sunderland, Mass.
+
+\bibitem[Unnithan~Kumar et~al., 2022a]{UnnithanKumar.2022a}
+Unnithan~Kumar, S., Kaszta, {\.Z}., and Cushman, S.~A. (2022a).
+\newblock Pathwalker: {{A New Individual-Based Movement Model}} for
+  {{Conservation Science}} and {{Connectivity Modelling}}.
+\newblock {\em ISPRS International Journal of Geo-Information}, 11(6):329.
+
+\bibitem[Unnithan~Kumar et~al., 2022b]{UnnithanKumar.2022}
+Unnithan~Kumar, S., Turnbull, J., Hartman~Davies, O., Hodgetts, T., and
+  Cushman, S.~A. (2022b).
+\newblock Moving {{Beyond Landscape Resistance}}: {{Considerations}} for the
+  {{Future}} of {{Connectivity Modelling}} and {{Conservation Science}}.
+\newblock {\em Landscape Ecology}, 37(10):2465--2480.
+
+\bibitem[Vasudev et~al., 2015]{Vasudev.2015}
+Vasudev, D., Fletcher, R.~J., Goswami, V.~R., and Krishnadas, M. (2015).
+\newblock From {{Dispersal Constraints}} to {{Landscape Connectivity}}:
+  {{Lessons}} from {{Species Distribution Modeling}}.
+\newblock {\em Ecography}, 38(10):967--978.
+
+\bibitem[Wickham et~al., 2024]{Wickham.2024}
+Wickham, H., Chang, W., Henry, L., Pedersen, T.~L., Takahashi, K., Wilke, C.,
+  Woo, K., Yutani, H., Dunnington, D., Posit, and PBC (2024).
+\newblock Ggplot2: {{Create Elegant Data Visualisations Using}} the {{Grammar}}
+  of {{Graphics}}.
+
+\bibitem[Wilson and Dincer, 1976]{Wilson.1976}
+Wilson, B.~H. and Dincer, T. (1976).
+\newblock An {{Introduction}} to the {{Hydrology}} and {{Hydrography}} of the
+  {{Okavango Delta}}. {{Presented}} at the {{Symposium}} on the {{Okavango
+  Delta}} and {{Its Future Utilization}}; {{Gaborone}} ({{Botswana}}); 30
+  {{Aug}} 1976.
+\newblock In {\em Proceedings of the {{Symposium}} on the {{Okavango Delta}}
+  and {{Its Future Utilization}}, {{Barone}}, {{Botswana}}}.
+
+\bibitem[Wolski et~al., 2017]{Wolski.2017}
+Wolski, P., {Murray-Hudson}, M., Thito, K., and Cassidy, L. (2017).
+\newblock Keeping {{It Simple}}: {{Monitoring Flood Extent}} in {{Large
+  Data-Poor Wetlands Using MODIS SWIR Data}}.
+\newblock {\em International Journal of Applied Earth Observation and
+  Geoinformation}, 57:224--234.
+
+\bibitem[Wood, 2011]{Wood.2011}
+Wood, S.~N. (2011).
+\newblock Fast {{Stable Restricted Maximum Likelihood}} and {{Marginal
+  Likelihood Estimation}} of {{Semiparametric Generalized Linear Models}}.
+\newblock {\em Journal of the Royal Statistical Society Series B: Statistical
+  Methodology}, 73(1):3--36.
+
+\bibitem[Woodroffe and Donnelly, 2011]{Woodroffe.2011}
+Woodroffe, R. and Donnelly, C.~A. (2011).
+\newblock Risk of {{Contact Between Endangered African Wild Dogs Lycaon
+  Pictus}} and {{Domestic Dogs}}: {{Opportunities}} for {{Pathogen
+  Transmission}}.
+\newblock {\em Journal of Applied Ecology}, 48(6):1345--1354.
+
+\bibitem[Woodroffe et~al., 2020]{Woodroffe.2020a}
+Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,
+  and O'Neill, H. M.~K. (2020).
+\newblock Dispersal {{Behaviour}} of {{African Wild Dogs}} in {{Kenya}}.
+\newblock {\em African Journal of Ecology}, 58(1):46--57.
+
+\bibitem[Xiong et~al., 2017]{Xiong.2017}
+Xiong, J., Thenkabail, P., Tilton, J., Gumma, M., Teluguntla, P., Oliphant, A.,
+  Congalton, R., Yadav, K., and Gorelick, N. (2017).
+\newblock Nominal 30-m {{Cropland Extent Map}} of {{Continental Africa}} by
+  {{Integrating Pixel-Based}} and {{Object-Based Algorithms Using Sentinel-2}}
+  and {{Landsat-8 Data}} on {{Google Earth Engine}}.
+\newblock {\em Remote Sensing}, 9(10):1065.
+
+\bibitem[Yamazaki et~al., 2019]{Yamazaki.2019}
+Yamazaki, D., Ikeshima, D., Sosa, J., Bates, P.~D., Allen, G., and Pavelsky, T.
+  (2019).
+\newblock {{MERIT HYDRO}}: {{A High}}-{{Resolution Global Hydrography Map
+  Based}} on {{Latest Topography Datasets}}.
+\newblock {\em Water Resources Research}.
+
+\bibitem[Zeller et~al., 2020a]{Zeller.2020a}
+Zeller, K., Lewison, R., Fletcher, R., Tulbure, M., and Jennings, M. (2020a).
+\newblock Understanding the {{Importance}} of {{Dynamic Landscape
+  Connectivity}}.
+\newblock {\em Land}, 9(9):303.
+
+\bibitem[Zeller et~al., 2018]{Zeller.2018}
+Zeller, K.~A., Jennings, M.~K., Vickers, T.~W., Ernest, H.~B., Cushman, S.~A.,
+  and Boyce, W.~M. (2018).
+\newblock Are {{All Data Types}} and {{Connectivity Models Created Equal}}?
+  {{Validating Common Connectivity Approaches}} with {{Dispersal Data}}.
+\newblock {\em Diversity and Distributions}, 24(7):868--879.
+
+\bibitem[Zeller et~al., 2012]{Zeller.2012}
+Zeller, K.~A., McGarigal, K., and Whiteley, A.~R. (2012).
+\newblock Estimating {{Landscape Resistance}} to {{Movement}}: {{A Review}}.
+\newblock {\em Landscape Ecology}, 27(6):777--797.
+
+\bibitem[Zeller et~al., 2020b]{Zeller.2020}
+Zeller, K.~A., Wattles, D.~W., Bauder, J.~M., and DeStefano, S. (2020b).
+\newblock Forecasting {{Seasonal Habitat Connectivity}} in a {{Developing
+  Landscape}}.
+\newblock {\em Land}, 9(7):233.
+
+\end{thebibliography}

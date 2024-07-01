@@ -1,0 +1,35 @@
+\babel@toc {english}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Connectivity}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Seasonality}{1}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Modeling Functional Connectivity}{2}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Incorporating Seasonality in Functional Connectivity Models}{3}{subsection.1.4}%
+\contentsline {subsection}{\numberline {1.5}African wild dogs in Northern Botswana}{3}{subsection.1.5}%
+\contentsline {subsection}{\numberline {1.6}What We Did}{4}{subsection.1.6}%
+\contentsline {section}{\numberline {2}Methods}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Study Area}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}GPS Data}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Covariates}{6}{subsection.2.3}%
+\contentsline {subsubsection}{\numberline {2.3.1}Landscape Characteristics}{7}{subsubsection.2.3.1}%
+\contentsline {subsubsection}{\numberline {2.3.2}Climate Descriptors}{8}{subsubsection.2.3.2}%
+\contentsline {subsubsection}{\numberline {2.3.3}Anthropogenic Features}{8}{subsubsection.2.3.3}%
+\contentsline {subsubsection}{\numberline {2.3.4}Light Availability}{8}{subsubsection.2.3.4}%
+\contentsline {subsection}{\numberline {2.4}Step-Selection Models}{9}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Validation}{11}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}Simulations}{11}{subsection.2.6}%
+\contentsline {section}{\numberline {3}Results}{12}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Step-Selection Models}{12}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Validation}{13}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Simulations}{13}{subsection.3.3}%
+\contentsline {section}{\numberline {4}Discussion}{14}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Brief Summary}{14}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Moderate Improvements upon Increasing Dynamism}{14}{subsection.4.2}%
+\contentsline {subsection}{\numberline {4.3}Substantial Improvements upon Fitting a Complex Model}{15}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Dynamic Connectivity}{15}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}The Costs of Incorporating Dynamism}{16}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Validation Procedure}{17}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Seasonal Habitat Selection}{18}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Conclusion}{18}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{19}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{19}{section.6}%
+\contentsline {section}{\numberline {7}Acknowledgments \& Funding}{19}{section.7}%

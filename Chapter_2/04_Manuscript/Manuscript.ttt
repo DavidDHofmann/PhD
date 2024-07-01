@@ -1,0 +1,14 @@
+\begin{table}
+ \caption{(a) Dispersal frequency (measured as the number of dispersal
+ trajectories) and (b) dispersal duration (in days) between (a1, b1) source
+ areas (labeled 1 to 6) and (a2, b2) egression zones (labeled 7 to 14) during
+ minimum and maximum flood. Final rows and columns of each subplot represent
+ summary statistics across all areas. For instance, the bottom row in a1
+ highlights for each source area the total number of trajectories successfully
+ dispersing into a target area. The last column, in contrast, indicates the
+ total number of trajectories immigrating into each target area. Values indicate
+ mean $\pm$ SD. The colors are mapped in a non-linear fashion to avoid
+ over-emphasis on final rows and columns.}
+ \label{IPCTable}
+ \includegraphics[width = \textwidth]{Figures/InterpatchConnectivityTable2.png}
+\end{table}

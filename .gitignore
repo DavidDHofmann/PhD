@@ -1,0 +1,15 @@
+General
+03_Data/
+05_Drafts/
+05_Presentation/
+06_Submission/
+99_Backup/
+Chapter_0
+.Rproj.user
+.httr-oauth
+**/Literature.bib
+**/LiteratureBibtex.bib
+**/FinalPaper.pdf
+Submission/
+Defense.pptx
+Defense2.pptx

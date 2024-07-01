@@ -1,0 +1,56 @@
+
+\begin{tabular}[t]{llllll}
+\toprule
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{3}{l}{Fixed Effects} & \multicolumn{1}{l}{Random Effects} \\
+\cmidrule(l{3pt}r{3pt}){3-5} \cmidrule(l{3pt}r{3pt}){6-6}
+Season & Covariate & Coefficient & p-value & Significance & SD\\
+\midrule
+ & sl & 0.058 & 0.214 &  & 0.203\\
+
+ & log(sl) & 0.057 & 0.069 & * & 0.109\\
+
+ & cos(ta) & 0.111 & 0.000 & *** & 0.053\\
+
+ & Humans & -0.289 & 0.019 & ** & 0.358\\
+
+ & \underline{Trees} & -0.279 & 0.011 & ** & 0.376\\
+
+ & \underline{Shrubs} & 0.139 & 0.492 &  & 0.170\\
+
+ & \underline{Water} & -0.467 & 0.018 & ** & 0.224\\
+
+\multirow{-8}{*}{\raggedright\arraybackslash All} & \underline{DistanceToWater}$^{0.5}$ & -0.780 & 0.000 & *** & 0.604\\
+\cmidrule{1-6}
+ & sl & 0.047 & 0.376 &  & 0.170\\
+
+ & log(sl) & 0.083 & 0.004 & *** & 0.043\\
+
+ & cos(ta) & 0.120 & 0.000 & *** & 0.060\\
+
+ & Humans & -0.219 & 0.110 &  & 0.302\\
+
+ & \underline{Trees} & -0.327 & 0.031 & ** & 0.450\\
+
+ & \underline{Shrubs} & -0.091 & 0.730 &  & 0.321\\
+
+ & \underline{Water} & -0.775 & 0.001 & *** & 0.003\\
+
+\multirow{-8}{*}{\raggedright\arraybackslash Dry} & \underline{DistanceToWater}$^{0.5}$ & -0.932 & 0.000 & *** & 0.681\\
+\cmidrule{1-6}
+ & sl & 0.010 & 0.889 &  & 0.257\\
+
+ & log(sl) & 0.032 & 0.497 &  & 0.128\\
+
+ & cos(ta) & 0.116 & 0.001 & *** & 0.083\\
+
+ & Humans & -0.271 & 0.140 &  & 0.366\\
+
+ & \underline{Trees} & -0.059 & 0.499 &  & 0.000\\
+
+ & \underline{Shrubs} & 0.495 & 0.114 &  & 0.007\\
+
+ & \underline{Water} & 0.113 & 0.711 &  & 0.152\\
+
+\multirow{-8}{*}{\raggedright\arraybackslash Wet} & \underline{DistanceToWater}$^{0.5}$ & -0.550 & 0.014 & ** & 0.619\\
+\bottomrule
+\end{tabular}

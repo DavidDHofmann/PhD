@@ -1,0 +1,42 @@
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_CovariatesAppendix.png}
+  \caption{Simulated landscapes under different levels of autocorrelation (5,
+  10, 20; from top to bottom). Autocorrelation only affected the layers
+  \textsf{elev} and \textsf{forest}, which were both simulated using a Gaussian
+  random field neutral landscape model \citep{Schlather.2015} using the
+  \texttt{R}-package \texttt{NLMR} \citep{Sciaini.2018}. Simulations were
+  repeated 100 times for each autocorrelation scenario, thus resulting in 300
+  unique landscape configurations.}
+  \label{Covariates}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = 0.9\textwidth]{99_DistributionParameters.png}
+  \caption{Tentative prameter estimates for the von Mises distribution (top row) and
+  gamma distribution (bottom row) fitted to steps with different durations. The
+  von Mises distribution requires one parameter, namely a concentration
+  parameter ($\kappa$). The gamma distribution requires a shape parameter ($k$)
+  and a scale parameter ($\theta$). The subscript $_0$ is used to indicate that
+  these are tentative distribution parameters (sensu \citealp{Avgar.2016} and
+  \citealp{Fieberg.2021}).}
+  \label{DistributionParameters}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ModelComparisonAppendix.png}
+  \caption{Parameter estimates across different autocorrelation scenarios (5,
+  10, 20; panels a, b, and c) and missingness levels (0\% - 50\%; from left
+  to right). True simulation parameters are indicated by the solid black
+  lines. Parameter estimates from the different approaches are given by the
+  colored symbols, and their bootstrap 95\% CIs across 100 replicates
+  by the colored lines.}
+  \label{ModelComparison}
+  \end{center}
+\end{figure}

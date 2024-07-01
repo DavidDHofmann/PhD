@@ -1,0 +1,10 @@
+\begin{table}
+  \caption{Comparison}
+  \label{SatelliteData}
+  \begin{tabular}{llll}
+             & Availability   & Spatial Resolution & Temporal Resolution                             \\
+  Landsat 7  & 1999 - Present & 15-60m             & Every 16th day                                  \\
+  Landsat 8  & 2013 - Present & 15-100m            & Every 16th day                                  \\
+  Sentinel 2 & 2015 - Present & 10-60m             & Every 10th day / every 5th day since March 2017
+  \end{tabular}
+\end{table}

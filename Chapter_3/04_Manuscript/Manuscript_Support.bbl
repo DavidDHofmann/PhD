@@ -1,0 +1,79 @@
+\begin{thebibliography}{}
+
+\bibitem[Aybar et~al., 2024]{Aybar.2024}
+Aybar, C., Qiusheng, W., Bautista, L., Yali, R., Barja, A., Ushey, K., Ooms,
+  J., Appelhans, T., Allaire, J.~J., Tang, Y., Roy, S., Adauto, M., Carrasco,
+  G., Bengtsson, H., Hollister, J., Donchyts, G., and JOSS, M. (2024).
+\newblock Rgee: {{R Bindings}} for {{Calling}} the '{{Earth Engine}}' {{API}}.
+
+\bibitem[Chraibi et~al., 2022]{Chraibi.2022}
+Chraibi, E., {de Boissieu}, F., Barbier, N., Luque, S., and F{\'e}ret, J.-B.
+  (2022).
+\newblock Stability in {{Time}} and {{Consistency Between Atmospheric
+  Corrections}}: {{Assessing}} the {{Reliability}} of {{Sentinel-2 Products}}
+  for {{Biodiversity Monitoring}} in {{Tropical Forests}}.
+\newblock {\em International Journal of Applied Earth Observation and
+  Geoinformation}, 112:102884.
+
+\bibitem[Cutler and Wiener, 2024]{Cutler.2024}
+Cutler, F. o. b. L. B. a.~A. and Wiener, R. p. b. A. L. a.~M. (2024).
+\newblock {{randomForest}}: {{Breiman}} and {{Cutler}}'s {{Random Forests}} for
+  {{Classification}} and {{Regression}}.
+
+\bibitem[Gilabert et~al., 1994]{Gilabert.1994}
+Gilabert, M.~A., Conese, C., and Maselli, F. (1994).
+\newblock An {{Atmospheric Correction Method}} for the {{Automatic Retrieval}}
+  of {{Surface Reflectances}} from {{TM Images}}.
+\newblock {\em International Journal of Remote Sensing}, 15(10):2065--2086.
+
+\bibitem[Hijmans et~al., 2024]{Hijmans.2024}
+Hijmans, R.~J., Bivand, R., Pebesma, E., and Sumner, M.~D. (2024).
+\newblock Terra: {{Spatial Data Analysis}}.
+
+\bibitem[Kuhn, 2008]{Kuhn.2008}
+Kuhn, M. (2008).
+\newblock Building {{Predictive Models}} in {{R Using}} the caret {{Package}}.
+\newblock {\em Journal of Statistical Software}, 28(5).
+
+\bibitem[{Main-Knorn} et~al., 2017]{Main-Knorn.2017}
+{Main-Knorn}, M., Pflug, B., Louis, J., Debaecker, V., {M{\"u}ller-Wilm}, U.,
+  and Gascon, F. (2017).
+\newblock {{Sen2Cor}} for {{Sentinel-2}}.
+\newblock In Bruzzone, L., Bovolo, F., and Benediktsson, J.~A., editors, {\em
+  Image and {{Signal Processing}} for {{Remote Sensing XXIII}}}, page~3,
+  Warsaw, Poland. SPIE.
+
+\bibitem[Ranghetti et~al., 2020]{Ranghetti.2020}
+Ranghetti, L., Boschetti, M., Nutini, F., and Busetto, L. (2020).
+\newblock ``sen2r'': {{An R Toolbox}} for {{Automatically Downloading}} and
+  {{Preprocessing Sentinel-2 Satellite Data}}.
+\newblock {\em Computers \& Geosciences}, 139:104473.
+
+\bibitem[Shetty et~al., 2021]{Shetty.2021}
+Shetty, S., Gupta, P.~K., Belgiu, M., and Srivastav, S.~K. (2021).
+\newblock Assessing the {{Effect}} of {{Training Sampling Design}} on the
+  {{Performance}} of {{Machine Learning Classifiers}} for {{Land Cover Mapping
+  Using Multi-Temporal Remote Sensing Data}} and {{Google Earth Engine}}.
+\newblock {\em Remote Sensing}, 13(8):1433.
+
+\bibitem[{\'S}mielak, 2023]{Smielak.2023}
+{\'S}mielak, M.~K. (2023).
+\newblock Biologically {{Meaningful Moonlight Measures}} and {{Their
+  Application}} in {{Ecological Research}}.
+\newblock {\em Behavioral Ecology and Sociobiology}, 77(2):21.
+
+\bibitem[Storey et~al., 2005]{Storey.2005}
+Storey, J., Scaramuzza, P., Schmidt, G., and Barsi, J. (2005).
+\newblock Landsat 7 {{Scan Line Corrector-Off Gap-Filled Product Development}}.
+
+\bibitem[Therneau et~al., 2024]{Therneau.2024b}
+Therneau, T., Atkinson, B., and Ripley, B. (2024).
+\newblock Rpart: {{Recursive Partitioning}} and {{Regression Trees}}.
+
+\bibitem[Vermote and Kotchenova, 2008]{Vermote.2008}
+Vermote, E.~F. and Kotchenova, S. (2008).
+\newblock Atmospheric {{Correction}} for the {{Monitoring}} of {{Land
+  Surfaces}}.
+\newblock {\em Journal of Geophysical Research: Atmospheres}, 113(D23).
+
+\end{thebibliography}

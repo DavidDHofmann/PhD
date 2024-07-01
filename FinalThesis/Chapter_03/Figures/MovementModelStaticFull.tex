@@ -1,0 +1,104 @@
+
+\begin{tabular}[t]{llllll}
+\toprule
+\multicolumn{1}{l}{} & \multicolumn{1}{l}{} & \multicolumn{3}{l}{Fixed Effects} & \multicolumn{1}{l}{Random Effects} \\
+\cmidrule(l{3pt}r{3pt}){3-5} \cmidrule(l{3pt}r{3pt}){6-6}
+Season & Covariate & Coefficient & p-value & Significance & SD\\
+\midrule
+ & sl & -0.014 & 0.734 &  & 0.152\\
+
+ & log(sl) & 0.478 & 0.000 & *** & 0.138\\
+
+ & cos(ta) & 0.128 & 0.000 & *** & 0.060\\
+
+ & sl:Dark & -0.294 & 0.000 & *** & -\\
+
+ & log(sl):Dark & -0.911 & 0.000 & *** & -\\
+
+ & sl:\underline{Temperature} & -0.234 & 0.000 & *** & -\\
+
+ & log(sl):\underline{Temperature} & -0.197 & 0.000 & *** & -\\
+
+ & Humans & -0.317 & 0.019 & ** & 0.412\\
+
+ & \underline{Trees} & -0.241 & 0.038 & ** & 0.415\\
+
+ & \underline{Shrubs} & 0.173 & 0.397 &  & 0.128\\
+
+ & \underline{Water} & -0.507 & 0.012 & ** & 0.253\\
+
+ & \underline{DistanceToWater}$^{0.5}$ & -0.885 & 0.000 & *** & 0.672\\
+
+ & sl:\underline{Trees} & 0.001 & 0.974 &  & -\\
+
+ & sl:\underline{Shrubs} & 0.081 & 0.561 &  & -\\
+
+ & sl:\underline{Water} & -0.183 & 0.174 &  & -\\
+
+\multirow{-16}{*}{\raggedright\arraybackslash All} & cos(ta):\underline{DistanceToWater}$^{0.5}$ & 0.058 & 0.000 & *** & -\\
+\cmidrule{1-6}
+ & sl & -0.057 & 0.311 &  & 0.163\\
+
+ & log(sl) & 0.532 & 0.000 & *** & 0.160\\
+
+ & cos(ta) & 0.128 & 0.000 & *** & 0.055\\
+
+ & sl:Dark & -0.122 & 0.070 & * & -\\
+
+ & log(sl):Dark & -1.036 & 0.000 & *** & -\\
+
+ & sl:\underline{Temperature} & -0.228 & 0.000 & *** & -\\
+
+ & log(sl):\underline{Temperature} & -0.248 & 0.000 & *** & -\\
+
+ & Humans & -0.259 & 0.087 & * & 0.353\\
+
+ & \underline{Trees} & -0.276 & 0.086 & * & 0.481\\
+
+ & \underline{Shrubs} & -0.058 & 0.827 &  & 0.238\\
+
+ & \underline{Water} & -0.846 & 0.001 & *** & 0.209\\
+
+ & \underline{DistanceToWater}$^{0.5}$ & -1.098 & 0.000 & *** & 0.796\\
+
+ & sl:\underline{Trees} & 0.050 & 0.342 &  & -\\
+
+ & sl:\underline{Shrubs} & -0.046 & 0.793 &  & -\\
+
+ & sl:\underline{Water} & -0.343 & 0.042 & ** & -\\
+
+\multirow{-16}{*}{\raggedright\arraybackslash Dry} & cos(ta):\underline{DistanceToWater}$^{0.5}$ & 0.035 & 0.107 &  & -\\
+\cmidrule{1-6}
+ & sl & -0.041 & 0.568 &  & 0.217\\
+
+ & log(sl) & 0.404 & 0.000 & *** & 0.153\\
+
+ & cos(ta) & 0.142 & 0.000 & *** & 0.112\\
+
+ & sl:Dark & -0.894 & 0.000 & *** & -\\
+
+ & log(sl):Dark & -0.726 & 0.000 & *** & -\\
+
+ & sl:\underline{Temperature} & -0.251 & 0.000 & *** & -\\
+
+ & log(sl):\underline{Temperature} & -0.140 & 0.004 & *** & -\\
+
+ & Humans & -0.265 & 0.181 &  & 0.420\\
+
+ & \underline{Trees} & -0.034 & 0.712 &  & 0.000\\
+
+ & \underline{Shrubs} & 0.562 & 0.092 & * & 0.141\\
+
+ & \underline{Water} & 0.136 & 0.671 &  & 0.001\\
+
+ & \underline{DistanceToWater}$^{0.5}$ & -0.578 & 0.007 & *** & 0.571\\
+
+ & sl:\underline{Trees} & -0.074 & 0.277 &  & -\\
+
+ & sl:\underline{Shrubs} & 0.383 & 0.101 &  & -\\
+
+ & sl:\underline{Water} & 0.141 & 0.534 &  & -\\
+
+\multirow{-16}{*}{\raggedright\arraybackslash Wet} & cos(ta):\underline{DistanceToWater}$^{0.5}$ & 0.090 & 0.001 & *** & -\\
+\bottomrule
+\end{tabular}

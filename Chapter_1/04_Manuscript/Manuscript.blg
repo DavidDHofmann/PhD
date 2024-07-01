@@ -1,0 +1,50 @@
+This is BibTeX, Version 0.99d (TeX Live 2022/dev/Debian)
+Capacity: max_strings=200000, hash_size=200000, hash_prime=170003
+The top-level auxiliary file: Manuscript.aux
+The style file: apalike.bst
+Database file #1: Literatur.bib
+Warning--I'm ignoring Hofmann.2021's extra "year" field
+--line 3137 of file Literatur.bib
+Warning--empty journal in Hofmann.2021b
+You've used 78 entries,
+            1935 wiz_defined-function locations,
+            985 strings with 20829 characters,
+and the built_in function-call counts, 35410 in all, are:
+= -- 3395
+> -- 1836
+< -- 25
++ -- 645
+- -- 644
+* -- 3355
+:= -- 6206
+add.period$ -- 236
+call.type$ -- 78
+change.case$ -- 703
+chr.to.int$ -- 77
+cite$ -- 79
+duplicate$ -- 1106
+empty$ -- 2264
+format.name$ -- 750
+if$ -- 6725
+int.to.chr$ -- 2
+int.to.str$ -- 0
+missing$ -- 83
+newline$ -- 396
+num.names$ -- 234
+pop$ -- 575
+preamble$ -- 2
+purify$ -- 712
+quote$ -- 0
+skip$ -- 821
+stack$ -- 0
+substring$ -- 2610
+swap$ -- 100
+text.length$ -- 3
+text.prefix$ -- 0
+top$ -- 0
+type$ -- 454
+warning$ -- 1
+while$ -- 276
+width$ -- 0
+write$ -- 1017
+(There were 2 warnings)

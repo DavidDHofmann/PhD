@@ -1,0 +1,114 @@
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/GraphicalAbstract.pdf}
+  \caption{Overview of the different dimensions in which seasonality can be
+  rendered in studies of landscape connectivity. (a) During model fitting, the
+  modeler needs to decide whether to represent the environment by a static set
+  of covariate layers, thus ignoring seasonality, or whether to obtain a dynamic
+  set covariate layers that allow rendering it. One also needs to decide
+  whether to parameterize a single-season model, assuming fixed preferences
+  across the year, or to engage in a multi-season model that accounts for
+  seasonal differences. (b) When utilizing the fitted model to predict
+  connectivity, one can either assume a static set of environmental covariates
+  or again attempt a seasonal take that renders how connectivity differs
+  depending on the season. (c) Depending on these decisions, six different
+  combinations with differing degrees of dynamism emerge. Our hypothesis was
+  that increasing the degree of dynamism would lead to improved predictions.
+  However, we were particularly interested in determining at which stage the
+  inclusion of seasonally provided the biggest benefits.}
+  \label{GraphicalAbstract}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/StudyArea.png} \caption{(a) Study
+  area from which data on dispersing wild dogs were collected. Dispersal
+  trajectories are plotted in dark gray. The study area encompassed parts of the
+  Okavango Delta in northern Botswana, a highly dynamic, flood-pulse-driven
+  ecosystem. The entire study area undergoes substantial seasonal changes, as
+  can be seen from two satellite images taken during peak dry season (b1) and
+  peak rainy season (b2). Notably, the flood of the Okavango Delta reaches its
+  maximum extent during peak dry season (August–September).}
+  \label{StudyArea}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\begin{center}
+  \includegraphics[width = \textwidth]{Figures/SeasonalCovariates.png}
+  \caption{Illustration of how some covariates considered in this study vary
+  across seasons. The wet season spans mid-October to mid-April (shaded in
+  gray). Data for the graphs were obtained from \textbf{(a)} JAXA GSMaP,
+  \textbf{(b)} ERA5, \textbf{(c)} MODIS MOD13Q1, and \textbf{(d)} remote sensed
+  MOD43A4 satellite images. Smoothing curves were fitted using GAMs as
+  implemented in the \texttt{mgcv} \texttt{R}-package \citep{Wood.2011}.}
+  \label{Seasonality}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/Schematic} \caption{Schematic
+  illustration of a dispersal simulation with dynamic covariates. As the
+  simulation proceeds, the underlying covariates (symbolized by the stack of
+  layers) are updated. In our case, the update frequency of covariate layers
+  varied from a few hours (e.g., temperature) to multiple months (e.g., shrub
+  cover). Each gray block represents a single layer and the duration for which
+  it was ``active''. Originating from the current position of the simulated
+  animal, a new redistribution kernel is derived. We generated redistribution
+  kernels by proposing a set of random steps and applying the parametrized
+  step-selection model to predict the probability of each step for being chosen.
+  Based on this kernel, one location was randomly sampled and the animal's
+  position updated. This procedure was repeated until the number of simulated
+  steps matched the number of steps from the observed individuals.}
+  \label{Schematic}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/MovementModel.png}
+  \caption{$\beta-$estimates from the integrated step-selection models, grouped
+  by movement kernel, habitat-selection function, and their interaction. We
+  either fit a simple model without interactions or a full model with
+  interactions and we distinguished between models fit using static or dynamic
+  covariates. Only the underlined covariates differed between the static and
+  dynamic configurations, as covariates were either represented as a single
+  layer (static), or a stack of layers (dynamic). Furthermore, data was either
+  pooled across seasons (yellow bars) or split into dry (green bars) and wet
+  (blue bars) season.}
+  \label{MovementModel}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/RankCorrelation.pdf}
+  \caption{(a) Spearman's rank correlation across different configurations of
+  dynamism that range from entirely static (SSS) to fully dynamic (DMD). The
+  more negative Spearman's rank correlation, the better is the predictive
+  performance under the respective configuration. Correlations were computed for
+  100 replicates. Note that the y-axis is inverted to match our expectation of
+  increasing performance as dynamism increases. (b) Difference in Spearman's
+  rank correlation when moving from one configuration to another. Values $< 0$
+  (blue) indicate an increase in predictive performance, whereas values $> 0$
+  (orange) indicate a decrease in predictive performance.}
+  \label{RankCorrelation}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/HeatmapComparison}
+  \caption{Heatmaps derived under the most static (SSS) and dynamic (DMD)
+  configurations. Results are shown for both the simple and full model.}
+  \label{HeatmapComparison}
+ \end{center}
+\end{figure}

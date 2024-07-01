@@ -1,0 +1,105 @@
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/GraphicalAbstract.pdf}
+  \caption{Conceptual illustration of the employed analytical framework to
+  investigate connectivity for dispersing African wild dogs under a minimum and
+  maximum flood extent in the Okavango Delta. (a) Based on a series of 700
+  floodmaps, obtained between the years 2000 and 2019, we derived extreme
+  scenarios for a minimum and maximum flood, using the minimum 100 and maximum
+  100 historically observed flood extremes. These layers were then joined with a
+  static set of covariates and fed into a dispersal simulation. (b) The
+  dispersal simulation was based on a previously parametrized integrated
+  step-selection function for dispersing wild dogs and allowed simulating
+  dispersal trajectories in the two extreme scenarios. (c) From simulated
+  dispersal trajectories we generated four summary maps, highlighting
+  connectivity patterns and areas potentially prone to human-wildlife conflict.}
+  \label{Concept}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/StudyArea2.png} \caption{(a)
+  Location of the study area, which forms part of the Kavango-Zambezi
+  Transfrontier Conservation Area (KAZA-TFCA, red polygon) in Southern Africa.
+  (b) The division of the core study area (enclosed by the purple ellipse) into
+  sub-areas (1 to 6) was based on the hydrographic structure of the Okavango
+  Delta and its tributaries. We simulated dispersal trajectories starting at
+  random locations within each of the six source areas (orange circles). Purple
+  zones (7 to 14) represent zones that we used to identify if and where
+  simulated dispersers left the close surroundings of the Okavango Delta (thus
+  called egression zones). These zones were generated using a set of cutlines
+  (purple dotted lines) originating from the center of the Delta that dissected
+  an elliptical buffer surrounding the Delta into sections of equal size and in
+  accordance with cardinal directions. The yellow lines represent GPS
+  trajectories of dispersing wild dogs that were observed using GPS collars.
+  While not all of these individuals were used to parametrize the dispersal
+  model presented by \citet{Hofmann.2023}, they serve to highlight the spatial
+  scale at which the species disperses. Map lines delineate study areas and do
+  not necessarily depict accepted national boundaries.}
+  \label{StudyArea}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/FloodExtent.png}
+  \caption{(a) Minimum and (b) maximum flood extent. The two maps were generated
+  based on 100 minimum and 100 maximum flood extent maps from a series of 700
+  almost weekly updated remote sensed MODIS MCD43A4 satellite images spanning
+  the years 2000 to 2019.}
+  \label{FloodExtent}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+\begin{center}
+ \includegraphics[width = \textwidth]{Figures/InterpatchConnectivityTable2.png}
+ \caption{(a) Dispersal frequency (measured as the number of dispersal
+ trajectories) and (b) dispersal duration (in days) between (a1, b1) source
+ areas (labeled 1 to 6) and (a2, b2) egression zones (labeled 7 to 14) during
+ minimum and maximum flood. Final rows and columns of each subplot represent
+ summary statistics across all areas. For instance, the bottom row in a1
+ highlights for each source area the total number of trajectories successfully
+ dispersing into a target area. The last column, in contrast, indicates the
+ total number of trajectories immigrating into each target area. Values indicate
+ mean $\pm$ SD. The colors are mapped in a non-linear fashion to avoid
+ over-emphasis on final rows and columns.}
+ \label{IPCTable}
+\end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = 0.8\textwidth]{Figures/InterpatchConnectivityMap.png}
+  \caption{Dispersal frequency and duration between source areas 1 to 6 in the
+  core study area during the minimum (left panel) and maximum (right panel)
+  flood scenario. The dispersal frequency shows the number of trajectories that
+  emigrated from a specific source area and successfully immigrated into another
+  one. The dispersal duration indicates the mean dispersal duration (in days)
+  required before trajectories arrived at the respective area. Although links
+  between non-neighboring source areas occurred in the simulation, we here only
+  present links between adjacent source areas for brevity. Detailed plots about
+  source-specific inter-patch connectivity are provided in Figures S3 and S4.}
+  \label{IPCMap}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}
+ \begin{center}
+  \includegraphics[width = 0.8\textwidth]{Figures/Metrics.png}
+  \caption{(a) Heatmaps, (b) betweenness maps, and (c) maps of potential for HWC
+  derived from simulated dispersal trajectories. Left panels were derived from
+  the minimum flood scenario, right panels from the maximum flood scenario.
+  Source areas from which dispersers were released are numbered 1-6. The color
+  scale for betweenness scores in (b) was square-rooted to improve visibility of
+  corridors with lower values. Source-specific heatmaps, betweenness maps, and
+  HWC maps are provided in Figures S6-S8.}
+  \label{Metrics}
+ \end{center}
+\end{figure}

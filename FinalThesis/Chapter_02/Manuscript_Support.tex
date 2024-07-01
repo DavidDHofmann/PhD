@@ -1,0 +1,210 @@
+\documentclass[../FinalThesis.tex]{subfiles}
+\begin{document}
+
+\newpage
+\section{Dispersal Model}
+\label{DispersalModel}
+The model employed to simulate dispersal was based on an integrated step
+selection function (iSSF). In (integrated) step selection functions (iSSFs,
+\citealp{Fortin.2005, Avgar.2016}), observed GPS locations are converted into
+steps (the straight-line traveled between two GPS recordings
+\citep{Turchin.1998}) and compared to a set of \textit{random} steps in a
+conditional logistic regression framework \citep{Fortin.2005, Thurfjell.2014,
+Muff.2020, Fieberg.2021}. The model presented in \citep{Hofmann.2023} used
+dispersal data collected on 16 dispersing AWDs from a free-ranging wild dog
+population in northern Botswana. GPS data during dispersal was collected at
+4-hourly intervals and translated into steps of similar duration. Observed steps
+were then paired step with 24 random steps that were generated using a uniform
+distribution for turning angles (\(-\pi, +\pi\)) and step lengths from a gamma
+distribution fitted to observed steps (scale \(\theta\) = 6,308 and shape \(k\)
+= 0.37). It was then assumed that animals assigned to each observed and random
+step a selection score of the form \citep{Fortin.2005}:
+
+\begin{equation}
+  w(x) = exp(\beta_1 x_1 + \beta_2 x_2 + ... + \beta_n x_n)
+\end{equation}
+
+Where (\(x_1, x_2, ..., x_n\)) represent the covariate values along each of the
+steps and the (\(\beta_1, \beta_2, ..., \beta_n\)) are the animal's relative
+selection strengths \citep{Avgar.2017} towards these covariates. The benefit
+of \textit{integrated} SSFs over regular SSFs is that they provide a means to
+render two complementary ``kernels''. A \textit{movement} kernel that describes
+general movement behavior of dispersing AWDs and a \textit{habitat} kernel that
+describes preferences of AWDs with regards to environmental conditions
+\citep{Fieberg.2021}. iSSFs also allow interactions among the two kernels and
+are thus suitable to render that movement behavior may change depending on
+habitat conditions. A fitted iSSF model can be used as an individual-based
+movement model to simulate dispersal \citep{Signer.2017, Hofmann.2023}.
+
+\newpage
+\section{Dispersal Model Estimates}
+\Cref{Model} depicts estimates from the model developed by \citet{Hofmann.2023}
+that we used to simulate dispersal trajectories in the present.
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/MovementModel.png}
+  \caption{Model parameters from the step-selection model implemented by
+  \citet{Hofmann.2023}. The model was fit to GPS data of dispersing African wild
+  dogs and comprises of a habitat kernel (light blue band), a movement kernel
+  (dark blue band), and their interactions (purple band). Abbreviations are as
+  follows: sl = step-length, ln(sl) = natural logarithm of the step-length,
+  cos(ta) = cosine of the relative turning angle.}
+  \label{Model}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Immigration \& Emigration by Source Area}
+\begin{figure}[!ht]
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/ImmigrationEmigration.png}
+  \caption{Number of individuals emigrating from, or immigrating into a specific
+  source area (focal area). Colors indicate into which other areas emigrants
+  moved or from which other areas immigrants originate. For instance, the most
+  left plot in the upper panel shows the number of individuals moving from
+  source area 1 into the six other source areas during minimum and maximum
+  flood, respectively.}
+  \label{EmigrationImmigration}
+ \end{center}
+\end{figure}
+
+\newpage
+\section{Source-Specific Inter-Patch Connectivity}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/IPCMain.png}
+  \caption{Spatial representation of inter-patch connectivity derived for each
+  source area separately across the two extreme flood-scenarios. The focal
+  source area of each subfigure is highlighted by a red circle. Subfigure a, for
+  instance, depicts inter-patch connectivity for source area 1.}
+  \label{IPCMain}
+  \end{center}
+\end{figure}
+
+\newpage
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/IPCBuffer.png}
+  \caption{Spatial representation of egression patterns derived for each source
+  area separately across the two extreme flood-scenarios. The focal source area
+  of each subfigure is highlighted by a red circle. Subfigure a, for instance,
+  depicts the number of individuals egressing from source area 1.}
+  \label{IPCBuffer}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Dispersal into Egression Zones}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/Egression.png}
+  \caption{Absolute number of simulated trajectories running into each of the
+  designated egression zones (purple) during minimum and maximum flood.}
+  \label{Egression}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Source-Specific Intensity of Use}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/HeatmapsIndividual.png}
+  \caption{Heatmaps showing the intensity of use for each source area separately
+  across the two extreme flood-scenarios. The focal source area of each
+  subfigure is highlighted by a red circle. Subfigure a, for instance, depicts
+  the heatmaps for source area 1.}
+  \label{HeatmapsInd}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Source-Specific Betweenness}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/BetweennessIndividual.png}
+  \caption{Betweenness maps prepared for each source area separately across the
+  two extreme flood-scenarios. The focal source area of each subfigure is
+  highlighted by a red circle. Subfigure a, for instance, depicts the
+  betweenness maps for source area 1.}
+  \label{BetweennessInd}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Source-Specific Human-Wildlife Conflict}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/HumanWildlifeConflictIndividual.png}
+  \caption{Human wildlife conflict maps prepared for each source area separately
+  across the two extreme flood-scenarios. The focal source area of each
+  subfigure is highlighted by a red circle. Subfigure a, for instance, depicts
+  the human wildlife-conflict maps for source area 1. Dotted shapes were used to
+  compare human-wildlife conflict within specific areas (see also
+  \Cref{AlternativeHWC}).}
+  \label{HWCInd}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Changes in Potential for Human-Wildlife Interactions}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{Figures/HWCDifferenceAOI.png}
+  \caption{Number of simulated trajectories within the vicinity of
+  human-dominated landscapes in different areas of interest across the minimum
+  and maximum flood scenarios. The areas are represented by the black dotted
+  shapes in \Cref{HWCInd}}
+  \label{HWCDifference}
+  \end{center}
+\end{figure}
+
+\newpage
+\section{Alternative Approach to Map Potential Human-Wildlife Interactions}
+\label{AlternativeHWC}
+
+To identify potential hotspots for human-wildlife conflict and generate
+\Cref{Metrics}c, we isolated all simulated animal locations within 500 meters to
+a human-influenced grid-cell (\Cref{Metrics}c in the main manuscript). To
+compute the needed distances, we assumed human-influence to be binary (influence
+= 1, no influence = 0), thus ignoring potential impacts of human density. We
+argue that the severity of human-wildlife conflict is not necessarily related to
+human density, yet humans' attitude towards wildlife. Attitude often correlates
+negatively with habitat suitability for the species of interest
+\citep{Behr.2017}, and so conflict is often pronounced in peripheral areas
+\citep{McNutt.2017}. Since we lacked detailed information of anthropogenic
+resistance \citep{Ghoddousi.2021} across the study area, we deemed a binary
+representation of human impacts as appropriate. Alternatively, one can also
+compute a compound score by multiplying the human-influence layer with the
+heatmaps derived from simulated dispersal. This is presented in
+\Cref{HWCAlternative}, where we multiplied the heatmaps (\Cref{HWCAlternative}a)
+with the human-influence layer (\Cref{HWCAlternative}b) and produced maps
+showing potential for human-wildlife conflict. Qualitatively, the maps in
+\Cref{HWCAlternative} are very similar to the ones presented in Figure 5c.
+
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width =
+  \textwidth]{Figures/HumanWildlifeConflictAlternative.png} \caption{Alternative
+  approach to quantifying the potential for human-wildlife conflict. Here, we
+  multiplied the heatmaps (a) with the human-influence layer (b) to obtain
+  human-wildlife conflict maps (c1). We also computed a difference map (c2) for
+  the layers shown in c1.}
+  \label{HWCAlternative}
+  \end{center}
+\end{figure}
+
+\ifSubfilesClassLoaded{%
+  \newpage
+  \begin{singlespacing}
+  \ifthenelse{\boolean{usebiblatex}}{
+    \begin{refcontext}[sorting=nyt]
+    \printbibliography
+    \end{refcontext}
+  } {
+    \bibliography{../LiteratureBibtex}%
+  }
+\end{singlespacing}
+}{}
+
+\end{document}

@@ -1,0 +1,40 @@
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_Figures/PanMapping.pdf}
+  \caption{Example of a \textit{wet pan} and \textit{dryland} training polygon
+  digitized on Google Earth. The extent of water can easily be gauged at this
+  zoom level in Google Earth. While the dryland polygon in this case covered an
+  area that is seasonally covered by water, other dryland polygons comprised
+  areas that are never inundated. However, to ensure reliable differentiation
+  between wet and dry pans, we included several dryland polygons located in dry
+  pans.}
+  \label{PanMapping}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_Figures/Reflectances.png}
+  \caption{}
+  \label{Reflectances}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_Figures/ClassificationValidation.png}
+  \caption{}
+  \label{ClassificationValidation}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_Figures/MovingWindows.png}
+  \caption{}
+  \label{MovingWindows}
+ \end{center}
+\end{figure}

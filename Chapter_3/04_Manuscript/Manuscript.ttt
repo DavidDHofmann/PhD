@@ -1,0 +1,18 @@
+\begin{table}[htbp]
+ \begin{center}
+    \caption{Covariates that were used in this study, including information on
+    their temporal and spatial resolutions, as well as on the avenue through which
+    the respective data were accessed or downloaded.}
+    \label{Covariates}
+   \begin{threeparttable}
+    \begin{tabular}{lcr}
+      \input{Figures/Covariates.tex}
+    \end{tabular}
+    \begin{tablenotes}
+      \item \textit{Note:} The covariates in gray were combined into proxies for
+      water, human influence, and brightness, respectively. The detailed
+      aggregation procedure is described by \citet{Hofmann.2021}.
+    \end{tablenotes}
+   \end{threeparttable}
+ \end{center}
+\end{table}

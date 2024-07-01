@@ -1,0 +1,31 @@
+
+\begin{tabular}[t]{lcccc}
+\toprule
+Variable & \makecell[c]{Temporal\\Resolution} & \makecell[c]{Spatial\\Resolution} & Source & \makecell[c]{Download\\Method}\\
+\midrule
+\addlinespace[0.3em]
+\multicolumn{5}{l}{(1) Landscape Characteristics}\\
+\hspace{1em}Trees & 1 year & 250 m & MODIS MOD44B & \texttt{RGISTools}\\
+\hspace{1em}Shrubs / grassland & 1 year & 250 m & MODIS MOD44B & \texttt{RGISTools}\\
+\hspace{1em}NDVI & 16 days & 250 m & MODIS MOD13Q1 & \texttt{rgee}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Rivers} & \cellcolor[HTML]{f2f2f2}{static} & \cellcolor[HTML]{f2f2f2}{90 m} & \cellcolor[HTML]{f2f2f2}{MERIT Hydro} & \cellcolor[HTML]{f2f2f2}{website}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Permanent water} & \cellcolor[HTML]{f2f2f2}{static} & \cellcolor[HTML]{f2f2f2}{30 m} & \cellcolor[HTML]{f2f2f2}{Globeland30} & \cellcolor[HTML]{f2f2f2}{website}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Floodwater} & \cellcolor[HTML]{f2f2f2}{8 days} & \cellcolor[HTML]{f2f2f2}{500 m} & \cellcolor[HTML]{f2f2f2}{MOD34A4} & \cellcolor[HTML]{f2f2f2}{\texttt{floodmapr}}\\
+\hspace{1em}Distance to water & 8 days & 500 m & MOD43A4 & \texttt{floodmapr}\\
+\hspace{1em}Pans & 5/10 days & 10 m & Sentinel 2 & \texttt{sen2r}\\
+\hspace{1em}Distance to pans & 5/10 days & 10 m & Sentinel 2 & \texttt{sen2r}\\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{(2) Climate Descriptors}\\
+\hspace{1em}Temperature & 4 hours & 10 km & ERA5 & \texttt{rgee}\\
+\hspace{1em}Precipitation & 4 hours & 10 km & JAXA GSMaP & \texttt{rgee}\\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{(3) Anthropogenic Features}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Human density} & \cellcolor[HTML]{f2f2f2}{static} & \cellcolor[HTML]{f2f2f2}{30 m} & \cellcolor[HTML]{f2f2f2}{Facebook} & \cellcolor[HTML]{f2f2f2}{website}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Agriculture} & \cellcolor[HTML]{f2f2f2}{static} & \cellcolor[HTML]{f2f2f2}{30 m} & \cellcolor[HTML]{f2f2f2}{Globeland30 / Cropland} & \cellcolor[HTML]{f2f2f2}{website}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Roads} & \cellcolor[HTML]{f2f2f2}{static} & \cellcolor[HTML]{f2f2f2}{vectorized} & \cellcolor[HTML]{f2f2f2}{Open Street Map} & \cellcolor[HTML]{f2f2f2}{website}\\
+\addlinespace[0.3em]
+\multicolumn{5}{l}{(4) Light Availability}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Night} & \cellcolor[HTML]{f2f2f2}{4 hours} & \cellcolor[HTML]{f2f2f2}{-} & \cellcolor[HTML]{f2f2f2}{-} & \cellcolor[HTML]{f2f2f2}{\texttt{moonlit}}\\
+\cellcolor[HTML]{f2f2f2}{\hspace{1em}Moon illumination} & \cellcolor[HTML]{f2f2f2}{4 hours} & \cellcolor[HTML]{f2f2f2}{-} & \cellcolor[HTML]{f2f2f2}{-} & \cellcolor[HTML]{f2f2f2}{\texttt{moonlit}}\\
+\bottomrule
+\end{tabular}

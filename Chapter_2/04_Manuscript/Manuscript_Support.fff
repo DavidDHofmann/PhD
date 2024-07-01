@@ -1,0 +1,108 @@
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_MovementModel.png}
+  \caption{Model parameters from the step-selection model implemented by
+  \cite{Hofmann.2023}. The model was fit to GPS data of dispersing African wild
+  dogs and comprises of a habitat kernel (light blue band), a movement kernel
+  (dark blue band), and their interactions (purple band). Abbreviations are as
+  follows: sl = step-length, log(sl) = natural logarithm of the step-length,
+  cos(ta) = cosine of the relative turning angle.}
+  \label{Model}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{99_ImmigrationEmigration.png}
+  \caption{Number of individuals emigrating from, or immigrating into a specific
+  source area (focal area). Colors indicate into which other areas emigrants
+  moved or from which other areas immigrants originate. For instance, the most
+  left plot in the upper panel shows the number of individuals moving from
+  source area 1 into the six other source areas during minimum and maximum
+  flood, respectively.}
+  \label{EmigrationImmigration}
+ \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_IPCMain.png}
+  \caption{Spatial representation of inter-patch connectivity derived for each
+  source area separately across the two extreme flood-scenarios. The focal
+  source area of each subfigure is highlighted by a red circle. Subfigure (a),
+  for instance, depicts inter-patch connectivity for source area 1.}
+  \label{IPCMain}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_IPCBuffer.png}
+  \caption{Spatial representation of egression patterns derived for each
+  source area separately across the two extreme flood-scenarios. The focal
+  source area of each subfigure is highlighted by a red circle. Subfigure (a),
+  for instance, depicts the number of individuals egressing from source area
+  1.}
+  \label{IPCBuffer}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_Egression.png}
+  \caption{Absolute number of simulated trajectories running into each of the
+  designated egression zones (purple) during minimum and maximum flood.}
+  \label{Egression}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_HeatmapsIndividual.png}
+  \caption{Heatmaps prepared for each source area separately across the two
+  extreme flood-scenarios. The focal source area of each subfigure is
+  highlighted by a red circle. Subfigure (a), for instance, depicts the heatmaps
+  for source area 1.}
+  \label{Heatmaps}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_BetweennessIndividual.png}
+  \caption{Betweenness maps prepared for each source area separately across the
+  two extreme flood-scenarios. The focal source area of each subfigure is
+  highlighted by a red circle. Subfigure (a), for instance, depicts the
+  betweenness maps for source area 1.}
+  \label{Betweenness}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_HumanWildlifeConflictIndividual.png}
+  \caption{Human wildlife conflict maps prepared for each source area separately
+  across the two extreme flood-scenarios. The focal source area of each
+  subfigure is highlighted by a red circle. Subfigure (a), for instance, depicts
+  the human wildlife conflict maps for source area 1.}
+  \label{HWC}
+  \end{center}
+\end{figure}
+\efloatseparator
+ 
+\begin{figure}[htbp]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_HWCDifferenceAOI.png}
+  \caption{Number of simulated trajectories within the vicinity of
+  human-dominated landcapes in different areas of interest across the minimum
+  and maximum flood scenarios.}
+  \label{HWCDifference}
+  \end{center}
+\end{figure}

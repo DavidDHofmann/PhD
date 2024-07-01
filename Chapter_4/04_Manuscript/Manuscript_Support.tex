@@ -1,0 +1,381 @@
+\documentclass[abstract=on,10pt,a4paper,bibliography=totocnumbered]{article}
+\usepackage[paper=a4paper,left=35mm,right=35mm,top=25mm,bottom=30mm]{geometry}
+\usepackage[doublespacing]{setspace}
+\usepackage[english]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{colortbl}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{gensymb}
+\usepackage{textcomp}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usepackage{enumerate}
+\usepackage{enumitem}
+\usepackage{subcaption}
+\usepackage{booktabs}
+\usepackage[hidelinks]{hyperref}
+\usepackage[nameinlink]{cleveref}
+\usepackage{multirow}
+\usepackage{arydshln}
+\usepackage[flushleft]{threeparttable}
+% \usepackage[nomarkers, nolists]{endfloat}
+\usepackage{scalerel}
+\usepackage{makecell}
+\usepackage{ifthen}
+\usepackage{tikz}
+\usepackage{lineno}
+\usepackage{adjustbox}
+\usetikzlibrary{svg.path}
+
+%------------------------------------------------------------------------------
+%  Bibtex vs Biblatex
+%------------------------------------------------------------------------------
+% While bibtex is very nice to use, it's insanely slow. I therefore work with
+% bibtex until the final stage. Set the value below to "true" or "false" to pick
+% which one should be used.
+\newboolean{usebiblatex}
+\setboolean{usebiblatex}{true}
+
+% Depending on the question, the commands below will prepare the document
+% accordingly
+\ifthenelse{\boolean{usebiblatex}}{
+  %-----------------------------------------------------------------------------
+  %  If using biblatex
+  %-----------------------------------------------------------------------------
+  % Load required packages and refer to correct bibliography
+  \usepackage{csquotes}
+  \usepackage[
+      backend=biber
+    , style=apa          % To display Author-year in the text
+    , natbib=true        % Necessary to use citep, etc.
+    , hyperref=true      % To have clickable links in the references
+    , useeditor=false    % Don't add editor to publications
+    , sorting=ynt        % Sort by year, name, and title
+    , uniquename=false   % Avoid that initials are put
+  ]{biblatex}
+  \addbibresource{Literature.bib}
+
+  % To include author in link
+  \DeclareFieldFormat{citehyperref}{%
+  \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+  \bibhyperref{#1}}
+  \DeclareFieldFormat{textcitehyperref}{%
+  \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
+  \bibhyperref{%
+    #1%
+    \ifbool{cbx:parens}
+      {\bibcloseparen\global\boolfalse{cbx:parens}}
+      {}}}
+  \savebibmacro{cite}
+  \savebibmacro{textcite}
+  \renewbibmacro*{cite}{%
+    \printtext[citehyperref]{%
+      \restorebibmacro{cite}%
+      \usebibmacro{cite}}}
+  \renewbibmacro*{textcite}{%
+    \ifboolexpr{
+      ( not test {\iffieldundef{prenote}} and
+        test {\ifnumequal{\value{citecount}}{1}} )
+      or
+      ( not test {\iffieldundef{postnote}} and
+        test {\ifnumequal{\value{citecount}}{\value{citetotal}}} )
+    }
+      {\DeclareFieldAlias{textcitehyperref}{noformat}}
+      {}%
+    \printtext[textcitehyperref]{%
+      \restorebibmacro{textcite}%
+      \usebibmacro{textcite}}}
+
+  % Remove editor form everything but books
+  \AtEveryBibitem{%
+   \ifentrytype{book}{}{%
+    \clearname{editor}
+   }
+  }
+}{
+  %-----------------------------------------------------------------------------
+  %  If using bibtex
+  %-----------------------------------------------------------------------------
+  % Load required packages and select citation style
+  \usepackage[round]{natbib}
+  \bibliographystyle{apalike}
+}
+
+%------------------------------------------------------------------------------
+%	Some Styling
+%------------------------------------------------------------------------------
+% Link colors
+\definecolor{linkcolor}{HTML}{000000}
+\hypersetup{
+  colorlinks = true,
+  linkcolor  = linkcolor,
+  urlcolor   = linkcolor,
+  citecolor  = linkcolor,
+}
+
+% Changing the style of captions in figures etc.
+\captionsetup{labelfont=bf, format=plain, font=small}
+
+% Change how equations are referenced
+\renewcommand{\theequation}{Equation \arabic{equation}}%
+
+% Avoid skip when including text from external .tex file
+\newcommand{\inputy}[1]{\input{#1}\unskip}
+
+% For supplementary material
+\newcommand{\beginappendix}{%
+  \setcounter{table}{0}
+  \renewcommand{\thetable}{S\arabic{table}}%
+  \setcounter{figure}{0}
+  \renewcommand{\thefigure}{S\arabic{figure}}%
+  \setcounter{equation}{0}
+  \renewcommand{\theequation}{Equation S\arabic{equation}}%
+  \setcounter{section}{0}
+  \renewcommand{\thesection}{A.\arabic{section}}%
+}
+
+%------------------------------------------------------------------------------
+%  ORCID
+%------------------------------------------------------------------------------
+% Creating some TikZ styles
+\tikzset{
+  nonterminal/.style = {rectangle
+    , minimum size = 6mm
+    , very thick
+    , draw = black!
+  }
+}
+
+% Create the ORCID logo
+\definecolor{orcidlogocol}{HTML}{A6CE39}
+\tikzset{
+  orcidlogo/.pic={
+    \fill[orcidlogocol]
+      svg{M256,128c0,70.7-57.3,128-128,128C57.3,256,0,198.7,0,128C0,57.3,57.3
+        ,0,128,0C198.7,0,256,57.3,256,128z};
+    \fill[white]
+      svg{M86.3,186.2H70.9V79.1h15.4v48.4V186.2z}
+      svg{M108.9,79.1h41.6c39.6,0,57,28.3,57,53.6c0,27.5-21.5,53.6-56.8
+        ,53.6h-41.8V79.1z M124.3,172.4h24.5c34.9,0,42.9-26.5
+        ,42.9-39.7c0-21.5-13.7-39.7-43.7-39.7h-23.7V172.4z}
+      svg{M88.7,56.8c0,5.5-4.5,10.1-10.1,10.1c-5.6,0-10.1-4.6-10.1-10.1c0-5.6
+      ,4.5-10.1,10.1-10.1C84.2,46.7,88.7,51.3,88.7,56.8z};
+  }
+}
+
+% Command to create the ORCID
+\newcommand\orcid[1]{\href{https://orcid.org/#1}{\mbox{\scalerel*{
+\begin{tikzpicture}[yscale=-1,transform shape]
+  \pic{orcidlogo};
+\end{tikzpicture}
+}{|}}}}
+
+%------------------------------------------------------------------------------
+%	Titlepage: Header
+%------------------------------------------------------------------------------
+\title{\textbf{Appendix}\\ Methods for Implementing Integrated Step-Selection
+Functions with Incomplete Data}
+
+% List of Authors
+\author{
+  David D. Hofmann\textsuperscript{1,2,\S} \orcid{0000-0003-3477-4365} \and
+  Gabriele Cozzi\textsuperscript{1,2} \orcid{0000-0002-1744-1940} \and
+  John Fieberg \textsuperscript{3} \orcid{0000-0002-3180-7021}
+}
+
+% Reduce spacing between authors
+\makeatletter
+\def\and{%
+  \end{tabular}%
+  \hskip -0.5em \@plus.17fil\relax
+  \begin{tabular}[t]{c}}
+\makeatother
+
+% Current Date
+% \date{\today}
+
+% And here the masterpiece begins
+\begin{document}
+
+% Change page numbering
+\pagenumbering{gobble}
+
+% Create Titlepage
+\maketitle
+
+%------------------------------------------------------------------------------
+%	Titlepage: Additional Info
+%------------------------------------------------------------------------------
+\begin{flushleft}
+
+\vspace{0.5cm}
+
+\textsuperscript{1} Department of Evolutionary Biology and Environmental
+Studies, University of Zurich, Winterthurerstrasse 190, 8057 Zurich,
+Switzerland.
+
+\textsuperscript{2} Botswana Predator Conservation Program, Wild Entrust,
+Private Bag 13, Maun, Botswana.
+
+\textsuperscript{3} Department of Fisheries, Wildlife, and Conservation Biology,
+University of Minnesota, St. Paul, MN, USA.
+
+\textsuperscript{\S} Corresponding author: \href{mailto://david.hofmann2@uzh.ch}{david.hofmann2@uzh.ch}
+
+\vspace{4cm}
+
+\textbf{Running Title:} Step-Selection Analyses with Missing Data
+
+\vspace{0.5cm}
+
+\textbf{Keywords:} animal movement, gps data, imputation, incomplete data,
+missing fixes, step-selection analyses, step-selection functions
+
+\end{flushleft}
+
+%------------------------------------------------------------------------------
+%	Main Text
+%------------------------------------------------------------------------------
+\newpage
+
+% Change page numbering
+\pagenumbering{arabic}
+
+% Create linenumbers
+% \linenumbers
+
+% Change to appendix counters
+\appendix
+\beginappendix
+
+%------------------------------------------------------------------------------
+%	Appendix S1:
+%------------------------------------------------------------------------------
+\newpage
+\section{Landscape Simulation: Different Autocorrelation Scenarios}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_CovariatesAppendix.png}
+  \caption{Simulated landscapes under different levels of autocorrelation (5,
+  10, 20; from top to bottom). Autocorrelation only affected the layers
+  \textsf{elev} and \textsf{forest}, which were both simulated using a Gaussian
+  random field neutral landscape model \citep{Schlather.2015} using the
+  \texttt{R}-package \texttt{NLMR} \citep{Sciaini.2018}. Simulations were
+  repeated 100 times for each autocorrelation scenario, thus resulting in 300
+  unique landscape configurations.}
+  \label{Covariates}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S2:
+%------------------------------------------------------------------------------
+\newpage
+\section{Dynamic Tentative Distribution Parameters}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = 0.9\textwidth]{99_DistributionParameters.png}
+  \caption{Tentative prameter estimates for the von Mises distribution (top row) and
+  gamma distribution (bottom row) fitted to steps with different durations. The
+  von Mises distribution requires one parameter, namely a concentration
+  parameter ($\kappa$). The gamma distribution requires a shape parameter ($k$)
+  and a scale parameter ($\theta$). The subscript $_0$ is used to indicate that
+  these are tentative distribution parameters (sensu \citealp{Avgar.2016} and
+  \citealp{Fieberg.2021}).}
+  \label{DistributionParameters}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S3:
+%------------------------------------------------------------------------------
+\newpage
+\section{Distribution of Relative Turning Angles following Different Step Durations}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = 0.9\textwidth]{99_TurningAnglePreviousDuration.png}
+  \caption{Density of relative turning angles associated with steps of $\Delta t
+  = 1$ following steps with different durations for all three autocorrelation
+  scenarios (5, 10, and 20). To generate this figure, we assumed a missingness
+  of 0.5 and forgiveness of 5.}
+  \label{PreviousDuration}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S4:
+%------------------------------------------------------------------------------
+\newpage
+\section{Model Estimates across all Scenarios}
+\begin{figure}[!ht]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_ModelComparisonAppendix.png}
+  \caption{Parameter estimates across different autocorrelation scenarios (5,
+  10, 20; panels a, b, and c) and missingness levels (0\% - 50\%; from left
+  to right). True simulation parameters are indicated by the solid black
+  lines. Parameter estimates from the different approaches are given by the
+  colored symbols, and their bootstrap 95\% CIs across 100 replicates
+  by the colored lines.}
+  \label{ModelComparison}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S5:
+%------------------------------------------------------------------------------
+\newpage
+\section{Case Study Covariates}
+
+\begin{figure}[htpb]
+  \begin{center}
+  \includegraphics[width = \textwidth]{99_CaseStudyCovariates.png}
+  \caption{Covariates used for the case study, overlaid with the GPS data of a
+  spotted hyena called ``Apollo'' (lines in black). Apollo was originally
+  collared in 2007 in northern Botswana and monitored until 2011. The depicted
+  area is part of the Okavango Delta, which is a massive wetland area. Data was
+  projected to a local projection (EPSG:32734).}
+  \label{CaseStudyCovariates}
+  \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S6:
+%------------------------------------------------------------------------------
+\newpage
+\section{Case Study Model Output}
+
+\begin{table}[htpb]
+  \begin{center}
+  \caption{Model results from the case study using GPS data collected on Apollo.
+  In F1, forgiveness was set to one (only 2-hour steps were considered), whereas
+  in F3-S and F3-SH a forgiveness of three was employed (allowing for step
+  durations of up to 6 hours). In model F3-S, the step duration was interacted
+  with step descriptors. In model F3-SH, step duration was interacted with step
+  descriptors and habitat covariates.}
+  \label{CaseStudyTable}
+    \begin{adjustbox}{max width=0.70\textwidth}
+    \begin{threeparttable}[h]
+      \input{99_CaseStudyTable.tex}
+      \begin{tablenotes}
+       \item \textit{Significance codes: * \(p < 0.10\) \quad ** \(p < 0.05\)
+        \quad *** \(p < 0.01\)}
+      \end{tablenotes}
+    \end{threeparttable}
+  \end{adjustbox}
+  \end{center}
+\end{table}
+
+\newpage
+\begingroup
+\singlespacing
+\ifthenelse{\boolean{usebiblatex}}{
+  \begin{refcontext}[sorting=nyt]
+  \printbibliography
+  \end{refcontext}
+}{
+  \bibliography{LiteratureBibtex}
+}
+\endgroup
+\end{document}

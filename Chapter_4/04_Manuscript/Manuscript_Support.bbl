@@ -1,0 +1,557 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{nyt/global//global/global}
+    \entry{Avgar.2016}{article}{}
+      \name{author}{4}{}{%
+        {{hash=09b384898f79df55ce74b0443582fc14}{%
+           family={Avgar},
+           familyi={A\bibinitperiod},
+           given={Tal},
+           giveni={T\bibinitperiod}}}%
+        {{hash=512e75b077532166dfd6933d0b65e003}{%
+           family={Potts},
+           familyi={P\bibinitperiod},
+           given={Jonathan\bibnamedelima R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=979ba955097899fc653965929c34cd2f}{%
+           family={Lewis},
+           familyi={L\bibinitperiod},
+           given={Mark\bibnamedelima A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=dc81c7f9cae28796afb9c45efce6d849}{%
+           family={Boyce},
+           familyi={B\bibinitperiod},
+           given={Mark\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{565d09de95b8a11b7a51378e8508f8ec}
+      \strng{fullhash}{348787caf94fa98a74f7493dfc8ae653}
+      \strng{bibnamehash}{348787caf94fa98a74f7493dfc8ae653}
+      \strng{authorbibnamehash}{348787caf94fa98a74f7493dfc8ae653}
+      \strng{authornamehash}{565d09de95b8a11b7a51378e8508f8ec}
+      \strng{authorfullhash}{348787caf94fa98a74f7493dfc8ae653}
+      \field{sortinit}{A}
+      \field{sortinithash}{2f401846e2029bad6b3ecc16d50031e2}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{2041210X}
+      \field{journaltitle}{Methods in Ecology and Evolution}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{5}
+      \field{shorttitle}{Integrated {{Step Selection Analysis}}}
+      \field{title}{Integrated {{Step Selection Analysis}}: {{Bridging}} the {{Gap Between Resource Selection}} and {{Animal Movement}}}
+      \field{volume}{7}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{619\bibrangedash 630}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1111/2041-210X.12528
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/66HFRL7L/Avgar et al. - 2016 - Integrated step selection analysis bridging the g.pdf;/home/david/Zotero/storage/D597VTTA/Avgar et al. - 2016 - Integrated step selection analysis bridging the g.pdf
+      \endverb
+    \endentry
+    \entry{Fieberg.2021}{article}{}
+      \name{author}{4}{}{%
+        {{hash=db0dbcd50d0f534196aba4421612db26}{%
+           family={Fieberg},
+           familyi={F\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=81142ccdd500b70f8fca130217e5122e}{%
+           family={Signer},
+           familyi={S\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod}}}%
+        {{hash=226d97c4743b4a0d89391c0c1cb01efd}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Brian},
+           giveni={B\bibinitperiod}}}%
+        {{hash=09b384898f79df55ce74b0443582fc14}{%
+           family={Avgar},
+           familyi={A\bibinitperiod},
+           given={Tal},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{e61aab1256fd29d9d36f7258fc452be2}
+      \strng{fullhash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \strng{bibnamehash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \strng{authorbibnamehash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \strng{authornamehash}{e61aab1256fd29d9d36f7258fc452be2}
+      \strng{authorfullhash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \field{sortinit}{F}
+      \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Habitat-selection analyses allow researchers to link animals to their environment via habitat-selection or step-selection functions, and are commonly used to address questions related to wildlife management and conservation efforts. Habitat-selection analyses that incorporate movement characteristics, referred to as integrated step-selection analyses, are particularly appealing because they allow modelling of both movement and habitat-selection processes. Despite their popularity, many users struggle with interpreting parameters in habitat-selection and step-selection functions. Integrated step-selection analyses also require several additional steps to translate model parameters into a full-fledged movement model, and the mathematics supporting this approach can be challenging for many to understand. Using simple examples, we demonstrate how weighted distribution theory and the inhomogeneous Poisson point process can facilitate parameter interpretation in habitat-selection analyses. Furthermore, we provide a ‘how to’ guide illustrating the steps required to implement integrated step-selection analyses using the amt package By providing clear examples with open-source code, we hope to make habitat-selection analyses more understandable and accessible to end users.}
+      \field{issn}{1365-2656}
+      \field{journaltitle}{Journal of Animal Ecology}
+      \field{langid}{english}
+      \field{number}{5}
+      \field{title}{A ‘{{How}} to’ {{Guide}} for {{Interpreting Parameters}} in {{Habitat-Selection Analyses}}}
+      \field{urlday}{21}
+      \field{urlmonth}{9}
+      \field{urlyear}{2021}
+      \field{volume}{90}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1027\bibrangedash 1043}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1111/1365-2656.13441
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/7V6577XM/Fieberg et al. - 2021 - A ‘How to’ Guide for Interpreting Parameters in Ha.pdf;/home/david/Zotero/storage/B2YQN2MN/Fieberg et al. - 2021 - A ‘How to’ Guide for Interpreting Parameters in Ha.pdf;/home/david/Zotero/storage/2C3XYJYT/AppC_iSSA_movement.html;/home/david/Zotero/storage/EHT7SBAB/AppB_SSF_examples.html;/home/david/Zotero/storage/YYLDF8EL/AppA_HSF_examples.html
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13441
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13441
+      \endverb
+    \endentry
+    \entry{Schlather.2015}{article}{}
+      \name{author}{5}{}{%
+        {{hash=51b06ae3722af166b5794bf90647b007}{%
+           family={Schlather},
+           familyi={S\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=da584b672db8d9e27548b4c520ac6d8c}{%
+           family={Malinowski},
+           familyi={M\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e1882e970ae0a17ad19814b59136643d}{%
+           family={Menck},
+           familyi={M\bibinitperiod},
+           given={Peter\bibnamedelima J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=5bdcedabbec901eb3cfbdbd8f1cb3010}{%
+           family={Oesting},
+           familyi={O\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3af26694e0546db335482ade09b403fd}{%
+           family={Strokorb},
+           familyi={S\bibinitperiod},
+           given={Kirstin},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{ea05b4818b8e61c6aa9e3b705c9f1047}
+      \strng{fullhash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \strng{bibnamehash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \strng{authorbibnamehash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \strng{authornamehash}{ea05b4818b8e61c6aa9e3b705c9f1047}
+      \strng{authorfullhash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Modeling of and inference on multivariate data that have been measured in space, such as temperature and pressure, are challenging tasks in environmental sciences, physics and materials science. We give an overview over and some background on modeling with crosscovariance models. The R package RandomFields supports the simulation, the parameter estimation and the prediction in particular for the linear model of coregionalization, the multivariate Matérn models, the delay model, and a spectrum of physically motivated vector valued models. An example on weather data is considered, illustrating the use of RandomFields for parameter estimation and prediction.}
+      \field{day}{10}
+      \field{issn}{1548-7660}
+      \field{journaltitle}{Journal of Statistical Software}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{Analysis, {{Simulation}} and {{Prediction}} of {{Multivariate Random Fields}} with {{Package RandomFields}}}
+      \field{urlday}{29}
+      \field{urlmonth}{6}
+      \field{urlyear}{2023}
+      \field{volume}{63}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 25}
+      \range{pages}{25}
+      \verb{doi}
+      \verb 10.18637/jss.v063.i08
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/CLC2E6AR/Schlather et al. - 2015 - Analysis, Simulation and Prediction of Multivariat.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.18637/jss.v063.i08
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.18637/jss.v063.i08
+      \endverb
+    \endentry
+    \entry{Sciaini.2018}{article}{}
+      \name{author}{4}{}{%
+        {{hash=66a31e71dfd3faf1b4dc87b06c18acdc}{%
+           family={Sciaini},
+           familyi={S\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=1f990ebfb42ac25dbbc95b6373d53ef1}{%
+           family={Fritsch},
+           familyi={F\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=05a7232eecc81999460275bc29c5a4a0}{%
+           family={Scherer},
+           familyi={S\bibinitperiod},
+           given={Cédric},
+           giveni={C\bibinitperiod}}}%
+        {{hash=46a1d51c94a9a8b3fab4cc2841b0e902}{%
+           family={Simpkins},
+           familyi={S\bibinitperiod},
+           given={Craig\bibnamedelima Eric},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=31a41c0030a932e24f739753daee7cf8}{%
+           family={Golding},
+           familyi={G\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{3ecdecdab7182ee48f0788ec92cbff5b}
+      \strng{fullhash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{bibnamehash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{authorbibnamehash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{authornamehash}{3ecdecdab7182ee48f0788ec92cbff5b}
+      \strng{authorfullhash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{editorbibnamehash}{31a41c0030a932e24f739753daee7cf8}
+      \strng{editornamehash}{31a41c0030a932e24f739753daee7cf8}
+      \strng{editorfullhash}{31a41c0030a932e24f739753daee7cf8}
+      \field{sortinit}{S}
+      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{2041-210X, 2041-210X}
+      \field{journaltitle}{Methods in Ecology and Evolution}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{shortjournal}{Methods Ecol Evol}
+      \field{shorttitle}{Nlmr and {{Landscapetools}}}
+      \field{title}{Nlmr and {{Landscapetools}}: {{An Integrated Environment}} for {{Simulating}} and {{Modifying Neutral Landscape Models}} in {{R}}}
+      \field{urlday}{29}
+      \field{urlmonth}{6}
+      \field{urlyear}{2023}
+      \field{volume}{9}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2240\bibrangedash 2248}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1111/2041-210X.13076
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/SINUSTI9/Sciaini et al. - 2018 - NLMR and landscapetools An integrated environment.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/2041-210X.13076
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/2041-210X.13076
+      \endverb
+    \endentry
+  \enddatalist
+  \datalist[entry]{ynt/global//global/global}
+    \entry{Schlather.2015}{article}{}
+      \name{author}{5}{}{%
+        {{hash=51b06ae3722af166b5794bf90647b007}{%
+           family={Schlather},
+           familyi={S\bibinitperiod},
+           given={Martin},
+           giveni={M\bibinitperiod}}}%
+        {{hash=da584b672db8d9e27548b4c520ac6d8c}{%
+           family={Malinowski},
+           familyi={M\bibinitperiod},
+           given={Alexander},
+           giveni={A\bibinitperiod}}}%
+        {{hash=e1882e970ae0a17ad19814b59136643d}{%
+           family={Menck},
+           familyi={M\bibinitperiod},
+           given={Peter\bibnamedelima J.},
+           giveni={P\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=5bdcedabbec901eb3cfbdbd8f1cb3010}{%
+           family={Oesting},
+           familyi={O\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=3af26694e0546db335482ade09b403fd}{%
+           family={Strokorb},
+           familyi={S\bibinitperiod},
+           given={Kirstin},
+           giveni={K\bibinitperiod}}}%
+      }
+      \strng{namehash}{ea05b4818b8e61c6aa9e3b705c9f1047}
+      \strng{fullhash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \strng{bibnamehash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \strng{authorbibnamehash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \strng{authornamehash}{ea05b4818b8e61c6aa9e3b705c9f1047}
+      \strng{authorfullhash}{58fbef53a7b31b46e08114b9bdb98f86}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Modeling of and inference on multivariate data that have been measured in space, such as temperature and pressure, are challenging tasks in environmental sciences, physics and materials science. We give an overview over and some background on modeling with crosscovariance models. The R package RandomFields supports the simulation, the parameter estimation and the prediction in particular for the linear model of coregionalization, the multivariate Matérn models, the delay model, and a spectrum of physically motivated vector valued models. An example on weather data is considered, illustrating the use of RandomFields for parameter estimation and prediction.}
+      \field{day}{10}
+      \field{issn}{1548-7660}
+      \field{journaltitle}{Journal of Statistical Software}
+      \field{langid}{english}
+      \field{month}{2}
+      \field{title}{Analysis, {{Simulation}} and {{Prediction}} of {{Multivariate Random Fields}} with {{Package RandomFields}}}
+      \field{urlday}{29}
+      \field{urlmonth}{6}
+      \field{urlyear}{2023}
+      \field{volume}{63}
+      \field{year}{2015}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1\bibrangedash 25}
+      \range{pages}{25}
+      \verb{doi}
+      \verb 10.18637/jss.v063.i08
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/CLC2E6AR/Schlather et al. - 2015 - Analysis, Simulation and Prediction of Multivariat.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://doi.org/10.18637/jss.v063.i08
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.18637/jss.v063.i08
+      \endverb
+    \endentry
+    \entry{Avgar.2016}{article}{}
+      \name{author}{4}{}{%
+        {{hash=09b384898f79df55ce74b0443582fc14}{%
+           family={Avgar},
+           familyi={A\bibinitperiod},
+           given={Tal},
+           giveni={T\bibinitperiod}}}%
+        {{hash=512e75b077532166dfd6933d0b65e003}{%
+           family={Potts},
+           familyi={P\bibinitperiod},
+           given={Jonathan\bibnamedelima R.},
+           giveni={J\bibinitperiod\bibinitdelim R\bibinitperiod}}}%
+        {{hash=979ba955097899fc653965929c34cd2f}{%
+           family={Lewis},
+           familyi={L\bibinitperiod},
+           given={Mark\bibnamedelima A.},
+           giveni={M\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=dc81c7f9cae28796afb9c45efce6d849}{%
+           family={Boyce},
+           familyi={B\bibinitperiod},
+           given={Mark\bibnamedelima S.},
+           giveni={M\bibinitperiod\bibinitdelim S\bibinitperiod}}}%
+      }
+      \strng{namehash}{565d09de95b8a11b7a51378e8508f8ec}
+      \strng{fullhash}{348787caf94fa98a74f7493dfc8ae653}
+      \strng{bibnamehash}{348787caf94fa98a74f7493dfc8ae653}
+      \strng{authorbibnamehash}{348787caf94fa98a74f7493dfc8ae653}
+      \strng{authornamehash}{565d09de95b8a11b7a51378e8508f8ec}
+      \strng{authorfullhash}{348787caf94fa98a74f7493dfc8ae653}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{2041210X}
+      \field{journaltitle}{Methods in Ecology and Evolution}
+      \field{langid}{english}
+      \field{month}{5}
+      \field{number}{5}
+      \field{shorttitle}{Integrated {{Step Selection Analysis}}}
+      \field{title}{Integrated {{Step Selection Analysis}}: {{Bridging}} the {{Gap Between Resource Selection}} and {{Animal Movement}}}
+      \field{volume}{7}
+      \field{year}{2016}
+      \field{dateera}{ce}
+      \field{pages}{619\bibrangedash 630}
+      \range{pages}{12}
+      \verb{doi}
+      \verb 10.1111/2041-210X.12528
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/66HFRL7L/Avgar et al. - 2016 - Integrated step selection analysis bridging the g.pdf;/home/david/Zotero/storage/D597VTTA/Avgar et al. - 2016 - Integrated step selection analysis bridging the g.pdf
+      \endverb
+    \endentry
+    \entry{Sciaini.2018}{article}{}
+      \name{author}{4}{}{%
+        {{hash=66a31e71dfd3faf1b4dc87b06c18acdc}{%
+           family={Sciaini},
+           familyi={S\bibinitperiod},
+           given={Marco},
+           giveni={M\bibinitperiod}}}%
+        {{hash=1f990ebfb42ac25dbbc95b6373d53ef1}{%
+           family={Fritsch},
+           familyi={F\bibinitperiod},
+           given={Matthias},
+           giveni={M\bibinitperiod}}}%
+        {{hash=05a7232eecc81999460275bc29c5a4a0}{%
+           family={Scherer},
+           familyi={S\bibinitperiod},
+           given={Cédric},
+           giveni={C\bibinitperiod}}}%
+        {{hash=46a1d51c94a9a8b3fab4cc2841b0e902}{%
+           family={Simpkins},
+           familyi={S\bibinitperiod},
+           given={Craig\bibnamedelima Eric},
+           giveni={C\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+      }
+      \name{editor}{1}{}{%
+        {{hash=31a41c0030a932e24f739753daee7cf8}{%
+           family={Golding},
+           familyi={G\bibinitperiod},
+           given={Nick},
+           giveni={N\bibinitperiod}}}%
+      }
+      \strng{namehash}{3ecdecdab7182ee48f0788ec92cbff5b}
+      \strng{fullhash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{bibnamehash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{authorbibnamehash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{authornamehash}{3ecdecdab7182ee48f0788ec92cbff5b}
+      \strng{authorfullhash}{31f6870e13bd5cb924b23399ecd5656b}
+      \strng{editorbibnamehash}{31a41c0030a932e24f739753daee7cf8}
+      \strng{editornamehash}{31a41c0030a932e24f739753daee7cf8}
+      \strng{editorfullhash}{31a41c0030a932e24f739753daee7cf8}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{shorttitle}
+      \field{issn}{2041-210X, 2041-210X}
+      \field{journaltitle}{Methods in Ecology and Evolution}
+      \field{langid}{english}
+      \field{month}{11}
+      \field{number}{11}
+      \field{shortjournal}{Methods Ecol Evol}
+      \field{shorttitle}{Nlmr and {{Landscapetools}}}
+      \field{title}{Nlmr and {{Landscapetools}}: {{An Integrated Environment}} for {{Simulating}} and {{Modifying Neutral Landscape Models}} in {{R}}}
+      \field{urlday}{29}
+      \field{urlmonth}{6}
+      \field{urlyear}{2023}
+      \field{volume}{9}
+      \field{year}{2018}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{2240\bibrangedash 2248}
+      \range{pages}{9}
+      \verb{doi}
+      \verb 10.1111/2041-210X.13076
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/SINUSTI9/Sciaini et al. - 2018 - NLMR and landscapetools An integrated environment.pdf
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/2041-210X.13076
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/10.1111/2041-210X.13076
+      \endverb
+    \endentry
+    \entry{Fieberg.2021}{article}{}
+      \name{author}{4}{}{%
+        {{hash=db0dbcd50d0f534196aba4421612db26}{%
+           family={Fieberg},
+           familyi={F\bibinitperiod},
+           given={John},
+           giveni={J\bibinitperiod}}}%
+        {{hash=81142ccdd500b70f8fca130217e5122e}{%
+           family={Signer},
+           familyi={S\bibinitperiod},
+           given={Johannes},
+           giveni={J\bibinitperiod}}}%
+        {{hash=226d97c4743b4a0d89391c0c1cb01efd}{%
+           family={Smith},
+           familyi={S\bibinitperiod},
+           given={Brian},
+           giveni={B\bibinitperiod}}}%
+        {{hash=09b384898f79df55ce74b0443582fc14}{%
+           family={Avgar},
+           familyi={A\bibinitperiod},
+           given={Tal},
+           giveni={T\bibinitperiod}}}%
+      }
+      \strng{namehash}{e61aab1256fd29d9d36f7258fc452be2}
+      \strng{fullhash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \strng{bibnamehash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \strng{authorbibnamehash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \strng{authornamehash}{e61aab1256fd29d9d36f7258fc452be2}
+      \strng{authorfullhash}{9da1cd6de4354ce0e00dc69f86ec8e5d}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{extradatescope}{labelyear}
+      \field{labeldatesource}{}
+      \true{uniqueprimaryauthor}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Habitat-selection analyses allow researchers to link animals to their environment via habitat-selection or step-selection functions, and are commonly used to address questions related to wildlife management and conservation efforts. Habitat-selection analyses that incorporate movement characteristics, referred to as integrated step-selection analyses, are particularly appealing because they allow modelling of both movement and habitat-selection processes. Despite their popularity, many users struggle with interpreting parameters in habitat-selection and step-selection functions. Integrated step-selection analyses also require several additional steps to translate model parameters into a full-fledged movement model, and the mathematics supporting this approach can be challenging for many to understand. Using simple examples, we demonstrate how weighted distribution theory and the inhomogeneous Poisson point process can facilitate parameter interpretation in habitat-selection analyses. Furthermore, we provide a ‘how to’ guide illustrating the steps required to implement integrated step-selection analyses using the amt package By providing clear examples with open-source code, we hope to make habitat-selection analyses more understandable and accessible to end users.}
+      \field{issn}{1365-2656}
+      \field{journaltitle}{Journal of Animal Ecology}
+      \field{langid}{english}
+      \field{number}{5}
+      \field{title}{A ‘{{How}} to’ {{Guide}} for {{Interpreting Parameters}} in {{Habitat-Selection Analyses}}}
+      \field{urlday}{21}
+      \field{urlmonth}{9}
+      \field{urlyear}{2021}
+      \field{volume}{90}
+      \field{year}{2021}
+      \field{dateera}{ce}
+      \field{urldateera}{ce}
+      \field{pages}{1027\bibrangedash 1043}
+      \range{pages}{17}
+      \verb{doi}
+      \verb 10.1111/1365-2656.13441
+      \endverb
+      \verb{file}
+      \verb /home/david/Zotero/storage/7V6577XM/Fieberg et al. - 2021 - A ‘How to’ Guide for Interpreting Parameters in Ha.pdf;/home/david/Zotero/storage/B2YQN2MN/Fieberg et al. - 2021 - A ‘How to’ Guide for Interpreting Parameters in Ha.pdf;/home/david/Zotero/storage/2C3XYJYT/AppC_iSSA_movement.html;/home/david/Zotero/storage/EHT7SBAB/AppB_SSF_examples.html;/home/david/Zotero/storage/YYLDF8EL/AppA_HSF_examples.html
+      \endverb
+      \verb{urlraw}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13441
+      \endverb
+      \verb{url}
+      \verb https://onlinelibrary.wiley.com/doi/abs/10.1111/1365-2656.13441
+      \endverb
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

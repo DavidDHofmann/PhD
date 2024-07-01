@@ -1,0 +1,464 @@
+---
+title : 'Example 1: Dynamic + Model Approach with Simulated Data'
+author: "David D. Hofmann, Gabriele Cozzi, John Fieberg"
+date  : "2024-01-30"
+output:
+  html_document:
+    toc      : true
+    toc_depth: 2
+---
+```{r setup, echo = FALSE}
+
+knitr::opts_knit$set(root.dir = rprojroot::find_rstudio_root_file())
+
+```
+
+## Purpose
+This example analysis serves to illustrate the application of the _dynamic +
+model_ approach with simulated data. We're first going to simulate a trajectory
+with known movement kernel and habitat-selection parameters (we call this the
+truth). We will then introduce data-missingness by randomly removing some of the
+simulated data-points. Finally, we will apply the _dynamic + model_ approach and
+try to obtain the true simulation parameters.
+
+## Disclaimer
+In this script, we'll utilize a set of custom functions that are stored in the
+`Functions.R` file. They are used to simulate covariates and movement, compute
+step-metrics, generate random-steps, and fit step distributions dynamically.
+Most of the functions can be replaced by much more generalized functions from
+the `amt` R-package. However, `amt`'s `random_steps()` function doesn't cope
+well with sampling random steps from distributions fit to different
+step-durations. We'll therefore use of our custom code. If you'd like to apply
+it to your own data, inspect the functions closels and verify that they suit
+your purposes.
+
+## Preamble
+Let's start by preparing our R-Session and loading all necessary packages. We
+also load the custom functions stored in the `Functions.R` file.
+
+```{r, warning = F, message = F}
+
+# Set notation standards
+options(scipen = 999)
+
+# Clear R's brain
+rm(list = ls())
+
+# Load required packages
+library(tidyverse)     # For data wrangling
+library(sf)            # For plotting spatial features
+library(lubridate)     # To handle dates and times
+library(raster)        # For spatial data manipulation
+library(amt)           # To fit step-length and turning-angle distributions
+library(survival)      # To fit conditional logistic regression model
+library(ggh4x)         # For nested ggplot facets
+
+# Load custom functions
+source("02_R-Scripts/Functions.R")
+
+```
+
+## Simulation
+We start by simulating a set of raster layers that represent the landscape on
+which we want to simulate movement. For this, we'll use the functions
+`simDistance()`, `simElevation()`, and `simForest()`, which allow simulating
+spatially auto-correlated layers. You may also use functions from other
+packages, such as the `NLMR` or `gstat` packages, to generate such layers.
+
+```{r}
+
+# Set a seed for reproducability
+seed <- 123456
+set.seed(seed)
+
+# Simulate landscape covariates (n x n)
+n      <- 300
+dist   <- simDistance(n, x = n / 2, y = n / 2)
+elev   <- simElevation(n, autocorr_range = 10, seed = seed)
+forest <- simForest(n, autocorr_range = 10, prop = 0.5, seed = seed + 1)
+cov <- stack(dist, elev, forest)
+names(cov) <- c("dist", "elev", "forest")
+
+# Visualize the simulated covariates
+cov %>%
+  as.data.frame(xy = T) %>%
+  pivot_longer(dist:forest, names_to = "Covariate", values_to = "Value") %>%
+  ggplot(aes(x = x, y = y, fill = Value)) +
+    geom_raster() +
+    scale_fill_viridis_c() +
+    scale_color_datetime(low = "red", high = "green", name = "Timestamp") +
+    facet_wrap(~ Covariate) +
+    coord_equal() +
+    theme_minimal() +
+    theme(strip.background = element_rect(fill = "gray95", color = "white"))
+
+```
+
+On this landscape, we now simulate a trajectory using the `move()` function. The
+function requires quite a few inputs, such as the starting location (`xy`), the
+covariate layers (`covars`), as well as a model formula (`formula`) and
+associated betas (`prefs`) that determine the habitat-selection function.
+Furthermore, we need to provide the step-length and turning-angle distributions
+from which random steps are sampled (`sl_dist` and `ta_dist`). The `move`
+function assumes a gamma distribution (with shape and scale parameters) for
+step-lengths and a von Mises distribution (with a concentration parameter kappa)
+for turning-angles. Finally, there are some simulation parameters that we need
+to define, including the extent on which simulated animals are allowed to move
+(`ext`), the number of steps simulated (`n_steps`), the number of random-steps
+proposed at each relocation (`n_rsteps`), whether the simulation should stop if
+one of the random steps leaves the study area (`stop`) and if a
+simulation-progressbar should be printed (`messages`).
+
+```{r, message = F}
+
+# Simulate a trajectory across this landscape
+sim <- move(
+    xy       = cbind(n / 2, n / 2)
+  , covars   = cov
+  , formula  = ~ dist + elev + forest
+  , prefs    = c(-20, 1, -1)
+  , sl_dist  = list(name = "gamma", params = list(shape = 3, scale = 1))
+  , ta_dist  = list(name = "vonmises", params = list(kappa = 0.5, mu = 0))
+  , ext      = as(extent(c(0, n, 0, n)), "SpatialPolygons")
+  , n_steps  = 1000
+  , n_rsteps = 25
+  , stop     = F
+  , messages = F
+)
+
+# Give the individual a random name
+sim$id <- "Hermes"
+
+# Add timestamps
+sim$timestamp <- ymd_hms("2023-01-01 09:00:00") + hours(1) * sim$step_number
+
+# Check it
+head(sim, n = 10)
+
+```
+
+The `sim` data-frame represents the full "TRUE" movement trajectory of the
+simulated animal. Note that we simulated that fixes were collected exactly on
+the hour. This is usually not the case in real applications, but simplifies the
+subsequent code a bit. In any case, it's straight forward to round timestamps of
+real data to the nearest hour or minute to avoid issues with slight deviations
+from the anticipated schedule. To mimic what real data would look like, we
+should also remove the step-metrics (`absta`, `ta`, `sl`), as they are usually
+not observed in reality and later have to be inferred from observed coordinates.
+
+```{r}
+
+# Remove columns that are not observed in reality
+sim[, c("absta", "ta", "sl", "step_number")] <- NULL
+head(sim, n = 10)
+
+# Visualize track
+ggplot(sim, aes(x = x, y = y, col = timestamp)) +
+  geom_path() +
+  scale_color_datetime(low = "red", high = "green", name = "Timestamp") +
+  coord_equal() +
+  theme_minimal()
+
+```
+
+For later, we should keep track of the true simulation parameters. This will
+allow us to compare our model estimates from the iSSF model to the true
+parameters.
+
+```{r}
+
+# Keep track of true simulation parameters
+truth <- data.frame(
+    Term  = c("dist", "elev", "forest", "shape", "scale", "kappa")
+  , Truth = c(-20, 1, -1, 3, 1, 0.5)
+)
+
+```
+
+Now we rarify the full trajectory and create an "incomplete" dataset where some
+locations are missing.
+
+```{r}
+
+# Rarify track by randomly removing 25% of the fixes. You'll see that the number
+# of fixes drops from 1000 to 750. We can then give each step an id (unique
+# across individuals if there are many) and number (not unique across
+# individuals if there are many)
+sim_rarified <- sim %>%
+  rarifyData(missingness = 0.25) %>%
+  mutate(
+      step_id     = 1:n()
+    , step_number = 1:n()
+  )
+
+# Compare number of fixes
+cbind(Original = nrow(sim), Rarified = nrow(sim_rarified))
+
+```
+
+The rarified trajectory is our point of departure and represents what we would
+observe in reality. Let's again visualize everything.
+
+```{r}
+
+# Visualize covariates and the rarified track
+cov_df <- cov %>%
+  as.data.frame(xy = T) %>%
+  pivot_longer(dist:forest, names_to = "Covariate", values_to = "Value")
+ggplot() +
+  geom_raster(data = cov_df, aes(x = x, y = y, fill = Value)) +
+  geom_path(data = sim_rarified, aes(x = x, y = y, col = timestamp)) +
+  scale_fill_viridis_c() +
+  scale_color_datetime(low = "red", high = "green", name = "Timestamp") +
+  facet_wrap(~ Covariate) +
+  coord_equal() +
+  theme_minimal() +
+  theme(strip.background = element_rect(fill = "gray95", color = "white"))
+
+```
+
+## Fitting Tentative Distributions
+Because the dataset is incomplete, the time between consecutive datapoints is
+not always equal. Let's figure out the regular (i.e. most frequent)
+step-duration.
+
+```{r}
+
+# Assess the regular step-duration of our data
+samp <- sim_rarified %>%
+  computeDurations() %>%
+  count(duration)
+samp
+
+```
+
+As expected (since we simulated so), the regular step-duration is 1 hour.
+However, we also observe that in a few cases the duration between two fixes can
+be as long as `r max(samp$duration)` hours. In regular iSSF, we would only
+consider bursts within which step-durations are somewhat comparable. Here,
+however, we are tolerant towards unequal step-durations, as we'll later account
+for differing step-durations in the model. Consequently, we would like to
+accommodate for differing durations by fitting tentative distributions for
+different step-durations. Since there are barely any fixes that are separated >
+3 hours apart, having a forgiveness larger than 3 won't add much. Let's
+therefore fix our forgiveness to 3 and fit the associated step-length and
+turning angle distributions using the `fitDists()` function. Depending on the
+missingness, some step-durations may not occur very often, making it difficult
+to parametrize the associated gamma and von Mises distributions. We can
+alleviate this problem by resampling the observed data to different
+step-durations (option `resample = T`) or by increasing missingness even more
+(option `rarify = T`). Here, we chose to use the resampling option.
+
+```{r}
+
+# Fit step-length and turning angle distributions to different durations
+dists <- fitDists(sim_rarified
+  , durations = 1:3 # Return fitted distributions for durations 1-3
+  , regular   = 1   # The regular step-duration is 1
+  , dynamic   = T   # Fit distributions dynamically
+  , resample  = T   # Resample track to the different durations
+  , rarify    = F   # Don't increase missingness
+)
+
+# Show the fitted values
+dists
+
+```
+
+You can see that we now have different gamma and von Mises parameters for steps
+from different durations. We can later use the so fitted distributions to
+generate random steps matching different step-durations.
+
+## Generating Random Steps
+Before generating random steps, we need to split our data into bursts within
+which the step-duration does not exceed 3.
+
+```{r}
+
+# Compute bursts within which the step duration does not exceed our forgiveness
+sim_rarified_bursted <- computeBursts(sim_rarified, max_duration = 3)
+head(sim_rarified_bursted)
+
+```
+
+In addition, we need to compute step-metrics (step-lengths and turning-angles)
+per burst.
+
+```{r}
+
+# Compute step metrics within bursts
+sim_rarified_metrics <- computeMetrics(sim_rarified_bursted)
+head(sim_rarified_metrics)
+
+```
+
+Finally, we can use the `computeSSF()` function to generate 25 random steps for
+each valid step (a valid step has a step-length and a turning-angle associated).
+Note that we cna use the dynamically fitted distributions `dists` to match
+sampled random steps with the step-durations of observed steps by picking the
+`dynamic+model` approach. The function `computeSSF()` will also automatically
+drop any invalid steps or steps with a duration that occurs less than 5 times in
+the dataset. This is to prevent issues when including the step-duration in the
+iSSF model.
+
+```{r}
+
+# Generate random steps
+sim_rarified_ssf <- computeSSF(sim_rarified_metrics
+  , n_rsteps = 25
+  , dists    = dists
+  , approach = "dynamic+model"
+)
+head(sim_rarified_ssf)
+
+```
+
+Let's visualize some of the observed and random steps to ensure everything is
+working as expected.
+
+```{r}
+
+# Verify that steps of different durations follow different sl- and
+# ta-distributions
+sim_rarified_ssf %>%
+  dplyr::select(case, duration, sl, relta) %>%
+  pivot_longer(sl:relta, names_to = "Metric", values_to = "Value") %>%
+  mutate(Type = ifelse(case == 1, "Observed", "Random")) %>%
+  ggplot(aes(x = Value, col = as.factor(duration))) +
+    geom_density() +
+    facet_nested_wrap(~ Type + Metric, scale = "free") +
+    scale_color_viridis_d(name = "Step-Duration") +
+    theme_minimal() +
+    theme(strip.background = element_rect(fill = "gray95", color = "white"))
+
+# Visualize some observed and random steps
+sim_rarified_ssf %>%
+  mutate(Type = ifelse(case == 1, "Observed", "Random")) %>%
+  subset(step_number %in% 1:1000) %>%
+  ggplot(aes(x = x, y = y, xend = x_to, yend = y_to, col = as.factor(duration))) +
+    geom_segment(linewidth = 0.1) +
+    scale_color_viridis_d(begin = 0.3, name = "Duration") +
+    theme_minimal() +
+    coord_equal() +
+    facet_wrap(~ Type) +
+    theme(strip.background = element_rect(fill = "gray95", color = "white"))
+
+```
+
+## Computing Covariates
+We still need to compute all covariates that we want include our iSSF model.
+This includes spatial covariates at the end-point of each step, as well as
+step-metrics. We can use the function `computeCovars` for this.
+
+```{r}
+
+# Compute covariates for all steps (the function will extract spatial covariates
+# at the end of each step and also compute log_sl and cos_ta)
+sim_rarified_covars <- computeCovars(sim_rarified_ssf
+  , covars    = cov
+  , extract   = "end"
+)
+head(sim_rarified_covars)
+
+```
+
+## Running the Model
+
+We are now ready to estimate parameters using conditional logistic regression.
+This can be achieved using the `clogit()` function from the `survival` package.
+Alternatively, one can use the wrapper `fit_clogit()` from the `amt` package.
+Importantly, we will include interactions among the step-descriptors $sl$,
+$log(sl)$, and $cos(ta)$ and the step-duration $duration$.
+
+```{r}
+
+# Ensure the step-duration enters as factor
+sim_rarified_covars$duration <- as.factor(sim_rarified_covars$duration)
+
+# Fit the model
+mod <- clogit(data = sim_rarified_covars, formula = case ~
+  + dist            # Habitat-selection
+  + elev            # Habitat-selection
+  + forest          # Habitat-selection
+  + sl              # Movement Kernel
+  + log_sl          # Movement Kernel
+  + cos_ta          # Movement Kernel
+  + sl:duration     # Movement x Step-Duration
+  + log_sl:duration # Movement x Step-Duration
+  + cos_ta:duration # Movement x Step-Duration
+  + strata(step_id)
+)
+summary(mod)
+
+```
+
+This looks good. Now we extract the model coefficients from the fitted model and
+use them to update our "tentative" distribution parameters for the gamma and von
+Mises distribution. Since the true data was simulated with $\Delta t = 1$, we
+will only update parameters for the case when $\Delta t = 1$.
+
+```{r}
+
+# Compute confidence intervals
+ci <- confint(mod, level = 0.95)
+
+# Put relevant results together
+coefs <- summary(mod)$coefficients
+coefs <- data.frame(
+    Coefficient = rownames(coefs)
+  , Estimate    = coefs[, "coef"]
+  , SE          = coefs[, "se(coef)"]
+  , Z           = coefs[, "z"]
+  , LCI         = ci[, 1]
+  , UCI         = ci[, 2]
+)
+
+# We can use this dataframe to update our tentative distribution parameters.
+corrected <- correctDists(list(
+    Dists = dists
+  , Coefs = coefs
+))
+corrected$Dists$updated
+
+```
+
+Finally, we put all results together into a `data.frame` and compare them to the
+truth.
+
+```{r}
+
+# Now put everything together into a dataframe
+mov_estimates <- corrected$Dists
+hab_estimates <- corrected$Coefs
+
+# Compile the updated distribution parameters (for step duration of one)
+mov_estimates <- tibble(
+    shape = as.numeric(mov_estimates$updated$sl$shape)
+  , scale = as.numeric(mov_estimates$updated$sl$scale)
+  , kappa = as.numeric(mov_estimates$updated$ta$kappa)
+  ) %>%
+  pivot_longer(shape:kappa, names_to = "Term", values_to = "Estimate") %>%
+  mutate(Kernel = "Movement")
+
+# Compile the habitat selection coefficients
+hab_estimates <- hab_estimates %>%
+  dplyr::select(Term = Coefficient, Estimate) %>%
+  subset(Term %in% c("forest", "dist", "elev")) %>%
+  mutate(Kernel = "Habitat")
+
+# Put them together
+estimates <- rbind(hab_estimates, mov_estimates, make.row.names = F)
+estimates
+
+# Compare to truth
+comparison <- left_join(truth, estimates, by = "Term")
+comparison
+
+```
+
+Wonderful. It looks like we were able to approximate the true simulation
+parameters quite well.
+
+```{r}
+sessionInfo()
+```

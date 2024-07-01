@@ -1,0 +1,332 @@
+PWD /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript
+INPUT /etc/texmf/web2c/texmf.cnf
+INPUT /usr/share/texmf/web2c/texmf.cnf
+INPUT /usr/share/texlive/texmf-dist/web2c/texmf.cnf
+INPUT /var/lib/texmf/web2c/pdftex/pdflatex.fmt
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.tex
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.log
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/report.cls
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/size10.clo
+INPUT /usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/pdfpages/pdfpages.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/base/ifthen.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/eso-pic/eso-pic.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/atbegshi.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/infwarerr.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ltxcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/xcolor/xcolor.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-def/pdftex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
+INPUT /usr/share/texlive/texmf-dist/tex/latex/pdfpages/pppdftex.def
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.aux
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.aux
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.aux
+INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+INPUT /usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/epstopdf-base.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/grfext.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvdefinekeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/kvsetkeys.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/etexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifluatex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/oberdiek/pdftexcmds.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/pdflscape.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/oberdiek/pdflscape.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT /usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+INPUT /usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+OUTPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/Manuscript.pdf
+INPUT /home/david/ownCloud/University/15. PhD/Chapter_1/04_Manuscript/TwoPages.aux
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb
+INPUT /usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb

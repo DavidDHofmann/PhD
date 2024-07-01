@@ -1,0 +1,269 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{\numberline {1}General Introduction}{1}{chapter.1}%
+\penalty 10000
+\contentsline {section}{\numberline {1.1}Ecological Networks in the Anthropocene}{2}{section.1.1}%
+\penalty 10000
+\contentsline {section}{\numberline {1.2}Dispersal}{3}{section.1.2}%
+\penalty 10000
+\contentsline {section}{\numberline {1.3}Connectivity}{3}{section.1.3}%
+\penalty 10000
+\contentsline {section}{\numberline {1.4}Modeling Connectivity}{4}{section.1.4}%
+\penalty 10000
+\contentsline {section}{\numberline {1.5}Limitations of Current Approaches}{5}{section.1.5}%
+\penalty 10000
+\contentsline {subsection}{\numberline {1.5.1}Use of Traditional Connectivity Models}{5}{subsection.1.5.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {1.5.2}The Assumption of Static Landscapes}{7}{subsection.1.5.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {1.5.3}Data Irregularity}{7}{subsection.1.5.3}%
+\penalty 10000
+\contentsline {section}{\numberline {1.6}Thesis Goals}{8}{section.1.6}%
+\penalty 10000
+\contentsline {section}{\numberline {1.7}Study Species}{8}{section.1.7}%
+\penalty 10000
+\contentsline {section}{\numberline {1.8}Study Area}{9}{section.1.8}%
+\penalty 10000
+\contentsline {section}{\numberline {1.9}General Methods}{11}{section.1.9}%
+\penalty 10000
+\contentsline {subsection}{\numberline {1.9.1}Data Collection}{11}{subsection.1.9.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {1.9.2}Statistical Analyses}{12}{subsection.1.9.2}%
+\penalty 10000
+\contentsline {section}{\numberline {1.10}Thesis Outline}{13}{section.1.10}%
+\contentsline {chapter}{\numberline {2}A Three-Step Approach for Assessing Landscape Connectivity via Simulated Dispersal: African Wild Dog Case Study}{17}{chapter.2}%
+\penalty 10000
+\penalty 10000
+\contentsline {section}{\numberline {2.1}Introduction}{19}{section.2.1}%
+\penalty 10000
+\contentsline {section}{\numberline {2.2}Materials and Methods}{21}{section.2.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.2.1}Case Study}{21}{subsection.2.2.1}%
+\contentsline {subsubsection}{GPS Data}{21}{subsection.2.2.1}%
+\contentsline {subsubsection}{Study Area}{22}{subsection.2.2.1}%
+\contentsline {subsubsection}{Habitat Covariates}{22}{figure.caption.7}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.2.2}Step 1 - Movement Model}{24}{subsection.2.2.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.2.3}Step 2 - Dispersal Simulation}{25}{subsection.2.2.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.2.4}Step 3 - Connectivity Maps}{26}{subsection.2.2.4}%
+\contentsline {subsubsection}{Heatmap}{26}{subsection.2.2.4}%
+\contentsline {subsubsection}{Betweenness Map}{27}{subsection.2.2.4}%
+\contentsline {subsubsection}{Inter-Patch Connectivity Map}{27}{subsection.2.2.4}%
+\contentsline {subsubsection}{Validation}{27}{subsection.2.2.4}%
+\penalty 10000
+\contentsline {section}{\numberline {2.3}Results}{28}{section.2.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.3.1}Dispersal Simulation}{29}{subsection.2.3.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.3.2}Heatmap}{30}{subsection.2.3.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.3.3}Betweenness}{30}{subsection.2.3.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {2.3.4}Inter-Patch Connectivity}{33}{subsection.2.3.4}%
+\penalty 10000
+\contentsline {section}{\numberline {2.4}Discussion}{33}{section.2.4}%
+\contentsline {section}{Appendices}{40}{chapter*.12}%
+\setcounter {tocdepth}{0}
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.A}Candidate Interactions}{41}{section.1.2.A}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.B}K-Fold Cross Validation Procedure}{42}{section.1.2.B}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.C}Source Areas \& Points}{43}{section.1.2.C}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.D}Betweenness Maps}{44}{section.1.2.D}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.E}Model Selection Results}{46}{section.1.2.E}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.F}Movement Model}{47}{section.1.2.F}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.G}Movement Model Interpretation}{48}{section.1.2.G}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.H}Convergence}{50}{section.1.2.H}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.I}Heatmaps in Relation to the Number of Simulated Steps}{51}{section.1.2.I}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.J}Betweenness Maps in Relation to the Number of Simulated Steps}{52}{section.1.2.J}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.K}Comparison of Traversal Frequencies and Betweenness Scores Inside and Outside KAZA-TFCA}{53}{section.1.2.K}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {2.L}Dispersal into other National Parks}{55}{section.1.2.L}%
+\setcounter {tocdepth}{1}
+\contentsline {chapter}{\numberline {3}Dispersal and Connectivity in Increasingly Extreme Climatic Conditions}{57}{appendix.3}%
+\penalty 10000
+\penalty 10000
+\contentsline {section}{\numberline {3.1}Introduction}{59}{section.3.1}%
+\penalty 10000
+\contentsline {section}{\numberline {3.2}Materials and Methods}{62}{section.3.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.2.1}Study Area}{62}{subsection.3.2.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.2.2}Spatial Habitat Layers}{63}{subsection.3.2.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.2.3}Source Areas and Egression Zones}{65}{subsection.3.2.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.2.4}Dispersal Simulation}{65}{subsection.3.2.4}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.2.5}Derived Metrics}{67}{subsection.3.2.5}%
+\contentsline {subsubsection}{Inter-Patch Connectivity}{67}{subsection.3.2.5}%
+\contentsline {subsubsection}{Intensity of Use}{68}{subsection.3.2.5}%
+\contentsline {subsubsection}{Betweenness}{68}{subsection.3.2.5}%
+\contentsline {subsubsection}{Human-Wildlife Conflict}{68}{subsection.3.2.5}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.2.6}Software}{69}{subsection.3.2.6}%
+\penalty 10000
+\contentsline {section}{\numberline {3.3}Results}{69}{section.3.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.3.1}Inter-Patch Connectivity}{69}{subsection.3.3.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.3.2}Intensity of Use}{72}{subsection.3.3.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.3.3}Betweenness}{72}{subsection.3.3.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {3.3.4}Human-Wildlife Conflict}{72}{subsection.3.3.4}%
+\penalty 10000
+\contentsline {section}{\numberline {3.4}Discussion}{74}{section.3.4}%
+\contentsline {section}{Appendices}{79}{appendix*.32}%
+\setcounter {tocdepth}{0}
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.A}Dispersal Model}{80}{section.2.3.A}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.B}Dispersal Model Estimates}{81}{section.2.3.B}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.C}Immigration \& Emigration by Source Area}{82}{section.2.3.C}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.D}Source-Specific Inter-Patch Connectivity}{83}{section.2.3.D}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.E}Dispersal into Egression Zones}{85}{section.2.3.E}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.F}Source-Specific Intensity of Use}{86}{section.2.3.F}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.G}Source-Specific Betweenness}{87}{section.2.3.G}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.H}Source-Specific Human-Wildlife Conflict}{88}{section.2.3.H}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.I}Changes in Potential for Human-Wildlife Interactions}{89}{section.2.3.I}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {3.J}Alternative Approach to Map Potential Human-Wildlife Interactions}{90}{section.2.3.J}%
+\setcounter {tocdepth}{1}
+\contentsline {chapter}{\numberline {4}The Effects of Increasing Seasonal Dynamism when Predicting Connectivity: Advantages or Unnecessary Complications?}{92}{appendix.4}%
+\penalty 10000
+\penalty 10000
+\contentsline {section}{\numberline {4.1}Introduction}{94}{section.4.1}%
+\penalty 10000
+\contentsline {section}{\numberline {4.2}Methods}{98}{section.4.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.2.1}Study Area}{98}{subsection.4.2.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.2.2}GPS Data}{99}{subsection.4.2.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.2.3}Covariates}{101}{subsection.4.2.3}%
+\contentsline {subsubsection}{Landscape Characteristics}{102}{table.caption.47}%
+\contentsline {subsubsection}{Climate Descriptors}{103}{table.caption.47}%
+\contentsline {subsubsection}{Anthropogenic Features}{103}{table.caption.47}%
+\contentsline {subsubsection}{Light Availability}{104}{table.caption.47}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.2.4}Step-Selection Models}{104}{subsection.4.2.4}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.2.5}Validation}{105}{subsection.4.2.5}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.2.6}Simulations}{106}{subsection.4.2.6}%
+\penalty 10000
+\contentsline {section}{\numberline {4.3}Results}{107}{section.4.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.3.1}Step-Selection Models}{108}{subsection.4.3.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.3.2}Validation}{108}{subsection.4.3.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.3.3}Simulations}{108}{subsection.4.3.3}%
+\penalty 10000
+\contentsline {section}{\numberline {4.4}Discussion}{111}{section.4.4}%
+\contentsline {section}{Appendices}{116}{appendix*.52}%
+\setcounter {tocdepth}{0}
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.A}Pan Mapping}{117}{section.3.4.A}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.A.1}Satellite Product Overview}{117}{subsection.3.4.A.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.A.2}Evaluation of Landsat 8 and Sentinel 2}{119}{subsection.3.4.A.2}%
+\contentsline {subsubsection}{Training Polygons}{119}{subsection.3.4.A.2}%
+\contentsline {subsubsection}{Satellite Data Download}{119}{figure.caption.56}%
+\contentsline {subsubsection}{Land Cover Classifiers}{120}{table.caption.58}%
+\contentsline {subsubsection}{Validation and Comparison}{121}{figure.caption.59}%
+\penalty 10000
+\contentsline {subsection}{\numberline {4.A.3}Bulk Download}{121}{subsection.3.4.A.3}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.B}Moon Illumination}{126}{section.3.4.B}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.C}Light-Type}{127}{section.3.4.C}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.D}Movement Model Results}{128}{section.3.4.D}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.E}Number of Random Steps}{132}{section.3.4.E}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.F}Model Interpretation}{133}{section.3.4.F}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {4.G}Spearman's Rank Correlation in Relation to the Number of Random Steps}{134}{section.3.4.G}%
+\setcounter {tocdepth}{1}
+\contentsline {chapter}{\numberline {5}Methods for Implementing Integrated Step-Selection Functions with Incomplete Data}{136}{appendix.5}%
+\penalty 10000
+\penalty 10000
+\contentsline {section}{\numberline {5.1}Introduction}{138}{section.5.1}%
+\penalty 10000
+\contentsline {section}{\numberline {5.2}Materials and Methods}{145}{section.5.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.1}Landscape Simulation}{145}{subsection.5.2.1}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.2}Movement Simulation}{146}{subsection.5.2.2}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.3}Data Rarefication}{147}{subsection.5.2.3}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.4}Computing Bursts}{147}{subsection.5.2.4}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.5}Fitting Distributions}{148}{subsection.5.2.5}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.6}Step-Selection Functions}{148}{subsection.5.2.6}%
+\penalty 10000
+\contentsline {subsection}{\numberline {5.2.7}Conditional Logistic Regression Model}{150}{subsection.5.2.7}%
+\penalty 10000
+\contentsline {section}{\numberline {5.3}Results}{151}{section.5.3}%
+\penalty 10000
+\contentsline {section}{\numberline {5.4}Case Study}{151}{section.5.4}%
+\penalty 10000
+\contentsline {section}{\numberline {5.5}Discussion}{155}{section.5.5}%
+\contentsline {section}{Appendices}{161}{appendix*.84}%
+\setcounter {tocdepth}{0}
+\penalty 10000
+\contentsline {section}{Appendix \numberline {5.A}Landscape Simulation: Different Autocorrelation Scenarios}{162}{section.4.5.A}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {5.B}Dynamic Tentative Distribution Parameters}{163}{section.4.5.B}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {5.C}Distribution of Relative Turning Angles following Different Step Durations}{164}{section.4.5.C}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {5.D}Model Estimates across all Scenarios}{165}{section.4.5.D}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {5.E}Case Study Covariates}{166}{section.4.5.E}%
+\penalty 10000
+\contentsline {section}{Appendix \numberline {5.F}Case Study Model Output}{167}{section.4.5.F}%
+\setcounter {tocdepth}{1}
+\contentsline {chapter}{\numberline {6}General Discussion}{169}{appendix.6}%
+\penalty 10000
+\contentsline {section}{\numberline {6.1}A Fresh Take on Connectivity}{170}{section.6.1}%
+\penalty 10000
+\contentsline {section}{\numberline {6.2}Conservation Insights}{173}{section.6.2}%
+\penalty 10000
+\contentsline {section}{\numberline {6.3}Methodological Considerations and Limitations}{174}{section.6.3}%
+\penalty 10000
+\contentsline {section}{\numberline {6.4}Ecological Considerations and Limitations}{177}{section.6.4}%
+\penalty 10000
+\contentsline {section}{\numberline {6.5}Conclusion}{180}{section.6.5}%
+\contentsline {chapter}{Acknowledgements}{182}{appendix*.94}%
+\contentsline {chapter}{Appendix \numberline {}Additional Works}{188}{appendix.5.}%
+\penalty 10000
+\contentsline {section}{\numberline {A.1}Cameratrap Survey}{189}{section.5..1}%
+\penalty 10000
+\contentsline {section}{\numberline {A.2}Supervised Theses}{190}{section.5..2}%
+\penalty 10000
+\contentsline {section}{\numberline {A.3}R-Packages}{193}{section.5..3}%
+\contentsline {chapter}{References}{195}{appendix*.99}%

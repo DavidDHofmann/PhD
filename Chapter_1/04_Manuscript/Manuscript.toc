@@ -1,0 +1,23 @@
+\babel@toc {english}{}
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Methods}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Case Study}{3}{subsection.2.1}%
+\contentsline {subsubsection}{\numberline {2.1.1}GPS Data}{3}{subsubsection.2.1.1}%
+\contentsline {subsubsection}{\numberline {2.1.2}Study Area}{4}{subsubsection.2.1.2}%
+\contentsline {subsubsection}{\numberline {2.1.3}Habitat Covariates}{4}{subsubsection.2.1.3}%
+\contentsline {subsection}{\numberline {2.2}Step 1 - Movement Model}{4}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Step 2 - Dispersal Simulation}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Step 3 - Connectivity Maps}{7}{subsection.2.4}%
+\contentsline {subsubsection}{\numberline {2.4.1}Heatmap}{7}{subsubsection.2.4.1}%
+\contentsline {subsubsection}{\numberline {2.4.2}Betweenness Map}{8}{subsubsection.2.4.2}%
+\contentsline {subsubsection}{\numberline {2.4.3}Inter-Patch Connectivity Map}{8}{subsubsection.2.4.3}%
+\contentsline {section}{\numberline {3}Results}{9}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Dispersal Simulation}{9}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Heatmap}{10}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}Betweenness}{10}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Inter-Patch Connectivity}{11}{subsection.3.4}%
+\contentsline {section}{\numberline {4}Discussion}{11}{section.4}%
+\contentsline {section}{\numberline {5}Authors' Contributions}{16}{section.5}%
+\contentsline {section}{\numberline {6}Data Availability}{16}{section.6}%
+\contentsline {section}{\numberline {7}Acknowledgements}{17}{section.7}%
+\contentsline {section}{\numberline {8}Conflict of Interest}{17}{section.8}%

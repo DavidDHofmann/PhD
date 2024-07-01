@@ -1,0 +1,23 @@
+[0] Config.pm:307> INFO - This is Biber 2.17
+[0] Config.pm:310> INFO - Logfile is 'FinalThesis.blg'
+[75] biber:340> INFO - === Do Mai 16, 2024, 23:13:53
+[91] Biber.pm:418> INFO - Reading 'FinalThesis.bcf'
+[731] Biber.pm:972> INFO - Found 372 citekeys in bib section 0
+[750] Biber.pm:4383> INFO - Processing section 0
+[758] Biber.pm:4574> INFO - Looking for bibtex file 'Literature.bib' for section 0
+[842] bibtex.pm:1713> INFO - LaTeX decoding ...
+[2202] bibtex.pm:1518> INFO - Found BibTeX data source 'Literature.bib'
+[6185] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[6185] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[6185] Biber.pm:4203> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[6185] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[7420] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[7421] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[7421] Biber.pm:4203> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[7421] Biber.pm:4209> INFO - No sort tailoring available for locale 'en-US'
+[8092] bbl.pm:654> INFO - Writing 'FinalThesis.bbl' with encoding 'UTF-8'
+[8960] bbl.pm:757> INFO - Output to FinalThesis.bbl
+[8960] Biber.pm:130> WARN - ISBN '978-1-4614-6867-7 978-1-4614-6868-4' in entry 'Eddelbuettel.2013' is invalid - run biber with '--validate_datamodel' for details.
+[8960] Biber.pm:130> WARN - ISBN '978-1-5106-1318-8 978-1-5106-1319-5' in entry 'Main-Knorn.2017' is invalid - run biber with '--validate_datamodel' for details.
+[8960] Biber.pm:130> WARN - ISBN '978-4-431-87770-7 978-4-431-87771-4' in entry 'Cushman.2010a' is invalid - run biber with '--validate_datamodel' for details.
+[8960] Biber.pm:132> INFO - WARNINGS: 3
