@@ -2,9 +2,9 @@
 
 
 This repository contains all R-scripts and ($\LaTeX$) files from David D.
-Hofmann's PhD thesis, entitled *Dispersal through Physical, Seasonal, and
+Hofmann's PhD thesis, entitled *Dispersal & Connectivity in Physical, Seasonal, and
 Extreme Landscapes*. The associated data is either hosted on dedicated
-repositories (e.g., dryad) or can be shared upon reasonable request. The
+repositories (e.g., Dryad) or can be shared upon reasonable request. The
 repository contains the following chapters.
 
 - `Chapter_1`: *A Three-Step Approach for Assessing Landscape Connectivity vis
