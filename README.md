@@ -1,4 +1,6 @@
-# Dispersal through Physical, Seasonal, and Extreme Landscapes (PhD Thesis)
+![](Titlepage.png)
+
+
 This repository contains all R-scripts and ($\LaTeX$) files from David D.
 Hofmann's PhD thesis, entitled *Dispersal through Physical, Seasonal, and
 Extreme Landscapes*. The associated data is either hosted on dedicated
