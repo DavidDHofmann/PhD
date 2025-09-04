@@ -21,7 +21,7 @@ library(ggstance)      # To plot pointranges
 library(ggdark)        # Access to dark themes
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load results from pan mapping

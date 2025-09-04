@@ -14,7 +14,7 @@ library(lubridate)    # To handle dates
 library(randomForest) # To handle random forest models
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Need to ensure the following versions are installed!

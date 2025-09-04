@@ -7,7 +7,7 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -107,7 +107,7 @@ p2 <- ggplot(subset(rank, Formula == "Complex Formula"), aes(x = ModelCode, y = 
   ylab("Spearman's Rank Correlation")
 
 # Store the plot to file
-ggsave("/home/david/ownCloud/University/15. PhD/Chapter_3/05_Presentation/RankCorrelationSimple.png"
+ggsave("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/05_Presentation/RankCorrelationSimple.png"
   , plot   = p1
   , device = png
   , bg     = "transparent"
@@ -117,7 +117,7 @@ ggsave("/home/david/ownCloud/University/15. PhD/Chapter_3/05_Presentation/RankCo
 )
 
 # Store the plot to file
-ggsave("/home/david/ownCloud/University/15. PhD/Chapter_3/05_Presentation/RankCorrelationComplex.png"
+ggsave("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/05_Presentation/RankCorrelationComplex.png"
   , plot   = p2
   , device = png
   , bg     = "transparent"

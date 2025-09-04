@@ -7,13 +7,6 @@ Abrahms, B., Sawyer, S.~C., Jordan, N.~R., McNutt, J.~W., Wilson, A.~M., and
   Conservation}}?
 \newblock {\em Journal of Applied Ecology}, 54(2):412--422.
 
-\bibitem[Adriaensen et~al., 2003]{Adriaensen.2003}
-Adriaensen, F., Chardon, J., De~Blust, G., Swinnen, E., Villalba, S., Gulinck,
-  H., and Matthysen, E. (2003).
-\newblock The {{Application}} of `{{Least-Cost}}' {{Modelling}} as a
-  {{Functional Landscape Model}}.
-\newblock {\em Landscape and Urban Planning}, 64(4):233--247.
-
 \bibitem[Allen et~al., 2016]{Allen.2016}
 Allen, C.~H., Parrott, L., and Kyle, C. (2016).
 \newblock An {{Individual-Based Modelling Approach}} to {{Estimate Landscape
@@ -70,14 +63,6 @@ Benz, R.~A., Boyce, M.~S., Thurfjell, H., Paton, D.~G., Musiani, M., Dormann,
 \newblock Dispersal {{Ecology Informs Design}} of {{Large-Scale Wildlife
   Corridors}}.
 \newblock {\em PLoS ONE}, 11(9):e0162989.
-
-\bibitem[Beyer et~al., 2010]{Beyer.2010}
-Beyer, H.~L., Haydon, D.~T., Morales, J.~M., Frair, J.~L., Hebblewhite, M.,
-  Mitchell, M., and Matthiopoulos, J. (2010).
-\newblock The {{Interpretation}} of {{Habitat Preference Metrics Under
-  Use}}--{{Availability Designs}}.
-\newblock {\em Philosophical Transactions of the Royal Society B: Biological
-  Sciences}, 365(1550):2245--2254.
 
 \bibitem[{Bishop-Taylor} et~al., 2018]{Bishop-Taylor.2018}
 {Bishop-Taylor}, R., Tulbure, M.~G., and Broich, M. (2018).
@@ -224,14 +209,6 @@ Fattebert, J., Robinson, H.~S., Balme, G., Slotow, R., and Hunter, L. (2015).
   {{Large Carnivore}}: {{How Leopards Change Spots}}.
 \newblock {\em Ecological Applications}, 25(7):1911--1921.
 
-\bibitem[Fieberg et~al., 2010]{Fieberg.2010}
-Fieberg, J., Matthiopoulos, J., Hebblewhite, M., Boyce, M.~S., and Frair, J.~L.
-  (2010).
-\newblock Correlation and {{Studies}} of {{Habitat Selection}}: {{Problem}},
-  {{Red Herring}} or {{Opportunity}}?
-\newblock {\em Philosophical Transactions of the Royal Society B: Biological
-  Sciences}, 365(1550):2233--2244.
-
 \bibitem[Fieberg et~al., 2021]{Fieberg.2021}
 Fieberg, J., Signer, J., Smith, B., and Avgar, T. (2021).
 \newblock A `{{How}} to' {{Guide}} for {{Interpreting Parameters}} in
@@ -244,6 +221,12 @@ Finerty, G.~E., Cushman, S.~A., Bauer, D.~T., Elliot, N.~B., Kesch, M.~K.,
 \newblock Evaluating {{Connectivity Models}} for {{Conservation}}: {{Insights}}
   from {{African Lion Dispersal Patterns}}.
 \newblock {\em Landscape Ecology}, 38(12):3205--3219.
+
+\bibitem[Forrest et~al., 2024]{Forrest.2024}
+Forrest, S.~W., Pagendam, D., Bode, M., Drovandi, C., Potts, J.~R., Perry, J.,
+  Vanderduys, E., and Hoskins, A.~J. (2024).
+\newblock Simulating {{Animal Movement Trajectories}} from {{Temporally Dynamic
+  Step Selection Functions}}.
 
 \bibitem[Fortin et~al., 2005]{Fortin.2005}
 Fortin, D., Beyer, H.~L., Boyce, M.~S., Smith, D.~W., Duchesne, T., and Mao,
@@ -315,7 +298,6 @@ Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
 Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2024).
 \newblock Dispersal and {{Connectivity}} in {{Increasingly Extreme Climatic
   Conditions}}.
-\newblock {\em Global Change Biology}.
 
 \bibitem[Hofmann et~al., 2023]{Hofmann.2023}
 Hofmann, D.~D., Cozzi, G., McNutt, J.~W., Ozgul, A., and Behr, D.~M. (2023).
@@ -390,13 +372,6 @@ McCarthy, J.~M., Gumbricht, T., McCarthy, T., Frost, P., Wessels, K., and
   between 1972 and 2000.
 \newblock {\em AMBIO: A Journal of the Human Environment}, 32(7):453--457.
 
-\bibitem[McCarthy et~al., 1997]{McCarthy.1997}
-McCarthy, T., Barry, M., Bloem, A., Ellery, W., Heister, H., Merry, C.,
-  R{\"o}ther, H., and Sternberg, H. (1997).
-\newblock The {{Gradient}} of the {{Okavango Fan}}, {{Botswana}}, and {{Its
-  Sedimentological}} and {{Tectonic Implications}}.
-\newblock {\em Journal of African Earth Sciences}, 24(1-2):65--78.
-
 \bibitem[McClure et~al., 2016]{McClure.2016}
 McClure, M.~L., Hansen, A.~J., and Inman, R.~M. (2016).
 \newblock Connecting {{Models}} to {{Movements}}: {{Testing Connectivity Model
@@ -407,12 +382,6 @@ McClure, M.~L., Hansen, A.~J., and Inman, R.~M. (2016).
 McNutt, J.~W. (1996).
 \newblock Sex-{{Biased Dispersal}} in {{African Wild Dogs}}, {{Lycaon}} pictus.
 \newblock {\em Animal Behaviour}, 52(6):1067--1077.
-
-\bibitem[McRae et~al., 2008]{McRae.2008}
-McRae, B.~H., Dickson, B.~G., Keitt, T.~H., and Shah, V.~B. (2008).
-\newblock Using {{Circuit Theory}} to {{Model Connectivity}} in {{Ecology}},
-  {{Evolution}}, and {{Conservation}}.
-\newblock {\em Ecology}, 89(10):2712--2724.
 
 \bibitem[Mendelsohn et~al., 2010]{Mendelsohn.2010}
 Mendelsohn, J.~M., Vander~Post, C., Ramberg, L., {Murray-Hudson}, M., Wolski,
@@ -475,12 +444,6 @@ Osipova, L., Okello, M.~M., Njumbi, S.~J., Ngene, S., Western, D., Hayward,
   Across Individuals}} and {{Seasons}}.
 \newblock {\em Animal Conservation}, 22(1):35--48.
 
-\bibitem[Otis and White, 1999]{Otis.1999}
-Otis, D.~L. and White, G.~C. (1999).
-\newblock Autocorrelation of {{Location Estimates}} and the {{Analysis}} of
-  {{Radiotracking Data}}.
-\newblock {\em The Journal of Wildlife Management}, 63(3):1039--1044.
-
 \bibitem[{P{\'e}rez-Goya} et~al., 2020]{Perez-Goya.2020}
 {P{\'e}rez-Goya}, U., {Montesino-SanMartin}, M., Militino, A.~F., and Ugarte,
   M.~D. (2020).
@@ -492,6 +455,12 @@ Perrin, N. and Mazalov, V. (2000).
 \newblock Local {{Competition}}, {{Inbreeding}}, and the {{Evolution}} of
   {{Sex}}-{{Biased Dispersal}}.
 \newblock {\em The American Naturalist}, 155(1):116--127.
+
+\bibitem[Potts and B{\"o}rger, 2023]{Potts.2023}
+Potts, J.~R. and B{\"o}rger, L. (2023).
+\newblock How to {{Scale}} up from {{Animal Movement Decisions}} to
+  {{Spatiotemporal Patterns}}: {{An Approach Via Step Selection}}.
+\newblock {\em Journal of Animal Ecology}, 92(1):16--29.
 
 \bibitem[Puy and Saltelli, 2022]{Puy.2022}
 Puy, A. and Saltelli, A. (2022).
@@ -515,6 +484,12 @@ Rabaiotti, D. and Woodroffe, R. (2019).
 \newblock Coping with {{Climate Change}}: {{Limited Behavioral Responses}} to
   {{Hot Weather}} in a {{Tropical Carnivore}}.
 \newblock {\em Oecologia}, 189(3):587--599.
+
+\bibitem[Rafiq et~al., 2024]{Rafiq.2024}
+Rafiq, K., Jordan, N.~R., McNutt, J.~W., Neelo, J., Attias, N., Boersma, D.,
+  Palmer, M.~S., Ruesink, J., and Abrahms, B. (2024).
+\newblock The {{Value}} of {{Field Research}} in {{Academia}}.
+\newblock {\em Science}, 384(6698):855--856.
 
 \bibitem[Ramberg et~al., 2006]{Ramberg.2006}
 Ramberg, L., Hancock, P., Lindholm, M., Meyer, T., Ringrose, S., Sliva, J.,
@@ -583,14 +558,6 @@ Simpkins, C.~E. and Perry, G.~L. (2017).
   Application}} in {{Ecological Research}}.
 \newblock {\em Behavioral Ecology and Sociobiology}, 77(2):21.
 
-\bibitem[Squires et~al., 2013]{Squires.2013}
-Squires, J.~R., DeCesare, N.~J., Olson, L.~E., Kolbe, J.~A., Hebblewhite, M.,
-  and Parks, S.~A. (2013).
-\newblock Combining {{Resource Selection}} and {{Movement Behavior}} to
-  {{Predict Corridors}} for {{Canada Lynx}} at {{Their Southern Range
-  Periphery}}.
-\newblock {\em Biological Conservation}, 157:187--195.
-
 \bibitem[Taylor et~al., 1993]{Taylor.1993}
 Taylor, P.~D., Fahrig, L., Henein, K., and Merriam, G. (1993).
 \newblock Connectivity {{Is}} a {{Vital Element}} of {{Landscape Structure}}.
@@ -600,12 +567,6 @@ Taylor, P.~D., Fahrig, L., Henein, K., and Merriam, G. (1993).
 Thieurmel, B. and Elmarhraoui, A. (2022).
 \newblock {\em Suncalc: {{Compute Sun Position}}, {{Sunlight Phases}}, {{Moon
   Position}} and {{Lunar Phase}}}.
-
-\bibitem[Thurfjell et~al., 2014]{Thurfjell.2014}
-Thurfjell, H., Ciuti, S., and Boyce, M.~S. (2014).
-\newblock Applications of {{Step-Selection Functions}} in {{Ecology}} and
-  {{Conservation}}.
-\newblock {\em Movement Ecology}, 2(1):4.
 
 \bibitem[Tiecke et~al., 2017]{Tiecke.2017}
 Tiecke, T.~G., Liu, X., Zhang, A., Gros, A., Li, N., Yetman, G., Kilic, T.,
@@ -623,13 +584,13 @@ Turchin, P. (1998).
   {{Modeling Population Redistribution}} in {{Animals}} and {{Plants}}}.
 \newblock Sinauer Associates, Sunderland, Mass.
 
-\bibitem[Unnithan~Kumar et~al., 2022a]{UnnithanKumar.2022a}
+\bibitem[Unnithan~Kumar et~al., 2022a]{UnnithanKumar.2022}
 Unnithan~Kumar, S., Kaszta, {\.Z}., and Cushman, S.~A. (2022a).
 \newblock Pathwalker: {{A New Individual-Based Movement Model}} for
   {{Conservation Science}} and {{Connectivity Modelling}}.
 \newblock {\em ISPRS International Journal of Geo-Information}, 11(6):329.
 
-\bibitem[Unnithan~Kumar et~al., 2022b]{UnnithanKumar.2022}
+\bibitem[Unnithan~Kumar et~al., 2022b]{UnnithanKumar.2022a}
 Unnithan~Kumar, S., Turnbull, J., Hartman~Davies, O., Hodgetts, T., and
   Cushman, S.~A. (2022b).
 \newblock Moving {{Beyond Landscape Resistance}}: {{Considerations}} for the
@@ -671,18 +632,17 @@ Wood, S.~N. (2011).
 \newblock {\em Journal of the Royal Statistical Society Series B: Statistical
   Methodology}, 73(1):3--36.
 
-\bibitem[Woodroffe and Donnelly, 2011]{Woodroffe.2011}
-Woodroffe, R. and Donnelly, C.~A. (2011).
-\newblock Risk of {{Contact Between Endangered African Wild Dogs Lycaon
-  Pictus}} and {{Domestic Dogs}}: {{Opportunities}} for {{Pathogen
-  Transmission}}.
-\newblock {\em Journal of Applied Ecology}, 48(6):1345--1354.
+\bibitem[Woodroffe, 2011]{Woodroffe.2011}
+Woodroffe, R. (2011).
+\newblock Ranging {{Behaviour}} of {{African Wild Dog Packs}} in a
+  {{Human-Dominated Landscape}}: {{Ranging Behaviour}} of {{African Wild
+  Dogs}}.
+\newblock {\em Journal of Zoology}, 283(2):88--97.
 
-\bibitem[Woodroffe et~al., 2020]{Woodroffe.2020a}
-Woodroffe, R., Rabaiotti, D., Ngatia, D.~K., Smallwood, T. R.~C., Strebel, S.,
-  and O'Neill, H. M.~K. (2020).
-\newblock Dispersal {{Behaviour}} of {{African Wild Dogs}} in {{Kenya}}.
-\newblock {\em African Journal of Ecology}, 58(1):46--57.
+\bibitem[Woodroffe and {Sillero-Zubiri}, 2020]{Woodroffe.2020a}
+Woodroffe, R. and {Sillero-Zubiri}, C. (2020).
+\newblock Lycaon pictus (amended version of 2012 assessment).
+\newblock {\em The IUCN Red List of Threatened Species}, 2020.
 
 \bibitem[Xiong et~al., 2017]{Xiong.2017}
 Xiong, J., Thenkabail, P., Tilton, J., Gumma, M., Teluguntla, P., Oliphant, A.,

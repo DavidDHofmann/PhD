@@ -7,7 +7,7 @@
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -220,8 +220,8 @@ dat <- dir(
 ext <- ext(dat)
 
 # We also want to add other waterbodies in the background
-water1 <- rast("/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif")
-water2 <- rast("/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
+water1 <- rast("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/03_Data/02_CleanData/01_LandCover_WaterCoverStatic.tif")
+water2 <- rast("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/03_Data/02_CleanData/03_LandscapeFeatures_Rivers.tif")
 water1[ext] <- 0
 water <- max(water1, water2)
 

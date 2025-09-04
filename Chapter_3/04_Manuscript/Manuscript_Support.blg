@@ -4,45 +4,45 @@ The top-level auxiliary file: Manuscript_Support.aux
 The style file: apalike.bst
 Database file #1: LiteratureBibtex.bib
 Warning--empty journal in Storey.2005
-You've used 13 entries,
+You've used 27 entries,
             1935 wiz_defined-function locations,
-            559 strings with 6874 characters,
-and the built_in function-call counts, 5268 in all, are:
-= -- 476
-> -- 328
-< -- 5
-+ -- 117
-- -- 115
-* -- 482
-:= -- 980
-add.period$ -- 35
-call.type$ -- 13
-change.case$ -- 121
-chr.to.int$ -- 13
-cite$ -- 14
-duplicate$ -- 170
-empty$ -- 295
-format.name$ -- 132
-if$ -- 974
+            645 strings with 10918 characters,
+and the built_in function-call counts, 11962 in all, are:
+= -- 1074
+> -- 828
+< -- 9
++ -- 299
+- -- 297
+* -- 1120
+:= -- 2213
+add.period$ -- 72
+call.type$ -- 27
+change.case$ -- 278
+chr.to.int$ -- 27
+cite$ -- 28
+duplicate$ -- 356
+empty$ -- 621
+format.name$ -- 330
+if$ -- 2200
 int.to.chr$ -- 1
 int.to.str$ -- 0
-missing$ -- 9
-newline$ -- 63
-num.names$ -- 41
-pop$ -- 104
+missing$ -- 17
+newline$ -- 127
+num.names$ -- 85
+pop$ -- 245
 preamble$ -- 1
-purify$ -- 121
+purify$ -- 279
 quote$ -- 0
-skip$ -- 130
+skip$ -- 275
 stack$ -- 0
-substring$ -- 245
-swap$ -- 11
-text.length$ -- 1
+substring$ -- 560
+swap$ -- 30
+text.length$ -- 2
 text.prefix$ -- 0
 top$ -- 0
-type$ -- 78
+type$ -- 162
 warning$ -- 1
-while$ -- 34
+while$ -- 75
 width$ -- 0
-write$ -- 158
+write$ -- 323
 (There was 1 warning)

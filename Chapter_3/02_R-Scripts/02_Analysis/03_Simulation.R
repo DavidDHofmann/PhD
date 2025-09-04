@@ -7,7 +7,7 @@
 rm(list = ls())
 
 # Change the working directory
-setwd("/home/david/ownCloud/University/15. PhD/Chapter_3")
+setwd("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3")
 
 # Load required packages
 # library(raster)         # To handle spatial data

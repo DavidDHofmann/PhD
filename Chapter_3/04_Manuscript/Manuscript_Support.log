@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.15)  12 MAY 2024 21:11
+This is pdfTeX, Version 3.141592653-2.6-1.40.22 (TeX Live 2022/dev/Debian) (preloaded format=pdflatex 2024.3.15)  11 AUG 2025 09:33
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -618,31 +618,67 @@ Package: lineno 2005/11/02 line numbers on paragraphs v4.41
 \bframesep=\dimen308
 \bframebox=\box68
 LaTeX Info: Redefining \\ on input line 3056.
+) (/usr/share/texlive/texmf-dist/tex/latex/tocloft/tocloft.sty
+Package: tocloft 2017/08/31 v2.3i parameterised ToC, etc., typesetting
+Package tocloft Info: The document has section divisions on input line 51.
+\cftparskip=\skip69
+\cftbeforetoctitleskip=\skip70
+\cftaftertoctitleskip=\skip71
+\cftbeforepartskip=\skip72
+\cftpartnumwidth=\skip73
+\cftpartindent=\skip74
+\cftbeforesecskip=\skip75
+\cftsecindent=\skip76
+\cftsecnumwidth=\skip77
+\cftbeforesubsecskip=\skip78
+\cftsubsecindent=\skip79
+\cftsubsecnumwidth=\skip80
+\cftbeforesubsubsecskip=\skip81
+\cftsubsubsecindent=\skip82
+\cftsubsubsecnumwidth=\skip83
+\cftbeforeparaskip=\skip84
+\cftparaindent=\skip85
+\cftparanumwidth=\skip86
+\cftbeforesubparaskip=\skip87
+\cftsubparaindent=\skip88
+\cftsubparanumwidth=\skip89
+\cftbeforeloftitleskip=\skip90
+\cftafterloftitleskip=\skip91
+\cftbeforefigskip=\skip92
+\cftfigindent=\skip93
+\cftfignumwidth=\skip94
+\c@lofdepth=\count340
+\c@lotdepth=\count341
+\cftbeforelottitleskip=\skip95
+\cftafterlottitleskip=\skip96
+\cftbeforetabskip=\skip97
+\cfttabindent=\skip98
+\cfttabnumwidth=\skip99
 ) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
 File: tikzlibrarysvg.path.code.tex 2021/05/15 v3.1.9a (3.1.9a)
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
 File: pgflibrarysvg.path.code.tex 2021/05/15 v3.1.9a (3.1.9a)
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/modules/pgfmoduleparser.code.tex
 File: pgfmoduleparser.code.tex 2021/05/15 v3.1.9a (3.1.9a)
-\pgfparserdef@arg@count=\count340
+\pgfparserdef@arg@count=\count342
 )
 \pgf@lib@svg@last@x=\dimen309
 \pgf@lib@svg@last@y=\dimen310
 \pgf@lib@svg@last@c@x=\dimen311
 \pgf@lib@svg@last@c@y=\dimen312
-\pgf@lib@svg@count=\count341
-\pgf@lib@svg@max@num=\count342
+\pgf@lib@svg@count=\count343
+\pgf@lib@svg@max@num=\count344
 )) (/usr/share/texlive/texmf-dist/tex/latex/natbib/natbib.sty
 Package: natbib 2010/09/13 8.31b (PWD, AO)
-\bibhang=\skip69
-\bibsep=\skip70
+\bibhang=\skip100
+\bibsep=\skip101
 LaTeX Info: Redefining \cite on input line 694.
-\c@NAT@ctr=\count343
+\c@NAT@ctr=\count345
 )
-Package hyperref Info: Option `colorlinks' set `true' on input line 114.
+Package hyperref Info: Option `colorlinks' set `true' on input line 120.
  (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2022-01-12 L3 backend support: PDF output (pdfTeX)
-\l__color_backend_stack_int=\count344
+\l__color_backend_stack_int=\count346
 \l__pdf_internal_box=\box69
 )
 
@@ -652,24 +688,24 @@ LaTeX Warning: Unused global option(s):
 (./Manuscript_Support.aux)
 \openout1 = `Manuscript_Support.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 201.
-LaTeX Font Info:    ... okay on input line 201.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 206.
+LaTeX Font Info:    ... okay on input line 206.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -707,16 +743,16 @@ LaTeX Font Info:    ... okay on input line 201.
 
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count345
+\scratchcounter=\count347
 \scratchdimen=\dimen313
 \scratchbox=\box70
-\nofMPsegments=\count346
-\nofMParguments=\count347
+\nofMPsegments=\count348
+\nofMParguments=\count349
 \everyMPshowfont=\toks44
-\MPscratchCnt=\count348
+\MPscratchCnt=\count350
 \MPscratchDim=\dimen314
-\MPnumerator=\count349
-\makeMPintoPDFobject=\count350
+\MPnumerator=\count351
+\makeMPintoPDFobject=\count352
 \everyMPtoPDFconversion=\toks45
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -732,19 +768,19 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \symgns@font=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `gns@font' in version `bold'
-(Font)                  TS1/cmr/m/n --> TS1/cmr/b/n on input line 201.
-Package gensymb Info: Math companion symbols declared on input line 201.
-LaTeX Info: Redefining \degree on input line 201.
-LaTeX Info: Redefining \celsius on input line 201.
-Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 201.
-LaTeX Info: Redefining \ohm on input line 201.
-Package gensymb Info: Using \textohm for \ohm on input line 201.
-Package gensymb Info: Using \textmu for \micro on input line 201.
+(Font)                  TS1/cmr/m/n --> TS1/cmr/b/n on input line 206.
+Package gensymb Info: Math companion symbols declared on input line 206.
+LaTeX Info: Redefining \degree on input line 206.
+LaTeX Info: Redefining \celsius on input line 206.
+Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 206.
+LaTeX Info: Redefining \ohm on input line 206.
+Package gensymb Info: Using \textohm for \ohm on input line 206.
+Package gensymb Info: Using \textmu for \micro on input line 206.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 201.
+Package hyperref Info: Link coloring ON on input line 206.
  (/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
 Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
  (/usr/share/texlive/texmf-dist/tex/latex/refcount/refcount.sty
@@ -752,160 +788,128 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 ) (/usr/share/texlive/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count351
+\c@section@level=\count353
 )
-LaTeX Info: Redefining \ref on input line 201.
-LaTeX Info: Redefining \pageref on input line 201.
-LaTeX Info: Redefining \nameref on input line 201.
+LaTeX Info: Redefining \ref on input line 206.
+LaTeX Info: Redefining \pageref on input line 206.
+LaTeX Info: Redefining \nameref on input line 206.
  (./Manuscript_Support.out) (./Manuscript_Support.out)
 \@outlinefile=\write4
 \openout4 = `Manuscript_Support.out'.
 
-LaTeX Font Info:    Trying to load font information for U+msa on input line 208.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 213.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 208.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 213.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) [1
 
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Manuscript_Support.toc
-Overfull \hbox (2.63878pt too wide) detected at line 2
-\OT1/cmr/bx/n/10 A.1 
- []
-
-
-Overfull \hbox (2.63878pt too wide) detected at line 10
-\OT1/cmr/bx/n/10 A.2 
- []
-
-
-Overfull \hbox (2.63878pt too wide) detected at line 11
-\OT1/cmr/bx/n/10 A.3 
- []
-
-
-Overfull \hbox (2.63878pt too wide) detected at line 12
-\OT1/cmr/bx/n/10 A.4 
- []
-
-
-Overfull \hbox (2.63878pt too wide) detected at line 13
-\OT1/cmr/bx/n/10 A.5 
- []
-
-
-Overfull \hbox (2.63878pt too wide) detected at line 14
-\OT1/cmr/bx/n/10 A.6 
- []
-
-
-Overfull \hbox (2.63878pt too wide) detected at line 15
-\OT1/cmr/bx/n/10 A.7 
- []
-
-)
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Manuscript_Support.toc)
 \tf@toc=\write5
 \openout5 = `Manuscript_Support.toc'.
 
- [1]
-<Figures/Pan.jpg, id=104, 2069.7325pt x 1608.0075pt>
-File: Figures/Pan.jpg Graphic file (type jpg)
-<use Figures/Pan.jpg>
-Package pdftex.def Info: Figures/Pan.jpg  used on input line 285.
-(pdftex.def)             Requested size: 398.3386pt x 309.47493pt.
- (./Figures/Satellites.tex) (./GeneralMetrics/TrainingTotal.tex) (./GeneralMetrics/TrainingDryland.tex) (./GeneralMetrics/TrainingWater.tex) (./GeneralMetrics/TrainingWetpan.tex) (./GeneralMetrics/TrainingDates.tex) [2] [3 <./Figures/Pan.jpg>]
-<Figures/PanMapping.pdf, id=125, 796.6487pt x 448.10245pt>
-File: Figures/PanMapping.pdf Graphic file (type pdf)
-<use Figures/PanMapping.pdf>
-Package pdftex.def Info: Figures/PanMapping.pdf  used on input line 353.
-(pdftex.def)             Requested size: 398.3386pt x 224.06433pt.
- [4] (./Figures/ND.tex) (./GeneralMetrics/PercentageTrainingWetpan.tex) [5 <./Figures/PanMapping.pdf>]
-<Figures/Reflectances.png, id=199, 722.7pt x 867.24pt>
-File: Figures/Reflectances.png Graphic file (type png)
-<use Figures/Reflectances.png>
-Package pdftex.def Info: Figures/Reflectances.png  used on input line 435.
-(pdftex.def)             Requested size: 398.3386pt x 478.00243pt.
-<Figures/ClassificationValidation.png, id=201, 693.792pt x 433.62pt>
-File: Figures/ClassificationValidation.png Graphic file (type png)
-<use Figures/ClassificationValidation.png>
-Package pdftex.def Info: Figures/ClassificationValidation.png  used on input line 459.
-(pdftex.def)             Requested size: 398.3386pt x 248.95903pt.
- (./GeneralMetrics/NumberTilesTotal.tex) (./GeneralMetrics/NumberTiles2A.tex) (./GeneralMetrics/NumberTiles1C.tex) [6] [7 <./Figures/Reflectances.png (PNG copy)>] [8 <./Figures/ClassificationValidation.png (PNG copy)>]
-<Figures/MovingWindows.png, id=231, 520.344pt x 390.0171pt>
-File: Figures/MovingWindows.png Graphic file (type png)
-<use Figures/MovingWindows.png>
-Package pdftex.def Info: Figures/MovingWindows.png  used on input line 497.
-(pdftex.def)             Requested size: 398.3386pt x 298.58229pt.
-<Figures/MovingWindows2.png, id=232, 520.344pt x 520.344pt>
-File: Figures/MovingWindows2.png Graphic file (type png)
-<use Figures/MovingWindows2.png>
-Package pdftex.def Info: Figures/MovingWindows2.png  used on input line 510.
-(pdftex.def)             Requested size: 398.3386pt x 398.35562pt.
- [9 <./Figures/MovingWindows.png (PNG copy)>] [10 <./Figures/MovingWindows2.png (PNG copy)>]
-<Figures/Moonlight.png, id=246, 433.62pt x 433.62pt>
+ [1] [2]
+<Figures/Moonlight.png, id=172, 433.62pt x 433.62pt>
 File: Figures/Moonlight.png Graphic file (type png)
 <use Figures/Moonlight.png>
-Package pdftex.def Info: Figures/Moonlight.png  used on input line 538.
+Package pdftex.def Info: Figures/Moonlight.png  used on input line 350.
 (pdftex.def)             Requested size: 298.75394pt x 298.76805pt.
- [11 <./Figures/Moonlight.png (PNG copy)>]
+ [3]
 
 pdfTeX warning: pdflatex (file ./Figures/Light.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
-<Figures/Light.pdf, id=258, 711.31892pt x 540.60239pt>
+<Figures/Light.pdf, id=194, 711.31892pt x 540.60239pt>
 File: Figures/Light.pdf Graphic file (type pdf)
 <use Figures/Light.pdf>
-Package pdftex.def Info: Figures/Light.pdf  used on input line 554.
+Package pdftex.def Info: Figures/Light.pdf  used on input line 360.
 (pdftex.def)             Requested size: 398.3386pt x 302.73526pt.
-[12 <./Figures/Light.pdf>] (./Figures/MovementModelStaticSimple.tex) (./Figures/MovementModelDynamicSimple.tex) (./Figures/MovementModelStaticFull.tex)
-Overfull \hbox (20.73154pt too wide) in paragraph at lines 615--617
+[4 <./Figures/Moonlight.png (PNG copy)>] [5 <./Figures/Light.pdf>]
+<Figures/Pan.jpg, id=250, 2069.7325pt x 1608.0075pt>
+File: Figures/Pan.jpg Graphic file (type jpg)
+<use Figures/Pan.jpg>
+Package pdftex.def Info: Figures/Pan.jpg  used on input line 408.
+(pdftex.def)             Requested size: 398.3386pt x 309.47493pt.
+ (./Figures/Satellites.tex) (./GeneralMetrics/TrainingTotal.tex) (./GeneralMetrics/TrainingDryland.tex) (./GeneralMetrics/TrainingWater.tex) (./GeneralMetrics/TrainingWetpan.tex) (./GeneralMetrics/TrainingDates.tex) [6] [7 <./Figures/Pan.jpg>]
+<Figures/PanMapping.pdf, id=269, 796.6487pt x 448.10245pt>
+File: Figures/PanMapping.pdf Graphic file (type pdf)
+<use Figures/PanMapping.pdf>
+Package pdftex.def Info: Figures/PanMapping.pdf  used on input line 476.
+(pdftex.def)             Requested size: 398.3386pt x 224.06433pt.
+ [8] (./Figures/ND.tex) (./GeneralMetrics/PercentageTrainingWetpan.tex) [9 <./Figures/PanMapping.pdf>]
+<Figures/Reflectances.png, id=340, 722.7pt x 867.24pt>
+File: Figures/Reflectances.png Graphic file (type png)
+<use Figures/Reflectances.png>
+Package pdftex.def Info: Figures/Reflectances.png  used on input line 558.
+(pdftex.def)             Requested size: 398.3386pt x 478.00243pt.
+<Figures/ClassificationValidation.png, id=342, 693.792pt x 433.62pt>
+File: Figures/ClassificationValidation.png Graphic file (type png)
+<use Figures/ClassificationValidation.png>
+Package pdftex.def Info: Figures/ClassificationValidation.png  used on input line 582.
+(pdftex.def)             Requested size: 398.3386pt x 248.95903pt.
+ (./GeneralMetrics/NumberTilesTotal.tex) (./GeneralMetrics/NumberTiles2A.tex) (./GeneralMetrics/NumberTiles1C.tex) [10] [11 <./Figures/Reflectances.png (PNG copy)>] [12 <./Figures/ClassificationValidation.png (PNG copy)>]
+<Figures/MovingWindows.png, id=372, 520.344pt x 390.0171pt>
+File: Figures/MovingWindows.png Graphic file (type png)
+<use Figures/MovingWindows.png>
+Package pdftex.def Info: Figures/MovingWindows.png  used on input line 620.
+(pdftex.def)             Requested size: 398.3386pt x 298.58229pt.
+<Figures/MovingWindows2.png, id=373, 520.344pt x 520.344pt>
+File: Figures/MovingWindows2.png Graphic file (type png)
+<use Figures/MovingWindows2.png>
+Package pdftex.def Info: Figures/MovingWindows2.png  used on input line 633.
+(pdftex.def)             Requested size: 398.3386pt x 398.35562pt.
+ [13 <./Figures/MovingWindows.png (PNG copy)>] [14 <./Figures/MovingWindows2.png (PNG copy)>] (./Figures/MovementModelStaticSimple.tex) (./Figures/MovementModelDynamicSimple.tex) (./Figures/MovementModelStaticFull.tex)
+Overfull \hbox (20.73154pt too wide) in paragraph at lines 682--684
  [] 
  []
+
+
+LaTeX Warning: Float too large for page by 15.11288pt on input line 685.
 
 (./Figures/MovementModelDynamicFull.tex)
-Overfull \hbox (20.73154pt too wide) in paragraph at lines 629--631
+Overfull \hbox (20.73154pt too wide) in paragraph at lines 696--698
  [] 
  []
 
 
-LaTeX Warning: Float too large for page by 15.11288pt on input line 632.
+LaTeX Warning: Float too large for page by 15.11288pt on input line 699.
 
-[13] [14] [15] [16]
-<Figures/Stability.png, id=331, 693.792pt x 578.16pt>
+[15] [16] [17] [18]
+<Figures/Stability.png, id=409, 693.792pt x 578.16pt>
 File: Figures/Stability.png Graphic file (type png)
 <use Figures/Stability.png>
-Package pdftex.def Info: Figures/Stability.png  used on input line 642.
+Package pdftex.def Info: Figures/Stability.png  used on input line 709.
 (pdftex.def)             Requested size: 398.3386pt x 331.94539pt.
- [17 <./Figures/Stability.png (PNG copy)>]
-<Figures/MovementModelInterpretation.png, id=337, 578.16pt x 361.35pt>
+ [19 <./Figures/Stability.png (PNG copy)>]
+<Figures/MovementModelInterpretation.png, id=415, 578.16pt x 361.35pt>
 File: Figures/MovementModelInterpretation.png Graphic file (type png)
 <use Figures/MovementModelInterpretation.png>
-Package pdftex.def Info: Figures/MovementModelInterpretation.png  used on input line 659.
+Package pdftex.def Info: Figures/MovementModelInterpretation.png  used on input line 726.
 (pdftex.def)             Requested size: 398.3386pt x 248.96234pt.
- [18 <./Figures/MovementModelInterpretation.png (PNG copy)>]
-<Figures/RankCorrelationNumberSteps.png, id=344, 650.43pt x 390.258pt>
+ [20 <./Figures/MovementModelInterpretation.png (PNG copy)>]
+<Figures/RankCorrelationNumberSteps.png, id=421, 650.43pt x 390.258pt>
 File: Figures/RankCorrelationNumberSteps.png Graphic file (type png)
 <use Figures/RankCorrelationNumberSteps.png>
-Package pdftex.def Info: Figures/RankCorrelationNumberSteps.png  used on input line 679.
+Package pdftex.def Info: Figures/RankCorrelationNumberSteps.png  used on input line 746.
 (pdftex.def)             Requested size: 398.3386pt x 239.0098pt.
- [19 <./Figures/RankCorrelationNumberSteps.png (PNG copy)>] (./Manuscript_Support.bbl) [20] (./Manuscript_Support.aux)
+ [21 <./Figures/RankCorrelationNumberSteps.png (PNG copy)>] (./Manuscript_Support.bbl [22]) [23] (./Manuscript_Support.aux)
 Package rerunfilecheck Info: File `Manuscript_Support.out' has not changed.
-(rerunfilecheck)             Checksum: D3276EEC76FBB8F9B1147871FE213402;2532.
+(rerunfilecheck)             Checksum: F88716DBAEF6ED58333C4325EA423151;3052.
  ) 
 Here is how much of TeX's memory you used:
- 27308 strings out of 478287
- 515529 string characters out of 5849289
- 828693 words of memory out of 5000000
- 44905 multiletter control sequences out of 15000+600000
+ 27643 strings out of 478287
+ 521110 string characters out of 5849289
+ 839782 words of memory out of 5000000
+ 45217 multiletter control sequences out of 15000+600000
  482672 words of font info for 78 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 84i,15n,89p,1092b,904s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 84i,15n,89p,1157b,904s stack positions out of 5000i,500n,10000p,200000b,80000s
 {/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></us
-r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb>
-Output written on Manuscript_Support.pdf (21 pages, 4317727 bytes).
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on Manuscript_Support.pdf (24 pages, 4342190 bytes).
 PDF statistics:
- 471 PDF objects out of 1000 (max. 8388607)
- 360 compressed objects within 4 object streams
- 74 named destinations out of 1000 (max. 500000)
- 180 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 560 PDF objects out of 1000 (max. 8388607)
+ 443 compressed objects within 5 object streams
+ 93 named destinations out of 1000 (max. 500000)
+ 204 words of extra memory for PDF output out of 10000 (max. 10000000)
 

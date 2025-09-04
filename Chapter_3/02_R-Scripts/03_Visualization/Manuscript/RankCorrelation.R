@@ -7,7 +7,8 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+# wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -23,14 +24,16 @@ source("02_R-Scripts/00_Functions.R")
 # Reload rank-correlations (for now, we only care about true preferences)
 rank <- "03_Data/03_Results/RankFrequency.rds" %>%
   read_rds() %>%
-  mutate(Formula = gsub(Formula, pattern = "Full", replacement = "Complex")) %>%
-  mutate(Formula = factor(Formula, levels = c("Simple", "Complex"), labels = c("Simple Formula", "Complex Formula"))) %>%
+  mutate(Formula = gsub(Formula, pattern = "Simple", replacement = "Simplistic")) %>%
+  mutate(Formula = gsub(Formula, pattern = "Full", replacement = "Realistic")) %>%
+  mutate(Formula = factor(Formula, levels = c("Simplistic", "Realistic"), labels = c("Simplistic Model", "Realistic Model"))) %>%
   subset(Preferences == "True")
 
 rank_rand <- "03_Data/03_Results/RankFrequency.rds" %>%
   read_rds() %>%
-  mutate(Formula = gsub(Formula, pattern = "Full", replacement = "Complex")) %>%
-  mutate(Formula = factor(Formula, levels = c("Simple", "Complex"), labels = c("Simple Formula", "Complex Formula"))) %>%
+  mutate(Formula = gsub(Formula, pattern = "Simple", replacement = "Simplistic")) %>%
+  mutate(Formula = gsub(Formula, pattern = "Full", replacement = "Realistic")) %>%
+  mutate(Formula = factor(Formula, levels = c("Simplistic", "Realistic"), labels = c("Simplistic Model", "Realistic Model"))) %>%
   subset(Preferences == "Randomized")
 
 # Some summary stats
@@ -48,10 +51,10 @@ rank_summarized <- rank %>%
   summarize(Spearman = mean(Spearman), .groups = "drop")
 
 # Compare means
-mod <- aov(Spearman ~ ModelCode, data = subset(rank, Formula == "Simple Formula"))
+mod <- aov(Spearman ~ ModelCode, data = subset(rank, Formula == "Simplistic Model"))
 summary(mod)
 
-mod <- aov(Spearman ~ ModelCode, data = subset(rank, Formula == "Complex Formula"))
+mod <- aov(Spearman ~ ModelCode, data = subset(rank, Formula == "Realistic Model"))
 summary(mod)
 
 ################################################################################
@@ -60,7 +63,7 @@ summary(mod)
 # Visualize
 p1 <- ggplot(rank, aes(x = ModelCode, y = Spearman, col = ModelCode, fill = ModelCode)) +
   geom_jitter(width = 0.1, size = 1, alpha = 0.1) +
-  geom_boxplot(data = rank_rand, inherit.aes = F, aes(x = ModelCode, y = Spearman, group = ModelCode), width = 0.1, color = "gray90", fill = "gray90", position = position_nudge(x = 0.2), linewidth = 0.25, outlier.size = 0.2) +
+  geom_boxplot(data = rank_rand, inherit.aes = F, aes(x = ModelCode, y = Spearman, group = ModelCode), width = 0.1, color = "gray30", fill = "gray60", position = position_nudge(x = 0.2), linewidth = 0.25, outlier.size = 0.2) +
   geom_boxplot(width = 0.4, alpha = 0.2) +
   stat_compare_means(
       method  = "anova"
@@ -122,7 +125,7 @@ for (i in 1:nrow(diffs)) {
 }
 
 # Plot for simple model
-p2 <- ggplot(subset(diffs, Formula == "Simple Formula"), aes(x = From, y = To, fill = Difference, color = Difference)) +
+p2 <- ggplot(subset(diffs, Formula == "Simplistic Model"), aes(x = From, y = To, fill = Difference, color = Difference)) +
   geom_tile(color = "white", linewidth = 1) +
   geom_text(aes(label = round(Difference, 2)), size = 2) +
   scale_fill_gradient2(
@@ -148,10 +151,10 @@ p2 <- ggplot(subset(diffs, Formula == "Simple Formula"), aes(x = From, y = To, f
   theme(
     , axis.title.y    = element_text(angle = 90)
   ) +
-  facet_wrap(~ "Simple Formula")
+  facet_wrap(~ "Simplistic Model")
 
 # Plot for full model
-p3 <- ggplot(subset(diffs, Formula == "Complex Formula"), aes(x = From, y = To, fill = Difference, color = Difference)) +
+p3 <- ggplot(subset(diffs, Formula == "Realistic Model"), aes(x = From, y = To, fill = Difference, color = Difference)) +
   geom_tile(color = "white", linewidth = 1) +
   geom_text(aes(label = round(Difference, 2)), size = 2) +
   scale_fill_gradient2(
@@ -179,7 +182,7 @@ p3 <- ggplot(subset(diffs, Formula == "Complex Formula"), aes(x = From, y = To, 
     , axis.title.y = element_blank()
     , axis.ticks.y = element_blank()
   ) +
-  facet_wrap(~ "Complex Formula")
+  facet_wrap(~ "Realistic Model")
 
 # Combine them
 p4 <- ggarrange(p2, p3, align = "hv")

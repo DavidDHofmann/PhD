@@ -4,6 +4,11 @@
 # Clear R's brain
 rm(list = ls())
 
+# Set the working directory
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+setwd(wd)
+
 # Load required packages
 library(rgdal)         # To handle spatial data
 library(sf)            # To handle spatial data
@@ -24,10 +29,6 @@ library(grid)          # To add pseudofacette
 library(gtable)        # To add pseudofacette
 library(ggh4x)         # To get nested wraps
 library(viridis)       # Access to the true viridis color scale
-
-# Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
-setwd(wd)
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")

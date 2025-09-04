@@ -7,7 +7,8 @@
 rm(list = ls())
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Surpress scientific notation
@@ -201,7 +202,7 @@ design <- design %>%
     )
     , Formula = factor(Formula
         , levels = c("Simple", "Complex")
-        , labels = c("Simple~Formula", "Complex~Formula")
+        , labels = c("Simplistic~Model", "Realistic~Model")
     )
   )
 

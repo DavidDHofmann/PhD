@@ -14,7 +14,7 @@ library(igraph)       # To compute betweenness
 library(pbmcapply)    # For multicore use with progress bar
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Custom functions

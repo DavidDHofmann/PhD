@@ -8,7 +8,7 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load packages
@@ -140,7 +140,7 @@ y_mins <- round(y%%1 * 60)
 # Print nicely
 x  <- paste0(x_degs, "\\degree", x_mins, "'E")
 y  <- paste0(y_degs, "\\degree", y_mins, "'S")
-xy <- paste(x, y)
+xy <- paste(x, y, sep = " and ")
 metrics[8] <- xy
 names(metrics)[8] <- c("StudyAreaCenter")
 

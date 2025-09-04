@@ -7,7 +7,8 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -121,7 +122,7 @@ p2 <- ggplot() +
   # geom_sf(data = wind, col = "red", fill = "red", alpha = 0.2) +
   geom_point(data = disp, mapping = aes(x = x, y = y), size = 0.1, col = "gray30") +
   geom_path(data = disp, mapping = aes(x = x, y = y, group = ID), linewidth = 0.1, col = "gray30") +
-  # geom_sf(data = areas, fill = NA, col = "black", linewidth = 0.5) +
+  geom_sf(data = areas, fill = "orange", col = "orange", linewidth = 0.5, alpha = 0.3) +
   # geom_sf_text(data = areas, aes(label = Name), col = "black") +
   geom_point(
       data        = subset(vills, place == "Cities")
@@ -209,14 +210,14 @@ p2 <- ggplot() +
 #### Legends
 ################################################################################
 # Create a new plot for the legend
-df <- prot[1:4, ]
+df <- prot[1:5, ]
 df <- dplyr::select(df, geom)
 df <- cbind(
     df
-  , Name   = factor(c("National Parks", "Forest Reserves", "Protected Areas", "Water")
-  , levels = c("National Parks", "Forest Reserves", "Protected Areas", "Water"))
-  , Color  = c(rev(brewer.pal(n = 3, name = "Greens")), "cornflowerblue")
-  , Alpha  = c(0.7, 0.7, 0.7, 1)
+  , Name   = factor(c("National Parks", "Forest Reserves", "Protected Areas", "Water", "Source Areas")
+  , levels = c("National Parks", "Forest Reserves", "Protected Areas", "Water", "Source Areas"))
+  , Color  = c(rev(brewer.pal(n = 3, name = "Greens")), "cornflowerblue", "orange")
+  , Alpha  = c(0.7, 0.7, 0.7, 1, 0.3)
 )
 df2 <- data.frame(
     x     = c(1, 2, 1)
@@ -263,5 +264,5 @@ p4 <- ggdraw() +
 ################################################################################
 ggsave("04_Manuscript/Figures/StudyArea1.png", bg = "white", plot = p1, width = 3, height = 3, scale = 2, device = png)
 ggsave("04_Manuscript/Figures/StudyArea2.png", bg = "white", plot = p2, width = 5.2, height = 3, scale = 1.5, device = png)
-ggsave("04_Manuscript/Figures/StudyArea3.png", bg = "transparent", plot = l1, width = 2.5, height = 0.3, scale = 2, device = png)
+ggsave("04_Manuscript/Figures/StudyArea3.png", bg = "transparent", plot = l1, width = 3, height = 0.3, scale = 2, device = png)
 ggsave("04_Manuscript/Figures/StudyArea4.png", bg = "transparent", plot = l2, width = 1.0, height = 0.2, scale = 2, device = png)

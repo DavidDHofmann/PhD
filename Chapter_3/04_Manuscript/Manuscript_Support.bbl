@@ -6,6 +6,13 @@ Aybar, C., Qiusheng, W., Bautista, L., Yali, R., Barja, A., Ushey, K., Ooms,
   G., Bengtsson, H., Hollister, J., Donchyts, G., and JOSS, M. (2024).
 \newblock Rgee: {{R Bindings}} for {{Calling}} the '{{Earth Engine}}' {{API}}.
 
+\bibitem[Chen et~al., 2015]{Chen.2015}
+Chen, J., Chen, J., Liao, A., Cao, X., Chen, L., Chen, X., He, C., Han, G.,
+  Peng, S., and Lu, M. (2015).
+\newblock Global {{Land Cover Mapping}} at 30 m {{Resolution}}: {{A POK-Based
+  Operational Approach}}.
+\newblock {\em ISPRS Journal of Photogrammetry and Remote Sensing}, 103:7--27.
+
 \bibitem[Chraibi et~al., 2022]{Chraibi.2022}
 Chraibi, E., {de Boissieu}, F., Barbier, N., Luque, S., and F{\'e}ret, J.-B.
   (2022).
@@ -20,15 +27,49 @@ Cutler, F. o. b. L. B. a.~A. and Wiener, R. p. b. A. L. a.~M. (2024).
 \newblock {{randomForest}}: {{Breiman}} and {{Cutler}}'s {{Random Forests}} for
   {{Classification}} and {{Regression}}.
 
+\bibitem[Didan, 2015]{Didan.2015}
+Didan, K. (2015).
+\newblock {{MOD13Q1 Modis}}/{{Terra Vegetation Indices}} 16-{{Day L3 Global}}
+  250m {{Sin Grid V006}}.
+
+\bibitem[DiMiceli et~al., 2022]{DiMiceli.2022}
+DiMiceli, C., Sohlberg, R., and Townshend, J. (2022).
+\newblock {{MODIS}}/{{Terra Vegetation Continuous Fields Yearly L3 Global}}
+  250m {{SIN Grid V061}}.
+
 \bibitem[Gilabert et~al., 1994]{Gilabert.1994}
 Gilabert, M.~A., Conese, C., and Maselli, F. (1994).
 \newblock An {{Atmospheric Correction Method}} for the {{Automatic Retrieval}}
   of {{Surface Reflectances}} from {{TM Images}}.
 \newblock {\em International Journal of Remote Sensing}, 15(10):2065--2086.
 
+\bibitem[Gorelick et~al., 2017]{Gorelick.2017}
+Gorelick, N., Hancher, M., Dixon, M., Ilyushchenko, S., Thau, D., and Moore, R.
+  (2017).
+\newblock Google {{Earth Engine}}: {{Planetary-Scale Geospatial Analysis}} for
+  {{Everyone}}.
+\newblock {\em Remote Sensing of Environment}.
+
 \bibitem[Hijmans et~al., 2024]{Hijmans.2024}
 Hijmans, R.~J., Bivand, R., Pebesma, E., and Sumner, M.~D. (2024).
 \newblock Terra: {{Spatial Data Analysis}}.
+
+\bibitem[Hofmann et~al., 2021]{Hofmann.2021}
+Hofmann, D.~D., Behr, D.~M., McNutt, J.~W., Ozgul, A., and Cozzi, G. (2021).
+\newblock Bound {{Within Boundaries}}: {{Do Protected Areas Cover Movement
+  Corridors}} of {{Their Most Mobile}}, {{Protected Species}}?
+\newblock {\em Journal of Applied Ecology}, 58(6):1133--1144.
+
+\bibitem[Kubota et~al., 2020]{Kubota.2020}
+Kubota, T., Aonashi, K., Ushio, T., Shige, S., Takayabu, Y.~N., Kachi, M.,
+  Arai, Y., Tashima, T., Masaki, T., Kawamoto, N., Mega, T., Yamamoto, M.~K.,
+  Hamada, A., Yamaji, M., Liu, G., and Oki, R. (2020).
+\newblock Global {{Satellite Mapping}} of {{Precipitation}} ({{GSMaP}})
+  {{Products}} in the {{GPM Era}}.
+\newblock In Levizzani, V., Kidd, C., Kirschbaum, D.~B., Kummerow, C.~D.,
+  Nakamura, K., and Turk, F.~J., editors, {\em Satellite {{Precipitation
+  Measurement}}: {{Volume}} 1}, Advances in {{Global Change Research}}, pages
+  355--373. Springer International Publishing, Cham.
 
 \bibitem[Kuhn, 2008]{Kuhn.2008}
 Kuhn, M. (2008).
@@ -42,6 +83,24 @@ Kuhn, M. (2008).
 \newblock In Bruzzone, L., Bovolo, F., and Benediktsson, J.~A., editors, {\em
   Image and {{Signal Processing}} for {{Remote Sensing XXIII}}}, page~3,
   Warsaw, Poland. SPIE.
+
+\bibitem[{Mu{\~n}oz-Sabater} et~al., 2021]{Munoz-Sabater.2021}
+{Mu{\~n}oz-Sabater}, J., Dutra, E., {Agust{\'i}-Panareda}, A., Albergel, C.,
+  Arduini, G., Balsamo, G., Boussetta, S., Choulga, M., Harrigan, S., and
+  Hersbach, H. (2021).
+\newblock {{ERA5-Land}}: {{A}} state-of-the-art global reanalysis dataset for
+  land applications.
+\newblock {\em Earth System Science Data}, 13(9):4349--4383.
+
+\bibitem[{OpenStreetMap contributors}, 2017]{OpenStreetMapContributors.2017}
+{OpenStreetMap contributors} (2017).
+\newblock Planet dump retrieved from {{https://planet.osm.org}}.
+
+\bibitem[{P{\'e}rez-Goya} et~al., 2020]{Perez-Goya.2020}
+{P{\'e}rez-Goya}, U., {Montesino-SanMartin}, M., Militino, A.~F., and Ugarte,
+  M.~D. (2020).
+\newblock {{RGISTools}}: {{Downloading}}, {{Customizing}}, and {{Processing
+  Time Series}} of {{Remote Sensing Data}} in {{R}}.
 
 \bibitem[Ranghetti et~al., 2020]{Ranghetti.2020}
 Ranghetti, L., Boschetti, M., Nutini, F., and Busetto, L. (2020).
@@ -70,10 +129,42 @@ Storey, J., Scaramuzza, P., Schmidt, G., and Barsi, J. (2005).
 Therneau, T., Atkinson, B., and Ripley, B. (2024).
 \newblock Rpart: {{Recursive Partitioning}} and {{Regression Trees}}.
 
+\bibitem[Thieurmel and Elmarhraoui, 2022]{Thieurmel.2022}
+Thieurmel, B. and Elmarhraoui, A. (2022).
+\newblock {\em Suncalc: {{Compute Sun Position}}, {{Sunlight Phases}}, {{Moon
+  Position}} and {{Lunar Phase}}}.
+
+\bibitem[Tiecke et~al., 2017]{Tiecke.2017}
+Tiecke, T.~G., Liu, X., Zhang, A., Gros, A., Li, N., Yetman, G., Kilic, T.,
+  Murray, S., Blankespoor, B., Prydz, E.~B., and Dang, H.-A.~H. (2017).
+\newblock Mapping the {{World Population One Building}} at a {{Time}}.
+
 \bibitem[Vermote and Kotchenova, 2008]{Vermote.2008}
 Vermote, E.~F. and Kotchenova, S. (2008).
 \newblock Atmospheric {{Correction}} for the {{Monitoring}} of {{Land
   Surfaces}}.
 \newblock {\em Journal of Geophysical Research: Atmospheres}, 113(D23).
+
+\bibitem[Wolski et~al., 2017]{Wolski.2017}
+Wolski, P., {Murray-Hudson}, M., Thito, K., and Cassidy, L. (2017).
+\newblock Keeping {{It Simple}}: {{Monitoring Flood Extent}} in {{Large
+  Data-Poor Wetlands Using MODIS SWIR Data}}.
+\newblock {\em International Journal of Applied Earth Observation and
+  Geoinformation}, 57:224--234.
+
+\bibitem[Xiong et~al., 2017]{Xiong.2017}
+Xiong, J., Thenkabail, P., Tilton, J., Gumma, M., Teluguntla, P., Oliphant, A.,
+  Congalton, R., Yadav, K., and Gorelick, N. (2017).
+\newblock Nominal 30-m {{Cropland Extent Map}} of {{Continental Africa}} by
+  {{Integrating Pixel-Based}} and {{Object-Based Algorithms Using Sentinel-2}}
+  and {{Landsat-8 Data}} on {{Google Earth Engine}}.
+\newblock {\em Remote Sensing}, 9(10):1065.
+
+\bibitem[Yamazaki et~al., 2019]{Yamazaki.2019}
+Yamazaki, D., Ikeshima, D., Sosa, J., Bates, P.~D., Allen, G., and Pavelsky, T.
+  (2019).
+\newblock {{MERIT HYDRO}}: {{A High}}-{{Resolution Global Hydrography Map
+  Based}} on {{Latest Topography Datasets}}.
+\newblock {\em Water Resources Research}.
 
 \end{thebibliography}

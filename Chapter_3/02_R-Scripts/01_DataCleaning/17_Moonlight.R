@@ -12,7 +12,7 @@ library(suncalc)      # To identify sunrise and sunset times
 library(hms)          # To work with times
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Custom functions
@@ -51,7 +51,7 @@ if (!file.exists("03_Data/02_CleanData/Moonlight.rds")) {
     , e    = 0.21
   )
 
-  # Group by the hours we are interested in
+  # Group by the hours (in UTC) we are interested in
   moon <- mutate(moon, date_new = case_when(
       hour(date) %in% c(3, 4, 5, 6) ~ update(date, hour = 3, minutes = 0, seconds = 0)
     , hour(date) %in% c(7, 8, 9, 10, 11, 12, 13, 14) ~ update(date, hour = 7, minutes = 0, seconds = 0)

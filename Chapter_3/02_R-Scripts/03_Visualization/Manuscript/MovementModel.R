@@ -7,7 +7,8 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -25,7 +26,7 @@ source("02_R-Scripts/00_Functions.R")
 #### Table
 ################################################################################
 # Load results and do some cleaning
-dat <- "/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/03_Results/MovementModels.rds" %>%
+dat <- "03_Data/03_Results/MovementModels.rds" %>%
   read_rds() %>%
   # unnest(Models) %>%
   subset(Covariate != "(Intercept)") %>%
@@ -37,7 +38,7 @@ dat <- "/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/03_Results/Mov
   ) %>%
   subset(!is.na(SE)) %>%
   mutate(FittingCovariates = factor(FittingCovariates, levels = c("Static", "Dynamic"))) %>%
-  mutate(Formula = factor(Formula, levels = c("Simple", "Full"), labels = c("Simple Formula", "Complex Formula")))
+  mutate(Formula = factor(Formula, levels = c("Simple", "Full"), labels = c("Simplistic Model", "Realistic Model")))
 
 dat %>%
   group_by(Covariate, FittingCovariates) %>%
@@ -185,28 +186,28 @@ tab <- coeffs %>%
     , SD       = ifelse(is.na(SD), " - ", formatC(SD, format = "f", flag = "0", digits = 3))
   )
 tab %>%
-  subset(Fitting == "Static" & Formula == "Simple Formula") %>%
+  subset(Fitting == "Static" & Formula == "Simplistic Model") %>%
   select(-c(Fitting, Formula, `z-value`, SE, Variance)) %>%
   kbl(booktabs = T, format = "latex", escape = F, digits = 3, align = "l") %>%
     add_header_above(c("", "", "Fixed Effects" = 3, "Random Effects" = 1), align = "l") %>%
     collapse_rows(1, latex_hline = c("custom"), custom_latex_hline = 1) %>%
     writeLines("04_Manuscript/Figures/MovementModelStaticSimple.tex")
 tab %>%
-  subset(Fitting == "Static" & Formula == "Complex Formula") %>%
+  subset(Fitting == "Static" & Formula == "Realistic Model") %>%
   select(-c(Fitting, Formula, `z-value`, SE, Variance)) %>%
   kbl(booktabs = T, format = "latex", escape = F, digits = 3, align = "l") %>%
     add_header_above(c("", "", "Fixed Effects" = 3, "Random Effects" = 1), align = "l") %>%
     collapse_rows(1, latex_hline = c("custom"), custom_latex_hline = 1) %>%
     writeLines("04_Manuscript/Figures/MovementModelStaticFull.tex")
 tab %>%
-  subset(Fitting == "Dynamic" & Formula == "Simple Formula") %>%
+  subset(Fitting == "Dynamic" & Formula == "Simplistic Model") %>%
   select(-c(Fitting, Formula, `z-value`, SE, Variance)) %>%
   kbl(booktabs = T, format = "latex", escape = F, digits = 3, align = "l") %>%
     add_header_above(c("", "", "Fixed Effects" = 3, "Random Effects" = 1), align = "l") %>%
     collapse_rows(1, latex_hline = c("custom"), custom_latex_hline = 1) %>%
     writeLines("04_Manuscript/Figures/MovementModelDynamicSimple.tex")
 tab %>%
-  subset(Fitting == "Dynamic" & Formula == "Complex Formula") %>%
+  subset(Fitting == "Dynamic" & Formula == "Realistic Model") %>%
   select(-c(Fitting, Formula, `z-value`, SE, Variance)) %>%
   kbl(booktabs = T, format = "latex", escape = F, digits = 3, align = "l") %>%
     add_header_above(c("", "", "Fixed Effects" = 3, "Random Effects" = 1), align = "l") %>%
@@ -274,7 +275,7 @@ ggsave("04_Manuscript/Figures/MovementModel.png"
   , device = png
   , bg     = "white"
   , width  = 5
-  , height = 4
+  , height = 4.5
   , scale  = 1.3
 )
 

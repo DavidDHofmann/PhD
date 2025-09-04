@@ -11,7 +11,7 @@ library(terra)       # To handle raster data
 library(tidyverse)   # For data wrangling
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load the globeland land cover map

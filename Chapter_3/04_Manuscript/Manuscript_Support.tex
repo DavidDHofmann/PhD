@@ -25,7 +25,13 @@
 \usepackage{ifthen}
 \usepackage{tikz}
 \usepackage{lineno}
+\usepackage{tocloft}
+\setlength{\cftsecnumwidth}{2.5em}  % Adjust the width as needed
+\setlength{\cftsecindent}{0em}
+\setlength{\cftsubsecnumwidth}{2.5em}  % Adjust the width as needed
+\setlength{\cftsubsecindent}{2em}
 \usetikzlibrary{svg.path}
+
 
 %------------------------------------------------------------------------------
 %  Bibtex vs Biblatex
@@ -173,9 +179,8 @@
 %------------------------------------------------------------------------------
 %	Titlepage: Header
 %------------------------------------------------------------------------------
-\title{\textbf{Appendix}\\ Individual-Based Dispersal Simulations to Study
-Dynamic Connectivity in Seasonal Landscapes}
-
+\title{\textbf{Appendix}\\ Seasonal Dynamism or Model Realism: What Drives
+Better Predictions of Landscape Connectivity?}
 
 % List of Authors
 \author{
@@ -224,12 +229,13 @@ Private Bag 13, Maun, Botswana.
 
 \vspace{4cm}
 
-\textbf{Running Title:} Simulating Dispersal in Seasonal Landscapes
+\textbf{Running Title:} Connectivity in Seasonal Landscapes
 
 \vspace{0.5cm}
 
 \textbf{Keywords:} African wild dog, Connectivity, Dispersal, Dynamism,
-Individual-based, Lycaon pictus, Okavango Delta, Seasonality
+Individual-based, Lycaon pictus, Okavango Delta, Seasonality, Integrated
+Step-Selection Functions, Mechanistic Models
 
 \end{flushleft}
 
@@ -253,7 +259,124 @@ Individual-based, Lycaon pictus, Okavango Delta, Seasonality
 \beginappendix
 
 %------------------------------------------------------------------------------
-%	Appendix S1: Pan Mapping
+%  Appendix S1: Covariates
+%------------------------------------------------------------------------------
+\newpage
+\section{Covariates}
+\subsection{Landscape Characteristics}
+
+We used data from the MODIS Vegetation Continuous Fields dataset (MOD44B V061;
+\citealp{DiMiceli.2022}) to represent different vegetation types across the
+study area. The MOD44B dataset comprises three continuous layers, depicting the
+percentage cover of woodland, shrubs/grassland, and bareland, respectively. The
+three layers added up to 100\%, so we dropped bareland from further analysis,
+thus preventing perfect multi-collinearity. The MOD44B product is updated on day
+65 of each year, so we used the R-package RGISTools \citep{Perez-Goya.2020} to
+download yearly updated layers, each at a resolution of 250m x 250m. We also
+obtained information on the NDVI through the MODIS MOD13Q1 dataset
+\citep{Didan.2015}, which also has a resolution of 250m x 250m. This product is
+updated every 16 days, and we accessed the respective data through Google Earth
+Engine \citep{Gorelick.2017} using the R-package rgee \citep{Aybar.2024}. To
+depict large, permanent waterbodies, we employed the Globeland30 dataset, from
+which we only retained the land-cover class water, while setting all other
+categories to dryland. Similarly, we used the MERIT Hydro dataset to obtain
+information on permanent rivers \citep{Yamazaki.2019}. To dynamically render
+large waterbodies, particularly the floodwaters of the Okavango Delta, we
+prepared weekly updated floodmaps using remote sensed MODIS MOD43A4 satellite
+images. The underlying floodmapping algorithm is described in detail by
+\citet{Wolski.2017} and \citet{Hofmann.2021} and is implemented in the floodmapr
+package (available on GitHub; \url{https://github.com/DavidDHofmann/floodmapr}).
+We combined the water (static), river (static), and flood layers (dynamic) into
+a single stack representing water bodies at a resolution of 500m x 500m.
+Finally, we employed remote sensing to detect small, ephemeral water bodies
+(i.e., pans) using a custom random-forest classifier applied to Sentinel 2
+satellite imagery (European Space Agency 2018; details of the classifier in
+Appendix A2). Sentinel 2 has a resolution of 10m and is therefore particularly
+useful for obtaining information on small landscape features. Even though
+Sentinel 2 satellite imagery is updated every five days, cloud cover often
+prohibited the computation of a ``pan-map''. Consequently, we settled for
+monthly updated composite images, which effectively alleviated problems due to
+cloud cover. In summary, we produced one stack of layers representing major
+water bodies, and another stack of layers representing ephemeral water bodies
+(pans). For both, we also computed corresponding ``distance-to-feature'' raster
+layers, indicating the distance to major and ephemeral water bodies,
+respectively.
+
+\subsection{Climate Descriptors}
+
+We obtained hourly updated spatial layers on 2m above-ground temperature from
+the ERA5 Land dataset \citep{Munoz-Sabater.2021} and hourly updated precipitation
+estimates from the Global Satellite Mapping of Precipitation dataset
+\citep{Kubota.2020}. Both datasets were accessed and downloaded through Google
+Earth Engine \citep{Gorelick.2017} using the rgee package \citep{Aybar.2024} and
+had a resolution of 10km x 10km. To match the one-hourly temperature and
+precipitation estimates with the four-hourly GPS data on dispersing wild dogs,
+we computed average precipitation and temperature values over four hourly
+periods that matched the GPS collection schedule.
+
+\subsection{Anthropogenic Features}
+
+We combined information on human density, agricultural activities, and roads
+into a single proxy, which we generically termed human influence. We sourced
+information on human density from Facebook’s high resolution human density
+dataset \citep{Tiecke.2017}, which we downloaded from the humdata website
+(\url{www.data.humdata.org}). We obtained information on the presence of
+agricultural fields from the Globeland30 \citep{Chen.2015} and Cropland
+\citep{Xiong.2017} datasets. We downloaded shapefiles comprising tar and main
+gravel roads from OpenStreetMap \citep{OpenStreetMapContributors.2017}. Finally,
+we merged all anthropogenic features into a single layer that had a resolution
+of 250m x 250m (details are provided by \citealp{Hofmann.2021}.
+
+\subsection{Light Intensity}
+
+We computed light intensity using the \texttt{suncalc} and \texttt{moonlit}
+R-packages \citep{Thieurmel.2022, Smielak.2023} for the central coordinates of
+our study area (lon = of 23.5, lat = -19.0) at a 5-minute temporal resolution.
+The set of light statistics comprised a binary variable separating day and night
+(i.e., sun < 18 °below the horizon) and a continuous estimate of moonlight
+intensity, relative to the maximum moon illumination \Cref{Moonlight}. Based on
+those covariates, we generated a binary covariate separating bright from dark
+conditions. Bright conditions encompassed all daytime hours and those nighttime
+periods during which the moon was present in the sky and illuminated by
+approximately one-fourth or more; conversely, dark conditions included nighttime
+periods during which the moon was absent from the sky or present and only
+minimally illuminated. To match the temporal resolution of our GPS data during
+dispersal, we calculated four hourly moonlight summaries \Cref{Light}.
+Specifically, we computed if a four-hourly interval fell into nighttime and the
+average amount of moon-illumination during those hours.
+
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = 0.75\textwidth]{Figures/Moonlight.png}
+  \caption{Moonlight intensity (illumination) as estimated from the
+  \texttt{moonlit} package \citep{Smielak.2023} in \texttt{R} calculated for a
+  couple of example timestamps in 2023.}
+  \label{Moonlight}
+ \end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/Light.pdf}
+  \caption{Schematic illustration of how we categorized steps into \textit{dark}
+  and \textit{bright} steps. First, we used the \texttt{suncalc} and
+  \texttt{moonlit} packages to obtain estimates of the sun-angle and moon
+  illumination at 5 minute intervals for each date of interest. Whenever the sun
+  angle was $\leq $ -18\degree, we deemed the respective period to be at night.
+  A night was either bright (moon illumination $>$ 0.02 of maximum illumination)
+  or dark (moon illumination $\leq$ 0.02 of maximum illumination). Any other
+  period was considered to provide enough illumination for wild dogs to move and
+  therefore considered as bright. Since each step covered a time-span of
+  approximately four hours, we defined a step as bright if at least 25\% (i.e.,
+  one hour) of it occurred during a bright period. The gray arrows represent
+  some example steps that are categorized as bright (light gray) or dark (dark
+  gray). All icons are original artwork created by the authors in Inkscape.}
+  \label{Light}
+ \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%	Appendix S2: Pan Mapping
 %------------------------------------------------------------------------------
 \newpage
 \section{Pan Mapping}
@@ -287,7 +410,7 @@ updated composite images (\Cref{Satellite}).
   This particular pan is comparably small at around 10 meters in diameter. Some
   of these pans dry out quickly, whereas others provide a source of water for
   the entire dry-season. Here, two spotted hyenas (\textit{Crocuta crocuta})
-  take a quick bath.}
+  take a quick bath. Photo Credit: David D. Hofmann.}
   \label{Pan}
  \end{center}
 \end{figure}
@@ -514,70 +637,14 @@ were detected in at least 50\% of the overlapping tiles. Finally, we generated
 \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S2: Moonlight
-%------------------------------------------------------------------------------
-\newpage
-\section{Moon Illumination}
-
-We used the \texttt{R}-package \texttt{moonlit} \citep{Smielak.2023} to obtain
-estimates of moon illumination at 5 minute intervals at the average location of
-dispersal GPS data (lon = of 23.5, lat = -19.0; \Cref{Moonlight}). The
-\texttt{moonlit} package is currently not on \texttt{CRAN}, but can be installed
-from GitHub (\url{https://github.com/msmielak/moonlit}). Besides providing
-information on the moon cycle, this package also allows estimating the amount of
-moonlight illumination on the ground. For instance, even during full-moon
-nights, the moon may only appear at a low angle in the sky, thus providing
-minimal illumination. Estimates from the \texttt{moonlit} package can therefore
-be viewed as biologically more relevant. To match the temporal resolution of our
-GPS data during dispersal, we calculated four hourly moonlight summaries.
-Specifically, we computed if an interval fell into nighttime and the average
-amount of moon-illumination during the four hours.
-
-\begin{figure}[htbp]
- \begin{center}
-  \includegraphics[width = 0.75\textwidth]{Figures/Moonlight.png}
-  \caption{Moonlight intensity (illumination) as estimated from the
-  \texttt{moonlit} package \citep{Smielak.2023} in \texttt{R} calculated for a
-  couple of example timestamps in 2023.}
-  \label{Moonlight}
- \end{center}
-\end{figure}
-
-%------------------------------------------------------------------------------
-%	Appendix S3: Light-Type of Each Step
-%------------------------------------------------------------------------------
-\newpage
-\section{Light-Type}
-
-\begin{figure}[htbp]
- \begin{center}
-  \includegraphics[width = \textwidth]{Figures/Light.pdf}
-  \caption{Schematic illustration of how we categorized steps into \textit{dark}
-  and \textit{bright} steps. First, we used the \texttt{suncalc} and
-  \texttt{moonlit} packages to obtain estimates of the sun-angle and moon
-  illumination at 5 minute intervals for each date of interest. Whenever the sun
-  angle was $\leq $ -18\degree, we deemed the respective period to be at night.
-  A night was either bright (moon illumination $>$ 0.02 of maximum illumination)
-  or dark (moon illumination $\leq$ 0.02 of maximum illumination). Any other
-  period was considered to provide enough illumination for wild dogs to move and
-  therefore considered as bright. Since each step covered a time-span of
-  approximately four hours, we defined a step as bright if at least 25\% (i.e.,
-  one hour) of it occurred during a bright period. The gray arrows represent
-  some example steps that are categorized as bright (light gray) or dark (dark
-  gray).}
-  \label{Light}
- \end{center}
-\end{figure}
-
-%------------------------------------------------------------------------------
-%	Appendix S4: Movement Model Results
+%	Appendix S3: Movement Model Results
 %------------------------------------------------------------------------------
 \newpage
 \section{Movement Model Results}
 
 \begin{table}[htbp]
  \begin{center}
-  \caption{Estimates obtained from the \textbf{simple} (no interactions)
+  \caption{Estimates obtained from the \textbf{simplistic} (no interactions)
   integrated step-selection models fitted using \textbf{static} covariates. GPS
   Data was either pooled across seasons (labeled ``all'') or split into dry and
   wet season. Only underlined covariates differed between the static and dynamic
@@ -591,7 +658,7 @@ amount of moon-illumination during the four hours.
 
 \begin{table}[htbp]
  \begin{center}
-  \caption{Estimates obtained from the \textbf{simple} (no interactions)
+  \caption{Estimates obtained from the \textbf{simplistic} (no interactions)
   integrated step-selection models fitted using \textbf{dynamic} covariates. GPS
   Data was either pooled across seasons (labeled ``all'') or split into dry and
   wet season. Only underlined covariates differed between the static and dynamic
@@ -605,11 +672,11 @@ amount of moon-illumination during the four hours.
 
 \begin{table}[htbp]
  \begin{center}
-  \caption{Estimates obtained from the \textbf{full} (with interactions)
-  integrated step-selection models fitted using \textbf{static} covariates. GPS
-  Data was either pooled across seasons (labeled ``all'') or split into dry and
-  wet season. Only underlined covariates differed between the static and dynamic
-  configurations.}
+  \caption{Estimates obtained from the \textbf{mechanistic realistic} (with
+  interactions) integrated step-selection models fitted using \textbf{static}
+  covariates. GPS Data was either pooled across seasons (labeled ``all'') or
+  split into dry and wet season. Only underlined covariates differed between the
+  static and dynamic configurations.}
   \label{ModelsStaticFull}
    \begin{threeparttable}
    \inputy{Figures/MovementModelStaticFull.tex}
@@ -619,11 +686,11 @@ amount of moon-illumination during the four hours.
 
 \begin{table}[htbp]
  \begin{center}
-  \caption{Estimates obtained from the \textbf{full} (no interactions)
-  integrated step-selection models fitted using \textbf{dynamic} covariates. GPS
-  Data was either pooled across seasons (labeled ``all'') or split into dry and
-  wet season. Only underlined covariates differed between the static and dynamic
-  configurations.}
+  \caption{Estimates obtained from the \textbf{mechanistic realistic} (no
+  interactions) integrated step-selection models fitted using \textbf{dynamic}
+  covariates. GPS Data was either pooled across seasons (labeled ``all'') or
+  split into dry and wet season. Only underlined covariates differed between the
+  static and dynamic configurations.}
   \label{ModelsDynamicFull}
    \begin{threeparttable}
    \inputy{Figures/MovementModelDynamicFull.tex}
@@ -632,7 +699,7 @@ amount of moon-illumination during the four hours.
 \end{table}
 
 %------------------------------------------------------------------------------
-%	Appendix S5: Stability with Regards to Number of Random Steps
+%	Appendix S4: Stability with Regards to Number of Random Steps
 %------------------------------------------------------------------------------
 \newpage
 \section{Number of Random Steps}
@@ -641,15 +708,15 @@ amount of moon-illumination during the four hours.
  \begin{center}
   \includegraphics[width = \textwidth]{Figures/Stability.png}
   \caption{Results from the integrated step-selection models when considering
-  different numbers of random steps. Results are shown for the simple and full
-  model for both all configurations of fitting covariates (static vs dry) and
-  model seasons (all vs. wet + dry).}
+  different numbers of random steps. Results are shown for the simplistic and
+  mechanistic realistic model for both all configurations of fitting covariates
+  (static vs dry) and model seasons (all vs. wet + dry).}
   \label{Stability}
  \end{center}
 \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S6: Dispersal Model Interpretation
+%	Appendix S5: Dispersal Model Interpretation
 %------------------------------------------------------------------------------
 \newpage
 \section{Model Interpretation}
@@ -669,7 +736,7 @@ amount of moon-illumination during the four hours.
 \end{figure}
 
 %------------------------------------------------------------------------------
-%	Appendix S7: Spearman Rank Correlation in Relation to Number of Random Steps
+%	Appendix S6: Spearman Rank Correlation in Relation to Number of Random Steps
 %------------------------------------------------------------------------------
 \newpage
 \section{Spearman's Rank Correlation in Relation to the Number of Random Steps}

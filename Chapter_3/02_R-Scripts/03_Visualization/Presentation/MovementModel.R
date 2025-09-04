@@ -7,7 +7,7 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -26,7 +26,7 @@ source("02_R-Scripts/00_Functions.R")
 #### Table
 ################################################################################
 # Load results and do some cleaning
-dat <- "/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/03_Results/MovementModels.rds" %>%
+dat <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/03_Data/03_Results/MovementModels.rds" %>%
   read_rds() %>%
   # unnest(Models) %>%
   subset(Covariate != "(Intercept)") %>%

@@ -7,7 +7,8 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+# wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -20,6 +21,8 @@ library(scales)       # To squish colorscales
 library(igraph)       # For network plots
 library(ggnetwork)    # For network plots
 library(colorspace)   # To darken and lighten colors
+library(cowplot)      # To extract legends
+library(ggpubr)       # To arrange plots
 
 # Load custom functions
 source("02_R-Scripts/00_Functions.R")
@@ -57,6 +60,9 @@ labels_waters <- data.frame(
 labels_areas <- st_coordinates(st_point_on_surface(areas))
 labels_areas <- cbind(labels_areas, st_drop_geometry(areas))
 
+################################################################################
+#### Heatmaps
+################################################################################
 # Reload connectivity results
 dat <- "03_Data/03_Results/Connectivity.rds" %>%
   read_rds() %>%
@@ -68,24 +74,19 @@ dat <- "03_Data/03_Results/Connectivity.rds" %>%
   })) %>%
   mutate(ModelCode = substr(ModelCode, start = 1, stop = 3)) %>%
   mutate(ModelCode = factor(ModelCode, levels = c("SSS", "DMD"))) %>%
-  mutate(Formula = factor(Formula, levels = c("Simple", "Full"), labels = c("Simple Formula", "Complex Formula")))
+  mutate(Formula = factor(Formula, levels = c("Simple", "Full"), labels = c("Simplistic Model", "Realistic Model")))
 
-# Extract interpatch connectivity
-ipc <- dat %>% mutate(Data = map(Data, function(x) {
-  x$Interpatch
-  })) %>%
-  unnest(Data) %>%
-  rename(
-      SourceArea        = source
-    , CurrentArea       = area
-    , DispersalDuration = duration
-    , DispersalSuccess  = success
-  )
-
-# ggplot(ipc, aes(x = SourceArea, y = CurrentArea, fill = DispersalDuration)) +
-#   geom_tile() +
-#   facet_grid(Formula ~ ModelCode) +
-#   coord_equal()
+# # Extract interpatch connectivity
+# ipc <- dat %>% mutate(Data = map(Data, function(x) {
+#   x$Interpatch
+#   })) %>%
+#   unnest(Data) %>%
+#   rename(
+#       SourceArea        = source
+#     , CurrentArea       = area
+#     , DispersalDuration = duration
+#     , DispersalSuccess  = success
+#   )
 
 # Sum heatmaps under the same configurations
 heat <- dat %>%
@@ -99,18 +100,6 @@ heat <- dat %>%
     return(result)
   }))
 
-# # Compute map correlations
-# heat %>%
-#   subset(ModelCode == "SSS") %>%
-#   pull(Data) %>%
-#   do.call(c, .) %>%
-#   layerCor(fun = "cor")
-# heat %>%
-#   subset(ModelCode == "DMD") %>%
-#   pull(Data) %>%
-#   do.call(c, .) %>%
-#   layerCor(fun = "cor")
-
 # Some smoothing
 heat <- heat %>%
   mutate(Data = map(Data, function(x) {
@@ -120,49 +109,78 @@ heat <- heat %>%
     return(result)
   }))
 
-# Quick plot
-plot(do.call(c, heat$Data), main = paste(heat$Formula, heat$ModelCode))
+################################################################################
+#### Difference in Heatmaps
+################################################################################
+# Create a helper-table for the difference maps we want to generate
+fromgrid <- select(heat, Formula, ModelCode) %>% setNames(c("FromFormula", "FromModelCode"))
+togrid   <- select(heat, Formula, ModelCode) %>% setNames(c("ToFormula", "ToModelCode"))
+diff <- expand_grid(fromgrid, togrid) %>%
+  mutate(
+      ChangeFormula   = FromFormula != ToFormula
+    , ChangeModelCode = FromModelCode != ToModelCode
+    , Changes         = ChangeFormula + ChangeModelCode
+  ) %>%
+  subset(Changes == 1) %>%
+  select(-c(ChangeFormula, ChangeModelCode)) %>%
+  mutate(PairKey = paste(
+      pmin(as.character(FromFormula), as.character(ToFormula))
+    , pmin(as.character(FromModelCode), as.character(ToModelCode))
+    , pmax(as.character(FromFormula), as.character(ToFormula))
+    , pmax(as.character(FromModelCode), as.character(ToModelCode))
+  )) %>%
+  distinct(PairKey, .keep_all = T) %>%
+  select(-c(Changes, PairKey))
 
-# Create a single dataframe
+# Loop through those and create difference maps
+diff$Data <- lapply(1:nrow(diff), function(i) {
+  map1 <- heat %>%
+    subset(Formula == diff$FromFormula[i] & ModelCode == diff$FromModelCode[i]) %>%
+    pull(Data) %>%
+    do.call(c, .)
+  map2 <- heat %>%
+    subset(Formula == diff$ToFormula[i] & ModelCode == diff$ToModelCode[i]) %>%
+    pull(Data) %>%
+    do.call(c, .)
+  delta <- abs(map2 - map1)
+})
+
+# Clean up
+diff <- diff %>%
+  mutate(Comparison = paste(
+      paste(FromModelCode, gsub(FromFormula, pattern = " Model", replacement = ""), sep = "_")
+    , "vs."
+    , paste(ToModelCode, gsub(ToFormula, pattern = " Model", replacement = ""), sep = "_")
+  )) %>%
+  mutate(
+      From = paste0(FromFormula, "_", FromModelCode)
+    , To   = paste0(ToFormula, "_", ToModelCode)
+  ) %>%
+  select(-c(FromFormula, FromModelCode, ToFormula, ToModelCode))
+
+# Compute mean absolute difference
+diff$TotalDifference <- sapply(diff$Data, function(x) {
+  mean(x[], na.rm = T)
+})
+
+################################################################################
+#### Maps to Data-Frame
+################################################################################
+# Create dataframes
 heat <- heat %>%
   mutate(Data = map(Data, function(x) {
     result <- as.data.frame(x, xy = T)
     names(result)[3] <- "Value"
     return(result)
   })) %>% unnest(Data)
-#
-# library(raster)
-# library(gstat)
-# test <- heat %>%
-#   nest(Data = -c(Formula, ModelCode)) %>%
-#   mutate(Variogram = map(Data, function(x) {
-#     pts   <- vect(x, geom =c("x", "y"))
-#     pts   <- as(pts, "Spatial")
-#     vario <- variogram(object = Value ~ 1, data = pts)
-#     return(vario)
-#   }))
-#
-# # Fit models
-# test <- test %>%
-#   mutate(Model = map(Variogram, function(x) {
-#     var <- fit.variogram(x, vgm("Sph"))
-#     result <- data.frame(
-#         Param = c("Sill", "Range", "Nugget")
-#       , Value = c(var$psill[2], var$range[2], var$psill[1])
-#     )
-#     return(result)
-#   }))
-#
-# test %>%
-#   dplyr::select(Formula, ModelCode, Model) %>%
-#   unnest(Model)
-#
-# test %>%
-#   dplyr::select(Formula, ModelCode, Variogram) %>%
-#   unnest(Variogram) %>%
-#   ggplot(aes(x = dist, y = gamma, color = ModelCode, linetype = Formula)) +
-#     geom_line() +
-#     theme_awesome()
+
+# Create dataframes
+diff <- diff %>%
+  mutate(Data = map(Data, function(x) {
+    result <- as.data.frame(x, xy = T)
+    names(result)[3] <- "Value"
+    return(result)
+  })) %>% unnest(Data)
 
 ################################################################################
 #### Functions to Plot
@@ -172,7 +190,7 @@ heat <- heat %>%
 spectral <- colorRampPalette(rev(brewer.pal(11, name = "Spectral")))
 plotMet <- function(
     data
-  , formula     = ~ ModelCode
+  , formula     = NULL
   , area        = NULL
   , barwidth    = unit(16, "cm")
   , colorscheme = c("dark", "light")
@@ -188,12 +206,16 @@ plotMet <- function(
   , lomehi      = F
   , cutlines    = F
   , diffmap     = F
+  , wrap        = F
+  , barheight   = 0.2
   ) {
 
     # Testing
-    # data        <- heat
-    # formula     <- ~ ModelCode
+    # data <- diff %>% subset(grepl(Comparison, pattern = "Simplistic") & grepl(Comparison, pattern = "Realistic"))
+    # data        <- diff
+    # formula     <- Comparison ~ "Test"
     # barwidth    <- 16
+    # barheight    <- 0.2
     # labels      <- F
     # colorscheme <- "dark"
     # col_area    <- c("black")
@@ -209,6 +231,7 @@ plotMet <- function(
     # cutlines    <- F
     # ext <- ext(dat$Data[[1]]$Heatmap)
     # diffmap <- F
+    # wrap <- F
 
   # Some checks
   if (diffmap) {
@@ -321,7 +344,7 @@ plotMet <- function(
             , title.position = "bottom"
             , title.hjust    = 0.5
             , ticks          = F
-            , barheight      = unit(0.2, "cm")
+            , barheight      = unit(barheight, "cm")
             , barwidth       = barwidth
           )
         )
@@ -340,7 +363,7 @@ plotMet <- function(
             , title.position = "bottom"
             , title.hjust    = 0.5
             , ticks          = F
-            , barheight      = unit(0.2, "cm")
+            , barheight      = unit(barheight, "cm")
             , barwidth       = barwidth
           )
         )
@@ -353,6 +376,7 @@ plotMet <- function(
       , xlim   = ext[1:2]
       , ylim   = ext[3:4]
       , expand = F
+      , label_graticule = "SE"
     ) +
     labs(
         x        = NULL
@@ -386,13 +410,22 @@ plotMet <- function(
           , text_size = 4
         )
     ) +
-    facet_grid(formula)
+    {
+      if (!is.null(formula) & !wrap) {
+        facet_grid(formula, switch = "y")
+      }
+    } +
+    {
+      if (!is.null(formula) & wrap) {
+        facet_wrap(formula)
+      }
+    }
 }
 
 # Generate Heatmaps
 ext <- ext(dat$Data[[1]]$Heatmap)
-p <- plotMet(heat
-  , formula     = Formula ~ ModelCode
+p1 <- plotMet(heat
+  , formula     = ~ ModelCode + Formula
   , barwidth    = unit(8, "cm")
   , colorscheme = "dark"
   , col_area    = "black"
@@ -403,15 +436,65 @@ p <- plotMet(heat
   , name        = "# Traversing Trajectories"
   , trans       = "identity"
   , ext         = ext - c(0, 0, 0, 1)
-  , lomehi      = T
+  , lomehi      = F
+  , barheight   = 0.5
+  , wrap        = T
 )
+
+p2 <- plotMet(diff
+  , formula     = ~ From + To
+  , barwidth    = unit(8, "cm")
+  , colorscheme = "dark"
+  , col_area    = "white"
+  , col_country = "white"
+  , col_water   = NA
+  , fill_water  = NA
+  , palette     = viridisLite::viridis(100)
+  , name        = "Absolute Difference"
+  , trans       = "identity"
+  , ext         = ext - c(0, 0, 0, 1)
+  , lomehi      = F
+  , wrap        = T
+  , barheight   = 0.5
+)
+
+# Extract legends
+l1 <- get_legend(p1)
+l2 <- get_legend(p2)
+
+# Arrange them
+l <- ggarrange(l1, l2, nrow = 2)
+
+# Remove legends from plots
+p1 <- p1 + theme(legend.position = "none")
+p2 <- p2 + theme(legend.position = "none")
 
 # Store plot to file
 ggsave("04_Manuscript/Figures/HeatmapComparison.png"
-  , plot   = p
+  , plot   = p1
   , bg     = "white"
   , height = 4
   , width  = 6
+  , scale  = 1.6
+  , device = png
+)
+
+# Store plot to file
+ggsave("04_Manuscript/Figures/HeatmapDifference.png"
+  , plot   = p2
+  , bg     = "white"
+  , height = 4
+  , width  = 6
+  , scale  = 1.6
+  , device = png
+)
+
+# Store legend
+ggsave("04_Manuscript/Figures/HeatmapLegends.png"
+  , plot   = l
+  , bg     = "white"
+  , height = 1
+  , width  = 2.2
   , scale  = 1.6
   , device = png
 )

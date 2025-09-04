@@ -5,7 +5,7 @@
 rm(list = ls())
 
 # Change the working directory.
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Load required packages
@@ -19,8 +19,8 @@ ext <- ext(21.74909, 24.30089, -20.34901, -18.14901)
 # Load covariates that we want to visualize and crop them
 water <- rast("03_Data/02_CleanData/WaterStatic.tif") %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
 dista <- rast("03_Data/02_CleanData/DistanceToWaterStatic.tif") %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
-trees <- rast("/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/02_CleanData/00_Vegmaps/2022-03-06.tif")[[1]] %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
-shrub <- rast("/home/david/ownCloud/University/15. PhD/Chapter_3/03_Data/02_CleanData/00_Vegmaps/2022-03-06.tif")[[2]] %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
+trees <- rast("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/03_Data/02_CleanData/00_Vegmaps/2022-03-06.tif")[[1]] %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
+shrub <- rast("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3/03_Data/02_CleanData/00_Vegmaps/2022-03-06.tif")[[2]] %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
 human <- rast("03_Data/02_CleanData/Humans.tif") %>% crop(ext) %>% as.data.frame(xy = T) %>% setNames(c("x", "y", "layer"))
 
 # Generate plots

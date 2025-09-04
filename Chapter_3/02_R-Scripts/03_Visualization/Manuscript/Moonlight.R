@@ -13,7 +13,8 @@ library(ggpubr)       # To arrange multiple ggplots
 library(gggibbous)    # To plot the moon
 
 # Set the working directory
-wd <- "/home/david/ownCloud/University/15. PhD/Chapter_3"
+wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
 setwd(wd)
 
 # Custom functions
@@ -88,7 +89,7 @@ ggsave("04_Manuscript/Figures/LightTypes.png"
 )
 
 ################################################################################
-#### Check Step-Length under Different Moonlight Conditions (REMOVE LATER)
+#### Check Step-Length under Different Moonlight Conditions
 ################################################################################
 # Load the step-selection data and cut moonlight into groups
 dat <- "03_Data/02_CleanData/SSFExtracted.rds" %>%
