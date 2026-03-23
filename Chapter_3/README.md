@@ -1,12 +1,12 @@
 # Seasonal dynamism or model realism: What drives better predictions of landscape connectivity?
 
-DOI TO PAPER:
+[https://doi.org/10.5061/dryad.z34tmpgvr](https://doi.org/10.5061/dryad.z34tmpgvr)
 
-This repository contains all `R`-code and data to reproduce the analyses and visualizations from Hofmann et al., 2026. It is recommended to explore the data through the provided `R`-Scripts. A general design principle was to compartmentalize all analyses and simulations to reduce computational requirements. As such, there are often parent files (in `.rds` format) that provide overviews and bundle further data files as `tidyverse` data-tibbles. All `R`-codes are extensively documented, giving detailed insights into the processing and analytical steps. All data can be understood by investigating the scripts for data cleaning. R-scripts are numbered and expected to be run in corresponding sequence.
+This repository contains all `R`-code and data to reproduce the analyses and visualizations from Hofmann et al., 2026. It is recommended to explore the data through the provided `R`-Scripts. A general design principle was to compartmentalize all analyses and simulations to reduce computational requirements. As such, there are often parent files (in `.rds` format) that provide overviews and bundle further data files as `tidyverse` data-tibbles. All `R`-codes are extensively documented, giving detailed insights into the processing and analytical steps. All data can be understood by investigating the scripts for data cleaning. R-scripts are numbered and expected to be run in corresponding sequence. All results, figures, and models presented in the associated manuscript can be fully reproduced using the data and scripts provided in this repository.
 
 ## Description of the File Structure
 
-The file structure of the repository is as follows:
+The file structure of the repository `SeasonalDispersal.zip` is as follows:
 
 ```bash
 ├── 02_R-Scripts
@@ -651,8 +651,6 @@ Unconsolidated files (these files should not be directly accessed):
   - Source: moonlit  
   - Reference: (12)
 
----
-
 ### Notes
 
 - Covariates were classified as either **continuous (C)** or **binary (B)**.  
@@ -661,6 +659,8 @@ Unconsolidated files (these files should not be directly accessed):
 - Download methods listed as code-style names (e.g., `rgee`, `sen2r`, `RGISTools`) refer to R packages.
 
 ### Data Source References
+
+Several datasets (e.g., MODIS, ERA5, GSMaP) were accessed programmatically via Google Earth Engine using the `rgee` R package. All datasets are cited according to their original providers and official distribution portals.
 
 (1) MODIS Vegetation Continuous Fields (MOD44B)  
 NASA LP DAAC.  
@@ -715,8 +715,10 @@ Further details on covariate preparation and aggregation are provided in Appendi
 
 ## Sharing/Access information
 
-If you use these data, please cite: Hofmann et al. (2026) [DOI]
+If you use these data, please cite: Hofmann et al. (2026) DOI TO PAPER:
 
 Links to other publicly accessible locations of the data:
 
 - Description of the spatial data preparation: [Hofmann et al., 2021](https://doi.org/10.1111/1365-2664.13868)
+- Description of an earlier dispersal model: [Hofmann et al., 2023](https://doi.org/10.1007/s10980-023-01602-4)
+- Description of flood extremes: [Hofmann et al., 2024](https://doi.org/10.1111/gcb.17299)
