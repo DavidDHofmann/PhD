@@ -5,8 +5,10 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
-wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Load required packages
@@ -23,7 +25,7 @@ names(dat) <- linebreak(names(dat), align = "c")
 dat$Description <- NULL
 
 # Make a nice table
-kbl(dat, booktabs = T, format = "latex", escape = F, align = "lcccc") %>%
+kbl(dat, booktabs = T, format = "latex", escape = F, align = "lccccc") %>%
   # kable_styling(latex_options = "scale_down") %>%
   pack_rows("(1) Landscape Characteristics", 1, 9, bold = F) %>%
   pack_rows("(2) Climate Descriptors", 10, 11, bold = F) %>%

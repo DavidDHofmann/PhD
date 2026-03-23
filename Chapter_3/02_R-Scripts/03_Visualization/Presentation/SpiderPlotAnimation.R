@@ -5,7 +5,10 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Load required packages
@@ -157,7 +160,7 @@ dat_plot <- spiderPlotData(dat
 )
 
 # Plot it
-ggplot() + 
+ggplot() +
   geom_polygon(data = dat_plot$Circles
     , aes(x = x, y = y, group = r)
     , fill  = NA

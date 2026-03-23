@@ -103,11 +103,11 @@
   performance under the respective configuration. Correlations were computed for
   100 replicates. Note that the y-axis is inverted to match our expectation of
   increasing performance as dynamism increases. The boxplots in light gray
-  represent Spearman's rank correlation coefficients under a null model and
-  serve for comparison. (b) Difference in Spearman's rank correlation when
-  moving from one configuration to another. Values $< 0$ (blue) indicate an
-  increase in predictive performance, whereas values $> 0$ (orange) indicate a
-  decrease in predictive performance.}
+  represent Spearman's rank correlation coefficients under a null model with
+  randomized preferences and serve for comparison. (b) Difference in Spearman's
+  rank correlation when moving from one configuration to another. Values $< 0$
+  (blue) indicate an increase in predictive performance, whereas values $> 0$
+  (orange) indicate a decrease in predictive performance.}
   \label{RankCorrelation}
  \end{center}
 \end{figure}
@@ -116,8 +116,9 @@
 \begin{figure}[htpb]
  \begin{center}
   \includegraphics[width = \textwidth]{Figures/HeatmapComparison}
-  \caption{Heatmaps derived under the most static (SSS) and dynamic (DMD)
-  configurations. Results are shown for simulations using the simplistic and mechanistic models.}
+  \caption{Heatmaps (i.e., number of traversing trajectories per pixel) derived
+  under the most static (SSS) and dynamic (DMD) configurations both when
+  simulating from the simplistic and mechanistic models.}
   \label{HeatmapComparison}
  \end{center}
 \end{figure}

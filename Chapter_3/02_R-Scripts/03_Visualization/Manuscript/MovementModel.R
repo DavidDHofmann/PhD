@@ -7,8 +7,10 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
-wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Load required packages
@@ -233,8 +235,9 @@ p1 <- ggplot(data = subset(coeffs, NumberRandomSteps == 25), aes(x = Covariate, 
     , position = position_dodge(width = dodge)
   ) +
   geom_point(
-      shape    = 3
-    , size     = 1
+      shape    = 95
+    # , color    = "black"
+    , size     = 3
     , position = position_dodge(width = dodge)
   ) +
   # geom_text(
@@ -251,7 +254,8 @@ p1 <- ggplot(data = subset(coeffs, NumberRandomSteps == 25), aes(x = Covariate, 
   scale_color_viridis_d(begin = 0.3, name = "Season", direction = -1) +
   scale_linewidth_manual(
       name   = "Confidence Level"
-    , values = c(1.5, 0.75, 0.3)
+    # , values = c(1.5, 0.75, 0.3)
+    , values = c(2, 1.25, 0.75)
   ) +
   theme(
     , legend.position   = "bottom"
@@ -270,12 +274,12 @@ p1 <- ggplot(data = subset(coeffs, NumberRandomSteps == 25), aes(x = Covariate, 
   )
 
 # Store the plot to file
-ggsave("04_Manuscript/Figures/MovementModel.png"
+ggsave("04_Manuscript/Figures/MovementModel.pdf"
   , plot   = p1
-  , device = png
+  , device = pdf
   , bg     = "white"
   , width  = 5
-  , height = 4.5
+  , height = 5.5
   , scale  = 1.3
 )
 

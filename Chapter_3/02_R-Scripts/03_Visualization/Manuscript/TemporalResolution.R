@@ -5,8 +5,10 @@
 rm(list = ls())
 
 # Set working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
-wd <- "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Load required packages
@@ -42,8 +44,12 @@ covs2 <- "03_Data/02_CleanData/Moonlight.rds" %>%
     x$Date
   }))
 
-# Put them together
+# Put them together (remove covariates that were later dropped)
 covs <- rbind(covs1, covs2)
+covs <- subset(covs, !(Covariate %in% c("Forest", "NDVI", "DistanceToPans", "Precipitation", "TimeOfDay", "MoonIllumination")))
+
+# Slightly rename
+covs$Covariate <- gsub(covs$Covariate, pattern = "Trees", replacement = "Trees/Grassland")
 print(covs)
 
 ################################################################################
@@ -82,7 +88,8 @@ styledDates <- function(dates, spacing = 0.1, max_days = 365, dt_min = 1) {
 }
 
 # Define spacings
-covs$Spacing = c(0.1, 0.1, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, rep(0.1, 4))
+# covs$Spacing = c(0.1, 0.1, 0.02, 0.02, 0.02, 0.02, 0.02, 0.01, rep(0.1, 4))
+covs$Spacing = c(0.1, rep(0.02, 4), 0.2)
 covs$Styleddates <- lapply(1:nrow(covs), function(i) {
   styledDates(covs$Dates[[i]], spacing = covs$Spacing[i], dt_min = 1)
 })
@@ -92,10 +99,10 @@ p1 <- covs %>%
   dplyr::select(Covariate, Styleddates) %>%
   unnest(Styleddates) %>%
   mutate(Covariate = factor(Covariate
-    , levels = c("Humans", "Forest", "Trees", "Shrubs", "Water", "DistanceToWater", "DistanceToPans", "NDVI", "Temperature", "Precipitation", "MoonIllumination", "TimeOfDay")
+    , levels = c("Humans", "Trees/Grassland", "Shrubs", "Water", "DistanceToWater", "Temperature")
   )) %>%
   ggplot(aes(x = Start, xend = End, y = Covariate, ystart = Covariate, yend = Covariate)) +
-    geom_segment(size = 3, col = "gray75") +
+    geom_segment(size = 3, col = "gray25") +
     # geom_point(aes(x = (Day + ToDay) / 2), pch = "|") +
     theme_minimal() +
     xlab("Day of the Year") +
@@ -271,8 +278,8 @@ for (i in 1:nlyr(covars)) {
 # Store the plots
 ggsave("04_Manuscript/Figures/Schematic1.png"
   , plot   = p1
-  , width  = 10
-  , height = 1.75
+  , width  = 9
+  , height = 1.5
   , scale  = 1
   , bg     = "white"
   , device = png

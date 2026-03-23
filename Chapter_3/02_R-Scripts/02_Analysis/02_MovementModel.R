@@ -19,7 +19,10 @@ library(pbmcapply)    # For progress bar parallel
 library(ggh4x)        # For nested ggplot-facettes
 
 # Change the working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Custom functions
@@ -57,7 +60,16 @@ if (rerun_valid & dir.exists(dir_valid)) {
 #### Loading Data
 ################################################################################
 # Load data
-dat <- read_rds("03_Data/02_CleanData/SSFExtracted.rds")
+# dat <- read_rds("03_Data/02_CleanData/SSFExtracted.rds")
+
+# Redaction
+# dat <- dat %>%
+#   mutate(ID = as.numeric(as.factor(ID))) %>%
+#   select(-c(CollarID, Sex, x, y, x_to, y_to)) %>%
+#   write_rds("03_Data/02_CleanData/SSFExtractedRedacted.rds")
+
+dat <- read_rds("03_Data/02_CleanData/SSFExtractedRedacted.rds")
+
 
 # Keep only desired columns
 dat <- dat %>% select(

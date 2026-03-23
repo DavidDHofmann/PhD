@@ -29,7 +29,10 @@ library(pbmcapply)  # To run stuff on multiple cores
 library(hms)        # To work with times
 
 # Change the working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Custom functions

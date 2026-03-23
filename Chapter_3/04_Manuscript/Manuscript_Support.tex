@@ -33,6 +33,7 @@
 \usetikzlibrary{svg.path}
 
 
+
 %------------------------------------------------------------------------------
 %  Bibtex vs Biblatex
 %------------------------------------------------------------------------------
@@ -40,7 +41,7 @@
 % bibtex until the final stage. Set the value below to "true" or "false" to pick
 % which one should be used.
 \newboolean{usebiblatex}
-\setboolean{usebiblatex}{false}
+\setboolean{usebiblatex}{true}
 
 % Depending on the question, the commands below will prepare the document
 % accordingly
@@ -185,10 +186,10 @@ Better Predictions of Landscape Connectivity?}
 % List of Authors
 \author{
   David D. Hofmann\textsuperscript{1,2,\S} \orcid{0000-0003-3477-4365} \and
-  Dominik M. Behr\textsuperscript{1,2} \orcid{0000-0001-7378-8538} \and
+  Dominik M. Behr\textsuperscript{1, 2} \orcid{0000-0001-7378-8538} \and
   John W. McNutt\textsuperscript{2} \and
   Arpat Ozgul\textsuperscript{1, 2} \orcid{0000-0001-7477-2642} \and
-  Gabriele Cozzi\textsuperscript{1,2} \orcid{0000-0002-1744-1940}
+  Gabriele Cozzi\textsuperscript{1, 2} \orcid{0000-0002-1744-1940}
 }
 
 % Reduce spacing between authors
@@ -259,7 +260,84 @@ Step-Selection Functions, Mechanistic Models
 \beginappendix
 
 %------------------------------------------------------------------------------
-%  Appendix S1: Covariates
+%  Appendix S1: GPS Data Overview
+%------------------------------------------------------------------------------
+\newpage
+\section{Seasonality}
+
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/SeasonalCovariates.png}
+  \caption{
+     Illustration of how some of the covariates considered in this study vary
+     across seasons. The wet season spans mid-October to mid-April (shaded in
+     gray), the remainder is considered as dry season. Data for the graphs were
+     obtained from (a) JAXA GSMaP \citep{Kubota.2020}, (b) ERA5
+     \citep{Munoz-Sabater.2021}, (c) MODIS MOD13Q1 \citep{Didan.2015}, and (d)
+     remote sensed MCD43A4 satellite images \citep{C.Schaaf.2015} for the years
+     2011 to 2022. Smoothing curves were fitted using GAMs as implemented in
+     the mgcv R-package \citep{Wood.2011}. Dots show observed monthly mean
+     values, while ribbons indicate pointwise 95\% confidence intervals around
+     the GAM-estimated means.
+  }
+  \label{SeasonalCovariates}
+ \end{center}
+\end{figure}
+
+%------------------------------------------------------------------------------
+%  Appendix S2: GPS Data Overview
+%------------------------------------------------------------------------------
+\newpage
+\section{GPS Sampling}
+
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = 0.9\textwidth]{Figures/GPSCleanup.png}
+  \caption{
+    (a) Summary of raw GPS data for all collared individuals, including both
+    resident and dispersing periods. The left panel shows the total number of
+    GPS fixes collected per individual (horizontal bars). The middle panel
+    displays the timing of fixes across the day. The right panel shows the
+    distribution of time lags between successive GPS fixes for each individual,
+    summarized as horizontal boxplots; crosses indicate median fix intervals.
+    (b) Equivalent summaries for the cleaned and standardized dataset,
+    restricted to dispersing individuals and resampled to a consistent fix
+    rate of four hours (and 8 hours during daytime). Because of the
+    standardization, the number of individuals remaining for further analyses
+    dropped from 33 to 26. 
+  }
+  \label{GPSCleanup}
+ \end{center}
+\end{figure}
+
+\begin{figure}[htbp]
+ \begin{center}
+  \includegraphics[width = \textwidth]{Figures/GPSSummaries.png}
+  \caption{
+    Summary of dispersal-phase GPS data for every collared disperser. The left
+    panel shows the timing and duration of dispersal periods for each
+    individual, plotted by day of year. Some individuals exhibited multiple
+    distinct dispersal events. The dark shaded background denotes the wet
+    season. The middle panel shows the total number of GPS fixes collected per
+    individual, partitioned by season, with dark bars representing fixes
+    collected during the wet season and lighter bars representing fixes
+    collected during the dry season. The right panel shows the mean cumulative
+    (24-h) distance moved by each dispersing individual, with horizontal bars
+    indicating the associated standard deviation.
+  }
+  \label{GPSSummaries}
+ \end{center}
+\end{figure}
+
+
+
+
+
+
+
+
+%------------------------------------------------------------------------------
+%  Appendix S3: Covariates
 %------------------------------------------------------------------------------
 \newpage
 \section{Covariates}
@@ -282,7 +360,7 @@ which we only retained the land-cover class water, while setting all other
 categories to dryland. Similarly, we used the MERIT Hydro dataset to obtain
 information on permanent rivers \citep{Yamazaki.2019}. To dynamically render
 large waterbodies, particularly the floodwaters of the Okavango Delta, we
-prepared weekly updated floodmaps using remote sensed MODIS MOD43A4 satellite
+prepared weekly updated floodmaps using remote sensed MODIS MCD43A4 satellite
 images. The underlying floodmapping algorithm is described in detail by
 \citet{Wolski.2017} and \citet{Hofmann.2021} and is implemented in the floodmapr
 package (available on GitHub; \url{https://github.com/DavidDHofmann/floodmapr}).
@@ -290,7 +368,7 @@ We combined the water (static), river (static), and flood layers (dynamic) into
 a single stack representing water bodies at a resolution of 500m x 500m.
 Finally, we employed remote sensing to detect small, ephemeral water bodies
 (i.e., pans) using a custom random-forest classifier applied to Sentinel 2
-satellite imagery (European Space Agency 2018; details of the classifier in
+satellite imagery (\citealp{ESA.2025}; details of the classifier in
 Appendix A2). Sentinel 2 has a resolution of 10m and is therefore particularly
 useful for obtaining information on small landscape features. Even though
 Sentinel 2 satellite imagery is updated every five days, cloud cover often
@@ -702,7 +780,7 @@ were detected in at least 50\% of the overlapping tiles. Finally, we generated
 %	Appendix S4: Stability with Regards to Number of Random Steps
 %------------------------------------------------------------------------------
 \newpage
-\section{Number of Random Steps}
+\section{Model Sensitivity to Number of Random Steps}
 
 \begin{figure}[htbp]
  \begin{center}

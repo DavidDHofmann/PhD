@@ -11,7 +11,10 @@ rm(list = ls())
 library(terra)     # To handle spatial data
 
 # Set the working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Import the human influence layer and the reference raster

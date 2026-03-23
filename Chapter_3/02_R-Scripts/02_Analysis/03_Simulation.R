@@ -7,7 +7,10 @@
 rm(list = ls())
 
 # Change the working directory
-setwd("/home/david/ownCloud/02_Academia/02_PhD/Chapter_3")
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 
 # Load required packages
 # library(raster)         # To handle spatial data

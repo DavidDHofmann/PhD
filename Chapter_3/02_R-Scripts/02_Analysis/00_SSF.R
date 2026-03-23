@@ -8,7 +8,10 @@
 rm(list = ls())
 
 # Change the working directory
-wd <- "/home/david/ownCloud/02_Academia/02_PhD/Chapter_3"
+wd <- ifelse(Sys.info()["sysname"] == "Linux"
+  , "/media/david/SharedSpace/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+  , "D:/SwitchDrive/02_Academia/02_PhD/Chapter_3"
+)
 setwd(wd)
 
 # Load packages
@@ -94,7 +97,7 @@ steps <- data %>%
   unnest(Bursts) %>%
   nest(data = -c(ID, burst_id)) %>%
   mutate(Nrow = map_dbl(data, nrow)) %>%
-  subset(Nrow > 3) %>%
+  subset(Nrow >= 3) %>%
   mutate(Steps = map(data, function(x) {
     mets <- stepMetrics(x)
     mets <- cbind(x, mets)
@@ -157,6 +160,7 @@ p1 <- ggplot(steps, aes(x = sl, col = inactive, fill = inactive)) +
   ylab("Density") +
   scale_fill_manual(values = c("orange", "cornflowerblue")) +
   scale_color_manual(values = c("orange", "cornflowerblue"))
+
 p2 <- ggplot(steps, aes(x = relta, col = inactive, fill = inactive)) +
   geom_density(alpha = 0.2) +
   theme_minimal() +
