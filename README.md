@@ -2,10 +2,10 @@
 
 
 This repository contains all R-scripts and ($\LaTeX$) files from David D.
-Hofmann's PhD thesis, entitled *Dispersal & Connectivity in Physical, Seasonal, and
-Extreme Landscapes*. The associated data is either hosted on dedicated
-repositories (e.g., Dryad) or can be shared upon reasonable request. The
-repository contains the following chapters.
+Hofmann's PhD thesis, entitled *Dispersal & Connectivity in Physical, Seasonal,
+and Extreme Landscapes* (https://doi.org/10.5167/uzh-263215). The associated
+data are either hosted on dedicated repositories (e.g., Dryad) or can be shared
+upon reasonable request. The repository contains the following chapters.
 
 - `Chapter_1`: *A Three-Step Approach for Assessing Landscape Connectivity vis
   Simulated Dispersal: African Wild Dog Case Study.*
@@ -31,7 +31,8 @@ repository contains the following chapters.
   seasonality when predicting dispersal and connectivity. I also demonstrate
   how simulations from integrated step-selection functions provide an
   unprecedented ability to account for seasonality when assessing connectivity.
-  This chapter is currently in preparation for submission.
+  This chapter was published in Ecosphere
+  (https://doi.org/10.1002/ecs2.70726).
 
 - `Chapter_4`: *Methods for Implementing Integrated Step-Selection Functions
   with Incomplete Data.*

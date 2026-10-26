@@ -1,20 +1,20 @@
 \babel@toc {english}{}\relax 
-\contentsline {section}{\numberline {A.1}Seasonality}{2}{appendix.A}%
-\contentsline {section}{\numberline {A.2}GPS Sampling}{3}{appendix.B}%
-\contentsline {section}{\numberline {A.3}Covariates}{5}{appendix.C}%
-\contentsline {subsection}{\numberline {A.3.1}Landscape Characteristics}{5}{subsection.C.1}%
-\contentsline {subsection}{\numberline {A.3.2}Climate Descriptors}{6}{subsection.C.2}%
-\contentsline {subsection}{\numberline {A.3.3}Anthropogenic Features}{6}{subsection.C.3}%
-\contentsline {subsection}{\numberline {A.3.4}Light Intensity}{6}{subsection.C.4}%
-\contentsline {section}{\numberline {A.4}Pan Mapping}{9}{appendix.D}%
-\contentsline {subsection}{\numberline {A.4.1}Satellite Product Overview}{9}{subsection.D.1}%
-\contentsline {subsection}{\numberline {A.4.2}Evaluation of Landsat 8 and Sentinel 2}{11}{subsection.D.2}%
-\contentsline {subsubsection}{\numberline {A.4.2.1}Training Polygons}{11}{subsubsection.D.2.1}%
-\contentsline {subsubsection}{\numberline {A.4.2.2}Satellite Data Download}{11}{subsubsection.D.2.2}%
-\contentsline {subsubsection}{\numberline {A.4.2.3}Land Cover Classifiers}{13}{subsubsection.D.2.3}%
-\contentsline {subsubsection}{\numberline {A.4.2.4}Validation and Comparison}{13}{subsubsection.D.2.4}%
-\contentsline {subsection}{\numberline {A.4.3}Bulk Download}{15}{subsection.D.3}%
-\contentsline {section}{\numberline {A.5}Movement Model Results}{18}{appendix.E}%
-\contentsline {section}{\numberline {A.6}Model Sensitivity to Number of Random Steps}{22}{appendix.F}%
-\contentsline {section}{\numberline {A.7}Model Interpretation}{23}{appendix.G}%
-\contentsline {section}{\numberline {A.8}Spearman's Rank Correlation in Relation to the Number of Random Steps}{24}{appendix.H}%
+\contentsline {section}{\numberline {S1}Seasonality}{2}{appendix.A}%
+\contentsline {section}{\numberline {S2}GPS Sampling}{3}{appendix.B}%
+\contentsline {section}{\numberline {S3}Covariates}{5}{appendix.C}%
+\contentsline {subsection}{\numberline {S3.1}Landscape Characteristics}{5}{subsection.C.1}%
+\contentsline {subsection}{\numberline {S3.2}Climate Descriptors}{6}{subsection.C.2}%
+\contentsline {subsection}{\numberline {S3.3}Anthropogenic Features}{6}{subsection.C.3}%
+\contentsline {subsection}{\numberline {S3.4}Light Intensity}{6}{subsection.C.4}%
+\contentsline {section}{\numberline {S4}Pan Mapping}{9}{appendix.D}%
+\contentsline {subsection}{\numberline {S4.1}Satellite Product Overview}{9}{subsection.D.1}%
+\contentsline {subsection}{\numberline {S4.2}Evaluation of Landsat 8 and Sentinel 2}{11}{subsection.D.2}%
+\contentsline {subsubsection}{\numberline {S4.2.1}Training Polygons}{11}{subsubsection.D.2.1}%
+\contentsline {subsubsection}{\numberline {S4.2.2}Satellite Data Download}{11}{subsubsection.D.2.2}%
+\contentsline {subsubsection}{\numberline {S4.2.3}Land Cover Classifiers}{12}{subsubsection.D.2.3}%
+\contentsline {subsubsection}{\numberline {S4.2.4}Validation and Comparison}{13}{subsubsection.D.2.4}%
+\contentsline {subsection}{\numberline {S4.3}Bulk Download}{15}{subsection.D.3}%
+\contentsline {section}{\numberline {S5}Movement Model Results}{18}{appendix.E}%
+\contentsline {section}{\numberline {S6}Model Sensitivity to Number of Random Steps}{22}{appendix.F}%
+\contentsline {section}{\numberline {S7}Model Interpretation}{23}{appendix.G}%
+\contentsline {section}{\numberline {S8}Spearman's Rank Correlation in Relation to the Number of Random Steps}{24}{appendix.H}%

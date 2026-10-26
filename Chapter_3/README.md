@@ -1,7 +1,5 @@
 # Seasonal dynamism or model realism: What drives better predictions of landscape connectivity?
 
-[https://doi.org/10.5061/dryad.z34tmpgvr](https://doi.org/10.5061/dryad.z34tmpgvr)
-
 This repository contains all `R`-code and data to reproduce the analyses and visualizations from Hofmann et al., 2026. It is recommended to explore the data through the provided `R`-Scripts. A general design principle was to compartmentalize all analyses and simulations to reduce computational requirements. As such, there are often parent files (in `.rds` format) that provide overviews and bundle further data files as `tidyverse` data-tibbles. All `R`-codes are extensively documented, giving detailed insights into the processing and analytical steps. All data can be understood by investigating the scripts for data cleaning. R-scripts are numbered and expected to be run in corresponding sequence. All results, figures, and models presented in the associated manuscript can be fully reproduced using the data and scripts provided in this repository.
 
 ## Description of the File Structure

@@ -296,30 +296,23 @@ plotMet <- function(
     geom_text(
         data     = labels_waters
       , mapping  = aes(x = x, y = y, label = Label)
-      , col      = ifelse(colorscheme == "dark", "gray80", "gray30")
+      , col      = ifelse(colorscheme == "dark", "gray90", "gray30")
       , fontface = 3
-      , size     = 1.3
+      , size     = 2.4
     ) +
     geom_text(
         data     = labels_countries
       , mapping  = aes(x = x, y = y, label = Label)
       , col      = col_country
-      , size     = 2
       , fontface = 2
+      , size     = 3.4
     ) +
     geom_text(
         data     = labels_areas
       , mapping  = aes(x = X, y = Y, label = Name)
       , col      = col_area
       , fontface = 3
-      , size     = 2
-    ) +
-    geom_text(
-        data     = labels_areas
-      , mapping  = aes(x = X, y = Y, label = Name)
-      , col      = col_area
-      , fontface = 3
-      , size     = 2
+      , size     = 2.8
     ) +
     geom_text(
         data     = subset(vills, place == "City")
@@ -327,7 +320,7 @@ plotMet <- function(
       , col      = ifelse(colorscheme == "dark", "gray90", "gray30")
       , fontface = 3
       , size     = 2
-      , nudge_y  = c(0.1, -0.1, 0.1)
+      , nudge_y  = rep(c(0.1, -0.1, 0.1), 4)
     ) +
     scale_size_manual(values = c(1.0, 0.25)) +
     scale_color_manual(values = c(col_area, "red")) +
@@ -477,8 +470,9 @@ ggsave("04_Manuscript/Figures/HeatmapComparison.png"
   , bg     = "white"
   , height = 4
   , width  = 6
-  , scale  = 1.6
+  , scale  = 1.2
   , device = png
+  , dpi    = 600
 )
 
 # Store plot to file
@@ -487,8 +481,9 @@ ggsave("04_Manuscript/Figures/HeatmapDifference.png"
   , bg     = "white"
   , height = 4
   , width  = 6
-  , scale  = 1.6
+  , scale  = 1.2
   , device = png
+  , dpi    = 600
 )
 
 # Store legend

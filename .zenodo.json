@@ -1,0 +1,75 @@
+{
+  "title": "Dispersal and Connectivity in Physical, Seasonal, and Extreme Landscapes: PhD Thesis",
+  "upload_type": "software",
+  "version": "1.0.0",
+  "creators": [
+    {
+      "name": "Hofmann, David D.",
+      "orcid": "0000-0003-3477-4365",
+      "affiliation": "University of Zurich"
+    }
+  ],
+  "description": "<p>This archive contains the research code and manuscript files accompanying David D. Hofmann's PhD thesis, <em>Dispersal and Connectivity in Physical, Seasonal, and Extreme Landscapes</em>, at the University of Zurich. It brings together analyses of animal movement and landscape connectivity, with applications to African wild dogs in southern Africa and methods for handling incomplete animal tracking data.</p><p>The code is organized into four chapters covering connectivity assessment through simulated dispersal; connectivity under contrasting climatic and flooding conditions; seasonal variation in connectivity predictions; and integrated step-selection analyses with missing locations. The workflows include data preparation, movement modelling, individual-based simulations, connectivity calculations, and visualization. Most code is written in R, with some supporting C++ functions.</p><p>The archive also includes LaTeX manuscript and thesis sources, associated figures, and defense material. Input datasets are distributed separately through the repositories linked in the documentation or are available subject to the access arrangements described there. Reuse requires the relevant datasets, software dependencies, and adjustment of local file paths.</p><p>The associated thesis is published at <a href=\"https://doi.org/10.5167/uzh-263215\">https://doi.org/10.5167/uzh-263215</a>.</p><p><strong>Funding.</strong> Funding was provided by Albert-Heim-Stiftung, Basler Stiftung für Biologische Forschung, Georges and Antoine Claraz Foundation, Idea Wild, Jacot Foundation, National Geographic Society, Parrotia-Stiftung, Stiftung Temperatio, Wilderness Wildlife Trust, Forschungskredit of the University of Zurich (Grant No. FK-21-091), and a Swiss National Science Foundation Grant (No. 31003A_182286) to A. Ozgul and a Swiss National Science Foundation Grant (No. S-74334-06-01) to G. Cozzi.</p><p><strong>License scope.</strong> CC BY 4.0 applies to the original source code authored by David D. Hofmann. Other included materials retain their stated licenses and rights notices.</p>",
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "language": "eng",
+  "keywords": [
+    "movement ecology",
+    "landscape connectivity",
+    "animal dispersal",
+    "integrated step-selection functions",
+    "individual-based simulation",
+    "seasonality",
+    "climate change",
+    "African wild dog",
+    "Lycaon pictus",
+    "R"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "10.5167/uzh-263215",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1007/s10980-023-01602-4",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1111/gcb.17299",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1002/ecs2.70726",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.1186/s40462-024-00476-8",
+      "relation": "isSupplementTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5061/dryad.dncjsxkzn",
+      "relation": "isRelatedTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5061/dryad.z34tmpgnm",
+      "relation": "isRelatedTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.5061/dryad.z34tmpgvr",
+      "relation": "isRelatedTo",
+      "scheme": "doi"
+    },
+    {
+      "identifier": "10.13020/6wcd-6s43",
+      "relation": "isRelatedTo",
+      "scheme": "doi"
+    }
+  ]
+}

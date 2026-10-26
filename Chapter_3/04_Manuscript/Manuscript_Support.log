@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.27)  29 JAN 2026 10:43
+This is pdfTeX, Version 3.141592653-2.6-1.40.25 (TeX Live 2023/Debian) (preloaded format=pdflatex 2026.1.27)  2 MAY 2026 11:21
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -669,6 +669,17 @@ Package tocloft Info: The document has section divisions on input line 51.
 \cftbeforetabskip=\skip98
 \cfttabindent=\skip99
 \cfttabnumwidth=\skip100
+) (/usr/share/texlive/texmf-dist/tex/latex/titlesec/titlesec.sty
+Package: titlesec 2023/10/27 v2.16 Sectioning titles
+\ttl@box=\box70
+\beforetitleunit=\skip101
+\aftertitleunit=\skip102
+\ttl@plus=\dimen312
+\ttl@minus=\dimen313
+\ttl@toksa=\toks45
+\titlewidth=\dimen314
+\titlewidthlast=\dimen315
+\titlewidthfirst=\dimen316
 ) (/usr/share/texlive/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarysvg.path.code.tex
 File: tikzlibrarysvg.path.code.tex 2023-01-15 v3.1.10 (3.1.10)
  (/usr/share/texlive/texmf-dist/tex/generic/pgf/libraries/pgflibrarysvg.path.code.tex
@@ -677,10 +688,10 @@ File: pgflibrarysvg.path.code.tex 2023-01-15 v3.1.10 (3.1.10)
 File: pgfmoduleparser.code.tex 2023-01-15 v3.1.10 (3.1.10)
 \pgfparserdef@arg@count=\count347
 )
-\pgf@lib@svg@last@x=\dimen312
-\pgf@lib@svg@last@y=\dimen313
-\pgf@lib@svg@last@c@x=\dimen314
-\pgf@lib@svg@last@c@y=\dimen315
+\pgf@lib@svg@last@x=\dimen317
+\pgf@lib@svg@last@y=\dimen318
+\pgf@lib@svg@last@c@x=\dimen319
+\pgf@lib@svg@last@c@y=\dimen320
 \pgf@lib@svg@count=\count348
 \pgf@lib@svg@max@num=\count349
 )) (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.sty
@@ -691,7 +702,7 @@ Package: csquotes 2022-09-14 v5.2n context-sensitive quotations (JAW)
 \csq@qlevel=\count353
 \csq@maxlvl=\count354
 \csq@tshold=\count355
-\csq@ltx@everypar=\toks45
+\csq@ltx@everypar=\toks46
  (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2022-09-14 v5.2n csquotes generic definitions (JAW)
 )
@@ -750,14 +761,14 @@ File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 \blx@sectionciteorderinternal@0=\count397
 \blx@entrysetcounter=\count398
 \blx@biblioinstance=\count399
-\labelnumberwidth=\skip101
-\labelalphawidth=\skip102
-\biblabelsep=\skip103
-\bibitemsep=\skip104
-\bibnamesep=\skip105
-\bibinitsep=\skip106
-\bibparsep=\skip107
-\bibhang=\skip108
+\labelnumberwidth=\skip103
+\labelalphawidth=\skip104
+\biblabelsep=\skip105
+\bibitemsep=\skip106
+\bibnamesep=\skip107
+\bibinitsep=\skip108
+\bibparsep=\skip109
+\bibhang=\skip110
 \blx@bcfin=\read4
 \blx@bcfout=\write4
 \blx@langwohyphens=\language90
@@ -771,7 +782,8 @@ File: blx-dm.def 2023/03/05 v3.19 biblatex localization (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex style data model...
 Package biblatex Info: ... file 'apa.dbx' found.
- (/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/apa.dbx
+
+(/usr/share/texlive/texmf-dist/tex/latex/biblatex-apa/apa.dbx
 File: apa.dbx 2023/03/20 v9.17 APA biblatex style data model
 )
 Package biblatex Info: Trying to load biblatex custom data model...
@@ -854,24 +866,23 @@ Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
 \c@savedcitation=\count478
 \c@pageref=\count479
 \c@savedpageref=\count480
-\shorthandwidth=\skip109
-\shortjournalwidth=\skip110
-\shortserieswidth=\skip111
-\shorttitlewidth=\skip112
-\shortauthorwidth=\skip113
-\shorteditorwidth=\skip114
-\locallabelnumberwidth=\skip115
-\locallabelalphawidth=\skip116
-\localshorthandwidth=\skip117
-\localshortjournalwidth=\skip118
-\localshortserieswidth=\skip119
-\localshorttitlewidth=\skip120
-\localshortauthorwidth=\skip121
-\localshorteditorwidth=\skip122
+\shorthandwidth=\skip111
+\shortjournalwidth=\skip112
+\shortserieswidth=\skip113
+\shorttitlewidth=\skip114
+\shortauthorwidth=\skip115
+\shorteditorwidth=\skip116
+\locallabelnumberwidth=\skip117
+\locallabelalphawidth=\skip118
+\localshorthandwidth=\skip119
+\localshortjournalwidth=\skip120
+\localshortserieswidth=\skip121
+\localshorttitlewidth=\skip122
+\localshortauthorwidth=\skip123
+\localshorteditorwidth=\skip124
 Package biblatex Info: Trying to load compatibility code...
 Package biblatex Info: ... file 'blx-compat.def' found.
-
-(/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
+ (/usr/share/texlive/texmf-dist/tex/latex/biblatex/blx-compat.def
 File: blx-compat.def 2023/03/05 v3.19 biblatex compatibility (PK/MW)
 )
 Package biblatex Info: Trying to load generic definitions...
@@ -948,7 +959,7 @@ Package: expl3 2024-01-22 L3 programming layer (loader)
  (/usr/share/texlive/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
 File: l3backend-pdftex.def 2024-01-04 L3 backend support: PDF output (pdfTeX)
 \l__color_backend_stack_int=\count492
-\l__pdf_internal_box=\box70
+\l__pdf_internal_box=\box71
 ))
 Package biblatex Info: ... and expl3
 (biblatex)             2024-01-22 L3 programming layer (loader) 
@@ -959,7 +970,7 @@ Package: xparse 2023-10-10 L3 Experimental document command parser
 )
 Package: blx-case-expl3 2023/03/05 v3.19 expl3 case changing code for biblatex
 ))
-Package hyperref Info: Option `colorlinks' set `true' on input line 121.
+Package hyperref Info: Option `colorlinks' set `true' on input line 120.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
 Package csquotes Info: Adjusting default style.
@@ -972,24 +983,24 @@ LaTeX Warning: Unused global option(s):
 (./Manuscript_Support.aux)
 \openout1 = `Manuscript_Support.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 207.
-LaTeX Font Info:    ... okay on input line 207.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 211.
+LaTeX Font Info:    ... okay on input line 211.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -1028,16 +1039,16 @@ LaTeX Font Info:    ... okay on input line 207.
 (/usr/share/texlive/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
 \scratchcounter=\count493
-\scratchdimen=\dimen316
-\scratchbox=\box71
+\scratchdimen=\dimen321
+\scratchbox=\box72
 \nofMPsegments=\count494
 \nofMParguments=\count495
-\everyMPshowfont=\toks46
+\everyMPshowfont=\toks47
 \MPscratchCnt=\count496
-\MPscratchDim=\dimen317
+\MPscratchDim=\dimen322
 \MPnumerator=\count497
 \makeMPintoPDFobject=\count498
-\everyMPtoPDFconversion=\toks47
+\everyMPtoPDFconversion=\toks48
 ) (/usr/share/texlive/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 485.
@@ -1046,19 +1057,19 @@ File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Live
 ))
 \symgns@font=\mathgroup6
 LaTeX Font Info:    Overwriting symbol font `gns@font' in version `bold'
-(Font)                  TS1/cmr/m/n --> TS1/cmr/b/n on input line 207.
-Package gensymb Info: Math companion symbols declared on input line 207.
-LaTeX Info: Redefining \degree on input line 207.
-LaTeX Info: Redefining \celsius on input line 207.
-Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 207.
-LaTeX Info: Redefining \ohm on input line 207.
-Package gensymb Info: Using \textohm for \ohm on input line 207.
-Package gensymb Info: Using \textmu for \micro on input line 207.
+(Font)                  TS1/cmr/m/n --> TS1/cmr/b/n on input line 211.
+Package gensymb Info: Math companion symbols declared on input line 211.
+LaTeX Info: Redefining \degree on input line 211.
+LaTeX Info: Redefining \celsius on input line 211.
+Package gensymb Info: Using text companion symbols for \degree, \celsius and \perthousand on input line 211.
+LaTeX Info: Redefining \ohm on input line 211.
+Package gensymb Info: Using \textohm for \ohm on input line 211.
+Package gensymb Info: Using \textmu for \micro on input line 211.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: threeparttable package is loaded.
 Package caption Info: End \AtBeginDocument code.
-Package hyperref Info: Link coloring ON on input line 207.
+Package hyperref Info: Link coloring ON on input line 211.
  (./Manuscript_Support.out) (./Manuscript_Support.out)
 \@outlinefile=\write5
 \openout5 = `Manuscript_Support.out'.
@@ -1093,119 +1104,124 @@ Package biblatex Info: Automatic encoding selection.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'Manuscript_Support.bbl' found.
  (./Manuscript_Support.bbl)
-Package biblatex Info: Reference section=0 on input line 207.
-Package biblatex Info: Reference segment=0 on input line 207.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 214.
+Package biblatex Info: Reference section=0 on input line 211.
+Package biblatex Info: Reference segment=0 on input line 211.
+ [1
+
+{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}] (./Manuscript_Support.toc
+LaTeX Font Info:    Trying to load font information for U+msa on input line 2.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 214.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 2.
  (/usr/share/texlive/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-) [1
-
-{/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}] (./Manuscript_Support.toc)
+))
 \tf@toc=\write6
 \openout6 = `Manuscript_Support.toc'.
 
  [1]
-<Figures/SeasonalCovariates.png, id=126, 487.8225pt x 292.6935pt>
+<Figures/SeasonalCovariates.png, id=118, 487.8225pt x 292.6935pt>
 File: Figures/SeasonalCovariates.png Graphic file (type png)
 <use Figures/SeasonalCovariates.png>
-Package pdftex.def Info: Figures/SeasonalCovariates.png  used on input line 270.
+Package pdftex.def Info: Figures/SeasonalCovariates.png  used on input line 262.
 (pdftex.def)             Requested size: 398.3386pt x 239.00534pt.
  [2 <./Figures/SeasonalCovariates.png (PNG copy)>]
-<Figures/GPSCleanup.png, id=149, 632.3625pt x 758.835pt>
+<Figures/GPSCleanup.png, id=141, 632.3625pt x 758.835pt>
 File: Figures/GPSCleanup.png Graphic file (type png)
 <use Figures/GPSCleanup.png>
-Package pdftex.def Info: Figures/GPSCleanup.png  used on input line 295.
+Package pdftex.def Info: Figures/GPSCleanup.png  used on input line 287.
 (pdftex.def)             Requested size: 358.50229pt x 430.2131pt.
-<Figures/GPSSummaries.png, id=150, 722.7pt x 433.62pt>
+<Figures/GPSSummaries.png, id=142, 722.7pt x 433.62pt>
 File: Figures/GPSSummaries.png Graphic file (type png)
 <use Figures/GPSSummaries.png>
-Package pdftex.def Info: Figures/GPSSummaries.png  used on input line 315.
+Package pdftex.def Info: Figures/GPSSummaries.png  used on input line 307.
 (pdftex.def)             Requested size: 398.3386pt x 239.0012pt.
- [3 <./Figures/GPSCleanup.png (PNG copy)>] [4 <./Figures/GPSSummaries.png (PNG copy)>] [5]
-<Figures/Moonlight.png, id=200, 433.62pt x 433.62pt>
+ [3 <./Figures/GPSCleanup.png (PNG copy)>] [4 <./Figures/GPSSummaries.png (PNG copy)>] [5] [6{/usr/share/texmf/fonts/enc/dvips/cm-super/cm-super-ts1.enc}]
+<Figures/Moonlight.png, id=207, 433.62pt x 433.62pt>
 File: Figures/Moonlight.png Graphic file (type png)
 <use Figures/Moonlight.png>
-Package pdftex.def Info: Figures/Moonlight.png  used on input line 428.
+Package pdftex.def Info: Figures/Moonlight.png  used on input line 420.
 (pdftex.def)             Requested size: 298.75394pt x 298.76805pt.
- [6]
+
 
 pdfTeX warning: pdflatex (file ./Figures/Light.pdf): PDF inclusion: found PDF version <1.6>, but at most version <1.5> allowed
-<Figures/Light.pdf, id=219, 711.31892pt x 540.60239pt>
+<Figures/Light.pdf, id=210, 711.31892pt x 540.60239pt>
 File: Figures/Light.pdf Graphic file (type pdf)
 <use Figures/Light.pdf>
-Package pdftex.def Info: Figures/Light.pdf  used on input line 438.
+Package pdftex.def Info: Figures/Light.pdf  used on input line 430.
 (pdftex.def)             Requested size: 398.3386pt x 302.73526pt.
 [7 <./Figures/Moonlight.png (PNG copy)>] [8 <./Figures/Light.pdf>]
-<Figures/Pan.jpg, id=274, 2069.7325pt x 1608.0075pt>
+<Figures/Pan.jpg, id=266, 2069.7325pt x 1608.0075pt>
 File: Figures/Pan.jpg Graphic file (type jpg)
 <use Figures/Pan.jpg>
-Package pdftex.def Info: Figures/Pan.jpg  used on input line 486.
+Package pdftex.def Info: Figures/Pan.jpg  used on input line 478.
 (pdftex.def)             Requested size: 398.3386pt x 309.47493pt.
- (./Figures/Satellites.tex) (./GeneralMetrics/TrainingTotal.tex) (./GeneralMetrics/TrainingDryland.tex) (./GeneralMetrics/TrainingWater.tex) (./GeneralMetrics/TrainingWetpan.tex) (./GeneralMetrics/TrainingDates.tex) [9] [10 <./Figures/Pan.jpg>]
-<Figures/PanMapping.pdf, id=291, 796.6487pt x 448.10245pt>
+ (./Figures/Satellites.tex) [9] [10 <./Figures/Pan.jpg>] (./GeneralMetrics/TrainingTotal.tex) (./GeneralMetrics/TrainingDryland.tex) (./GeneralMetrics/TrainingWater.tex) (./GeneralMetrics/TrainingWetpan.tex) (./GeneralMetrics/TrainingDates.tex)
+<Figures/PanMapping.pdf, id=285, 796.6487pt x 448.10245pt>
 File: Figures/PanMapping.pdf Graphic file (type pdf)
 <use Figures/PanMapping.pdf>
-Package pdftex.def Info: Figures/PanMapping.pdf  used on input line 554.
+Package pdftex.def Info: Figures/PanMapping.pdf  used on input line 546.
 (pdftex.def)             Requested size: 398.3386pt x 224.06433pt.
- [11] (./Figures/ND.tex) (./GeneralMetrics/PercentageTrainingWetpan.tex) [12 <./Figures/PanMapping.pdf>]
-<Figures/Reflectances.png, id=352, 722.7pt x 867.24pt>
+ [11] (./Figures/ND.tex)
+
+LaTeX Warning: `h' float specifier changed to `ht'.
+
+(./GeneralMetrics/PercentageTrainingWetpan.tex) [12 <./Figures/PanMapping.pdf>]
+<Figures/Reflectances.png, id=343, 722.7pt x 867.24pt>
 File: Figures/Reflectances.png Graphic file (type png)
 <use Figures/Reflectances.png>
-Package pdftex.def Info: Figures/Reflectances.png  used on input line 636.
+Package pdftex.def Info: Figures/Reflectances.png  used on input line 628.
 (pdftex.def)             Requested size: 398.3386pt x 478.00243pt.
-<Figures/ClassificationValidation.png, id=354, 693.792pt x 433.62pt>
+<Figures/ClassificationValidation.png, id=345, 693.792pt x 433.62pt>
 File: Figures/ClassificationValidation.png Graphic file (type png)
 <use Figures/ClassificationValidation.png>
-Package pdftex.def Info: Figures/ClassificationValidation.png  used on input line 660.
+Package pdftex.def Info: Figures/ClassificationValidation.png  used on input line 652.
 (pdftex.def)             Requested size: 398.3386pt x 248.95903pt.
  (./GeneralMetrics/NumberTilesTotal.tex) (./GeneralMetrics/NumberTiles2A.tex) (./GeneralMetrics/NumberTiles1C.tex) [13] [14 <./Figures/Reflectances.png (PNG copy)>] [15 <./Figures/ClassificationValidation.png (PNG copy)>]
-<Figures/MovingWindows.png, id=382, 520.344pt x 390.0171pt>
+<Figures/MovingWindows.png, id=376, 520.344pt x 390.0171pt>
 File: Figures/MovingWindows.png Graphic file (type png)
 <use Figures/MovingWindows.png>
-Package pdftex.def Info: Figures/MovingWindows.png  used on input line 698.
+Package pdftex.def Info: Figures/MovingWindows.png  used on input line 690.
 (pdftex.def)             Requested size: 398.3386pt x 298.58229pt.
-<Figures/MovingWindows2.png, id=383, 520.344pt x 520.344pt>
+<Figures/MovingWindows2.png, id=377, 520.344pt x 520.344pt>
 File: Figures/MovingWindows2.png Graphic file (type png)
 <use Figures/MovingWindows2.png>
-Package pdftex.def Info: Figures/MovingWindows2.png  used on input line 711.
+Package pdftex.def Info: Figures/MovingWindows2.png  used on input line 703.
 (pdftex.def)             Requested size: 398.3386pt x 398.35562pt.
  [16 <./Figures/MovingWindows.png (PNG copy)>] [17 <./Figures/MovingWindows2.png (PNG copy)>] (./Figures/MovementModelStaticSimple.tex) (./Figures/MovementModelDynamicSimple.tex) (./Figures/MovementModelStaticFull.tex)
-Overfull \hbox (20.73154pt too wide) in paragraph at lines 760--762
+Overfull \hbox (20.73154pt too wide) in paragraph at lines 752--754
  [] 
  []
 
 
-LaTeX Warning: Float too large for page by 15.11288pt on input line 763.
+LaTeX Warning: Float too large for page by 15.11288pt on input line 755.
 
 (./Figures/MovementModelDynamicFull.tex)
-Overfull \hbox (20.73154pt too wide) in paragraph at lines 774--776
+Overfull \hbox (20.73154pt too wide) in paragraph at lines 766--768
  [] 
  []
 
 
-LaTeX Warning: Float too large for page by 15.11288pt on input line 777.
+LaTeX Warning: Float too large for page by 15.11288pt on input line 769.
 
 [18] [19] [20] [21]
-<Figures/Stability.png, id=419, 693.792pt x 578.16pt>
+<Figures/Stability.png, id=413, 693.792pt x 578.16pt>
 File: Figures/Stability.png Graphic file (type png)
 <use Figures/Stability.png>
-Package pdftex.def Info: Figures/Stability.png  used on input line 787.
+Package pdftex.def Info: Figures/Stability.png  used on input line 779.
 (pdftex.def)             Requested size: 398.3386pt x 331.94539pt.
  [22 <./Figures/Stability.png (PNG copy)>]
-<Figures/MovementModelInterpretation.png, id=425, 578.16pt x 361.35pt>
+<Figures/MovementModelInterpretation.png, id=419, 578.16pt x 361.35pt>
 File: Figures/MovementModelInterpretation.png Graphic file (type png)
 <use Figures/MovementModelInterpretation.png>
-Package pdftex.def Info: Figures/MovementModelInterpretation.png  used on input line 804.
+Package pdftex.def Info: Figures/MovementModelInterpretation.png  used on input line 796.
 (pdftex.def)             Requested size: 398.3386pt x 248.96234pt.
  [23 <./Figures/MovementModelInterpretation.png (PNG copy)>]
-<Figures/RankCorrelationNumberSteps.png, id=431, 650.43pt x 390.258pt>
+<Figures/RankCorrelationNumberSteps.png, id=425, 650.43pt x 390.258pt>
 File: Figures/RankCorrelationNumberSteps.png Graphic file (type png)
 <use Figures/RankCorrelationNumberSteps.png>
-Package pdftex.def Info: Figures/RankCorrelationNumberSteps.png  used on input line 824.
+Package pdftex.def Info: Figures/RankCorrelationNumberSteps.png  used on input line 816.
 (pdftex.def)             Requested size: 398.3386pt x 239.0098pt.
  [24 <./Figures/RankCorrelationNumberSteps.png (PNG copy)>] [25] [26] (./Manuscript_Support.aux)
  ***********
@@ -1219,18 +1235,18 @@ Package logreq Info: Writing requests to 'Manuscript_Support.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 36181 strings out of 474222
- 696386 string characters out of 5748733
+ 36423 strings out of 474222
+ 699251 string characters out of 5748733
  1987975 words of memory out of 5000000
- 57758 multiletter control sequences out of 15000+600000
- 571482 words of font info for 86 fonts, out of 8000000 for 9000
+ 58003 multiletter control sequences out of 15000+600000
+ 568365 words of font info for 74 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  84i,15n,93p,3019b,5050s stack positions out of 10000i,1000n,20000p,200000b,200000s
-</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0800.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
-Output written on Manuscript_Support.pdf (27 pages, 5602054 bytes).
+</usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti12.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti9.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0700.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm0900.pfb></usr/share/texmf/fonts/type1/public/cm-super/sfrm1000.pfb>
+Output written on Manuscript_Support.pdf (27 pages, 5596562 bytes).
 PDF statistics:
- 613 PDF objects out of 1000 (max. 8388607)
- 486 compressed objects within 5 object streams
- 104 named destinations out of 1000 (max. 500000)
+ 602 PDF objects out of 1000 (max. 8388607)
+ 477 compressed objects within 5 object streams
+ 103 named destinations out of 1000 (max. 500000)
  235 words of extra memory for PDF output out of 10000 (max. 10000000)
 

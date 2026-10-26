@@ -79,7 +79,8 @@ p1 <- ggplot(rank, aes(x = ModelCode, y = Spearman, col = ModelCode, fill = Mode
     , method        = "t.test"
     , tip.length    = 0
     , step.increase = 0.05
-    , size          = 1.5
+    , size          = 2.5
+    , vjust         = 0.15
   ) +
   theme_awesome() +
   scale_fill_viridis_d() +

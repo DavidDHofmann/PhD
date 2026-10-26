@@ -26,13 +26,12 @@
 \usepackage{tikz}
 \usepackage{lineno}
 \usepackage{tocloft}
+\usepackage{titlesec}
 \setlength{\cftsecnumwidth}{2.5em}  % Adjust the width as needed
 \setlength{\cftsecindent}{0em}
 \setlength{\cftsubsecnumwidth}{2.5em}  % Adjust the width as needed
 \setlength{\cftsubsecindent}{2em}
 \usetikzlibrary{svg.path}
-
-
 
 %------------------------------------------------------------------------------
 %  Bibtex vs Biblatex
@@ -138,8 +137,13 @@
   \setcounter{equation}{0}
   \renewcommand{\theequation}{Equation S\arabic{equation}}%
   \setcounter{section}{0}
-  \renewcommand{\thesection}{A.\arabic{section}}%
+  \renewcommand{\thesection}{S\arabic{section}}
 }
+
+% Format section titles
+\titleformat{\section}
+  {\normalfont\Large\bfseries}
+  {Section~\thesection}{1em}{}
 
 %------------------------------------------------------------------------------
 %  ORCID
@@ -180,16 +184,16 @@
 %------------------------------------------------------------------------------
 %	Titlepage: Header
 %------------------------------------------------------------------------------
-\title{\textbf{Appendix}\\ Seasonal Dynamism or Model Realism: What Drives
+\title{\textbf{Appendix S1}\\ Seasonal Dynamism or Model Realism: What Drives
 Better Predictions of Landscape Connectivity?}
 
 % List of Authors
 \author{
-  David D. Hofmann\textsuperscript{1,2,\S} \orcid{0000-0003-3477-4365} \and
-  Dominik M. Behr\textsuperscript{1, 2} \orcid{0000-0001-7378-8538} \and
-  John W. McNutt\textsuperscript{2} \and
-  Arpat Ozgul\textsuperscript{1, 2} \orcid{0000-0001-7477-2642} \and
-  Gabriele Cozzi\textsuperscript{1, 2} \orcid{0000-0002-1744-1940}
+  David D. Hofmann \and
+  Dominik M. Behr \and
+  John W. McNutt \and
+  Arpat Ozgul \and
+  Gabriele Cozzi
 }
 
 % Reduce spacing between authors
@@ -201,7 +205,7 @@ Better Predictions of Landscape Connectivity?}
 \makeatother
 
 % Current Date
-% \date{\today}
+\date{\large \textit{Ecosphere}}
 
 % And here the masterpiece begins
 \begin{document}
@@ -209,36 +213,24 @@ Better Predictions of Landscape Connectivity?}
 % Change page numbering
 \pagenumbering{gobble}
 
-% Create Titlepage
-\maketitle
+\begin{titlepage}
+\centering
 
-%------------------------------------------------------------------------------
-%	Titlepage: Additional Info
-%------------------------------------------------------------------------------
-\begin{flushleft}
+{\large \textit{Ecosphere}\par}
+\vspace{2em}
 
-\vspace{0.5cm}
+{\LARGE \textbf{Appendix S1}\par}
+\vspace{1em}
 
-\textsuperscript{1} Department of Evolutionary Biology and Environmental
-Studies, University of Zurich, Winterthurerstrasse 190, 8057 Zurich,
-Switzerland.
+{\LARGE Seasonal Dynamism or Model Realism: What Drives Better Predictions of Landscape Connectivity?\par}
 
-\textsuperscript{2} Botswana Predator Conservation Program, Wild Entrust,
-Private Bag 13, Maun, Botswana.
+\vspace{2em}
 
-\textsuperscript{\S} Corresponding author: \href{mailto://david.hofmann2@uzh.ch}{david.hofmann2@uzh.ch}
+{\large
+David D. Hofmann, Dominik M. Behr, John W. McNutt, Arpat Ozgul, and Gabriele Cozzi
+}
 
-\vspace{4cm}
-
-\textbf{Running Title:} Connectivity in Seasonal Landscapes
-
-\vspace{0.5cm}
-
-\textbf{Keywords:} African wild dog, Connectivity, Dispersal, Dynamism,
-Individual-based, Lycaon pictus, Okavango Delta, Seasonality, Integrated
-Step-Selection Functions, Mechanistic Models
-
-\end{flushleft}
+\end{titlepage}
 
 %------------------------------------------------------------------------------
 %	Main Text
@@ -304,7 +296,7 @@ Step-Selection Functions, Mechanistic Models
     restricted to dispersing individuals and resampled to a consistent fix
     rate of four hours (and 8 hours during daytime). Because of the
     standardization, the number of individuals remaining for further analyses
-    dropped from 33 to 26. 
+    dropped from 33 to 26.
   }
   \label{GPSCleanup}
  \end{center}
@@ -369,7 +361,7 @@ a single stack representing water bodies at a resolution of 500m x 500m.
 Finally, we employed remote sensing to detect small, ephemeral water bodies
 (i.e., pans) using a custom random-forest classifier applied to Sentinel 2
 satellite imagery (\citealp{ESA.2025}; details of the classifier in
-Appendix A2). Sentinel 2 has a resolution of 10m and is therefore particularly
+Section S2). Sentinel 2 has a resolution of 10m and is therefore particularly
 useful for obtaining information on small landscape features. Even though
 Sentinel 2 satellite imagery is updated every five days, cloud cover often
 prohibited the computation of a ``pan-map''. Consequently, we settled for

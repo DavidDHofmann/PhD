@@ -1,25 +1,25 @@
 [0] Config.pm:307> INFO - This is Biber 2.19
 [0] Config.pm:310> INFO - Logfile is 'Manuscript_Support.blg'
-[71] biber:340> INFO - === Do Jan 29, 2026, 10:43:09
-[90] Biber.pm:419> INFO - Reading 'Manuscript_Support.bcf'
-[164] Biber.pm:979> INFO - Found 30 citekeys in bib section 0
-[187] Biber.pm:4419> INFO - Processing section 0
-[198] Biber.pm:4610> INFO - Looking for bibtex file 'Literature.bib' for section 0
-[305] bibtex.pm:1713> INFO - LaTeX decoding ...
-[1482] bibtex.pm:1519> INFO - Found BibTeX data source 'Literature.bib'
-[1894] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1895] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1895] Biber.pm:4239> INFO - Sorting list 'ynt/apasortcite//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
-[1896] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[1959] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[1959] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[1960] Biber.pm:4239> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
-[1960] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[2036] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
-[2036] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
-[2037] Biber.pm:4239> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
-[2037] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
-[2097] bbl.pm:660> INFO - Writing 'Manuscript_Support.bbl' with encoding 'UTF-8'
-[2167] bbl.pm:763> INFO - Output to Manuscript_Support.bbl
-[2167] Biber.pm:131> WARN - ISBN '978-1-5106-1318-8 978-1-5106-1319-5' in entry 'Main-Knorn.2017' is invalid - run biber with '--validate_datamodel' for details.
-[2167] Biber.pm:133> INFO - WARNINGS: 1
+[42] biber:340> INFO - === Sa Mai  2, 2026, 11:17:37
+[53] Biber.pm:419> INFO - Reading 'Manuscript_Support.bcf'
+[96] Biber.pm:979> INFO - Found 30 citekeys in bib section 0
+[110] Biber.pm:4419> INFO - Processing section 0
+[117] Biber.pm:4610> INFO - Looking for bibtex file 'Literature.bib' for section 0
+[181] bibtex.pm:1713> INFO - LaTeX decoding ...
+[908] bibtex.pm:1519> INFO - Found BibTeX data source 'Literature.bib'
+[1160] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1161] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1162] Biber.pm:4239> INFO - Sorting list 'ynt/apasortcite//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[1163] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1207] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1208] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1208] Biber.pm:4239> INFO - Sorting list 'nyt/global//global/global' of type 'entry' with template 'nyt' and locale 'en-US'
+[1209] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1264] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1265] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1265] Biber.pm:4239> INFO - Sorting list 'ynt/global//global/global' of type 'entry' with template 'ynt' and locale 'en-US'
+[1265] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1308] bbl.pm:660> INFO - Writing 'Manuscript_Support.bbl' with encoding 'UTF-8'
+[1362] bbl.pm:763> INFO - Output to Manuscript_Support.bbl
+[1362] Biber.pm:131> WARN - ISBN '978-1-5106-1318-8 978-1-5106-1319-5' in entry 'Main-Knorn.2017' is invalid - run biber with '--validate_datamodel' for details.
+[1362] Biber.pm:133> INFO - WARNINGS: 1

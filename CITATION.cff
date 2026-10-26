@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this research code, please cite this software archive and the relevant thesis or chapter publication."
+type: software
+title: "Dispersal and Connectivity in Physical, Seasonal, and Extreme Landscapes: PhD Research Code"
+version: "1.0.0"
+authors:
+  - family-names: "Hofmann"
+    given-names: "David D."
+    orcid: "https://orcid.org/0000-0003-3477-4365"
+    affiliation: "University of Zurich"
+repository-code: "https://github.com/DavidDHofmann/PhD"
+url: "https://github.com/DavidDHofmann/PhD"
+license: "CC-BY-4.0"
+abstract: >-
+  Research code accompanying David D. Hofmann's PhD thesis, Dispersal and
+  Connectivity in Physical, Seasonal, and Extreme Landscapes, at the
+  University of Zurich (https://doi.org/10.5167/uzh-263215). The repository
+  contains workflows for data preparation, movement modelling,
+  individual-based dispersal simulations, connectivity calculations, and
+  visualization across four thesis chapters, primarily in R with supporting
+  C++ functions. It also contains manuscript and thesis sources, figures,
+  and defense material. Input datasets are distributed separately through
+  the repositories and access arrangements described in the documentation.
+keywords:
+  - "movement ecology"
+  - "landscape connectivity"
+  - "animal dispersal"
+  - "integrated step-selection functions"
+  - "individual-based simulation"
+  - "seasonality"
+  - "climate change"
+  - "African wild dog"
+  - "Lycaon pictus"
+  - "R"

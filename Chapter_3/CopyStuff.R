@@ -101,8 +101,13 @@ file.copy(
 file.copy("README.md", file.path(outdir, "README.md"))
 
 #  Remove files that are not needed
+file.remove(file.path(outdir, "03_Data/02_CleanData/ValidationDispersers.rds"))
+file.remove(file.path(outdir, "03_Data/02_CleanData/Forest.tif"))
+file.remove(file.path(outdir, "03_Data/02_CleanData/PansStatic.tif"))
+# file.remove(file.path(outdir, "03_Data/02_CleanData/GomotiPred.tif.aux.xml"))
+# file.remove(file.path(outdir, "03_Data/02_CleanData/MbomaPred.tif.aux.xml"))
 file.remove(file.path(outdir, "03_Data/02_CleanData/Dispersers.csv"))
 file.remove(file.path(outdir, "03_Data/02_CleanData/DispersersSubsampled.csv"))
-file.remove(file.path(outdir, "03_Data/02_CleanData/ValidationDispersers.rds"))
 file.remove(file.path(outdir, "03_Data/02_CleanData/SSF.csv"))
 file.remove(file.path(outdir, "03_Data/02_CleanData/SSFExtracted.rds"))
+
