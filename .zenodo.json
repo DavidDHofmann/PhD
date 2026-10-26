@@ -1,7 +1,7 @@
 {
   "title": "Dispersal and Connectivity in Physical, Seasonal, and Extreme Landscapes: PhD Thesis",
   "upload_type": "software",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "creators": [
     {
       "name": "Hofmann, David D.",
@@ -53,22 +53,22 @@
     },
     {
       "identifier": "10.5061/dryad.dncjsxkzn",
-      "relation": "isRelatedTo",
+      "relation": "references",
       "scheme": "doi"
     },
     {
       "identifier": "10.5061/dryad.z34tmpgnm",
-      "relation": "isRelatedTo",
+      "relation": "references",
       "scheme": "doi"
     },
     {
       "identifier": "10.5061/dryad.z34tmpgvr",
-      "relation": "isRelatedTo",
+      "relation": "references",
       "scheme": "doi"
     },
     {
       "identifier": "10.13020/6wcd-6s43",
-      "relation": "isRelatedTo",
+      "relation": "references",
       "scheme": "doi"
     }
   ]

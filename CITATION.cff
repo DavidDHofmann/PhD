@@ -1,8 +1,8 @@
 cff-version: 1.2.0
 message: "If you use this research code, please cite this software archive and the relevant thesis or chapter publication."
 type: software
-title: "Dispersal and Connectivity in Physical, Seasonal, and Extreme Landscapes: PhD Research Code"
-version: "1.0.0"
+title: "Dispersal and Connectivity in Physical, Seasonal, and Extreme Landscapes: PhD Thesis"
+version: "1.0.1"
 authors:
   - family-names: "Hofmann"
     given-names: "David D."
